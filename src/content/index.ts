@@ -12,12 +12,14 @@ import { licoesIa } from './grimoires/ia/lessons';
 import { estudosDeCaso } from './discursivas/tce-go-2026';
 import { capDevApis, capDevIdentidade, grimorioDev, licoesDev } from './grimoires/dev';
 import { questoesDev } from './grimoires/dev/questions';
+import { capInfraNuvem, capInfraRedes, grimorioInfra, licoesInfra } from './grimoires/infra';
+import { questoesInfra } from './grimoires/infra/questions';
 
 export const contests: Contest[] = [tceGo2026];
-export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev];
-export const chapters: Chapter[] = [capCriptografia, capIaLlm, capIaAgentes, capDevApis, capDevIdentidade];
-export const lessons: Lesson[] = [...licoesCap01, ...licoesIa, ...licoesDev];
-export const questions: Question[] = [...questoesCap01, ...questoesIaCap01, ...questoesIaCap02, ...questoesDev];
+export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev, grimorioInfra];
+export const chapters: Chapter[] = [capCriptografia, capIaLlm, capIaAgentes, capDevApis, capDevIdentidade, capInfraRedes, capInfraNuvem];
+export const lessons: Lesson[] = [...licoesCap01, ...licoesIa, ...licoesDev, ...licoesInfra];
+export const questions: Question[] = [...questoesCap01, ...questoesIaCap01, ...questoesIaCap02, ...questoesDev, ...questoesInfra];
 
 const byId = <T extends { id: string }>(list: T[]) => new Map(list.map((x) => [x.id, x]));
 const contestMap = byId(contests);

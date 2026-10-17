@@ -6,13 +6,13 @@
 ## Situação atual
 - App publicado automaticamente no GitHub Pages a cada push (workflow `.github/workflows/pages.yml` → branch `gh-pages`). Endereço: https://cainalo.github.io/Cronicas-do-Conhecimento-/ (o usuário precisa ter ativado Settings → Pages → `gh-pages` / root; confirmar com ele).
 - Edital oficial conferido (`docs/fontes/`), 68 tópicos em `contest.ts`.
-- Conteúdo: Códice das Sete Chaves (Criptografia), Livro dos Autômatos (IA, 2 caps.) e Tratado das Pontes e dos Selos (Dev: APIs; identidade). 8 lições, 84 questões, 3 estudos de caso. Cobertura 9/68 tópicos.
+- Conteúdo: Códice das Sete Chaves (Criptografia), Livro dos Autômatos (IA, 2 caps.) Tratado das Pontes e dos Selos (Dev: APIs; identidade) e Atlas das Estradas e das Nuvens (Redes; Nuvem). 10 lições, 106 questões, 3 estudos de caso. Cobertura 12/68 tópicos.
 - Visual de livro medieval gótico (ver `docs/DESIGN_SYSTEM.md`), sem "cara de IA".
 - Fase D completa: simulados, estudos de caso (2), flashcards e planejador, todos sincronizáveis (migrações 2 e 3 aplicadas, RLS verificado). PWA offline testado.
 - Supabase com RLS verificado; login/sync pelo navegador ainda **não testados pelo usuário**.
 
 ## Testes
-`npm test` 116/116; `tsc -b` OK; build OK; capturas 390×844 sem overflow nem erros.
+`npm test` 138/138; `tsc -b` OK; build OK; capturas 390×844 sem overflow nem erros.
 
 ## Pendências com o usuário
 - Confirmar que o site abriu no celular e se o login/sincronização funcionaram.
@@ -20,6 +20,6 @@
 - Rodada criativa de `OPEN_QUESTIONS.md`.
 
 ## Próxima tarefa exata
-1. **Grimório de SO, Redes e Computação em Nuvem** (5 questões): `src/content/grimoires/infra/` (`binding: 'castanho'`). Cap. 1 Redes: TCP/IP, IPv4/IPv6 (sub-redes, CIDR), DNS, DHCP, HTTP/2, HTTP/3 (QUIC), HTTPS, SMTP, FTP, SSH, VPN, proxies, balanceamento, firewalls (`ti.infra.redes`, `ti.infra.perimetro`). Cap. 2 Nuvem: IaaS/PaaS/SaaS, serverless, escalabilidade, alta disponibilidade, nuvem híbrida (`ti.infra.nuvem`). ~12 questões por capítulo, 1 lição por capítulo, glossário. Verificar com `npm test`; atualizar `CONTENT_COVERAGE.md`.
-2. Depois: Segurança restante (OWASP Top 10:2025, Zero Trust, ISO 27000, IAM, continuidade), Banco de Dados, Governança, Legislação de TI, Eng. de Software, DevOps, Gerais.
-3. Fase E (gamificação: missões e conquistas ligadas ao estudo real) e rodada de perguntas criativas de `OPEN_QUESTIONS.md` antes da narrativa.
+1. **Segurança da Informação, cap. 2**: OWASP Top 10:2025, codificação segura e DevSecOps, Zero Trust, IAM, família ISO/IEC 27000, continuidade (`ti.seguranca.owasp`, `ti.seguranca.zero-trust`, `ti.seguranca.iso27000`, `ti.seguranca.acesso`, `ti.seguranca.continuidade`, `ti.seguranca.principios`, `ti.seguranca.ameacas`) em `src/content/grimoires/seguranca/cap02-.../`, acrescentando `cap.seg.02` ao `chapterIds` do Códice. ATENÇÃO: conferir a lista oficial do OWASP Top 10:2025 antes de escrever (não inventar a ordem); se a rede não permitir, pesquisar com WebSearch e marcar a fonte.
+2. Depois: Banco de Dados, Governança, Legislação de TI, Eng. de Software, DevOps, SO (Windows/Linux), Gerais.
+3. Fase E (gamificação) e rodada criativa de `OPEN_QUESTIONS.md` (perguntar ao usuário antes de escrever narrativa).

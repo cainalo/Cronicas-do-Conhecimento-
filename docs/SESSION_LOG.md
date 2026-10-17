@@ -17,3 +17,4 @@
 - PWA: vite-plugin-pwa, ícones, service worker; leitura e respostas offline testadas.
 - Planejador de estudos (migração 3, study_settings). 92 testes.
 - Grimório de Desenvolvimento de Sistemas (2 capítulos, 24 questões, 2 lições) e estudo de caso de API. 116 testes.
+- Grimório de Redes e Nuvem (2 capítulos, 22 questões, 2 lições). 138 testes.

@@ -1,6 +1,6 @@
 # Matriz de cobertura (base: Anexo II oficial, cargo B02)
 
-Cobertura atual: **9 de 68 tópicos** com material (5 capítulos, 8 lições, 84 questões autorais, 3 estudos de caso, flashcards dos glossários). Não declarar cobertura integral enquanto houver lacunas.
+Cobertura atual: **12 de 68 tópicos** com material (7 capítulos, 10 lições, 106 questões autorais, 3 estudos de caso, flashcards dos glossários). Não declarar cobertura integral enquanto houver lacunas.
 Os IDs de tópico estão em `src/content/contests/tce-go-2026/contest.ts`; a tela **Progresso → Edital e cobertura** calcula esta matriz automaticamente.
 
 | Disciplina (questões) | Tópicos | Com material | Material |
@@ -15,7 +15,7 @@ Os IDs de tópico estão em `src/content/contests/tce-go-2026/contest.ts`; a tel
 | Banco de Dados (4) | 5 | 0 (o cap. 1 de IA cobre bancos vetoriais/pgvector, parte de `ti.dados.nosql`) | — |
 | IA, Ciência de Dados e Automação (5) | 4 | 1 | `ti.ia.generativa` (prompts, contexto, RAG) no cap. 1 do Livro dos Autômatos. Faltam: fundamentos de ML/deep learning/PLN, ética e Estratégia Brasileira de IA, ciência de dados e Big Data |
 | Segurança da Informação (4) | 8 | 1 | `ti.seguranca.criptografia` → Códice das Sete Chaves, cap. 1; lições lic.seg.01.a/b; questões q.seg.01.001–020 (autorais, não revisadas) |
-| SO, Redes e Nuvem (5) | 5 | 0 (o cap. 1 cobre parcialmente HTTPS/TLS de `ti.infra.redes`) | — |
+| SO, Redes e Nuvem (5) | 5 | 3 | Atlas das Estradas e das Nuvens: cap. 1 Redes (`ti.infra.redes`, `ti.infra.perimetro`), cap. 2 Nuvem (`ti.infra.nuvem`); lições lic.infra.01/02; q.infra.01.001–012, q.infra.02.001–010. Faltam: Windows/Linux, shell/PowerShell (`ti.infra.so`), AD/LDAP e virtualização (`ti.infra.diretorio`) |
 | Governança de TI (4) | 5 | 0 | — |
 | Legislação Aplicada à TI (4) | 5 | 0 (o cap. 1 toca certificação digital/ICP-Brasil) | — |
 | Língua Inglesa (2) | 1 | 0 | — |
