@@ -63,5 +63,13 @@ export const artifacts: Artifact[] = [
   { topicId: 'cg.portugues.gramatica', name: 'Tinteiro do Acento Perdido', lore: 'Guarda os acentos que o Acordo de 1990 confiscou das ideias heroicas.' },
   { topicId: 'cg.portugues.sintaxe', name: 'Balança da Concordância', lore: 'Pesa sujeito e verbo; quando "haver" sobe ao prato, ela nunca vai ao plural.' },
   { topicId: 'cg.portugues.redacao', name: 'Selo do Ofício Unificado', lore: 'Onde ele carimba, aviso e memorando passam a atender por um só nome.' },
+  { topicId: 'cg.legislacao.cf', name: 'O Selo dos Cinco Princípios', lore: 'Legalidade, impessoalidade, moralidade, publicidade e eficiência: quem quebra um, deixa digitais em todos.' },
+  { topicId: 'cg.legislacao.ce-go', name: 'A Carta de Goiás', lore: 'Sete cadeiras, uma sede na Capital e jurisdição até a última fronteira do Estado.' },
+  { topicId: 'cg.legislacao.lei-organica', name: 'O Livro das Três Sentenças', lore: 'Regulares, com ressalva ou irregulares; e, quando o fogo leva as provas, o processo é trancado.' },
+  { topicId: 'cg.legislacao.regimento', name: 'O Regimento de Ferro', lore: 'Plenário e duas Câmaras: cada caso sabe em que sala será ouvido.' },
+  { topicId: 'cg.legislacao.pccr', name: 'A Escada dos Ofícios', lore: 'Auxiliar, Técnico e Analista: cada degrau pede pontos e horas de estudo.' },
+  { topicId: 'cg.legislacao.regime-juridico', name: 'O Juramento dos Três Anos', lore: 'Iniciativa, assiduidade, eficiência: o estágio observa tudo, em silêncio.' },
+  { topicId: 'cg.legislacao.etica', name: 'O Espelho da Conduta', lore: 'Até a postagem da madrugada responde ao Código, e o brasão do Tribunal não serve de bandeira.' },
+  { topicId: 'cg.legislacao.resolucoes', name: 'O Molho de Sete Chaves', lore: 'Cada resolução abre uma porta da casa; troque o número e você entra no cômodo errado.' },
   { topicId: 'ti.infra.nuvem', name: 'Castelo Alugado', lore: 'Cresce e encolhe conforme os visitantes chegam.' },
 ];
