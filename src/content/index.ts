@@ -17,12 +17,14 @@ import { capInfraNuvem, capInfraRedes, grimorioInfra, licoesInfra } from './grim
 import { questoesInfra } from './grimoires/infra/questions';
 import { capDadosSgbd, capDadosSql, grimorioDados, licoesDados } from './grimoires/dados';
 import { questoesDados } from './grimoires/dados/questions';
+import { capGovModelos, capGovPublico, grimorioGovernanca, licoesGovernanca } from './grimoires/governanca';
+import { questoesGovernanca } from './grimoires/governanca/questions';
 
 export const contests: Contest[] = [tceGo2026];
-export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev, grimorioInfra, grimorioDados];
-export const chapters: Chapter[] = [capCriptografia, capDefesa, capIaLlm, capIaAgentes, capDevApis, capDevIdentidade, capInfraRedes, capInfraNuvem, capDadosSql, capDadosSgbd];
-export const lessons: Lesson[] = [...licoesCap01, ...licoesCap02, ...licoesIa, ...licoesDev, ...licoesInfra, ...licoesDados];
-export const questions: Question[] = [...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesDev, ...questoesInfra, ...questoesDados];
+export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev, grimorioInfra, grimorioDados, grimorioGovernanca];
+export const chapters: Chapter[] = [capCriptografia, capDefesa, capIaLlm, capIaAgentes, capDevApis, capDevIdentidade, capInfraRedes, capInfraNuvem, capDadosSql, capDadosSgbd, capGovModelos, capGovPublico];
+export const lessons: Lesson[] = [...licoesCap01, ...licoesCap02, ...licoesIa, ...licoesDev, ...licoesInfra, ...licoesDados, ...licoesGovernanca];
+export const questions: Question[] = [...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesDev, ...questoesInfra, ...questoesDados, ...questoesGovernanca];
 
 const byId = <T extends { id: string }>(list: T[]) => new Map(list.map((x) => [x.id, x]));
 const contestMap = byId(contests);

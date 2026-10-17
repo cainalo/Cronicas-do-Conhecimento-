@@ -22,3 +22,4 @@
 - Usuário pediu app nativo e visual medieval moderno: Capacitor Android com APK no site (CI), PWA removido; redesign completo (cards arredondados, ilustrações SVG, animações, nova tipografia).
 - Segurança cap. 2 (Defesa em Profundidade): 6 seções, 20 questões, 2 lições, 7 artefatos. OWASP Top 10:2025 conferido por busca (site oficial bloqueado). 162 testes.
 - Grimório de Banco de Dados "O Arquivo Profundo": 2 capítulos (5 seções), 22 questões, 2 lições, 5 artefatos. 184 testes.
+- Grimório de Governança de TI "As Atas do Conselho": 2 capítulos (5 seções), 22 questões, 2 lições, 5 artefatos. PMBOK 8, ISO 38500:2024 e ENGD conferidos em fontes secundárias (registrado). 206 testes.

@@ -30,5 +30,10 @@ export const artifacts: Artifact[] = [
   { topicId: 'ti.dados.sgbd', name: 'Lanterna do Arquivista', lore: 'Ilumina o porão onde os registros dormem e as cópias aguardam.' },
   { topicId: 'ti.dados.nosql', name: 'Baú sem Gavetas', lore: 'Guarda o que for, do jeito que vier.' },
   { topicId: 'ti.dados.governanca', name: 'Cadeado do Guardião', lore: 'Só se abre para quem tem motivo e nome.' },
+  { topicId: 'ti.governanca.estrategia', name: 'Cetro do Regente', lore: 'Aponta o rumo; quem rema são outros.' },
+  { topicId: 'ti.governanca.itil', name: 'Livro de Ocorrências', lore: 'Registra cada queda e o porquê dela.' },
+  { topicId: 'ti.governanca.projetos', name: 'Ampulheta do Mestre de Obras', lore: 'Mede o tempo que resta até a próxima entrega.' },
+  { topicId: 'ti.governanca.contratacoes', name: 'Bolsa do Tesoureiro', lore: 'Só se abre diante de um estudo que a justifique.' },
+  { topicId: 'ti.governanca.governo-digital', name: 'Sineta da Praça', lore: 'Chama o povo ao serviço sem que precise sair de casa.' },
   { topicId: 'ti.infra.nuvem', name: 'Castelo Alugado', lore: 'Cresce e encolhe conforme os visitantes chegam.' },
 ];

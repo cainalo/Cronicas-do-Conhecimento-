@@ -1,6 +1,6 @@
 # Matriz de cobertura (base: Anexo II oficial, cargo B02)
 
-Cobertura atual: **24 de 68 tópicos** com material (10 capítulos, 14 lições, 148 questões autorais, 3 estudos de caso, flashcards dos glossários). Não declarar cobertura integral enquanto houver lacunas.
+Cobertura atual: **29 de 68 tópicos** com material (12 capítulos, 16 lições, 170 questões autorais, 3 estudos de caso, flashcards dos glossários). Não declarar cobertura integral enquanto houver lacunas.
 Os IDs de tópico estão em `src/content/contests/tce-go-2026/contest.ts`; a tela **Progresso → Edital e cobertura** calcula esta matriz automaticamente.
 
 | Disciplina (questões) | Tópicos | Com material | Material |
@@ -16,7 +16,7 @@ Os IDs de tópico estão em `src/content/contests/tce-go-2026/contest.ts`; a tel
 | IA, Ciência de Dados e Automação (5) | 4 | 1 | `ti.ia.generativa` (prompts, contexto, RAG) no cap. 1 do Livro dos Autômatos. Faltam: fundamentos de ML/deep learning/PLN, ética e Estratégia Brasileira de IA, ciência de dados e Big Data |
 | Segurança da Informação (4) | 8 | **8** (completa) | Cap. 2 Defesa em Profundidade (cap.seg.02): princípios/riscos/LAI, acesso/IAM, Zero Trust (NIST SP 800-207), OWASP Top 10:2025 + DevSecOps/APIs/containers, ameaças/IDS/IPS/pentest, backup/continuidade, ISO 27000 (27001:2022); lições lic.seg.02.a/b; q.seg.02.001–020. Cap. 1: | `ti.seguranca.criptografia` → Códice das Sete Chaves, cap. 1; lições lic.seg.01.a/b; questões q.seg.01.001–020 (autorais, não revisadas) |
 | SO, Redes e Nuvem (5) | 5 | 3 | Atlas das Estradas e das Nuvens: cap. 1 Redes (`ti.infra.redes`, `ti.infra.perimetro`), cap. 2 Nuvem (`ti.infra.nuvem`); lições lic.infra.01/02; q.infra.01.001–012, q.infra.02.001–010. Faltam: Windows/Linux, shell/PowerShell (`ti.infra.so`), AD/LDAP e virtualização (`ti.infra.diretorio`) |
-| Governança de TI (4) | 5 | 0 | — |
+| Governança de TI (4) | 5 | **5** (completa) | As Atas do Conselho: cap. 1 (`ti.governanca.estrategia`, `.itil`, `.projetos`: alinhamento/PDTI, ISO/IEC 38500:2024, COBIT 2019, ITIL 4, PMBOK 8, Scrum/Kanban); cap. 2 (`ti.governanca.contratacoes`, `.governo-digital`: Lei 14.133 aplicada a TIC, IN SGD/ME 94/2022, Lei 14.129, ENGD 2024–2027); lições lic.gov.01/02; q.gov.01.001–012, q.gov.02.001–010. **Fontes secundárias**: princípios da ISO 38500:2024, estrutura do PMBOK 8 e objetivos da ENGD conferidos por busca (normas pagas; Planalto/Câmara bloqueados no contêiner) |
 | Legislação Aplicada à TI (4) | 5 | 0 (o cap. 1 toca certificação digital/ICP-Brasil) | — |
 | Língua Inglesa (2) | 1 | 0 | — |
 
