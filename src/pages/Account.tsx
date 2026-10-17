@@ -2,6 +2,11 @@ import { useState, type FormEvent } from 'react';
 import { useStudy } from '@/app/StudyProvider';
 import { usePrefs } from '@/app/prefs';
 import { supabase } from '@/lib/supabase';
+import { AppDownload } from '@/components/AppDownload';
+import { PUBLIC_SITE, isNative } from '@/app/native';
+
+// No app nativo os links do e-mail abrem o site público; no navegador, a própria página.
+const authRedirect = () => (isNative() ? `${PUBLIC_SITE}conta` : `${location.origin}${import.meta.env.BASE_URL}conta`);
 import { Icon } from '@/components/Icon';
 
 type Mode = 'entrar' | 'criar' | 'recuperar';
@@ -31,12 +36,12 @@ export function AccountPage() {
     if (mode === 'entrar') void run(() => sb.auth.signInWithPassword({ email, password }), 'Bem-vindo de volta!');
     if (mode === 'criar')
       void run(
-        () => sb.auth.signUp({ email, password, options: { emailRedirectTo: `${location.origin}${import.meta.env.BASE_URL}conta` } }),
+        () => sb.auth.signUp({ email, password, options: { emailRedirectTo: authRedirect() } }),
         'Conta criada. Se for pedido, confirme pelo link enviado ao seu e-mail e depois entre.',
       );
     if (mode === 'recuperar')
       void run(
-        () => sb.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}${import.meta.env.BASE_URL}conta` }),
+        () => sb.auth.resetPasswordForEmail(email, { redirectTo: authRedirect() }),
         'Se o e-mail estiver cadastrado, você receberá um link. Ao abri-lo, defina a nova senha nesta tela.',
       );
   };
@@ -122,6 +127,8 @@ export function AccountPage() {
       )}
 
       {msg && <p className={`rounded-sm border p-3 text-sm ${msg.ok ? 'border-ok/50 text-ok' : 'border-bad/50 text-bad'}`}>{msg.t}</p>}
+
+      <AppDownload />
 
       <section className="card space-y-2 p-4">
         <h2 className="text-base">Aparência</h2>

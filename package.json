@@ -20,6 +20,10 @@
   },
   "homepage": "https://github.com/cainalo/Cronicas-do-Conhecimento-#readme",
   "dependencies": {
+    "@capacitor/android": "^7.4.4",
+    "@capacitor/app": "^7.1.2",
+    "@capacitor/core": "^7.4.4",
+    "@capacitor/status-bar": "^7.0.6",
     "@fontsource/eb-garamond": "^5.3.0",
     "@fontsource/im-fell-english-sc": "^5.3.0",
     "@fontsource/unifrakturmaguntia": "^5.3.0",
@@ -31,6 +35,8 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.4.4",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",
@@ -44,7 +50,6 @@
     "tailwindcss": "^3.4.15",
     "typescript": "^5.6.3",
     "vite": "^5.4.11",
-    "vite-plugin-pwa": "^0.21.1",
     "vitest": "^2.1.8"
   },
   "private": true,
