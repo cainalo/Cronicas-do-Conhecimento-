@@ -12,7 +12,7 @@ const iso = (v: string | null | undefined) => (v ? new Date(v).toISOString() : u
 const same = (a: unknown, b: unknown) => JSON.stringify(a, Object.keys(a ?? {}).sort()) === JSON.stringify(b, Object.keys(b ?? {}).sort());
 
 export async function pullRemote(sb: SupabaseClient, userId: string): Promise<StudyData> {
-  const [att, rp, bm, les, xp, ex, es, cs] = await Promise.all([
+  const [att, rp, bm, les, xp, ex, es, cs, st] = await Promise.all([
     sb.from('question_attempts').select('*').eq('user_id', userId),
     sb.from('reading_progress').select('*').eq('user_id', userId),
     sb.from('bookmarks').select('*').eq('user_id', userId),
@@ -21,8 +21,9 @@ export async function pullRemote(sb: SupabaseClient, userId: string): Promise<St
     sb.from('mock_exams').select('*').eq('user_id', userId),
     sb.from('essay_answers').select('*').eq('user_id', userId),
     sb.from('flashcard_states').select('*').eq('user_id', userId),
+    sb.from('study_settings').select('*').eq('user_id', userId),
   ]);
-  const err = att.error ?? rp.error ?? bm.error ?? les.error ?? xp.error ?? ex.error ?? es.error ?? cs.error;
+  const err = att.error ?? rp.error ?? bm.error ?? les.error ?? xp.error ?? ex.error ?? es.error ?? cs.error ?? st.error;
   if (err) throw err;
   const d = emptyData();
   d.attempts = (att.data as Row[]).map((r) => ({
@@ -85,6 +86,15 @@ export async function pullRemote(sb: SupabaseClient, userId: string): Promise<St
       reps: r.reps,
       lapses: r.lapses,
       updatedAt: iso(r.updated_at)!,
+    };
+  }
+  const s0 = (st.data as Row[])[0];
+  if (s0) {
+    d.settings = {
+      minutesPerDay: s0.minutes_per_day,
+      weekdays: s0.weekdays,
+      dailyQuestionGoal: s0.daily_question_goal,
+      updatedAt: iso(s0.updated_at)!,
     };
   }
   return d;
@@ -221,6 +231,21 @@ export async function pushPending(sb: SupabaseClient, userId: string, data: Stud
     if (error) left.cards = p.cards;
   }
 
+  if (p.settings && data.settings) {
+    const s = data.settings;
+    const { error } = await sb.from('study_settings').upsert(
+      {
+        user_id: userId,
+        minutes_per_day: s.minutesPerDay,
+        weekdays: s.weekdays,
+        daily_question_goal: s.dailyQuestionGoal,
+        updated_at: s.updatedAt,
+      },
+      { onConflict: 'user_id' },
+    );
+    if (error) left.settings = true;
+  }
+
   for (const d of p.bookmarkDeletes) {
     const { error } = await sb.from('bookmarks').delete().eq('user_id', userId).eq('chapter_id', d.chapterId).eq('section_id', d.sectionId);
     if (error) left.bookmarkDeletes.push(d);
@@ -253,6 +278,7 @@ export async function syncAll(sb: SupabaseClient, userId: string, local: StudyDa
   merged.pending.cards = Object.keys(merged.cards).filter(
     (k) => merged.pending.cards.includes(k) || !same(merged.cards[k], remote.cards[k]),
   );
+  merged.pending.settings = !!merged.settings && (merged.pending.settings || !same(merged.settings, remote.settings));
   // Simulados em andamento não sobem; concluídos que o servidor já tem não são reenviados.
   merged.pending.exams = merged.pending.exams.filter((id) => merged.exams[id]?.finishedAt && !remote.exams[id]);
   const pushed = await pushPending(sb, userId, merged);

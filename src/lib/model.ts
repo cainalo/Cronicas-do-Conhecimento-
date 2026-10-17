@@ -70,6 +70,14 @@ export interface CardState {
   updatedAt: string;
 }
 
+/** Preferências do planejador (sincronizadas). weekdays: 0 = domingo ... 6 = sábado. */
+export interface StudySettings {
+  minutesPerDay: number;
+  weekdays: number[];
+  dailyQuestionGoal: number;
+  updatedAt: string;
+}
+
 export interface XpEvent {
   id: string;
   kind: XpKind;
@@ -89,6 +97,7 @@ export interface Pending {
   exams: string[];
   essays: string[];
   cards: string[];
+  settings: boolean;
 }
 
 export interface StudyData {
@@ -101,6 +110,7 @@ export interface StudyData {
   exams: Record<string, MockExam>;
   essays: Record<string, EssayAnswer>;
   cards: Record<string, CardState>;
+  settings?: StudySettings;
   pending: Pending;
   lastSyncAt?: string;
 }
@@ -115,6 +125,7 @@ export const emptyPending = (): Pending => ({
   exams: [],
   essays: [],
   cards: [],
+  settings: false,
 });
 
 export const emptyData = (): StudyData => ({
@@ -139,4 +150,5 @@ export const pendingCount = (p: Pending) =>
   p.lessons.length +
   p.exams.length +
   p.essays.length +
-  p.cards.length;
+  p.cards.length +
+  (p.settings ? 1 : 0);

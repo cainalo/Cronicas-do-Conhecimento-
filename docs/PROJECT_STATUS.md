@@ -20,7 +20,8 @@
 | Flashcards com repetição espaçada (SM-2 simplificado) a partir dos glossários (29 cartões) | `training.test.ts`, `flow.test.tsx` |
 | Sincronização dessas três áreas com o Supabase (tabelas novas com RLS) | RLS verificado no remoto (`rls_check_02.sql`); envio pelo app não testado (rede) |
 | Visual de livro medieval (couro, pergaminho, capitulares, capas) | Capturas mobile |
-| Manifesto web (instalar na tela inicial) | Arquivo presente; não testado em aparelho |
+| Planejador (`/plano`): ordem do dia congelada no aparelho, atividades marcadas pelo estudo real, revisão de erros, flashcards, estudo de caso semanal (1º dia), simulado semanal (último dia), leitura e lições; dias de descanso sem culpa; previsto/lido/respondido/domínio; preferências sincronizadas | `planner.test.ts`, captura |
+| PWA offline (service worker, ícones, atualização automática) | Teste Playwright com rede desligada |
 
 ## Implementado, mas NÃO testado ponta a ponta
 - **Sincronização real com Supabase e Auth (cadastro, login, recuperação de senha) pelo app.** O container bloqueia `*.supabase.co`; o caminho SQL foi validado, o cliente HTTP não. Testar no navegador do celular/PC.
@@ -28,7 +29,7 @@
 
 ## Incompleto / não iniciado
 - Cobertura do edital: 7 de 68 tópicos oficiais com material (Criptografia; IA: LLM, contexto, IA generativa/RAG, agentes, MCP, qualidade).
-- Planejador de estudos, missões/conquistas/inventário, narrativa, mapa/trilha visual, service worker/offline, Capacitor/Android.
+- Missões/conquistas/inventário, trilha visual, narrativa (aguarda decisões), Capacitor/Android, lembretes.
 
 ## Conhecido
 - Bundle JS ~660 kB (sem code-splitting) — aceitável por ora.

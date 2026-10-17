@@ -98,6 +98,7 @@ export function mergeData(base: StudyData, incoming: StudyData, incomingIsPendin
     ]),
     essays: uniq([...p.essays, ...q.essays, ...(incomingIsPending ? Object.keys(incoming.essays) : [])]),
     cards: uniq([...p.cards, ...q.cards, ...(incomingIsPending ? Object.keys(incoming.cards) : [])]),
+    settings: p.settings || q.settings || (incomingIsPending && !!incoming.settings),
   };
 
   return {
@@ -110,6 +111,7 @@ export function mergeData(base: StudyData, incoming: StudyData, incomingIsPendin
     exams: mergeRecords(base.exams, incoming.exams, mergeExam),
     essays: mergeRecords(base.essays, incoming.essays, newest),
     cards: mergeRecords(base.cards, incoming.cards, newest),
+    settings: newest(base.settings, incoming.settings),
     pending,
     lastSyncAt: base.lastSyncAt,
   };

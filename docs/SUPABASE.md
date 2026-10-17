@@ -9,6 +9,7 @@
 |---|---|
 | `20261017000100_initial_user_progress.sql` | ✅ 17/10/2026 (nome `initial_user_progress`) |
 | `20261017000200_exam_essay_flashcards.sql` | ✅ 17/10/2026 (nome `exam_essay_flashcards`) |
+| `20261017000300_study_settings.sql` | ✅ 17/10/2026 (nome `study_settings`) |
 
 ## Esquema (somente dados privados; conteúdo fica no repositório)
 | Tabela | Chave | Observações |
@@ -22,6 +23,7 @@
 | mock_exams | id | simulados concluídos, imutáveis (só SELECT/INSERT) |
 | essay_answers | (user_id, prompt_id) | rascunho/entrega discursiva; última escrita vence |
 | flashcard_states | (user_id, card_id) | repetição espaçada; última escrita vence |
+| study_settings | user_id | minutos/dia, dias da semana, meta diária de questões; última escrita vence |
 
 ## Segurança
 RLS em todas; políticas `to authenticated` com `(select auth.uid()) = user_id`; `anon` sem privilégio algum; `authenticated` só com os privilégios necessários (sem UPDATE/DELETE no histórico e no XP). Verificado com `supabase/tests/rls_check.sql` e `rls_check_02.sql` e `get_advisors` (0 alertas de segurança; só "unused index" informativo).

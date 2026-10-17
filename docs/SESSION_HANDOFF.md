@@ -8,11 +8,11 @@
 - Edital oficial conferido (`docs/fontes/`), 68 tópicos em `contest.ts`.
 - Conteúdo: Códice das Sete Chaves (cap. 1 Criptografia) e Livro dos Autômatos (cap. 1 LLM/contexto/RAG; cap. 2 agentes/MCP/qualidade). 6 lições, 60 questões autorais. Cobertura 7/68 tópicos.
 - Visual de livro medieval gótico (ver `docs/DESIGN_SYSTEM.md`), sem "cara de IA".
-- Fase D quase completa: simulados, estudos de caso (2) e flashcards, todos sincronizáveis (migração 2 aplicada, RLS verificado). Falta o planejador.
+- Fase D completa: simulados, estudos de caso (2), flashcards e planejador, todos sincronizáveis (migrações 2 e 3 aplicadas, RLS verificado). PWA offline testado.
 - Supabase com RLS verificado; login/sync pelo navegador ainda **não testados pelo usuário**.
 
 ## Testes
-`npm test` 87/87; `tsc -b` OK; build OK; capturas 390×844 sem overflow nem erros.
+`npm test` 92/92; `tsc -b` OK; build OK; capturas 390×844 sem overflow nem erros.
 
 ## Pendências com o usuário
 - Confirmar que o site abriu no celular e se o login/sincronização funcionaram.
@@ -20,6 +20,6 @@
 - Rodada criativa de `OPEN_QUESTIONS.md`.
 
 ## Próxima tarefa exata
-1. ~~PWA offline~~ ✅ feito e testado (ver `docs/MOBILE_AND_OFFLINE.md`).
-2. **Planejador de estudos** (fecha a Fase D): disponibilidade diária em minutos, distribuição de leitura/lições/revisões/flashcards/discursiva até 17/01/2027, sem apagar o histórico ao replanejar.
-3. **Grimório de Desenvolvimento de Sistemas** (`src/content/grimoires/dev/`, cap. 1 APIs REST/GraphQL/WebSockets, OAuth 2.0, OIDC, JWT; `binding: 'noite'`).
+1. **Grimório de Desenvolvimento de Sistemas** (5 questões): `src/content/grimoires/dev/`, mesmo formato dos outros (`binding: 'noite'`, `sigil: 'grimorio'`). Cap. 1: APIs REST, GraphQL, WebSockets, JSON/XML, OpenAPI; OAuth 2.0, OpenID Connect, JWT (tópicos `ti.dev.apis`, `ti.dev.auth`). ~20 questões, 2 lições, glossário (vira flashcards automaticamente). Um estudo de caso em `src/content/discursivas/tce-go-2026.ts`. Verificar com `npm test` e atualizar `CONTENT_COVERAGE.md`.
+2. Seguir a ordem de prioridade de conteúdo de `CONTENT_COVERAGE.md` (SO/Redes/Nuvem, Segurança restante, Banco de Dados...).
+3. Fase E (gamificação: missões e conquistas ligadas ao estudo real) e rodada de perguntas criativas de `OPEN_QUESTIONS.md` antes da narrativa.

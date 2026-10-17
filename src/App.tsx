@@ -15,6 +15,7 @@ import { TrainingPage } from '@/pages/Training';
 import { FlashcardsPage } from '@/pages/Flashcards';
 import { ExamPage, ExamResultPage } from '@/pages/Exam';
 import { EssayListPage, EssayPage } from '@/pages/Essay';
+import { PlanPage } from '@/pages/Plan';
 
 export function AppRoutes() {
   return (
@@ -31,6 +32,7 @@ export function AppRoutes() {
         <Route path="edital" element={<EditalPage />} />
         <Route path="conta" element={<AccountPage />} />
         <Route path="treino" element={<TrainingPage />} />
+        <Route path="plano" element={<PlanPage />} />
         <Route path="flashcards" element={<FlashcardsPage />} />
         <Route path="simulado" element={<ExamPage />} />
         <Route path="simulado/:id" element={<ExamResultPage />} />

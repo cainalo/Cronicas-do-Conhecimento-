@@ -5,6 +5,8 @@ import { levelInfo, recommend, reviewQueue, totalXp } from '@/lib/study';
 import { TopicProgressList } from './Progress';
 import { WaxSeal } from '@/components/WaxSeal';
 import { dueCards } from '@/lib/training';
+import { settingsOf } from '@/lib/planner';
+import { TodayPlanSummary } from './Plan';
 import { flashcards } from '@/content';
 
 function daysUntil(iso: string) {
@@ -24,7 +26,7 @@ export function Dashboard() {
   const localDay = (iso: string) => new Date(iso).toLocaleDateString('sv');
   const today = localDay(new Date().toISOString());
   const answeredToday = data.attempts.filter((a) => localDay(a.answeredAt) === today).length;
-  const dailyGoal = 10;
+  const dailyGoal = settingsOf(data).dailyQuestionGoal;
 
   return (
     <div className="space-y-5">
@@ -54,6 +56,7 @@ export function Dashboard() {
       )}
 
       <section aria-label="Resumo do dia" className="ledger">
+        <TodayPlanSummary />
         <div className="ledger-row">
           <span>Nível {lv.level}</span>
           <span className="text-muted">
