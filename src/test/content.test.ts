@@ -56,3 +56,23 @@ describe('estudos de caso', () => {
     expect(e.modelAnswer.length).toBeGreaterThan(400);
   });
 });
+
+import { allSectionExtras } from '@/content';
+
+describe('cenas e atividades por seção', () => {
+  it('toda seção de todo capítulo tem cena e atividades', () => {
+    for (const c of chapters) for (const s of c.sections) expect(allSectionExtras[`${c.id}:${s.id}`], `${c.id}:${s.id}`).toBeTruthy();
+  });
+  it.each(Object.entries(allSectionExtras))('%s é bem formada', (key, ex) => {
+    const [chapterId, sectionId] = key.split(':');
+    expect(getChapter(chapterId)?.sections.some((s) => s.id === sectionId)).toBe(true);
+    expect(ex.scene.length).toBeGreaterThanOrEqual(3);
+    expect(ex.truths.some((t) => t.answer) && ex.truths.some((t) => !t.answer)).toBe(true);
+    for (const b of ex.blanks) {
+      expect(b.sentence.split('___').length).toBe(2);
+      expect(new Set(b.options).size).toBe(b.options.length);
+      expect(b.options).toContain(b.answer);
+    }
+    expect(ex.outro.length).toBeGreaterThan(10);
+  });
+});

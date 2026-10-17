@@ -94,3 +94,48 @@ describe('progresso e recomendação', () => {
     expect(d.pending.bookmarkDeletes).toHaveLength(0);
   });
 });
+
+import { buildPractice, completePractice, parsePegadinhas, practiceDone } from '@/lib/practice';
+import { chapterBlocks, paginate, splitMarkdown } from '@/lib/book';
+import { cluesRevealed } from '@/lib/game';
+import { getChapter as gch, questionsForContest as qfc3, DEFAULT_CONTEST_ID as DC3 } from '@/content';
+import { emptyData as ed3 } from '@/lib/model';
+
+describe('prática e livro', () => {
+  const ch = gch('cap.dados.01')!;
+  it('lê as pegadinhas do texto', () => {
+    const p = parsePegadinhas(ch.sections[2].body);
+    expect(p.length).toBeGreaterThan(0);
+    expect(p[0].answer).toBe(false);
+  });
+  it('monta uma rodada variada e conclui a prática uma única vez com XP', () => {
+    const acts = buildPractice(ch, ch.sections[2].id, qfc3(DC3), undefined, () => 0.4);
+    const kinds = new Set(acts.map((a) => a.kind));
+    expect(kinds.has('tf')).toBe(true);
+    expect(kinds.has('term')).toBe(true);
+    expect(kinds.has('pairs')).toBe(true);
+    expect(kinds.has('mcq')).toBe(true);
+    expect(new Set(acts.map((a) => a.id)).size).toBe(acts.length);
+    let d = ed3();
+    d = completePractice(d, ch.id, ch.sections[0].id, 80).data;
+    expect(practiceDone(d, ch.id, ch.sections[0].id)).toBe(true);
+    const xp1 = d.xp.length;
+    d = completePractice(d, ch.id, ch.sections[0].id, 100).data;
+    expect(d.xp.length).toBe(xp1);
+  });
+  it('divide o texto em blocos e pagina respeitando a altura', () => {
+    const blocks = splitMarkdown('### Título\n\nTexto um.\n\n```\ncódigo\n\nainda código\n```\n\nFim.');
+    expect(blocks).toEqual(['### Título\n\nTexto um.', '```\ncódigo\n\nainda código\n```', 'Fim.']);
+    const bb = chapterBlocks(ch, () => undefined);
+    expect(bb[0].kind).toBe('cover');
+    const pages = paginate(bb, bb.map(() => 100), 250);
+    expect(pages.flat()).toEqual(bb.map((_, i) => i));
+    expect(pages.every((p) => p.length <= 3)).toBe(true);
+  });
+  it('revela as pistas em proporção ao avanço', () => {
+    expect(cluesRevealed(0, 140, 35)).toBe(0);
+    expect(cluesRevealed(1, 140, 35)).toBe(1);
+    expect(cluesRevealed(70, 140, 35)).toBe(18);
+    expect(cluesRevealed(140, 140, 35)).toBe(35);
+  });
+});

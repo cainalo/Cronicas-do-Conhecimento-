@@ -149,6 +149,21 @@ a { text-underline-offset: 3px; }
 .shine { position: relative; overflow: hidden; }
 .shine::after { content: ''; position: absolute; inset: 0 auto 0 0; width: 40%; background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.45), transparent); animation: shine 3.8s ease-in-out infinite; pointer-events: none; }
 .confetti-piece { position: fixed; top: 0; z-index: 60; width: 9px; height: 14px; border-radius: 2px; pointer-events: none; animation: confetti-fall var(--dur, 2.6s) cubic-bezier(0.25, 0.6, 0.4, 1) var(--delay, 0s) forwards; }
+/* Virada de página do livro */
+@keyframes flip-fwd { from { transform: rotateY(0deg); } to { transform: rotateY(-178deg); } }
+@keyframes flip-back { from { transform: rotateY(-178deg); } to { transform: rotateY(0deg); } }
+@keyframes flip-shade { 0% { opacity: 0; } 50% { opacity: 0.35; } 100% { opacity: 0; } }
+.page-flip-fwd { animation: flip-fwd 0.55s cubic-bezier(0.45, 0.05, 0.3, 1) forwards; transform-origin: left center; backface-visibility: hidden; }
+.page-flip-back { animation: flip-back 0.55s cubic-bezier(0.45, 0.05, 0.3, 1) forwards; transform-origin: left center; backface-visibility: hidden; }
+.page-shade { animation: flip-shade 0.55s ease-in-out forwards; background: linear-gradient(90deg, rgb(0 0 0 / 0.45), transparent 60%); }
+.book-spine::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 22px; border-radius: 1.5rem 0 0 1.5rem; background: linear-gradient(90deg, rgb(80 50 20 / 0.22), transparent); pointer-events: none; }
+
+/* Tabelas e código cabem na largura da página do livro */
+.book-page .prose-manuscript table { font-size: 0.74em; table-layout: auto; }
+.book-page .prose-manuscript th, .book-page .prose-manuscript td { padding: 0.4em 0.45em; overflow-wrap: break-word; hyphens: auto; }
+.book-page .prose-manuscript pre { font-size: 0.9em; white-space: pre-wrap; overflow-wrap: anywhere; }
+.book-page .prose-manuscript .table-wrap { overflow-x: hidden; }
+
 /* Inclinação 3D dos cartões ao passar o mouse (variáveis definidas em JS) */
 .tilt { transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 0.18s ease-out, box-shadow 0.2s ease-out; }
 

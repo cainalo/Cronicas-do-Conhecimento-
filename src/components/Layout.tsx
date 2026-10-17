@@ -3,8 +3,8 @@ import { useStudy } from '@/app/StudyProvider';
 import { AREAS, areaColor, areaOf, isAreaHome, tint, type AreaKey } from '@/app/areas';
 import { useNextActivity } from '@/app/usePlanOfToday';
 import { levelInfo, totalXp } from '@/lib/study';
-import { achievements } from '@/lib/game';
-import { DEFAULT_CONTEST_ID, chapters, questionsForContest } from '@/content';
+import { achievements, cluesRevealed } from '@/lib/game';
+import { DEFAULT_CONTEST_ID, chapters, questionsForContest, totalUnits } from '@/content';
 import { useCelebrations, useRegionCelebration } from '@/app/fx';
 import { useRegions } from '@/pages/Realm';
 import { Icon } from '@/components/Icon';
@@ -97,10 +97,12 @@ export function Layout() {
   const dark = useIsDark();
   const xp = totalXp(data);
   const lv = levelInfo(xp);
-  useCelebrations(xp, lv.level, achievements(data, chapters, questionsForContest(DEFAULT_CONTEST_ID)), Object.keys(data.lessons).length, clues.length);
+  useCelebrations(xp, lv.level, achievements(data, chapters, questionsForContest(DEFAULT_CONTEST_ID)), cluesRevealed(Object.keys(data.lessons).length, totalUnits, clues.length), clues.length);
   const regions = useRegions();
   useRegionCelebration(regions.filter((r) => r.explored && r.mastery >= 0.8).map((r) => r.name));
   const inner = !isAreaHome(pathname);
+  // Leitura e prática ocupam a tela toda, como as lições do Duolingo (sem a barra inferior).
+  const immersive = /^\/(capitulo|pratica|licao)\//.test(pathname);
   const accountColor = areaColor('conta', dark);
   const onAccount = areaOf(pathname) === 'conta';
   // Prólogo na primeira visita (fora dos testes automatizados).
@@ -160,13 +162,13 @@ export function Layout() {
       </header>
 
       {showPrologue && <Prologue onClose={() => setShowPrologue(false)} />}
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 pb-32 pt-5 sm:px-6 lg:pb-12">
+      <main className={`mx-auto w-full max-w-3xl flex-1 px-4 sm:px-6 ${immersive ? 'pb-3 pt-4' : 'pb-32 pt-5 lg:pb-12'}`}>
         <div key={pathname} className="page-enter">
           <Outlet />
         </div>
       </main>
 
-      <nav
+      {!immersive && <nav
         aria-label="Navegação principal"
         className="safe-bottom-nav fixed inset-x-0 bottom-0 z-30 flex items-stretch justify-around border-t border-line bg-bg/95 shadow-[0_-4px_16px_-8px_rgb(0_0_0/0.15)] backdrop-blur-md lg:hidden"
       >
@@ -175,7 +177,7 @@ export function Layout() {
         <ContinueButton variant="fab" />
         <Tab area="treino" variant="bottom" />
         <Tab area="reino" variant="bottom" />
-      </nav>
+      </nav>}
     </div>
   );
 }

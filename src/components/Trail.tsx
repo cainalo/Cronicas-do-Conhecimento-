@@ -7,6 +7,7 @@ import { getLesson } from '@/content';
 import { Icon, type IconName } from '@/components/Icon';
 import { Mascot } from '@/components/Mascot';
 import { tint } from '@/app/areas';
+import { practiceDone } from '@/lib/practice';
 
 interface Stop {
   key: string;
@@ -14,7 +15,7 @@ interface Stop {
   label: string;
   icon: IconName;
   done: boolean;
-  kind: 'read' | 'lesson';
+  kind: 'read' | 'practice' | 'lesson';
 }
 
 const OFFSETS = [0, 62, 92, 62, 0, -62, -92, -62];
@@ -22,17 +23,23 @@ const ROW = 92;
 
 export function chapterStops(c: Chapter, data: StudyData): Stop[] {
   const read = new Set(data.reading[c.id]?.sectionsRead ?? []);
-  const stops: Stop[] = c.sections.map((s) => ({
-    key: `${c.id}:${s.id}`,
-    to: `/capitulo/${c.id}#${s.id}`,
-    label: s.title.replace(/^\d+\.\s*/, ''),
-    icon: 'grimorio',
-    done: read.has(s.id),
-    kind: 'read',
-  }));
+  const stops: Stop[] = c.sections.flatMap((s) => {
+    const label = s.title.replace(/^\d+\.\s*/, '');
+    return [
+      { key: `${c.id}:${s.id}:ler`, to: `/capitulo/${c.id}#${s.id}`, label: `Ler: ${label}`, icon: 'grimorio' as IconName, done: read.has(s.id), kind: 'read' as const },
+      {
+        key: `${c.id}:${s.id}:praticar`,
+        to: `/pratica/${c.id}/${s.id}`,
+        label: `Praticar: ${label}`,
+        icon: 'chama' as IconName,
+        done: practiceDone(data, c.id, s.id),
+        kind: 'practice' as const,
+      },
+    ];
+  });
   for (const lid of c.lessonIds) {
     const l = getLesson(lid);
-    stops.push({ key: lid, to: `/licao/${lid}`, label: l ? `Lição: ${l.title}` : 'Lição', icon: 'escudo', done: !!data.lessons[lid], kind: 'lesson' });
+    stops.push({ key: lid, to: `/licao/${lid}`, label: l ? `Desafio: ${l.title}` : 'Desafio', icon: 'escudo', done: !!data.lessons[lid], kind: 'lesson' });
   }
   return stops;
 }
@@ -118,7 +125,7 @@ export function Trail({ chapter, data, color, guide = true }: { chapter: Chapter
               {isCurrent && guide && (
                 <div className={`pointer-events-none absolute -top-6 flex flex-col items-center ${x >= 0 ? 'right-full mr-1' : 'left-full ml-1'}`}>
                   <span className="anim-toast-in whitespace-nowrap rounded-xl border border-line bg-surface px-2 py-1 text-[11px] font-bold shadow-sm" style={{ color: 'rgb(var(--ember))' }}>
-                    {s.kind === 'lesson' ? 'Hora da lição!' : 'Comece aqui'}
+                    {s.kind === 'lesson' ? 'Hora do desafio!' : s.kind === 'practice' ? 'Hora de praticar!' : 'Comece a ler'}
                   </span>
                   <Mascot mood="talk" size={52} />
                 </div>

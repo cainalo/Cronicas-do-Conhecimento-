@@ -5,7 +5,8 @@ import { FxProvider } from '@/app/fx';
 import { Layout } from '@/components/Layout';
 import { Dashboard } from '@/pages/Dashboard';
 import { GrimoirePage, LibraryPage } from '@/pages/Library';
-import { ReaderPage } from '@/pages/Reader';
+import { BookPage } from '@/pages/Book';
+import { PracticePage } from '@/pages/Practice';
 import { LessonPage } from '@/pages/Lesson';
 import { ReviewPage } from '@/pages/Review';
 import { HistoryPage } from '@/pages/History';
@@ -29,7 +30,8 @@ export function AppRoutes() {
         <Route index element={<Dashboard />} />
         <Route path="biblioteca" element={<LibraryPage />} />
         <Route path="grimorio/:id" element={<GrimoirePage />} />
-        <Route path="capitulo/:id" element={<ReaderPage />} />
+        <Route path="capitulo/:id" element={<BookPage />} />
+        <Route path="pratica/:chapterId/:sectionId" element={<PracticePage />} />
         <Route path="licao/:id" element={<LessonPage />} />
         <Route path="revisao" element={<ReviewPage />} />
         <Route path="historico" element={<HistoryPage />} />

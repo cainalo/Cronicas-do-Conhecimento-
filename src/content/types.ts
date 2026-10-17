@@ -148,3 +148,19 @@ export interface EssayPrompt {
   origin: QuestionOrigin;
   review: ReviewStatus;
 }
+
+/**
+ * Extras de cada seção para a trilha estilo Duolingo: cena da história antes da leitura,
+ * atividades interativas próprias (além das questões) e a fala de encerramento.
+ * Chave: `${chapterId}:${sectionId}`.
+ */
+export interface SectionExtras {
+  /** Cena de abertura: 3 a 5 falas curtas. who: 'Bubo', 'Aprendiz' ou outro personagem da história. */
+  scene: { who: string; text: string }[];
+  /** Verdadeiro ou falso sobre o conteúdo da seção (equilibrar verdadeiras e falsas). */
+  truths: { statement: string; answer: boolean; why: string }[];
+  /** Complete a lacuna: a frase tem "___" e uma das opções é a correta. */
+  blanks: { sentence: string; options: string[]; answer: string; why: string }[];
+  /** Fala do Bubo ao terminar a prática da seção. */
+  outro: string;
+}

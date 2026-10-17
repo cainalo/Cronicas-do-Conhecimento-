@@ -11,6 +11,8 @@ import { Icon } from '@/components/Icon';
 import { useState } from 'react';
 import { Prologue } from '@/components/Prologue';
 import { clues } from '@/content/game/story';
+import { cluesRevealed } from '@/lib/game';
+import { totalUnits } from '@/content';
 
 export function useRegions(): RegionState[] {
   const { data } = useStudy();
@@ -37,7 +39,7 @@ export function RealmPage() {
   const sealsWon = seals.filter((s) => s.done).length;
   const shades = dark ? ['#78b873', '#8f9df0', '#e8b13b', '#ef7a5a'] : ['#4a7f46', '#5160c4', '#a8740c', '#c2571f'];
   const [prologue, setPrologue] = useState(false);
-  const revealed = Math.min(clues.length, Object.keys(data.lessons).length);
+  const revealed = cluesRevealed(Object.keys(data.lessons).length, totalUnits, clues.length);
 
   return (
     <div className="space-y-6">

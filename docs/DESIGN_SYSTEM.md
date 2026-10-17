@@ -38,6 +38,10 @@ Aprovado em 17/10/2026 (substitui o "medieval moderno" escuro). O usuário relat
 - **Cenas** `components/SceneBanner.tsx` (biblioteca, treino, reino, conta) e **desenhos dos cartões** `components/TileArt.tsx` (ampulheta escorrendo, cartas virando, relógio, pena escrevendo etc.), com inclinação 3D no mouse.
 - **Efeitos** `app/fx.tsx`: confete, avisos (+XP, novo nível, selo), sons sintetizados (Web Audio, desligáveis em Conta). Tudo respeita `prefers-reduced-motion`.
 
+## Livro e prática (estilo Duolingo)
+- **Livro** (`pages/Book.tsx`): capa, cena, título do trecho, texto em blocos, "Pare e pense", fim do trecho com botão Praticar, glossário e referências; cabeçalho corrido e fólio em romanos; lombada sombreada; virada 3D (`page-flip-fwd/back`). Sem barra inferior durante leitura e prática.
+- **Prática** (`pages/Practice.tsx`): barra de progresso verde, sequência (chama), opções com relevo, botão Verificar e painel verde/vermelho com Continuar, como no Duolingo.
+
 ## Componentes
 `PageHeader`, `SectionTitle`, `Tile`, `TileGrid`, `IconBadge` (Page.tsx); `.card`, `.btn-primary`, `.btn-ghost`, `.chip`, `.ledger`/`.ledger-row`, `.meter`, `.input`, `.manuscript`, `.prose-manuscript`; `ProgressRing`, `HeroScene`, `BookCover`, `WaxSeal`, `RealmMap`, `AppDownload`.
 

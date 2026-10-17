@@ -60,21 +60,28 @@ it('fluxo: lição → erro → revisão → recuperação, com persistência lo
   expect(loadData('visitante').attempts).toHaveLength(11);
 });
 
-it('leitor: marca seção lida e mostra o sumário', async () => {
+it('livro: vira páginas, marca o trecho como lido e busca no sumário', async () => {
   const user = userEvent.setup();
-  window.HTMLElement.prototype.scrollIntoView = vi.fn();
-  // jsdom não implementa IntersectionObserver
-  (globalThis as unknown as { IntersectionObserver: unknown }).IntersectionObserver = class {
-    observe() {}
-    disconnect() {}
-  };
   renderAt('/capitulo/cap.seg.01');
   expect(screen.getByRole('heading', { name: 'Criptografia' })).toBeInTheDocument();
-  await user.click(screen.getAllByRole('button', { name: 'Marcar seção como lida' })[0]);
+  // Vira até o fim do primeiro trecho (a página com "Praticar agora").
+  for (let i = 0; i < 6 && !screen.queryByTestId('praticar-fundamentos'); i++) {
+    await user.click(screen.getByRole('button', { name: 'Próxima página' }));
+  }
+  expect(screen.getByTestId('praticar-fundamentos')).toBeInTheDocument();
   expect(loadData('visitante').reading['cap.seg.01'].sectionsRead).toEqual(['fundamentos']);
-  await user.click(screen.getByRole('button', { name: /Sumário/ }));
+  await user.click(screen.getByRole('button', { name: 'Sumário' }));
   await user.type(screen.getByPlaceholderText('Buscar no capítulo…'), 'Kerckhoffs');
   expect(screen.getAllByText(/1\. Fundamentos/).length).toBeGreaterThan(0);
+});
+
+it('prática: abre a rodada do trecho e mostra a primeira atividade', async () => {
+  const user = userEvent.setup();
+  renderAt('/pratica/cap.seg.01/fundamentos');
+  expect(screen.getByRole('heading', { name: /Prática:/ })).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: /Começar/ }));
+  expect(screen.getByRole('button', { name: 'Sair da prática' })).toBeInTheDocument();
+  expect(screen.getByText(/Verdadeiro ou falso\?|Qual é o termo\?|Complete a frase|Associe cada termo|Questão no estilo da prova/)).toBeInTheDocument();
 });
 
 it('simulado: monta, responde, entrega e mostra o boletim', async () => {

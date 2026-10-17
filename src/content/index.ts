@@ -99,3 +99,8 @@ export const flashcards: Flashcard[] = chapters.flatMap((c) =>
   })),
 );
 export const getFlashcard = (id: string) => flashcards.find((f) => f.id === id);
+
+export { getSectionExtras, allSectionExtras } from './game/scenes';
+
+/** Unidades da jornada: um trecho praticado por seção e um desafio por lição. */
+export const totalUnits = chapters.reduce((n, c) => n + c.sections.length, 0) + lessons.length;

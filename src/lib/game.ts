@@ -168,3 +168,9 @@ export function characterSheet(data: StudyData) {
   const lv = levelInfo(xp);
   return { xp, ...lv, title: titleFor(lv.level), streak: streak(data) };
 }
+
+/** Pistas reveladas em proporção ao avanço total (trechos praticados + desafios concluídos). */
+export function cluesRevealed(completed: number, totalUnits: number, nClues: number): number {
+  if (completed <= 0 || totalUnits <= 0) return 0;
+  return Math.min(nClues, Math.ceil((completed / totalUnits) * nClues));
+}

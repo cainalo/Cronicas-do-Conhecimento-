@@ -33,3 +33,4 @@
 - Rodada 3 de perguntas (narrativa) respondida; implementados prólogo, falas de Bubo por região e diário de pistas com aviso de nova pista. Agente de revisão de questões em andamento.
 - Revisão das 160 questões novas por agente: gabaritos conferidos, 3 ajustes (q.dev.03.008, q.port.02.003, q.inst.02.008). Névoa animada no mapa do reino, rarefeita conforme o domínio, com brilho nas regiões libertadas.
 - Comemoração ao libertar uma região da névoa (≥ 80%) e desfecho do diário ao reunir as 35 pistas.
+- Pedido do usuário: mais Duolingo, capítulos curtos, livro real sem rolagem. Feito: livro paginado com virada 3D, trilha Ler/Praticar/Desafio, prática com 5 tipos de atividade e painel de resposta, "Pare e pense" no livro, cenas e atividades próprias para as 105 seções (4 agentes; 3 retomados após limite de uso). 550 testes.

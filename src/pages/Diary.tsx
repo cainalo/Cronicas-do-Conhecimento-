@@ -5,19 +5,21 @@ import { clues } from '@/content/game/story';
 import { PageHeader } from '@/components/Page';
 import { MascotSays } from '@/components/Mascot';
 import { Icon } from '@/components/Icon';
+import { cluesRevealed } from '@/lib/game';
+import { totalUnits } from '@/content';
 
 export function DiaryPage() {
   const { data } = useStudy();
-  const revealed = Math.min(clues.length, Object.keys(data.lessons).length);
+  const revealed = cluesRevealed(Object.keys(data.lessons).length, totalUnits, clues.length);
   return (
     <div className="space-y-5">
       <PageHeader area="reino" icon="pergaminho" title="Diário de pistas" subtitle={`${revealed} de ${clues.length} pistas sobre a Névoa`} />
       <MascotSays mood={revealed === clues.length ? 'cheer' : 'think'} size={72}>
         {revealed === 0
-          ? 'O diário ainda está em branco. Conclua uma lição e a primeira pista aparece.'
+          ? 'O diário ainda está em branco. Pratique um trecho e a primeira pista aparece.'
           : revealed === clues.length
             ? 'O mistério está todo diante de você. Falta só o Grande Exame.'
-            : 'Cada lição concluída revela uma nova pista. Quem será que alimenta a névoa?'}
+            : 'Cada trecho praticado e cada desafio vencido aproximam a próxima pista. Quem será que alimenta a névoa?'}
       </MascotSays>
       <ol className="space-y-2">
         {clues.slice(0, revealed).map((c, i) => (

@@ -12,10 +12,11 @@
 | `src/test/study.test.ts` | XP único, revisão/recuperação, lição (melhor nota), capítulo lido, níveis, domínio, recomendação, marcadores |
 | `src/test/merge.test.ts` | fusão entre aparelhos, XP sem duplicar, migração do visitante |
 | `src/test/game.test.ts` | títulos, sequência, domínio, selos, missões, Rodada relâmpago (escolha das questões) |
+| `src/test/study.test.ts` (prática e livro) | pegadinhas, montagem da prática, XP único, divisão em blocos, paginação, pistas proporcionais |
 | `src/test/flow.test.tsx` | fluxo real de telas: lição com erro → resultado 90% → nova sessão → revisão → recuperação; leitor (marcar lida, busca) |
 
 ## Últimos resultados (2026-10-17)
-- `npm test`: **428/428** ✅ (content, study, merge, training, planner, game, flow)
+- `npm test`: **550/550** ✅ (content, study, merge, training, planner, game, flow)
 - `npm run build`: ✅ (aviso de chunk > 500 kB)
 - `rls_check.sql` no remoto: 13/13 conforme esperado ✅
 - Visual (Playwright/Chromium, 390×844, escuro e claro): sem overflow horizontal, sem erros de console ✅

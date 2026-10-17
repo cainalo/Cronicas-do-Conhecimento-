@@ -5,7 +5,7 @@ import { Mascot, type MascotMood } from '@/components/Mascot';
 
 export type Scene = 'biblioteca' | 'treino' | 'reino' | 'conta';
 
-function Art({ scene, dark }: { scene: Scene; dark: boolean }) {
+export function SceneArt({ scene, dark }: { scene: Scene; dark: boolean }) {
   const sky = dark ? ['#20263d', '#3a2d3d'] : ['#f6e7c8', '#f9efdc'];
   return (
     <svg viewBox="0 0 360 140" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full" aria-hidden="true">
@@ -125,7 +125,7 @@ function Art({ scene, dark }: { scene: Scene; dark: boolean }) {
 export function SceneBanner({ scene, children, mood = 'talk', dark = false }: { scene: Scene; children: ReactNode; mood?: MascotMood; dark?: boolean }) {
   return (
     <div className="relative mb-5 h-[9.5rem] overflow-hidden rounded-[2rem] border border-line shadow-[var(--shadow-card)]">
-      <Art scene={scene} dark={dark} />
+      <SceneArt scene={scene} dark={dark} />
       <div className="absolute inset-x-0 bottom-0 flex items-end gap-1 p-3">
         <Mascot mood={mood} size={74} />
         <div className="anim-toast-in mb-10 max-w-[10.5rem] rounded-2xl rounded-bl-sm bg-surface/95 px-3 py-2 text-[13px] font-semibold leading-snug text-ink shadow-md backdrop-blur">
