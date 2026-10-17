@@ -354,7 +354,7 @@ export const questoesInstitucional: Question[] = [
       { key: 'E', text: 'multa, que no estatuto goiano substitui a suspensão quando o infrator já não está em atividade.', comment: 'Correta. A suspensão pressupõe exercício; para o aposentado, a lei prevê a multa (art. 193).' },
     ],
     answer: 'E',
-    explanation: 'O art. 193 da Lei nº 20.756/2020 prevê advertência, suspensão, multa, demissão, cassação de aposentadoria, cassação de disponibilidade e destituição de cargo em comissão. Infração média leva, em regra, à suspensão (até 90 dias); como o aposentado não está em exercício, a sanção é convertida em multa, conforme o § 3º do art. 193 citado em pareceres da PGE-GO. A cassação de aposentadoria é reservada à infração grave. Confira o texto integral da lei.',
+    explanation: 'O art. 193 da Lei nº 20.756/2020 prevê advertência, suspensão, multa, demissão, cassação de aposentadoria, cassação de disponibilidade e destituição de cargo em comissão. Infração média leva, em regra, à suspensão (até 90 dias); como o aposentado não está em exercício, a sanção é convertida em multa, conforme o § 3º do art. 193, calculada por dia de suspensão sobre os proventos. A cassação de aposentadoria é reservada à infração grave.',
   },
   {
     ...c2,

@@ -31,3 +31,4 @@
 - Simulado "Prova completa" (70 questões, distribuição do edital, boletim ponderado) e matérias recolhíveis no simulado personalizado. 430 testes.
 - 5 estudos de caso novos (dados, infra, DevOps, governança/contratações, engenharia de software) e teste de integridade dos estudos de caso. 438 testes.
 - Rodada 3 de perguntas (narrativa) respondida; implementados prólogo, falas de Bubo por região e diário de pistas com aviso de nova pista. Agente de revisão de questões em andamento.
+- Revisão das 160 questões novas por agente: gabaritos conferidos, 3 ajustes (q.dev.03.008, q.port.02.003, q.inst.02.008). Névoa animada no mapa do reino, rarefeita conforme o domínio, com brilho nas regiões libertadas.

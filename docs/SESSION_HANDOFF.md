@@ -22,7 +22,7 @@
 - Nome definitivo da plataforma (segue "Crônicas do Conhecimento", provisório).
 
 ## Próxima tarefa exata
-1. Integrar o relatório do agente de revisão amostral de questões (se houver alterações não commitadas em `src/content/grimoires/*/questions*.ts`, conferir, rodar testes e commitar).
+1. Conferir no texto oficial os pontos que a revisão não confirmou: multa de até 2x o dano (art. 111 da Lei 16.168/2007), arts. 26/28 da Constituição de Goiás, arts. 73/77 da Lei Orgânica, art. 33 da Lei 20.756 (precisa dos PDFs).
 2. Quando o usuário enviar os PDFs, ampliar `legislacao/cap02-normas/02-goias-tce.md` e `institucional/cap02-goias/*` e suas questões.
 3. Narrativa: ampliar com cenas ao dissipar cada região no mapa (animação da névoa saindo) e um final especial ao concluir as 35 pistas.
 4. Ideias pendentes: virada de página no leitor, ilustrações nas margens.

@@ -105,6 +105,9 @@ export function RealmMap({ regions }: { regions: RegionState[] }) {
         <pattern id="nevoa" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
           <line x1="0" y1="0" x2="0" y2="6" stroke="rgb(60 40 20 / .28)" strokeWidth="1" />
         </pattern>
+        <filter id="neblina" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="5" />
+        </filter>
         <pattern id="mar" width="26" height="14" patternUnits="userSpaceOnUse">
           <path d="M2 9 q4 -4 8 0 t8 0" fill="none" stroke="rgb(50 70 90 / .35)" strokeWidth=".8" />
         </pattern>
@@ -138,6 +141,31 @@ export function RealmMap({ regions }: { regions: RegionState[] }) {
         {/* Rio */}
         <path d="M 40 395 C 80 340, 60 300, 110 260 S 170 200, 150 150 S 200 70, 260 30" fill="none" stroke="rgb(60 90 120 / .55)" strokeWidth="2.4" />
       </g>
+
+      {/* Névoa do Esquecimento: densa onde não há grimório, rala conforme o domínio cresce */}
+      <g filter="url(#neblina)" pointerEvents="none" aria-hidden="true">
+        {cells.map((cell, idx) => {
+          const reg = slots[idx];
+          if (idx === CAPITAL || !reg) return null;
+          const density = reg.explored ? Math.max(0, 0.7 * (1 - reg.mastery / 0.8)) : 0.85;
+          if (density <= 0.02) return null;
+          return (
+            <g key={idx} opacity={density} className="anim-drift" style={{ animationDelay: `${(idx % 5) * -1.4}s`, animationDuration: `${6 + (idx % 4)}s` }}>
+              <ellipse cx={cell.cx - 18} cy={cell.cy - 10} rx="38" ry="17" fill="#a9a196" />
+              <ellipse cx={cell.cx + 18} cy={cell.cy + 6} rx="34" ry="15" fill="#bdb5a9" />
+              <ellipse cx={cell.cx} cy={cell.cy + 20} rx="30" ry="11" fill="#c9c2b6" />
+            </g>
+          );
+        })}
+      </g>
+      {/* Brilho nas regiões já libertadas (domínio ≥ 80%) */}
+      {cells.map((cell, idx) => {
+        const reg = slots[idx];
+        if (idx === CAPITAL || !reg || !reg.explored || reg.mastery < 0.8) return null;
+        return (
+          <path key={`b${idx}`} className="anim-twinkle" pointerEvents="none" transform={`translate(${cell.cx + 22} ${cell.cy - 18})`} d="M0 -6 L1.6 -1.6 L6 0 L1.6 1.6 L0 6 L-1.6 1.6 L-6 0 L-1.6 -1.6 Z" fill="#e8b13b" />
+        );
+      })}
 
       {/* Rótulos e áreas de toque (fora do filtro, para ficarem nítidos) */}
       {cells.map((cell, idx) => {

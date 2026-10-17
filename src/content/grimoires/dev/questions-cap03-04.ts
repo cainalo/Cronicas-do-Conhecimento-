@@ -127,7 +127,7 @@ export const questoesDevCap0304: Question[] = [
     difficulty: 3,
     stem: 'Valores de número de processo foram inseridos, já em ordem crescente, em uma árvore binária de busca sem qualquer mecanismo de balanceamento. Nessa situação, a complexidade de pior caso de uma busca nessa árvore é',
     options: [
-      { key: 'A', text: 'O(1), pois a raiz guarda o menor valor.', comment: 'A raiz guarda o primeiro valor inserido, e a busca pode percorrer muitos nós.' },
+      { key: 'A', text: 'O(1), pois a raiz guarda o menor valor.', comment: 'A raiz de fato guarda o menor valor (o primeiro inserido), mas buscar qualquer outro valor obriga a descer pelos nós seguintes.' },
       { key: 'B', text: 'O(n), pois a árvore degenera em uma estrutura semelhante a uma lista.', comment: 'Correta.' },
       { key: 'C', text: 'O(log n), garantido pela propriedade de ordenação da árvore.', comment: 'O(log n) só é garantido em árvores balanceadas (AVL, rubro-negra).' },
       { key: 'D', text: 'O(n log n), pois cada nível exige ordenação.', comment: 'A busca não ordena nada; apenas desce pela árvore.' },

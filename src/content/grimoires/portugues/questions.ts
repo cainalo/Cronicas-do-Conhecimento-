@@ -263,7 +263,7 @@ export const questoesPortugues: Question[] = [
       { key: 'B', text: 'A servidora estava meia cansada após a sessão.', comment: '"Meio" com sentido de "um pouco" é advérbio invariável.' },
       { key: 'C', text: 'É proibido a entrada de pessoas não credenciadas.', comment: 'Com artigo, o adjetivo concorda: "é proibida a entrada".' },
       { key: 'D', text: 'Há bastante provas de sobrepreço no processo.', comment: 'Como pronome junto de substantivo, varia: "bastantes provas".' },
-      { key: 'E', text: 'As auditoras mesmo assinaram o relatório final.', comment: '"Mesmo" com valor de reforço concorda: "as auditoras mesmas".' },
+      { key: 'E', text: 'As auditoras já estão quite com as obrigações eleitorais.', comment: '"Quite" é adjetivo e concorda com o nome: "as auditoras estão quites".' },
     ],
     answer: 'A',
     explanation: 'Anexo, incluso, mesmo e quite concordam com o nome; "em anexo" é invariável. "Meio" advérbio não varia. "É proibido" é invariável sem determinante e varia com artigo. "Bastante" varia quando acompanha substantivo.',
