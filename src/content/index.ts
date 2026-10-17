@@ -27,6 +27,8 @@ import { capPortLeitura, capPortSintaxe, grimorioPortugues, licoesPortugues } fr
 import { questoesPortugues } from './grimoires/portugues/questions';
 import { capInstCf, capInstGoias, grimorioInstitucional, licoesInstitucional } from './grimoires/institucional';
 import { questoesInstitucional } from './grimoires/institucional/questions';
+import { capMatAritmetica, capMatLogica, grimorioMatematica, licoesMatematica } from './grimoires/matematica';
+import { questoesMatematica } from './grimoires/matematica/questions';
 import { capDadosSgbd, capDadosSql, grimorioDados, licoesDados } from './grimoires/dados';
 import { questoesDados } from './grimoires/dados/questions';
 import { capGovModelos, capGovPublico, grimorioGovernanca, licoesGovernanca } from './grimoires/governanca';
@@ -39,10 +41,10 @@ import { capDevopsEntrega, capDevopsPlataforma, grimorioDevops, licoesDevops } f
 import { questoesDevops } from './grimoires/devops/questions';
 
 export const contests: Contest[] = [tceGo2026];
-export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev, grimorioInfra, grimorioDados, grimorioGovernanca, grimorioLegislacao, grimorioEngSoft, grimorioDevops, grimorioIngles, grimorioPortugues, grimorioInstitucional];
-export const chapters: Chapter[] = [capCriptografia, capDefesa, capIaLlm, capIaAgentes, capIaFundamentos, capIaEticaDados, capDevApis, capDevIdentidade, capDevAlgoritmos, capDevLinguagens, capInfraRedes, capInfraNuvem, capInfraSo, capDadosSql, capDadosSgbd, capGovModelos, capGovPublico, capLegDados, capLegNormas, capEsProcesso, capEsArquitetura, capDevopsEntrega, capDevopsPlataforma, capInglesLeitura, capInglesVocabulario, capPortLeitura, capPortSintaxe, capInstCf, capInstGoias];
-export const lessons: Lesson[] = [...licoesCap01, ...licoesCap02, ...licoesIa, ...licoesIa34, ...licoesDev, ...licoesDev34, ...licoesInfra, ...licoesInfraSo, ...licoesDados, ...licoesGovernanca, ...licoesLegislacao, ...licoesEngSoft, ...licoesDevops, ...licoesIngles, ...licoesPortugues, ...licoesInstitucional];
-export const questions: Question[] = [...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesIaCap0304, ...questoesDev, ...questoesDevCap0304, ...questoesInfra, ...questoesInfraSo, ...questoesDados, ...questoesGovernanca, ...questoesLegislacao, ...questoesEngSoft, ...questoesDevops, ...questoesIngles, ...questoesPortugues, ...questoesInstitucional];
+export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev, grimorioInfra, grimorioDados, grimorioGovernanca, grimorioLegislacao, grimorioEngSoft, grimorioDevops, grimorioIngles, grimorioPortugues, grimorioMatematica, grimorioInstitucional];
+export const chapters: Chapter[] = [capCriptografia, capDefesa, capIaLlm, capIaAgentes, capIaFundamentos, capIaEticaDados, capDevApis, capDevIdentidade, capDevAlgoritmos, capDevLinguagens, capInfraRedes, capInfraNuvem, capInfraSo, capDadosSql, capDadosSgbd, capGovModelos, capGovPublico, capLegDados, capLegNormas, capEsProcesso, capEsArquitetura, capDevopsEntrega, capDevopsPlataforma, capInglesLeitura, capInglesVocabulario, capPortLeitura, capPortSintaxe, capInstCf, capInstGoias, capMatAritmetica, capMatLogica];
+export const lessons: Lesson[] = [...licoesCap01, ...licoesCap02, ...licoesIa, ...licoesIa34, ...licoesDev, ...licoesDev34, ...licoesInfra, ...licoesInfraSo, ...licoesDados, ...licoesGovernanca, ...licoesLegislacao, ...licoesEngSoft, ...licoesDevops, ...licoesIngles, ...licoesPortugues, ...licoesInstitucional, ...licoesMatematica];
+export const questions: Question[] = [...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesIaCap0304, ...questoesDev, ...questoesDevCap0304, ...questoesInfra, ...questoesInfraSo, ...questoesDados, ...questoesGovernanca, ...questoesLegislacao, ...questoesEngSoft, ...questoesDevops, ...questoesIngles, ...questoesPortugues, ...questoesInstitucional, ...questoesMatematica];
 
 const byId = <T extends { id: string }>(list: T[]) => new Map(list.map((x) => [x.id, x]));
 const contestMap = byId(contests);

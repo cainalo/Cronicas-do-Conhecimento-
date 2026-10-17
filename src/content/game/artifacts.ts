@@ -71,5 +71,8 @@ export const artifacts: Artifact[] = [
   { topicId: 'cg.legislacao.regime-juridico', name: 'O Juramento dos Três Anos', lore: 'Iniciativa, assiduidade, eficiência: o estágio observa tudo, em silêncio.' },
   { topicId: 'cg.legislacao.etica', name: 'O Espelho da Conduta', lore: 'Até a postagem da madrugada responde ao Código, e o brasão do Tribunal não serve de bandeira.' },
   { topicId: 'cg.legislacao.resolucoes', name: 'O Molho de Sete Chaves', lore: 'Cada resolução abre uma porta da casa; troque o número e você entra no cômodo errado.' },
+  { topicId: 'cg.matematica.aritmetica', name: 'O Ábaco de Contas Negativas', lore: 'Cada conta tem um sinal escondido; o ábaco nunca esquece de quem é o expoente.' },
+  { topicId: 'cg.matematica.proporcao', name: 'A Balança do Rateio Justo', lore: 'Pesa as partes antes de repartir o tesouro, e desconfia de quem soma porcentagens.' },
+  { topicId: 'cg.matematica.logica', name: 'O Tabuleiro dos Depoimentos', lore: 'Cada casa marcada com X é uma mentira a menos; no fim, só o culpado sobra de pé.' },
   { topicId: 'ti.infra.nuvem', name: 'Castelo Alugado', lore: 'Cresce e encolhe conforme os visitantes chegam.' },
 ];

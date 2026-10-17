@@ -19,6 +19,7 @@
 | Estudo de caso: 2 enunciados autorais, orientação com critérios pedagógicos, editor com estimativa de linhas e salvamento automático, entrega, autoavaliação, resposta-modelo comentada | `training.test.ts`, captura |
 | Flashcards com repetição espaçada (SM-2 simplificado) a partir dos glossários (29 cartões) | `training.test.ts`, `flow.test.tsx` |
 | Sincronização dessas três áreas com o Supabase (tabelas novas com RLS) | RLS verificado no remoto (`rls_check_02.sql`); envio pelo app não testado (rede) |
+| Camada divertida: mascote, trilha estilo Duolingo, cenas, desenhos animados, confete, sons, Rodada relâmpago | `game.test.ts` (rodada), capturas |
 | Visual claro estilo NutriConnect: cor por área, cabeçalho com migalha, grades de cartões, botão "Continuar"; medieval leve (capas, selos, mapa, pergaminho do leitor) | Capturas 390×844 claro/escuro e 1280×800 |
 | Planejador (`/plano`): ordem do dia congelada no aparelho, atividades marcadas pelo estudo real, revisão de erros, flashcards, estudo de caso semanal (1º dia), simulado semanal (último dia), leitura e lições; dias de descanso sem culpa; previsto/lido/respondido/domínio; preferências sincronizadas | `planner.test.ts`, captura |
 | App Android nativo (Capacitor), APK compilado e publicado pelo CI com download no site | Execução 11 do workflow; APK inspecionado (assinatura, conteúdo). Não testado em aparelho físico |
@@ -29,7 +30,7 @@
 - Confirmação de e-mail: depende da configuração padrão do Supabase Auth (provavelmente ativa). URL de redirecionamento precisa ser cadastrada ao publicar.
 
 ## Incompleto / não iniciado
-- Cobertura do edital: 39 de 68 tópicos oficiais com material (Segurança, Banco de Dados, Governança, Eng. de Software e DevOps completos; Legislação de TI com LC 205 e normativos do TCE-GO só em panorama) (Criptografia; IA: LLM, contexto, IA generativa/RAG, agentes, MCP, qualidade; Dev: APIs, autenticação; Infra: redes, perímetro, nuvem; Dados: modelagem, SQL, SGBDs, NoSQL, governança; Governança de TI: estratégia, ITIL, projetos, contratações, governo digital).
+- Cobertura do edital: 68 de 68 tópicos com material (13 grimórios, 391 questões autorais); normas estaduais/TCE-GO em panorama verificável (ver CONTENT_COVERAGE).
 - Narrativa (aguarda decisões: protagonista, conflito, personagens), Capacitor/Android, lembretes.
 
 ## Conhecido

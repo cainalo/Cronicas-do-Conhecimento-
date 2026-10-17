@@ -4,26 +4,23 @@
 **Fase:** C em andamento (conteúdo e persistência).
 
 ## Situação atual
-- App publicado automaticamente no GitHub Pages a cada push (workflow `.github/workflows/pages.yml` → branch `gh-pages`). Endereço: https://cainalo.github.io/Cronicas-do-Conhecimento-/ (o usuário precisa ter ativado Settings → Pages → `gh-pages` / root; confirmar com ele).
+- App publicado automaticamente no GitHub Pages a cada push (workflow `.github/workflows/pages.yml` → branch `gh-pages`): https://cainalo.github.io/Cronicas-do-Conhecimento-/ e APK em `/download/`. Usuário confirmou que o APK instala e funciona.
 - Edital oficial conferido (`docs/fontes/`), 68 tópicos em `contest.ts`.
-- Conteúdo: Códice das Sete Chaves (Criptografia), Livro dos Autômatos (IA, 2 caps.) Tratado das Pontes e dos Selos (Dev: APIs; identidade) e Atlas das Estradas e das Nuvens (Redes; Nuvem). Códice também com cap. 2 (Defesa em Profundidade) e O Arquivo Profundo (Banco de Dados, 2 caps.) As Atas do Conselho (Governança, 2 caps.) e O Livro das Leis do Reino (Legislação de TI, 2 caps.; normas de Goiás/TCE-GO só em panorama) O Caderno dos Arquitetos (Eng. de Software, 2 caps.) e O Diário do Porto (DevOps, 2 caps.). 22 lições, 236 questões, 3 estudos de caso. Cobertura 44/68 tópicos.
-- Fase E feita: mapa do reino, ficha do personagem, selos, inventário, missões semanais (migração 4).
-- Visual claro no estilo do NutriConnect (ver `docs/DESIGN_SYSTEM.md`): cor por área, cabeçalho com migalha, botão central "Continuar". Usuário confirmou que o APK instala e funciona.
-- App nativo Android (Capacitor) compilado no CI e baixável em `/download/` (ver `docs/MOBILE_AND_OFFLINE.md`). PWA removido.
-- Fase D completa: simulados, estudos de caso (2), flashcards e planejador, todos sincronizáveis (migrações 2 e 3 aplicadas, RLS verificado). 
-- Supabase com RLS verificado; login/sync pelo navegador ainda **não testados pelo usuário**.
+- **Conteúdo: 68/68 tópicos com material** (13 grimórios, 31 capítulos, 35 lições, 391 questões autorais, 3 estudos de caso). Ver `docs/CONTENT_COVERAGE.md`; normas estaduais/TCE-GO e LC 205 só em panorama (faltam os PDFs oficiais).
+- Visual claro no estilo do NutriConnect + camada divertida: mascote Bubo (coruja escriba, **provisório**), trilha estilo Duolingo em cada capítulo, cenas ilustradas nas páginas centrais, desenhos animados nos cartões, confete/avisos de XP/nível/selo, sons (chave em Conta), Rodada relâmpago, "Você sabia?".
+- Fases D e E completas; Supabase com RLS verificado; login/sync pelo navegador ainda **não confirmados pelo usuário**.
 
 ## Testes
-`npm test` 272/272; `tsc -b` OK; build OK; capturas 390×844 sem overflow nem erros.
+`npm test` 428/428; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
 
 ## Pendências com o usuário
-- Usuário confirmou que o app funciona; pedir retorno sobre o novo visual e sobre login/sincronização.
-- Configurar Site URL/Redirect URLs no Supabase (passo descrito em `docs/MOBILE_AND_OFFLINE.md`).
-- Rodada criativa de `OPEN_QUESTIONS.md`.
-- Pedir PDFs dos normativos do TCE-GO e da LC 205/2025 para completar `grimoires/legislacao/cap02-normas/02-goias-tce.md`.
+- Pedir retorno sobre o visual novo e sobre login/sincronização.
+- Configurar Site URL/Redirect URLs no Supabase (passo em `docs/MOBILE_AND_OFFLINE.md`).
+- PDFs: LC estadual 205/2025, RN 13/2016, RA 14/2024, RA 17/2024, RA 14/2025, PDTI 2025–2026, Lei 16.168/2007, Regimento (Res. 22/2008), Lei 15.122/2005, Lei 20.756/2020, Código de Ética, RN 5/2024, RA 24/2024, RA 5/2024, RA 19/2024, RA 15/2024, Constituição de Goiás (TCE).
+- Rodada criativa da narrativa (Fase F): protagonista, conflito, personagens, nome do mascote e da plataforma.
 
 ## Próxima tarefa exata
-1. **Capítulo 3 do Atlas (SO e diretório)**: `src/content/grimoires/infra/cap03-so/`, tópicos `ti.infra.so` (Windows/Linux, shell, PowerShell) e `ti.infra.diretorio` (AD, LDAP, virtualização) — conferir o texto exato no Anexo II (`docs/fontes/`, seção SO/Redes/Nuvem). Adicionar `capInfraSo` ao `chapterIds` do grimório, lição lic.infra.03, ~12 questões q.infra.03.*, artefatos.
-2. Depois: IA (fundamentos de ML/deep learning/PLN, ética e Estratégia Brasileira de IA, ciência de dados e Big Data), Inglês, Gerais (Português, Matemática/RL, Legislação Institucional).
-3. Se o usuário enviar os PDFs dos normativos do TCE-GO/LC 205, ampliar o cap. 2 de Legislação.
-4. Narrativa (Fase F): perguntar protagonista, conflito e personagens.
+1. **Simulado no formato da prova**: opção "Prova completa" em `/simulado` com 70 questões distribuídas como no edital (por disciplina, `Discipline.questions` em `contest.ts`; 25 gerais peso 1, 45 específicas peso 2), 4h30, boletim com nota ponderada e por bloco. Regra pura em `src/lib/training.ts` + teste.
+2. **Mais estudos de caso** (discursiva) para as disciplinas específicas sem caso: Banco de Dados, Infra/SO, DevOps, Governança, Eng. de Software (`src/content/discursivas/tce-go-2026.ts`).
+3. Narrativa (Fase F): perguntar ao usuário (AskUserQuestion) protagonista, conflito, personagens, nome do mascote; depois prólogo e falas por região.
+4. Quando o usuário enviar os PDFs, ampliar `legislacao/cap02-normas/02-goias-tce.md` e `institucional/cap02-goias/*` e suas questões.

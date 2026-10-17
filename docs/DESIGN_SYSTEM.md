@@ -32,6 +32,12 @@ Aprovado em 17/10/2026 (substitui o "medieval moderno" escuro). O usuário relat
 - Botões em pílula (`rounded-full`); principal em terracota sólida.
 - Movimento curto: `page-enter`, `stagger`, inclinação do ícone ao passar o dedo/mouse; tudo desligado com `prefers-reduced-motion`.
 
+## Camada divertida (inspirada no NutriConnect)
+- **Mascote** `components/Mascot.tsx` (Bubo, provisório): respira, pisca, acena e fala; humores idle/talk/cheer/sad/think. Aparece na Torre, nas cenas das páginas centrais, na trilha, no fim das lições, na revisão vazia, no simulado e no plano.
+- **Trilha** `components/Trail.tsx`: paradas por seção e lição, caminho em curvas, parada atual pulsando, cenário (árvores, torres, bandeiras).
+- **Cenas** `components/SceneBanner.tsx` (biblioteca, treino, reino, conta) e **desenhos dos cartões** `components/TileArt.tsx` (ampulheta escorrendo, cartas virando, relógio, pena escrevendo etc.), com inclinação 3D no mouse.
+- **Efeitos** `app/fx.tsx`: confete, avisos (+XP, novo nível, selo), sons sintetizados (Web Audio, desligáveis em Conta). Tudo respeita `prefers-reduced-motion`.
+
 ## Componentes
 `PageHeader`, `SectionTitle`, `Tile`, `TileGrid`, `IconBadge` (Page.tsx); `.card`, `.btn-primary`, `.btn-ghost`, `.chip`, `.ledger`/`.ledger-row`, `.meter`, `.input`, `.manuscript`, `.prose-manuscript`; `ProgressRing`, `HeroScene`, `BookCover`, `WaxSeal`, `RealmMap`, `AppDownload`.
 
