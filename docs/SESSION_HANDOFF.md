@@ -20,6 +20,6 @@
 - Rodada criativa de `OPEN_QUESTIONS.md`.
 
 ## Próxima tarefa exata
-1. **PWA offline** (Fase G, prioridade porque o usuário só usa o celular): instalar `vite-plugin-pwa`, gerar service worker com precache do app e das fontes (o conteúdo está no bundle), ícones PNG 192/512 e maskable gerados do `public/icon.svg`; respeitar o `base` do GitHub Pages; testar com Playwright em modo offline (`context.setOffline(true)`) abrindo o leitor após um primeiro carregamento. Registrar em `docs/MOBILE_AND_OFFLINE.md`.
+1. ~~PWA offline~~ ✅ feito e testado (ver `docs/MOBILE_AND_OFFLINE.md`).
 2. **Planejador de estudos** (fecha a Fase D): disponibilidade diária em minutos, distribuição de leitura/lições/revisões/flashcards/discursiva até 17/01/2027, sem apagar o histórico ao replanejar.
 3. **Grimório de Desenvolvimento de Sistemas** (`src/content/grimoires/dev/`, cap. 1 APIs REST/GraphQL/WebSockets, OAuth 2.0, OIDC, JWT; `binding: 'noite'`).

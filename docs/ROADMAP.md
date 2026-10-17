@@ -8,7 +8,7 @@
 | D | Planejador, flashcards (repetição espaçada), simulados, discursiva | 🟡 simulados, discursiva e flashcards prontos; falta planejador | Cada item usável e testado |
 | E | Trilha, missões, conquistas, inventário | ⬜ (XP e níveis prontos) | Missões funcionam de ponta a ponta |
 | F | Narrativa, personagens, mapas, animações | ⬜ (aguarda decisões) | Aprovado pelo usuário |
-| G | PWA offline (service worker, downloads), Capacitor Android | ⬜ (manifesto pronto) | Abrir offline e sincronizar após reconexão, testado |
+| G | PWA offline (service worker, downloads), Capacitor Android | 🟡 PWA offline pronto e testado; falta Capacitor | Abrir offline e sincronizar após reconexão, testado |
 | H | Testes amplos, expansão para outros concursos | ⬜ | — |
 
 ## Próximas entregas, em ordem

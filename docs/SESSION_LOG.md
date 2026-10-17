@@ -14,3 +14,4 @@
 - Grimório "O Livro dos Autômatos" (IA): 2 capítulos (11 seções), 4 lições, 40 questões autorais. 77 testes.
 - Visual de livro medieval gótico (pedido do usuário).
 - Fase D: migração 2 (mock_exams, essay_answers, flashcard_states, novos tipos de XP), simulados, estudos de caso, flashcards, central de treino. 87 testes.
+- PWA: vite-plugin-pwa, ícones, service worker; leitura e respostas offline testadas.
