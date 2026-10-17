@@ -1,0 +1,355 @@
+import type { Question } from '@/content/types';
+
+// Questões AUTORAIS (não são questões oficiais da FCC). Estilo inspirado no formato de múltipla
+// escolha com cinco alternativas. Estado: não revisadas por especialista externo.
+
+const base = {
+  contestId: 'tce-go-2026-tecnico-ti',
+  topicId: 'ti.seguranca.criptografia',
+  chapterId: 'cap.seg.01',
+  origin: 'autoral',
+  review: 'nao-revisado',
+} as const;
+
+export const questoesCap01: Question[] = [
+  {
+    ...base,
+    id: 'q.seg.01.001',
+    sectionId: 'fundamentos',
+    difficulty: 1,
+    stem: 'Entre os objetivos de segurança da informação listados a seguir, aquele que NÃO é garantido por mecanismos criptográficos é a',
+    options: [
+      { key: 'A', text: 'confidencialidade.', comment: 'Garantida pela cifragem (simétrica ou assimétrica).' },
+      { key: 'B', text: 'integridade.', comment: 'Garantida por hash protegido, HMAC, cifragem autenticada ou assinatura digital.' },
+      { key: 'C', text: 'disponibilidade.', comment: 'Correta. Disponibilidade depende de redundância, backup, proteção contra DoS etc., não de criptografia.' },
+      { key: 'D', text: 'autenticidade.', comment: 'Garantida por MAC/HMAC (entre as partes) ou assinatura digital.' },
+      { key: 'E', text: 'irretratabilidade.', comment: 'Irretratabilidade (não repúdio) é garantida pela assinatura digital.' },
+    ],
+    answer: 'C',
+    explanation:
+      'A criptografia atende confidencialidade, integridade, autenticidade e não repúdio. A disponibilidade integra a tríade CID, mas é assegurada por outros controles (redundância, cópias de segurança, mitigação de negação de serviço). Algumas vezes a criptografia até atrapalha a disponibilidade: perder a chave significa perder o acesso aos dados.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.002',
+    sectionId: 'fundamentos',
+    difficulty: 1,
+    stem: 'Segundo o princípio de Kerckhoffs, a segurança de um sistema criptográfico deve depender',
+    options: [
+      { key: 'A', text: 'do sigilo do algoritmo utilizado.', comment: 'É exatamente o oposto: o algoritmo pode ser público.' },
+      { key: 'B', text: 'apenas do sigilo da chave.', comment: 'Correta. Tudo pode ser público, exceto a chave.' },
+      { key: 'C', text: 'do tamanho do texto cifrado.', comment: 'O tamanho do cifrado não é fonte de segurança.' },
+      { key: 'D', text: 'da combinação entre algoritmo secreto e chave pública.', comment: 'Algoritmo secreto é "segurança por obscuridade", contrária ao princípio.' },
+      { key: 'E', text: 'do uso exclusivo de algoritmos assimétricos.', comment: 'O princípio vale para qualquer família de algoritmos.' },
+    ],
+    answer: 'B',
+    explanation:
+      'Kerckhoffs estabeleceu que o sistema deve permanecer seguro mesmo que o inimigo conheça todos os seus detalhes, exceto a chave. Por isso algoritmos como AES e RSA são públicos e amplamente analisados.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.003',
+    sectionId: 'simetrica',
+    difficulty: 2,
+    stem: 'Uma organização com 30 servidores precisa que cada par deles se comunique com sigilo exclusivo usando apenas criptografia simétrica. O número mínimo de chaves distintas necessárias é',
+    options: [
+      { key: 'A', text: '30.', comment: 'Seria uma chave por servidor, o que não garante sigilo exclusivo por par.' },
+      { key: 'B', text: '60.', comment: 'Corresponde a 2n, número de chaves do modelo assimétrico (30 pares).' },
+      { key: 'C', text: '435.', comment: 'Correta: n(n − 1)/2 = 30 × 29 / 2 = 435.' },
+      { key: 'D', text: '870.', comment: 'É n(n − 1), sem dividir por 2: contaria cada par duas vezes.' },
+      { key: 'E', text: '900.', comment: 'É n², sem fundamento.' },
+    ],
+    answer: 'C',
+    explanation:
+      'Na criptografia simétrica, cada par precisa de uma chave própria. O número de pares distintos entre n participantes é n(n − 1)/2. Para 30: 30 × 29 / 2 = 435 chaves.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.004',
+    sectionId: 'simetrica',
+    difficulty: 2,
+    stem: 'Sobre o algoritmo AES, é correto afirmar:',
+    options: [
+      { key: 'A', text: 'Opera com blocos de 128, 192 ou 256 bits, conforme o nível de segurança desejado.', comment: 'O bloco é fixo em 128 bits; o que varia são as chaves.' },
+      { key: 'B', text: 'É uma cifra de fluxo que substituiu o RC4 no TLS.', comment: 'AES é cifra de bloco; o modo CTR o faz operar como fluxo, mas ele não é uma cifra de fluxo.' },
+      { key: 'C', text: 'Utiliza chave de 56 bits, o que o torna vulnerável à força bruta.', comment: '56 bits é o tamanho efetivo da chave do DES.' },
+      { key: 'D', text: 'Opera com blocos de 128 bits e admite chaves de 128, 192 ou 256 bits.', comment: 'Correta. Padronizado no FIPS 197; foi o algoritmo Rijndael.' },
+      { key: 'E', text: 'É um algoritmo assimétrico baseado em curvas elípticas.', comment: 'AES é simétrico.' },
+    ],
+    answer: 'D',
+    explanation:
+      'O AES (Rijndael, FIPS 197) é uma cifra simétrica de bloco com bloco fixo de 128 bits e chaves de 128, 192 ou 256 bits (10, 12 ou 14 rodadas). Confundir tamanho de bloco com tamanho de chave é a pegadinha mais comum sobre o AES.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.005',
+    sectionId: 'simetrica',
+    difficulty: 2,
+    stem: 'Ao cifrar uma imagem com AES, um analista percebeu que os contornos da figura continuavam visíveis no arquivo cifrado. O modo de operação provavelmente utilizado foi o',
+    options: [
+      { key: 'A', text: 'ECB, pois blocos de texto claro idênticos produzem blocos cifrados idênticos.', comment: 'Correta. É o famoso exemplo do "pinguim em ECB".' },
+      { key: 'B', text: 'CBC, pois o vetor de inicialização é reutilizado em cada bloco.', comment: 'No CBC cada bloco é encadeado ao anterior; padrões não ficam visíveis assim.' },
+      { key: 'C', text: 'GCM, pois ele não oferece confidencialidade, apenas autenticação.', comment: 'GCM oferece confidencialidade e autenticação.' },
+      { key: 'D', text: 'CTR, pois o contador é sempre o mesmo para toda a mensagem.', comment: 'No CTR o contador muda a cada bloco.' },
+      { key: 'E', text: 'CBC, pois ele cifra todos os blocos em paralelo com a mesma chave.', comment: 'A cifragem CBC é sequencial, não paralela.' },
+    ],
+    answer: 'A',
+    explanation:
+      'No ECB cada bloco é cifrado de forma independente com a mesma chave. Blocos iguais no texto claro (por exemplo, áreas de mesma cor numa imagem) geram blocos cifrados iguais, preservando padrões. Por isso o ECB não deve ser usado para dados reais.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.006',
+    sectionId: 'simetrica',
+    difficulty: 3,
+    stem: 'Um sistema precisa cifrar mensagens garantindo, com um único mecanismo, confidencialidade e detecção de adulteração. A alternativa mais adequada é',
+    options: [
+      { key: 'A', text: 'AES no modo ECB.', comment: 'ECB não autentica e ainda revela padrões.' },
+      { key: 'B', text: 'AES no modo CBC.', comment: 'CBC oferece confidencialidade, mas não autenticação; exigiria um MAC adicional.' },
+      { key: 'C', text: 'AES no modo GCM.', comment: 'Correta. GCM é cifragem autenticada (AEAD).' },
+      { key: 'D', text: 'SHA-256 aplicado à mensagem.', comment: 'Hash não oferece confidencialidade.' },
+      { key: 'E', text: 'RC4 com chave de 128 bits.', comment: 'RC4 é inseguro e não autentica.' },
+    ],
+    answer: 'C',
+    explanation:
+      'O GCM (Galois/Counter Mode) combina a cifragem em modo contador com um código de autenticação, produzindo cifragem autenticada (AEAD). Ele é o modo padrão nas suítes do TLS 1.2 e 1.3.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.007',
+    sectionId: 'assimetrica',
+    difficulty: 1,
+    stem: 'Ana deseja enviar a Bruno um arquivo que somente Bruno consiga ler, usando criptografia assimétrica. Ana deve cifrar o arquivo com a',
+    options: [
+      { key: 'A', text: 'chave privada de Ana.', comment: 'Qualquer um com a chave pública de Ana poderia decifrar: isso prova autoria, não garante sigilo.' },
+      { key: 'B', text: 'chave pública de Ana.', comment: 'Só a privada de Ana decifraria; Bruno não conseguiria ler.' },
+      { key: 'C', text: 'chave privada de Bruno.', comment: 'Ana não tem (nem deve ter) a chave privada de Bruno.' },
+      { key: 'D', text: 'chave pública de Bruno.', comment: 'Correta. Apenas a chave privada de Bruno decifra.' },
+      { key: 'E', text: 'chave de sessão de Bruno, publicada em seu certificado.', comment: 'Certificados contêm a chave pública do titular, não chaves de sessão.' },
+    ],
+    answer: 'D',
+    explanation:
+      'Para confidencialidade, cifra-se com a chave pública do destinatário: somente a chave privada correspondente, que só o destinatário possui, consegue decifrar.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.008',
+    sectionId: 'assimetrica',
+    difficulty: 2,
+    stem: 'O protocolo Diffie-Hellman é corretamente descrito como um mecanismo',
+    options: [
+      { key: 'A', text: 'de assinatura digital baseado na fatoração de inteiros.', comment: 'DH não assina, e a fatoração é a base do RSA.' },
+      { key: 'B', text: 'de acordo de chaves que, em sua forma básica, é vulnerável ao ataque do intermediário por não autenticar as partes.', comment: 'Correta.' },
+      { key: 'C', text: 'de cifragem simétrica de bloco com chave de 168 bits.', comment: 'Essa descrição lembra o 3DES.' },
+      { key: 'D', text: 'de resumo de mensagens com saída de 160 bits.', comment: 'Isso descreve o SHA-1.' },
+      { key: 'E', text: 'que dispensa qualquer troca de mensagens entre as partes.', comment: 'As partes trocam valores públicos para chegar ao segredo comum.' },
+    ],
+    answer: 'B',
+    explanation:
+      'Diffie-Hellman permite que duas partes combinem uma chave secreta por um canal público, com base na dificuldade do logaritmo discreto. Sem autenticação (por exemplo, via certificados e assinaturas), um atacante no meio pode negociar chaves separadas com cada lado.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.009',
+    sectionId: 'assimetrica',
+    difficulty: 2,
+    stem: 'Comparando criptografia simétrica e assimétrica, é correto afirmar que a assimétrica',
+    options: [
+      { key: 'A', text: 'é mais rápida, por isso é usada para cifrar grandes volumes de dados.', comment: 'É o contrário: a assimétrica é muito mais lenta.' },
+      { key: 'B', text: 'exige n(n − 1)/2 chaves para n participantes.', comment: 'Essa é a fórmula da simétrica; a assimétrica usa n pares.' },
+      { key: 'C', text: 'facilita a distribuição de chaves, pois a chave pública pode ser divulgada abertamente.', comment: 'Correta.' },
+      { key: 'D', text: 'utiliza a mesma chave para cifrar e decifrar.', comment: 'Isso define a simétrica.' },
+      { key: 'E', text: 'não permite a implementação de assinaturas digitais.', comment: 'Assinaturas digitais dependem justamente da assimétrica.' },
+    ],
+    answer: 'C',
+    explanation:
+      'A grande contribuição da criptografia de chave pública é dispensar um canal secreto prévio para distribuir chaves e permitir assinaturas. Em contrapartida, é mais lenta, o que leva ao uso de esquemas híbridos.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.010',
+    sectionId: 'assimetrica',
+    difficulty: 3,
+    stem: 'Em relação à criptografia de curvas elípticas (ECC), quando comparada ao RSA, é correto afirmar que',
+    options: [
+      { key: 'A', text: 'oferece nível de segurança comparável com chaves significativamente menores.', comment: 'Correta: ECC de 256 bits ≈ RSA de 3072 bits (NIST SP 800-57).' },
+      { key: 'B', text: 'é um algoritmo simétrico, enquanto o RSA é assimétrico.', comment: 'Ambos são assimétricos.' },
+      { key: 'C', text: 'baseia-se na dificuldade de fatorar o produto de dois primos.', comment: 'Fatoração é a base do RSA; ECC baseia-se no logaritmo discreto em curvas elípticas.' },
+      { key: 'D', text: 'não pode ser usada para assinatura digital.', comment: 'ECDSA e Ed25519 são assinaturas com curvas elípticas.' },
+      { key: 'E', text: 'exige chaves maiores que o RSA para o mesmo nível de segurança.', comment: 'É o contrário.' },
+    ],
+    answer: 'A',
+    explanation:
+      'A ECC fundamenta-se no problema do logaritmo discreto sobre curvas elípticas, para o qual não se conhecem algoritmos tão eficientes quanto os de fatoração. Por isso alcança a mesma segurança com chaves menores, o que é vantajoso em dispositivos móveis e IoT.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.011',
+    sectionId: 'hash',
+    difficulty: 1,
+    stem: 'A respeito das funções hash criptográficas, é correto afirmar:',
+    options: [
+      { key: 'A', text: 'Permitem recuperar a mensagem original a partir do resumo, desde que se conheça a chave.', comment: 'Hash não tem chave nem é reversível.' },
+      { key: 'B', text: 'Produzem resumos cujo tamanho é proporcional ao da entrada.', comment: 'O tamanho do resumo é fixo.' },
+      { key: 'C', text: 'Garantem a confidencialidade da mensagem resumida.', comment: 'Hash não garante confidencialidade.' },
+      { key: 'D', text: 'Produzem um resumo de tamanho fixo, e uma pequena alteração na entrada altera significativamente o resultado.', comment: 'Correta: tamanho fixo e efeito avalanche.' },
+      { key: 'E', text: 'Tornam impossível a existência de duas entradas com o mesmo resumo.', comment: 'Colisões sempre existem; exige-se que sejam inviáveis de encontrar.' },
+    ],
+    answer: 'D',
+    explanation:
+      'Funções hash são determinísticas, geram saída de tamanho fixo, são de mão única e exibem efeito avalanche. Colisões existem matematicamente (entradas infinitas, saídas finitas); a exigência é que encontrá-las seja computacionalmente inviável.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.012',
+    sectionId: 'hash',
+    difficulty: 2,
+    stem: 'Considerando os algoritmos de hash, assinale a alternativa que associa corretamente algoritmo, tamanho do resumo e situação atual.',
+    options: [
+      { key: 'A', text: 'MD5 — 160 bits — recomendado para assinaturas digitais.', comment: 'MD5 tem 128 bits e está quebrado para colisões.' },
+      { key: 'B', text: 'SHA-1 — 128 bits — considerado seguro contra colisões.', comment: 'SHA-1 tem 160 bits; colisão prática demonstrada em 2017.' },
+      { key: 'C', text: 'SHA-256 — 256 bits — integrante da família SHA-2, considerado seguro.', comment: 'Correta.' },
+      { key: 'D', text: 'SHA-3 — 128 bits — versão simplificada do MD5.', comment: 'SHA-3 (Keccak) tem construção própria (esponja) e saídas de 224 a 512 bits.' },
+      { key: 'E', text: 'SHA-512 — 512 bits — algoritmo de cifragem simétrica.', comment: 'SHA-512 é hash, não cifra.' },
+    ],
+    answer: 'C',
+    explanation:
+      'MD5 (128 bits) e SHA-1 (160 bits) estão quebrados para colisões e não devem ser usados para segurança. SHA-2 (incluindo SHA-256) e SHA-3 são os padrões atuais (FIPS 180-4 e FIPS 202).',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.013',
+    sectionId: 'hash',
+    difficulty: 2,
+    stem: 'Dois sistemas que compartilham uma chave secreta precisam verificar se as mensagens trocadas não foram alteradas e se vêm de fato um do outro, sem necessidade de sigilo do conteúdo. O mecanismo mais adequado é',
+    options: [
+      { key: 'A', text: 'HMAC.', comment: 'Correta: integridade e autenticidade com chave compartilhada.' },
+      { key: 'B', text: 'MD5 sem chave.', comment: 'Sem chave, um atacante recalcula o hash; e MD5 está quebrado.' },
+      { key: 'C', text: 'AES no modo ECB.', comment: 'Oferece (mal) confidencialidade, que não foi pedida, e não autentica.' },
+      { key: 'D', text: 'Cifragem com a chave pública do destinatário.', comment: 'Isso provê confidencialidade, não autenticidade da origem.' },
+      { key: 'E', text: 'Diffie-Hellman.', comment: 'DH serve para combinar chaves, não para autenticar mensagens.' },
+    ],
+    answer: 'A',
+    explanation:
+      'O HMAC calcula um código a partir da mensagem e de uma chave compartilhada. Quem não conhece a chave não consegue produzir um código válido, o que garante integridade e autenticidade entre as partes. Por ser a chave compartilhada, o HMAC não oferece não repúdio.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.014',
+    sectionId: 'hash',
+    difficulty: 2,
+    stem: 'Para armazenar senhas de usuários em um banco de dados, a prática mais adequada é',
+    options: [
+      { key: 'A', text: 'cifrar as senhas com AES e guardar a chave na mesma tabela.', comment: 'Senhas não devem ser reversíveis, e guardar a chave junto anula a proteção.' },
+      { key: 'B', text: 'aplicar MD5 sobre a senha, por ser rápido.', comment: 'Rapidez favorece o atacante; MD5 é inadequado.' },
+      { key: 'C', text: 'aplicar uma função própria para senhas, como Argon2id ou bcrypt, com sal único por usuário.', comment: 'Correta (OWASP Password Storage Cheat Sheet).' },
+      { key: 'D', text: 'aplicar SHA-256 sem sal, para que senhas iguais tenham o mesmo resumo e facilitem a auditoria.', comment: 'Resumos iguais para senhas iguais são justamente uma fraqueza.' },
+      { key: 'E', text: 'armazenar em texto claro, restringindo o acesso ao banco.', comment: 'Qualquer vazamento exporia todas as senhas.' },
+    ],
+    answer: 'C',
+    explanation:
+      'Funções lentas e adaptativas (Argon2id, scrypt, bcrypt, PBKDF2) aumentam o custo de ataques de força bruta. O sal, único por usuário, impede tabelas pré-computadas e faz senhas iguais gerarem resumos diferentes.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.015',
+    sectionId: 'assinatura',
+    difficulty: 1,
+    stem: 'Em um esquema de assinatura digital, o signatário utiliza ____ para assinar, e o verificador utiliza ____ para conferir a assinatura. As lacunas são preenchidas, respectivamente, por',
+    options: [
+      { key: 'A', text: 'a chave pública do signatário — a chave privada do signatário', comment: 'Invertido.' },
+      { key: 'B', text: 'a chave privada do signatário — a chave pública do signatário', comment: 'Correta.' },
+      { key: 'C', text: 'a chave privada do verificador — a chave pública do verificador', comment: 'As chaves envolvidas são as do signatário.' },
+      { key: 'D', text: 'a chave pública do verificador — a chave privada do verificador', comment: 'Isso descreve a cifragem para sigilo, não assinatura.' },
+      { key: 'E', text: 'uma chave simétrica compartilhada — a mesma chave simétrica', comment: 'Isso seria um MAC, sem não repúdio.' },
+    ],
+    answer: 'B',
+    explanation:
+      'Apenas o signatário possui sua chave privada, por isso só ele pode assinar; qualquer pessoa, com a chave pública correspondente, pode verificar. É isso que fundamenta a autenticidade e o não repúdio.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.016',
+    sectionId: 'assinatura',
+    difficulty: 2,
+    stem: 'Um documento eletrônico foi assinado digitalmente e enviado por e-mail sem qualquer outra proteção. Nessa situação, a assinatura digital NÃO garante',
+    options: [
+      { key: 'A', text: 'a integridade do documento.', comment: 'A assinatura garante integridade: alterações a invalidam.' },
+      { key: 'B', text: 'a autenticidade da autoria.', comment: 'A assinatura garante autenticidade.' },
+      { key: 'C', text: 'o não repúdio.', comment: 'A assinatura garante não repúdio.' },
+      { key: 'D', text: 'a confidencialidade do conteúdo.', comment: 'Correta: o documento assinado continua legível.' },
+      { key: 'E', text: 'que alterações posteriores sejam detectadas.', comment: 'Isso é integridade, que a assinatura garante.' },
+    ],
+    answer: 'D',
+    explanation:
+      'A assinatura digital provê integridade, autenticidade e não repúdio, mas não sigilo. Para confidencialidade, seria preciso também cifrar o documento para o destinatário.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.017',
+    sectionId: 'assinatura',
+    difficulty: 2,
+    stem: 'Um certificado digital no padrão X.509 contém, entre outras informações,',
+    options: [
+      { key: 'A', text: 'a chave privada do titular, protegida por senha.', comment: 'O certificado nunca contém a chave privada.' },
+      { key: 'B', text: 'a chave pública do titular e a assinatura digital da autoridade certificadora emissora.', comment: 'Correta.' },
+      { key: 'C', text: 'a chave privada da autoridade certificadora, para validação da cadeia.', comment: 'A chave privada da AC jamais é distribuída.' },
+      { key: 'D', text: 'as chaves de sessão simétricas utilizadas nas conexões TLS.', comment: 'Chaves de sessão são derivadas a cada conexão.' },
+      { key: 'E', text: 'o hash da senha do titular, para fins de autenticação.', comment: 'Não faz parte do certificado.' },
+    ],
+    answer: 'B',
+    explanation:
+      'O certificado vincula uma chave pública a uma identidade e é assinado pela AC emissora. Contém titular, emissor, chave pública, validade, número de série e a assinatura da AC, entre outros campos.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.018',
+    sectionId: 'assinatura',
+    difficulty: 2,
+    stem: 'Sobre a Infraestrutura de Chaves Públicas Brasileira (ICP-Brasil), é correto afirmar que',
+    options: [
+      { key: 'A', text: 'foi instituída pela Lei Geral de Proteção de Dados Pessoais.', comment: 'A ICP-Brasil é anterior à LGPD (2018).' },
+      { key: 'B', text: 'foi instituída pela Medida Provisória nº 2.200-2/2001, e sua AC Raiz é o Instituto Nacional de Tecnologia da Informação (ITI).', comment: 'Correta.' },
+      { key: 'C', text: 'tem como AC Raiz o Banco Central do Brasil.', comment: 'A AC Raiz é o ITI.' },
+      { key: 'D', text: 'dispensa o uso de autoridades de registro na emissão de certificados.', comment: 'As ARs fazem a identificação dos solicitantes.' },
+      { key: 'E', text: 'admite apenas certificados de servidores web.', comment: 'Há certificados para pessoas físicas, jurídicas, equipamentos etc.' },
+    ],
+    answer: 'B',
+    explanation:
+      'A ICP-Brasil foi instituída pela MP nº 2.200-2, de 24 de agosto de 2001. O ITI é a AC Raiz. A estrutura inclui ACs subordinadas e Autoridades de Registro.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.019',
+    sectionId: 'hibrida',
+    difficulty: 2,
+    stem: 'Em uma conexão HTTPS, a criptografia é empregada de forma híbrida porque',
+    options: [
+      { key: 'A', text: 'a criptografia simétrica é usada para autenticar o servidor, e a assimétrica para cifrar os dados.', comment: 'Invertido.' },
+      { key: 'B', text: 'a criptografia assimétrica é usada para estabelecer a chave de sessão, e a simétrica, mais eficiente, para cifrar os dados.', comment: 'Correta.' },
+      { key: 'C', text: 'o hash é usado para cifrar os dados, e a assinatura para decifrá-los.', comment: 'Hash não cifra, assinatura não decifra.' },
+      { key: 'D', text: 'os dados são cifrados duas vezes, primeiro com RSA e depois com AES, para dobrar a segurança.', comment: 'Não é esse o propósito do esquema híbrido.' },
+      { key: 'E', text: 'a criptografia assimétrica é mais rápida e por isso cifra o tráfego volumoso.', comment: 'A assimétrica é mais lenta.' },
+    ],
+    answer: 'B',
+    explanation:
+      'O TLS usa mecanismos assimétricos (acordo de chaves ECDHE, certificado e assinatura do servidor) para autenticar e combinar segredos, e a simétrica (AES-GCM ou ChaCha20-Poly1305) para proteger o volume de dados, por ser muito mais rápida.',
+  },
+  {
+    ...base,
+    id: 'q.seg.01.020',
+    sectionId: 'hibrida',
+    difficulty: 3,
+    stem: 'O TLS 1.3 deixou de admitir a troca de chaves por RSA estático, exigindo acordos efêmeros (DHE/ECDHE). O principal benefício dessa mudança é',
+    options: [
+      { key: 'A', text: 'dispensar o uso de certificados digitais pelos servidores.', comment: 'Certificados continuam necessários para autenticar o servidor.' },
+      { key: 'B', text: 'permitir o uso do modo ECB, mais rápido.', comment: 'Sem relação; ECB não é usado no TLS.' },
+      { key: 'C', text: 'garantir sigilo futuro (forward secrecy): o vazamento posterior da chave privada do servidor não permite decifrar sessões já gravadas.', comment: 'Correta.' },
+      { key: 'D', text: 'eliminar a necessidade de criptografia simétrica na sessão.', comment: 'A sessão continua cifrada com algoritmos simétricos.' },
+      { key: 'E', text: 'tornar a conexão compatível com o SSL 3.0.', comment: 'SSL 3.0 é obsoleto e inseguro.' },
+    ],
+    answer: 'C',
+    explanation:
+      'Com RSA estático, quem gravasse o tráfego e depois obtivesse a chave privada do servidor poderia recuperar as chaves de sessão. Com acordos efêmeros, cada sessão usa segredos descartáveis, garantindo sigilo futuro (RFC 8446).',
+  },
+];

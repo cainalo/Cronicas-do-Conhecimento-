@@ -1,0 +1,109 @@
+@import '@fontsource/cinzel/500.css';
+@import '@fontsource/cinzel/700.css';
+@import '@fontsource/literata/400.css';
+@import '@fontsource/literata/400-italic.css';
+@import '@fontsource/literata/600.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Noite na Torre (padrão) */
+:root {
+  --bg: 15 18 32;
+  --surface: 24 28 46;
+  --raised: 33 38 60;
+  --ink: 232 225 208;
+  --muted: 158 158 170;
+  --line: 58 62 88;
+  --gold: 212 164 76;
+  --ember: 196 92 60;
+  --ok: 110 180 120;
+  --bad: 222 106 96;
+  /* Página do manuscrito à noite: pergaminho escurecido, tinta clara e quente */
+  --parchment: 38 33 26;
+  --sepia: 236 224 198;
+  --font-scale: 1;
+  color-scheme: dark;
+}
+
+/* Pergaminho diurno */
+:root[data-theme='light'] {
+  --bg: 233 226 210;
+  --surface: 245 239 226;
+  --raised: 252 248 238;
+  --ink: 40 32 24;
+  --muted: 110 98 84;
+  --line: 205 192 168;
+  --gold: 150 104 30;
+  --ember: 160 60 36;
+  --ok: 46 120 64;
+  --bad: 170 50 40;
+  --parchment: 246 237 214;
+  --sepia: 43 33 22;
+  color-scheme: light;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+body {
+  @apply bg-bg text-ink font-serif antialiased;
+  min-height: 100dvh;
+}
+h1, h2, h3, .font-display { font-family: Cinzel, Georgia, serif; letter-spacing: 0.02em; }
+:focus-visible { outline: 2px solid rgb(var(--gold)); outline-offset: 2px; }
+
+@layer components {
+  .card { @apply rounded-xl border border-line bg-surface; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 font-display text-sm font-medium transition active:scale-[0.98] disabled:opacity-50; min-height: 44px; }
+  .btn-primary { @apply btn bg-gold text-bg hover:brightness-110; }
+  .btn-ghost { @apply btn border border-line bg-transparent text-ink hover:bg-raised; }
+  .chip { @apply inline-flex items-center rounded-full border border-line px-2 py-0.5 text-xs text-muted; }
+  .divider-ornament { @apply my-6 flex items-center gap-3 text-gold; }
+  .divider-ornament::before, .divider-ornament::after { content: ''; @apply h-px flex-1 bg-gold/40; }
+}
+
+/* ---------- Manuscrito ---------- */
+.manuscript {
+  background-color: rgb(var(--parchment));
+  color: rgb(var(--sepia));
+  background-image:
+    radial-gradient(ellipse at top left, rgb(var(--gold) / 0.08), transparent 60%),
+    radial-gradient(ellipse at bottom right, rgb(var(--ember) / 0.06), transparent 55%);
+  border: 1px solid rgb(var(--gold) / 0.35);
+  box-shadow: inset 0 0 0 4px rgb(var(--parchment)), inset 0 0 0 5px rgb(var(--gold) / 0.25), 0 10px 30px rgb(0 0 0 / 0.25);
+}
+.prose-manuscript {
+  font-size: calc(1.0625rem * var(--font-scale));
+  line-height: 1.75;
+}
+.prose-manuscript p { margin: 0 0 1em; }
+.prose-manuscript h3 { font-size: 1.1em; margin: 1.6em 0 0.6em; color: rgb(var(--gold)); }
+.prose-manuscript strong { font-weight: 600; }
+.prose-manuscript ul, .prose-manuscript ol { margin: 0 0 1em 1.25em; }
+.prose-manuscript ul { list-style: disc; }
+.prose-manuscript ol { list-style: decimal; }
+.prose-manuscript li { margin: 0.25em 0; }
+.prose-manuscript blockquote {
+  margin: 1.2em 0; padding: 0.8em 1em; border-left: 3px solid rgb(var(--ember));
+  background: rgb(var(--ember) / 0.08); border-radius: 0 8px 8px 0;
+}
+.prose-manuscript blockquote p:last-child { margin-bottom: 0; }
+.prose-manuscript code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85em; background: rgb(var(--sepia) / 0.08); padding: 0.1em 0.3em; border-radius: 4px; }
+.prose-manuscript pre { overflow-x: auto; margin: 0 0 1em; padding: 0.9em; border-radius: 8px; background: rgb(var(--sepia) / 0.07); border: 1px solid rgb(var(--gold) / 0.2); line-height: 1.5; }
+.prose-manuscript pre code { background: none; padding: 0; font-size: 0.8em; }
+.prose-manuscript .table-wrap { overflow-x: auto; margin: 0 0 1.2em; }
+.prose-manuscript table { border-collapse: collapse; width: 100%; font-size: 0.88em; line-height: 1.45; }
+.prose-manuscript th, .prose-manuscript td { border: 1px solid rgb(var(--gold) / 0.25); padding: 0.45em 0.6em; vertical-align: top; text-align: left; }
+.prose-manuscript th { background: rgb(var(--gold) / 0.12); font-weight: 600; }
+/* Iluminura: capitular na primeira letra de cada seção */
+.prose-manuscript .illuminated > p:first-child::first-letter {
+  float: left; font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: 3.4em; line-height: 0.9;
+  padding: 0.08em 0.12em 0 0; margin-right: 0.08em; color: rgb(var(--gold));
+  text-shadow: 0 0 1px rgb(var(--ember) / 0.6);
+}
+mark.search-hit { background: rgb(var(--gold) / 0.45); color: inherit; border-radius: 2px; }
+
+.safe-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+@layer components {
+  .input { @apply w-full rounded-lg border border-line bg-raised px-3 py-3 text-ink placeholder:text-muted; }
+}

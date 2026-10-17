@@ -1,0 +1,20 @@
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { loadPrefs, savePrefs, type Prefs } from '@/lib/storage';
+
+const PrefsCtx = createContext<{ prefs: Prefs; setPrefs: (p: Partial<Prefs>) => void } | null>(null);
+
+export function PrefsProvider({ children }: { children: ReactNode }) {
+  const [prefs, set] = useState<Prefs>(loadPrefs);
+  useEffect(() => {
+    document.documentElement.dataset.theme = prefs.theme;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', prefs.theme === 'dark' ? '#0f1220' : '#e9e2d2');
+    savePrefs(prefs);
+  }, [prefs]);
+  return <PrefsCtx.Provider value={{ prefs, setPrefs: (p) => set((c) => ({ ...c, ...p })) }}>{children}</PrefsCtx.Provider>;
+}
+
+export function usePrefs() {
+  const c = useContext(PrefsCtx);
+  if (!c) throw new Error('usePrefs fora do PrefsProvider');
+  return c;
+}
