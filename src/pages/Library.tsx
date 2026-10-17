@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
-import { DEFAULT_CONTEST_ID, getChapter, getContest, getGrimoire, grimoiresForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, chapters, getChapter, getContest, getGrimoire, grimoiresForContest } from '@/content';
 import type { ReviewStatus } from '@/content/types';
 import { Icon } from '@/components/Icon';
 
@@ -14,7 +14,8 @@ export const reviewLabel: Record<ReviewStatus, string> = {
 export function LibraryPage() {
   const contest = getContest(DEFAULT_CONTEST_ID)!;
   const written = grimoiresForContest(contest.id);
-  const writtenDisciplines = new Set(written.map((g) => g.disciplineId));
+  const coveredTopics = new Set(chapters.flatMap((c) => c.topicIds));
+  const hasMaterial = (topicIds: string[]) => topicIds.some((t) => coveredTopics.has(t));
   return (
     <div className="space-y-5">
       <h1 className="text-xl text-gold">Biblioteca da Torre</h1>
@@ -23,13 +24,13 @@ export function LibraryPage() {
           <li key={g.id}>
             <Link to={`/grimorio/${g.id}`} className="card flex gap-4 p-4 hover:bg-raised">
               <div aria-hidden className="manuscript flex h-24 w-16 shrink-0 items-center justify-center rounded-sm text-gold">
-                <Icon name="selo" size={30} />
+                <Icon name={g.sigil ?? 'selo'} size={30} />
               </div>
               <div>
                 <p className="text-xs text-muted">{g.epithet}</p>
                 <h2 className="text-lg">{g.title}</h2>
                 <p className="mt-1 text-sm text-muted">{g.description}</p>
-                <p className="mt-1 text-xs text-gold">{g.chapterIds.length} capítulo(s) escrito(s)</p>
+                <p className="mt-1 text-xs text-gold">{g.chapterIds.length === 1 ? '1 capítulo escrito' : `${g.chapterIds.length} capítulos escritos`}</p>
               </div>
             </Link>
           </li>
@@ -39,7 +40,7 @@ export function LibraryPage() {
         <h2 className="mb-2 text-base text-muted">Estantes ainda vazias</h2>
         <ul className="grid grid-cols-2 gap-2">
           {contest.disciplines
-            .filter((d) => !writtenDisciplines.has(d.id))
+            .filter((d) => !hasMaterial(d.topics.map((t) => t.id)))
             .map((d) => (
               <li key={d.id} className="rounded-sm border border-dashed border-line p-3 text-sm text-muted">
                 {d.title}

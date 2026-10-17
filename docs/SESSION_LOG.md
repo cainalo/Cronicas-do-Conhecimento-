@@ -9,3 +9,6 @@
 - Implementados leitor, lições, revisão, histórico, progresso, edital, conta/sync, XP/níveis, recomendação.
 - 37 testes, build, verificação de RLS no banco remoto, capturas mobile.
 - Usuário enviou o edital consolidado (15/09/2026): salvo em docs/fontes/, contest.ts reescrito com dados oficiais (68 tópicos), divergências das fontes secundárias registradas.
+- Publicação automática no GitHub Pages (workflow + branch gh-pages) para uso só pelo celular.
+- Pesquisa de "cara de site feito por IA": emojis trocados por ícones SVG próprios, painel em livro-razão, sem rótulos em maiúsculas espaçadas, rubricas em vermelho, texto sem excesso de travessões. Regras em DESIGN_SYSTEM.md.
+- Grimório "O Livro dos Autômatos" (IA): 2 capítulos (11 seções), 4 lições, 40 questões autorais. 77 testes.

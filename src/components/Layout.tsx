@@ -15,10 +15,10 @@ export function SyncBadge() {
   const { sync, session } = useStudy();
   const map = {
     local: { t: 'Local', c: 'text-muted' },
-    idle: { t: sync.pending ? `${sync.pending} pendente(s)` : 'Sincronizado', c: sync.pending ? 'text-gold' : 'text-ok' },
+    idle: { t: sync.pending ? `${sync.pending} a enviar` : 'Sincronizado', c: sync.pending ? 'text-gold' : 'text-ok' },
     syncing: { t: 'Sincronizando…', c: 'text-gold' },
-    offline: { t: `Offline · ${sync.pending} pendente(s)`, c: 'text-gold' },
-    error: { t: `Erro · ${sync.pending} pendente(s)`, c: 'text-bad' },
+    offline: { t: `Offline, ${sync.pending} a enviar`, c: 'text-gold' },
+    error: { t: `Falha no envio (${sync.pending})`, c: 'text-bad' },
   } as const;
   const m = map[sync.state];
   return (

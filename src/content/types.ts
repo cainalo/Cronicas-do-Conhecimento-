@@ -79,6 +79,8 @@ export interface Grimoire {
   epithet: string;
   description: string;
   chapterIds: string[];
+  /** Nome do ícone de capa (ver components/Icon.tsx). */
+  sigil?: 'chave' | 'pena' | 'selo' | 'grimorio';
 }
 
 export interface QuestionOption {

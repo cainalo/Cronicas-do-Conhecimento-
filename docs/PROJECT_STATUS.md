@@ -21,7 +21,7 @@
 - Confirmação de e-mail: depende da configuração padrão do Supabase Auth (provavelmente ativa). URL de redirecionamento precisa ser cadastrada ao publicar.
 
 ## Incompleto / não iniciado
-- Cobertura do edital: 1 de 68 tópicos oficiais com material.
+- Cobertura do edital: 7 de 68 tópicos oficiais com material (Criptografia; IA: LLM, contexto, IA generativa/RAG, agentes, MCP, qualidade).
 - Flashcards, simulados, discursiva, planejador, missões/conquistas/inventário, narrativa, mapa/trilha visual, service worker/offline, Capacitor/Android.
 
 ## Conhecido

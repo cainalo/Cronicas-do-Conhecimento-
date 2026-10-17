@@ -14,6 +14,7 @@
 ## Próximas entregas, em ordem
 1. ~~Conferir edital oficial~~ ✅ feito em 17/10/2026.
 2. Testar login/sincronização no navegador real.
-3. Grimório de IA (9 questões em dois blocos: Eng. de Software Assistida por IA e Sistemas Agentivos 4 + IA, Ciência de Dados e Automação 5).
+3. ~~Grimório de IA, caps. 1 e 2~~ ✅ (falta cap. 3: fundamentos de ML, ética, ciência de dados).
+4. Grimório de Desenvolvimento de Sistemas (5 questões).
 4. Flashcards com repetição espaçada ligados aos capítulos.
 5. Service worker (vite-plugin-pwa) para leitura offline.

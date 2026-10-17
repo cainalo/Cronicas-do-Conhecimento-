@@ -43,9 +43,9 @@ export function AccountPage() {
 
   const syncText = {
     local: 'Modo visitante: progresso só neste aparelho.',
-    idle: sync.pending ? `${sync.pending} registro(s) aguardando envio.` : 'Tudo salvo no servidor.',
+    idle: sync.pending ? `Registros aguardando envio: ${sync.pending}.` : 'Tudo salvo no servidor.',
     syncing: 'Sincronizando…',
-    offline: `Sem conexão. ${sync.pending} registro(s) serão enviados quando voltar.`,
+    offline: `Sem conexão. Registros a enviar quando ela voltar: ${sync.pending}.`,
     error: `Falha ao sincronizar: ${sync.error ?? ''}`,
   }[sync.state];
 
@@ -83,7 +83,7 @@ export function AccountPage() {
           <button
             className="btn-ghost w-full text-bad"
             onClick={async () => {
-              if (sync.pending && !confirm(`Há ${sync.pending} registro(s) ainda não enviados. Eles continuarão guardados neste aparelho para quando você entrar de novo. Sair mesmo assim?`)) return;
+              if (sync.pending && !confirm(`Ainda há registros não enviados (${sync.pending}). Eles continuarão guardados neste aparelho para quando você entrar de novo. Sair mesmo assim?`)) return;
               await sb.auth.signOut();
             }}
           >
