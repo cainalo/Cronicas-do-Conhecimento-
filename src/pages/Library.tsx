@@ -3,6 +3,8 @@ import { useStudy } from '@/app/StudyProvider';
 import { DEFAULT_CONTEST_ID, chapters, getChapter, getContest, getGrimoire, grimoiresForContest } from '@/content';
 import type { ReviewStatus } from '@/content/types';
 import { BookCover } from '@/components/BookCover';
+import { Trail, chapterStops } from '@/components/Trail';
+import { SceneBanner } from '@/components/SceneBanner';
 import { roman } from '@/lib/roman';
 import { areaColor, tint } from '@/app/areas';
 import { Icon } from '@/components/Icon';
@@ -20,10 +22,14 @@ export function LibraryPage() {
   const written = grimoiresForContest(contest.id);
   const coveredTopics = new Set(chapters.flatMap((c) => c.topicIds));
   const hasMaterial = (topicIds: string[]) => topicIds.some((t) => coveredTopics.has(t));
-  const color = areaColor('grimorios', useIsDark());
+  const dark = useIsDark();
+  const color = areaColor('grimorios', dark);
   return (
     <div className="space-y-6">
       <PageHeader area="grimorios" crumb={false} title="Grimórios" subtitle={`${written.length} livros escritos para o ${contest.name}`} />
+      <SceneBanner scene="biblioteca" dark={dark}>
+        Escolha um livro. Cada capítulo é uma trilha com paradas e uma lição no fim.
+      </SceneBanner>
       <ul className="stagger grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3">
         {written.map((g) => (
           <li key={g.id}>
@@ -63,6 +69,8 @@ export function GrimoirePage() {
   const g = getGrimoire(id);
   const color = areaColor('grimorios', useIsDark());
   if (!g) return <p>Grimório não encontrado.</p>;
+  // O mascote espera só no primeiro capítulo ainda não concluído.
+  const firstOpen = g.chapterIds.findIndex((cid) => chapterStops(getChapter(cid)!, data).some((s) => !s.done));
   return (
     <div className="space-y-6">
       <header>
@@ -83,42 +91,38 @@ export function GrimoirePage() {
         <p className="mt-4 text-[0.95rem] text-muted">{g.description}</p>
       </header>
       <section>
-        <SectionTitle icon="sumario" color={color}>
-          Capítulos
+        <SectionTitle icon="mapa" color={color}>
+          Trilha
         </SectionTitle>
-        <ol className="stagger space-y-3">
-          {g.chapterIds.map((cid) => {
+        <ol className="space-y-8">
+          {g.chapterIds.map((cid, ci) => {
             const c = getChapter(cid)!;
             const rp = data.reading[c.id];
             const read = rp?.sectionsRead.length ?? 0;
             return (
-              <li key={c.id} className="card p-4">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="rounded-full px-2.5 py-0.5 text-xs font-bold text-white" style={{ background: color }}>
-                    Capítulo {roman(c.number).toUpperCase()}
-                  </span>
-                  <span className="text-xs text-muted">
-                    {read}/{c.sections.length} seções lidas
-                  </span>
-                </div>
-                <span className="meter mt-3">
-                  <span style={{ width: `${(read / c.sections.length) * 100}%`, background: color }} />
-                </span>
-                <h3 className="mt-3 text-lg leading-snug">{c.title}</h3>
-                <p className="text-sm text-muted">{c.subtitle}</p>
-                <p className="mt-1 text-xs text-muted">
-                  cerca de {c.estimatedMinutes} minutos · {reviewLabel[c.review]}
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <Link to={`/capitulo/${c.id}${rp?.lastSectionId ? `#${rp.lastSectionId}` : ''}`} className="btn-primary flex-1">
-                    {read ? 'Continuar leitura' : 'Abrir o capítulo'}
-                  </Link>
-                  {c.lessonIds.map((lid, i) => (
-                    <Link key={lid} to={`/licao/${lid}`} className="btn-ghost">
-                      Lição {roman(i + 1).toUpperCase()}
+              <li key={c.id}>
+                {/* Faixa do trecho, como as unidades do Duolingo */}
+                <div
+                  className="shine relative mb-6 overflow-hidden rounded-[1.6rem] p-4 text-white shadow-[var(--shadow-card)]"
+                  style={{ background: `linear-gradient(140deg, ${color}, color-mix(in srgb, ${color} 65%, #000))` }}
+                >
+                  <p className="text-xs font-bold uppercase tracking-wide opacity-85">
+                    Capítulo {roman(c.number).toUpperCase()} · {read}/{c.sections.length} seções
+                  </p>
+                  <h3 className="mt-1 text-lg leading-snug">{c.title}</h3>
+                  <p className="text-sm opacity-90">{c.subtitle}</p>
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <Link
+                      to={`/capitulo/${c.id}${rp?.lastSectionId ? `#${rp.lastSectionId}` : ''}`}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-bold shadow-sm transition active:scale-95"
+                      style={{ color }}
+                    >
+                      <Icon name="grimorio" size={16} strokeWidth={2.2} /> {read ? 'Continuar leitura' : 'Abrir o capítulo'}
                     </Link>
-                  ))}
+                    <span className="text-xs opacity-85">cerca de {c.estimatedMinutes} min · {reviewLabel[c.review].toLowerCase()}</span>
+                  </div>
                 </div>
+                <Trail chapter={c} data={data} color={color} guide={ci === firstOpen} />
               </li>
             );
           })}

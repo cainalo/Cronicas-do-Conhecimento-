@@ -6,6 +6,7 @@ import { isDone } from '@/lib/planner';
 import { usePlanOfToday } from '@/app/usePlanOfToday';
 import { areaColor } from '@/app/areas';
 import { PageHeader, SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
+import { SceneBanner } from '@/components/SceneBanner';
 
 export function TrainingPage() {
   const { data } = useStudy();
@@ -26,6 +27,13 @@ export function TrainingPage() {
   return (
     <div className="space-y-6">
       <PageHeader area="treino" crumb={false} title="Treino" subtitle="Praticar, revisar e testar o que foi estudado" />
+      <SceneBanner scene="treino" dark={dark} mood={wrong ? 'think' : 'talk'}>
+        {wrong
+          ? `${wrong} questão(ões) esperam revanche na revisão de erros.`
+          : due
+            ? `${due} cartões querem ser lembrados hoje.`
+            : 'Tudo em dia. Que tal um simulado para medir forças?'}
+      </SceneBanner>
 
       <section>
         <SectionTitle icon="calendario" color={color}>

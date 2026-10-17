@@ -9,12 +9,15 @@ import { PUBLIC_SITE, isNative } from '@/app/native';
 const authRedirect = () => (isNative() ? `${PUBLIC_SITE}conta` : `${location.origin}${import.meta.env.BASE_URL}conta`);
 import { Icon } from '@/components/Icon';
 import { PageHeader } from '@/components/Page';
+import { SceneBanner } from '@/components/SceneBanner';
+import { useFx } from '@/app/fx';
 
 type Mode = 'entrar' | 'criar' | 'recuperar';
 
 export function AccountPage() {
   const { session, sync, syncNow, authReady } = useStudy();
   const { prefs, setPrefs } = usePrefs();
+  const { sfx } = useFx();
   const [mode, setMode] = useState<Mode>('entrar');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -58,6 +61,9 @@ export function AccountPage() {
   return (
     <div className="space-y-5">
       <PageHeader area="conta" crumb={false} title="Conta" subtitle="Login, sincronização, aparência e o app Android" />
+      <SceneBanner scene="conta" dark={prefs.theme === 'dark'} mood={session ? 'cheer' : 'talk'}>
+        {session ? 'Seu progresso está guardado no cofre do reino.' : 'Entre para guardar o progresso e estudar em qualquer aparelho.'}
+      </SceneBanner>
 
       {!authReady ? (
         <p className="text-muted">Verificando sessão…</p>
@@ -141,6 +147,25 @@ export function AccountPage() {
             <Icon name="sol" size={18} /> Claro
           </button>
         </div>
+        <label className="flex items-center justify-between gap-3 pt-2">
+          <span>
+            <span className="block font-semibold">Sons</span>
+            <span className="block text-sm text-muted">Toques curtos ao acertar, errar e concluir.</span>
+          </span>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={prefs.sound !== false}
+            onClick={() => {
+              const on = prefs.sound === false;
+              setPrefs({ sound: on });
+              if (on) sfx('ok', true);
+            }}
+            className={`relative h-7 w-12 shrink-0 rounded-full transition ${prefs.sound !== false ? 'bg-ok' : 'bg-line'}`}
+          >
+            <span className={`absolute top-0.5 h-6 w-6 rounded-full bg-white shadow transition-all ${prefs.sound !== false ? 'left-[1.375rem]' : 'left-0.5'}`} />
+          </button>
+        </label>
       </section>
     </div>
   );

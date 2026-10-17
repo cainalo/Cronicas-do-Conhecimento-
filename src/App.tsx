@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
+import { FxProvider } from '@/app/fx';
 import { Layout } from '@/components/Layout';
 import { Dashboard } from '@/pages/Dashboard';
 import { GrimoirePage, LibraryPage } from '@/pages/Library';
@@ -51,11 +52,13 @@ export function AppRoutes() {
 export default function App() {
   return (
     <PrefsProvider>
-      <StudyProvider>
-        <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-          <AppRoutes />
-        </BrowserRouter>
-      </StudyProvider>
+      <FxProvider>
+        <StudyProvider>
+          <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+            <AppRoutes />
+          </BrowserRouter>
+        </StudyProvider>
+      </FxProvider>
     </PrefsProvider>
   );
 }

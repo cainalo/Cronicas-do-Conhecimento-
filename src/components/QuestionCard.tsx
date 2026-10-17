@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import type { Question } from '@/content/types';
 import { getChapter } from '@/content';
 import { Icon } from '@/components/Icon';
+import { useFx } from '@/app/fx';
 
 const originLabel: Record<Question['origin'], string> = {
   autoral: 'Questão autoral (não oficial)',
@@ -23,9 +24,10 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
   const correct = selected === q.answer;
   const chapter = getChapter(q.chapterId);
   const section = chapter?.sections.find((s) => s.id === q.sectionId);
+  const { sfx } = useFx();
 
   return (
-    <article className="card p-4" aria-live="polite">
+    <article className={`card p-4 ${confirmed ? (correct ? 'pop' : 'anim-shake') : ''}`} aria-live="polite">
       <div className="mb-3 flex flex-wrap gap-2">
         <span className="chip">{originLabel[q.origin]}</span>
         <span className="chip">{['Fácil', 'Média', 'Difícil'][q.difficulty - 1]}</span>
@@ -78,6 +80,7 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
           onClick={() => {
             if (!selected) return;
             setConfirmed(true);
+            sfx(selected === q.answer ? 'ok' : 'bad');
             onAnswer(selected);
           }}
         >

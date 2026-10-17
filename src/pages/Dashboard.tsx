@@ -14,6 +14,7 @@ import { AppDownload } from '@/components/AppDownload';
 import { Icon } from '@/components/Icon';
 import { SyncBadge } from '@/components/Layout';
 import { IconBadge, SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
+import { Mascot } from '@/components/Mascot';
 
 function daysUntil(iso: string) {
   const ms = new Date(iso + 'T00:00:00-03:00').getTime() - Date.now();
@@ -38,9 +39,40 @@ export function Dashboard() {
   const { plan } = usePlanOfToday();
   const pending = plan.items.filter((i) => !isDone(i, data, plan.day));
   const torre = c('torre');
+  const hour = new Date().getHours();
+  const greet = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
+  // "Você sabia?": um termo de glossário por dia, sempre o mesmo durante o dia.
+  const dayNum = Math.floor(Date.now() / 86400000);
+  const fact = flashcards[dayNum % flashcards.length];
 
   return (
     <div className="stagger space-y-6">
+      {/* Saudação do mascote, como a abertura da página Funções do NutriConnect */}
+      <section className="flex items-end gap-2">
+        <Mascot mood={sheet.streak ? 'cheer' : 'talk'} size={88} />
+        <div className="mb-3 min-w-0 flex-1">
+          <div className="anim-toast-in rounded-2xl rounded-bl-sm border border-line bg-surface px-3.5 py-2.5 shadow-[var(--shadow-card)]">
+            <p className="font-display text-lg leading-tight">
+              {greet}, {sheet.title.toLowerCase()}!
+            </p>
+            <p className="mt-0.5 text-sm text-muted">
+              {sheet.streak ? `Você estuda há ${sheet.streak} dia(s) seguido(s). Não deixe a chama apagar.` : 'Um pouco de estudo hoje acende a sua sequência.'}
+            </p>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold text-white shadow-sm" style={{ background: '#c2571f' }}>
+              <Icon name="chama" size={14} strokeWidth={2.2} /> {sheet.streak} dia(s)
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold text-white shadow-sm" style={{ background: '#a8740c' }}>
+              <Icon name="estrela" size={14} strokeWidth={2.2} /> {sheet.xp} XP
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold text-white shadow-sm" style={{ background: '#4a7f46' }}>
+              <Icon name="escudo" size={14} strokeWidth={2.2} /> nível {sheet.level}
+            </span>
+          </div>
+        </div>
+      </section>
+
       {/* Abertura: contagem regressiva e a próxima missão, no mesmo cartão */}
       <section
         className="overflow-hidden rounded-[2rem] border shadow-[var(--shadow-card)]"
@@ -110,6 +142,17 @@ export function Dashboard() {
           <Tile to="/reino" icon="mapa" color={c('reino')} title="Mapa do reino" text="Seu domínio em cada disciplina." />
         </TileGrid>
       </section>
+
+      {fact && (
+        <Link to="/flashcards" className="card group relative block overflow-hidden p-4">
+          <span className="absolute -right-4 -top-4 h-24 w-24 rounded-full opacity-15" style={{ background: c('grimorios') }} />
+          <p className="flex items-center gap-2 text-sm font-semibold" style={{ color: c('grimorios') }}>
+            <Icon name="estrela" size={16} strokeWidth={2.2} className="anim-twinkle" /> Você sabia?
+          </p>
+          <p className="mt-1 font-display text-lg leading-snug">{fact.front}</p>
+          <p className="mt-1 text-sm text-muted">{fact.back}</p>
+        </Link>
+      )}
 
       {!session && (
         <Link to="/conta" className="card flex items-center gap-3 p-4">

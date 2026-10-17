@@ -1,10 +1,11 @@
 // Peças de página no estilo do NutriConnect: cabeçalho com a cor da área, títulos de seção
 // com ícone e grade de cartões coloridos.
-import type { CSSProperties, ReactNode } from 'react';
+import { useRef, type CSSProperties, type PointerEvent, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { usePrefs } from '@/app/prefs';
 import { AREAS, areaColor, tint, type AreaKey } from '@/app/areas';
 import { Icon, type IconName } from '@/components/Icon';
+import { TileArt, type ArtId } from '@/components/TileArt';
 
 export const useIsDark = () => usePrefs().prefs.theme === 'dark';
 
@@ -92,38 +93,65 @@ export interface TileProps {
   text: string;
   badge?: string;
   wide?: boolean;
+  /** Desenho animado do canto; por padrão, o do próprio ícone. */
+  art?: ArtId | null;
+  index?: number;
 }
 
-/** Cartão de função: fundo suave na cor do cartão, ícone em placa, título e descrição curta. */
-export function Tile({ to, icon, color, title, text, badge, wide }: TileProps) {
+const ARTS: string[] = ['ampulheta', 'cartas', 'relogio', 'pena', 'calendario', 'lista', 'mapa', 'escudo', 'grafico', 'pergaminho', 'grimorio', 'torre'];
+
+/** Inclina o elemento na direção do mouse (no toque, só afunda um pouco). */
+export function useTilt<T extends HTMLElement>() {
+  const ref = useRef<T | null>(null);
+  const onPointerMove = (e: PointerEvent) => {
+    if (e.pointerType !== 'mouse' || !ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    ref.current.style.setProperty('--rx', `${(-y * 7).toFixed(2)}deg`);
+    ref.current.style.setProperty('--ry', `${(x * 9).toFixed(2)}deg`);
+  };
+  const onPointerLeave = () => {
+    ref.current?.style.removeProperty('--rx');
+    ref.current?.style.removeProperty('--ry');
+  };
+  return { ref, onPointerMove, onPointerLeave };
+}
+
+/** Cartão de função: fundo suave na cor do cartão, ícone em placa, desenho animado, título e descrição curta. */
+export function Tile({ to, icon, color, title, text, badge, wide, art, index = 0 }: TileProps) {
+  const tilt = useTilt<HTMLAnchorElement>();
+  const artId = art === null ? null : (art ?? (ARTS.includes(icon) ? (icon as ArtId) : null));
   const style: CSSProperties = {
-    background: `linear-gradient(160deg, ${tint(color, 16)}, ${tint(color, 5)}), rgb(var(--surface))`,
-    borderColor: tint(color, 24),
+    background: `linear-gradient(160deg, ${tint(color, 18)}, ${tint(color, 5)}), rgb(var(--surface))`,
+    borderColor: tint(color, 26),
   };
   return (
-    <Link
-      to={to}
-      className={`group relative flex h-full min-h-[8.5rem] flex-col items-start gap-2 overflow-hidden rounded-[1.6rem] border p-3.5 text-left shadow-[var(--shadow-card)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] active:scale-[0.98] ${wide ? 'col-span-2' : ''}`}
-      style={style}
-    >
-      <span className="flex w-full items-start justify-between gap-2">
-        <span className="transition duration-300 group-hover:-rotate-6 group-hover:scale-110">
+    <div className={`anim-tile-in ${wide ? 'col-span-2' : ''}`} style={{ animationDelay: `${Math.min(index, 12) * 50}ms` }}>
+      <Link
+        to={to}
+        {...tilt}
+        className="tilt group relative flex h-full min-h-[8.75rem] flex-col items-start gap-2 overflow-hidden rounded-[1.6rem] border p-3.5 text-left shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lift)] active:scale-[0.98]"
+        style={style}
+      >
+        {artId && <TileArt art={artId} color={color} />}
+        <span className="relative transition duration-300 group-hover:-rotate-6 group-hover:scale-110">
           <IconBadge icon={icon} color={color} />
         </span>
         {badge && (
-          <span className="max-w-[60%] truncate rounded-full px-2 py-0.5 text-[11px] font-bold text-white shadow-sm" style={{ background: color }}>
+          <span className="relative mt-auto max-w-full truncate rounded-full px-2 py-0.5 text-[11px] font-bold text-white shadow-sm" style={{ background: color }}>
             {badge}
           </span>
         )}
-      </span>
-      <span className="mt-auto text-[0.95rem] font-bold leading-tight" style={{ color: `color-mix(in srgb, ${color} 55%, rgb(var(--ink)))` }}>
-        {title}
-      </span>
-      <span className="line-clamp-2 text-xs leading-snug text-ink/70">{text}</span>
-    </Link>
+        <span className={`relative text-[0.95rem] font-bold leading-tight ${badge ? '' : 'mt-auto'}`} style={{ color: `color-mix(in srgb, ${color} 55%, rgb(var(--ink)))` }}>
+          {title}
+        </span>
+        <span className="relative line-clamp-2 text-xs leading-snug text-ink/70">{text}</span>
+      </Link>
+    </div>
   );
 }
 
 export function TileGrid({ children }: { children: ReactNode }) {
-  return <div className="stagger grid grid-cols-2 gap-3 sm:grid-cols-3">{children}</div>;
+  return <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">{children}</div>;
 }

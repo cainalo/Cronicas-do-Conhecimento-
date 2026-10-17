@@ -6,6 +6,8 @@ import { Markdown } from '@/components/Markdown';
 import { QuestionCard } from '@/components/QuestionCard';
 import { completeLesson, recordAnswer, totalXp } from '@/lib/study';
 import { Icon } from '@/components/Icon';
+import { useFx } from '@/app/fx';
+import { Mascot, SpeechBubble } from '@/components/Mascot';
 
 type Phase = { k: 'cards'; i: number } | { k: 'q'; i: number } | { k: 'done' };
 
@@ -13,6 +15,7 @@ export function LessonPage() {
   const { id = '' } = useParams();
   const lesson = getLesson(id);
   const { data, update } = useStudy();
+  const { confetti, sfx } = useFx();
   const startXp = useRef(totalXp(data));
   const [phase, setPhase] = useState<Phase>({ k: 'cards', i: 0 });
   const [results, setResults] = useState<Record<string, boolean>>({});
@@ -82,6 +85,9 @@ export function LessonPage() {
                 const finalScore = Math.round((Object.values(results).filter(Boolean).length / qs.length) * 100);
                 update((d) => completeLesson(d, lesson, finalScore).data);
                 setPhase({ k: 'done' });
+                window.scrollTo(0, 0);
+                sfx('done');
+                if (finalScore >= 70) confetti(finalScore === 100 ? 120 : 70);
               }
             }}
           />
@@ -90,8 +96,20 @@ export function LessonPage() {
 
       {phase.k === 'done' && (
         <section className="card space-y-3 p-5 text-center">
-          <p className="rubric font-display text-lg">Lição concluída</p>
-          <h1 className="text-2xl">{score}%</h1>
+          <div className="flex items-end justify-center gap-2">
+            <Mascot mood={score >= 70 ? 'cheer' : score >= 40 ? 'talk' : 'sad'} size={92} />
+            <SpeechBubble className="mb-8 max-w-[14rem] text-left anim-toast-in">
+              {score === 100
+                ? 'Perfeito! Nem uma vírgula fora do lugar.'
+                : score >= 70
+                  ? 'Muito bem! O Tribunal ficaria orgulhoso.'
+                  : score >= 40
+                    ? 'Bom começo. Revise os erros e volte mais forte.'
+                    : 'Toda grande obra começa com rascunhos. Vamos revisar juntos?'}
+            </SpeechBubble>
+          </div>
+          <p className="rubric text-sm font-semibold">Lição concluída</p>
+          <h1 className="font-display text-5xl">{score}%</h1>
           <p className="text-muted">
             {correct} de {qs.length} corretas · +{totalXp(data) - startXp.current} XP
           </p>

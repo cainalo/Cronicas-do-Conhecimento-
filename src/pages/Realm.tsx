@@ -6,6 +6,7 @@ import { RealmMap, type RegionState } from '@/components/RealmMap';
 import { achievements, characterSheet, topicMastery } from '@/lib/game';
 import { areaColor } from '@/app/areas';
 import { PageHeader, SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
+import { SceneBanner } from '@/components/SceneBanner';
 
 export function useRegions(): RegionState[] {
   const { data } = useStudy();
@@ -35,6 +36,9 @@ export function RealmPage() {
   return (
     <div className="space-y-6">
       <PageHeader area="reino" crumb={false} title="Reino" subtitle="Seu personagem, seu domínio e o edital" />
+      <SceneBanner scene="reino" dark={dark}>
+        {explored} de {regions.length} regiões já têm grimório. Cada acerto clareia o mapa.
+      </SceneBanner>
 
       <TileGrid>
         <Tile wide to="/personagem" icon="escudo" color={shades[0]} title={sheet.title} text="Ficha, selos, inventário e missões da semana." badge={`${sealsWon}/${seals.length} selos`} />

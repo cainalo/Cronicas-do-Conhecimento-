@@ -49,6 +49,8 @@ export function hasData(d: StudyData) {
 // Preferências do leitor (por dispositivo).
 export interface Prefs {
   fontScale: number;
+  /** Efeitos sonoros curtos (acerto, erro, conclusão). */
+  sound?: boolean;
   theme: 'dark' | 'light';
 }
 // v2: o tema claro passou a ser o padrão (o escuro antigo era padrão, não escolha).

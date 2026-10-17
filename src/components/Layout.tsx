@@ -3,6 +3,9 @@ import { useStudy } from '@/app/StudyProvider';
 import { AREAS, areaColor, areaOf, isAreaHome, tint, type AreaKey } from '@/app/areas';
 import { useNextActivity } from '@/app/usePlanOfToday';
 import { levelInfo, totalXp } from '@/lib/study';
+import { achievements } from '@/lib/game';
+import { DEFAULT_CONTEST_ID, chapters, questionsForContest } from '@/content';
+import { useCelebrations } from '@/app/fx';
 import { Icon } from '@/components/Icon';
 import { useIsDark } from '@/components/Page';
 
@@ -88,7 +91,9 @@ export function Layout() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const dark = useIsDark();
-  const lv = levelInfo(totalXp(data));
+  const xp = totalXp(data);
+  const lv = levelInfo(xp);
+  useCelebrations(xp, lv.level, achievements(data, chapters, questionsForContest(DEFAULT_CONTEST_ID)));
   const inner = !isAreaHome(pathname);
   const accountColor = areaColor('conta', dark);
   const onAccount = areaOf(pathname) === 'conta';
