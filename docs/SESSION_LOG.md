@@ -16,3 +16,4 @@
 - Fase D: migração 2 (mock_exams, essay_answers, flashcard_states, novos tipos de XP), simulados, estudos de caso, flashcards, central de treino. 87 testes.
 - PWA: vite-plugin-pwa, ícones, service worker; leitura e respostas offline testadas.
 - Planejador de estudos (migração 3, study_settings). 92 testes.
+- Grimório de Desenvolvimento de Sistemas (2 capítulos, 24 questões, 2 lições) e estudo de caso de API. 116 testes.

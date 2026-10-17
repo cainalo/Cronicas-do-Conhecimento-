@@ -10,12 +10,14 @@ import { questoesIaCap01 } from './grimoires/ia/questions-cap01';
 import { questoesIaCap02 } from './grimoires/ia/questions-cap02';
 import { licoesIa } from './grimoires/ia/lessons';
 import { estudosDeCaso } from './discursivas/tce-go-2026';
+import { capDevApis, capDevIdentidade, grimorioDev, licoesDev } from './grimoires/dev';
+import { questoesDev } from './grimoires/dev/questions';
 
 export const contests: Contest[] = [tceGo2026];
-export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa];
-export const chapters: Chapter[] = [capCriptografia, capIaLlm, capIaAgentes];
-export const lessons: Lesson[] = [...licoesCap01, ...licoesIa];
-export const questions: Question[] = [...questoesCap01, ...questoesIaCap01, ...questoesIaCap02];
+export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev];
+export const chapters: Chapter[] = [capCriptografia, capIaLlm, capIaAgentes, capDevApis, capDevIdentidade];
+export const lessons: Lesson[] = [...licoesCap01, ...licoesIa, ...licoesDev];
+export const questions: Question[] = [...questoesCap01, ...questoesIaCap01, ...questoesIaCap02, ...questoesDev];
 
 const byId = <T extends { id: string }>(list: T[]) => new Map(list.map((x) => [x.id, x]));
 const contestMap = byId(contests);

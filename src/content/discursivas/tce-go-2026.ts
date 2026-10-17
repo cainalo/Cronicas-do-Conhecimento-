@@ -73,4 +73,33 @@ Para o agente da iniciativa B: (1) aplicar o menor privilégio, restringindo-o a
 Em respeito à LGPD e à Resolução Administrativa nº 24/2024, dados pessoais de jurisdicionados não devem ser enviados a ferramentas não autorizadas; em testes, usam-se dados fictícios ou anonimizados.`,
     commentary: `A resposta responde exatamente na ordem pedida: arquitetura, justificativa, três medidas, três controles e o fecho sobre privacidade. Numerar as medidas ajuda o corretor a encontrar cada item. Um erro frequente seria propor ajuste fino para normas que mudam a cada mês, ou dizer que o RAG "elimina" alucinações.`,
   },
+  {
+    id: 'ec.dev.01',
+    contestId: 'tce-go-2026-tecnico-ti',
+    topicIds: ['ti.dev.apis', 'ti.dev.auth'],
+    title: 'A API de remessa dos municípios',
+    origin: 'autoral',
+    review: 'nao-revisado',
+    lineLimit: 30,
+    scenario: `Um Tribunal de Contas quer que os sistemas de contabilidade dos municípios enviem, toda noite e sem intervenção humana, os dados de empenhos ao Tribunal. Além disso, servidores municipais usarão um aplicativo de celular do Tribunal para consultar o andamento das remessas, entrando com a conta gov.br.
+
+A equipe precisa definir a interface, o modo de autenticação de cada tipo de acesso e como documentar a API para as empresas que desenvolvem os sistemas municipais.`,
+    command: `Proponha: (a) dois endpoints REST para a remessa e a consulta de uma remessa, com método, URI e códigos de status de sucesso e de erro relevantes; (b) o fluxo OAuth 2.0 adequado para os sistemas municipais e o adequado para o aplicativo, justificando; (c) como a API deve validar os tokens JWT recebidos; (d) como documentar a API para os fornecedores.`,
+    criteria: [
+      { id: 'c1', text: '(a) Endpoints REST coerentes (ex.: POST /remessas → 201 com Location; GET /remessas/{id} → 200), com substantivos na URI e métodos corretos.', points: 20 },
+      { id: 'c2', text: '(a) Cita códigos de erro pertinentes e os diferencia (400/422 para dados inválidos, 401 sem credencial, 403 sem permissão, 404 inexistente, 429 excesso).', points: 15 },
+      { id: 'c3', text: '(b) Client credentials para os sistemas municipais (sem usuário) e código de autorização com PKCE para o aplicativo, com OpenID Connect para identificar o usuário via gov.br.', points: 25 },
+      { id: 'c4', text: '(c) Validação de JWT: assinatura com a chave do emissor, lista fixa de algoritmos (sem "none"), exp, iss, aud e escopos; tokens de vida curta.', points: 20 },
+      { id: 'c5', text: '(d) Documentação com OpenAPI (esquemas, códigos, segurança) e Swagger UI ou portal equivalente; versionamento.', points: 10 },
+      { id: 'c6', text: 'Texto organizado nas partes pedidas, terminologia correta, dentro do limite de linhas.', points: 10 },
+    ],
+    modelAnswer: `(a) A remessa seria recebida por POST /v1/remessas, com os empenhos em JSON no corpo. Em caso de sucesso, a API responde 201 Created, com o cabeçalho Location apontando para /v1/remessas/{id}. A consulta seria GET /v1/remessas/{id}, com 200 OK e a situação do processamento. Erros: 400 ou 422 para dados malformados ou inválidos, 401 quando faltar token válido, 403 quando o município tentar acessar remessa de outro ente, 404 para remessa inexistente e 429 se houver excesso de chamadas.
+
+(b) Os sistemas municipais atuam sem usuário, de madrugada; por isso o fluxo indicado é o client credentials, em que cada sistema se autentica com suas credenciais e recebe um token com escopo restrito, como remessas:envio. O aplicativo tem usuário e é cliente público, que não guarda segredos; deve usar o código de autorização com PKCE, e o login gov.br via OpenID Connect fornece o ID Token que identifica o servidor municipal.
+
+(c) A API deve verificar a assinatura do JWT com a chave pública publicada pelo servidor de autorização, aceitar apenas os algoritmos previstos (rejeitando "none"), conferir exp, iss e aud e checar se o escopo autoriza a operação. Os tokens de acesso devem durar poucos minutos.
+
+(d) A API seria descrita em um documento OpenAPI 3, com esquemas, exemplos, códigos de resposta e o esquema de segurança, publicado com Swagger UI em um portal para os fornecedores, com versão explícita na URI.`,
+    commentary: `Responder por letras, na ordem do enunciado, é a forma mais segura de não esquecer um item pedido. Note a justificativa de cada escolha de fluxo: "sem usuário" leva ao client credentials; "cliente público" leva ao PKCE. Um erro frequente seria usar o fluxo de senha no aplicativo ou dizer que o OAuth, sozinho, autentica o usuário.`,
+  },
 ];
