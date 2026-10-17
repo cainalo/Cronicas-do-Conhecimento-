@@ -16,6 +16,8 @@ import { FlashcardsPage } from '@/pages/Flashcards';
 import { ExamPage, ExamResultPage } from '@/pages/Exam';
 import { EssayListPage, EssayPage } from '@/pages/Essay';
 import { PlanPage } from '@/pages/Plan';
+import { RealmPage } from '@/pages/Realm';
+import { CharacterPage } from '@/pages/Character';
 
 export function AppRoutes() {
   return (
@@ -33,6 +35,8 @@ export function AppRoutes() {
         <Route path="conta" element={<AccountPage />} />
         <Route path="treino" element={<TrainingPage />} />
         <Route path="plano" element={<PlanPage />} />
+        <Route path="reino" element={<RealmPage />} />
+        <Route path="personagem" element={<CharacterPage />} />
         <Route path="flashcards" element={<FlashcardsPage />} />
         <Route path="simulado" element={<ExamPage />} />
         <Route path="simulado/:id" element={<ExamResultPage />} />

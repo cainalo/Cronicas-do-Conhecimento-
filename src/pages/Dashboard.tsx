@@ -6,6 +6,8 @@ import { TopicProgressList } from './Progress';
 import { WaxSeal } from '@/components/WaxSeal';
 import { dueCards } from '@/lib/training';
 import { settingsOf } from '@/lib/planner';
+import { characterSheet } from '@/lib/game';
+import { roman } from '@/lib/roman';
 import { TodayPlanSummary } from './Plan';
 import { flashcards } from '@/content';
 
@@ -21,6 +23,7 @@ export function Dashboard() {
   const rec = recommend(data, chapters, lessons, bank);
   const xp = totalXp(data);
   const lv = levelInfo(xp);
+  const sheet = characterSheet(data);
   const queue = reviewQueue(data, bank);
   const cardsDue = dueCards(data, flashcards.map((f) => f.id)).length;
   const localDay = (iso: string) => new Date(iso).toLocaleDateString('sv');
@@ -57,12 +60,14 @@ export function Dashboard() {
 
       <section aria-label="Resumo do dia" className="ledger">
         <TodayPlanSummary />
-        <div className="ledger-row">
-          <span>Nível {lv.level}</span>
-          <span className="text-muted">
-            {xp} XP, faltam {lv.span - lv.into} para o nível {lv.level + 1}
+        <Link to="/personagem" className="ledger-row">
+          <span>
+            {sheet.title}, nível {roman(lv.level).toUpperCase()}
           </span>
-        </div>
+          <span className="text-muted">
+            {xp} XP{sheet.streak ? ` · ${sheet.streak} dia(s) seguido(s)` : ''}
+          </span>
+        </Link>
         <div className="ledger-row">
           <span>Questões hoje</span>
           <span className={answeredToday >= dailyGoal ? 'text-ok' : 'text-muted'}>

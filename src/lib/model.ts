@@ -36,7 +36,7 @@ export interface LessonCompletion {
   lastCompletedAt: string;
 }
 
-export type XpKind = 'question_first_correct' | 'lesson_complete' | 'chapter_read' | 'review_recovered' | 'essay_submitted' | 'card_mastered';
+export type XpKind = 'question_first_correct' | 'lesson_complete' | 'chapter_read' | 'review_recovered' | 'essay_submitted' | 'card_mastered' | 'weekly_mission';
 
 /** Simulado. Em andamento fica só no aparelho; concluído é imutável e vai ao servidor. */
 export interface MockExam {

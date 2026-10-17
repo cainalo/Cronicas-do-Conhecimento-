@@ -10,6 +10,7 @@
 | `20261017000100_initial_user_progress.sql` | ✅ 17/10/2026 (nome `initial_user_progress`) |
 | `20261017000200_exam_essay_flashcards.sql` | ✅ 17/10/2026 (nome `exam_essay_flashcards`) |
 | `20261017000300_study_settings.sql` | ✅ 17/10/2026 (nome `study_settings`) |
+| `20261017000400_weekly_mission_xp.sql` | ✅ 17/10/2026 (nome `weekly_mission_xp`) |
 
 ## Esquema (somente dados privados; conteúdo fica no repositório)
 | Tabela | Chave | Observações |

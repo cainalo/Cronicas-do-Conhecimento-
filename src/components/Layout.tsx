@@ -8,7 +8,7 @@ const nav: { to: string; label: string; icon: IconName; end?: boolean }[] = [
   { to: '/', label: 'Torre', icon: 'torre', end: true },
   { to: '/biblioteca', label: 'Grimórios', icon: 'grimorio' },
   { to: '/treino', label: 'Treino', icon: 'ampulheta' },
-  { to: '/progresso', label: 'Progresso', icon: 'mapa' },
+  { to: '/reino', label: 'Reino', icon: 'mapa' },
   { to: '/conta', label: 'Conta', icon: 'chave' },
 ];
 
@@ -41,9 +41,9 @@ export function Layout() {
         </Link>
         <div className="flex shrink-0 items-center gap-3 font-display text-sm">
           <SyncBadge />
-          <span className="whitespace-nowrap" title={`${lv.into}/${lv.span} XP para o próximo nível`}>
+          <Link to="/personagem" className="whitespace-nowrap" title={`${lv.into}/${lv.span} XP para o próximo nível`}>
             Nível {roman(lv.level).toUpperCase()}
-          </span>
+          </Link>
         </div>
       </header>
       <main className="folio mx-2 mb-24 mt-3 flex-1 px-4 pb-8 pt-5 sm:mx-4 sm:px-8">

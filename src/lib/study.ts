@@ -10,6 +10,7 @@ export const XP_RULES: Record<XpKind, number> = {
   chapter_read: 50,
   essay_submitted: 20,
   card_mastered: 3,
+  weekly_mission: 40,
 };
 
 const uuid = () => crypto.randomUUID();

@@ -9,6 +9,11 @@
 | 2026-10-17 | Imersão medieval (pedido do usuário: "transforme nosso grimório num livro medieval, gótico, o mais realista possível") | App inteiro vira um livro sobre mesa de leitura: fólio de pergaminho com texturas, faixas de couro gravado a ouro, capas de grimório em couro com cantoneiras e fecho, capitulares iluminadas, rubricas em vermelhão, títulos em letra gótica, selo de lacre. Os temas passam a ser "noite" (pergaminho à luz de vela) e "dia" (luz de janela); o texto é sempre tinta escura sobre pergaminho. | Gótico só em títulos; texto corrido em EB Garamond e capitulares em romana, para não prejudicar a leitura. |
 | 2026-10-17 | Atmosfera geral (substituída pela linha acima quanto às cores) | **Noite na torre**: azul-noite, couro, dourado envelhecido; modo claro "pergaminho" disponível. | Tema escuro é o padrão. |
 
+| 2026-10-17 | Tom da história | **Mistério investigativo**: o aprendiz é um auditor-escriba que investiga registros adulterados e sistemas corrompidos no reino. | Narrativa detalhada (protagonista, conflito, personagens) ainda a definir com o usuário. |
+| 2026-10-17 | Trilha | **Mapa do reino**: cada disciplina é uma região; capítulos e lições se revelam com o estudo. | Implementado em `/reino` (`components/RealmMap.tsx`). |
+| 2026-10-17 | Recompensas | **Selos (conquistas), inventário de artefatos, missões semanais e títulos do personagem**, além de XP e níveis. | Implementado em `/personagem` (`lib/game.ts`). |
+| 2026-10-17 | Nome | "Crônicas do Conhecimento" permanece **provisório**; decidir depois. | — |
+
 ## Decisões técnicas delegadas (tomadas por Claude)
 | Assunto | Decisão | Justificativa |
 |---|---|---|

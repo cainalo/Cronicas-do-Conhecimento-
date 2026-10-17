@@ -22,6 +22,7 @@
 | Visual de livro medieval (couro, pergaminho, capitulares, capas) | Capturas mobile |
 | Planejador (`/plano`): ordem do dia congelada no aparelho, atividades marcadas pelo estudo real, revisão de erros, flashcards, estudo de caso semanal (1º dia), simulado semanal (último dia), leitura e lições; dias de descanso sem culpa; previsto/lido/respondido/domínio; preferências sincronizadas | `planner.test.ts`, captura |
 | PWA offline (service worker, ícones, atualização automática) | Teste Playwright com rede desligada |
+| Gamificação: mapa do reino (`/reino`), ficha do personagem (`/personagem`) com título, sequência, missões semanais com resgate de XP, 12 selos e inventário de artefatos | `game.test.ts`, capturas |
 
 ## Implementado, mas NÃO testado ponta a ponta
 - **Sincronização real com Supabase e Auth (cadastro, login, recuperação de senha) pelo app.** O container bloqueia `*.supabase.co`; o caminho SQL foi validado, o cliente HTTP não. Testar no navegador do celular/PC.
@@ -29,7 +30,7 @@
 
 ## Incompleto / não iniciado
 - Cobertura do edital: 12 de 68 tópicos oficiais com material (Criptografia; IA: LLM, contexto, IA generativa/RAG, agentes, MCP, qualidade; Dev: APIs, autenticação; Infra: redes, perímetro, nuvem).
-- Missões/conquistas/inventário, trilha visual, narrativa (aguarda decisões), Capacitor/Android, lembretes.
+- Narrativa (aguarda decisões: protagonista, conflito, personagens), Capacitor/Android, lembretes.
 
 ## Conhecido
 - Bundle JS ~660 kB (sem code-splitting) — aceitável por ora.
