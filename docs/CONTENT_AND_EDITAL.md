@@ -1,23 +1,31 @@
 # Conteúdo e edital
 
-## Estado da verificação
-⚠ **Edital oficial ainda não lido** (em 17/10/2026 a rede do ambiente bloqueou `concursosfcc.com.br`, `portal.tce.go.gov.br` e o PDF em cloudfront). Tudo abaixo vem de fontes secundárias concordantes (buscas web) e está marcado `fonte-secundaria` em `src/content/contests/tce-go-2026/contest.ts`.
+## Fonte vigente (oficial, verificada)
+**Edital nº 01/2026 — Abertura de Inscrições (RETIFICADO), versão consolidada de 15/09/2026**, TCE-GO / FCC. Enviado pelo usuário em 17/10/2026.
+- PDF: `docs/fontes/edital-tcego-2026-consolidado-15-09-2026.pdf`
+- Texto extraído (pdftotext -layout): `docs/fontes/edital-tcego-2026-consolidado-15-09-2026.txt` (Anexo II a partir da linha ~1335; cargo B02 a partir da ~1498)
+- Dados estruturados no app: `src/content/contests/tce-go-2026/contest.ts` (todos `oficial-verificado`).
 
-## Documentos
-- Edital nº 01/2026 (abertura) — FCC / TCE-GO.
-- Edital nº 02/2026 (retificação), DOE-GO 16/09/2026: detalha a distribuição por disciplina; altera Legislação Institucional (comum) e Noções de Adm. Pública (só Téc. Administrativo).
+## Dados essenciais (cargo B02 — Técnico de Controle Externo, Tecnologia da Informação)
+- 10 vagas (1 PcD, 2 negros); ensino médio; R$ 11.862,19; taxa R$ 100; inscrições 05/10–06/11/2026; provas em Goiânia em 17/01/2027.
+- Objetiva (5 alternativas): Gerais 25 (peso 1) — Português 10, Matemática e RL 10, Legislação Institucional 5. Específicos 45 (peso 2) — Eng. de Software 4; Desenvolvimento de Sistemas 5; Eng. de Software Assistida por IA e Sistemas Agentivos 4; DevOps/Plataforma/Entrega 4; Banco de Dados 4; IA, Ciência de Dados e Automação 5; Segurança da Informação 4; SO, Redes e Nuvem 5; Governança de TI 4; Legislação Aplicada à TI 4; Inglês técnico 2.
+- Nota padronizada por prova: NP = [(acertos − média)/σ] × 10 + 50, × peso. Habilitação: soma ≥ 150 (cap. 9).
+- Estudo de Caso: 1 questão prática; 0–100; habilitado ≥ 50; linhas definidas na questão; corrigido até a 48ª (ampla), 12ª (negros) e todos os PcD habilitados; nota zero por fuga ao tema, identificação, ilegibilidade, em branco, não atender à grade (cap. 11). Grade de correção divulgada na vista.
+- Nota final = objetivas ponderadas + Estudo de Caso. 1º desempate: maior nota no Estudo de Caso.
+- Duração: **não consta no edital** (virá no Edital de Convocação, previsto para 11/12/2026). Saída permitida após 3 h.
 
-## Dados levantados (secundários)
-- Cargo: Técnico de Controle Externo — Tecnologia da Informação; nível médio; 10 vagas TI (16 no total); R$ 11.862,19; inscrições 05/10–06/11/2026; taxa R$ 100; prova 17/01/2027.
-- Objetiva: 70 questões — 25 Conhecimentos Gerais (peso 1) + 45 Específicos (peso 2). Duração 4h30 (objetiva + discursiva).
-- Discursiva TI: estudo de caso, 1 questão prática sobre Conhecimentos Específicos; nota mínima reportada 50 pontos. Linhas e critérios: **não confirmados**.
-- Gerais (contagem não confirmada): Português 10, Matemática e Raciocínio Lógico 10, Legislação Institucional 5 (Lei Orgânica do TCE-GO; RA 14/2025, 24/2024, 5/2024).
-- Específicos (contagens citadas por uma fonte): IA (dois blocos) 9; SO, Redes e Nuvem 5; Governança de TI 4 (COBIT 2019, ITIL 4, PMBOK 8ª ed.); Legislação aplicada à TI 4 (contratações de TIC na Lei 14.133/2021); Inglês 2; Segurança da Informação (OWASP Top 10, criptografia, DevSecOps, Zero Trust, ISO 27000) — contagem desconhecida; Engenharia de Software, Banco de Dados, Ciência de Dados — itens não confirmados.
+## Divergências das fontes secundárias usadas antes (corrigidas)
+| Antes (secundária) | Oficial |
+|---|---|
+| Duração 4h30 | Não definida no edital |
+| Correção da discursiva até a 60ª posição | 48ª (ampla) / 12ª (negros) / todos PcD |
+| "Banco de Dados e Ciência de Dados" juntos | Banco de Dados (4) e IA, Ciência de Dados e Automação (5) separados |
+| Legislação Institucional: 3 resoluções | 7 normativos + CF, CE-GO, Lei 16.168/2007, RI, Leis 15.122/2005 e 20.756/2020, Código de Ética |
+| — | Disciplinas não citadas antes: Desenvolvimento de Sistemas, DevOps, Eng. Software Assistida por IA |
 
-## Fontes consultadas
-Ver `sources` em `contest.ts` (Gran Cursos, Estratégia, Cursos do Portal, Você Concursado; links oficiais pendentes).
+## Histórico de versões
+| Versão | Data | Observação |
+|---|---|---|
+| Consolidado com retificações | 15/09/2026 | Vigente no app |
 
-## Procedimento ao obter o oficial
-1. Salvar PDFs em `docs/fontes/` (são documentos públicos).
-2. Transcrever tópicos literais do Anexo II em `contest.ts`, com `status: 'oficial-verificado'`.
-3. Registrar diferenças aqui (histórico de versões) e ajustar capítulos/questões afetados.
+Ao surgir nova retificação: salvar o PDF em `docs/fontes/`, registrar aqui as mudanças e atualizar `contest.ts` sem apagar o registro anterior.

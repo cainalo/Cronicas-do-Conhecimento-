@@ -12,8 +12,8 @@
 | H | Testes amplos, expansão para outros concursos | ⬜ | — |
 
 ## Próximas entregas, em ordem
-1. Conferir edital oficial (Anexo II + retificação 02/2026) e atualizar `contest.ts`.
+1. ~~Conferir edital oficial~~ ✅ feito em 17/10/2026.
 2. Testar login/sincronização no navegador real.
-3. Grimório de IA (9 questões — maior bloco conhecido): LLMs, prompts/contexto, RAG, MCP/agentes.
+3. Grimório de IA (9 questões em dois blocos: Eng. de Software Assistida por IA e Sistemas Agentivos 4 + IA, Ciência de Dados e Automação 5).
 4. Flashcards com repetição espaçada ligados aos capítulos.
 5. Service worker (vite-plugin-pwa) para leitura offline.

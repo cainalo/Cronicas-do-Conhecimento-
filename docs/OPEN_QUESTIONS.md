@@ -1,7 +1,8 @@
 # Perguntas pendentes
 
 ## Bloqueio técnico (aguardando o usuário)
-- **Liberar rede:** adicionar `concursosfcc.com.br`, `portal.tce.go.gov.br` e `qptxcdksufdpbxddqpsw.supabase.co` em *Network access* do ambiente (menu do ambiente → Edit). Sem isso não dá para ler o edital oficial nem testar a sincronização real a partir do container. *(Usuário escolheu liberar os domínios do edital.)*
+- ~~Edital oficial~~ resolvido: o usuário enviou o PDF consolidado (17/10/2026).
+- **Rede:** `qptxcdksufdpbxddqpsw.supabase.co` continua bloqueado no container; a sincronização real precisa ser testada pelo usuário no navegador (ou liberando o domínio em *Network access*).
 
 ## Próxima rodada sugerida (não perguntadas ainda)
 1. **Nome definitivo** da plataforma e do universo (manter "Crônicas do Conhecimento"?).

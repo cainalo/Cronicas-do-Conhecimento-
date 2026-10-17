@@ -18,9 +18,9 @@ export function EditalPage() {
         ← Progresso
       </Link>
       <h1 className="text-xl text-gold">Edital — {c.name}</h1>
-      <p className="rounded-lg border border-gold/50 p-3 text-sm">
-        ⚠ O edital oficial ainda <b>não foi conferido diretamente</b>. Estes dados vêm de fontes secundárias concordantes e serão confirmados no Anexo II do
-        Edital nº 01/2026 e na retificação nº 02/2026. A cobertura do material <b>não é integral</b>.
+      <p className="rounded-lg border border-ok/50 p-3 text-sm">
+        ✔ Dados conferidos no <b>Edital nº 01/2026 retificado (versão consolidada de 15/09/2026)</b>. A cobertura do material ainda <b>não é integral</b>: veja abaixo o
+        que já tem grimório e questões.
       </p>
       <section className="card p-4">
         <h2 className="mb-1 text-base">{c.role}</h2>
