@@ -19,12 +19,14 @@ import { capDadosSgbd, capDadosSql, grimorioDados, licoesDados } from './grimoir
 import { questoesDados } from './grimoires/dados/questions';
 import { capGovModelos, capGovPublico, grimorioGovernanca, licoesGovernanca } from './grimoires/governanca';
 import { questoesGovernanca } from './grimoires/governanca/questions';
+import { capLegDados, capLegNormas, grimorioLegislacao, licoesLegislacao } from './grimoires/legislacao';
+import { questoesLegislacao } from './grimoires/legislacao/questions';
 
 export const contests: Contest[] = [tceGo2026];
-export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev, grimorioInfra, grimorioDados, grimorioGovernanca];
-export const chapters: Chapter[] = [capCriptografia, capDefesa, capIaLlm, capIaAgentes, capDevApis, capDevIdentidade, capInfraRedes, capInfraNuvem, capDadosSql, capDadosSgbd, capGovModelos, capGovPublico];
-export const lessons: Lesson[] = [...licoesCap01, ...licoesCap02, ...licoesIa, ...licoesDev, ...licoesInfra, ...licoesDados, ...licoesGovernanca];
-export const questions: Question[] = [...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesDev, ...questoesInfra, ...questoesDados, ...questoesGovernanca];
+export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev, grimorioInfra, grimorioDados, grimorioGovernanca, grimorioLegislacao];
+export const chapters: Chapter[] = [capCriptografia, capDefesa, capIaLlm, capIaAgentes, capDevApis, capDevIdentidade, capInfraRedes, capInfraNuvem, capDadosSql, capDadosSgbd, capGovModelos, capGovPublico, capLegDados, capLegNormas];
+export const lessons: Lesson[] = [...licoesCap01, ...licoesCap02, ...licoesIa, ...licoesDev, ...licoesInfra, ...licoesDados, ...licoesGovernanca, ...licoesLegislacao];
+export const questions: Question[] = [...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesDev, ...questoesInfra, ...questoesDados, ...questoesGovernanca, ...questoesLegislacao];
 
 const byId = <T extends { id: string }>(list: T[]) => new Map(list.map((x) => [x.id, x]));
 const contestMap = byId(contests);

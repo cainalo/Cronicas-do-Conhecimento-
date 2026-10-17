@@ -35,5 +35,10 @@ export const artifacts: Artifact[] = [
   { topicId: 'ti.governanca.projetos', name: 'Ampulheta do Mestre de Obras', lore: 'Mede o tempo que resta até a próxima entrega.' },
   { topicId: 'ti.governanca.contratacoes', name: 'Bolsa do Tesoureiro', lore: 'Só se abre diante de um estudo que a justifique.' },
   { topicId: 'ti.governanca.governo-digital', name: 'Sineta da Praça', lore: 'Chama o povo ao serviço sem que precise sair de casa.' },
+  { topicId: 'ti.legislacao.lgpd', name: 'Véu do Súdito', lore: 'Esconde o rosto de quem não precisa ser visto.' },
+  { topicId: 'ti.legislacao.marco-civil', name: 'Registro do Pedágio', lore: 'Anota quem passou e quando, mas nunca o que levava.' },
+  { topicId: 'ti.legislacao.contratacoes', name: 'Anel de Sinete', lore: 'Sela o documento; quem o vê sabe quem o assinou.' },
+  { topicId: 'ti.legislacao.goias', name: 'Carta do Ducado', lore: 'Concede licença aos autômatos, com deveres para cada um.' },
+  { topicId: 'ti.legislacao.tce', name: 'Regimento da Casa', lore: 'As regras que o próprio Tribunal escreveu para si.' },
   { topicId: 'ti.infra.nuvem', name: 'Castelo Alugado', lore: 'Cresce e encolhe conforme os visitantes chegam.' },
 ];
