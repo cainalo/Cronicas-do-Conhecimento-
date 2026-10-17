@@ -36,7 +36,7 @@ export default function App() {
   return (
     <PrefsProvider>
       <StudyProvider>
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
           <AppRoutes />
         </BrowserRouter>
       </StudyProvider>

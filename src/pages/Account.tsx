@@ -30,12 +30,12 @@ export function AccountPage() {
     if (mode === 'entrar') void run(() => sb.auth.signInWithPassword({ email, password }), 'Bem-vindo de volta!');
     if (mode === 'criar')
       void run(
-        () => sb.auth.signUp({ email, password, options: { emailRedirectTo: `${location.origin}/conta` } }),
+        () => sb.auth.signUp({ email, password, options: { emailRedirectTo: `${location.origin}${import.meta.env.BASE_URL}conta` } }),
         'Conta criada. Se for pedido, confirme pelo link enviado ao seu e-mail e depois entre.',
       );
     if (mode === 'recuperar')
       void run(
-        () => sb.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/conta` }),
+        () => sb.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}${import.meta.env.BASE_URL}conta` }),
         'Se o e-mail estiver cadastrado, você receberá um link. Ao abri-lo, defina a nova senha nesta tela.',
       );
   };
