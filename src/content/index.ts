@@ -15,12 +15,14 @@ import { capDevApis, capDevIdentidade, grimorioDev, licoesDev } from './grimoire
 import { questoesDev } from './grimoires/dev/questions';
 import { capInfraNuvem, capInfraRedes, grimorioInfra, licoesInfra } from './grimoires/infra';
 import { questoesInfra } from './grimoires/infra/questions';
+import { capDadosSgbd, capDadosSql, grimorioDados, licoesDados } from './grimoires/dados';
+import { questoesDados } from './grimoires/dados/questions';
 
 export const contests: Contest[] = [tceGo2026];
-export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev, grimorioInfra];
-export const chapters: Chapter[] = [capCriptografia, capDefesa, capIaLlm, capIaAgentes, capDevApis, capDevIdentidade, capInfraRedes, capInfraNuvem];
-export const lessons: Lesson[] = [...licoesCap01, ...licoesCap02, ...licoesIa, ...licoesDev, ...licoesInfra];
-export const questions: Question[] = [...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesDev, ...questoesInfra];
+export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev, grimorioInfra, grimorioDados];
+export const chapters: Chapter[] = [capCriptografia, capDefesa, capIaLlm, capIaAgentes, capDevApis, capDevIdentidade, capInfraRedes, capInfraNuvem, capDadosSql, capDadosSgbd];
+export const lessons: Lesson[] = [...licoesCap01, ...licoesCap02, ...licoesIa, ...licoesDev, ...licoesInfra, ...licoesDados];
+export const questions: Question[] = [...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesDev, ...questoesInfra, ...questoesDados];
 
 const byId = <T extends { id: string }>(list: T[]) => new Map(list.map((x) => [x.id, x]));
 const contestMap = byId(contests);

@@ -25,5 +25,10 @@ export const artifacts: Artifact[] = [
   { topicId: 'ti.dev.auth', name: 'Selo do Portador', lore: 'Quem o porta passa; por isso nunca o mostre em estrada aberta.' },
   { topicId: 'ti.infra.redes', name: 'Bússola dos Pacotes', lore: 'Aponta o caminho de cada mensagem pelo reino.' },
   { topicId: 'ti.infra.perimetro', name: 'Escudo da Muralha', lore: 'Guarda a cidade, mas deixa passar os mensageiros autorizados.' },
+  { topicId: 'ti.dados.modelagem', name: 'Régua do Escrivão', lore: 'Traça cada coluna no lugar certo, sem repetir o que já foi escrito.' },
+  { topicId: 'ti.dados.sql', name: 'Pena das Consultas', lore: 'Escreve perguntas que os arquivos sabem responder.' },
+  { topicId: 'ti.dados.sgbd', name: 'Lanterna do Arquivista', lore: 'Ilumina o porão onde os registros dormem e as cópias aguardam.' },
+  { topicId: 'ti.dados.nosql', name: 'Baú sem Gavetas', lore: 'Guarda o que for, do jeito que vier.' },
+  { topicId: 'ti.dados.governanca', name: 'Cadeado do Guardião', lore: 'Só se abre para quem tem motivo e nome.' },
   { topicId: 'ti.infra.nuvem', name: 'Castelo Alugado', lore: 'Cresce e encolhe conforme os visitantes chegam.' },
 ];
