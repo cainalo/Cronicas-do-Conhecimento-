@@ -12,7 +12,7 @@
 | Fusão entre dispositivos / migração visitante→conta | `merge.test.ts` |
 | Banco Supabase: 6 tabelas, RLS, privilégios, trigger de perfil, unicidade de XP | `supabase/tests/rls_check.sql` executado no banco remoto (13/13 esperados), advisors de segurança sem alertas |
 | Integridade do conteúdo (gabarito, comentários, tópicos do edital, nunca 'oficial') | `content.test.ts` |
-| Edital oficial (consolidado 15/09/2026) transcrito: provas, pesos, nº de questões, regras da discursiva, 61 tópicos do Anexo II | Conferido contra o PDF; `npm test` |
+| Edital oficial (consolidado 15/09/2026) transcrito: provas, pesos, nº de questões, regras da discursiva, 68 tópicos do Anexo II | Conferido contra o PDF; `npm test` |
 | Tela do edital com status de verificação e cobertura por tópico | Build |
 | Manifesto web (instalar na tela inicial) | Arquivo presente; não testado em aparelho |
 
@@ -21,7 +21,7 @@
 - Confirmação de e-mail: depende da configuração padrão do Supabase Auth (provavelmente ativa). URL de redirecionamento precisa ser cadastrada ao publicar.
 
 ## Incompleto / não iniciado
-- Cobertura do edital: 1 de 61 tópicos oficiais com material.
+- Cobertura do edital: 1 de 68 tópicos oficiais com material.
 - Flashcards, simulados, discursiva, planejador, missões/conquistas/inventário, narrativa, mapa/trilha visual, service worker/offline, Capacitor/Android.
 
 ## Conhecido

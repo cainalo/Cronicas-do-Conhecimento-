@@ -5,7 +5,7 @@
 
 ## Situação atual
 App React/Vite funcional com o primeiro fluxo de estudo completo (capítulo de Criptografia, 2 lições, 20 questões autorais comentadas, revisão, histórico, progresso, XP). Persistência local-first com sincronização para o Supabase (projeto `qptxcdksufdpbxddqpsw`, migração `20261017000100_initial_user_progress` aplicada, RLS verificado).
-**Edital oficial conferido** (PDF consolidado de 15/09/2026 em `docs/fontes/`); `contest.ts` contém os 14 componentes da prova e 61 tópicos oficiais, todos `oficial-verificado`.
+**Edital oficial conferido** (PDF consolidado de 15/09/2026 em `docs/fontes/`); `contest.ts` contém os 14 componentes da prova e 68 tópicos oficiais, todos `oficial-verificado`.
 
 ## Testes executados
 - `npm test` → 37/37; `tsc -b` OK; `npm run build` OK.

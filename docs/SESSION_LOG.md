@@ -8,4 +8,4 @@
 - Escrito Grimório "O Códice das Sete Chaves", cap. 1 Criptografia (6 seções), 2 lições, 20 questões autorais.
 - Implementados leitor, lições, revisão, histórico, progresso, edital, conta/sync, XP/níveis, recomendação.
 - 37 testes, build, verificação de RLS no banco remoto, capturas mobile.
-- Usuário enviou o edital consolidado (15/09/2026): salvo em docs/fontes/, contest.ts reescrito com dados oficiais (61 tópicos), divergências das fontes secundárias registradas.
+- Usuário enviou o edital consolidado (15/09/2026): salvo em docs/fontes/, contest.ts reescrito com dados oficiais (68 tópicos), divergências das fontes secundárias registradas.

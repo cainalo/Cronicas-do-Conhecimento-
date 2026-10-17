@@ -1,6 +1,6 @@
 # Matriz de cobertura (base: Anexo II oficial, cargo B02)
 
-Cobertura atual: **1 de 61 tópicos** com material. Não declarar cobertura integral enquanto houver lacunas.
+Cobertura atual: **1 de 68 tópicos** com material. Não declarar cobertura integral enquanto houver lacunas.
 Os IDs de tópico estão em `src/content/contests/tce-go-2026/contest.ts`; a tela **Progresso → Edital e cobertura** calcula esta matriz automaticamente.
 
 | Disciplina (questões) | Tópicos | Com material | Material |
