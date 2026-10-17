@@ -43,3 +43,16 @@ describe('integridade do conteúdo', () => {
     expect(new Set(questions.map((q) => q.answer)).size).toBeGreaterThanOrEqual(4);
   });
 });
+
+import { essayPrompts } from '@/content';
+
+describe('estudos de caso', () => {
+  it.each(essayPrompts.map((e) => [e.id, e] as const))('%s é bem formado', (_id, e) => {
+    expect(e.criteria.reduce((s, c) => s + c.points, 0)).toBe(100);
+    expect(new Set(e.criteria.map((c) => c.id)).size).toBe(e.criteria.length);
+    const ids = topicsForContest(e.contestId).map((t) => t.id);
+    e.topicIds.forEach((t) => expect(ids).toContain(t));
+    expect(e.origin).not.toBe('oficial');
+    expect(e.modelAnswer.length).toBeGreaterThan(400);
+  });
+});

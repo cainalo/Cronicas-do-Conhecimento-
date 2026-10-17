@@ -6,13 +6,13 @@
 ## Situação atual
 - App publicado automaticamente no GitHub Pages a cada push (workflow `.github/workflows/pages.yml` → branch `gh-pages`): https://cainalo.github.io/Cronicas-do-Conhecimento-/ e APK em `/download/`. Usuário confirmou que o APK instala e funciona.
 - Edital oficial conferido (`docs/fontes/`), 68 tópicos em `contest.ts`.
-- **Conteúdo: 68/68 tópicos com material** (13 grimórios, 31 capítulos, 35 lições, 391 questões autorais, 3 estudos de caso). Ver `docs/CONTENT_COVERAGE.md`; normas estaduais/TCE-GO e LC 205 só em panorama (faltam os PDFs oficiais).
+- **Conteúdo: 68/68 tópicos com material** (13 grimórios, 31 capítulos, 35 lições, 391 questões autorais, 8 estudos de caso). Ver `docs/CONTENT_COVERAGE.md`; normas estaduais/TCE-GO e LC 205 só em panorama (faltam os PDFs oficiais).
 - Visual claro no estilo do NutriConnect + camada divertida: mascote Bubo (coruja escriba, **provisório**), trilha estilo Duolingo em cada capítulo, cenas ilustradas nas páginas centrais, desenhos animados nos cartões, confete/avisos de XP/nível/selo, sons (chave em Conta), Rodada relâmpago, "Você sabia?".
 - Simulado no formato da prova (70 questões por disciplina conforme o edital, pontos ponderados gerais × 1 e específicas × 2).
 - Fases D e E completas; Supabase com RLS verificado; login/sync pelo navegador ainda **não confirmados pelo usuário**.
 
 ## Testes
-`npm test` 430/430; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
+`npm test` 438/438; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
 
 ## Pendências com o usuário
 - Pedir retorno sobre o visual novo e sobre login/sincronização.
@@ -21,7 +21,7 @@
 - Rodada criativa da narrativa (Fase F): protagonista, conflito, personagens, nome do mascote e da plataforma.
 
 ## Próxima tarefa exata
-1. **Mais estudos de caso** (discursiva) para as disciplinas específicas sem caso: Banco de Dados, Infra/SO, DevOps, Governança, Eng. de Software (`src/content/discursivas/tce-go-2026.ts`; seguir o formato e as regras dos 3 existentes, critérios pedagógicos, nunca da banca).
-2. Narrativa (Fase F): perguntar ao usuário (AskUserQuestion) protagonista, conflito, personagens, nome do mascote; depois prólogo e falas por região.
-3. Quando o usuário enviar os PDFs, ampliar `legislacao/cap02-normas/02-goias-tce.md` e `institucional/cap02-goias/*` e suas questões.
-4. Revisão de qualidade amostral das 391 questões (gabaritos, comentários) e dos textos com "Nota de fonte".
+1. Narrativa (Fase F): perguntar ao usuário (AskUserQuestion) protagonista, conflito, personagens, nome do mascote e da plataforma; depois prólogo e falas por região do mapa.
+2. Quando o usuário enviar os PDFs, ampliar `legislacao/cap02-normas/02-goias-tce.md` e `institucional/cap02-goias/*` e suas questões.
+3. Revisão de qualidade amostral das questões (gabaritos, comentários) e dos textos com "Nota de fonte"; estudos de caso para Legislação de TI e Português (redação oficial) se o usuário quiser.
+4. Ideias de produto pendentes: virada de página no leitor, ilustrações nas margens, sons opcionais mais ricos.

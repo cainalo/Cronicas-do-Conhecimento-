@@ -1,6 +1,6 @@
 # Matriz de cobertura (base: Anexo II oficial, cargo B02)
 
-Cobertura atual: **68 de 68 tópicos** com material (13 grimórios, 31 capítulos, 35 lições, 391 questões autorais, 3 estudos de caso, flashcards dos glossários). Cobertura **não é integral em profundidade**: Legislação de TI (normas do TCE-GO e LC 205) e Legislação Institucional (normas estaduais) estão só em panorama verificável; EBIA/PBIA e o Manual de Redação foram conferidos em fontes secundárias. Todas as questões são autorais e não revisadas por especialista. Não declarar cobertura integral enquanto houver lacunas.
+Cobertura atual: **68 de 68 tópicos** com material (13 grimórios, 31 capítulos, 35 lições, 391 questões autorais, 8 estudos de caso (segurança, IA, desenvolvimento, banco de dados, infraestrutura, DevOps, governança/contratações, engenharia de software), flashcards dos glossários). Cobertura **não é integral em profundidade**: Legislação de TI (normas do TCE-GO e LC 205) e Legislação Institucional (normas estaduais) estão só em panorama verificável; EBIA/PBIA e o Manual de Redação foram conferidos em fontes secundárias. Todas as questões são autorais e não revisadas por especialista. Não declarar cobertura integral enquanto houver lacunas.
 Os IDs de tópico estão em `src/content/contests/tce-go-2026/contest.ts`; a tela **Progresso → Edital e cobertura** calcula esta matriz automaticamente.
 
 | Disciplina (questões) | Tópicos | Com material | Material |
