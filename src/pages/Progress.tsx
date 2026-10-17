@@ -22,12 +22,12 @@ export function TopicProgressList({ onlyWithContent = false }: { onlyWithContent
                 <span className="text-muted">{t.discipline.title} · </span>
                 {t.title}
               </p>
-              {hasContent && <span className="font-display text-sm text-gold">{pct(s.mastery)}</span>}
+              {hasContent && <span className="rubric font-display">{pct(s.mastery)}</span>}
             </div>
             {hasContent ? (
               <>
-                <div className="mt-2 h-1.5 rounded bg-raised" aria-label={`Domínio ${pct(s.mastery)}`}>
-                  <div className="h-1.5 rounded bg-ok" style={{ width: pct(s.mastery) }} />
+                <div className="meter mt-2" aria-label={`Domínio ${pct(s.mastery)}`}>
+                  <span style={{ width: pct(s.mastery) }} />
                 </div>
                 <p className="mt-1 text-xs text-muted">
                   Leitura {s.chaptersRead}/{s.chaptersTotal} cap. · Respondidas {s.answered}/{s.totalQuestions} · Corretas agora {s.correctNow}
@@ -47,7 +47,7 @@ export function TopicProgressList({ onlyWithContent = false }: { onlyWithContent
 export function ProgressPage() {
   return (
     <div className="space-y-4">
-      <h1 className="text-xl text-gold">Progresso</h1>
+      <h1 className="text-center text-4xl">Progresso</h1>
       <p className="text-sm text-muted">
         <b className="text-ink">Domínio</b> = parcela das questões do tópico cuja resposta mais recente está correta. Leitura concluída não conta como domínio.
       </p>

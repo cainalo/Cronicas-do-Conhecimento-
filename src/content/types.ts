@@ -81,6 +81,8 @@ export interface Grimoire {
   chapterIds: string[];
   /** Nome do ícone de capa (ver components/Icon.tsx). */
   sigil?: 'chave' | 'pena' | 'selo' | 'grimorio';
+  /** Cor do couro da encadernação. */
+  binding?: 'sangue' | 'floresta' | 'noite' | 'castanho';
 }
 
 export interface QuestionOption {

@@ -51,7 +51,7 @@ export function AccountPage() {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-xl text-gold">Conta</h1>
+      <h1 className="text-center text-4xl">Conta</h1>
 
       {!authReady ? (
         <p className="text-muted">Verificando sessão…</p>
@@ -94,7 +94,7 @@ export function AccountPage() {
         <section className="card p-4">
           <div className="mb-4 grid grid-cols-3 gap-1 rounded-sm bg-raised p-1 text-sm">
             {(['entrar', 'criar', 'recuperar'] as Mode[]).map((m) => (
-              <button key={m} className={`rounded-md py-2 ${mode === m ? 'bg-gold text-bg' : 'text-muted'}`} onClick={() => setMode(m)} type="button">
+              <button key={m} className={`py-2 font-display ${mode === m ? 'leather-band' : 'text-muted'}`} onClick={() => setMode(m)} type="button">
                 {{ entrar: 'Entrar', criar: 'Criar conta', recuperar: 'Recuperar' }[m]}
               </button>
             ))}

@@ -6,6 +6,13 @@ import { getChapter, getGrimoire, getLesson } from '@/content';
 import { Markdown } from '@/components/Markdown';
 import { markSectionRead, setLastSection, toggleBookmark } from '@/lib/study';
 import { reviewLabel } from './Library';
+import { roman } from '@/lib/roman';
+
+/** "3. Título" vira ["iii", "Título"]. */
+function splitNumber(title: string): [string | null, string] {
+  const m = /^(\d+)\.\s*(.*)$/.exec(title);
+  return m ? [roman(Number(m[1])), m[2]] : [null, title];
+}
 import { Icon } from '@/components/Icon';
 
 function stripMd(s: string) {
@@ -75,12 +82,15 @@ export function ReaderPage() {
   return (
     <div style={{ ['--font-scale' as string]: prefs.fontScale }}>
       {/* Barra do leitor */}
-      <div className="sticky top-12 z-10 -mx-4 mb-3 flex items-center gap-2 border-b border-line bg-bg/95 px-4 py-2 backdrop-blur">
+      <div
+        className="sticky top-12 z-10 -mx-4 -mt-5 mb-4 flex items-center gap-2 px-4 py-2 sm:-mx-8 sm:px-8"
+        style={{ backgroundColor: 'rgb(var(--parchment))', backgroundImage: 'var(--tex-grain)', borderBottom: '3px double rgb(var(--ink) / 0.4)' }}
+      >
         <button className="btn-ghost px-3 py-2" onClick={() => setTocOpen((v) => !v)} aria-expanded={tocOpen}>
           <Icon name="sumario" size={18} /> Sumário
         </button>
         <span className="flex-1 truncate text-center text-xs text-muted">
-          {rp?.sectionsRead.length ?? 0}/{chapter.sections.length} lidas
+          {rp?.sectionsRead.length ?? 0} de {chapter.sections.length} lidas
         </span>
         <button className="btn-ghost px-3 py-2" aria-label="Diminuir fonte" onClick={() => setPrefs({ fontScale: Math.max(0.85, +(prefs.fontScale - 0.1).toFixed(2)) })}>
           A−
@@ -108,7 +118,7 @@ export function ReaderPage() {
               {results.map((r) => (
                 <li key={r.s.id}>
                   <button className="text-left" onClick={() => go(r.s.id)}>
-                    <b className="text-gold">{r.s.title}</b> <span className="text-muted">({r.count})</span>
+                    <b className="rubric">{r.s.title}</b> <span className="text-muted">({r.count})</span>
                     <span className="block text-muted">{r.snippet}</span>
                   </button>
                 </li>
@@ -134,17 +144,20 @@ export function ReaderPage() {
         </nav>
       )}
 
-      <article className="manuscript rounded-sm px-5 py-6 sm:px-8">
-        <header className="mb-6 text-center">
-          <Link to={`/grimorio/${chapter.grimoireId}`} className="font-display text-xs opacity-70">
+      <article className="manuscript px-4 py-6 sm:px-8">
+        <header className="mb-8 text-center">
+          <Link to={`/grimorio/${chapter.grimoireId}`} className="font-display text-sm text-muted">
             {grimoire?.title}
           </Link>
-          <p className="mt-2 font-display text-sm opacity-70">Capítulo {chapter.number}</p>
-          <h1 className="text-2xl text-gold">{chapter.title}</h1>
-          <p className="mt-1 italic opacity-80">{chapter.subtitle}</p>
-          <p className="mt-3 text-xs opacity-60">
-            ~{chapter.estimatedMinutes} min · {reviewLabel[chapter.review]} · Texto autoral
+          <p className="rubric mt-3 font-display text-lg">Capitulum {roman(chapter.number)}</p>
+          <h1 className="mt-1 text-[2.1rem] leading-tight">{chapter.title}</h1>
+          <p className="mx-auto mt-2 max-w-sm italic text-muted">{chapter.subtitle}</p>
+          <p className="mt-3 text-xs text-muted">
+            cerca de {chapter.estimatedMinutes} minutos · {reviewLabel[chapter.review]} · texto autoral
           </p>
+          <div className="divider-ornament !mb-0" aria-hidden>
+            ✠
+          </div>
         </header>
 
         {chapter.sections.map((s, idx) => {
@@ -161,7 +174,10 @@ export function ReaderPage() {
             >
               {idx > 0 && <div className="divider-ornament" aria-hidden>❧</div>}
               <div className="mb-3 flex items-start justify-between gap-3">
-                <h2 className="text-lg text-gold">{s.title}</h2>
+                <h2 className="text-[1.35rem] leading-snug">
+                  {splitNumber(s.title)[0] && <span className="rubric mr-2">{splitNumber(s.title)[0]}.</span>}
+                  {splitNumber(s.title)[1]}
+                </h2>
                 <button
                   className="p-1"
                   aria-label={isBookmarked(s.id) ? 'Remover marcador' : 'Adicionar marcador'}
@@ -172,12 +188,12 @@ export function ReaderPage() {
                 </button>
               </div>
               <div className="prose-manuscript">
-                <div className="illuminated">
+                <div className={`illuminated ${idx % 2 ? 'rubra' : ''}`}>
                   <Markdown highlightTerm={query.trim()}>{s.body}</Markdown>
                 </div>
               </div>
               <button
-                className={`mt-2 w-full rounded-sm border px-4 py-3 text-sm ${read ? 'border-ok/50 text-ok' : 'border-gold/50 text-gold'}`}
+                className={`mt-2 w-full border px-4 py-3 font-display ${read ? 'border-ok/50 text-ok' : 'border-ink/40 text-ink hover:bg-raised/60'}`}
                 disabled={read}
                 onClick={() =>
                   update((d) => {
@@ -189,6 +205,7 @@ export function ReaderPage() {
               >
                 {read ? 'Seção lida' : 'Marcar seção como lida'}
               </button>
+              <p className="mt-2 text-right font-display text-xs text-muted">fol. {roman(idx + 1)}</p>
             </section>
           );
         })}
@@ -197,16 +214,16 @@ export function ReaderPage() {
           ❧
         </div>
         <section id="glossario" ref={(el) => (sectionRefs.current.glossario = el)} className="prose-manuscript scroll-mt-28">
-          <h2 className="mb-3 text-lg text-gold">Glossário</h2>
+          <h2 className="rubric mb-3 text-xl">Glossarium</h2>
           <dl className="space-y-2">
             {chapter.glossary.map((g) => (
               <div key={g.term}>
-                <dt className="font-semibold">{g.term}</dt>
+                <dt className="font-semibold"><span className="rubric">¶</span> {g.term}</dt>
                 <dd className="opacity-90">{g.definition}</dd>
               </div>
             ))}
           </dl>
-          <h2 className="mb-3 mt-6 text-lg text-gold">Referências</h2>
+          <h2 className="rubric mb-3 mt-6 text-xl">Fontes e referências</h2>
           <ul>
             {chapter.references.map((r) => (
               <li key={r.title}>
@@ -228,14 +245,14 @@ export function ReaderPage() {
                 <span className="block">{l.title}</span>
                 <span className="text-xs text-muted">{l.questionIds.length} questões</span>
               </span>
-              <span className="text-sm text-gold">{done ? `Melhor: ${done.bestScore}%` : 'Iniciar'}</span>
+              <span className="rubric font-display">{done ? `Melhor: ${done.bestScore}%` : 'Iniciar'}</span>
             </Link>
           );
         })}
       </section>
 
       {toast && (
-        <div role="status" className="fixed inset-x-4 bottom-24 z-30 mx-auto max-w-sm rounded-sm bg-gold px-4 py-3 text-center font-display text-bg shadow-lg">
+        <div role="status" className="fixed inset-x-4 bottom-24 z-30 mx-auto max-w-sm leather-band px-4 py-3 text-center font-display shadow-lg">
           {toast}
         </div>
       )}

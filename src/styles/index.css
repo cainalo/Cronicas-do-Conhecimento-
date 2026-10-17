@@ -1,111 +1,241 @@
-@import '@fontsource/cinzel/500.css';
-@import '@fontsource/cinzel/700.css';
-@import '@fontsource/literata/400.css';
-@import '@fontsource/literata/400-italic.css';
-@import '@fontsource/literata/600.css';
+@import '@fontsource/eb-garamond/400.css';
+@import '@fontsource/eb-garamond/400-italic.css';
+@import '@fontsource/eb-garamond/600.css';
+@import '@fontsource/im-fell-english-sc/400.css';
+@import '@fontsource/unifrakturmaguntia/400.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Noite na Torre (padrão) */
-:root {
-  --bg: 15 18 32;
-  --surface: 24 28 46;
-  --raised: 33 38 60;
-  --ink: 232 225 208;
-  --muted: 158 158 170;
-  --line: 58 62 88;
-  --gold: 212 164 76;
-  --ember: 196 92 60;
-  --ok: 110 180 120;
-  --bad: 222 106 96;
-  /* Página do manuscrito à noite: pergaminho escurecido, tinta clara e quente */
-  --parchment: 38 33 26;
-  --sepia: 236 224 198;
-  --font-scale: 1;
-  color-scheme: dark;
-}
+/*
+  O app é um livro aberto sobre a mesa de leitura:
+  - a mesa (madeira escura) aparece nas margens;
+  - o conteúdo fica num fólio de pergaminho, escrito com tinta ferrogálica;
+  - cabeçalho e navegação são faixas de couro com gravação a ouro.
+  Pigmentos: tinta sépia, vermelhão (rubricas), azul ultramar, verdete e ouro.
+  Texturas geradas por filtros SVG (sem imagens externas).
+*/
 
-/* Pergaminho diurno */
-:root[data-theme='light'] {
-  --bg: 233 226 210;
-  --surface: 245 239 226;
-  --raised: 252 248 238;
-  --ink: 40 32 24;
-  --muted: 110 98 84;
-  --line: 205 192 168;
-  --gold: 150 104 30;
-  --ember: 160 60 36;
-  --ok: 46 120 64;
-  --bad: 170 50 40;
-  --parchment: 246 237 214;
-  --sepia: 43 33 22;
+:root {
+  /* Noite: pergaminho iluminado por vela */
+  --desk: 22 14 9;
+  --surface: 232 214 170;
+  --raised: 218 197 150;
+  --parchment: 226 206 160;
+  --ink: 40 26 12;
+  --muted: 104 82 52;
+  --line: 120 92 56;
+  --gold: 150 101 22;
+  --ember: 156 42 22;
+  --azure: 34 58 112;
+  --ok: 52 98 52;
+  --bad: 150 34 20;
+  --sepia: 40 26 12;
+  --bg: 22 14 9;
+  --leather: 58 22 16;
+  --leaf: 214 172 92; /* ouro em folha sobre couro */
+  --candle: 0.55;
+  --font-scale: 1;
   color-scheme: light;
 }
 
-html { -webkit-text-size-adjust: 100%; }
-body {
-  @apply bg-bg text-ink font-serif antialiased;
-  min-height: 100dvh;
+:root[data-theme='light'] {
+  /* Dia: luz de janela */
+  --desk: 74 50 32;
+  --surface: 244 233 205;
+  --raised: 232 216 180;
+  --parchment: 240 226 192;
+  --ink: 36 24 12;
+  --muted: 100 80 52;
+  --line: 128 100 62;
+  --bg: 74 50 32;
+  --candle: 0.25;
 }
-h1, h2, h3, .font-display { font-family: Cinzel, Georgia, serif; letter-spacing: 0.02em; }
-:focus-visible { outline: 2px solid rgb(var(--gold)); outline-offset: 2px; }
+
+/* ---------- Texturas ---------- */
+:root {
+  --tex-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .22 0 0 0 0 .1 1.3 0 0 0 -.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+  --tex-fibers: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012 .18' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .28 0 0 0 0 .12 1.4 0 0 0 -.7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)' opacity='.25'/%3E%3C/svg%3E");
+  --tex-stains: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.0045' numOctaves='4' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .3 0 0 0 0 .12 1.9 0 0 0 -1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)' opacity='.32'/%3E%3C/svg%3E");
+  --tex-wood: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.003 .09' numOctaves='5' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .34 0 0 0 0 .18 1.1 0 0 0 -.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)' opacity='.55'/%3E%3C/svg%3E");
+  --tex-leather: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='l'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='4' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.6 0 0 0 -.62'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23l)' opacity='.6'/%3E%3C/svg%3E");
+  --tex-leather-mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012' numOctaves='3' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.5 0 0 0 -.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)' opacity='.5'/%3E%3C/svg%3E");
+}
+
+html { -webkit-text-size-adjust: 100%; }
+
+/* A mesa de leitura */
+body {
+  @apply font-serif antialiased;
+  color: rgb(var(--ink));
+  min-height: 100dvh;
+  background-color: rgb(var(--desk));
+  background-image: radial-gradient(ellipse 120% 70% at 50% 35%, transparent 30%, rgb(0 0 0 / 0.55) 100%), var(--tex-wood);
+  background-attachment: fixed;
+}
+
+/* Luz de vela: halo quente e lento sobre a mesa */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+  background: radial-gradient(ellipse 90% 60% at 50% 30%, rgb(255 190 110 / 0.06), transparent 60%),
+    radial-gradient(ellipse 140% 100% at 50% 40%, transparent 55%, rgb(20 8 0 / calc(var(--candle) * 0.6)) 100%);
+  animation: vela 7s ease-in-out infinite alternate;
+}
+@keyframes vela {
+  0% { opacity: 0.92; }
+  40% { opacity: 1; }
+  55% { opacity: 0.95; }
+  100% { opacity: 1; }
+}
+
+h1, .font-gothic { font-family: 'UnifrakturMaguntia', 'IM Fell English SC', serif; font-weight: 400; letter-spacing: 0.01em; }
+h2, h3, .font-display { font-family: 'IM Fell English SC', 'EB Garamond', serif; font-weight: 400; letter-spacing: 0.02em; }
+:focus-visible { outline: 2px solid rgb(var(--ember)); outline-offset: 2px; }
+a { text-underline-offset: 3px; }
+
+/* ---------- Fólio de pergaminho ---------- */
+.folio {
+  position: relative;
+  background-color: rgb(var(--parchment));
+  background-image:
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 62%, rgb(110 70 30 / 0.28) 100%),
+    var(--tex-stains), var(--tex-fibers), var(--tex-grain);
+  box-shadow:
+    inset 0 0 40px rgb(120 80 40 / 0.35),
+    inset 0 0 6px rgb(90 55 25 / 0.5),
+    0 1px 0 rgb(255 240 210 / 0.2),
+    0 18px 40px rgb(0 0 0 / 0.55);
+  border-radius: 2px 3px 2px 4px;
+}
 
 @layer components {
-  .card { @apply rounded-sm border border-line bg-surface; }
-  .btn { @apply inline-flex items-center justify-center gap-2 rounded-sm px-4 py-3 font-display text-sm font-medium transition active:scale-[0.98] disabled:opacity-50; min-height: 44px; }
-  .btn-primary { @apply btn bg-gold text-bg hover:brightness-110; }
-  .btn-ghost { @apply btn border border-line bg-transparent text-ink hover:bg-raised; }
-  .chip { @apply inline-flex items-center rounded-sm border border-line px-1.5 py-0.5 text-xs text-muted; }
-  .ledger { @apply border-y-[3px] border-double border-line; }
-  .ledger-row { @apply flex items-baseline justify-between gap-3 border-b border-dashed border-line py-2.5 last:border-b-0; }
-  .divider-ornament { @apply my-6 flex items-center gap-3 text-xl text-ember; }
-  .divider-ornament::before, .divider-ornament::after { content: ''; @apply h-px flex-1 bg-gold/40; }
+  /* Cartões: folhas soltas de velino sobre o fólio */
+  .card {
+    @apply rounded-[2px] border;
+    border-color: rgb(var(--line) / 0.45);
+    background-color: rgb(var(--surface) / 0.75);
+    background-image: var(--tex-grain);
+    box-shadow: 0 1px 2px rgb(60 35 10 / 0.25), inset 0 0 18px rgb(140 100 50 / 0.18);
+  }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-[2px] px-4 py-3 font-display text-[1.05rem] transition active:translate-y-px disabled:opacity-50; min-height: 44px; }
+  /* Botão principal: couro vermelho com filete dourado */
+  .btn-primary {
+    @apply btn;
+    color: rgb(var(--leaf));
+    background-color: rgb(var(--leather));
+    background-image: var(--tex-leather), linear-gradient(rgb(255 255 255 / 0.06), rgb(0 0 0 / 0.2));
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.5), inset 0 0 0 3px rgb(var(--leaf) / 0.55), inset 0 0 0 4px rgb(0 0 0 / 0.4), 0 2px 4px rgb(0 0 0 / 0.35);
+    text-shadow: 0 1px 0 rgb(0 0 0 / 0.6);
+  }
+  .btn-primary:hover { filter: brightness(1.1); }
+  .btn-ghost { @apply btn border; border-color: rgb(var(--ink) / 0.45); color: rgb(var(--ink)); background: rgb(var(--surface) / 0.35); }
+  .btn-ghost:hover { background: rgb(var(--raised) / 0.7); }
+  .chip { @apply inline-flex items-center rounded-[2px] border px-1.5 py-0.5 text-xs; border-color: rgb(var(--line) / 0.6); color: rgb(var(--muted)); }
+  .ledger { border-top: 3px double rgb(var(--ink) / 0.45); border-bottom: 3px double rgb(var(--ink) / 0.45); }
+  .ledger-row { @apply flex items-baseline justify-between gap-3 py-2.5; border-bottom: 1px dotted rgb(var(--ink) / 0.35); }
+  .ledger-row:last-child { border-bottom: 0; }
+  .divider-ornament { @apply my-7 flex items-center gap-3 text-2xl; color: rgb(var(--ember)); }
+  .divider-ornament::before, .divider-ornament::after { content: ''; @apply h-px flex-1; background: rgb(var(--ember) / 0.45); }
+  .input { @apply w-full rounded-[2px] border px-3 py-3; border-color: rgb(var(--ink) / 0.4); background: rgb(255 248 230 / 0.45); color: rgb(var(--ink)); }
+  .input::placeholder { color: rgb(var(--muted)); }
+  .rubric { color: rgb(var(--ember)); }
+  /* Barra de progresso desenhada a pena */
+  .meter { @apply h-2; border: 1px solid rgb(var(--ink) / 0.5); background: rgb(var(--raised) / 0.6); }
+  .meter > span { display: block; height: 100%; background: rgb(var(--ok) / 0.85); }
 }
 
-/* ---------- Manuscrito ---------- */
+/* ---------- Faixas de couro (cabeçalho e navegação) ---------- */
+.leather-band {
+  color: rgb(var(--leaf));
+  background-color: rgb(var(--leather));
+  background-image: var(--tex-leather), var(--tex-leather-mottle), linear-gradient(rgb(255 255 255 / 0.05), rgb(0 0 0 / 0.25));
+}
+.leather-band.top { box-shadow: inset 0 -1px 0 rgb(0 0 0 / 0.6), inset 0 -4px 0 rgb(var(--leaf) / 0.45), inset 0 -5px 0 rgb(0 0 0 / 0.5), 0 4px 10px rgb(0 0 0 / 0.5); }
+.leather-band.bottom { box-shadow: inset 0 1px 0 rgb(0 0 0 / 0.6), inset 0 4px 0 rgb(var(--leaf) / 0.45), inset 0 5px 0 rgb(0 0 0 / 0.5), 0 -4px 10px rgb(0 0 0 / 0.5); }
+
+/* ---------- Página do manuscrito ---------- */
 .manuscript {
-  background-color: rgb(var(--parchment));
-  color: rgb(var(--sepia));
-  background-image:
-    radial-gradient(ellipse at top left, rgb(var(--gold) / 0.08), transparent 60%),
-    radial-gradient(ellipse at bottom right, rgb(var(--ember) / 0.06), transparent 55%);
-  border: 1px solid rgb(var(--gold) / 0.35);
-  box-shadow: inset 0 0 0 4px rgb(var(--parchment)), inset 0 0 0 5px rgb(var(--gold) / 0.25), 0 10px 30px rgb(0 0 0 / 0.25);
+  position: relative;
+  color: rgb(var(--ink));
+  /* Moldura de pautado: filetes vermelhos duplos, como a regragem dos copistas */
+  box-shadow: inset 0 0 0 1px rgb(var(--ember) / 0.55), inset 0 0 0 4px transparent, inset 0 0 0 5px rgb(var(--ember) / 0.35);
 }
 .prose-manuscript {
-  font-size: calc(1.0625rem * var(--font-scale));
-  line-height: 1.75;
+  font-size: calc(1.15rem * var(--font-scale));
+  line-height: 1.7;
+  hyphens: auto;
+  text-align: left;
+  text-wrap: pretty;
 }
-.prose-manuscript p { margin: 0 0 1em; }
-.prose-manuscript h3 { font-size: 1.1em; margin: 1.6em 0 0.6em; color: rgb(var(--ember)); }
+/* Justificado como nos códices, só onde a linha é longa o bastante para não abrir buracos */
+@media (min-width: 560px) {
+  .prose-manuscript { text-align: justify; }
+}
+.prose-manuscript p { margin: 0 0 0.9em; }
+.prose-manuscript h3 {
+  font-family: 'IM Fell English SC', serif;
+  font-size: 1.15em;
+  margin: 1.5em 0 0.5em;
+  color: rgb(var(--ember));
+  text-align: left;
+}
 .prose-manuscript strong { font-weight: 600; }
-.prose-manuscript ul, .prose-manuscript ol { margin: 0 0 1em 1.25em; }
-.prose-manuscript ul { list-style: disc; }
-.prose-manuscript ol { list-style: decimal; }
-.prose-manuscript li { margin: 0.25em 0; }
+.prose-manuscript em { font-style: italic; }
+.prose-manuscript ul, .prose-manuscript ol { margin: 0 0 1em 1.4em; text-align: left; }
+.prose-manuscript ul { list-style: none; }
+.prose-manuscript ul > li { position: relative; }
+/* Marca de parágrafo em vermelho no lugar do marcador */
+.prose-manuscript ul > li::before { content: '¶'; position: absolute; left: -1.1em; color: rgb(var(--ember)); }
+.prose-manuscript ol { list-style: lower-roman; }
+.prose-manuscript ol > li::marker { color: rgb(var(--ember)); }
+.prose-manuscript li { margin: 0.3em 0; }
 .prose-manuscript blockquote {
-  margin: 1.2em 0; padding: 0.8em 1em; border-left: 3px solid rgb(var(--ember));
-  background: rgb(var(--ember) / 0.08); border-radius: 0 8px 8px 0;
+  margin: 1.2em 0;
+  padding: 0.7em 0.9em 0.7em 1.1em;
+  border-left: 2px solid rgb(var(--ember) / 0.8);
+  background: rgb(var(--ember) / 0.06);
+  font-style: italic;
+  text-align: left;
 }
 .prose-manuscript blockquote p:last-child { margin-bottom: 0; }
-.prose-manuscript code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85em; background: rgb(var(--sepia) / 0.08); padding: 0.1em 0.3em; border-radius: 4px; }
-.prose-manuscript pre { overflow-x: auto; margin: 0 0 1em; padding: 0.9em; border-radius: 8px; background: rgb(var(--sepia) / 0.07); border: 1px solid rgb(var(--gold) / 0.2); line-height: 1.5; }
-.prose-manuscript pre code { background: none; padding: 0; font-size: 0.8em; }
-.prose-manuscript .table-wrap { overflow-x: auto; margin: 0 0 1.2em; }
-.prose-manuscript table { border-collapse: collapse; width: 100%; font-size: 0.88em; line-height: 1.45; }
-.prose-manuscript th, .prose-manuscript td { border: 1px solid rgb(var(--gold) / 0.25); padding: 0.45em 0.6em; vertical-align: top; text-align: left; }
-.prose-manuscript th { background: rgb(var(--gold) / 0.12); font-weight: 600; }
-/* Iluminura: capitular na primeira letra de cada seção */
-.prose-manuscript .illuminated > p:first-child::first-letter {
-  float: left; font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: 3.4em; line-height: 0.9;
-  padding: 0.08em 0.12em 0 0; margin-right: 0.08em; color: rgb(var(--gold));
-  text-shadow: 0 0 1px rgb(var(--ember) / 0.6);
+.prose-manuscript code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.82em; background: rgb(var(--ink) / 0.07); padding: 0.05em 0.3em; border-radius: 2px; }
+.prose-manuscript pre {
+  overflow-x: auto; margin: 0 0 1em; padding: 0.9em; line-height: 1.5; text-align: left;
+  background: rgb(var(--ink) / 0.06);
+  border: 1px solid rgb(var(--ink) / 0.25);
+  box-shadow: inset 0 0 0 3px rgb(var(--parchment) / 0.6), inset 0 0 0 4px rgb(var(--ink) / 0.15);
 }
-mark.search-hit { background: rgb(var(--gold) / 0.45); color: inherit; border-radius: 2px; }
+.prose-manuscript pre code { background: none; padding: 0; font-size: 0.72em; }
+.prose-manuscript .table-wrap { overflow-x: auto; margin: 0 0 1.2em; }
+.prose-manuscript table { border-collapse: collapse; width: 100%; font-size: 0.88em; line-height: 1.4; text-align: left; hyphens: manual; }
+.prose-manuscript th, .prose-manuscript td { border: 1px solid rgb(var(--ink) / 0.3); padding: 0.4em 0.55em; vertical-align: top; }
+.prose-manuscript th { font-family: 'IM Fell English SC', serif; font-weight: 400; color: rgb(var(--ember)); background: rgb(var(--ember) / 0.06); }
 
-.safe-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem); }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
-@layer components {
-  .input { @apply w-full rounded-sm border border-line bg-raised px-3 py-3 text-ink placeholder:text-muted; }
+/* Letra capitular iluminada: ouro sobre campo de pigmento, com filete */
+.prose-manuscript .illuminated > p:first-child::first-letter {
+  float: left;
+  font-family: 'EB Garamond', serif;
+  font-weight: 600;
+  font-size: 3.1em;
+  line-height: 0.95;
+  padding: 0.1em 0.14em 0.06em;
+  margin: 0.06em 0.14em 0 0;
+  color: #e8c46a;
+  background-color: rgb(var(--azure));
+  background-image: radial-gradient(circle at 30% 25%, rgb(255 255 255 / 0.18), transparent 60%), var(--tex-grain);
+  border: 2px solid #b8862b;
+  box-shadow: inset 0 0 0 2px rgb(var(--azure)), inset 0 0 0 3px rgb(232 196 106 / 0.6), 1px 1px 0 rgb(0 0 0 / 0.25);
+  text-shadow: 0 1px 0 rgb(80 50 0 / 0.8), 0 0 1px #fff3c4;
+}
+.prose-manuscript .illuminated.rubra > p:first-child::first-letter { background-color: rgb(var(--ember)); box-shadow: inset 0 0 0 2px rgb(var(--ember)), inset 0 0 0 3px rgb(232 196 106 / 0.6), 1px 1px 0 rgb(0 0 0 / 0.25); }
+
+mark.search-hit { background: rgb(214 172 92 / 0.55); color: inherit; }
+
+.safe-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 0.25rem); }
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
 }

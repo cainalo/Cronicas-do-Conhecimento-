@@ -1,6 +1,7 @@
 import { NavLink, Outlet, Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { levelInfo, totalXp } from '@/lib/study';
+import { roman } from '@/lib/roman';
 import { Icon, type IconName } from '@/components/Icon';
 
 const nav: { to: string; label: string; icon: IconName; end?: boolean }[] = [
@@ -14,11 +15,11 @@ const nav: { to: string; label: string; icon: IconName; end?: boolean }[] = [
 export function SyncBadge() {
   const { sync, session } = useStudy();
   const map = {
-    local: { t: 'Local', c: 'text-muted' },
-    idle: { t: sync.pending ? `${sync.pending} a enviar` : 'Sincronizado', c: sync.pending ? 'text-gold' : 'text-ok' },
-    syncing: { t: 'Sincronizando…', c: 'text-gold' },
-    offline: { t: `Offline, ${sync.pending} a enviar`, c: 'text-gold' },
-    error: { t: `Falha no envio (${sync.pending})`, c: 'text-bad' },
+    local: { t: 'Local', c: 'opacity-70' },
+    idle: { t: sync.pending ? `${sync.pending} a enviar` : 'Sincronizado', c: sync.pending ? 'opacity-90' : 'text-[#9fc58f]' },
+    syncing: { t: 'Sincronizando…', c: 'opacity-90' },
+    offline: { t: `Offline, ${sync.pending} a enviar`, c: 'opacity-90' },
+    error: { t: `Falha no envio (${sync.pending})`, c: 'text-[#f0a08a]' },
   } as const;
   const m = map[sync.state];
   return (
@@ -34,21 +35,21 @@ export function Layout() {
   const lv = levelInfo(totalXp(data));
   return (
     <div className="mx-auto flex min-h-dvh max-w-3xl flex-col">
-      <header className="sticky top-0 z-20 flex h-12 items-center justify-between gap-3 border-b border-line bg-bg/95 px-4 backdrop-blur">
-        <Link to="/" className="truncate font-display text-sm font-bold text-gold">
+      <header className="leather-band top sticky top-0 z-20 flex h-12 items-center justify-between gap-3 px-4">
+        <Link to="/" className="truncate font-gothic text-xl leading-none" style={{ textShadow: '0 1px 0 rgb(0 0 0 / 0.7)' }}>
           Crônicas do Conhecimento
         </Link>
-        <div className="flex shrink-0 items-center gap-3">
+        <div className="flex shrink-0 items-center gap-3 font-display text-sm">
           <SyncBadge />
-          <span className="chip whitespace-nowrap" title={`${lv.into}/${lv.span} XP para o próximo nível`}>
-            Nv {lv.level}
+          <span className="whitespace-nowrap" title={`${lv.into}/${lv.span} XP para o próximo nível`}>
+            Nível {roman(lv.level).toUpperCase()}
           </span>
         </div>
       </header>
-      <main className="flex-1 px-4 pb-24 pt-4">
+      <main className="folio mx-2 mb-24 mt-3 flex-1 px-4 pb-8 pt-5 sm:mx-4 sm:px-8">
         <Outlet />
       </main>
-      <nav className="safe-bottom fixed inset-x-0 bottom-0 z-20 border-t border-line bg-surface/95 backdrop-blur" aria-label="Navegação principal">
+      <nav className="leather-band bottom safe-bottom fixed inset-x-0 bottom-0 z-20" aria-label="Navegação principal">
         <ul className="mx-auto grid max-w-3xl grid-cols-5">
           {nav.map((n) => (
             <li key={n.to}>
@@ -56,7 +57,9 @@ export function Layout() {
                 to={n.to}
                 end={n.end}
                 className={({ isActive }) =>
-                  `flex min-h-[56px] flex-col items-center justify-center gap-0.5 text-[11px] ${isActive ? 'text-gold' : 'text-muted'}`
+                  `flex min-h-[58px] flex-col items-center justify-center gap-0.5 pt-1 font-display text-[12px] ${
+                    isActive ? 'text-leaf' : 'text-[#d9c7a0]/60'
+                  }`
                 }
               >
                 <Icon name={n.icon} size={22} />

@@ -29,14 +29,14 @@ export function LessonPage() {
         <Link to={`/capitulo/${lesson.chapterId}`} className="text-xl text-muted" aria-label="Sair da lição">
           <Icon name="sair" size={22} />
         </Link>
-        <div className="h-2 flex-1 rounded bg-raised">
-          <div className="h-2 rounded bg-gold transition-all" style={{ width: `${progress * 100}%` }} />
+        <div className="meter flex-1">
+          <span className="transition-all" style={{ width: `${progress * 100}%` }} />
         </div>
       </div>
 
       {phase.k === 'cards' && (
-        <section className="manuscript rounded-sm p-5">
-          <p className="font-display text-sm text-gold">
+        <section className="manuscript p-5">
+          <p className="rubric font-display text-lg">
             {lesson.title} · {phase.i + 1}/{lesson.cards.length}
           </p>
           <h1 className="mt-2 text-xl">{lesson.cards[phase.i].title}</h1>
@@ -90,7 +90,7 @@ export function LessonPage() {
 
       {phase.k === 'done' && (
         <section className="card space-y-3 p-5 text-center">
-          <p className="font-display text-sm text-gold">Lição concluída</p>
+          <p className="rubric font-display text-lg">Lição concluída</p>
           <h1 className="text-2xl">{score}%</h1>
           <p className="text-muted">
             {correct} de {qs.length} corretas · +{totalXp(data) - startXp.current} XP

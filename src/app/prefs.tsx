@@ -7,7 +7,7 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
   const [prefs, set] = useState<Prefs>(loadPrefs);
   useEffect(() => {
     document.documentElement.dataset.theme = prefs.theme;
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', prefs.theme === 'dark' ? '#0f1220' : '#e9e2d2');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', prefs.theme === 'dark' ? '#3a1610' : '#3a1610');
     savePrefs(prefs);
   }, [prefs]);
   return <PrefsCtx.Provider value={{ prefs, setPrefs: (p) => set((c) => ({ ...c, ...p })) }}>{children}</PrefsCtx.Provider>;

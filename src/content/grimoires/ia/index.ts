@@ -21,6 +21,7 @@ export const grimorioIa: Grimoire = {
     'Modelos de linguagem, prompts e contexto, RAG e bancos vetoriais, agentes de programação e o protocolo MCP. Cobre os dois blocos de IA do edital (9 questões).',
   chapterIds: ['cap.ia.01', 'cap.ia.02'],
   sigil: 'pena',
+  binding: 'floresta',
 };
 
 export const capIaLlm: Chapter = {

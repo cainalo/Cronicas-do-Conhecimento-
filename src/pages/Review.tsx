@@ -17,7 +17,7 @@ export function ReviewPage() {
   if (!queueIds) {
     return (
       <div className="space-y-4">
-        <h1 className="text-xl text-gold">Revisão</h1>
+        <h1 className="text-center text-4xl">Revisão</h1>
         {live.length === 0 ? (
           <p className="card p-4 text-muted">Nenhuma questão errada aguardando revisão. Quando você errar, ela aparecerá aqui até ser respondida corretamente.</p>
         ) : (
@@ -48,7 +48,7 @@ export function ReviewPage() {
   if (i >= queueIds.length) {
     return (
       <div className="card space-y-3 p-5 text-center">
-        <h1 className="text-xl text-gold">Revisão concluída</h1>
+        <h1 className="text-center text-4xl">Revisão concluída</h1>
         <p>
           Recuperadas: {recovered} de {queueIds.length}
         </p>

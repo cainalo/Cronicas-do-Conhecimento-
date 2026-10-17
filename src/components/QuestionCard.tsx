@@ -37,7 +37,7 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
           const state = !confirmed ? (isSel ? 'sel' : '') : o.key === q.answer ? 'ok' : isSel ? 'bad' : 'dim';
           const cls = {
             '': 'border-line hover:bg-raised',
-            sel: 'border-gold bg-gold/10',
+            sel: 'border-ember bg-ember/5 shadow-[inset_0_0_0_1px_rgb(var(--ember))]',
             ok: 'border-ok bg-ok/10',
             bad: 'border-bad bg-bad/10',
             dim: 'border-line opacity-70',
@@ -51,7 +51,7 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
                 aria-pressed={isSel}
                 className={`flex w-full items-start gap-3 rounded-sm border p-3 text-left transition ${cls}`}
               >
-                <span className="font-display font-bold text-gold">{o.key}</span>
+                <span className="rubric w-5 shrink-0 font-display text-xl leading-6">{o.key}</span>
                 <span className="flex-1">
                   {o.text}
                   {confirmed && (o.key === q.answer || isSel) && (
@@ -95,7 +95,7 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
             </ul>
           </details>
           {chapter && section && (
-            <Link to={`/capitulo/${chapter.id}#${section.id}`} className="block text-sm text-gold underline">
+            <Link to={`/capitulo/${chapter.id}#${section.id}`} className="rubric block underline">
               Estudar no grimório: {section.title}
             </Link>
           )}

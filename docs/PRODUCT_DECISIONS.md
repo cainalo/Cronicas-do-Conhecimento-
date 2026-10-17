@@ -6,7 +6,8 @@
 | 2026-10-17 | Backend | Criar projeto Supabase novo e separado (`cronicas-do-conhecimento`, sa-east-1, custo $0 informado na criação). | Não usar o projeto NutriConnect. |
 | 2026-10-17 | Edital | O usuário vai liberar `concursosfcc.com.br` e `portal.tce.go.gov.br` na rede do ambiente. | Próxima sessão deve ler o edital oficial e trocar `fonte-secundaria` por `oficial-verificado` onde conferido. |
 | 2026-10-17 | Estética dos grimórios | **Manuscritos antigos**: pergaminho, iluminuras (capitulares) e ornamentos também durante a leitura. | Implementado com página de pergaminho, capitular dourada, divisores ✦. Legibilidade preservada (Literata, 17px, entrelinha 1.75). |
-| 2026-10-17 | Atmosfera geral | **Noite na torre**: azul-noite, couro, dourado envelhecido; modo claro "pergaminho" disponível. | Tema escuro é o padrão. |
+| 2026-10-17 | Imersão medieval (pedido do usuário: "transforme nosso grimório num livro medieval, gótico, o mais realista possível") | App inteiro vira um livro sobre mesa de leitura: fólio de pergaminho com texturas, faixas de couro gravado a ouro, capas de grimório em couro com cantoneiras e fecho, capitulares iluminadas, rubricas em vermelhão, títulos em letra gótica, selo de lacre. Os temas passam a ser "noite" (pergaminho à luz de vela) e "dia" (luz de janela); o texto é sempre tinta escura sobre pergaminho. | Gótico só em títulos; texto corrido em EB Garamond e capitulares em romana, para não prejudicar a leitura. |
+| 2026-10-17 | Atmosfera geral (substituída pela linha acima quanto às cores) | **Noite na torre**: azul-noite, couro, dourado envelhecido; modo claro "pergaminho" disponível. | Tema escuro é o padrão. |
 
 ## Decisões técnicas delegadas (tomadas por Claude)
 | Assunto | Decisão | Justificativa |

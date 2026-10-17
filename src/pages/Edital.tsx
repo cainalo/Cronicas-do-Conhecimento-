@@ -4,7 +4,7 @@ import type { SourceStatus } from '@/content/types';
 
 const statusLabel: Record<SourceStatus, { t: string; c: string }> = {
   'oficial-verificado': { t: 'Oficial verificado', c: 'text-ok border-ok/50' },
-  'fonte-secundaria': { t: 'Fonte secundária', c: 'text-gold border-gold/50' },
+  'fonte-secundaria': { t: 'Fonte secundária', c: 'text-ember border-ember/50' },
   'nao-confirmado': { t: 'Não confirmado', c: 'text-bad border-bad/50' },
 };
 const Status = ({ s }: { s: SourceStatus }) => <span className={`chip ${statusLabel[s].c}`}>{statusLabel[s].t}</span>;
@@ -17,7 +17,7 @@ export function EditalPage() {
       <Link to="/progresso" className="text-sm text-muted">
         Voltar ao progresso
       </Link>
-      <h1 className="text-xl text-gold">Edital do {c.name}</h1>
+      <h1 className="text-center text-4xl">Edital do {c.name}</h1>
       <p className="rounded-sm border border-ok/50 p-3 text-sm">
         Dados conferidos no <b>Edital nº 01/2026 retificado (versão consolidada de 15/09/2026)</b>. A cobertura do material ainda <b>não é integral</b>: veja abaixo o
         que já tem grimório e questões.
@@ -100,7 +100,7 @@ export function EditalPage() {
         <ul className="space-y-1">
           {c.sources.map((s) => (
             <li key={s.url}>
-              <a href={s.url} target="_blank" rel="noreferrer" className="text-gold underline">
+              <a href={s.url} target="_blank" rel="noreferrer" className="rubric underline">
                 {s.title}
               </a>{' '}
               <span className="text-muted">

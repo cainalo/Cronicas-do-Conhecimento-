@@ -16,6 +16,7 @@ export const grimorioSeguranca: Grimoire = {
     'Criptografia, OWASP Top 10, DevSecOps, Zero Trust e a família ISO/IEC 27000. Começa pelo segredo mais antigo: como guardar e provar a palavra escrita.',
   chapterIds: ['cap.seg.01'],
   sigil: 'chave',
+  binding: 'sangue',
 };
 
 export const capCriptografia: Chapter = {
