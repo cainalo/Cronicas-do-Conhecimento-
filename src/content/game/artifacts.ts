@@ -8,6 +8,13 @@ export interface Artifact {
 
 export const artifacts: Artifact[] = [
   { topicId: 'ti.seguranca.criptografia', name: 'Chave de Sete Dentes', lore: 'Abre qualquer cofre cujo segredo você saiba guardar.' },
+  { topicId: 'ti.seguranca.principios', name: 'Balança dos Três Pratos', lore: 'Pesa sigilo, integridade e disponibilidade antes de cada decisão.' },
+  { topicId: 'ti.seguranca.acesso', name: 'Molho de Chaves do Porteiro', lore: 'Cada chave abre só a porta de quem precisa entrar.' },
+  { topicId: 'ti.seguranca.zero-trust', name: 'Olho que Nunca Dorme', lore: 'Pergunta o nome até a quem já está dentro do castelo.' },
+  { topicId: 'ti.seguranca.owasp', name: 'Bestiário das Dez Pragas', lore: 'Descreve as dez feras que mais rondam as aplicações.' },
+  { topicId: 'ti.seguranca.ameacas', name: 'Sino de Alarme', lore: 'Toca quando o inimigo cruza a muralha; às vezes, por engano.' },
+  { topicId: 'ti.seguranca.continuidade', name: 'Cofre das Três Cópias', lore: 'Uma em casa, outra em outro meio, a terceira longe dali.' },
+  { topicId: 'ti.seguranca.iso27000', name: 'Regimento da Ordem', lore: 'Noventa e três preceitos em quatro livros.' },
   { topicId: 'ti.ia-eng.llm', name: 'Oráculo de Latão', lore: 'Prevê a próxima palavra, mas às vezes inventa o passado.' },
   { topicId: 'ti.ia-eng.contexto', name: 'Lente da Janela', lore: 'Mostra só o que cabe no seu campo de visão.' },
   { topicId: 'ti.ia.generativa', name: 'Índice dos Mil Pergaminhos', lore: 'Encontra o trecho certo antes que o oráculo fale.' },

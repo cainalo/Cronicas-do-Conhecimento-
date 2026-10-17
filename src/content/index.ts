@@ -2,7 +2,8 @@
 // nunca os arquivos de um concurso específico.
 import type { Chapter, Contest, EssayPrompt, Flashcard, Grimoire, Lesson, Question } from './types';
 import { tceGo2026 } from './contests/tce-go-2026/contest';
-import { capCriptografia, grimorioSeguranca } from './grimoires/seguranca';
+import { capCriptografia, capDefesa, grimorioSeguranca, licoesCap02 } from './grimoires/seguranca';
+import { questoesSegCap02 } from './grimoires/seguranca/questions-cap02';
 import { questoesCap01 } from './grimoires/seguranca/questions-cap01';
 import { licoesCap01 } from './grimoires/seguranca/lessons-cap01';
 import { capIaAgentes, capIaLlm, grimorioIa } from './grimoires/ia';
@@ -17,9 +18,9 @@ import { questoesInfra } from './grimoires/infra/questions';
 
 export const contests: Contest[] = [tceGo2026];
 export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev, grimorioInfra];
-export const chapters: Chapter[] = [capCriptografia, capIaLlm, capIaAgentes, capDevApis, capDevIdentidade, capInfraRedes, capInfraNuvem];
-export const lessons: Lesson[] = [...licoesCap01, ...licoesIa, ...licoesDev, ...licoesInfra];
-export const questions: Question[] = [...questoesCap01, ...questoesIaCap01, ...questoesIaCap02, ...questoesDev, ...questoesInfra];
+export const chapters: Chapter[] = [capCriptografia, capDefesa, capIaLlm, capIaAgentes, capDevApis, capDevIdentidade, capInfraRedes, capInfraNuvem];
+export const lessons: Lesson[] = [...licoesCap01, ...licoesCap02, ...licoesIa, ...licoesDev, ...licoesInfra];
+export const questions: Question[] = [...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesDev, ...questoesInfra];
 
 const byId = <T extends { id: string }>(list: T[]) => new Map(list.map((x) => [x.id, x]));
 const contestMap = byId(contests);

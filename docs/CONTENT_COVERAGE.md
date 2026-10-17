@@ -1,6 +1,6 @@
 # Matriz de cobertura (base: Anexo II oficial, cargo B02)
 
-Cobertura atual: **12 de 68 tópicos** com material (7 capítulos, 10 lições, 106 questões autorais, 3 estudos de caso, flashcards dos glossários). Não declarar cobertura integral enquanto houver lacunas.
+Cobertura atual: **19 de 68 tópicos** com material (8 capítulos, 12 lições, 126 questões autorais, 3 estudos de caso, flashcards dos glossários). Não declarar cobertura integral enquanto houver lacunas.
 Os IDs de tópico estão em `src/content/contests/tce-go-2026/contest.ts`; a tela **Progresso → Edital e cobertura** calcula esta matriz automaticamente.
 
 | Disciplina (questões) | Tópicos | Com material | Material |
@@ -14,7 +14,7 @@ Os IDs de tópico estão em `src/content/contests/tce-go-2026/contest.ts`; a tel
 | DevOps, Plataforma e Entrega (4) | 5 | 0 | — |
 | Banco de Dados (4) | 5 | 0 (o cap. 1 de IA cobre bancos vetoriais/pgvector, parte de `ti.dados.nosql`) | — |
 | IA, Ciência de Dados e Automação (5) | 4 | 1 | `ti.ia.generativa` (prompts, contexto, RAG) no cap. 1 do Livro dos Autômatos. Faltam: fundamentos de ML/deep learning/PLN, ética e Estratégia Brasileira de IA, ciência de dados e Big Data |
-| Segurança da Informação (4) | 8 | 1 | `ti.seguranca.criptografia` → Códice das Sete Chaves, cap. 1; lições lic.seg.01.a/b; questões q.seg.01.001–020 (autorais, não revisadas) |
+| Segurança da Informação (4) | 8 | **8** (completa) | Cap. 2 Defesa em Profundidade (cap.seg.02): princípios/riscos/LAI, acesso/IAM, Zero Trust (NIST SP 800-207), OWASP Top 10:2025 + DevSecOps/APIs/containers, ameaças/IDS/IPS/pentest, backup/continuidade, ISO 27000 (27001:2022); lições lic.seg.02.a/b; q.seg.02.001–020. Cap. 1: | `ti.seguranca.criptografia` → Códice das Sete Chaves, cap. 1; lições lic.seg.01.a/b; questões q.seg.01.001–020 (autorais, não revisadas) |
 | SO, Redes e Nuvem (5) | 5 | 3 | Atlas das Estradas e das Nuvens: cap. 1 Redes (`ti.infra.redes`, `ti.infra.perimetro`), cap. 2 Nuvem (`ti.infra.nuvem`); lições lic.infra.01/02; q.infra.01.001–012, q.infra.02.001–010. Faltam: Windows/Linux, shell/PowerShell (`ti.infra.so`), AD/LDAP e virtualização (`ti.infra.diretorio`) |
 | Governança de TI (4) | 5 | 0 | — |
 | Legislação Aplicada à TI (4) | 5 | 0 (o cap. 1 toca certificação digital/ICP-Brasil) | — |

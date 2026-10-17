@@ -22,6 +22,6 @@
 - Rodada criativa de `OPEN_QUESTIONS.md`.
 
 ## Próxima tarefa exata
-1. **Segurança da Informação, cap. 2**: OWASP Top 10:2025, codificação segura e DevSecOps, Zero Trust, IAM, família ISO/IEC 27000, continuidade (`ti.seguranca.owasp`, `ti.seguranca.zero-trust`, `ti.seguranca.iso27000`, `ti.seguranca.acesso`, `ti.seguranca.continuidade`, `ti.seguranca.principios`, `ti.seguranca.ameacas`) em `src/content/grimoires/seguranca/cap02-.../`, acrescentando `cap.seg.02` ao `chapterIds` do Códice. ATENÇÃO: conferir a lista oficial do OWASP Top 10:2025 antes de escrever (não inventar a ordem); se a rede não permitir, pesquisar com WebSearch e marcar a fonte.
-2. Depois: Banco de Dados, Governança, Legislação de TI, Eng. de Software, DevOps, SO (Windows/Linux), Gerais.
-3. Narrativa (Fase F): perguntar ao usuário protagonista, conflito, personagens e prólogo (ver `GAME_DESIGN.md`, Pendente) antes de escrever.
+1. **Grimório de Banco de Dados** (4 questões): `src/content/grimoires/dados/` (`binding: 'castanho'` ou nova cor). Cap. 1 Modelagem e SQL: MER, normalização (1FN–3FN, FNBC), desnormalização, SQL (DDL/DML/DCL, JOINs, agregação, subconsultas), álgebra relacional, transações ACID e isolamento, índices, procedures/triggers/views. Cap. 2 SGBDs e NoSQL: PostgreSQL/Oracle (administração básica), NoSQL (documento, chave-valor, colunas, grafos; MongoDB, Redis), replicação, backup, alta disponibilidade, governança. Tópicos `ti.dados.*`. ~12 questões por capítulo, lições, glossário, artefatos em `content/game/artifacts.ts`.
+2. Depois: Governança de TI, Legislação aplicada à TI, Eng. de Software, DevOps, SO (Windows/Linux), IA (fundamentos de ML, ética, ciência de dados), Gerais.
+3. Narrativa (Fase F): perguntar protagonista, conflito e personagens.
