@@ -7,6 +7,7 @@ import { usePlanOfToday } from '@/app/usePlanOfToday';
 import { latestAttempt } from '@/lib/study';
 import { Icon } from '@/components/Icon';
 import { PageHeader } from '@/components/Page';
+import { MascotSays } from '@/components/Mascot';
 
 const WEEK = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 const fmtMin = (m: number) => (m >= 60 ? `${Math.floor(m / 60)}h${m % 60 ? String(m % 60).padStart(2, '0') : ''}` : `${m} min`);
@@ -49,6 +50,13 @@ export function PlanPage() {
   return (
     <div className="space-y-6">
       <PageHeader area="treino" icon="calendario" title="Ordem do dia" subtitle="O que estudar hoje, montado a partir do seu histórico" />
+      {!plan.restDay && plan.items.length > 0 && (
+        <MascotSays mood={done.length === plan.items.length ? 'cheer' : 'talk'} size={72}>
+          {done.length === plan.items.length
+            ? 'Ordem do dia cumprida! Descanse a pena ou siga treinando.'
+            : `Faltam ${plan.items.length - done.length} atividade(s). O botão Continuar leva direto à próxima.`}
+        </MascotSays>
+      )}
 
       {plan.restDay ? (
         <section className="manuscript p-5 text-center">

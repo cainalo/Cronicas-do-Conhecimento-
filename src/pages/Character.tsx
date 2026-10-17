@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useStudy } from '@/app/StudyProvider';
 import { DEFAULT_CONTEST_ID, chapters, questionsForContest, topicTitle } from '@/content';
 import { artifacts } from '@/content/game/artifacts';
@@ -20,6 +21,11 @@ export function CharacterPage() {
   const dark = useIsDark();
   const color = areaColor('reino', dark);
   const gold = dark ? '#e8b13b' : '#a8740c';
+  const [allArtifacts, setAllArtifacts] = useState(false);
+  // Conquistados primeiro, depois os mais próximos de surgir.
+  const ranked = [...artifacts].sort((a, b) => topicMastery(data, b.topicId, bank) - topicMastery(data, a.topicId, bank));
+  const gotCount = ranked.filter((a) => topicMastery(data, a.topicId, bank) >= MASTERY_FOR_ARTIFACT).length;
+  const shownArtifacts = allArtifacts ? ranked : ranked.slice(0, Math.max(6, gotCount + 4));
 
   return (
     <div className="space-y-6">
@@ -107,7 +113,7 @@ export function CharacterPage() {
         </SectionTitle>
         <p className="text-sm text-muted">Cada artefato surge quando você acerta, na última tentativa, ao menos {MASTERY_FOR_ARTIFACT * 100}% das questões do tópico.</p>
         <ul className="mt-3 grid grid-cols-2 gap-2">
-          {artifacts.map((a) => {
+          {shownArtifacts.map((a) => {
             const m = topicMastery(data, a.topicId, bank);
             const got = m >= MASTERY_FOR_ARTIFACT;
             return (
@@ -134,6 +140,11 @@ export function CharacterPage() {
             );
           })}
         </ul>
+        {!allArtifacts && ranked.length > shownArtifacts.length && (
+          <button type="button" className="btn-ghost mt-3 w-full" onClick={() => setAllArtifacts(true)}>
+            Ver os {ranked.length - shownArtifacts.length} artefatos ocultos restantes
+          </button>
+        )}
       </section>
     </div>
   );

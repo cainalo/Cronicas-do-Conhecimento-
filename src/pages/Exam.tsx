@@ -6,6 +6,7 @@ import { activeExam, answerExam, examDeadline, finishExam, pickExamQuestions, st
 import type { MockExam } from '@/lib/model';
 import { PageHeader } from '@/components/Page';
 import { QuestionStem } from '@/components/QuestionCard';
+import { MascotSays } from '@/components/Mascot';
 
 const fmt = (ms: number) => {
   const s = Math.max(0, Math.floor(ms / 1000));
@@ -44,10 +45,9 @@ function ExamSetup() {
     <div className="space-y-5">
       <header>
         <PageHeader area="treino" icon="relogio" title="Simulado" />
-        <p className="-mt-2 text-sm text-muted">
-          Sem correção durante a prova. A prova real terá 70 questões de 5 alternativas (25 gerais, peso 1; 45 específicas, peso 2); aqui o
-          sorteio usa as questões já escritas.
-        </p>
+        <MascotSays mood="think" size={72}>
+          Sem correção durante a prova, como no dia. A real terá 70 questões (25 gerais, peso 1; 45 específicas, peso 2); aqui sorteio entre as já escritas.
+        </MascotSays>
       </header>
 
       <section className="space-y-3">
