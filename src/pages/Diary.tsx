@@ -25,6 +25,16 @@ export function DiaryPage() {
             <p className="font-serif text-[1.02rem] leading-relaxed">{c}</p>
           </li>
         ))}
+        {revealed === clues.length && (
+          <li className="shine relative overflow-hidden rounded-[1.8rem] p-5 text-center text-white shadow-[var(--shadow-lift)]" style={{ background: 'linear-gradient(140deg, #c2571f, #7a2e10)' }}>
+            <p className="text-xs font-bold uppercase tracking-wide opacity-85">Fim do diário</p>
+            <p className="mt-1 font-display text-2xl">O Grande Exame aguarda</p>
+            <p className="mt-2 text-sm opacity-90">Você reuniu todas as pistas. Agora a névoa só se vence no dia da prova: mantenha a revisão em dia e faça a prova completa no simulado.</p>
+            <Link to="/simulado" className="mt-3 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-bold text-[#7a2e10]">
+              <Icon name="relogio" size={16} strokeWidth={2.2} /> Ir ao simulado
+            </Link>
+          </li>
+        )}
         {revealed < clues.length && (
           <li className="flex items-center gap-3 rounded-2xl border border-dashed border-line p-4 text-muted">
             <Icon name="chave" size={20} />

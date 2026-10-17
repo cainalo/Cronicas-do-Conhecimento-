@@ -5,7 +5,8 @@ import { useNextActivity } from '@/app/usePlanOfToday';
 import { levelInfo, totalXp } from '@/lib/study';
 import { achievements } from '@/lib/game';
 import { DEFAULT_CONTEST_ID, chapters, questionsForContest } from '@/content';
-import { useCelebrations } from '@/app/fx';
+import { useCelebrations, useRegionCelebration } from '@/app/fx';
+import { useRegions } from '@/pages/Realm';
 import { Icon } from '@/components/Icon';
 import { useIsDark } from '@/components/Page';
 import { useState } from 'react';
@@ -97,6 +98,8 @@ export function Layout() {
   const xp = totalXp(data);
   const lv = levelInfo(xp);
   useCelebrations(xp, lv.level, achievements(data, chapters, questionsForContest(DEFAULT_CONTEST_ID)), Object.keys(data.lessons).length, clues.length);
+  const regions = useRegions();
+  useRegionCelebration(regions.filter((r) => r.explored && r.mastery >= 0.8).map((r) => r.name));
   const inner = !isAreaHome(pathname);
   const accountColor = areaColor('conta', dark);
   const onAccount = areaOf(pathname) === 'conta';

@@ -147,3 +147,24 @@ export function useCelebrations(xp: number, level: number, seals: { id: string; 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [xp, level, seals.filter((s) => s.done).length, lessonsDone]);
 }
+
+/** Comemora quando uma região do mapa passa de 80% de domínio (a névoa se dissipa). */
+export function useRegionCelebration(cleared: string[]) {
+  const { toast, confetti, sfx } = useFx();
+  const last = useRef<Set<string> | null>(null);
+  const key = cleared.join('|');
+  useEffect(() => {
+    const now = new Set(cleared);
+    const prev = last.current;
+    last.current = now;
+    if (!prev) return;
+    for (const name of cleared) {
+      if (!prev.has(name)) {
+        toast({ text: 'A névoa se dissipou', sub: name, icon: 'mapa', color: '#4a7f46' });
+        confetti(100);
+        sfx('level');
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+}
