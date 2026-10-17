@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { DEFAULT_CONTEST_ID, getContest, getQuestion, questionsForContest, topicTitle } from '@/content';
-import { activeExam, answerExam, examDeadline, finishExam, pickExamQuestions, startExam } from '@/lib/training';
+import { activeExam, answerExam, examDeadline, finishExam, pickExamQuestions, pickFullExam, startExam, weightedScore } from '@/lib/training';
 import type { MockExam } from '@/lib/model';
 import { PageHeader } from '@/components/Page';
 import { QuestionStem } from '@/components/QuestionCard';
@@ -39,6 +39,7 @@ function ExamSetup() {
     .filter((e) => e.finishedAt)
     .sort((a, b) => b.finishedAt!.localeCompare(a.finishedAt!));
 
+  const fullCount = useMemo(() => pickFullExam(bank, contest.disciplines, () => 0.5).length, [bank, contest]);
   const toggle = (id: string) => setSel((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
 
   return (
@@ -46,24 +47,73 @@ function ExamSetup() {
       <header>
         <PageHeader area="treino" icon="relogio" title="Simulado" />
         <MascotSays mood="think" size={72}>
-          Sem correção durante a prova, como no dia. A real terá 70 questões (25 gerais, peso 1; 45 específicas, peso 2); aqui sorteio entre as já escritas.
+          Sem correção durante a prova, como no dia. Encare a prova completa ou monte a sua, e no fim eu entrego o boletim.
         </MascotSays>
       </header>
 
+      <section className="shine relative overflow-hidden rounded-[1.8rem] p-4 text-white shadow-[var(--shadow-card)]" style={{ background: 'linear-gradient(140deg, #3b6fb0, #1f3d66)' }}>
+        <p className="text-xs font-bold uppercase tracking-wide opacity-85">Formato do edital</p>
+        <h2 className="mt-1 text-xl">Prova completa</h2>
+        <p className="mt-1 text-sm opacity-90">
+          {fullCount} questões na ordem do caderno: 25 de Conhecimentos Gerais (peso 1) e 45 de Específicos (peso 2), com o número de questões de cada disciplina previsto no edital.
+          {fullCount < 70 ? ` Hoje o banco cobre ${fullCount} das 70.` : ''}
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {([
+            [0, 'Sem cronômetro'],
+            [240, 'Com 4 horas'],
+          ] as const).map(([min, label]) => (
+            <button
+              key={min}
+              type="button"
+              className="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#1f3d66] shadow-sm transition active:scale-95"
+              onClick={() => {
+                const qs = pickFullExam(bank, contest.disciplines).map((q) => q.id);
+                update((d) => startExam(d, contest.id, qs, min || undefined).data);
+                navigate('/simulado');
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 text-xs opacity-80">A duração oficial ainda não foi publicada; 4 horas é só uma referência de treino.</p>
+      </section>
+
       <section className="space-y-3">
-        <h2 className="text-xl">Matérias</h2>
-        {groups.map((g) => (
-          <fieldset key={g.d.id} className="card p-3">
-            <legend className="rubric px-1 font-display">{g.d.title}</legend>
-            {g.topics.map(({ t, n: nq }) => (
-              <label key={t.id} className="flex items-start gap-3 py-1.5">
-                <input type="checkbox" className="mt-1.5 h-4 w-4 accent-[rgb(var(--ember))]" checked={sel.includes(t.id)} onChange={() => toggle(t.id)} />
-                <span className="flex-1">{t.title}</span>
-                <span className="text-sm text-muted">{nq}</span>
-              </label>
-            ))}
-          </fieldset>
-        ))}
+        <h2 className="text-xl">Ou monte o seu</h2>
+        {groups.map((g) => {
+          const ids = g.topics.map((x) => x.t.id);
+          const on = ids.filter((id) => sel.includes(id)).length;
+          return (
+            <details key={g.d.id} className="card p-3">
+              <summary className="flex cursor-pointer list-none items-center gap-3">
+                <input
+                  type="checkbox"
+                  aria-label={`Marcar todos de ${g.d.title}`}
+                  className="h-4 w-4 accent-[rgb(var(--ember))]"
+                  checked={on === ids.length}
+                  ref={(el) => el && (el.indeterminate = on > 0 && on < ids.length)}
+                  onChange={() => setSel((s) => (on === ids.length ? s.filter((x) => !ids.includes(x)) : [...new Set([...s, ...ids])]))}
+                  onClick={(e) => e.stopPropagation()}
+                />
+                <span className="flex-1 font-semibold">{g.d.title}</span>
+                <span className="text-sm text-muted">
+                  {g.topics.reduce((a, x) => a + x.n, 0)} questões
+                </span>
+              </summary>
+              <div className="mt-2 border-t border-line pt-2">
+                {g.topics.map(({ t, n: nq }) => (
+                  <label key={t.id} className="flex items-start gap-3 py-1.5">
+                    <input type="checkbox" className="mt-1.5 h-4 w-4 accent-[rgb(var(--ember))]" checked={sel.includes(t.id)} onChange={() => toggle(t.id)} />
+                    <span className="flex-1 text-sm">{t.title}</span>
+                    <span className="text-sm text-muted">{nq}</span>
+                  </label>
+                ))}
+              </div>
+            </details>
+          );
+        })}
       </section>
 
       <section className="space-y-2">
@@ -239,6 +289,7 @@ export function ExamResultPage() {
     byTopic.set(q.topicId, s);
   }
   const pct = Math.round(((e.correct ?? 0) / e.questionIds.length) * 100);
+  const ws = weightedScore(e, questionsForContest(e.contestId), getContest(e.contestId)?.disciplines ?? []);
   const minutes = Math.round((new Date(e.finishedAt).getTime() - new Date(e.startedAt).getTime()) / 60000);
 
   return (
@@ -250,6 +301,26 @@ export function ExamResultPage() {
           {e.correct} de {e.questionIds.length} corretas em {minutes} min
           {e.timeLimitMin ? ` (limite de ${e.timeLimitMin} min)` : ''}
         </p>
+        <div className="mt-4 grid grid-cols-3 gap-2 text-sm">
+          <span className="rounded-2xl bg-raised p-2">
+            <b className="block text-lg">
+              {ws.gerais.ok}/{ws.gerais.n}
+            </b>
+            Gerais (peso 1)
+          </span>
+          <span className="rounded-2xl bg-raised p-2">
+            <b className="block text-lg">
+              {ws.especificos.ok}/{ws.especificos.n}
+            </b>
+            Específicos (peso 2)
+          </span>
+          <span className="rounded-2xl bg-raised p-2">
+            <b className="block text-lg">
+              {ws.points}/{ws.max}
+            </b>
+            Pontos ponderados
+          </span>
+        </div>
         <p className="mx-auto mt-2 max-w-md text-sm text-muted">
           Na prova real a nota é padronizada pelo desempenho do grupo (edital, cap. 9); este percentual serve só para o seu acompanhamento.
         </p>

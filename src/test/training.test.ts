@@ -105,3 +105,31 @@ describe('flashcards', () => {
     expect(new Set(flashcards.map((f) => f.id)).size).toBe(flashcards.length);
   });
 });
+
+import { pickFullExam, weightedScore } from '@/lib/training';
+import { getContest as gct, DEFAULT_CONTEST_ID as DC2, questionsForContest as qfc2 } from '@/content';
+
+describe('prova completa', () => {
+  const contest = gct(DC2)!;
+  const bank = qfc2(DC2);
+  it('respeita o número de questões por disciplina do edital, gerais primeiro', () => {
+    const qs = pickFullExam(bank, contest.disciplines, () => 0.3);
+    expect(qs).toHaveLength(70);
+    expect(new Set(qs.map((q) => q.id)).size).toBe(70);
+    for (const d of contest.disciplines) {
+      const ids = new Set(d.topics.map((t) => t.id));
+      expect(qs.filter((q) => ids.has(q.topicId))).toHaveLength(d.questions ?? 0);
+    }
+    const geraisIds = new Set(contest.disciplines.filter((d) => d.block === 'gerais').flatMap((d) => d.topics.map((t) => t.id)));
+    expect(qs.slice(0, 25).every((q) => geraisIds.has(q.topicId))).toBe(true);
+  });
+  it('pondera gerais com peso 1 e específicas com peso 2', () => {
+    const qs = pickFullExam(bank, contest.disciplines, () => 0.7);
+    const answers = Object.fromEntries(qs.map((q) => [q.id, q.answer]));
+    const ws = weightedScore({ id: 'x', contestId: DC2, questionIds: qs.map((q) => q.id), answers, startedAt: '' }, bank, contest.disciplines);
+    expect(ws.gerais).toEqual({ ok: 25, n: 25 });
+    expect(ws.especificos).toEqual({ ok: 45, n: 45 });
+    expect(ws.points).toBe(115);
+    expect(ws.max).toBe(115);
+  });
+});

@@ -34,6 +34,36 @@ export function pickExamQuestions(bank: Question[], topicIds: string[], count: n
   return shuffle(out, rand);
 }
 
+interface DisciplineLike {
+  id: string;
+  block: 'gerais' | 'especificos';
+  questions?: number;
+  topics: { id: string }[];
+}
+
+/**
+ * Prova completa: o número de questões de cada disciplina previsto no edital, na ordem
+ * do caderno (gerais e depois específicas). Disciplinas com banco menor entram com o que há.
+ */
+export function pickFullExam(bank: Question[], disciplines: DisciplineLike[], rand: () => number = Math.random): Question[] {
+  const ordered = [...disciplines.filter((d) => d.block === 'gerais'), ...disciplines.filter((d) => d.block === 'especificos')];
+  return ordered.flatMap((d) => pickExamQuestions(bank, d.topics.map((t) => t.id), d.questions ?? 0, rand));
+}
+
+/** Pontos ponderados como no edital (gerais peso 1, específicas peso 2), sem a padronização. */
+export function weightedScore(exam: MockExam, bank: Question[], disciplines: DisciplineLike[]) {
+  const blockOf = new Map(disciplines.flatMap((d) => d.topics.map((t) => [t.id, d.block] as const)));
+  const res = { gerais: { ok: 0, n: 0 }, especificos: { ok: 0, n: 0 } };
+  for (const qid of exam.questionIds) {
+    const q = bank.find((x) => x.id === qid);
+    const b = q && blockOf.get(q.topicId);
+    if (!q || !b) continue;
+    res[b].n++;
+    if (exam.answers[qid] === q.answer) res[b].ok++;
+  }
+  return { ...res, points: res.gerais.ok + 2 * res.especificos.ok, max: res.gerais.n + 2 * res.especificos.n };
+}
+
 export function startExam(data: StudyData, contestId: string, questionIds: string[], timeLimitMin: number | undefined, now = new Date().toISOString()) {
   const exam: MockExam = { id: crypto.randomUUID(), contestId, questionIds, answers: {}, timeLimitMin, startedAt: now };
   return { data: { ...data, exams: { ...data.exams, [exam.id]: exam } }, exam };
