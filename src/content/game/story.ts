@@ -131,7 +131,9 @@ export const clues: string[] = [
   'Pista 32. Os carimbos mostram que a névoa sempre engrossa na véspera dos pagamentos ao fornecedor fantasma.',
   'Pista 33. Quem domina a matéria vê através da névoa. Por isso eles temem que novos auditores sejam nomeados.',
   'Pista 34. O plano final é apagar o próprio Grande Exame dos registros do Reino, em janeiro.',
-  'Pista 35. Bubo fecha o diário: "Agora você sabe tudo o que eu sei. O resto se decide no dia do Exame. Estude, aprendiz, e a névoa não terá onde se esconder."',
+  'Pista 35. O antigo aprendiz espalhou que TI é assunto só para iniciados. É mentira: todo mestre começou pelo primeiro pergaminho.',
+  'Pista 36. Os novos aprendizes que começaram do zero já leem registros que a névoa escondia. O Tesoureiro-Mor não esperava por isso.',
+  'Pista 37. Bubo fecha o diário: "Agora você sabe tudo o que eu sei. O resto se decide no dia do Exame. Estude, aprendiz, e a névoa não terá onde se esconder."',
 ];
 
 export const PROLOGUE_KEY = 'cronicas:prologo:v1';

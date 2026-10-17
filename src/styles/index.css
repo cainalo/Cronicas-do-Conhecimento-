@@ -158,6 +158,64 @@ a { text-underline-offset: 3px; }
 .page-shade { animation: flip-shade 0.55s ease-in-out forwards; background: linear-gradient(90deg, rgb(0 0 0 / 0.45), transparent 60%); }
 .book-spine::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 22px; border-radius: 1.5rem 0 0 1.5rem; background: linear-gradient(90deg, rgb(80 50 20 / 0.22), transparent); pointer-events: none; }
 
+/* Livro de couro: capa, fecho, bordas de folhas empilhadas e a folha que vira com verso */
+.leather-cover {
+  border-radius: 1.6rem;
+  background-color: #5a3519;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 30% 20%, rgb(255 210 150 / 0.16), transparent 70%),
+    radial-gradient(ellipse 120% 100% at 50% 50%, transparent 55%, rgb(20 8 0 / 0.55) 100%),
+    var(--tex-grain), var(--tex-grain);
+  box-shadow: 0 18px 36px -18px rgb(40 20 5 / 0.75), inset 0 0 0 1px rgb(255 220 170 / 0.12), inset 6px 0 10px -4px rgb(0 0 0 / 0.45);
+}
+.leather-cover::before {
+  content: ''; position: absolute; inset: 5px 5px 5px 9px; border-radius: 1.3rem; pointer-events: none;
+  border: 1.5px dashed rgb(232 196 140 / 0.45);
+}
+.leather-cover::after {
+  /* lombada com nervuras */
+  content: ''; position: absolute; inset: 0 auto 0 0; width: 12px; border-radius: 1.6rem 0 0 1.6rem; pointer-events: none;
+  background: repeating-linear-gradient(180deg, transparent 0 18%, rgb(0 0 0 / 0.35) 18% 19.5%, rgb(255 210 150 / 0.18) 19.5% 21%), linear-gradient(90deg, rgb(0 0 0 / 0.45), rgb(0 0 0 / 0.05));
+}
+.leather-clasp {
+  position: absolute; right: -3px; top: 50%; z-index: 2; width: 14px; height: 34px; margin-top: -17px; border-radius: 6px 3px 3px 6px;
+  background: linear-gradient(180deg, #e7c46a, #a67a26 55%, #6e4d14); box-shadow: 0 2px 4px rgb(0 0 0 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.5);
+}
+.page-edges-right, .page-edges-left { position: absolute; top: 6px; bottom: 6px; border-radius: 0 6px 6px 0; pointer-events: none;
+  background: repeating-linear-gradient(90deg, #f1e4c4 0 1px, #c7ad7c 1px 1.5px); box-shadow: 1px 0 2px rgb(0 0 0 / 0.25); }
+.page-edges-left { border-radius: 6px 0 0 6px; }
+.manuscript.parchment-aged {
+  border-radius: 1.1rem;
+  background-image:
+    radial-gradient(circle at 82% 14%, rgb(150 100 40 / 0.10) 0 7%, transparent 14%),
+    radial-gradient(circle at 12% 86%, rgb(140 90 35 / 0.09) 0 9%, transparent 17%),
+    radial-gradient(ellipse 60% 40% at 70% 78%, rgb(160 110 50 / 0.06), transparent 70%),
+    linear-gradient(90deg, rgb(90 55 20 / 0.22), transparent 7%, transparent 94%, rgb(90 55 20 / 0.10)),
+    radial-gradient(ellipse 110% 95% at 50% 45%, transparent 58%, rgb(140 95 45 / 0.28) 100%),
+    var(--tex-grain);
+  box-shadow: inset 0 0 18px rgb(120 80 30 / 0.22), 0 2px 6px -2px rgb(40 20 5 / 0.4);
+}
+/* Virada com dobra: --p vai de 0 (folha deitada) a 1 (folha virada). A parte da folha à direita
+   da dobra se espelha para a esquerda e mostra o verso, com a tinta da frente vista por trás. */
+@property --p { syntax: '<number>'; inherits: true; initial-value: 0; }
+@keyframes curl-p-fwd { from { --p: 0; } to { --p: 1; } }
+@keyframes curl-p-back { from { --p: 1; } to { --p: 0; } }
+.curl-fwd { animation: curl-p-fwd 0.7s cubic-bezier(0.45, 0.05, 0.35, 1) forwards; }
+.curl-back { animation: curl-p-back 0.7s cubic-bezier(0.45, 0.05, 0.35, 1) forwards; }
+.curl-front { clip-path: inset(0 calc(var(--p) * 100%) 0 0); }
+.curl-flap-wrap { filter: drop-shadow(-6px 0 8px rgb(40 20 5 / 0.35)); }
+.curl-flap {
+  border-radius: 1.1rem; overflow: hidden;
+  background-color: rgb(240 228 200); background-image: var(--tex-grain);
+  transform: translateX(calc((1 - 2 * var(--p)) * 100%));
+  clip-path: inset(0 calc((1 - var(--p)) * 100%) 0 0);
+}
+.curl-flap-shade { background: linear-gradient(90deg, rgb(90 55 20 / 0.30), rgb(255 250 235 / 0.10) 40%, rgb(255 250 235 / 0.35) calc(var(--p) * 100% - 2px), rgb(90 55 20 / 0.25) calc(var(--p) * 100%)); }
+.curl-under-shade { left: calc((1 - var(--p)) * 100%); width: 70px; background: linear-gradient(90deg, rgb(30 15 0 / 0.38), transparent); opacity: calc(1 - var(--p)); }
+
+.learn-text { font-size: calc(1.22rem * var(--font-scale)); line-height: 1.6; }
+.learn-text strong { color: rgb(var(--ember)); }
+
 /* Tabelas e código cabem na largura da página do livro */
 .book-page .prose-manuscript table { font-size: 0.74em; table-layout: auto; }
 .book-page .prose-manuscript th, .book-page .prose-manuscript td { padding: 0.4em 0.45em; overflow-wrap: break-word; hyphens: auto; }

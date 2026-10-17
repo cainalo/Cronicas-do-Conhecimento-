@@ -12,6 +12,8 @@ import { questoesIaCap02 } from './grimoires/ia/questions-cap02';
 import { licoesIa } from './grimoires/ia/lessons';
 import { capIaEticaDados, capIaFundamentos, licoesIa34 } from './grimoires/ia/cap03-04';
 import { questoesIaCap0304 } from './grimoires/ia/questions-cap03-04';
+import { capPrimComputador, capPrimRedesDados, grimorioPrimeiros, licoesPrimeiros } from './grimoires/primeiros';
+import { questoesPrimeiros } from './grimoires/primeiros/questions';
 import { estudosDeCaso } from './discursivas/tce-go-2026';
 import { capDevApis, capDevIdentidade, grimorioDev, licoesDev } from './grimoires/dev';
 import { questoesDev } from './grimoires/dev/questions';
@@ -41,10 +43,10 @@ import { capDevopsEntrega, capDevopsPlataforma, grimorioDevops, licoesDevops } f
 import { questoesDevops } from './grimoires/devops/questions';
 
 export const contests: Contest[] = [tceGo2026];
-export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev, grimorioInfra, grimorioDados, grimorioGovernanca, grimorioLegislacao, grimorioEngSoft, grimorioDevops, grimorioIngles, grimorioPortugues, grimorioMatematica, grimorioInstitucional];
-export const chapters: Chapter[] = [capCriptografia, capDefesa, capIaLlm, capIaAgentes, capIaFundamentos, capIaEticaDados, capDevApis, capDevIdentidade, capDevAlgoritmos, capDevLinguagens, capInfraRedes, capInfraNuvem, capInfraSo, capDadosSql, capDadosSgbd, capGovModelos, capGovPublico, capLegDados, capLegNormas, capEsProcesso, capEsArquitetura, capDevopsEntrega, capDevopsPlataforma, capInglesLeitura, capInglesVocabulario, capPortLeitura, capPortSintaxe, capInstCf, capInstGoias, capMatAritmetica, capMatLogica];
-export const lessons: Lesson[] = [...licoesCap01, ...licoesCap02, ...licoesIa, ...licoesIa34, ...licoesDev, ...licoesDev34, ...licoesInfra, ...licoesInfraSo, ...licoesDados, ...licoesGovernanca, ...licoesLegislacao, ...licoesEngSoft, ...licoesDevops, ...licoesIngles, ...licoesPortugues, ...licoesInstitucional, ...licoesMatematica];
-export const questions: Question[] = [...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesIaCap0304, ...questoesDev, ...questoesDevCap0304, ...questoesInfra, ...questoesInfraSo, ...questoesDados, ...questoesGovernanca, ...questoesLegislacao, ...questoesEngSoft, ...questoesDevops, ...questoesIngles, ...questoesPortugues, ...questoesInstitucional, ...questoesMatematica];
+export const grimoires: Grimoire[] = [grimorioPrimeiros, grimorioSeguranca, grimorioIa, grimorioDev, grimorioInfra, grimorioDados, grimorioGovernanca, grimorioLegislacao, grimorioEngSoft, grimorioDevops, grimorioIngles, grimorioPortugues, grimorioMatematica, grimorioInstitucional];
+export const chapters: Chapter[] = [capPrimComputador, capPrimRedesDados, capCriptografia, capDefesa, capIaLlm, capIaAgentes, capIaFundamentos, capIaEticaDados, capDevApis, capDevIdentidade, capDevAlgoritmos, capDevLinguagens, capInfraRedes, capInfraNuvem, capInfraSo, capDadosSql, capDadosSgbd, capGovModelos, capGovPublico, capLegDados, capLegNormas, capEsProcesso, capEsArquitetura, capDevopsEntrega, capDevopsPlataforma, capInglesLeitura, capInglesVocabulario, capPortLeitura, capPortSintaxe, capInstCf, capInstGoias, capMatAritmetica, capMatLogica];
+export const lessons: Lesson[] = [...licoesPrimeiros, ...licoesCap01, ...licoesCap02, ...licoesIa, ...licoesIa34, ...licoesDev, ...licoesDev34, ...licoesInfra, ...licoesInfraSo, ...licoesDados, ...licoesGovernanca, ...licoesLegislacao, ...licoesEngSoft, ...licoesDevops, ...licoesIngles, ...licoesPortugues, ...licoesInstitucional, ...licoesMatematica];
+export const questions: Question[] = [...questoesPrimeiros, ...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesIaCap0304, ...questoesDev, ...questoesDevCap0304, ...questoesInfra, ...questoesInfraSo, ...questoesDados, ...questoesGovernanca, ...questoesLegislacao, ...questoesEngSoft, ...questoesDevops, ...questoesIngles, ...questoesPortugues, ...questoesInstitucional, ...questoesMatematica];
 
 const byId = <T extends { id: string }>(list: T[]) => new Map(list.map((x) => [x.id, x]));
 const contestMap = byId(contests);
@@ -101,6 +103,7 @@ export const flashcards: Flashcard[] = chapters.flatMap((c) =>
 export const getFlashcard = (id: string) => flashcards.find((f) => f.id === id);
 
 export { getSectionExtras, allSectionExtras } from './game/scenes';
+export { getSimpleSection, allSimpleSections } from './game/simple';
 
 /** Unidades da jornada: um trecho praticado por seção e um desafio por lição. */
 export const totalUnits = chapters.reduce((n, c) => n + c.sections.length, 0) + lessons.length;

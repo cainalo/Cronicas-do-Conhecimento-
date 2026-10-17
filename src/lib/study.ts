@@ -252,8 +252,8 @@ export function recommend(data: StudyData, allChapters: Chapter[], allLessons: L
       return {
         kind: 'read',
         title: `${ch.title}: ${nextSection.title}`,
-        reason: rp ? 'Retome a leitura de onde parou.' : 'Tópico do edital ainda não estudado.',
-        to: `/capitulo/${ch.id}#${nextSection.id}`,
+        reason: rp ? 'Retome de onde parou.' : 'Assunto do edital ainda não estudado. Começa pela explicação simples.',
+        to: `/aprender/${ch.id}/${nextSection.id}`,
       };
     }
     if (pendingLesson) {

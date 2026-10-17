@@ -40,6 +40,8 @@ Aprovado em 17/10/2026 (substitui o "medieval moderno" escuro). O usuário relat
 
 ## Livro e prática (estilo Duolingo)
 - **Livro** (`pages/Book.tsx`): capa, cena, título do trecho, texto em blocos, "Pare e pense", fim do trecho com botão Praticar, glossário e referências; cabeçalho corrido e fólio em romanos; lombada sombreada; virada 3D (`page-flip-fwd/back`). Sem barra inferior durante leitura e prática.
+- **Livro de couro** (`components/LeatherBook.tsx`, usado pelo livro completo e pelo Aprender): `.leather-cover` (couro, costura tracejada, lombada com nervuras), `.leather-clasp`, `.page-edges-left/right` (folhas empilhadas), `Leaf` com `.parchment-aged`. Virada por dobra: propriedade CSS `--p` (0→1) animada; `.curl-front` recorta a folha, `.curl-flap` espelha o verso com a tinta da frente a 12% de opacidade; sombras `.curl-under-shade` e `.curl-flap-shade`. Sem animação em `prefers-reduced-motion` e nos testes.
+- **Aprender** (`pages/Learn.tsx`): barra azul de progresso, abertura com cena, páginas curtas com texto maior (`.learn-text`, termos em negrito na cor de destaque), "Palavras novas", "Você entendeu?" e página final com Praticar e Texto completo.
 - **Prática** (`pages/Practice.tsx`): barra de progresso verde, sequência (chama), opções com relevo, botão Verificar e painel verde/vermelho com Continuar, como no Duolingo.
 
 ## Componentes

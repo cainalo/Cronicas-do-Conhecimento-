@@ -26,7 +26,7 @@ export function chapterStops(c: Chapter, data: StudyData): Stop[] {
   const stops: Stop[] = c.sections.flatMap((s) => {
     const label = s.title.replace(/^\d+\.\s*/, '');
     return [
-      { key: `${c.id}:${s.id}:ler`, to: `/capitulo/${c.id}#${s.id}`, label: `Ler: ${label}`, icon: 'grimorio' as IconName, done: read.has(s.id), kind: 'read' as const },
+      { key: `${c.id}:${s.id}:ler`, to: `/aprender/${c.id}/${s.id}`, label: `Aprender: ${label}`, icon: 'grimorio' as IconName, done: read.has(s.id), kind: 'read' as const },
       {
         key: `${c.id}:${s.id}:praticar`,
         to: `/pratica/${c.id}/${s.id}`,
@@ -125,7 +125,7 @@ export function Trail({ chapter, data, color, guide = true }: { chapter: Chapter
               {isCurrent && guide && (
                 <div className={`pointer-events-none absolute -top-6 flex flex-col items-center ${x >= 0 ? 'right-full mr-1' : 'left-full ml-1'}`}>
                   <span className="anim-toast-in whitespace-nowrap rounded-xl border border-line bg-surface px-2 py-1 text-[11px] font-bold shadow-sm" style={{ color: 'rgb(var(--ember))' }}>
-                    {s.kind === 'lesson' ? 'Hora do desafio!' : s.kind === 'practice' ? 'Hora de praticar!' : 'Comece a ler'}
+                    {s.kind === 'lesson' ? 'Hora do desafio!' : s.kind === 'practice' ? 'Hora de praticar!' : 'Comece aqui'}
                   </span>
                   <Mascot mood="talk" size={52} />
                 </div>

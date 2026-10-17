@@ -1,7 +1,7 @@
 // Prática estilo Duolingo: cada seção vira uma rodada curta de atividades variadas, montada a
 // partir do próprio conteúdo (pegadinhas do texto, glossário do capítulo, questões da seção e os
 // extras escritos para a seção: verdadeiro ou falso e complete a lacuna). Regras puras e testáveis.
-import type { Chapter, Question, SectionExtras } from '@/content/types';
+import type { Chapter, Question, SectionExtras, SimpleSection } from '@/content/types';
 import type { StudyData } from './model';
 import { grantXp } from './study';
 
@@ -45,6 +45,7 @@ export function buildPractice(
   bank: Question[],
   extras?: SectionExtras,
   rand: () => number = Math.random,
+  simple?: SimpleSection,
 ): Activity[] {
   const section = chapter.sections.find((s) => s.id === sectionId);
   if (!section) return [];
@@ -86,6 +87,19 @@ export function buildPractice(
     .slice(0, 3)
     .map((q) => ({ kind: 'mcq' as const, id: q.id, question: q }));
 
+  // Aquecimento bem fácil, tirado da explicação simples: verdadeiro ou falso e palavras novas.
+  const warm: Activity[] = [];
+  if (simple) {
+    simple.checks.slice(0, 2).forEach((c, i) => warm.push({ kind: 'tf', id: `${key}:s${i}`, ...c }));
+    const w = shuffle(simple.words, rand);
+    if (w.length >= 4) {
+      const g = w[0];
+      const others = w.slice(1, 4).map((x) => x.term);
+      warm.push({ kind: 'term', id: `${key}:w0`, definition: g.meaning, options: shuffle([g.term, ...others], rand), answer: g.term });
+      warm.push({ kind: 'pairs', id: `${key}:wp`, pairs: w.slice(0, 4).map((x) => ({ term: x.term, definition: x.meaning })) });
+    }
+  }
+
   // Intercala: começa leve (V/F, termo), mistura lacunas e pares no meio, questões no fim.
   const order: Activity[] = [];
   const queues = [tfs, terms, blanks, pairs];
@@ -95,7 +109,8 @@ export function buildPractice(
       if (x) order.push(x);
     }
   }
-  return [...order, ...mcqs];
+  // Com aquecimento, a rodada continua curta: menos itens no meio e no máximo duas questões.
+  return simple ? [...warm, ...order.slice(0, 6), ...mcqs.slice(0, 2)] : [...order, ...mcqs];
 }
 
 /** Conclui a prática de uma seção (guardada junto das lições, com prefixo próprio). */

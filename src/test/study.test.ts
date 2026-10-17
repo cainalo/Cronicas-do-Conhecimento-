@@ -123,6 +123,14 @@ describe('prática e livro', () => {
     d = completePractice(d, ch.id, ch.sections[0].id, 100).data;
     expect(d.xp.length).toBe(xp1);
   });
+  it('com a explicação simples, começa pelo aquecimento fácil e fica curta', () => {
+    const simple = { pages: [], words: ['a', 'b', 'c', 'd'].map((t) => ({ term: t, meaning: `significado ${t}` })), checks: [{ statement: 'x', answer: true, why: 'y' }, { statement: 'z', answer: false, why: 'w' }, { statement: 'k', answer: true, why: 'q' }] };
+    const acts = buildPractice(ch, ch.sections[2].id, qfc3(DC3), undefined, () => 0.4, simple);
+    expect(acts[0].id.endsWith(':s0')).toBe(true);
+    expect(acts.slice(0, 4).map((a) => a.kind)).toEqual(['tf', 'tf', 'term', 'pairs']);
+    expect(acts.length).toBeLessThanOrEqual(12);
+    expect(acts[acts.length - 1].kind).toBe('mcq');
+  });
   it('divide o texto em blocos e pagina respeitando a altura', () => {
     const blocks = splitMarkdown('### Título\n\nTexto um.\n\n```\ncódigo\n\nainda código\n```\n\nFim.');
     expect(blocks).toEqual(['### Título\n\nTexto um.', '```\ncódigo\n\nainda código\n```', 'Fim.']);

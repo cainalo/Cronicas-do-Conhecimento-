@@ -102,7 +102,7 @@ export function Layout() {
   useRegionCelebration(regions.filter((r) => r.explored && r.mastery >= 0.8).map((r) => r.name));
   const inner = !isAreaHome(pathname);
   // Leitura e prática ocupam a tela toda, como as lições do Duolingo (sem a barra inferior).
-  const immersive = /^\/(capitulo|pratica|licao)\//.test(pathname);
+  const immersive = /^\/(capitulo|aprender|pratica|licao)\//.test(pathname);
   const accountColor = areaColor('conta', dark);
   const onAccount = areaOf(pathname) === 'conta';
   // Prólogo na primeira visita (fora dos testes automatizados).

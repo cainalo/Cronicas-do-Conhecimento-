@@ -13,7 +13,8 @@
 | `src/test/merge.test.ts` | fusão entre aparelhos, XP sem duplicar, migração do visitante |
 | `src/test/game.test.ts` | títulos, sequência, domínio, selos, missões, Rodada relâmpago (escolha das questões) |
 | `src/test/study.test.ts` (prática e livro) | pegadinhas, montagem da prática, XP único, divisão em blocos, paginação, pistas proporcionais |
-| `src/test/flow.test.tsx` | fluxo real de telas: lição com erro → resultado 90% → nova sessão → revisão → recuperação; leitor (marcar lida, busca) |
+| `src/test/flow.test.tsx` | fluxo real de telas: lição com erro → resultado 90% → nova sessão → revisão → recuperação; leitor (marcar lida, busca); Aprender (páginas, trecho estudado, link do texto completo); prática; simulado |
+| `src/test/content.test.ts` (camada simples) | toda seção tem explicação simples; 4–7 páginas; até 70 palavras por página; última "Resumindo"; 4–8 palavras novas; 3 verificações com V e F |
 
 ## Últimos resultados (2026-10-17)
 - `npm test`: **550/550** ✅ (content, study, merge, training, planner, game, flow)

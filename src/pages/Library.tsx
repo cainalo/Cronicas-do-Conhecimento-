@@ -128,20 +128,32 @@ export function GrimoirePage() {
                   className="shine relative mb-6 overflow-hidden rounded-[1.6rem] p-4 text-white shadow-[var(--shadow-card)]"
                   style={{ background: `linear-gradient(140deg, ${color}, color-mix(in srgb, ${color} 65%, #000))` }}
                 >
-                  <p className="text-xs font-bold uppercase tracking-wide opacity-85">
-                    Capítulo {roman(c.number).toUpperCase()} · {read}/{c.sections.length} seções
+                  <p className="text-xs font-bold opacity-85">
+                    Capítulo {roman(c.number).toUpperCase()} · {read}/{c.sections.length} trechos
                   </p>
                   <h3 className="mt-1 text-lg leading-snug">{c.title}</h3>
                   <p className="text-sm opacity-90">{c.subtitle}</p>
                   <div className="mt-3 flex flex-wrap items-center gap-2">
+                    {(() => {
+                      const stops = chapterStops(c, data);
+                      const nx = stops.find((s) => !s.done) ?? stops[0];
+                      return (
+                        <Link
+                          to={nx.to}
+                          className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-bold shadow-sm transition active:scale-95"
+                          style={{ color }}
+                        >
+                          <Icon name="play" size={15} fill="currentColor" /> {stops.some((s) => s.done) ? 'Continuar' : 'Começar'}
+                        </Link>
+                      );
+                    })()}
                     <Link
                       to={`/capitulo/${c.id}${rp?.lastSectionId ? `#${rp.lastSectionId}` : ''}`}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-bold shadow-sm transition active:scale-95"
-                      style={{ color }}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-white/60 px-3 py-1.5 text-xs font-semibold transition active:scale-95"
                     >
-                      <Icon name="grimorio" size={16} strokeWidth={2.2} /> {read ? 'Continuar leitura' : 'Abrir o capítulo'}
+                      <Icon name="grimorio" size={14} strokeWidth={2.2} /> Texto completo
                     </Link>
-                    <span className="text-xs opacity-85">cerca de {c.estimatedMinutes} min · {reviewLabel[c.review].toLowerCase()}</span>
+                    <span className="text-xs opacity-85">cerca de {c.estimatedMinutes} min</span>
                   </div>
                 </div>
                 <Trail chapter={c} data={data} color={color} guide={ci === firstOpen} />

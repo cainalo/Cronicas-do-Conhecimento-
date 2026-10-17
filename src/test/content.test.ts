@@ -76,3 +76,28 @@ describe('cenas e atividades por seção', () => {
     expect(ex.outro.length).toBeGreaterThan(10);
   });
 });
+
+// Camada "do zero": cada trecho tem uma explicação curta e simples antes do texto completo.
+import { allSimpleSections } from '@/content';
+const words = (t: string) => t.trim().split(/\s+/).filter(Boolean).length;
+describe('explicação simples por trecho', () => {
+  it('toda seção tem explicação simples e nenhuma sobra', () => {
+    const keys = new Set(chapters.flatMap((c) => c.sections.map((s) => `${c.id}:${s.id}`)));
+    for (const k of keys) expect(allSimpleSections[k], k).toBeTruthy();
+    for (const k of Object.keys(allSimpleSections)) expect(keys.has(k), k).toBe(true);
+  });
+  it.each(Object.entries(allSimpleSections))('%s é curta e bem formada', (_k, s) => {
+    expect(s.pages.length).toBeGreaterThanOrEqual(4);
+    expect(s.pages.length).toBeLessThanOrEqual(7);
+    for (const p of s.pages) {
+      expect(p.title.length).toBeGreaterThan(2);
+      expect(words(p.text)).toBeLessThanOrEqual(70);
+    }
+    expect(s.pages[s.pages.length - 1].title).toBe('Resumindo');
+    expect(s.words.length).toBeGreaterThanOrEqual(4);
+    expect(s.words.length).toBeLessThanOrEqual(8);
+    expect(s.checks.length).toBe(3);
+    expect(s.checks.some((c) => c.answer)).toBe(true);
+    expect(s.checks.some((c) => !c.answer)).toBe(true);
+  });
+});

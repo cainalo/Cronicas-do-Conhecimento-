@@ -5,8 +5,9 @@ import { scenesTiGestao } from './ti-gestao';
 import { scenesSegurancaIa } from './seguranca-ia';
 import { scenesDevInfra } from './dev-infra';
 import { scenesGerais } from './gerais';
+import { scenesPrimeiros } from '../../grimoires/primeiros/extras';
 
-const all: Record<string, SectionExtras> = { ...scenesTiGestao, ...scenesSegurancaIa, ...scenesDevInfra, ...scenesGerais };
+const all: Record<string, SectionExtras> = { ...scenesPrimeiros, ...scenesTiGestao, ...scenesSegurancaIa, ...scenesDevInfra, ...scenesGerais };
 
 export function getSectionExtras(chapterId: string, sectionId: string): SectionExtras | undefined {
   return all[`${chapterId}:${sectionId}`];

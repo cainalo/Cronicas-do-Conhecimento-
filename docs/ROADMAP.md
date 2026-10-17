@@ -18,3 +18,6 @@
 4. Grimório de Desenvolvimento de Sistemas (5 questões).
 4. Flashcards com repetição espaçada ligados aos capítulos.
 5. Service worker (vite-plugin-pwa) para leitura offline.
+
+## Feito em 17/10 (pedido "do zero")
+- Explicação simples por trecho, tela Aprender, grimório introdutório, livro de couro com virada por dobra. Próximo: ouvir o usuário sobre a clareza das explicações e ajustar o tom; revisar a camada simples com olhar humano.

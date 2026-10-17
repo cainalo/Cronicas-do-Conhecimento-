@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
-import { DEFAULT_CONTEST_ID, getChapter, getSectionExtras, questionsForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, getChapter, getSectionExtras, getSimpleSection, questionsForContest } from '@/content';
 import { buildPractice, completePractice, type Activity } from '@/lib/practice';
 import { recordAnswer, totalXp } from '@/lib/study';
 import { Icon } from '@/components/Icon';
@@ -121,10 +121,11 @@ export function PracticePage() {
   const chapter = getChapter(chapterId);
   const section = chapter?.sections.find((s) => s.id === sectionId);
   const extras = getSectionExtras(chapterId, sectionId);
+  const simple = getSimpleSection(chapterId, sectionId);
   const { data, update } = useStudy();
   const { sfx, confetti } = useFx();
   const startXp = useMemo(() => totalXp(data), []); // eslint-disable-line react-hooks/exhaustive-deps
-  const initial = useMemo(() => (chapter ? buildPractice(chapter, sectionId, questionsForContest(DEFAULT_CONTEST_ID), extras) : []), [chapter, sectionId, extras]);
+  const initial = useMemo(() => (chapter ? buildPractice(chapter, sectionId, questionsForContest(DEFAULT_CONTEST_ID), extras, Math.random, simple) : []), [chapter, sectionId, extras, simple]);
   const [queue, setQueue] = useState<Activity[]>(initial);
   const [phase, setPhase] = useState<'intro' | 'play' | 'done'>('intro');
   const [value, setValue] = useState<string>();
@@ -211,13 +212,13 @@ export function PracticePage() {
                 : 'Vamos ver o que ficou deste trecho. Errou? A pergunta volta no fim até você acertar.'}
             </SpeechBubble>
           </div>
-          <p className="text-sm text-muted">{total} atividades: verdadeiro ou falso, lacunas, termos, pares e questões.</p>
+          <p className="text-sm text-muted">{total} atividades curtas. Começa fácil e vai ficando mais difícil. Errou? A atividade volta no fim.</p>
           <div className="mt-auto pt-6">
             <button className="btn-primary w-full" onClick={() => setPhase('play')} disabled={!total}>
               <Icon name="play" size={18} fill="currentColor" /> Começar
             </button>
-            <Link to={`/capitulo/${chapterId}#${sectionId}`} className="btn-ghost mt-2 w-full">
-              <Icon name="grimorio" size={18} /> Reler o trecho
+            <Link to={simple ? `/aprender/${chapterId}/${sectionId}` : `/capitulo/${chapterId}#${sectionId}`} className="btn-ghost mt-2 w-full">
+              <Icon name="grimorio" size={18} /> Rever a explicação
             </Link>
           </div>
         </div>

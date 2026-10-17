@@ -164,3 +164,17 @@ export interface SectionExtras {
   /** Fala do Bubo ao terminar a prática da seção. */
   outro: string;
 }
+
+/**
+ * Versão "do zero" de uma seção: explicação em linguagem simples, para quem nunca estudou o
+ * assunto. É o primeiro passo da trilha (Aprender); o texto completo fica para aprofundar.
+ * Chave: `${chapterId}:${sectionId}`.
+ */
+export interface SimpleSection {
+  /** 4 a 7 páginas curtas: uma ideia por página. */
+  pages: { title: string; text: string }[];
+  /** Palavras novas do trecho, com significado simples. */
+  words: { term: string; meaning: string }[];
+  /** Verificações bem fáceis, tiradas das páginas. */
+  checks: { statement: string; answer: boolean; why: string }[];
+}

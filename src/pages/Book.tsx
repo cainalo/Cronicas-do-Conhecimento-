@@ -1,6 +1,6 @@
 // Leitor em forma de livro: páginas que viram (sem rolagem vertical). A página é montada a partir da
 // altura real da tela; arrastar para o lado, tocar nas bordas ou usar as setas vira a página.
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { usePrefs } from '@/app/prefs';
@@ -14,11 +14,10 @@ import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
 import { Mascot } from '@/components/Mascot';
 import { SceneArt } from '@/components/SceneBanner';
+import { LeatherBook, Leaf } from '@/components/LeatherBook';
 import { reviewLabel } from './Library';
 
-const reducedMotion = () => import.meta.env.MODE === 'test' || (typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
-
-function Pegadinha({ item }: { item: { statement: string; answer: boolean; why: string } }) {
+export function Pegadinha({ item }: { item: { statement: string; answer: boolean; why: string } }) {
   const [pick, setPick] = useState<boolean>();
   const { sfx } = useFx();
   const done = pick !== undefined;
@@ -51,6 +50,35 @@ function Pegadinha({ item }: { item: { statement: string; answer: boolean; why: 
   );
 }
 
+export function SceneLines({ lines }: { lines: { who: string; text: string }[] }) {
+  return (
+    <div className="space-y-2">
+      <div className="relative h-24 overflow-hidden rounded-2xl">
+        <SceneArt scene="biblioteca" dark={false} />
+      </div>
+      <p className="rubric text-center font-logo text-sm font-bold">Cena</p>
+      <ul className="space-y-2">
+        {lines.map((l, i) => {
+          const bubo = l.who.toLowerCase() === 'bubo';
+          return (
+            <li key={i} className={`flex items-end gap-2 ${bubo ? '' : 'flex-row-reverse'}`}>
+              {bubo ? (
+                <Mascot mood={i === lines.length - 1 ? 'talk' : 'idle'} size={38} />
+              ) : (
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#5160c4] text-xs font-bold text-white">{l.who[0]}</span>
+              )}
+              <span className={`rounded-2xl px-3 py-2 text-[0.92rem] leading-snug shadow-sm ${bubo ? 'rounded-bl-sm bg-surface' : 'rounded-br-sm bg-[#5160c4]/12'}`}>
+                <b className="block text-[0.72rem] opacity-70">{l.who}</b>
+                {l.text}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
 function BlockView({ b, chapterId, measuring }: { b: BookBlock; chapterId: string; measuring?: boolean }) {
   const chapter = getChapter(chapterId)!;
   const grimoire = getGrimoire(chapter.grimoireId);
@@ -75,32 +103,7 @@ function BlockView({ b, chapterId, measuring }: { b: BookBlock; chapterId: strin
         </div>
       );
     case 'scene':
-      return (
-        <div className="space-y-2">
-          <div className="relative h-24 overflow-hidden rounded-2xl">
-            <SceneArt scene="biblioteca" dark={false} />
-          </div>
-          <p className="rubric text-center text-xs font-bold uppercase tracking-wide">Cena</p>
-          <ul className="space-y-2">
-            {b.lines.map((l, i) => {
-              const bubo = l.who.toLowerCase() === 'bubo';
-              return (
-                <li key={i} className={`flex items-end gap-2 ${bubo ? '' : 'flex-row-reverse'}`}>
-                  {bubo ? (
-                    <Mascot mood={i === b.lines.length - 1 ? 'talk' : 'idle'} size={measuring ? 38 : 38} />
-                  ) : (
-                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#5160c4] text-xs font-bold text-white">{l.who[0]}</span>
-                  )}
-                  <span className={`rounded-2xl px-3 py-2 text-[0.92rem] leading-snug shadow-sm ${bubo ? 'rounded-bl-sm bg-surface' : 'rounded-br-sm bg-[#5160c4]/12'}`}>
-                    <b className="block text-[0.7rem] uppercase tracking-wide opacity-70">{l.who}</b>
-                    {l.text}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      );
+      return <SceneLines lines={b.lines} />;
     case 'title':
       return (
         <div className="mb-2 pt-1">
@@ -189,11 +192,9 @@ export function BookPage() {
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [pages, setPages] = useState<number[][]>(() => paginate(blocks, [], Infinity));
   const [page, setPage] = useState(0);
-  const [flip, setFlip] = useState<{ from: number; to: number; dir: 1 | -1 } | null>(null);
   const [toc, setToc] = useState(false);
   const [query, setQuery] = useState('');
   const placed = useRef<string | null>(null);
-  const start = useRef<{ x: number; y: number } | null>(null);
 
   // Tamanho útil da página.
   useLayoutEffect(() => {
@@ -261,37 +262,6 @@ export function BookPage() {
   if (!chapter) return <p>Capítulo não encontrado.</p>;
 
   const total = pages.length;
-  const go = (to: number) => {
-    if (to < 0 || to >= total || to === page || flip) return;
-    const dir = to > page ? 1 : -1;
-    if (reducedMotion() || Math.abs(to - page) > 1) {
-      setPage(to);
-      return;
-    }
-    sfx('tap');
-    setFlip({ from: page, to, dir });
-    window.setTimeout(() => {
-      setPage(to);
-      setFlip(null);
-    }, 540);
-  };
-
-  const onDown = (e: RPointerEvent) => {
-    start.current = { x: e.clientX, y: e.clientY };
-  };
-  const onUp = (e: RPointerEvent) => {
-    const s = start.current;
-    start.current = null;
-    if (!s) return;
-    if ((e.target as HTMLElement).closest('button, a, input, summary, details, pre, .table-wrap')) return;
-    const dx = e.clientX - s.x;
-    const dy = e.clientY - s.y;
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) return go(dx < 0 ? page + 1 : page - 1);
-    const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width;
-    if (x > 0.7) go(page + 1);
-    else if (x < 0.3) go(page - 1);
-  };
 
   const bookmarked = curSection ? data.bookmarks.some((b) => b.chapterId === chapter.id && b.sectionId === curSection) : false;
   const results =
@@ -303,24 +273,23 @@ export function BookPage() {
       : [];
 
   const renderPage = (pi: number) => (
-    <div className="absolute inset-0">
-    <div className="book-page manuscript book-spine flex h-full flex-col overflow-hidden px-5 pb-2 pt-3">
-      <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[rgb(var(--line)/0.35)] pb-1 text-[0.68rem] uppercase tracking-wide text-muted">
-        <span className="truncate">{chapter.title}</span>
-        <span className="shrink-0">Cap. {roman(chapter.number).toUpperCase()}</span>
+    <Leaf
+      head={
+        <>
+          <span className="truncate">{chapter.title}</span>
+          <span className="shrink-0">Cap. {roman(chapter.number).toUpperCase()}</span>
+        </>
+      }
+      folio={`fol. ${roman(pi + 1)}`}
+    >
+      <div className="space-y-3">
+        {(pages[pi] ?? []).map((bi) => (
+          <div key={bi}>
+            <BlockView b={blocks[bi]} chapterId={chapter.id} />
+          </div>
+        ))}
       </div>
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain py-3 [scrollbar-width:none]">
-        <div className="space-y-3">
-          {(pages[pi] ?? []).map((bi) => (
-            <div key={bi}>
-              <BlockView b={blocks[bi]} chapterId={chapter.id} />
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="shrink-0 text-center font-logo text-[0.7rem] text-muted">fol. {roman(pi + 1)}</div>
-    </div>
-    </div>
+    </Leaf>
   );
 
   return (
@@ -357,46 +326,31 @@ export function BookPage() {
       </div>
 
       {/* O livro */}
-      <div className="relative min-h-0 flex-1 overflow-hidden [perspective:1600px]" onPointerDown={onDown} onPointerUp={onUp}>
-        {/* Medidor invisível: mesma largura do corpo da página */}
-        <div ref={measureRef} aria-hidden="true" className="book-page pointer-events-none invisible absolute left-0 top-0 -z-10 space-y-0 px-5" style={{ width: size.w ? size.w + 40 : undefined }}>
-          {blocks.map((b, i) => (
-            <div key={i} style={{ width: size.w || undefined }}>
-              <BlockView b={b} chapterId={chapter.id} measuring />
-            </div>
-          ))}
-        </div>
-        {/* Corpo de referência para a altura útil */}
-        <div className="pointer-events-none absolute inset-x-5 bottom-[1.6rem] top-[2.6rem]" ref={bodyRef} aria-hidden="true" />
-
-        {flip ? (
+      <LeatherBook
+        page={Math.min(page, total - 1)}
+        total={total}
+        onPage={setPage}
+        render={renderPage}
+        overlay={
           <>
-            {renderPage(flip.dir === 1 ? flip.to : flip.from)}
-            <div key={`f${flip.from}-${flip.to}`} className={`absolute inset-0 ${flip.dir === 1 ? 'page-flip-fwd' : 'page-flip-back'}`}>
-              {renderPage(flip.dir === 1 ? flip.from : flip.to)}
-              <div className="page-shade pointer-events-none absolute inset-0 rounded-[1.5rem]" />
+            {/* Medidor invisível: mesma largura do corpo da página */}
+            <div ref={measureRef} aria-hidden="true" className="book-page pointer-events-none invisible absolute left-0 top-0 -z-10 space-y-0 px-5" style={{ width: size.w ? size.w + 40 : undefined }}>
+              {blocks.map((b, i) => (
+                <div key={i} style={{ width: size.w || undefined }}>
+                  <BlockView b={b} chapterId={chapter.id} measuring />
+                </div>
+              ))}
             </div>
+            {/* Corpo de referência para a altura útil */}
+            <div className="pointer-events-none absolute inset-x-5 bottom-[1.6rem] top-[2.6rem]" ref={bodyRef} aria-hidden="true" />
           </>
-        ) : (
-          renderPage(Math.min(page, total - 1))
-        )}
-      </div>
-
-      {/* Navegação */}
-      <div className="mt-2 flex shrink-0 items-center gap-2">
-        <button className="btn-ghost !min-h-[42px] flex-1 text-sm" disabled={page === 0} onClick={() => go(page - 1)} aria-label="Página anterior">
-          <Icon name="voltar" size={18} /> Anterior
-        </button>
-        {page < total - 1 ? (
-          <button className="btn-primary !min-h-[42px] flex-1 text-sm" onClick={() => go(page + 1)} aria-label="Próxima página">
-            Virar <Icon name="seta" size={18} />
-          </button>
-        ) : (
-          <button className="btn-primary !min-h-[42px] flex-1 text-sm" onClick={() => navigate(`/grimorio/${chapter.grimoireId}`)}>
+        }
+        last={
+          <button className="btn-primary !min-h-[44px] flex-1 text-sm" onClick={() => navigate(`/grimorio/${chapter.grimoireId}`)}>
             Voltar à trilha
           </button>
-        )}
-      </div>
+        }
+      />
 
       {/* Sumário */}
       {toc && (

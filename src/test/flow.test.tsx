@@ -75,6 +75,19 @@ it('livro: vira páginas, marca o trecho como lido e busca no sumário', async (
   expect(screen.getAllByText(/1\. Fundamentos/).length).toBeGreaterThan(0);
 });
 
+it('aprender: livro simples do trecho, palavras novas e convite para praticar', async () => {
+  const user = userEvent.setup();
+  renderAt('/aprender/cap.prim.01/computador');
+  expect(screen.getByText(/Trecho I/)).toBeInTheDocument();
+  for (let i = 0; i < 12 && !screen.queryByTestId('praticar-computador'); i++) {
+    await user.click(screen.getByRole('button', { name: 'Próxima página' }));
+    if (i === 0) expect(screen.getByText(/1 de \d/)).toBeInTheDocument();
+  }
+  expect(screen.getByText('Trecho aprendido!')).toBeInTheDocument();
+  expect(loadData('visitante').reading['cap.prim.01'].sectionsRead).toEqual(['computador']);
+  expect(screen.getByRole('link', { name: /texto completo/ })).toHaveAttribute('href', '/capitulo/cap.prim.01#computador');
+});
+
 it('prática: abre a rodada do trecho e mostra a primeira atividade', async () => {
   const user = userEvent.setup();
   renderAt('/pratica/cap.seg.01/fundamentos');
