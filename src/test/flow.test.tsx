@@ -76,3 +76,29 @@ it('leitor: marca seção lida e mostra o sumário', async () => {
   await user.type(screen.getByPlaceholderText('Buscar no capítulo…'), 'Kerckhoffs');
   expect(screen.getAllByText(/1\. Fundamentos/).length).toBeGreaterThan(0);
 });
+
+it('simulado: monta, responde, entrega e mostra o boletim', async () => {
+  const user = userEvent.setup();
+  renderAt('/simulado');
+  await user.click(screen.getByRole('button', { name: '10' }));
+  await user.click(screen.getByRole('button', { name: 'Livre' }));
+  await user.click(screen.getByRole('button', { name: /Iniciar simulado com 10 questões/ }));
+  expect(screen.getByText(/Respondidas 0 de 10/)).toBeInTheDocument();
+  // Responde a primeira com a letra A e entrega (confirmação aceita).
+  await user.click(screen.getAllByRole('button', { pressed: false }).find((b) => b.textContent?.startsWith('A'))!);
+  window.confirm = () => true;
+  await user.click(screen.getByRole('button', { name: 'Entregar a prova' }));
+  expect(screen.getByRole('heading', { name: 'Boletim' })).toBeInTheDocument();
+  const exams = Object.values(loadData('visitante').exams);
+  expect(exams).toHaveLength(1);
+  expect(exams[0].finishedAt).toBeTruthy();
+});
+
+it('flashcards: revela e avalia um cartão', async () => {
+  const user = userEvent.setup();
+  renderAt('/flashcards');
+  await user.click(screen.getByRole('button', { name: 'Revelar o verso' }));
+  await user.click(screen.getByRole('button', { name: /Bom/ }));
+  expect(screen.getByText(/Próxima revisão amanhã/)).toBeInTheDocument();
+  expect(Object.keys(loadData('visitante').cards)).toHaveLength(1);
+});

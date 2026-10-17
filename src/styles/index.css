@@ -190,7 +190,7 @@ a { text-underline-offset: 3px; }
 .prose-manuscript ul > li { position: relative; }
 /* Marca de parágrafo em vermelho no lugar do marcador */
 .prose-manuscript ul > li::before { content: '¶'; position: absolute; left: -1.1em; color: rgb(var(--ember)); }
-.prose-manuscript ol { list-style: lower-roman; }
+.prose-manuscript ol { list-style: decimal; }
 .prose-manuscript ol > li::marker { color: rgb(var(--ember)); }
 .prose-manuscript li { margin: 0.3em 0; }
 .prose-manuscript blockquote {

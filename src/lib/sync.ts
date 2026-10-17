@@ -12,14 +12,17 @@ const iso = (v: string | null | undefined) => (v ? new Date(v).toISOString() : u
 const same = (a: unknown, b: unknown) => JSON.stringify(a, Object.keys(a ?? {}).sort()) === JSON.stringify(b, Object.keys(b ?? {}).sort());
 
 export async function pullRemote(sb: SupabaseClient, userId: string): Promise<StudyData> {
-  const [att, rp, bm, les, xp] = await Promise.all([
+  const [att, rp, bm, les, xp, ex, es, cs] = await Promise.all([
     sb.from('question_attempts').select('*').eq('user_id', userId),
     sb.from('reading_progress').select('*').eq('user_id', userId),
     sb.from('bookmarks').select('*').eq('user_id', userId),
     sb.from('lesson_completions').select('*').eq('user_id', userId),
     sb.from('xp_events').select('*').eq('user_id', userId),
+    sb.from('mock_exams').select('*').eq('user_id', userId),
+    sb.from('essay_answers').select('*').eq('user_id', userId),
+    sb.from('flashcard_states').select('*').eq('user_id', userId),
   ]);
-  const err = att.error ?? rp.error ?? bm.error ?? les.error ?? xp.error;
+  const err = att.error ?? rp.error ?? bm.error ?? les.error ?? xp.error ?? ex.error ?? es.error ?? cs.error;
   if (err) throw err;
   const d = emptyData();
   d.attempts = (att.data as Row[]).map((r) => ({
@@ -52,6 +55,38 @@ export async function pullRemote(sb: SupabaseClient, userId: string): Promise<St
     };
   }
   d.xp = (xp.data as Row[]).map((r) => ({ id: r.id, kind: r.kind, refId: r.ref_id, amount: r.amount, createdAt: iso(r.created_at)! }));
+  for (const r of ex.data as Row[]) {
+    d.exams[r.id] = {
+      id: r.id,
+      contestId: r.contest_id,
+      questionIds: r.question_ids,
+      answers: r.answers ?? {},
+      timeLimitMin: r.time_limit_min ?? undefined,
+      startedAt: iso(r.started_at)!,
+      finishedAt: iso(r.finished_at),
+      correct: r.correct,
+    };
+  }
+  for (const r of es.data as Row[]) {
+    d.essays[r.prompt_id] = {
+      promptId: r.prompt_id,
+      body: r.body,
+      checklist: r.checklist ?? [],
+      submittedAt: iso(r.submitted_at),
+      updatedAt: iso(r.updated_at)!,
+    };
+  }
+  for (const r of cs.data as Row[]) {
+    d.cards[r.card_id] = {
+      cardId: r.card_id,
+      dueAt: iso(r.due_at)!,
+      intervalDays: r.interval_days,
+      ease: r.ease,
+      reps: r.reps,
+      lapses: r.lapses,
+      updatedAt: iso(r.updated_at)!,
+    };
+  }
   return d;
 }
 
@@ -132,6 +167,60 @@ export async function pushPending(sb: SupabaseClient, userId: string, data: Stud
     if (error) left.bookmarks = p.bookmarks;
   }
 
+  const exams = p.exams.map((id) => data.exams[id]).filter((e) => e?.finishedAt);
+  if (exams.length) {
+    const { error } = await sb.from('mock_exams').upsert(
+      exams.map((e) => ({
+        id: e.id,
+        user_id: userId,
+        contest_id: e.contestId,
+        question_ids: e.questionIds,
+        answers: e.answers,
+        time_limit_min: e.timeLimitMin ?? null,
+        started_at: e.startedAt,
+        finished_at: e.finishedAt,
+        correct: e.correct ?? 0,
+        total: e.questionIds.length,
+      })),
+      { onConflict: 'id', ignoreDuplicates: true },
+    );
+    if (error) left.exams = p.exams;
+  }
+
+  const essays = p.essays.map((id) => data.essays[id]).filter(Boolean);
+  if (essays.length) {
+    const { error } = await sb.from('essay_answers').upsert(
+      essays.map((e) => ({
+        user_id: userId,
+        prompt_id: e.promptId,
+        body: e.body,
+        checklist: e.checklist,
+        submitted_at: e.submittedAt ?? null,
+        updated_at: e.updatedAt,
+      })),
+      { onConflict: 'user_id,prompt_id' },
+    );
+    if (error) left.essays = p.essays;
+  }
+
+  const cards = p.cards.map((id) => data.cards[id]).filter(Boolean);
+  if (cards.length) {
+    const { error } = await sb.from('flashcard_states').upsert(
+      cards.map((c) => ({
+        user_id: userId,
+        card_id: c.cardId,
+        due_at: c.dueAt,
+        interval_days: c.intervalDays,
+        ease: c.ease,
+        reps: c.reps,
+        lapses: c.lapses,
+        updated_at: c.updatedAt,
+      })),
+      { onConflict: 'user_id,card_id' },
+    );
+    if (error) left.cards = p.cards;
+  }
+
   for (const d of p.bookmarkDeletes) {
     const { error } = await sb.from('bookmarks').delete().eq('user_id', userId).eq('chapter_id', d.chapterId).eq('section_id', d.sectionId);
     if (error) left.bookmarkDeletes.push(d);
@@ -158,6 +247,14 @@ export async function syncAll(sb: SupabaseClient, userId: string, local: StudyDa
   merged.pending.lessons = Object.keys(merged.lessons).filter(
     (k) => merged.pending.lessons.includes(k) || !same(merged.lessons[k], remote.lessons[k]),
   );
+  merged.pending.essays = Object.keys(merged.essays).filter(
+    (k) => merged.pending.essays.includes(k) || !same(merged.essays[k], remote.essays[k]),
+  );
+  merged.pending.cards = Object.keys(merged.cards).filter(
+    (k) => merged.pending.cards.includes(k) || !same(merged.cards[k], remote.cards[k]),
+  );
+  // Simulados em andamento não sobem; concluídos que o servidor já tem não são reenviados.
+  merged.pending.exams = merged.pending.exams.filter((id) => merged.exams[id]?.finishedAt && !remote.exams[id]);
   const pushed = await pushPending(sb, userId, merged);
   return { ...pushed, lastSyncAt: new Date().toISOString() };
 }

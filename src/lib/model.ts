@@ -36,7 +36,39 @@ export interface LessonCompletion {
   lastCompletedAt: string;
 }
 
-export type XpKind = 'question_first_correct' | 'lesson_complete' | 'chapter_read' | 'review_recovered';
+export type XpKind = 'question_first_correct' | 'lesson_complete' | 'chapter_read' | 'review_recovered' | 'essay_submitted' | 'card_mastered';
+
+/** Simulado. Em andamento fica só no aparelho; concluído é imutável e vai ao servidor. */
+export interface MockExam {
+  id: string;
+  contestId: string;
+  questionIds: string[];
+  answers: Record<string, string>;
+  timeLimitMin?: number;
+  startedAt: string;
+  finishedAt?: string;
+  correct?: number;
+}
+
+/** Resposta discursiva: um rascunho por enunciado; a versão mais recente prevalece. */
+export interface EssayAnswer {
+  promptId: string;
+  body: string;
+  checklist: string[];
+  submittedAt?: string;
+  updatedAt: string;
+}
+
+/** Estado de repetição espaçada (SM-2 simplificado) de um flashcard. */
+export interface CardState {
+  cardId: string;
+  dueAt: string;
+  intervalDays: number;
+  ease: number;
+  reps: number;
+  lapses: number;
+  updatedAt: string;
+}
 
 export interface XpEvent {
   id: string;
@@ -54,6 +86,9 @@ export interface Pending {
   bookmarkDeletes: { chapterId: string; sectionId: string }[];
   reading: string[];
   lessons: string[];
+  exams: string[];
+  essays: string[];
+  cards: string[];
 }
 
 export interface StudyData {
@@ -63,11 +98,24 @@ export interface StudyData {
   bookmarks: Bookmark[];
   lessons: Record<string, LessonCompletion>;
   xp: XpEvent[];
+  exams: Record<string, MockExam>;
+  essays: Record<string, EssayAnswer>;
+  cards: Record<string, CardState>;
   pending: Pending;
   lastSyncAt?: string;
 }
 
-export const emptyPending = (): Pending => ({ attempts: [], xp: [], bookmarks: [], bookmarkDeletes: [], reading: [], lessons: [] });
+export const emptyPending = (): Pending => ({
+  attempts: [],
+  xp: [],
+  bookmarks: [],
+  bookmarkDeletes: [],
+  reading: [],
+  lessons: [],
+  exams: [],
+  essays: [],
+  cards: [],
+});
 
 export const emptyData = (): StudyData => ({
   version: 1,
@@ -76,8 +124,19 @@ export const emptyData = (): StudyData => ({
   bookmarks: [],
   lessons: {},
   xp: [],
+  exams: {},
+  essays: {},
+  cards: {},
   pending: emptyPending(),
 });
 
 export const pendingCount = (p: Pending) =>
-  p.attempts.length + p.xp.length + p.bookmarks.length + p.bookmarkDeletes.length + p.reading.length + p.lessons.length;
+  p.attempts.length +
+  p.xp.length +
+  p.bookmarks.length +
+  p.bookmarkDeletes.length +
+  p.reading.length +
+  p.lessons.length +
+  p.exams.length +
+  p.essays.length +
+  p.cards.length;

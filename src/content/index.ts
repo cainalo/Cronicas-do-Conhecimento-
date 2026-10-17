@@ -1,6 +1,6 @@
 // Registro central do conteúdo. As telas consultam apenas estas funções,
 // nunca os arquivos de um concurso específico.
-import type { Chapter, Contest, Grimoire, Lesson, Question } from './types';
+import type { Chapter, Contest, EssayPrompt, Flashcard, Grimoire, Lesson, Question } from './types';
 import { tceGo2026 } from './contests/tce-go-2026/contest';
 import { capCriptografia, grimorioSeguranca } from './grimoires/seguranca';
 import { questoesCap01 } from './grimoires/seguranca/questions-cap01';
@@ -9,6 +9,7 @@ import { capIaAgentes, capIaLlm, grimorioIa } from './grimoires/ia';
 import { questoesIaCap01 } from './grimoires/ia/questions-cap01';
 import { questoesIaCap02 } from './grimoires/ia/questions-cap02';
 import { licoesIa } from './grimoires/ia/lessons';
+import { estudosDeCaso } from './discursivas/tce-go-2026';
 
 export const contests: Contest[] = [tceGo2026];
 export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa];
@@ -46,3 +47,26 @@ export function topicTitle(contestId: string, topicId: string): string {
 export function topicsForContest(contestId: string) {
   return (getContest(contestId)?.disciplines ?? []).flatMap((d) => d.topics.map((t) => ({ ...t, discipline: d })));
 }
+
+export const essayPrompts: EssayPrompt[] = estudosDeCaso;
+export const getEssayPrompt = (id: string) => essayPrompts.find((e) => e.id === id);
+
+const slug = (s: string) =>
+  s
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
+/** Flashcards gerados a partir do glossário de cada capítulo (frente: termo; verso: definição). */
+export const flashcards: Flashcard[] = chapters.flatMap((c) =>
+  c.glossary.map((g) => ({
+    id: `fc.${c.id}.${slug(g.term)}`,
+    chapterId: c.id,
+    topicId: c.topicIds[0],
+    front: g.term,
+    back: g.definition,
+  })),
+);
+export const getFlashcard = (id: string) => flashcards.find((f) => f.id === id);

@@ -8,6 +8,7 @@
 | Arquivo | Aplicada no remoto |
 |---|---|
 | `20261017000100_initial_user_progress.sql` | ✅ 17/10/2026 (nome `initial_user_progress`) |
+| `20261017000200_exam_essay_flashcards.sql` | ✅ 17/10/2026 (nome `exam_essay_flashcards`) |
 
 ## Esquema (somente dados privados; conteúdo fica no repositório)
 | Tabela | Chave | Observações |
@@ -17,10 +18,13 @@
 | reading_progress | (user_id, chapter_id) | upsert |
 | bookmarks | id; único (user_id, chapter_id, section_id) | insert/delete |
 | lesson_completions | (user_id, lesson_id) | upsert, guarda melhor nota |
-| xp_events | id; **único (user_id, kind, ref_id)** | anti-duplicação de XP |
+| xp_events | id; **único (user_id, kind, ref_id)** | anti-duplicação de XP; tipos: question_first_correct, review_recovered, lesson_complete, chapter_read, essay_submitted, card_mastered |
+| mock_exams | id | simulados concluídos, imutáveis (só SELECT/INSERT) |
+| essay_answers | (user_id, prompt_id) | rascunho/entrega discursiva; última escrita vence |
+| flashcard_states | (user_id, card_id) | repetição espaçada; última escrita vence |
 
 ## Segurança
-RLS em todas; políticas `to authenticated` com `(select auth.uid()) = user_id`; `anon` sem privilégio algum; `authenticated` só com os privilégios necessários (sem UPDATE/DELETE no histórico e no XP). Verificado com `supabase/tests/rls_check.sql` e `get_advisors` (0 alertas de segurança; só "unused index" informativo).
+RLS em todas; políticas `to authenticated` com `(select auth.uid()) = user_id`; `anon` sem privilégio algum; `authenticated` só com os privilégios necessários (sem UPDATE/DELETE no histórico e no XP). Verificado com `supabase/tests/rls_check.sql` e `rls_check_02.sql` e `get_advisors` (0 alertas de segurança; só "unused index" informativo).
 
 ## Auth
 E-mail + senha; recuperação por link (redireciona para `/conta`, onde se define a nova senha). Ao publicar: cadastrar URL do site em Authentication → URL Configuration. Confirmação de e-mail: configuração padrão do projeto (não alterada).

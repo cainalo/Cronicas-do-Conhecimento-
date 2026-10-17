@@ -195,13 +195,11 @@ export function ReaderPage() {
               <button
                 className={`mt-2 w-full border px-4 py-3 font-display ${read ? 'border-ok/50 text-ok' : 'border-ink/40 text-ink hover:bg-raised/60'}`}
                 disabled={read}
-                onClick={() =>
-                  update((d) => {
-                    const r = markSectionRead(d, chapter, s.id);
-                    if (r.xp) flash(`Capítulo concluído. +${r.xp.amount} XP`);
-                    return r.data;
-                  })
-                }
+                onClick={() => {
+                  const xp = markSectionRead(data, chapter, s.id).xp;
+                  update((d) => markSectionRead(d, chapter, s.id).data);
+                  if (xp) flash(`Capítulo concluído. +${xp.amount} XP`);
+                }}
               >
                 {read ? 'Seção lida' : 'Marcar seção como lida'}
               </button>

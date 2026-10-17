@@ -7,7 +7,7 @@ import { Icon, type IconName } from '@/components/Icon';
 const nav: { to: string; label: string; icon: IconName; end?: boolean }[] = [
   { to: '/', label: 'Torre', icon: 'torre', end: true },
   { to: '/biblioteca', label: 'Grimórios', icon: 'grimorio' },
-  { to: '/revisao', label: 'Revisão', icon: 'ampulheta' },
+  { to: '/treino', label: 'Treino', icon: 'ampulheta' },
   { to: '/progresso', label: 'Progresso', icon: 'mapa' },
   { to: '/conta', label: 'Conta', icon: 'chave' },
 ];

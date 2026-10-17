@@ -1,6 +1,6 @@
 // Fusão determinística entre dados locais e remotos (ou entre visitante e conta).
 // Registros imutáveis (tentativas, XP) são unidos por id; XP também por (tipo, referência).
-import type { Bookmark, LessonCompletion, ReadingProgress, StudyData, XpEvent } from './model';
+import type { Bookmark, LessonCompletion, MockExam, ReadingProgress, StudyData, XpEvent } from './model';
 
 const uniq = (xs: string[]) => [...new Set(xs)];
 
@@ -37,6 +37,20 @@ export function mergeXp(preferred: XpEvent[], other: XpEvent[]): XpEvent[] {
     if (!out.has(k)) out.set(k, e);
   }
   return [...out.values()];
+}
+
+/** Última escrita vence (rascunhos discursivos e estado de flashcards). */
+export function newest<T extends { updatedAt: string }>(a: T | undefined, b: T | undefined): T | undefined {
+  if (!a) return b;
+  if (!b) return a;
+  return a.updatedAt >= b.updatedAt ? a : b;
+}
+
+/** Simulado concluído prevalece sobre o mesmo simulado em andamento. */
+export function mergeExam(a: MockExam | undefined, b: MockExam | undefined): MockExam | undefined {
+  if (!a) return b;
+  if (!b) return a;
+  return a.finishedAt ? a : b.finishedAt ? b : a;
 }
 
 function mergeRecords<T>(a: Record<string, T>, b: Record<string, T>, f: (x?: T, y?: T) => T | undefined) {
@@ -77,6 +91,13 @@ export function mergeData(base: StudyData, incoming: StudyData, incomingIsPendin
     bookmarkDeletes: [...p.bookmarkDeletes, ...q.bookmarkDeletes],
     reading: uniq([...p.reading, ...q.reading, ...(incomingIsPending ? Object.keys(incoming.reading) : [])]),
     lessons: uniq([...p.lessons, ...q.lessons, ...(incomingIsPending ? Object.keys(incoming.lessons) : [])]),
+    exams: uniq([
+      ...p.exams,
+      ...q.exams,
+      ...(incomingIsPending ? Object.values(incoming.exams).filter((e) => e.finishedAt).map((e) => e.id) : []),
+    ]),
+    essays: uniq([...p.essays, ...q.essays, ...(incomingIsPending ? Object.keys(incoming.essays) : [])]),
+    cards: uniq([...p.cards, ...q.cards, ...(incomingIsPending ? Object.keys(incoming.cards) : [])]),
   };
 
   return {
@@ -86,6 +107,9 @@ export function mergeData(base: StudyData, incoming: StudyData, incomingIsPendin
     bookmarks,
     reading: mergeRecords(base.reading, incoming.reading, mergeReading),
     lessons: mergeRecords(base.lessons, incoming.lessons, mergeLesson),
+    exams: mergeRecords(base.exams, incoming.exams, mergeExam),
+    essays: mergeRecords(base.essays, incoming.essays, newest),
+    cards: mergeRecords(base.cards, incoming.cards, newest),
     pending,
     lastSyncAt: base.lastSyncAt,
   };

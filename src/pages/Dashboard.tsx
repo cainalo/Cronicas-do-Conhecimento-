@@ -4,6 +4,8 @@ import { DEFAULT_CONTEST_ID, chapters, getContest, lessons, questionsForContest 
 import { levelInfo, recommend, reviewQueue, totalXp } from '@/lib/study';
 import { TopicProgressList } from './Progress';
 import { WaxSeal } from '@/components/WaxSeal';
+import { dueCards } from '@/lib/training';
+import { flashcards } from '@/content';
 
 function daysUntil(iso: string) {
   const ms = new Date(iso + 'T00:00:00-03:00').getTime() - Date.now();
@@ -18,6 +20,7 @@ export function Dashboard() {
   const xp = totalXp(data);
   const lv = levelInfo(xp);
   const queue = reviewQueue(data, bank);
+  const cardsDue = dueCards(data, flashcards.map((f) => f.id)).length;
   const localDay = (iso: string) => new Date(iso).toLocaleDateString('sv');
   const today = localDay(new Date().toISOString());
   const answeredToday = data.attempts.filter((a) => localDay(a.answeredAt) === today).length;
@@ -66,6 +69,10 @@ export function Dashboard() {
         <Link to="/revisao" className="ledger-row">
           <span>Revisões pendentes</span>
           <span className={queue.length ? 'text-ember' : 'text-muted'}>{queue.length}</span>
+        </Link>
+        <Link to="/flashcards" className="ledger-row">
+          <span>Cartões para hoje</span>
+          <span className={cardsDue ? 'text-ember' : 'text-muted'}>{cardsDue}</span>
         </Link>
       </section>
 

@@ -14,6 +14,12 @@
 | Integridade do conteúdo (gabarito, comentários, tópicos do edital, nunca 'oficial') | `content.test.ts` |
 | Edital oficial (consolidado 15/09/2026) transcrito: provas, pesos, nº de questões, regras da discursiva, 68 tópicos do Anexo II | Conferido contra o PDF; `npm test` |
 | Tela do edital com status de verificação e cobertura por tópico | Build |
+| Central de treino (`/treino`) | Captura mobile |
+| Simulado: escolha de tópicos, 10–40 questões, tempo livre ou 2–3 min/questão, entrega automática no fim do tempo, boletim por tópico, histórico | `training.test.ts`, `flow.test.tsx`, captura |
+| Estudo de caso: 2 enunciados autorais, orientação com critérios pedagógicos, editor com estimativa de linhas e salvamento automático, entrega, autoavaliação, resposta-modelo comentada | `training.test.ts`, captura |
+| Flashcards com repetição espaçada (SM-2 simplificado) a partir dos glossários (29 cartões) | `training.test.ts`, `flow.test.tsx` |
+| Sincronização dessas três áreas com o Supabase (tabelas novas com RLS) | RLS verificado no remoto (`rls_check_02.sql`); envio pelo app não testado (rede) |
+| Visual de livro medieval (couro, pergaminho, capitulares, capas) | Capturas mobile |
 | Manifesto web (instalar na tela inicial) | Arquivo presente; não testado em aparelho |
 
 ## Implementado, mas NÃO testado ponta a ponta
@@ -22,7 +28,7 @@
 
 ## Incompleto / não iniciado
 - Cobertura do edital: 7 de 68 tópicos oficiais com material (Criptografia; IA: LLM, contexto, IA generativa/RAG, agentes, MCP, qualidade).
-- Flashcards, simulados, discursiva, planejador, missões/conquistas/inventário, narrativa, mapa/trilha visual, service worker/offline, Capacitor/Android.
+- Planejador de estudos, missões/conquistas/inventário, narrativa, mapa/trilha visual, service worker/offline, Capacitor/Android.
 
 ## Conhecido
 - Bundle JS ~660 kB (sem code-splitting) — aceitável por ora.

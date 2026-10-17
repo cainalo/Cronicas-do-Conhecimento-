@@ -121,3 +121,30 @@ export interface Lesson {
   cards: LessonCard[];
   questionIds: string[];
 }
+
+export interface Flashcard {
+  id: string;
+  chapterId: string;
+  topicId: string;
+  front: string;
+  back: string;
+}
+
+/** Estudo de caso para prática discursiva. Critérios são pedagógicos, NÃO os da banca. */
+export interface EssayPrompt {
+  id: string;
+  contestId: string;
+  topicIds: string[];
+  title: string;
+  /** Situação apresentada (markdown). */
+  scenario: string;
+  /** O que o candidato deve responder (markdown). */
+  command: string;
+  /** Limite de linhas usado no treino (a FCC define o limite em cada questão). */
+  lineLimit: number;
+  criteria: { id: string; text: string; points: number }[];
+  modelAnswer: string;
+  commentary: string;
+  origin: QuestionOrigin;
+  review: ReviewStatus;
+}

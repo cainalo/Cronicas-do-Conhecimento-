@@ -17,6 +17,9 @@ export function ReviewPage() {
   if (!queueIds) {
     return (
       <div className="space-y-4">
+        <Link to="/treino" className="font-display text-sm text-muted">
+          Voltar ao treino
+        </Link>
         <h1 className="text-center text-4xl">Revisão</h1>
         {live.length === 0 ? (
           <p className="card p-4 text-muted">Nenhuma questão errada aguardando revisão. Quando você errar, ela aparecerá aqui até ser respondida corretamente.</p>

@@ -33,7 +33,17 @@ export function clearData(owner: string) {
 }
 
 export function hasData(d: StudyData) {
-  return d.attempts.length + d.xp.length + d.bookmarks.length + Object.keys(d.reading).length + Object.keys(d.lessons).length > 0;
+  return (
+    d.attempts.length +
+      d.xp.length +
+      d.bookmarks.length +
+      Object.keys(d.reading).length +
+      Object.keys(d.lessons).length +
+      Object.keys(d.exams).length +
+      Object.keys(d.essays).length +
+      Object.keys(d.cards).length >
+    0
+  );
 }
 
 // Preferências do leitor (por dispositivo).

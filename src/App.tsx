@@ -11,6 +11,10 @@ import { HistoryPage } from '@/pages/History';
 import { ProgressPage } from '@/pages/Progress';
 import { EditalPage } from '@/pages/Edital';
 import { AccountPage } from '@/pages/Account';
+import { TrainingPage } from '@/pages/Training';
+import { FlashcardsPage } from '@/pages/Flashcards';
+import { ExamPage, ExamResultPage } from '@/pages/Exam';
+import { EssayListPage, EssayPage } from '@/pages/Essay';
 
 export function AppRoutes() {
   return (
@@ -26,6 +30,12 @@ export function AppRoutes() {
         <Route path="progresso" element={<ProgressPage />} />
         <Route path="edital" element={<EditalPage />} />
         <Route path="conta" element={<AccountPage />} />
+        <Route path="treino" element={<TrainingPage />} />
+        <Route path="flashcards" element={<FlashcardsPage />} />
+        <Route path="simulado" element={<ExamPage />} />
+        <Route path="simulado/:id" element={<ExamResultPage />} />
+        <Route path="discursiva" element={<EssayListPage />} />
+        <Route path="discursiva/:id" element={<EssayPage />} />
         <Route path="*" element={<p>Página não encontrada.</p>} />
       </Route>
     </Routes>

@@ -8,6 +8,8 @@ export const XP_RULES: Record<XpKind, number> = {
   review_recovered: 5,
   lesson_complete: 30,
   chapter_read: 50,
+  essay_submitted: 20,
+  card_mastered: 3,
 };
 
 const uuid = () => crypto.randomUUID();
