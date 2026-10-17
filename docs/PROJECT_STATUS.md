@@ -23,6 +23,7 @@
 | Visual claro estilo NutriConnect: cor por área, cabeçalho com migalha, grades de cartões, botão "Continuar"; medieval leve (capas, selos, mapa, pergaminho do leitor) | Capturas 390×844 claro/escuro e 1280×800 |
 | Planejador (`/plano`): ordem do dia congelada no aparelho, atividades marcadas pelo estudo real, revisão de erros, flashcards, estudo de caso semanal (1º dia), simulado semanal (último dia), leitura e lições; dias de descanso sem culpa; previsto/lido/respondido/domínio; preferências sincronizadas | `planner.test.ts`, captura |
 | App Android nativo (Capacitor), APK compilado e publicado pelo CI com download no site | Execução 11 do workflow; APK inspecionado (assinatura, conteúdo). Não testado em aparelho físico |
+| Aprender (explicação do zero por trecho, palavras novas, verificações, trecho estudado), prática com aquecimento, livro de couro com virada por dobra, grimório introdutório | `flow.test.tsx`, `study.test.ts`, `content.test.ts` (camada simples), capturas 390×844 |
 | Gamificação: mapa do reino (`/reino`), ficha do personagem (`/personagem`) com título, sequência, missões semanais com resgate de XP, 12 selos e inventário de artefatos | `game.test.ts`, capturas |
 
 ## Implementado, mas NÃO testado ponta a ponta

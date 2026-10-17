@@ -6,7 +6,9 @@
 ## Situação atual
 - App publicado automaticamente no GitHub Pages a cada push (workflow `.github/workflows/pages.yml` → branch `gh-pages`): https://cainalo.github.io/Cronicas-do-Conhecimento-/ e APK em `/download/`. Usuário confirmou que o APK instala e funciona.
 - Edital oficial conferido (`docs/fontes/`), 68 tópicos em `contest.ts`.
-- **Conteúdo: 68/68 tópicos com material** (13 grimórios, 31 capítulos, 35 lições, 391 questões autorais, 8 estudos de caso). Ver `docs/CONTENT_COVERAGE.md`; normas estaduais/TCE-GO e LC 205 só em panorama (faltam os PDFs oficiais).
+- **Conteúdo: 68/68 tópicos com material** (14 grimórios, 33 capítulos, 37 lições, 407 questões autorais, 8 estudos de caso), incluindo o grimório introdutório **O Primeiro Pergaminho**.
+- **Estudo do zero**: cada trecho começa em **Aprender** (`/aprender/:cap/:trecho`, explicação simples de 4–7 páginas curtas, palavras novas, 3 verificações) → **Praticar** (aquecimento fácil primeiro) → **Desafio**; texto completo opcional. As 112 seções têm camada simples (`content/game/simple/`, `grimoires/primeiros/simple.ts`), escrita por agentes e **não revisada por humano**.
+- **Livro de couro** (`components/LeatherBook.tsx`): capa, folhas empilhadas, pergaminho envelhecido, virada por dobra mostrando o verso. Ver `docs/CONTENT_COVERAGE.md`; normas estaduais/TCE-GO e LC 205 só em panorama (faltam os PDFs oficiais).
 - **Estudo estilo Duolingo**: livro com páginas que viram, trilha Ler → Praticar por trecho e Desafio por capítulo; 105 seções com cena e atividades próprias (`content/game/scenes/`).
 - Narrativa (Fase F): prólogo, falas por região e diário de pistas (`src/content/game/story.ts`).
 - Visual claro no estilo do NutriConnect + camada divertida: mascote Bubo (coruja escriba, **provisório**), trilha estilo Duolingo em cada capítulo, cenas ilustradas nas páginas centrais, desenhos animados nos cartões, confete/avisos de XP/nível/selo, sons (chave em Conta), Rodada relâmpago, "Você sabia?".
@@ -14,15 +16,16 @@
 - Fases D e E completas; Supabase com RLS verificado; login/sync pelo navegador ainda **não confirmados pelo usuário**.
 
 ## Testes
-`npm test` 550/550; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
+`npm test` 688/688; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
 
 ## Pendências com o usuário
-- Pedir retorno sobre o visual novo e sobre login/sincronização.
+- Pedir retorno sobre a clareza da explicação simples (o usuário disse que não entendia nada) e sobre o livro de couro; e sobre login/sincronização.
 - Configurar Site URL/Redirect URLs no Supabase (passo em `docs/MOBILE_AND_OFFLINE.md`).
 - PDFs: LC estadual 205/2025, RN 13/2016, RA 14/2024, RA 17/2024, RA 14/2025, PDTI 2025–2026, Lei 16.168/2007, Regimento (Res. 22/2008), Lei 15.122/2005, Lei 20.756/2020, Código de Ética, RN 5/2024, RA 24/2024, RA 5/2024, RA 19/2024, RA 15/2024, Constituição de Goiás (TCE).
 - Nome definitivo da plataforma (segue "Crônicas do Conhecimento", provisório).
 
 ## Próxima tarefa exata
+0. Ouvir o usuário sobre o Aprender e ajustar o tom/tamanho; considerar revisão humana da camada simples por amostragem.
 1. Conferir no texto oficial os pontos que a revisão não confirmou: multa de até 2x o dano (art. 111 da Lei 16.168/2007), arts. 26/28 da Constituição de Goiás, arts. 73/77 da Lei Orgânica, art. 33 da Lei 20.756 (precisa dos PDFs).
 2. Quando o usuário enviar os PDFs, ampliar `legislacao/cap02-normas/02-goias-tce.md` e `institucional/cap02-goias/*` e suas questões.
 3. Narrativa: falas extras por marco (nível, selos) se o usuário quiser.

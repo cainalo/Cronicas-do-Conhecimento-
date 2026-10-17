@@ -17,7 +17,7 @@
 | `src/test/content.test.ts` (camada simples) | toda seção tem explicação simples; 4–7 páginas; até 70 palavras por página; última "Resumindo"; 4–8 palavras novas; 3 verificações com V e F |
 
 ## Últimos resultados (2026-10-17)
-- `npm test`: **550/550** ✅ (content, study, merge, training, planner, game, flow)
+- `npm test`: **688/688** ✅ (content, study, merge, training, planner, game, flow)
 - `npm run build`: ✅ (aviso de chunk > 500 kB)
 - `rls_check.sql` no remoto: 13/13 conforme esperado ✅
 - Visual (Playwright/Chromium, 390×844, escuro e claro): sem overflow horizontal, sem erros de console ✅
