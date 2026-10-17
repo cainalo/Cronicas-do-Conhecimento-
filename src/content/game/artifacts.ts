@@ -45,5 +45,10 @@ export const artifacts: Artifact[] = [
   { topicId: 'ti.engsoft.arquitetura', name: 'Esquadro do Arquiteto', lore: 'Separa as salas para que uma reforma não derrube a outra.' },
   { topicId: 'ti.engsoft.modelagem', name: 'Carta de Plantas', lore: 'Desenha a obra antes da primeira pedra.' },
   { topicId: 'ti.engsoft.qualidade', name: 'Martelo de Prova', lore: 'Bate em cada viga até ter certeza de que aguenta.' },
+  { topicId: 'ti.devops.git', name: 'Diário de Bordo', lore: 'Guarda cada mudança de rota, e ninguém arranca suas páginas.' },
+  { topicId: 'ti.devops.cicd', name: 'Esteira do Estaleiro', lore: 'Leva cada barco da forja à água, testando o casco no caminho.' },
+  { topicId: 'ti.devops.iac', name: 'Molde de Bronze', lore: 'Funde o mesmo navio quantas vezes for preciso.' },
+  { topicId: 'ti.devops.containers', name: 'Caixote do Mercador', lore: 'Leva a carga inteira, em qualquer porão.' },
+  { topicId: 'ti.devops.observabilidade', name: 'Luneta do Vigia', lore: 'Vê a tempestade antes que alcance a frota.' },
   { topicId: 'ti.infra.nuvem', name: 'Castelo Alugado', lore: 'Cresce e encolhe conforme os visitantes chegam.' },
 ];
