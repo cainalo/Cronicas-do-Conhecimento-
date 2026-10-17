@@ -82,23 +82,20 @@ export function ReaderPage() {
   return (
     <div style={{ ['--font-scale' as string]: prefs.fontScale }}>
       {/* Barra do leitor */}
-      <div
-        className="sticky top-12 z-10 -mx-4 -mt-5 mb-4 flex items-center gap-2 px-4 py-2 sm:-mx-8 sm:px-8"
-        style={{ backgroundColor: 'rgb(var(--parchment))', backgroundImage: 'var(--tex-grain)', borderBottom: '3px double rgb(var(--ink) / 0.4)' }}
-      >
-        <button className="btn-ghost px-3 py-2" onClick={() => setTocOpen((v) => !v)} aria-expanded={tocOpen}>
+      <div className="sticky top-14 z-10 -mx-4 -mt-5 mb-4 flex items-center gap-2 border-b border-line/30 bg-bg/80 px-4 py-2 backdrop-blur-xl sm:-mx-6 sm:px-6">
+        <button className="btn-ghost !min-h-[40px] !px-3 !py-1.5" onClick={() => setTocOpen((v) => !v)} aria-expanded={tocOpen}>
           <Icon name="sumario" size={18} /> Sumário
         </button>
         <span className="flex-1 truncate text-center text-xs text-muted">
           {rp?.sectionsRead.length ?? 0} de {chapter.sections.length} lidas
         </span>
-        <button className="btn-ghost px-3 py-2" aria-label="Diminuir fonte" onClick={() => setPrefs({ fontScale: Math.max(0.85, +(prefs.fontScale - 0.1).toFixed(2)) })}>
+        <button className="btn-ghost !min-h-[40px] !px-3 !py-1.5" aria-label="Diminuir fonte" onClick={() => setPrefs({ fontScale: Math.max(0.85, +(prefs.fontScale - 0.1).toFixed(2)) })}>
           A−
         </button>
-        <button className="btn-ghost px-3 py-2" aria-label="Aumentar fonte" onClick={() => setPrefs({ fontScale: Math.min(1.5, +(prefs.fontScale + 0.1).toFixed(2)) })}>
+        <button className="btn-ghost !min-h-[40px] !px-3 !py-1.5" aria-label="Aumentar fonte" onClick={() => setPrefs({ fontScale: Math.min(1.5, +(prefs.fontScale + 0.1).toFixed(2)) })}>
           A+
         </button>
-        <button className="btn-ghost px-3 py-2" aria-label="Alternar tema" onClick={() => setPrefs({ theme: prefs.theme === 'dark' ? 'light' : 'dark' })}>
+        <button className="btn-ghost !min-h-[40px] !px-3 !py-1.5" aria-label="Alternar tema" onClick={() => setPrefs({ theme: prefs.theme === 'dark' ? 'light' : 'dark' })}>
           <Icon name={prefs.theme === 'dark' ? 'sol' : 'lua'} size={18} />
         </button>
       </div>
@@ -110,7 +107,7 @@ export function ReaderPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar no capítulo…"
-            className="mb-3 w-full rounded-sm border border-line bg-raised px-3 py-2 text-ink placeholder:text-muted"
+            className="mb-3 w-full rounded-xl border border-line bg-raised px-3 py-2 text-ink placeholder:text-muted"
           />
           {query.trim().length >= 2 && (
             <ul className="mb-3 space-y-2 text-sm">

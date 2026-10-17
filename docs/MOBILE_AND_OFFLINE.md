@@ -1,19 +1,24 @@
-# Mobile e offline
+# Mobile, app nativo e offline
 
-## Hoje
-- Layout mobile-first (testado em 390×844), navegação inferior, alvos ≥ 44px, área segura.
-- **PWA com `vite-plugin-pwa` (Workbox, `registerType: autoUpdate`)**: manifesto gerado no build, ícones PNG 192/512, maskable e apple-touch (gerados de `public/icon.svg` com Chromium), service worker com precache de JS, CSS, HTML, fontes e ícones (≈ 38 itens, 1,5 MB) e `navigateFallback` para rotas do SPA.
-- Como todo o conteúdo dos grimórios está no bundle, o primeiro acesso já deixa **todos os grimórios, lições, questões, flashcards e estudos de caso disponíveis offline**. Quando o conteúdo crescer muito, separar capítulos em chunks e oferecer "baixar grimório" (planejado).
-- Dados de estudo são local-first: respostas, leitura, simulados, discursivas e cartões feitos offline ficam pendentes e sincronizam ao reconectar (evento `online`).
-- **Testado** (Playwright/Chromium, 17/10/2026): após o primeiro carregamento, com a rede desligada, abriram o capítulo `cap.ia.02` com fontes e a lição `lic.ia.01.a`, e uma resposta foi gravada localmente. A sincronização após reconexão com o Supabase real não pôde ser testada no container (rede bloqueada).
+## Decisão (17/10/2026)
+O usuário pediu **app nativo (Capacitor), não PWA**, com opção de download. O PWA foi removido; o site descarta service workers e caches antigos ao abrir (`src/main.tsx`).
 
-## Planejado
-1. Indicador "disponível offline" e botão para baixar grimórios quando houver divisão em chunks.
-2. Capacitor (Android primeiro): `npx cap add android`, `npm run build && npx cap sync`. As rotas usam BrowserRouter (compatível).
-3. Notificações opcionais de lembrete (exigem decisão do usuário).
+## App Android (Capacitor 7)
+- Configuração: `capacitor.config.ts` (appId `io.github.cainalo.cronicas`, webDir `dist`). Projeto nativo em `android/` (versionado).
+- Ícone adaptativo e tela de abertura gerados por `@capacitor/assets` a partir de `assets/` (imagens produzidas do `public/icon.svg`).
+- Integração nativa em `src/app/native.ts`: barra de status, botão voltar do Android; links de e-mail de autenticação apontam para o site público quando no app.
+- **Offline**: o app carrega o site empacotado no próprio APK (todo o conteúdo dos grimórios está no bundle), então abre e funciona sem internet. Os dados de estudo são local-first e sincronizam quando há conexão.
 
-## Publicação (GitHub Pages)
-- Workflow `.github/workflows/pages.yml`: a cada push em `main` ou no branch de trabalho, roda testes, gera o build com `GITHUB_PAGES=true` (base `/Cronicas-do-Conhecimento-/`), copia `index.html` para `404.html` (fallback de SPA) e publica no branch `gh-pages`.
-- Endereço: https://cainalo.github.io/Cronicas-do-Conhecimento-/
-- Configuração única feita pelo usuário: Settings → Pages → Source: *Deploy from a branch* → `gh-pages` / `(root)`.
-- Supabase: definir Authentication → URL Configuration → Site URL (e Redirect URLs) com o endereço acima, para os links de confirmação e recuperação de senha voltarem ao app.
+## Compilação e download
+- O workflow `.github/workflows/pages.yml`, a cada push, roda os testes, gera o build web, `npx cap sync android`, compila `assembleRelease` com JDK 21 e publica `download/cronicas-do-conhecimento.apk` e `download/version.json` junto do site no GitHub Pages.
+- `versionCode` = número da execução do workflow; `versionName` = `0.1.<execução>`. Atualizações instalam por cima.
+- **Assinatura**: se existirem os segredos `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`, usa essa chave. Senão, usa uma chave mantida no cache do GitHub Actions (`android-signing-v1`), gerada na primeira execução. A chave nunca fica no repositório. Risco: se o cache expirar (7 dias sem uso), uma nova chave é gerada e o Android exigirá desinstalar a versão antiga antes de instalar a nova (progresso de quem tem conta é recuperado pelo servidor). Para publicar na Play Store ou evitar esse risco, cadastrar os segredos.
+- Verificado em 17/10/2026: execução 11 compilou o APK (6,4 MB, assinado v1+v2, certificado "CN=Cronicas do Conhecimento"), publicado no site.
+- **Não testado em aparelho físico** pelo assistente (sem dispositivo no ambiente).
+
+## Download no site
+`components/AppDownload.tsx` lê `download/version.json` e mostra versão, tamanho, botão "Baixar" e instruções (permitir instalação de fonte desconhecida). Aparece no painel e na tela Conta; nunca dentro do app.
+
+## Próximos passos
+- iOS: `npx cap add ios` exige macOS/Xcode (fora do alcance do CI atual sem runner macOS).
+- Notificações locais de lembrete (`@capacitor/local-notifications`), mediante aprovação do usuário.

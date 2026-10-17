@@ -174,7 +174,7 @@ function ExamRun({ exam }: { exam: MockExam }) {
           <button
             key={id}
             onClick={() => setI(k)}
-            className={`h-8 w-8 border font-display text-sm ${k === i ? 'border-ember text-ember' : 'border-ink/30'} ${exam.answers[id] ? 'bg-ink/10' : ''}`}
+            className={`h-9 w-9 rounded-lg border text-sm font-bold transition ${k === i ? 'border-gold bg-gold/15 text-gold' : 'border-line/50'} ${exam.answers[id] && k !== i ? 'bg-raised text-ink' : ''}`}
             aria-label={`Questão ${k + 1}${exam.answers[id] ? ', respondida' : ''}`}
           >
             {k + 1}
@@ -191,11 +191,11 @@ function ExamRun({ exam }: { exam: MockExam }) {
             return (
               <li key={o.key}>
                 <button
-                  className={`flex w-full items-start gap-3 border p-3 text-left ${on ? 'border-ember bg-ember/5 shadow-[inset_0_0_0_1px_rgb(var(--ember))]' : 'border-ink/30'}`}
+                  className={`flex w-full items-start gap-3 rounded-xl border p-3.5 text-left transition duration-150 active:scale-[0.99] ${on ? 'border-gold bg-gold/10 shadow-[inset_0_0_0_1px_rgb(var(--gold))]' : 'border-line/50 hover:border-gold/40 hover:bg-raised/50'}`}
                   aria-pressed={on}
                   onClick={() => update((d) => answerExam(d, exam.id, q.id, o.key))}
                 >
-                  <span className="rubric w-5 shrink-0 font-display text-xl leading-6">{o.key}</span>
+                  <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg text-sm font-bold ${on ? 'bg-gold text-[#2b1d0b]' : 'bg-raised text-muted'}`}>{o.key}</span>
                   <span className="flex-1">{o.text}</span>
                 </button>
               </li>

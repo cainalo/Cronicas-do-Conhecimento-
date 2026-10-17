@@ -56,7 +56,7 @@ export function AccountPage() {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-center text-4xl">Conta</h1>
+      <h1 className="text-center text-3xl text-gold">Conta</h1>
 
       {!authReady ? (
         <p className="text-muted">Verificando sessão…</p>
@@ -97,7 +97,7 @@ export function AccountPage() {
         </section>
       ) : (
         <section className="card p-4">
-          <div className="mb-4 grid grid-cols-3 gap-1 rounded-sm bg-raised p-1 text-sm">
+          <div className="mb-4 grid grid-cols-3 gap-1 rounded-xl bg-raised p-1 text-sm">
             {(['entrar', 'criar', 'recuperar'] as Mode[]).map((m) => (
               <button key={m} className={`py-2 font-display ${mode === m ? 'leather-band' : 'text-muted'}`} onClick={() => setMode(m)} type="button">
                 {{ entrar: 'Entrar', criar: 'Criar conta', recuperar: 'Recuperar' }[m]}
@@ -126,7 +126,7 @@ export function AccountPage() {
         </section>
       )}
 
-      {msg && <p className={`rounded-sm border p-3 text-sm ${msg.ok ? 'border-ok/50 text-ok' : 'border-bad/50 text-bad'}`}>{msg.t}</p>}
+      {msg && <p className={`rounded-xl border p-3 text-sm ${msg.ok ? 'border-ok/50 text-ok' : 'border-bad/50 text-bad'}`}>{msg.t}</p>}
 
       <AppDownload />
 

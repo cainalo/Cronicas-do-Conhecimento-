@@ -8,8 +8,9 @@
 - Edital oficial conferido (`docs/fontes/`), 68 tópicos em `contest.ts`.
 - Conteúdo: Códice das Sete Chaves (Criptografia), Livro dos Autômatos (IA, 2 caps.) Tratado das Pontes e dos Selos (Dev: APIs; identidade) e Atlas das Estradas e das Nuvens (Redes; Nuvem). 10 lições, 106 questões, 3 estudos de caso. Cobertura 12/68 tópicos.
 - Fase E feita: mapa do reino, ficha do personagem, selos, inventário, missões semanais (migração 4).
-- Visual de livro medieval gótico (ver `docs/DESIGN_SYSTEM.md`), sem "cara de IA".
-- Fase D completa: simulados, estudos de caso (2), flashcards e planejador, todos sincronizáveis (migrações 2 e 3 aplicadas, RLS verificado). PWA offline testado.
+- Visual "medieval moderno" (ver `docs/DESIGN_SYSTEM.md`), sem "cara de IA".
+- App nativo Android (Capacitor) compilado no CI e baixável em `/download/` (ver `docs/MOBILE_AND_OFFLINE.md`). PWA removido.
+- Fase D completa: simulados, estudos de caso (2), flashcards e planejador, todos sincronizáveis (migrações 2 e 3 aplicadas, RLS verificado). 
 - Supabase com RLS verificado; login/sync pelo navegador ainda **não testados pelo usuário**.
 
 ## Testes

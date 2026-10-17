@@ -27,7 +27,7 @@ export function LibraryPage() {
         {written.map((g) => (
           <li key={g.id}>
             <Link to={`/grimorio/${g.id}`} className="group block">
-              <BookCover g={g} className="transition group-hover:-translate-y-1 group-active:translate-y-0" />
+              <BookCover g={g} className="transition duration-300 ease-out group-hover:[transform:perspective(700px)_rotateY(-10deg)_translateY(-4px)] group-active:scale-[0.98]" />
               <p className="mt-3 font-display text-[0.8rem] text-muted">{g.epithet}</p>
               <h2 className="text-lg leading-tight">{g.title}</h2>
               <p className="mt-0.5 text-sm italic text-muted">

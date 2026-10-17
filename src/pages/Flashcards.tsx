@@ -45,7 +45,7 @@ export function FlashcardsPage() {
       <Link to="/treino" className="font-display text-sm text-muted">
         Voltar ao treino
       </Link>
-      <h1 className="text-center text-4xl">Flashcards</h1>
+      <h1 className="text-center text-3xl text-gold">Flashcards</h1>
       {!card ? (
         <div className="card space-y-2 p-5 text-center">
           <h2 className="text-xl">Nada para hoje</h2>

@@ -8,7 +8,7 @@
 | D | Planejador, flashcards (repetição espaçada), simulados, discursiva | ✅ (falta só ampliar conteúdo) | Cada item usável e testado |
 | E | Trilha, missões, conquistas, inventário | ✅ mapa, títulos, selos, inventário e missões semanais | Missões funcionam de ponta a ponta |
 | F | Narrativa, personagens, mapas, animações | ⬜ (aguarda decisões) | Aprovado pelo usuário |
-| G | PWA offline (service worker, downloads), Capacitor Android | 🟡 PWA offline pronto e testado; falta Capacitor | Abrir offline e sincronizar após reconexão, testado |
+| G | App nativo e offline | ✅ Android (Capacitor) com APK no site; PWA removido a pedido; iOS pendente | Abrir offline e sincronizar após reconexão, testado |
 | H | Testes amplos, expansão para outros concursos | ⬜ | — |
 
 ## Próximas entregas, em ordem

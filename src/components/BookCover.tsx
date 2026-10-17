@@ -17,17 +17,17 @@ export function BookCover({ g, className = '' }: { g: Grimoire; className?: stri
   return (
     <div
       aria-hidden
-      className={`relative aspect-[3/4] overflow-hidden rounded-r-[4px] rounded-l-[2px] ${className}`}
+      className={`relative aspect-[3/4] overflow-hidden rounded-r-2xl rounded-l-md ${className}`}
       style={{
         backgroundColor: `rgb(${tint})`,
         backgroundImage:
           'linear-gradient(90deg, rgb(0 0 0 / .55) 0, rgb(0 0 0 / .15) 7%, rgb(255 255 255 / .07) 9%, transparent 14%), radial-gradient(ellipse at 40% 35%, rgb(255 255 255 / .08), transparent 60%), var(--tex-leather), var(--tex-leather-mottle)',
-        boxShadow: '3px 4px 10px rgb(0 0 0 / .55), inset -2px 0 3px rgb(0 0 0 / .5), inset 0 0 18px rgb(0 0 0 / .45)',
+        boxShadow: '0 18px 30px -14px rgb(0 0 0 / .8), 0 4px 10px -4px rgb(0 0 0 / .5), inset -2px 0 3px rgb(0 0 0 / .5), inset 0 0 18px rgb(0 0 0 / .45)',
       }}
     >
       {/* Filetes dourados gravados */}
-      <div className="absolute inset-[9%] border border-[#d6ac5c]/70" style={{ boxShadow: 'inset 0 0 0 3px transparent, inset 0 0 0 4px rgb(214 172 92 / .45), 0 1px 0 rgb(0 0 0 / .4)' }} />
-      <div className="absolute inset-[16%] border border-dashed border-[#d6ac5c]/35" />
+      <div className="absolute inset-[9%] rounded-lg border border-[#d6ac5c]/70" style={{ boxShadow: 'inset 0 0 0 3px transparent, inset 0 0 0 4px rgb(214 172 92 / .45), 0 1px 0 rgb(0 0 0 / .4)' }} />
+      <div className="absolute inset-[16%] rounded-md border border-dashed border-[#d6ac5c]/35" />
       {/* Cantoneiras */}
       <span className={`${boss} left-[5%] top-[4%]`} style={metal} />
       <span className={`${boss} right-[5%] top-[4%]`} style={metal} />

@@ -23,8 +23,9 @@ export default {
       },
       fontFamily: {
         gothic: ['UnifrakturMaguntia', 'serif'],
-        display: ['"IM Fell English SC"', 'Georgia', 'serif'],
-        serif: ['"EB Garamond"', 'Georgia', 'serif'],
+        display: ['Cinzel', 'Georgia', 'serif'],
+        sans: ['"Alegreya Sans"', 'system-ui', 'sans-serif'],
+        serif: ['Alegreya', 'Georgia', 'serif'],
       },
     },
   },

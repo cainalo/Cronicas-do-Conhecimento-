@@ -14,6 +14,9 @@
 | 2026-10-17 | Recompensas | **Selos (conquistas), inventário de artefatos, missões semanais e títulos do personagem**, além de XP e níveis. | Implementado em `/personagem` (`lib/game.ts`). |
 | 2026-10-17 | Nome | "Crônicas do Conhecimento" permanece **provisório**; decidir depois. | — |
 
+| 2026-10-17 | App | **App nativo Android (Capacitor), não PWA**, com opção de download no site. | PWA removido; APK compilado no CI e publicado em `/download/`. iOS fica preparado para o futuro. |
+| 2026-10-17 | Visual (substitui o "livro gótico" quanto ao acabamento) | **Medieval moderno**: estilo medieval sem cara de site antigo nem de IA; cantos arredondados, ilustrações, cards interativos, animações e sombras. | Novo design system (abaixo e em DESIGN_SYSTEM.md). Pergaminho mantido como superfície de leitura e destaque. |
+
 ## Decisões técnicas delegadas (tomadas por Claude)
 | Assunto | Decisão | Justificativa |
 |---|---|---|

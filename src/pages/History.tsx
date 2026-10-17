@@ -20,7 +20,7 @@ export function HistoryPage() {
       <Link to="/progresso" className="text-sm text-muted">
         Voltar ao progresso
       </Link>
-      <h1 className="text-center text-4xl">Histórico de questões</h1>
+      <h1 className="text-center text-3xl text-gold">Histórico de questões</h1>
       <div className="flex gap-2" role="tablist">
         {(['todas', 'certas', 'erradas'] as Filter[]).map((f) => (
           <button key={f} role="tab" aria-selected={filter === f} className={filter === f ? 'btn-primary flex-1' : 'btn-ghost flex-1'} onClick={() => setFilter(f)}>

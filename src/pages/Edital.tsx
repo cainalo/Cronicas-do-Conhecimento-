@@ -17,8 +17,8 @@ export function EditalPage() {
       <Link to="/progresso" className="text-sm text-muted">
         Voltar ao progresso
       </Link>
-      <h1 className="text-center text-4xl">Edital do {c.name}</h1>
-      <p className="rounded-sm border border-ok/50 p-3 text-sm">
+      <h1 className="text-center text-3xl text-gold">Edital do {c.name}</h1>
+      <p className="rounded-xl border border-ok/50 p-3 text-sm">
         Dados conferidos no <b>Edital nº 01/2026 retificado (versão consolidada de 15/09/2026)</b>. A cobertura do material ainda <b>não é integral</b>: veja abaixo o
         que já tem grimório e questões.
       </p>

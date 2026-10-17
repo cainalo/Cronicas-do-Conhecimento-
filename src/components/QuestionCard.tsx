@@ -36,11 +36,11 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
           const isSel = selected === o.key;
           const state = !confirmed ? (isSel ? 'sel' : '') : o.key === q.answer ? 'ok' : isSel ? 'bad' : 'dim';
           const cls = {
-            '': 'border-line hover:bg-raised',
-            sel: 'border-ember bg-ember/5 shadow-[inset_0_0_0_1px_rgb(var(--ember))]',
-            ok: 'border-ok bg-ok/10',
+            '': 'border-line/50 hover:border-gold/40 hover:bg-raised/50',
+            sel: 'border-gold bg-gold/10 shadow-[inset_0_0_0_1px_rgb(var(--gold))]',
+            ok: 'pop border-ok bg-ok/10 shadow-[inset_0_0_0_1px_rgb(var(--ok))]',
             bad: 'border-bad bg-bad/10',
-            dim: 'border-line opacity-70',
+            dim: 'border-line/40 opacity-60',
           }[state];
           return (
             <li key={o.key}>
@@ -49,9 +49,15 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
                 disabled={confirmed}
                 onClick={() => setSelected(o.key)}
                 aria-pressed={isSel}
-                className={`flex w-full items-start gap-3 rounded-sm border p-3 text-left transition ${cls}`}
+                className={`flex w-full items-start gap-3 rounded-xl border p-3.5 text-left transition duration-150 active:scale-[0.99] ${cls}`}
               >
-                <span className="rubric w-5 shrink-0 font-display text-xl leading-6">{o.key}</span>
+                <span
+                  className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg text-sm font-bold transition ${
+                    state === 'ok' ? 'bg-ok text-[#10200f]' : state === 'bad' ? 'bg-bad text-white' : state === 'sel' ? 'bg-gold text-[#2b1d0b]' : 'bg-raised text-muted'
+                  }`}
+                >
+                  {o.key}
+                </span>
                 <span className="flex-1">
                   {o.text}
                   {confirmed && (o.key === q.answer || isSel) && (
@@ -83,8 +89,8 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
             <Icon name={correct ? 'certo' : 'errado'} className="mr-1 inline align-[-3px]" />
             {correct ? 'Correto' : `Resposta correta: ${q.answer}`}
           </p>
-          <div className="rounded-sm bg-raised p-3 text-[0.98rem] leading-relaxed">{q.explanation}</div>
-          <details className="rounded-sm border border-line p-3 text-sm">
+          <div className="rounded-xl bg-raised p-3 text-[0.98rem] leading-relaxed">{q.explanation}</div>
+          <details className="rounded-xl border border-line p-3 text-sm">
             <summary className="cursor-pointer text-muted">Comentário de todas as alternativas</summary>
             <ul className="mt-2 space-y-1">
               {q.options.map((o) => (

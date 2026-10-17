@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
-import { DEFAULT_CONTEST_ID, chapters, questionsForContest, topicsForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, chapters, getContest, questionsForContest, topicsForContest } from '@/content';
 import { topicStats } from '@/lib/study';
 
 const pct = (x: number) => `${Math.round(x * 100)}%`;
@@ -47,7 +47,7 @@ export function TopicProgressList({ onlyWithContent = false }: { onlyWithContent
 export function ProgressPage() {
   return (
     <div className="space-y-4">
-      <h1 className="text-center text-4xl">Progresso</h1>
+      <h1 className="text-center text-3xl text-gold">Progresso</h1>
       <p className="text-sm text-muted">
         <b className="text-ink">Domínio</b> = parcela das questões do tópico cuja resposta mais recente está correta. Leitura concluída não conta como domínio.
       </p>
@@ -61,5 +61,35 @@ export function ProgressPage() {
       </div>
       <TopicProgressList />
     </div>
+  );
+}
+
+/** Resumo compacto por disciplina (apenas as que já têm material). */
+export function DisciplineSummary() {
+  const { data } = useStudy();
+  const bank = questionsForContest(DEFAULT_CONTEST_ID);
+  const contest = getContest(DEFAULT_CONTEST_ID)!;
+  const rows = contest.disciplines
+    .map((d) => {
+      const stats = d.topics.map((t) => topicStats(data, t.id, bank, chapters)).filter((s) => s.totalQuestions > 0);
+      const total = stats.reduce((n, s) => n + s.totalQuestions, 0);
+      const correct = stats.reduce((n, s) => n + s.correctNow, 0);
+      return { d, total, mastery: total ? correct / total : 0 };
+    })
+    .filter((r) => r.total > 0);
+  return (
+    <ul className="ledger">
+      {rows.map(({ d, mastery }) => (
+        <li key={d.id} className="ledger-row">
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-[0.95rem]">{d.title}</span>
+            <span className="meter mt-1.5">
+              <span style={{ width: pct(mastery) }} />
+            </span>
+          </span>
+          <span className="w-11 shrink-0 text-right font-display text-sm font-bold text-gold">{pct(mastery)}</span>
+        </li>
+      ))}
+    </ul>
   );
 }
