@@ -7,6 +7,10 @@ import { achievements, characterSheet, topicMastery } from '@/lib/game';
 import { areaColor } from '@/app/areas';
 import { PageHeader, SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
 import { SceneBanner } from '@/components/SceneBanner';
+import { Icon } from '@/components/Icon';
+import { useState } from 'react';
+import { Prologue } from '@/components/Prologue';
+import { clues } from '@/content/game/story';
 
 export function useRegions(): RegionState[] {
   const { data } = useStudy();
@@ -31,7 +35,9 @@ export function RealmPage() {
   const sheet = characterSheet(data);
   const seals = achievements(data, chapters, questionsForContest(DEFAULT_CONTEST_ID));
   const sealsWon = seals.filter((s) => s.done).length;
-  const shades = dark ? ['#78b873', '#8f9df0', '#e8b13b'] : ['#4a7f46', '#5160c4', '#a8740c'];
+  const shades = dark ? ['#78b873', '#8f9df0', '#e8b13b', '#ef7a5a'] : ['#4a7f46', '#5160c4', '#a8740c', '#c2571f'];
+  const [prologue, setPrologue] = useState(false);
+  const revealed = Math.min(clues.length, Object.keys(data.lessons).length);
 
   return (
     <div className="space-y-6">
@@ -39,11 +45,13 @@ export function RealmPage() {
       <SceneBanner scene="reino" dark={dark}>
         {explored} de {regions.length} regiões já têm grimório. Cada acerto clareia o mapa.
       </SceneBanner>
+      {prologue && <Prologue onClose={() => setPrologue(false)} />}
 
       <TileGrid>
         <Tile wide to="/personagem" icon="escudo" color={shades[0]} title={sheet.title} text="Ficha, selos, inventário e missões da semana." badge={`${sealsWon}/${seals.length} selos`} />
         <Tile to="/progresso" icon="grafico" color={shades[1]} title="Progresso" text="Acertos e domínio por tópico do edital." />
-        <Tile to="/edital" icon="pergaminho" color={shades[2]} title="Edital" text="Provas, pesos, regras e cobertura." />
+        <Tile to="/diario" icon="pergaminho" color={shades[3]} title="Diário de pistas" text="O mistério da Névoa, uma pista por lição." badge={`${revealed}/${clues.length}`} />
+        <Tile to="/edital" icon="lista" art="pergaminho" color={shades[2]} title="Edital" text="Provas, pesos, regras e cobertura." />
       </TileGrid>
 
       <section>
@@ -57,6 +65,10 @@ export function RealmPage() {
           {explored} de {regions.length} regiões com grimório. A cor se intensifica com o domínio; regiões sob névoa aguardam o seu livro.
         </p>
       </section>
+
+      <button type="button" className="btn-ghost w-full" onClick={() => setPrologue(true)}>
+        <Icon name="grimorio" size={18} /> Rever o prólogo da história
+      </button>
 
       <ul className="ledger">
         {regions.map((r) => (

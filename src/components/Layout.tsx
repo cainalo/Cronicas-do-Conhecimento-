@@ -8,6 +8,9 @@ import { DEFAULT_CONTEST_ID, chapters, questionsForContest } from '@/content';
 import { useCelebrations } from '@/app/fx';
 import { Icon } from '@/components/Icon';
 import { useIsDark } from '@/components/Page';
+import { useState } from 'react';
+import { Prologue, prologueSeen } from '@/components/Prologue';
+import { clues } from '@/content/game/story';
 
 const TABS: AreaKey[] = ['torre', 'grimorios', 'treino', 'reino'];
 
@@ -93,10 +96,12 @@ export function Layout() {
   const dark = useIsDark();
   const xp = totalXp(data);
   const lv = levelInfo(xp);
-  useCelebrations(xp, lv.level, achievements(data, chapters, questionsForContest(DEFAULT_CONTEST_ID)));
+  useCelebrations(xp, lv.level, achievements(data, chapters, questionsForContest(DEFAULT_CONTEST_ID)), Object.keys(data.lessons).length, clues.length);
   const inner = !isAreaHome(pathname);
   const accountColor = areaColor('conta', dark);
   const onAccount = areaOf(pathname) === 'conta';
+  // Prólogo na primeira visita (fora dos testes automatizados).
+  const [showPrologue, setShowPrologue] = useState(() => import.meta.env.MODE !== 'test' && !prologueSeen());
 
   return (
     <div className="flex min-h-dvh flex-col">
@@ -151,6 +156,7 @@ export function Layout() {
         </div>
       </header>
 
+      {showPrologue && <Prologue onClose={() => setShowPrologue(false)} />}
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 pb-32 pt-5 sm:px-6 lg:pb-12">
         <div key={pathname} className="page-enter">
           <Outlet />

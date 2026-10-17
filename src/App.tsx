@@ -20,6 +20,7 @@ import { PlanPage } from '@/pages/Plan';
 import { RealmPage } from '@/pages/Realm';
 import { CharacterPage } from '@/pages/Character';
 import { BlitzPage } from '@/pages/Blitz';
+import { DiaryPage } from '@/pages/Diary';
 
 export function AppRoutes() {
   return (
@@ -41,6 +42,7 @@ export function AppRoutes() {
         <Route path="personagem" element={<CharacterPage />} />
         <Route path="flashcards" element={<FlashcardsPage />} />
         <Route path="relampago" element={<BlitzPage />} />
+        <Route path="diario" element={<DiaryPage />} />
         <Route path="simulado" element={<ExamPage />} />
         <Route path="simulado/:id" element={<ExamResultPage />} />
         <Route path="discursiva" element={<EssayListPage />} />

@@ -40,7 +40,7 @@ export const AREAS: Record<AreaKey, Area> = {
     to: '/reino',
     icon: 'mapa',
     color: ['#4a7f46', '#78b873'],
-    paths: ['/reino', '/personagem', '/progresso', '/edital'],
+    paths: ['/reino', '/diario', '/personagem', '/progresso', '/edital'],
   },
   conta: { key: 'conta', label: 'Conta', to: '/conta', icon: 'pessoa', color: ['#5160c4', '#8f9df0'], paths: ['/conta'] },
 };

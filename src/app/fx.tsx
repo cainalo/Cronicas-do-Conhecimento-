@@ -120,13 +120,13 @@ export function FxProvider({ children }: { children: ReactNode }) {
 }
 
 /** Observa o estudo e comemora: +XP, novo nível e selos conquistados. */
-export function useCelebrations(xp: number, level: number, seals: { id: string; name: string; done: boolean }[]) {
+export function useCelebrations(xp: number, level: number, seals: { id: string; name: string; done: boolean }[], lessonsDone = 0, cluesTotal = 0) {
   const { toast, confetti, sfx } = useFx();
-  const last = useRef<{ xp: number; level: number; seals: Set<string> } | null>(null);
+  const last = useRef<{ xp: number; level: number; seals: Set<string>; lessons: number } | null>(null);
   useEffect(() => {
     const doneSeals = new Set(seals.filter((s) => s.done).map((s) => s.id));
     const prev = last.current;
-    last.current = { xp, level, seals: doneSeals };
+    last.current = { xp, level, seals: doneSeals, lessons: lessonsDone };
     if (!prev) return;
     if (level > prev.level) {
       toast({ text: `Nível ${level}!`, sub: 'Você subiu de nível', icon: 'escudo', color: '#4a7f46' });
@@ -135,6 +135,9 @@ export function useCelebrations(xp: number, level: number, seals: { id: string; 
     } else if (xp > prev.xp) {
       toast({ text: `+${xp - prev.xp} XP`, icon: 'selo', color: '#a8740c' });
     }
+    if (lessonsDone > prev.lessons && lessonsDone <= cluesTotal) {
+      toast({ text: 'Nova pista no diário', sub: `Pista ${lessonsDone} de ${cluesTotal}`, icon: 'pergaminho', color: '#4a7f46' });
+    }
     for (const s of seals) {
       if (s.done && !prev.seals.has(s.id)) {
         toast({ text: 'Selo conquistado', sub: s.name, icon: 'selo', color: '#c2571f' });
@@ -142,5 +145,5 @@ export function useCelebrations(xp: number, level: number, seals: { id: string; 
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [xp, level, seals.filter((s) => s.done).length]);
+  }, [xp, level, seals.filter((s) => s.done).length, lessonsDone]);
 }

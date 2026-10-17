@@ -75,3 +75,17 @@ describe('rodada relâmpago', () => {
     expect(picked.every((q) => q.chapterId === 'cap.dados.01')).toBe(true);
   });
 });
+
+import { clues, prologue, regionStories } from '@/content/game/story';
+import { lessons as allLessons, getContest as gc2 } from '@/content';
+
+describe('história', () => {
+  it('tem uma pista por lição e uma cena por disciplina do edital', () => {
+    expect(clues.length).toBeGreaterThanOrEqual(allLessons.length);
+    for (const d of gc2(DEFAULT_CONTEST_ID)!.disciplines) {
+      expect(regionStories[d.id]?.intro.length).toBeGreaterThan(20);
+      expect(regionStories[d.id]?.cleared.length).toBeGreaterThan(20);
+    }
+    expect(prologue.length).toBe(3);
+  });
+});

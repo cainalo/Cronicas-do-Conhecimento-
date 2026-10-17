@@ -7,7 +7,7 @@
 | C | Supabase real + ampliação de conteúdo com rastreabilidade | 🟡 Banco e RLS prontos; sync do cliente não confirmado pelo usuário; conteúdo: 68/68 tópicos (normas estaduais em panorama) | Login+sync testado em aparelho real; edital oficial conferido; ≥1 capítulo por disciplina de maior peso |
 | D | Planejador, flashcards (repetição espaçada), simulados, discursiva | ✅ (falta só ampliar conteúdo) | Cada item usável e testado |
 | E | Trilha, missões, conquistas, inventário | ✅ mapa, títulos, selos, inventário e missões semanais | Missões funcionam de ponta a ponta |
-| F | Narrativa, personagens, mapas, animações | 🟡 animações, mascote provisório, trilha e cenas feitos; história aguarda decisões | Aprovado pelo usuário |
+| F | Narrativa, personagens, mapas, animações | ✅ prólogo, falas por região, diário de pistas, mascote, trilha, cenas e animações | Aprovado pelo usuário |
 | G | App nativo e offline | ✅ Android (Capacitor) com APK no site; PWA removido a pedido; iOS pendente | Abrir offline e sincronizar após reconexão, testado |
 | H | Testes amplos, expansão para outros concursos | ⬜ | — |
 

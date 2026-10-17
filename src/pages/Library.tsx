@@ -5,6 +5,9 @@ import type { ReviewStatus } from '@/content/types';
 import { BookCover } from '@/components/BookCover';
 import { Trail, chapterStops } from '@/components/Trail';
 import { SceneBanner } from '@/components/SceneBanner';
+import { MascotSays } from '@/components/Mascot';
+import { regionStories } from '@/content/game/story';
+import { useRegions } from './Realm';
 import { roman } from '@/lib/roman';
 import { areaColor, tint } from '@/app/areas';
 import { Icon } from '@/components/Icon';
@@ -77,7 +80,10 @@ export function GrimoirePage() {
   const { data } = useStudy();
   const g = getGrimoire(id);
   const color = areaColor('grimorios', useIsDark());
+  const regions = useRegions();
   if (!g) return <p>Grimório não encontrado.</p>;
+  const region = regions.find((r) => r.discipline.id === g.disciplineId);
+  const story = regionStories[g.disciplineId];
   // O mascote espera só no primeiro capítulo ainda não concluído.
   const firstOpen = g.chapterIds.findIndex((cid) => chapterStops(getChapter(cid)!, data).some((s) => !s.done));
   return (
@@ -98,6 +104,13 @@ export function GrimoirePage() {
           </div>
         </div>
         <p className="mt-4 text-[0.95rem] text-muted">{g.description}</p>
+        {story && (
+          <div className="mt-4">
+            <MascotSays mood={(region?.mastery ?? 0) >= 0.8 ? 'cheer' : 'talk'} size={68}>
+              {(region?.mastery ?? 0) >= 0.8 ? story.cleared : story.intro}
+            </MascotSays>
+          </div>
+        )}
       </header>
       <section>
         <SectionTitle icon="mapa" color={color}>
