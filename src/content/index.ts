@@ -10,11 +10,19 @@ import { capIaAgentes, capIaLlm, grimorioIa } from './grimoires/ia';
 import { questoesIaCap01 } from './grimoires/ia/questions-cap01';
 import { questoesIaCap02 } from './grimoires/ia/questions-cap02';
 import { licoesIa } from './grimoires/ia/lessons';
+import { capIaEticaDados, capIaFundamentos, licoesIa34 } from './grimoires/ia/cap03-04';
+import { questoesIaCap0304 } from './grimoires/ia/questions-cap03-04';
 import { estudosDeCaso } from './discursivas/tce-go-2026';
 import { capDevApis, capDevIdentidade, grimorioDev, licoesDev } from './grimoires/dev';
 import { questoesDev } from './grimoires/dev/questions';
+import { capDevAlgoritmos, capDevLinguagens, licoesDev34 } from './grimoires/dev/cap03-04';
+import { questoesDevCap0304 } from './grimoires/dev/questions-cap03-04';
 import { capInfraNuvem, capInfraRedes, grimorioInfra, licoesInfra } from './grimoires/infra';
 import { questoesInfra } from './grimoires/infra/questions';
+import { capInfraSo, licoesInfraSo } from './grimoires/infra/cap03';
+import { questoesInfraSo } from './grimoires/infra/questions-cap03';
+import { capInglesLeitura, capInglesVocabulario, grimorioIngles, licoesIngles } from './grimoires/ingles';
+import { questoesIngles } from './grimoires/ingles/questions';
 import { capDadosSgbd, capDadosSql, grimorioDados, licoesDados } from './grimoires/dados';
 import { questoesDados } from './grimoires/dados/questions';
 import { capGovModelos, capGovPublico, grimorioGovernanca, licoesGovernanca } from './grimoires/governanca';
@@ -27,10 +35,10 @@ import { capDevopsEntrega, capDevopsPlataforma, grimorioDevops, licoesDevops } f
 import { questoesDevops } from './grimoires/devops/questions';
 
 export const contests: Contest[] = [tceGo2026];
-export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev, grimorioInfra, grimorioDados, grimorioGovernanca, grimorioLegislacao, grimorioEngSoft, grimorioDevops];
-export const chapters: Chapter[] = [capCriptografia, capDefesa, capIaLlm, capIaAgentes, capDevApis, capDevIdentidade, capInfraRedes, capInfraNuvem, capDadosSql, capDadosSgbd, capGovModelos, capGovPublico, capLegDados, capLegNormas, capEsProcesso, capEsArquitetura, capDevopsEntrega, capDevopsPlataforma];
-export const lessons: Lesson[] = [...licoesCap01, ...licoesCap02, ...licoesIa, ...licoesDev, ...licoesInfra, ...licoesDados, ...licoesGovernanca, ...licoesLegislacao, ...licoesEngSoft, ...licoesDevops];
-export const questions: Question[] = [...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesDev, ...questoesInfra, ...questoesDados, ...questoesGovernanca, ...questoesLegislacao, ...questoesEngSoft, ...questoesDevops];
+export const grimoires: Grimoire[] = [grimorioSeguranca, grimorioIa, grimorioDev, grimorioInfra, grimorioDados, grimorioGovernanca, grimorioLegislacao, grimorioEngSoft, grimorioDevops, grimorioIngles];
+export const chapters: Chapter[] = [capCriptografia, capDefesa, capIaLlm, capIaAgentes, capIaFundamentos, capIaEticaDados, capDevApis, capDevIdentidade, capDevAlgoritmos, capDevLinguagens, capInfraRedes, capInfraNuvem, capInfraSo, capDadosSql, capDadosSgbd, capGovModelos, capGovPublico, capLegDados, capLegNormas, capEsProcesso, capEsArquitetura, capDevopsEntrega, capDevopsPlataforma, capInglesLeitura, capInglesVocabulario];
+export const lessons: Lesson[] = [...licoesCap01, ...licoesCap02, ...licoesIa, ...licoesIa34, ...licoesDev, ...licoesDev34, ...licoesInfra, ...licoesInfraSo, ...licoesDados, ...licoesGovernanca, ...licoesLegislacao, ...licoesEngSoft, ...licoesDevops, ...licoesIngles];
+export const questions: Question[] = [...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesIaCap0304, ...questoesDev, ...questoesDevCap0304, ...questoesInfra, ...questoesInfraSo, ...questoesDados, ...questoesGovernanca, ...questoesLegislacao, ...questoesEngSoft, ...questoesDevops, ...questoesIngles];
 
 const byId = <T extends { id: string }>(list: T[]) => new Map(list.map((x) => [x.id, x]));
 const contestMap = byId(contests);

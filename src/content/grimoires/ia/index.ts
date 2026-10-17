@@ -18,8 +18,8 @@ export const grimorioIa: Grimoire = {
   title: 'O Livro dos Autômatos',
   epithet: 'Grimório de Inteligência Artificial',
   description:
-    'Modelos de linguagem, prompts e contexto, RAG e bancos vetoriais, agentes de programação e o protocolo MCP. Cobre os dois blocos de IA do edital (9 questões).',
-  chapterIds: ['cap.ia.01', 'cap.ia.02'],
+    'Modelos de linguagem, prompts e contexto, RAG, agentes de programação e MCP; aprendizado de máquina, redes neurais e PLN; ética, LGPD aplicada à IA, EBIA, ciência de dados e Big Data. Cobre os dois blocos de IA do edital (9 questões).',
+  chapterIds: ['cap.ia.01', 'cap.ia.02', 'cap.ia.03', 'cap.ia.04'],
   sigil: 'pena',
   binding: 'floresta',
 };

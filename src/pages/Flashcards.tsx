@@ -57,19 +57,27 @@ export function FlashcardsPage() {
           <p className="text-center text-sm text-muted">
             Cartão {Math.min(done + 1, total)} de {total} · {getChapter(card.chapterId)?.title}
           </p>
-          <section className="manuscript flex min-h-[16rem] flex-col items-center justify-center gap-4 px-5 py-8 text-center">
-            <p className="rubric text-sm font-semibold">Frente</p>
-            <p className="text-2xl leading-snug">{card.front}</p>
-            {shown && (
-              <>
-                <div className="divider-ornament !my-1 w-full" aria-hidden>
-                  ❧
-                </div>
-                <p className="rubric text-sm font-semibold">Verso</p>
+          <button
+            type="button"
+            onClick={() => setShown(true)}
+            className="block w-full [perspective:1200px]"
+            aria-label={shown ? 'Cartão revelado' : 'Virar o cartão'}
+          >
+            <div
+              className="relative min-h-[17rem] transition-transform duration-500 [transform-style:preserve-3d]"
+              style={{ transform: shown ? 'rotateY(180deg)' : 'none' }}
+            >
+              <section className="manuscript absolute inset-0 flex flex-col items-center justify-center gap-4 px-5 py-8 text-center [backface-visibility:hidden]">
+                <p className="rubric text-sm font-semibold">Frente</p>
+                <p className="text-2xl leading-snug">{card.front}</p>
+                <p className="mt-2 text-xs text-muted">toque para virar</p>
+              </section>
+              <section className="manuscript absolute inset-0 flex flex-col items-center justify-center gap-3 overflow-y-auto px-5 py-8 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                <p className="rubric text-sm font-semibold">{card.front}</p>
                 <p className="text-[1.15rem] leading-relaxed">{card.back}</p>
-              </>
-            )}
-          </section>
+              </section>
+            </div>
+          </button>
           {!shown ? (
             <button className="btn-primary w-full" onClick={() => setShown(true)}>
               Revelar o verso

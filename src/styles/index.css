@@ -297,6 +297,16 @@ a { text-underline-offset: 3px; }
 }
 .prose-manuscript .illuminated.rubra > p:first-child::first-letter { background: radial-gradient(circle at 30% 25%, rgb(255 255 255 / 0.16), transparent 60%), rgb(140 40 24); }
 
+/* Enunciado de questão em Markdown */
+.prose-stem p { margin: 0 0 0.6em; }
+.prose-stem p:last-child { margin-bottom: 0; }
+.prose-stem blockquote { margin: 0.4em 0 0.8em; padding: 0.6em 0.9em; border-left: 3px solid rgb(var(--gold) / 0.7); border-radius: 0 12px 12px 0; background: rgb(var(--gold) / 0.07); font-style: italic; }
+.prose-stem code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85em; background: rgb(var(--ink) / 0.07); padding: 0.08em 0.35em; border-radius: 6px; }
+.prose-stem pre { overflow-x: auto; margin: 0.4em 0 0.8em; padding: 0.8em; border-radius: 12px; background: rgb(var(--ink) / 0.06); line-height: 1.45; }
+.prose-stem pre code { background: none; padding: 0; }
+.prose-stem ul, .prose-stem ol { margin: 0 0 0.6em 1.3em; list-style: disc; }
+.prose-stem ol { list-style: decimal; }
+
 mark.search-hit { background: rgb(232 177 59 / 0.45); color: inherit; border-radius: 3px; }
 
 .safe-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 0.75rem); }

@@ -14,8 +14,8 @@ export const grimorioDev: Grimoire = {
   disciplineId: 'ti.dev',
   title: 'O Tratado das Pontes e dos Selos',
   epithet: 'Grimório de Desenvolvimento de Sistemas',
-  description: 'Como os sistemas conversam (REST, JSON e XML, GraphQL, WebSockets, OpenAPI) e como provam quem pode entrar (OAuth 2.0, OpenID Connect, JWT).',
-  chapterIds: ['cap.dev.01', 'cap.dev.02'],
+  description: 'Como os sistemas conversam (REST, GraphQL, WebSockets, OpenAPI), como provam quem pode entrar (OAuth 2.0, OIDC, JWT), os algoritmos e estruturas de dados que os movem e as linguagens em que são escritos (Java, JavaScript/Node, React, Python, TypeScript), com pacotes e publicação.',
+  chapterIds: ['cap.dev.01', 'cap.dev.02', 'cap.dev.03', 'cap.dev.04'],
   sigil: 'grimorio',
   binding: 'noite',
 };

@@ -11,9 +11,9 @@ export const grimorioInfra: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.infra',
   title: 'O Atlas das Estradas e das Nuvens',
-  epithet: 'Grimório de Redes e Computação em Nuvem',
-  description: 'As estradas por onde correm os pacotes (TCP/IP, endereços, DNS, HTTP/3, firewalls, VPN) e os castelos alugados nas nuvens (IaaS, PaaS, SaaS, escala e disponibilidade).',
-  chapterIds: ['cap.infra.01', 'cap.infra.02'],
+  epithet: 'Grimório de Sistemas Operacionais, Redes e Nuvem',
+  description: 'As estradas por onde correm os pacotes (TCP/IP, endereços, DNS, HTTP/3, firewalls, VPN), os castelos alugados nas nuvens (IaaS, PaaS, SaaS, escala) e as engrenagens de cada máquina (Windows, Linux, shell, PowerShell, Active Directory, virtualização).',
+  chapterIds: ['cap.infra.01', 'cap.infra.02', 'cap.infra.03'],
   sigil: 'selo',
   binding: 'castanho',
 };

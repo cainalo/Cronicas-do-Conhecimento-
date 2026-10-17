@@ -4,6 +4,16 @@ import type { Question } from '@/content/types';
 import { getChapter } from '@/content';
 import { Icon } from '@/components/Icon';
 import { useFx } from '@/app/fx';
+import { Markdown } from '@/components/Markdown';
+
+/** Enunciado: aceita Markdown (textos citados, código, listas) para questões de leitura e de comandos. */
+export function QuestionStem({ text, className = '' }: { text: string; className?: string }) {
+  return (
+    <div className={`prose-stem text-[1.05rem] leading-relaxed ${className}`}>
+      <Markdown>{text}</Markdown>
+    </div>
+  );
+}
 
 const originLabel: Record<Question['origin'], string> = {
   autoral: 'Questão autoral (não oficial)',
@@ -32,7 +42,7 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
         <span className="chip">{originLabel[q.origin]}</span>
         <span className="chip">{['Fácil', 'Média', 'Difícil'][q.difficulty - 1]}</span>
       </div>
-      <p className="mb-4 text-[1.05rem] leading-relaxed">{q.stem}</p>
+      <QuestionStem text={q.stem} className="mb-4" />
       <ol className="space-y-2">
         {q.options.map((o) => {
           const isSel = selected === o.key;

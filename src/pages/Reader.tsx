@@ -14,6 +14,8 @@ function splitNumber(title: string): [string | null, string] {
   return m ? [roman(Number(m[1])), m[2]] : [null, title];
 }
 import { Icon } from '@/components/Icon';
+import { useFx } from '@/app/fx';
+import { Mascot, SpeechBubble } from '@/components/Mascot';
 
 function stripMd(s: string) {
   return s.replace(/[#*_`>|]/g, ' ').replace(/\s+/g, ' ');
@@ -25,6 +27,7 @@ export function ReaderPage() {
   const chapter = getChapter(id);
   const { data, update } = useStudy();
   const { prefs, setPrefs } = usePrefs();
+  const { sfx, confetti } = useFx();
   const [tocOpen, setTocOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [toast, setToast] = useState<string>();
@@ -86,8 +89,11 @@ export function ReaderPage() {
         <button className="btn-ghost !min-h-[40px] !px-3 !py-1.5" onClick={() => setTocOpen((v) => !v)} aria-expanded={tocOpen}>
           <Icon name="sumario" size={18} /> Sumário
         </button>
-        <span className="flex-1 truncate text-center text-xs text-muted">
-          {rp?.sectionsRead.length ?? 0} de {chapter.sections.length} lidas
+        <span className="flex-1 px-1 text-center text-xs text-muted">
+          <span className="block truncate">{rp?.sectionsRead.length ?? 0} de {chapter.sections.length} lidas</span>
+          <span className="meter mt-1 block !h-1.5">
+            <span style={{ width: `${((rp?.sectionsRead.length ?? 0) / chapter.sections.length) * 100}%` }} />
+          </span>
         </span>
         <button className="btn-ghost !min-h-[40px] !px-3 !py-1.5" aria-label="Diminuir fonte" onClick={() => setPrefs({ fontScale: Math.max(0.85, +(prefs.fontScale - 0.1).toFixed(2)) })}>
           A−
@@ -190,14 +196,21 @@ export function ReaderPage() {
                 </div>
               </div>
               <button
-                className={`mt-2 w-full border px-4 py-3 font-display ${read ? 'border-ok/50 text-ok' : 'border-ink/40 text-ink hover:bg-raised/60'}`}
+                className={`mt-2 flex w-full items-center justify-center gap-2 rounded-full border-2 px-4 py-3 font-semibold transition active:scale-[0.98] ${read ? 'border-ok/50 bg-ok/10 text-ok' : 'border-ember/60 text-ember hover:bg-ember/10'}`}
                 disabled={read}
                 onClick={() => {
                   const xp = markSectionRead(data, chapter, s.id).xp;
                   update((d) => markSectionRead(d, chapter, s.id).data);
-                  if (xp) flash(`Capítulo concluído. +${xp.amount} XP`);
+                  sfx(xp ? 'done' : 'ok');
+                  if (xp) {
+                    flash(`Capítulo concluído. +${xp.amount} XP`);
+                    confetti(80);
+                  }
+                  const nextSec = chapter.sections[idx + 1];
+                  if (nextSec) window.setTimeout(() => sectionRefs.current[nextSec.id]?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 450);
                 }}
               >
+                <Icon name="certo" size={18} strokeWidth={2.4} className={read ? 'pop' : ''} />
                 {read ? 'Seção lida' : 'Marcar seção como lida'}
               </button>
               <p className="mt-2 text-right font-display text-xs text-muted">fol. {roman(idx + 1)}</p>
@@ -205,6 +218,17 @@ export function ReaderPage() {
           );
         })}
 
+        {chapter.lessonIds[0] && (
+          <div className="my-6 flex items-end gap-2">
+            <Mascot mood={(rp?.sectionsRead.length ?? 0) === chapter.sections.length ? 'cheer' : 'talk'} size={70} />
+            <SpeechBubble className="mb-6 flex-1">
+              {(rp?.sectionsRead.length ?? 0) === chapter.sections.length ? 'Capítulo lido! Hora de provar o que aprendeu.' : 'Quando terminar a leitura, a lição testa o que ficou.'}
+              <Link to={`/licao/${chapter.lessonIds[0]}`} className="btn-primary mt-2 w-full !min-h-[40px] text-sm">
+                <Icon name="escudo" size={16} strokeWidth={2.2} /> Fazer a lição
+              </Link>
+            </SpeechBubble>
+          </div>
+        )}
         <div className="divider-ornament" aria-hidden>
           ❧
         </div>

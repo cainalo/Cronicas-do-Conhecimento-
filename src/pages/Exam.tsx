@@ -5,6 +5,7 @@ import { DEFAULT_CONTEST_ID, getContest, getQuestion, questionsForContest, topic
 import { activeExam, answerExam, examDeadline, finishExam, pickExamQuestions, startExam } from '@/lib/training';
 import type { MockExam } from '@/lib/model';
 import { PageHeader } from '@/components/Page';
+import { QuestionStem } from '@/components/QuestionCard';
 
 const fmt = (ms: number) => {
   const s = Math.max(0, Math.floor(ms / 1000));
@@ -182,7 +183,7 @@ function ExamRun({ exam }: { exam: MockExam }) {
 
       <article className="card p-4">
         <p className="rubric font-display">Questão {i + 1}</p>
-        <p className="mt-2 text-[1.08rem] leading-relaxed">{q.stem}</p>
+        <QuestionStem text={q.stem} className="mt-2" />
         <ol className="mt-3 space-y-2">
           {q.options.map((o) => {
             const on = exam.answers[q.id] === o.key;
