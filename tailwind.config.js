@@ -23,8 +23,9 @@ export default {
       },
       fontFamily: {
         gothic: ['UnifrakturMaguntia', 'serif'],
-        display: ['Cinzel', 'Georgia', 'serif'],
-        sans: ['"Alegreya Sans"', 'system-ui', 'sans-serif'],
+        display: ['"Libre Baskerville"', 'Georgia', 'serif'],
+        logo: ['Cinzel', 'Georgia', 'serif'],
+        sans: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
         serif: ['Alegreya', 'Georgia', 'serif'],
       },
     },

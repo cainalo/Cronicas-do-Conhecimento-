@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { flashcards, getChapter, getFlashcard } from '@/content';
 import { dueCards, reviewCard, type Grade } from '@/lib/training';
+import { PageHeader } from '@/components/Page';
 
 const grades: { g: Grade; label: string; hint: string }[] = [
   { g: 'errei', label: 'Errei', hint: 'volta em minutos' },
@@ -42,10 +43,7 @@ export function FlashcardsPage() {
 
   return (
     <div className="space-y-5">
-      <Link to="/treino" className="font-display text-sm text-muted">
-        Voltar ao treino
-      </Link>
-      <h1 className="text-center text-3xl text-gold">Flashcards</h1>
+      <PageHeader area="treino" icon="cartas" title="Flashcards" subtitle="Termos dos glossários com repetição espaçada" />
       {!card ? (
         <div className="card space-y-2 p-5 text-center">
           <h2 className="text-xl">Nada para hoje</h2>
@@ -56,18 +54,18 @@ export function FlashcardsPage() {
         </div>
       ) : (
         <>
-          <p className="text-center text-sm italic text-muted">
+          <p className="text-center text-sm text-muted">
             Cartão {Math.min(done + 1, total)} de {total} · {getChapter(card.chapterId)?.title}
           </p>
           <section className="manuscript flex min-h-[16rem] flex-col items-center justify-center gap-4 px-5 py-8 text-center">
-            <p className="rubric font-display text-sm">Frente</p>
+            <p className="rubric text-sm font-semibold">Frente</p>
             <p className="text-2xl leading-snug">{card.front}</p>
             {shown && (
               <>
                 <div className="divider-ornament !my-1 w-full" aria-hidden>
                   ❧
                 </div>
-                <p className="rubric font-display text-sm">Verso</p>
+                <p className="rubric text-sm font-semibold">Verso</p>
                 <p className="text-[1.15rem] leading-relaxed">{card.back}</p>
               </>
             )}
@@ -81,12 +79,12 @@ export function FlashcardsPage() {
               {grades.map((x) => (
                 <button key={x.g} className={x.g === 'bom' ? 'btn-primary flex-col !gap-0 !px-1' : 'btn-ghost flex-col !gap-0 !px-1'} onClick={() => grade(x.g)}>
                   <span>{x.label}</span>
-                  <span className="font-serif text-[0.7rem] italic opacity-80">{x.hint}</span>
+                  <span className="font-serif text-[0.7rem] opacity-80">{x.hint}</span>
                 </button>
               ))}
             </div>
           )}
-          {last && <p className="text-center text-sm italic text-muted">{last}</p>}
+          {last && <p className="text-center text-sm text-muted">{last}</p>}
           <p className="text-center text-xs text-muted">
             Seja honesto na nota: ela define quando o cartão volta. Um cartão chega ao domínio quando o intervalo passa de 21 dias.
           </p>

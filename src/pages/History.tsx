@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { getQuestion } from '@/content';
 import { Icon } from '@/components/Icon';
+import { PageHeader } from '@/components/Page';
 
 type Filter = 'todas' | 'certas' | 'erradas';
 
@@ -17,10 +18,7 @@ export function HistoryPage() {
 
   return (
     <div className="space-y-4">
-      <Link to="/progresso" className="text-sm text-muted">
-        Voltar ao progresso
-      </Link>
-      <h1 className="text-center text-3xl text-gold">Histórico de questões</h1>
+      <PageHeader area="treino" icon="lista" title="Histórico" subtitle="Todas as respostas, da mais recente à mais antiga" />
       <div className="flex gap-2" role="tablist">
         {(['todas', 'certas', 'erradas'] as Filter[]).map((f) => (
           <button key={f} role="tab" aria-selected={filter === f} className={filter === f ? 'btn-primary flex-1' : 'btn-ghost flex-1'} onClick={() => setFilter(f)}>

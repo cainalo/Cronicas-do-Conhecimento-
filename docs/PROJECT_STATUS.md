@@ -19,7 +19,7 @@
 | Estudo de caso: 2 enunciados autorais, orientação com critérios pedagógicos, editor com estimativa de linhas e salvamento automático, entrega, autoavaliação, resposta-modelo comentada | `training.test.ts`, captura |
 | Flashcards com repetição espaçada (SM-2 simplificado) a partir dos glossários (29 cartões) | `training.test.ts`, `flow.test.tsx` |
 | Sincronização dessas três áreas com o Supabase (tabelas novas com RLS) | RLS verificado no remoto (`rls_check_02.sql`); envio pelo app não testado (rede) |
-| Visual de livro medieval (couro, pergaminho, capitulares, capas) | Capturas mobile |
+| Visual claro estilo NutriConnect: cor por área, cabeçalho com migalha, grades de cartões, botão "Continuar"; medieval leve (capas, selos, mapa, pergaminho do leitor) | Capturas 390×844 claro/escuro e 1280×800 |
 | Planejador (`/plano`): ordem do dia congelada no aparelho, atividades marcadas pelo estudo real, revisão de erros, flashcards, estudo de caso semanal (1º dia), simulado semanal (último dia), leitura e lições; dias de descanso sem culpa; previsto/lido/respondido/domínio; preferências sincronizadas | `planner.test.ts`, captura |
 | App Android nativo (Capacitor), APK compilado e publicado pelo CI com download no site | Execução 11 do workflow; APK inspecionado (assinatura, conteúdo). Não testado em aparelho físico |
 | Gamificação: mapa do reino (`/reino`), ficha do personagem (`/personagem`) com título, sequência, missões semanais com resgate de XP, 12 selos e inventário de artefatos | `game.test.ts`, capturas |

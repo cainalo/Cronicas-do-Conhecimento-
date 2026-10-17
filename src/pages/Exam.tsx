@@ -4,6 +4,7 @@ import { useStudy } from '@/app/StudyProvider';
 import { DEFAULT_CONTEST_ID, getContest, getQuestion, questionsForContest, topicTitle } from '@/content';
 import { activeExam, answerExam, examDeadline, finishExam, pickExamQuestions, startExam } from '@/lib/training';
 import type { MockExam } from '@/lib/model';
+import { PageHeader } from '@/components/Page';
 
 const fmt = (ms: number) => {
   const s = Math.max(0, Math.floor(ms / 1000));
@@ -40,12 +41,9 @@ function ExamSetup() {
 
   return (
     <div className="space-y-5">
-      <Link to="/treino" className="font-display text-sm text-muted">
-        Voltar ao treino
-      </Link>
-      <header className="text-center">
-        <h1 className="text-4xl">Simulado</h1>
-        <p className="mx-auto mt-1 max-w-md italic text-muted">
+      <header>
+        <PageHeader area="treino" icon="relogio" title="Simulado" />
+        <p className="-mt-2 text-sm text-muted">
           Sem correção durante a prova. A prova real terá 70 questões de 5 alternativas (25 gerais, peso 1; 45 específicas, peso 2); aqui o
           sorteio usa as questões já escritas.
         </p>
@@ -60,7 +58,7 @@ function ExamSetup() {
               <label key={t.id} className="flex items-start gap-3 py-1.5">
                 <input type="checkbox" className="mt-1.5 h-4 w-4 accent-[rgb(var(--ember))]" checked={sel.includes(t.id)} onChange={() => toggle(t.id)} />
                 <span className="flex-1">{t.title}</span>
-                <span className="text-sm italic text-muted">{nq}</span>
+                <span className="text-sm text-muted">{nq}</span>
               </label>
             ))}
           </fieldset>
@@ -76,7 +74,7 @@ function ExamSetup() {
             </button>
           ))}
         </div>
-        <p className="text-sm italic text-muted">Disponíveis nas matérias marcadas: {available}.</p>
+        <p className="text-sm text-muted">Disponíveis nas matérias marcadas: {available}.</p>
       </section>
 
       <section className="space-y-2">
@@ -92,7 +90,7 @@ function ExamSetup() {
             </button>
           ))}
         </div>
-        <p className="text-sm italic text-muted">
+        <p className="text-sm text-muted">
           {pace ? `Limite de ${n * pace} minutos; ao esgotar, a prova é entregue automaticamente.` : 'Sem cronômetro.'} O edital não fixa a duração; ela sairá
           no edital de convocação.
         </p>
@@ -118,7 +116,7 @@ function ExamSetup() {
               <li key={e.id}>
                 <Link to={`/simulado/${e.id}`} className="ledger-row">
                   <span>{new Date(e.finishedAt!).toLocaleDateString('pt-BR')}</span>
-                  <span className="italic">
+                  <span className="">
                     {e.correct} de {e.questionIds.length} ({Math.round(((e.correct ?? 0) / e.questionIds.length) * 100)}%)
                   </span>
                 </Link>
@@ -159,7 +157,7 @@ function ExamRun({ exam }: { exam: MockExam }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <span className="font-display">
+        <span className="font-semibold">
           Respondidas {answered} de {exam.questionIds.length}
         </span>
         {deadline && (
@@ -195,7 +193,7 @@ function ExamRun({ exam }: { exam: MockExam }) {
                   aria-pressed={on}
                   onClick={() => update((d) => answerExam(d, exam.id, q.id, o.key))}
                 >
-                  <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg text-sm font-bold ${on ? 'bg-gold text-[#2b1d0b]' : 'bg-raised text-muted'}`}>{o.key}</span>
+                  <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg text-sm font-bold ${on ? 'bg-gold text-white' : 'bg-raised text-muted'}`}>{o.key}</span>
                   <span className="flex-1">{o.text}</span>
                 </button>
               </li>
@@ -244,13 +242,10 @@ export function ExamResultPage() {
 
   return (
     <div className="space-y-5">
-      <Link to="/simulado" className="font-display text-sm text-muted">
-        Voltar aos simulados
-      </Link>
-      <header className="text-center">
-        <h1 className="text-4xl">Boletim</h1>
-        <p className="mt-2 font-display text-5xl">{pct}%</p>
-        <p className="italic text-muted">
+      <PageHeader area="treino" icon="relogio" title="Boletim do simulado" />
+      <header className="card p-5 text-center">
+        <p className="font-display text-5xl">{pct}%</p>
+        <p className="mt-1 text-muted">
           {e.correct} de {e.questionIds.length} corretas em {minutes} min
           {e.timeLimitMin ? ` (limite de ${e.timeLimitMin} min)` : ''}
         </p>
@@ -265,7 +260,7 @@ export function ExamResultPage() {
           {[...byTopic].map(([t, s]) => (
             <li key={t} className="ledger-row">
               <span>{topicTitle(e.contestId, t)}</span>
-              <span className="shrink-0 italic">
+              <span className="shrink-0">
                 {s.ok}/{s.n}
               </span>
             </li>

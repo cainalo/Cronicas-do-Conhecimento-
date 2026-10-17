@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { loadPrefs, savePrefs, type Prefs } from '@/lib/storage';
+import { applyStatusBar } from '@/app/native';
 
 const PrefsCtx = createContext<{ prefs: Prefs; setPrefs: (p: Partial<Prefs>) => void } | null>(null);
 
@@ -7,7 +8,8 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
   const [prefs, set] = useState<Prefs>(loadPrefs);
   useEffect(() => {
     document.documentElement.dataset.theme = prefs.theme;
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', prefs.theme === 'dark' ? '#3a1610' : '#3a1610');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', prefs.theme === 'dark' ? '#1f1b15' : '#faf7f0');
+    void applyStatusBar(prefs.theme);
     savePrefs(prefs);
   }, [prefs]);
   return <PrefsCtx.Provider value={{ prefs, setPrefs: (p) => set((c) => ({ ...c, ...p })) }}>{children}</PrefsCtx.Provider>;

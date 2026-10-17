@@ -4,20 +4,18 @@ import { useStudy } from '@/app/StudyProvider';
 import { essayPrompts, getEssayPrompt, topicTitle } from '@/content';
 import { Markdown } from '@/components/Markdown';
 import { estimateLines, saveEssay, submitEssay } from '@/lib/training';
+import { PageHeader } from '@/components/Page';
 
 export function EssayListPage() {
   const { data } = useStudy();
   return (
     <div className="space-y-5">
-      <Link to="/treino" className="font-display text-sm text-muted">
-        Voltar ao treino
-      </Link>
-      <header className="text-center">
-        <h1 className="text-4xl">Estudo de caso</h1>
-        <p className="mx-auto mt-1 max-w-md italic text-muted">
-          Na prova de TI, a discursiva é uma questão prática sobre os Conhecimentos Específicos, com nota de 0 a 100 e mínimo de 50 (edital, cap. 11).
-        </p>
-      </header>
+      <PageHeader
+        area="treino"
+        icon="pena"
+        title="Estudo de caso"
+        subtitle="A discursiva de TI é uma questão prática sobre os Conhecimentos Específicos, com nota de 0 a 100 e mínimo de 50 (edital, cap. 11)."
+      />
       <ul className="space-y-3">
         {essayPrompts.map((p) => {
           const e = data.essays[p.id];
@@ -25,7 +23,7 @@ export function EssayListPage() {
             <li key={p.id}>
               <Link to={`/discursiva/${p.id}`} className="card block p-4">
                 <h2 className="text-xl">{p.title}</h2>
-                <p className="mt-1 text-sm italic text-muted">{p.topicIds.map((t) => topicTitle(p.contestId, t)).join(' · ')}</p>
+                <p className="mt-1 text-sm text-muted">{p.topicIds.map((t) => topicTitle(p.contestId, t)).join(' · ')}</p>
                 <p className="mt-2 text-sm">
                   {e?.submittedAt ? <span className="text-ok">Entregue</span> : e?.body ? <span className="rubric">Rascunho salvo</span> : 'Não iniciado'}
                 </p>
@@ -75,14 +73,7 @@ export function EssayPage() {
 
   return (
     <div className="space-y-5">
-      <Link to="/discursiva" className="font-display text-sm text-muted">
-        Voltar aos estudos de caso
-      </Link>
-      <header className="text-center">
-        <p className="rubric font-display">Estudo de caso</p>
-        <h1 className="text-3xl leading-tight">{p.title}</h1>
-        <p className="mt-1 text-xs text-muted">Enunciado autoral, não é questão da FCC · limite de treino: {p.lineLimit} linhas</p>
-      </header>
+      <PageHeader area="treino" icon="pena" title={p.title} subtitle={`Estudo de caso autoral, não é questão da FCC · limite de treino: ${p.lineLimit} linhas`} />
 
       <section className="manuscript px-4 py-5">
         <div className="prose-manuscript">
@@ -99,13 +90,13 @@ export function EssayPage() {
         </button>
         {showGuide && (
           <div className="card p-4">
-            <p className="text-sm italic text-muted">
+            <p className="text-sm text-muted">
               Critérios pedagógicos deste treino. A banca define a própria grade, divulgada apenas na vista de prova.
             </p>
             <ul className="mt-2 space-y-1.5">
               {p.criteria.map((c) => (
                 <li key={c.id}>
-                  <span className="rubric">¶</span> {c.text} <span className="text-sm italic text-muted">({c.points} pontos)</span>
+                  <span className="rubric">¶</span> {c.text} <span className="text-sm text-muted">({c.points} pontos)</span>
                 </li>
               ))}
             </ul>
@@ -130,7 +121,7 @@ export function EssayPage() {
           onChange={(e) => setBody(e.target.value)}
           placeholder="Escreva como na folha de resposta: parágrafos curtos, na ordem do que foi pedido."
         />
-        <p className="text-xs italic text-muted">
+        <p className="text-xs text-muted">
           {savedAt ? `Salvo às ${new Date(savedAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}.` : 'Ainda não salvo.'} A estimativa
           considera cerca de 75 caracteres por linha manuscrita.
         </p>
@@ -154,12 +145,12 @@ export function EssayPage() {
         <>
           <section className="card space-y-2 p-4">
             <h2 className="text-xl">Autoavaliação</h2>
-            <p className="text-sm italic text-muted">Marque o que sua resposta realmente contém. A soma é uma estimativa pedagógica, não a nota da banca.</p>
+            <p className="text-sm text-muted">Marque o que sua resposta realmente contém. A soma é uma estimativa pedagógica, não a nota da banca.</p>
             {p.criteria.map((c) => (
               <label key={c.id} className="flex items-start gap-3 py-1">
                 <input type="checkbox" className="mt-1.5 h-4 w-4 accent-[rgb(var(--ember))]" checked={checklist.includes(c.id)} onChange={() => toggle(c.id)} />
                 <span className="flex-1">
-                  {c.text} <span className="text-sm italic text-muted">({c.points})</span>
+                  {c.text} <span className="text-sm text-muted">({c.points})</span>
                 </span>
               </label>
             ))}

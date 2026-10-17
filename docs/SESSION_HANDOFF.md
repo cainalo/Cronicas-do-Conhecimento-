@@ -8,7 +8,7 @@
 - Edital oficial conferido (`docs/fontes/`), 68 tópicos em `contest.ts`.
 - Conteúdo: Códice das Sete Chaves (Criptografia), Livro dos Autômatos (IA, 2 caps.) Tratado das Pontes e dos Selos (Dev: APIs; identidade) e Atlas das Estradas e das Nuvens (Redes; Nuvem). Códice também com cap. 2 (Defesa em Profundidade) e O Arquivo Profundo (Banco de Dados, 2 caps.) As Atas do Conselho (Governança, 2 caps.) e O Livro das Leis do Reino (Legislação de TI, 2 caps.; normas de Goiás/TCE-GO só em panorama) O Caderno dos Arquitetos (Eng. de Software, 2 caps.) e O Diário do Porto (DevOps, 2 caps.). 22 lições, 236 questões, 3 estudos de caso. Cobertura 44/68 tópicos.
 - Fase E feita: mapa do reino, ficha do personagem, selos, inventário, missões semanais (migração 4).
-- Visual "medieval moderno" (ver `docs/DESIGN_SYSTEM.md`), sem "cara de IA".
+- Visual claro no estilo do NutriConnect (ver `docs/DESIGN_SYSTEM.md`): cor por área, cabeçalho com migalha, botão central "Continuar". Usuário confirmou que o APK instala e funciona.
 - App nativo Android (Capacitor) compilado no CI e baixável em `/download/` (ver `docs/MOBILE_AND_OFFLINE.md`). PWA removido.
 - Fase D completa: simulados, estudos de caso (2), flashcards e planejador, todos sincronizáveis (migrações 2 e 3 aplicadas, RLS verificado). 
 - Supabase com RLS verificado; login/sync pelo navegador ainda **não testados pelo usuário**.
@@ -17,7 +17,7 @@
 `npm test` 272/272; `tsc -b` OK; build OK; capturas 390×844 sem overflow nem erros.
 
 ## Pendências com o usuário
-- Confirmar que o site abriu no celular e se o login/sincronização funcionaram.
+- Usuário confirmou que o app funciona; pedir retorno sobre o novo visual e sobre login/sincronização.
 - Configurar Site URL/Redirect URLs no Supabase (passo descrito em `docs/MOBILE_AND_OFFLINE.md`).
 - Rodada criativa de `OPEN_QUESTIONS.md`.
 - Pedir PDFs dos normativos do TCE-GO e da LC 205/2025 para completar `grimoires/legislacao/cap02-normas/02-goias-tce.md`.

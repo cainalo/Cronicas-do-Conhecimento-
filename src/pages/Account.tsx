@@ -8,6 +8,7 @@ import { PUBLIC_SITE, isNative } from '@/app/native';
 // No app nativo os links do e-mail abrem o site público; no navegador, a própria página.
 const authRedirect = () => (isNative() ? `${PUBLIC_SITE}conta` : `${location.origin}${import.meta.env.BASE_URL}conta`);
 import { Icon } from '@/components/Icon';
+import { PageHeader } from '@/components/Page';
 
 type Mode = 'entrar' | 'criar' | 'recuperar';
 
@@ -56,7 +57,7 @@ export function AccountPage() {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-center text-3xl text-gold">Conta</h1>
+      <PageHeader area="conta" crumb={false} title="Conta" subtitle="Login, sincronização, aparência e o app Android" />
 
       {!authReady ? (
         <p className="text-muted">Verificando sessão…</p>
@@ -97,9 +98,9 @@ export function AccountPage() {
         </section>
       ) : (
         <section className="card p-4">
-          <div className="mb-4 grid grid-cols-3 gap-1 rounded-xl bg-raised p-1 text-sm">
+          <div className="mb-4 grid grid-cols-3 gap-1 rounded-full bg-raised p-1 text-sm">
             {(['entrar', 'criar', 'recuperar'] as Mode[]).map((m) => (
-              <button key={m} className={`py-2 font-display ${mode === m ? 'leather-band' : 'text-muted'}`} onClick={() => setMode(m)} type="button">
+              <button key={m} className={`rounded-full py-2 text-sm font-semibold transition ${mode === m ? 'bg-surface text-ink shadow-sm' : 'text-muted'}`} onClick={() => setMode(m)} type="button">
                 {{ entrar: 'Entrar', criar: 'Criar conta', recuperar: 'Recuperar' }[m]}
               </button>
             ))}
@@ -134,10 +135,10 @@ export function AccountPage() {
         <h2 className="text-base">Aparência</h2>
         <div className="flex gap-2">
           <button className={prefs.theme === 'dark' ? 'btn-primary flex-1' : 'btn-ghost flex-1'} onClick={() => setPrefs({ theme: 'dark' })}>
-            <Icon name="lua" size={18} /> Noite na torre
+            <Icon name="lua" size={18} /> Escuro
           </button>
           <button className={prefs.theme === 'light' ? 'btn-primary flex-1' : 'btn-ghost flex-1'} onClick={() => setPrefs({ theme: 'light' })}>
-            <Icon name="sol" size={18} /> Pergaminho
+            <Icon name="sol" size={18} /> Claro
           </button>
         </div>
       </section>

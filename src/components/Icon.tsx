@@ -58,6 +58,48 @@ const paths = {
     </>
   ),
   aviso: <path d="M12 3l10 18H2zM12 10v5M12 18v.5" />,
+  voltar: <path d="M15 5l-7 7 7 7" />,
+  seta: <path d="M9 5l7 7-7 7" />,
+  play: <path d="M8 5.5v13l10-6.5z" />,
+  calendario: (
+    <>
+      <rect x="3.5" y="5" width="17" height="15" rx="3" />
+      <path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M12 14h2M8 17h2" />
+    </>
+  ),
+  cartas: (
+    <>
+      <rect x="7" y="3" width="12" height="16" rx="2.5" />
+      <path d="M5 6.5v12A2.5 2.5 0 0 0 7.5 21H15" />
+      <path d="M10.5 9h5M10.5 12.5h5" />
+    </>
+  ),
+  relogio: (
+    <>
+      <circle cx="12" cy="13" r="8" />
+      <path d="M12 9v4l2.5 2M9.5 2.5h5" />
+    </>
+  ),
+  lista: <path d="M4 6h2M9 6h11M4 12h2M9 12h11M4 18h2M9 18h11" />,
+  escudo: (
+    <>
+      <path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z" />
+      <path d="M8.5 12l2.5 2.5 4.5-5" />
+    </>
+  ),
+  pergaminho: (
+    <>
+      <path d="M7 4h11a2 2 0 0 1 2 2v1h-4M7 4a2 2 0 0 0-2 2v11a3 3 0 0 0 3 3h9a3 3 0 0 0 3-3V7" />
+      <path d="M9 9h6M9 12.5h6M9 16h4" />
+    </>
+  ),
+  pessoa: (
+    <>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4.5 20.5c1-4 4-6 7.5-6s6.5 2 7.5 6" />
+    </>
+  ),
+  grafico: <path d="M4 20V10M10 20V4M16 20v-7M21 20H3" />,
 } as const;
 
 export type IconName = keyof typeof paths;

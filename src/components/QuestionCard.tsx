@@ -53,7 +53,7 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
               >
                 <span
                   className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg text-sm font-bold transition ${
-                    state === 'ok' ? 'bg-ok text-[#10200f]' : state === 'bad' ? 'bg-bad text-white' : state === 'sel' ? 'bg-gold text-[#2b1d0b]' : 'bg-raised text-muted'
+                    state === 'ok' ? 'bg-ok text-white' : state === 'bad' ? 'bg-bad text-white' : state === 'sel' ? 'bg-gold text-white' : 'bg-raised text-muted'
                   }`}
                 >
                   {o.key}

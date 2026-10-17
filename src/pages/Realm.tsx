@@ -3,7 +3,9 @@ import { useStudy } from '@/app/StudyProvider';
 import { DEFAULT_CONTEST_ID, chapters, getContest, grimoires, questionsForContest } from '@/content';
 import { regionNames } from '@/content/game/realm';
 import { RealmMap, type RegionState } from '@/components/RealmMap';
-import { topicMastery } from '@/lib/game';
+import { achievements, characterSheet, topicMastery } from '@/lib/game';
+import { areaColor } from '@/app/areas';
+import { PageHeader, SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
 
 export function useRegions(): RegionState[] {
   const { data } = useStudy();
@@ -20,51 +22,63 @@ export function useRegions(): RegionState[] {
 }
 
 export function RealmPage() {
+  const { data } = useStudy();
+  const dark = useIsDark();
+  const color = areaColor('reino', dark);
   const regions = useRegions();
   const explored = regions.filter((r) => r.explored).length;
+  const sheet = characterSheet(data);
+  const seals = achievements(data, chapters, questionsForContest(DEFAULT_CONTEST_ID));
+  const sealsWon = seals.filter((s) => s.done).length;
+  const shades = dark ? ['#78b873', '#8f9df0', '#e8b13b'] : ['#4a7f46', '#5160c4', '#a8740c'];
+
   return (
-    <div className="space-y-5">
-      <header className="text-center">
-        <h1 className="text-4xl">Mappa regni</h1>
-        <p className="font-display text-muted">o reino a investigar</p>
-      </header>
-      <div className="card p-2">
-        <RealmMap regions={regions} />
-      </div>
-      <p className="text-center text-sm italic text-muted">
-        {explored} de {regions.length} regiões com grimório. A cor se intensifica com o domínio demonstrado; regiões sob névoa aguardam o seu livro.
-      </p>
+    <div className="space-y-6">
+      <PageHeader area="reino" crumb={false} title="Reino" subtitle="Seu personagem, seu domínio e o edital" />
+
+      <TileGrid>
+        <Tile wide to="/personagem" icon="escudo" color={shades[0]} title={sheet.title} text="Ficha, selos, inventário e missões da semana." badge={`${sealsWon}/${seals.length} selos`} />
+        <Tile to="/progresso" icon="grafico" color={shades[1]} title="Progresso" text="Acertos e domínio por tópico do edital." />
+        <Tile to="/edital" icon="pergaminho" color={shades[2]} title="Edital" text="Provas, pesos, regras e cobertura." />
+      </TileGrid>
+
+      <section>
+        <SectionTitle icon="mapa" color={color}>
+          Mapa do reino
+        </SectionTitle>
+        <div className="card overflow-hidden p-2">
+          <RealmMap regions={regions} />
+        </div>
+        <p className="mt-2 text-center text-sm text-muted">
+          {explored} de {regions.length} regiões com grimório. A cor se intensifica com o domínio; regiões sob névoa aguardam o seu livro.
+        </p>
+      </section>
+
       <ul className="ledger">
         {regions.map((r) => (
           <li key={r.discipline.id}>
             {r.to ? (
               <Link to={r.to} className="ledger-row">
                 <span>
-                  {r.name}
-                  <span className="block text-sm italic text-muted">{r.discipline.title}</span>
+                  <span className="font-semibold">{r.name}</span>
+                  <span className="block text-sm text-muted">{r.discipline.title}</span>
                 </span>
-                <span className="rubric shrink-0">{Math.round(r.mastery * 100)}%</span>
+                <span className="shrink-0 font-bold" style={{ color }}>
+                  {Math.round(r.mastery * 100)}%
+                </span>
               </Link>
             ) : (
               <div className="ledger-row text-muted">
                 <span>
                   {r.name}
-                  <span className="block text-sm italic">{r.discipline.title}</span>
+                  <span className="block text-sm">{r.discipline.title}</span>
                 </span>
-                <span className="shrink-0 text-sm italic">sob névoa</span>
+                <span className="shrink-0 text-sm">sob névoa</span>
               </div>
             )}
           </li>
         ))}
       </ul>
-      <div className="flex gap-2">
-        <Link to="/progresso" className="btn-ghost flex-1">
-          Progresso por tópico
-        </Link>
-        <Link to="/edital" className="btn-ghost flex-1">
-          Edital
-        </Link>
-      </div>
     </div>
   );
 }

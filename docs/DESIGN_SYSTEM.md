@@ -1,33 +1,39 @@
-# Design system: medieval moderno
+# Design system: claro e organizado, no estilo do NutriConnect
 
-Aprovado em 17/10/2026 (substitui o "livro gótico realista"). Materiais e pigmentos de códice aplicados a uma interface atual.
+Aprovado em 17/10/2026 (substitui o "medieval moderno" escuro). O usuário relatou dificuldade de se localizar e pediu o visual do NutriConnect (repositório `cainalo/nutriconnect-simple-site`, usado só como referência de linguagem visual).
 
-## Princípios
-- **Base escura de pedra** com luz quente de tocha (gradientes radiais dourado e couro), tema claro "Dia" disponível.
-- **Cards arredondados** (`rounded-2xl`), borda fina, sombra macia em camadas; links em card sobem 2px no toque/hover e encolhem levemente ao pressionar.
-- **Pergaminho** (`.manuscript`) como superfície de leitura e de destaque (missão, flashcards, lições): tinta sempre escura dentro dele (variáveis redefinidas localmente).
-- **Ilustrações próprias em SVG**: cena da Torre ao entardecer (`components/HeroScene.tsx`, estrelas, janelas e bandeiras animadas), capas de couro dos grimórios (`BookCover`, inclinação 3D no hover), mapa do reino, selo de lacre com animação de carimbo.
-- **Movimento curto e com propósito**: entrada de página (`page-enter`), entrada escalonada de listas (`stagger`), carimbo (`stamp`), pulso na resposta certa (`pop`), anéis de progresso animados. Tudo desligado com `prefers-reduced-motion`.
-- **Navegação**: cabeçalho translúcido com desfoque; barra inferior flutuante arredondada com indicador dourado no item ativo.
+## Decisões do usuário (rodada de 17/10/2026)
+- Tema padrão **claro creme**; o escuro continua em Conta → Aparência.
+- Abas com **nomes medievais**: Torre, Grimórios, Treino, Reino (Conta vai para o avatar no canto do cabeçalho).
+- Medieval **leve**: capas de couro dos grimórios, selos, mapa do reino, cena da Torre e o pergaminho do leitor e das lições. O resto tem cara de app atual.
+- **Botão central "Continuar"** na barra inferior: leva à primeira atividade pendente da ordem do dia (ou à recomendação). Hook `useNextActivity` em `src/app/usePlanOfToday.ts`.
+
+## Orientação (o problema que motivou a revisão)
+- **Cada área tem a sua cor** (`src/app/areas.ts`): Torre terracota, Grimórios azul, Treino âmbar, Reino verde, Conta anil. A aba da área atual fica colorida, com fundo suave e rótulo em negrito, inclusive nas páginas internas (mapa de prefixos de rota por área).
+- **Cabeçalho de página** (`PageHeader` em `src/components/Page.tsx`): migalha "‹ Área" na cor da área, ícone em placa colorida, título e subtítulo. Páginas internas mostram também o botão **voltar** no cabeçalho do app.
+- **Páginas centrais como grades de cartões** (`Tile`/`TileGrid`), agrupados por `SectionTitle` (ícone colorido + título + fio que se apaga), como a página Funções do NutriConnect.
+- Títulos claros em português (nada de "Exercitia", "Ordo diei").
+
+## Cores (tokens em `src/styles/index.css`, mesmos valores do NutriConnect)
+| Token | Claro | Escuro | Uso |
+|---|---|---|---|
+| bg / surface / raised | #FAF7F0 / #FFFDFA / #F0EBE1 | #1F1B15 / #27221B / #322C24 | Fundo creme, cartões, elementos internos |
+| ink / muted / line | #342D24 / #6D6355 / #E6DED2 | #F4EEE2 / #B8AD9C / #423B31 | Texto e bordas |
+| gold (verde-oliva) | #555F36 | #9BA86A | Estrutura, links, destaques |
+| ember (terracota) | #B4532A | #D8764A | Botão principal, ações, rubricas |
+| ok / bad | #3D7D42 / #AA3D2A | #84BA78 / #D4634F | Acerto / erro |
 
 ## Tipografia
-- **Cinzel** (capitulares romanas): títulos, botões, números.
-- **Alegreya Sans**: interface. **Alegreya**: texto longo do leitor (família desenhada para literatura).
-- **UnifrakturMaguntia** (gótica): só a marca "Crônicas" e títulos das capas.
+- **IBM Plex Sans**: interface. **Libre Baskerville**: títulos (`font-display`, h1–h3).
+- **Cinzel**: só a marca no cabeçalho. **Alegreya**: texto longo do leitor e das lições. **UnifrakturMaguntia**: só nas capas dos grimórios.
 
-## Cores (tokens em `src/styles/index.css`)
-| Token | Noite | Uso |
-|---|---|---|
-| bg / surface / raised | #120F0C / #201B16 / #2D261F | Fundo, cards, elementos internos |
-| ink / muted | #EEE4D0 / #AA9A82 | Texto |
-| gold | #E0B25A | Ação principal, destaque, progresso |
-| ember (vermelhão) | #E26E52 | Rubricas, alertas, pendências |
-| azure (ultramar) | #4668A6 | Capitulares, simulado |
-| ok / bad | #84C68C / #EE7664 | Acerto / erro |
-| leather / leaf | #76241A / #EEC676 | Superfícies de couro e ouro em folha |
+## Forma e movimento
+- Cartões `rounded-3xl`, cartões de função `rounded-[1.6rem]`, abertura `rounded-[2rem]`; sombras macias e quentes.
+- Botões em pílula (`rounded-full`); principal em terracota sólida.
+- Movimento curto: `page-enter`, `stagger`, inclinação do ícone ao passar o dedo/mouse; tudo desligado com `prefers-reduced-motion`.
 
 ## Componentes
-`.card`, `.btn-primary` (ouro em relevo), `.btn-ghost`, `.chip` (pílula), `.ledger`/`.ledger-row` (lista em cartão), `.meter` (barra arredondada), `.icon-tile` (ícone em placa colorida), `.input`, `.manuscript`, `.prose-manuscript` (tabelas arredondadas e zebradas, capitular em placa), `ProgressRing`, `HeroScene`, `BookCover`, `WaxSeal`, `RealmMap`, `AppDownload`.
+`PageHeader`, `SectionTitle`, `Tile`, `TileGrid`, `IconBadge` (Page.tsx); `.card`, `.btn-primary`, `.btn-ghost`, `.chip`, `.ledger`/`.ledger-row`, `.meter`, `.input`, `.manuscript`, `.prose-manuscript`; `ProgressRing`, `HeroScene`, `BookCover`, `WaxSeal`, `RealmMap`, `AppDownload`.
 
 ## Anti-padrões proibidos ("cara de site feito por IA")
 Levantados em 17/10/2026 (pesquisa sobre *vibe-coded design tells* e sinais de texto gerado por IA). Não usar:
@@ -37,4 +43,4 @@ Levantados em 17/10/2026 (pesquisa sobre *vibe-coded design tells* e sinais de t
 - Hero centralizado seguido de três cartões iguais; fileiras de cartões de estatística idênticos (usar `.ledger` com linhas).
 - Rótulos pequenos em MAIÚSCULAS com espaçamento largo ("eyebrow") acima de títulos.
 - Texto: excesso de travessões (—), construção "não é X, é Y", palavras-muleta ("robusto", "sem esforço", "mergulhar", "Além disso" em série), exclamações, negrito em frases inteiras.
-Usar no lugar: elementos de manuscrito reais, como rubricas em vermelho (`ember`) nos subtítulos, ❧ (hedera) como separador, capitular iluminada e linhas duplas de livro-razão.
+Nota: o degradê suave da própria cor nos ícones e cartões (herdado do NutriConnect) é permitido; continua proibido o degradê roxo e o texto em degradê.

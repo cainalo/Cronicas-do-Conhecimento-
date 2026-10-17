@@ -6,6 +6,7 @@ import { MASTERY_FOR_ARTIFACT, TITLES, achievements, characterSheet, claimMissio
 import { roman } from '@/lib/roman';
 import { WaxSeal } from '@/components/WaxSeal';
 import { Icon } from '@/components/Icon';
+import { PageHeader } from '@/components/Page';
 
 export function CharacterPage() {
   const { data, update } = useStudy();
@@ -17,18 +18,16 @@ export function CharacterPage() {
 
   return (
     <div className="space-y-6">
-      <header className="text-center">
-        <p className="rubric font-display">Ficha do personagem</p>
-        <h1 className="text-4xl">{sheet.title}</h1>
-        <p className="mt-1 font-display text-lg">Nível {roman(sheet.level).toUpperCase()}</p>
-        <div className="meter mx-auto mt-2 max-w-xs">
+      <PageHeader area="reino" icon="escudo" title={sheet.title} subtitle={`Ficha do personagem · nível ${roman(sheet.level).toUpperCase()}`} />
+      <header className="card p-4 text-center">
+        <div className="meter mx-auto max-w-xs">
           <span style={{ width: `${(sheet.into / sheet.span) * 100}%`, background: 'rgb(var(--gold))' }} />
         </div>
-        <p className="mt-1 text-sm italic text-muted">
+        <p className="mt-2 text-sm text-muted">
           {sheet.xp} XP · faltam {sheet.span - sheet.into} para o nível {sheet.level + 1}
           {next ? ` · título de ${next.title} no nível ${next.minLevel}` : ''}
         </p>
-        <p className="mt-2 font-display">
+        <p className="mt-2 font-semibold">
           {sheet.streak ? `${sheet.streak} dia(s) seguido(s) de estudo` : 'Nenhuma sequência ativa: um estudo hoje começa uma nova.'}
         </p>
       </header>
@@ -45,7 +44,7 @@ export function CharacterPage() {
                 </span>
               </span>
               {m.claimed ? (
-                <span className="shrink-0 text-sm italic text-ok">recompensa recebida</span>
+                <span className="shrink-0 text-sm text-ok">recompensa recebida</span>
               ) : m.done ? (
                 <button className="btn-primary shrink-0 !min-h-0 !py-1.5 text-sm" onClick={() => update((d) => claimMission(d, m.id).data)}>
                   Receber 40 XP
@@ -58,7 +57,7 @@ export function CharacterPage() {
             </li>
           ))}
         </ul>
-        <p className="mt-1 text-xs italic text-muted">As missões recomeçam toda segunda-feira. Não cumprir uma missão não tira nada de você.</p>
+        <p className="mt-1 text-xs text-muted">As missões recomeçam toda segunda-feira. Não cumprir uma missão não tira nada de você.</p>
       </section>
 
       <section>
@@ -67,8 +66,8 @@ export function CharacterPage() {
           {seals.map((s) => (
             <li key={s.id} className="text-center" title={s.how}>
               <WaxSeal letter={s.name[0]} size={54} className={s.done ? 'mx-auto' : 'mx-auto opacity-25 grayscale'} />
-              <p className={`mt-1 font-display text-[0.8rem] leading-tight ${s.done ? '' : 'text-muted'}`}>{s.name}</p>
-              <p className="text-[0.7rem] italic leading-tight text-muted">{s.done ? s.how : `${s.cur}/${s.max} · ${s.how}`}</p>
+              <p className={`mt-1 text-[0.8rem] font-semibold leading-tight ${s.done ? '' : 'text-muted'}`}>{s.name}</p>
+              <p className="text-[0.7rem] leading-tight text-muted">{s.done ? s.how : `${s.cur}/${s.max} · ${s.how}`}</p>
             </li>
           ))}
         </ul>
@@ -76,7 +75,7 @@ export function CharacterPage() {
 
       <section>
         <h2 className="text-xl">Inventário</h2>
-        <p className="text-sm italic text-muted">Cada artefato surge quando você acerta, na última tentativa, ao menos {MASTERY_FOR_ARTIFACT * 100}% das questões do tópico.</p>
+        <p className="text-sm text-muted">Cada artefato surge quando você acerta, na última tentativa, ao menos {MASTERY_FOR_ARTIFACT * 100}% das questões do tópico.</p>
         <ul className="mt-2 space-y-2">
           {artifacts.map((a) => {
             const m = topicMastery(data, a.topicId, bank);
@@ -87,8 +86,8 @@ export function CharacterPage() {
                   <Icon name="selo" size={26} />
                 </span>
                 <span className="flex-1">
-                  <span className="font-display">{got ? a.name : 'Artefato oculto'}</span>
-                  <span className="block text-sm italic text-muted">{got ? a.lore : topicTitle(DEFAULT_CONTEST_ID, a.topicId)}</span>
+                  <span className="font-semibold">{got ? a.name : 'Artefato oculto'}</span>
+                  <span className="block text-sm text-muted">{got ? a.lore : topicTitle(DEFAULT_CONTEST_ID, a.topicId)}</span>
                 </span>
                 <span className="shrink-0 text-sm text-muted">{Math.round(m * 100)}%</span>
               </li>

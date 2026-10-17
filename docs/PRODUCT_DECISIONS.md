@@ -28,3 +28,4 @@
 | Domínio | "Domínio" = questões cuja última resposta está correta ÷ total do tópico | Leitura não é evidência de domínio. |
 | Sem vidas | Nenhuma penalidade que impeça praticar | Exigência do brief. |
 | Fontes | Cinzel (títulos) e Literata (texto), empacotadas via @fontsource | Funcionam offline; Literata foi feita para leitura longa em tela. |
+| 2026-10-17 | Visual e navegação (substitui o "medieval moderno" escuro) | **Estilo NutriConnect**: tema claro creme padrão, cor por área, cabeçalho de página com migalha, páginas centrais em grade de cartões; abas com nomes medievais (Torre, Grimórios, Treino, Reino); medieval leve; botão central "Continuar". | Motivo: dificuldade de se localizar. Detalhes em DESIGN_SYSTEM.md. |

@@ -51,12 +51,13 @@ export interface Prefs {
   fontScale: number;
   theme: 'dark' | 'light';
 }
-const PREFS = 'cronicas:prefs';
+// v2: o tema claro passou a ser o padrão (o escuro antigo era padrão, não escolha).
+const PREFS = 'cronicas:prefs:v2';
 export function loadPrefs(): Prefs {
   try {
-    return { fontScale: 1, theme: 'dark', ...JSON.parse(localStorage.getItem(PREFS) ?? '{}') };
+    return { fontScale: 1, theme: 'light', ...JSON.parse(localStorage.getItem(PREFS) ?? '{}') };
   } catch {
-    return { fontScale: 1, theme: 'dark' };
+    return { fontScale: 1, theme: 'light' };
   }
 }
 export function savePrefs(p: Prefs) {

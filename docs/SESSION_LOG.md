@@ -26,3 +26,4 @@
 - Grimório de Legislação Aplicada à TI "O Livro das Leis do Reino": 2 capítulos (4 seções), 22 questões, 2 lições, 5 artefatos. LC 205/2025 e normativos do TCE-GO só em panorama (portais bloqueados; PDFs pedidos ao usuário). 228 testes.
 - Grimório de Engenharia de Software "O Caderno dos Arquitetos": 2 capítulos (5 seções), 22 questões, 2 lições, 5 artefatos. 250 testes.
 - Grimório de DevOps "O Diário do Porto": 2 capítulos (4 seções), 22 questões, 2 lições, 5 artefatos. 272 testes.
+- Revisão estética pedida pelo usuário (dificuldade de se localizar; "mais parecido com o NutriConnect"): estudado o repositório do NutriConnect; rodada de 4 perguntas; tema claro creme, cor por área, PageHeader com migalha, grades de cartões, barra inferior com botão "Continuar", Conta no avatar, IBM Plex Sans + Libre Baskerville. Capturas 390×844 (claro e escuro) e 1280×800 sem overflow nem erros. 272 testes.

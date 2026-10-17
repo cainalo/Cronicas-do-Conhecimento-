@@ -10,7 +10,7 @@ const stars = [
 export function HeroScene({ children }: { children?: ReactNode }) {
   return (
     <div className="relative overflow-hidden rounded-3xl shadow-[0_24px_48px_-24px_rgb(0_0_0/0.8)]">
-      <svg viewBox="0 0 380 230" className="block h-auto w-full" aria-hidden="true">
+      <svg viewBox="0 0 380 230" preserveAspectRatio="xMidYMid slice" className="block h-auto w-full sm:h-60" aria-hidden="true">
         <defs>
           <linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#141a2e" />

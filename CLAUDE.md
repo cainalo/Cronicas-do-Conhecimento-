@@ -26,7 +26,7 @@ Trabalhe em fluxos completos e testados, um de cada vez. Estética nunca atrasa 
 - Alterações só por migração em `supabase/migrations/` aplicada via MCP `apply_migration` (mesmo nome do arquivo).
 - RLS em todas as tabelas; após DDL rode `get_advisors` e `supabase/tests/rls_check.sql` (transação revertida).
 - Nunca reset destrutivo; nunca service role key no cliente ou no repositório.
-- O projeto `NutriConnect` na mesma organização é de OUTRO produto: não tocar.
+- O projeto `NutriConnect` na mesma organização é de OUTRO produto: não tocar no banco dele. O repositório `cainalo/nutriconnect-simple-site` serve só de referência visual (leitura).
 
 ## Ao final de cada etapa
 Atualize `docs/SESSION_HANDOFF.md`, `PROJECT_STATUS.md`, `ROADMAP.md`, `SESSION_LOG.md`, `TESTING.md` e demais afetados. Nunca declare concluído o que não foi testado. Commit com mensagem descritiva e push no branch de trabalho.

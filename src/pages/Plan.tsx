@@ -1,56 +1,15 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
-import { DEFAULT_CONTEST_ID, chapters, essayPrompts, flashcards, getContest, lessons, questionsForContest } from '@/content';
-import { buildPlan, isDone, localDay, remainingMinutes, setSettings, settingsOf, studyDaysUntil, type Plan } from '@/lib/planner';
-import { GUEST } from '@/lib/storage';
+import { DEFAULT_CONTEST_ID, chapters, getContest } from '@/content';
+import { isDone, remainingMinutes, setSettings, settingsOf, studyDaysUntil } from '@/lib/planner';
+import { usePlanOfToday } from '@/app/usePlanOfToday';
 import { latestAttempt } from '@/lib/study';
 import { Icon } from '@/components/Icon';
+import { PageHeader } from '@/components/Page';
 
 const WEEK = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 const fmtMin = (m: number) => (m >= 60 ? `${Math.floor(m / 60)}h${m % 60 ? String(m % 60).padStart(2, '0') : ''}` : `${m} min`);
-
-/**
- * A ordem do dia é congelada no aparelho na primeira abertura do dia, para que as
- * atividades cumpridas continuem visíveis (marcadas) em vez de sumirem.
- */
-function usePlanOfToday() {
-  const { data, session } = useStudy();
-  const owner = session?.user.id ?? GUEST;
-  const content = useMemo(
-    () => ({ chapters, lessons, bank: questionsForContest(DEFAULT_CONTEST_ID), cardIds: flashcards.map((f) => f.id), essays: essayPrompts }),
-    [],
-  );
-  const key = `cronicas:plano:${owner}:${localDay(new Date())}`;
-  const read = (): Plan | null => {
-    try {
-      return JSON.parse(localStorage.getItem(key) ?? 'null');
-    } catch {
-      return null;
-    }
-  };
-  const [plan, setPlan] = useState<Plan>(() => {
-    const saved = read();
-    if (saved) return saved;
-    const p = buildPlan(data, settingsOf(data), content);
-    try {
-      localStorage.setItem(key, JSON.stringify(p));
-    } catch {
-      /* sem armazenamento: o plano vale só nesta visita */
-    }
-    return p;
-  });
-  const rebuild = (d = data) => {
-    const p = buildPlan(d, settingsOf(d), content);
-    try {
-      localStorage.setItem(key, JSON.stringify(p));
-    } catch {
-      /* ignora */
-    }
-    setPlan(p);
-  };
-  return { plan, rebuild, content };
-}
 
 export function TodayPlanSummary() {
   const { data } = useStudy();
@@ -89,15 +48,12 @@ export function PlanPage() {
 
   return (
     <div className="space-y-6">
-      <header className="text-center">
-        <h1 className="text-4xl">Ordo diei</h1>
-        <p className="font-display text-muted">a ordem do dia do aprendiz</p>
-      </header>
+      <PageHeader area="treino" icon="calendario" title="Ordem do dia" subtitle="O que estudar hoje, montado a partir do seu histórico" />
 
       {plan.restDay ? (
         <section className="manuscript p-5 text-center">
           <h2 className="text-xl">Hoje é dia de descanso</h2>
-          <p className="mt-1 italic">Descansar também faz parte da preparação. Se quiser estudar mesmo assim, o treino continua aberto.</p>
+          <p className="mt-1">Descansar também faz parte da preparação. Se quiser estudar mesmo assim, o treino continua aberto.</p>
           <Link to="/treino" className="btn-ghost mt-3">
             Ir ao treino
           </Link>
@@ -106,12 +62,12 @@ export function PlanPage() {
         <section>
           <div className="flex items-baseline justify-between">
             <h2 className="text-xl">Hoje</h2>
-            <span className="italic text-muted">
+            <span className="text-muted">
               {fmtMin(doneMin)} de {fmtMin(plan.items.reduce((m, i) => m + i.minutes, 0))}
             </span>
           </div>
           {plan.items.length === 0 ? (
-            <p className="mt-2 italic">Nada pendente no material já escrito. Use o treino para manter a memória viva.</p>
+            <p className="mt-2">Nada pendente no material já escrito. Use o treino para manter a memória viva.</p>
           ) : (
             <ol className="ledger mt-2">
               {plan.items.map((it) => {
@@ -119,12 +75,15 @@ export function PlanPage() {
                 return (
                   <li key={it.key}>
                     <Link to={it.to} className="ledger-row items-start">
-                      <span className={`mt-1 shrink-0 ${ok ? 'text-ok' : 'text-muted'}`}>
-                        {ok ? <Icon name="certo" size={18} /> : <span className="inline-block w-[18px] text-center">·</span>}
+                      <span
+                        className={`mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 ${ok ? 'border-ok bg-ok text-white' : 'border-line'}`}
+                        aria-label={ok ? 'feito' : 'pendente'}
+                      >
+                        {ok && <Icon name="certo" size={14} strokeWidth={2.6} />}
                       </span>
                       <span className="flex-1">
                         <span className={ok ? 'line-through decoration-ink/40' : ''}>{it.title}</span>
-                        <span className="block text-sm italic text-muted">{it.why}</span>
+                        <span className="block text-sm text-muted">{it.why}</span>
                       </span>
                       <span className="shrink-0 text-sm text-muted">{fmtMin(it.minutes)}</span>
                     </Link>
@@ -136,7 +95,7 @@ export function PlanPage() {
           <button className="btn-ghost mt-3 w-full" onClick={() => rebuild()}>
             Refazer a ordem do dia
           </button>
-          <p className="mt-1 text-center text-xs italic text-muted">Refazer não apaga nada do histórico; só recalcula as próximas atividades.</p>
+          <p className="mt-1 text-center text-xs text-muted">Refazer não apaga nada do histórico; só recalcula as próximas atividades.</p>
         </section>
       )}
 
@@ -168,7 +127,7 @@ export function PlanPage() {
             </span>
           </li>
         </ul>
-        <p className="mt-2 text-sm italic text-muted">
+        <p className="mt-2 text-sm text-muted">
           O material escrito cobre parte do edital (veja Progresso, Edital e cobertura). Ler não é dominar: domínio conta só as questões cuja última resposta está
           certa.
         </p>
@@ -181,7 +140,7 @@ export function PlanPage() {
         {edit && (
           <div className="card mt-3 space-y-4 p-4">
             <div>
-              <p className="font-display">Minutos por dia de estudo</p>
+              <p className="font-semibold">Minutos por dia de estudo</p>
               <div className="mt-2 grid grid-cols-5 gap-1.5">
                 {[30, 45, 60, 90, 120].map((m) => (
                   <button key={m} className={form.minutesPerDay === m ? 'btn-primary !px-1' : 'btn-ghost !px-1'} onClick={() => setForm({ ...form, minutesPerDay: m })}>
@@ -191,7 +150,7 @@ export function PlanPage() {
               </div>
             </div>
             <div>
-              <p className="font-display">Dias da semana</p>
+              <p className="font-semibold">Dias da semana</p>
               <div className="mt-2 grid grid-cols-7 gap-1">
                 {WEEK.map((w, i) => {
                   const on = form.weekdays.includes(i);
@@ -211,7 +170,7 @@ export function PlanPage() {
               </div>
             </div>
             <div>
-              <p className="font-display">Meta diária de questões</p>
+              <p className="font-semibold">Meta diária de questões</p>
               <div className="mt-2 grid grid-cols-4 gap-1.5">
                 {[5, 10, 20, 30].map((g) => (
                   <button key={g} className={form.dailyQuestionGoal === g ? 'btn-primary' : 'btn-ghost'} onClick={() => setForm({ ...form, dailyQuestionGoal: g })}>

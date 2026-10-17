@@ -4,6 +4,7 @@ import { useStudy } from '@/app/StudyProvider';
 import { DEFAULT_CONTEST_ID, questionsForContest } from '@/content';
 import { QuestionCard } from '@/components/QuestionCard';
 import { attemptsFor, recordAnswer, reviewQueue } from '@/lib/study';
+import { PageHeader } from '@/components/Page';
 
 export function ReviewPage() {
   const { data, update } = useStudy();
@@ -17,10 +18,7 @@ export function ReviewPage() {
   if (!queueIds) {
     return (
       <div className="space-y-4">
-        <Link to="/treino" className="font-display text-sm text-muted">
-          Voltar ao treino
-        </Link>
-        <h1 className="text-center text-3xl text-gold">Revisão</h1>
+        <PageHeader area="treino" icon="ampulheta" title="Revisão de erros" subtitle="As questões voltam até você acertá-las" />
         {live.length === 0 ? (
           <p className="card p-4 text-muted">Nenhuma questão errada aguardando revisão. Quando você errar, ela aparecerá aqui até ser respondida corretamente.</p>
         ) : (
@@ -51,7 +49,7 @@ export function ReviewPage() {
   if (i >= queueIds.length) {
     return (
       <div className="card space-y-3 p-5 text-center">
-        <h1 className="text-center text-3xl text-gold">Revisão concluída</h1>
+        <h1 className="text-center text-2xl">Revisão concluída</h1>
         <p>
           Recuperadas: {recovered} de {queueIds.length}
         </p>
