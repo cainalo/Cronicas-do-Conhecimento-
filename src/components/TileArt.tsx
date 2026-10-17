@@ -1,6 +1,6 @@
 // Desenhos animados dos cartões (como na página Funções do NutriConnect): cada cartão tem a
 // sua cena no canto. Decoração (aria-hidden); "reduzir movimento" para tudo.
-export type ArtId = 'ampulheta' | 'cartas' | 'relogio' | 'pena' | 'calendario' | 'lista' | 'mapa' | 'escudo' | 'grafico' | 'pergaminho' | 'grimorio' | 'torre';
+export type ArtId = 'ampulheta' | 'cartas' | 'relogio' | 'pena' | 'calendario' | 'lista' | 'mapa' | 'escudo' | 'grafico' | 'pergaminho' | 'grimorio' | 'torre' | 'chama';
 
 export function TileArt({ art, color }: { art: ArtId; color: string }) {
   const soft = `color-mix(in srgb, ${color} 30%, transparent)`;
@@ -110,6 +110,13 @@ export function TileArt({ art, color }: { art: ArtId; color: string }) {
           <path d="M12 16c8-4 14-4 20 2 6-6 12-6 20-2v34c-8-4-14-4-20 2-6-6-12-6-20-2z" fill={soft} stroke={color} strokeWidth="2.5" strokeLinejoin="round" />
           <path d="M32 18v34" stroke={color} strokeWidth="2" />
           <path className="anim-twinkle" d="M46 6l1.8 4 4 1.8-4 1.8L46 18l-1.8-4.4-4-1.8 4-1.8z" fill={color} />
+        </g>
+      )}
+      {art === 'chama' && (
+        <g>
+          <path className="anim-flicker" d="M32 6c3 10 16 15 16 30a16 16 0 0 1-32 0c0-8 5-13 8-16 0 6 3 9 6 9 0-9-2-15 2-23z" fill={color} />
+          <path className="anim-flicker" style={{ animationDelay: '.3s' }} d="M32 30c2 5 8 8 8 15a8 8 0 0 1-16 0c0-4 3-7 4-8 1 3 2 4 3 4 0-4 0-7 1-11z" fill="#fff" opacity=".55" />
+          <path className="anim-twinkle" d="M52 12l1.5 3.5 3.5 1.5-3.5 1.5L52 22l-1.5-3.5L47 17l3.5-1.5z" fill={color} />
         </g>
       )}
       {art === 'torre' && (

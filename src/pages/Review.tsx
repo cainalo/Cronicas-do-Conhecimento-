@@ -5,6 +5,7 @@ import { DEFAULT_CONTEST_ID, questionsForContest } from '@/content';
 import { QuestionCard } from '@/components/QuestionCard';
 import { attemptsFor, recordAnswer, reviewQueue } from '@/lib/study';
 import { PageHeader } from '@/components/Page';
+import { Mascot, SpeechBubble } from '@/components/Mascot';
 
 export function ReviewPage() {
   const { data, update } = useStudy();
@@ -20,7 +21,10 @@ export function ReviewPage() {
       <div className="space-y-4">
         <PageHeader area="treino" icon="ampulheta" title="Revisão de erros" subtitle="As questões voltam até você acertá-las" />
         {live.length === 0 ? (
-          <p className="card p-4 text-muted">Nenhuma questão errada aguardando revisão. Quando você errar, ela aparecerá aqui até ser respondida corretamente.</p>
+          <div className="card flex items-end gap-2 p-4">
+            <Mascot mood="cheer" size={80} />
+            <SpeechBubble className="mb-6 flex-1">Nenhum erro esperando revanche. Quando você errar, a questão volta aqui até ser vencida.</SpeechBubble>
+          </div>
         ) : (
           <>
             <p className="text-muted">

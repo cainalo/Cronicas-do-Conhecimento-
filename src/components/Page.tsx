@@ -98,7 +98,7 @@ export interface TileProps {
   index?: number;
 }
 
-const ARTS: string[] = ['ampulheta', 'cartas', 'relogio', 'pena', 'calendario', 'lista', 'mapa', 'escudo', 'grafico', 'pergaminho', 'grimorio', 'torre'];
+const ARTS: string[] = ['ampulheta', 'cartas', 'relogio', 'pena', 'calendario', 'lista', 'mapa', 'escudo', 'grafico', 'pergaminho', 'grimorio', 'torre', 'chama'];
 
 /** Inclina o elemento na direção do mouse (no toque, só afunda um pouco). */
 export function useTilt<T extends HTMLElement>() {

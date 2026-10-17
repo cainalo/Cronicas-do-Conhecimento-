@@ -56,3 +56,22 @@ describe('gamificação', () => {
     expect(seals()['dominio']).toBe(true);
   });
 });
+
+import { pickBlitz } from '@/pages/Blitz';
+import { questionsForContest as qfc, DEFAULT_CONTEST_ID as DCI } from '@/content';
+import { emptyData as emptyD } from '@/lib/model';
+import { markSectionRead as msr } from '@/lib/study';
+import { getChapter as gc } from '@/content';
+
+describe('rodada relâmpago', () => {
+  it('escolhe 5 questões distintas, priorizando capítulos começados e questões novas', () => {
+    const bank = qfc(DCI);
+    let d = emptyD();
+    const ch = gc('cap.dados.01')!;
+    d = msr(d, ch, ch.sections[0].id).data;
+    const picked = pickBlitz(d, bank, () => 0.5);
+    expect(picked).toHaveLength(5);
+    expect(new Set(picked.map((q) => q.id)).size).toBe(5);
+    expect(picked.every((q) => q.chapterId === 'cap.dados.01')).toBe(true);
+  });
+});

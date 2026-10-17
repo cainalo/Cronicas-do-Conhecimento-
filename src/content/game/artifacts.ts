@@ -59,5 +59,9 @@ export const artifacts: Artifact[] = [
   { topicId: 'ti.dev.algoritmos', name: 'Ampulheta do Big-O', lore: 'Não mede quanto o feitiço demora, mas quanto piora quando a pilha de pergaminhos dobra.' },
   { topicId: 'ti.dev.linguagens', name: 'Dicionário das Sete Línguas', lore: 'Traduz qualquer ordem para a máquina, menos um === mal colocado.' },
   { topicId: 'ti.dev.git-pacotes', name: 'Livro-Razão das Dependências', lore: 'Anota a versão exata de cada ingrediente, para que a poção saia igual em qualquer caldeirão.' },
+  { topicId: 'cg.portugues.interpretacao', name: 'Lupa do Leitor Desconfiado', lore: 'Mostra o que o texto disse e esconde o que você gostaria que ele tivesse dito.' },
+  { topicId: 'cg.portugues.gramatica', name: 'Tinteiro do Acento Perdido', lore: 'Guarda os acentos que o Acordo de 1990 confiscou das ideias heroicas.' },
+  { topicId: 'cg.portugues.sintaxe', name: 'Balança da Concordância', lore: 'Pesa sujeito e verbo; quando "haver" sobe ao prato, ela nunca vai ao plural.' },
+  { topicId: 'cg.portugues.redacao', name: 'Selo do Ofício Unificado', lore: 'Onde ele carimba, aviso e memorando passam a atender por um só nome.' },
   { topicId: 'ti.infra.nuvem', name: 'Castelo Alugado', lore: 'Cresce e encolhe conforme os visitantes chegam.' },
 ];

@@ -49,8 +49,9 @@ export function TrainingPage() {
             text={plan.restDay ? 'Hoje é dia de descanso. Volte amanhã ou estude livremente.' : 'Atividades do dia montadas a partir do seu histórico e do tempo disponível.'}
             badge={plan.restDay ? 'descanso' : `${done} de ${plan.items.length}`}
           />
+          <Tile to="/relampago" icon="chama" color={dark ? '#ef7a5a' : '#c2571f'} title="Rodada relâmpago" text="5 questões rápidas, com sequência de acertos." />
           <Tile to="/revisao" icon="ampulheta" color={shades[1]} title="Revisão de erros" text="Questões erradas voltam até você acertar." badge={wrong ? `${wrong}` : undefined} />
-          <Tile to="/flashcards" icon="cartas" color={shades[2]} title="Flashcards" text="Repetição espaçada dos glossários." badge={due ? `${due} hoje` : undefined} />
+          <Tile wide to="/flashcards" icon="cartas" color={shades[2]} title="Flashcards" text="Repetição espaçada dos glossários." badge={due ? `${due} hoje` : undefined} />
         </TileGrid>
       </section>
 

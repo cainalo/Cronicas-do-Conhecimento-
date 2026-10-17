@@ -24,6 +24,12 @@ export function LibraryPage() {
   const hasMaterial = (topicIds: string[]) => topicIds.some((t) => coveredTopics.has(t));
   const dark = useIsDark();
   const color = areaColor('grimorios', dark);
+  const { data } = useStudy();
+  const bookProgress = (ids: string[]) => {
+    const secs = ids.flatMap((id) => getChapter(id)?.sections.map((x) => `${id}:${x.id}`) ?? []);
+    const read = ids.flatMap((id) => (data.reading[id]?.sectionsRead ?? []).map((x) => `${id}:${x}`));
+    return secs.length ? read.length / secs.length : 0;
+  };
   return (
     <div className="space-y-6">
       <PageHeader area="grimorios" crumb={false} title="Grimórios" subtitle={`${written.length} livros escritos para o ${contest.name}`} />
@@ -38,8 +44,11 @@ export function LibraryPage() {
               <p className="mt-3 text-xs font-semibold" style={{ color }}>{g.epithet.replace('Grimório de ', '')}</p>
               <h2 className="text-base leading-tight">{g.title}</h2>
               <p className="mt-0.5 text-xs text-muted">
-                {g.chapterIds.length === 1 ? 'um capítulo escrito' : `${g.chapterIds.length} capítulos escritos`}
+                {g.chapterIds.length === 1 ? 'um capítulo' : `${g.chapterIds.length} capítulos`} · {Math.round(bookProgress(g.chapterIds) * 100)}% lido
               </p>
+              <span className="meter mt-1.5 block !h-1.5">
+                <span style={{ width: `${bookProgress(g.chapterIds) * 100}%`, background: color }} />
+              </span>
             </Link>
           </li>
         ))}
