@@ -40,5 +40,10 @@ export const artifacts: Artifact[] = [
   { topicId: 'ti.legislacao.contratacoes', name: 'Anel de Sinete', lore: 'Sela o documento; quem o vê sabe quem o assinou.' },
   { topicId: 'ti.legislacao.goias', name: 'Carta do Ducado', lore: 'Concede licença aos autômatos, com deveres para cada um.' },
   { topicId: 'ti.legislacao.tce', name: 'Regimento da Casa', lore: 'As regras que o próprio Tribunal escreveu para si.' },
+  { topicId: 'ti.engsoft.ciclo', name: 'Roda do Moinho', lore: 'Gira em voltas curtas e mói um pouco a cada volta.' },
+  { topicId: 'ti.engsoft.requisitos', name: 'Pergaminho dos Pedidos', lore: 'Diz o que o povo quer e como saber que foi atendido.' },
+  { topicId: 'ti.engsoft.arquitetura', name: 'Esquadro do Arquiteto', lore: 'Separa as salas para que uma reforma não derrube a outra.' },
+  { topicId: 'ti.engsoft.modelagem', name: 'Carta de Plantas', lore: 'Desenha a obra antes da primeira pedra.' },
+  { topicId: 'ti.engsoft.qualidade', name: 'Martelo de Prova', lore: 'Bate em cada viga até ter certeza de que aguenta.' },
   { topicId: 'ti.infra.nuvem', name: 'Castelo Alugado', lore: 'Cresce e encolhe conforme os visitantes chegam.' },
 ];

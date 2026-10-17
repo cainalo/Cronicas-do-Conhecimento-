@@ -24,3 +24,4 @@
 - Grimório de Banco de Dados "O Arquivo Profundo": 2 capítulos (5 seções), 22 questões, 2 lições, 5 artefatos. 184 testes.
 - Grimório de Governança de TI "As Atas do Conselho": 2 capítulos (5 seções), 22 questões, 2 lições, 5 artefatos. PMBOK 8, ISO 38500:2024 e ENGD conferidos em fontes secundárias (registrado). 206 testes.
 - Grimório de Legislação Aplicada à TI "O Livro das Leis do Reino": 2 capítulos (4 seções), 22 questões, 2 lições, 5 artefatos. LC 205/2025 e normativos do TCE-GO só em panorama (portais bloqueados; PDFs pedidos ao usuário). 228 testes.
+- Grimório de Engenharia de Software "O Caderno dos Arquitetos": 2 capítulos (5 seções), 22 questões, 2 lições, 5 artefatos. 250 testes.

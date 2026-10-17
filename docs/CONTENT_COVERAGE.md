@@ -1,6 +1,6 @@
 # Matriz de cobertura (base: Anexo II oficial, cargo B02)
 
-Cobertura atual: **34 de 68 tópicos** com material (14 capítulos, 18 lições, 192 questões autorais, 3 estudos de caso, flashcards dos glossários). Não declarar cobertura integral enquanto houver lacunas.
+Cobertura atual: **39 de 68 tópicos** com material (16 capítulos, 20 lições, 214 questões autorais, 3 estudos de caso, flashcards dos glossários). Não declarar cobertura integral enquanto houver lacunas.
 Os IDs de tópico estão em `src/content/contests/tce-go-2026/contest.ts`; a tela **Progresso → Edital e cobertura** calcula esta matriz automaticamente.
 
 | Disciplina (questões) | Tópicos | Com material | Material |
@@ -8,7 +8,7 @@ Os IDs de tópico estão em `src/content/contests/tce-go-2026/contest.ts`; a tel
 | Língua Portuguesa (10) | 4 | 0 | — |
 | Matemática e Raciocínio Lógico (10) | 3 | 0 | — |
 | Legislação Institucional (5) | 8 | 0 | — |
-| Engenharia de Software (4) | 5 | 0 | — |
+| Engenharia de Software (4) | 5 | **5** (completa) | O Caderno dos Arquitetos: cap. 1 (`ti.engsoft.ciclo`, `.requisitos`: preditivo/iterativo/incremental/ágil, espiral, V, Kanban, Lean, XP/TDD; RF/RNF, engenharia de requisitos, INVEST, Dado/Quando/Então, casos de uso include/extend); cap. 2 (`.arquitetura`, `.modelagem`, `.qualidade`: camadas, SOA, microsserviços, eventos, SOLID/DRY/KISS/YAGNI, coesão/acoplamento; UML 2.5, BPMN 2.0, 23 padrões GoF; ISO/IEC 25010, tipos de teste, revisão, refatoração, dívida técnica); lições lic.es.01/02; q.es.01.001–010, q.es.02.001–012 |
 | Desenvolvimento de Sistemas (5) | 5 | 2 | Tratado das Pontes e dos Selos: cap. 1 APIs (`ti.dev.apis`: REST, JSON/XML, GraphQL, WebSockets, OpenAPI) e cap. 2 Identidade (`ti.dev.auth`: OAuth 2.0, OIDC, JWT); lições lic.dev.01/02; q.dev.01.001–012, q.dev.02.001–012; estudo de caso ec.dev.01. Faltam: algoritmos/estruturas de dados, linguagens (Java, JS/Node, React, Python, TS), Git e empacotamento |
 | Eng. Software Assistida por IA e Sistemas Agentivos (4) | 5 | 5 | Livro dos Autômatos: cap. 1 (`ti.ia-eng.llm`, `ti.ia-eng.contexto`) e cap. 2 (`ti.ia-eng.agentes`, `ti.ia-eng.mcp`, `ti.ia-eng.qualidade`); lições lic.ia.01.a/b, lic.ia.02.a/b; questões q.ia.01.001–020, q.ia.02.001–020 |
 | DevOps, Plataforma e Entrega (4) | 5 | 0 | — |
