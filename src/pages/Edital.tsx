@@ -15,11 +15,11 @@ export function EditalPage() {
   return (
     <div className="space-y-5">
       <Link to="/progresso" className="text-sm text-muted">
-        ← Progresso
+        Voltar ao progresso
       </Link>
-      <h1 className="text-xl text-gold">Edital — {c.name}</h1>
-      <p className="rounded-lg border border-ok/50 p-3 text-sm">
-        ✔ Dados conferidos no <b>Edital nº 01/2026 retificado (versão consolidada de 15/09/2026)</b>. A cobertura do material ainda <b>não é integral</b>: veja abaixo o
+      <h1 className="text-xl text-gold">Edital do {c.name}</h1>
+      <p className="rounded-sm border border-ok/50 p-3 text-sm">
+        Dados conferidos no <b>Edital nº 01/2026 retificado (versão consolidada de 15/09/2026)</b>. A cobertura do material ainda <b>não é integral</b>: veja abaixo o
         que já tem grimório e questões.
       </p>
       <section className="card p-4">
@@ -104,7 +104,7 @@ export function EditalPage() {
                 {s.title}
               </a>{' '}
               <span className="text-muted">
-                ({s.kind}, consultado em {s.accessed}){s.note && ` — ${s.note}`}
+                ({s.kind}, consultado em {s.accessed}){s.note && `. ${s.note}`}
               </span>
             </li>
           ))}

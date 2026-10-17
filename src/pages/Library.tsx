@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { DEFAULT_CONTEST_ID, getChapter, getContest, getGrimoire, grimoiresForContest } from '@/content';
 import type { ReviewStatus } from '@/content/types';
+import { Icon } from '@/components/Icon';
 
 export const reviewLabel: Record<ReviewStatus, string> = {
   'nao-revisado': 'Não revisado por especialista',
@@ -21,8 +22,8 @@ export function LibraryPage() {
         {written.map((g) => (
           <li key={g.id}>
             <Link to={`/grimorio/${g.id}`} className="card flex gap-4 p-4 hover:bg-raised">
-              <div aria-hidden className="manuscript flex h-24 w-16 shrink-0 items-center justify-center rounded text-3xl">
-                🔐
+              <div aria-hidden className="manuscript flex h-24 w-16 shrink-0 items-center justify-center rounded-sm text-gold">
+                <Icon name="selo" size={30} />
               </div>
               <div>
                 <p className="text-xs text-muted">{g.epithet}</p>
@@ -40,7 +41,7 @@ export function LibraryPage() {
           {contest.disciplines
             .filter((d) => !writtenDisciplines.has(d.id))
             .map((d) => (
-              <li key={d.id} className="rounded-lg border border-dashed border-line p-3 text-sm text-muted">
+              <li key={d.id} className="rounded-sm border border-dashed border-line p-3 text-sm text-muted">
                 {d.title}
               </li>
             ))}
@@ -58,7 +59,7 @@ export function GrimoirePage() {
   return (
     <div className="space-y-4">
       <Link to="/biblioteca" className="text-sm text-muted">
-        ← Biblioteca
+        Voltar à biblioteca
       </Link>
       <header>
         <p className="text-xs text-muted">{g.epithet}</p>

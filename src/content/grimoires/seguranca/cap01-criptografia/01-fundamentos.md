@@ -22,23 +22,23 @@ Formulado no século XIX por Auguste Kerckhoffs, diz que **um sistema criptográ
 
 Os objetivos clássicos de segurança relacionados à criptografia são:
 
-1. **Confidencialidade** — só quem tem autorização consegue ler. Mecanismo típico: **cifragem** (simétrica ou assimétrica).
-2. **Integridade** — qualquer alteração é detectável. Mecanismos: **hash**, **MAC/HMAC**, **assinatura digital**.
-3. **Autenticidade** — confirma-se a origem (quem enviou). Mecanismos: **MAC/HMAC** (entre quem compartilha a chave) e **assinatura digital**.
-4. **Não repúdio** (irretratabilidade) — o autor não consegue negar a autoria perante terceiros. Mecanismo: **assinatura digital** (porque só o autor possui a chave privada).
+1. **Confidencialidade**: só quem tem autorização consegue ler. Mecanismo típico: **cifragem** (simétrica ou assimétrica).
+2. **Integridade**: qualquer alteração é detectável. Mecanismos: **hash**, **MAC/HMAC**, **assinatura digital**.
+3. **Autenticidade**: confirma-se a origem (quem enviou). Mecanismos: **MAC/HMAC** (entre quem compartilha a chave) e **assinatura digital**.
+4. **Não repúdio** (irretratabilidade): o autor não consegue negar a autoria perante terceiros. Mecanismo: **assinatura digital** (porque só o autor possui a chave privada).
 
-E a **disponibilidade**? Ela integra a tríade CID (Confidencialidade, Integridade, Disponibilidade) da segurança da informação, mas **não é garantida pela criptografia** — é obtida com redundância, *backup*, proteção contra negação de serviço etc. Essa distinção é uma pegadinha frequente.
+E a **disponibilidade**? Ela integra a tríade CID (Confidencialidade, Integridade, Disponibilidade) da segurança da informação, mas **não é garantida pela criptografia**: é obtida com redundância, *backup*, proteção contra negação de serviço etc. Essa distinção é uma pegadinha frequente.
 
 ### Tabela-mestra: mecanismo × propriedade
 
 | Mecanismo | Confidencialidade | Integridade | Autenticidade | Não repúdio |
-|---|:---:|:---:|:---:|:---:|
-| Cifragem simétrica (ex.: AES-CBC) | ✔ | — | — | — |
-| Cifragem autenticada (ex.: AES-GCM) | ✔ | ✔ | ✔ (entre as partes) | — |
-| Cifragem assimétrica com chave pública do destinatário | ✔ | — | — | — |
-| Hash (ex.: SHA-256) isolado | — | ✔ (contra erros acidentais; ver ressalva) | — | — |
-| MAC / HMAC | — | ✔ | ✔ (entre as partes) | — |
-| Assinatura digital | — | ✔ | ✔ | ✔ |
+|---|---|---|---|---|
+| Cifragem simétrica (ex.: AES-CBC) | sim | não | não | não |
+| Cifragem autenticada (ex.: AES-GCM) | sim | sim | sim, entre as partes | não |
+| Cifragem com a chave pública do destinatário | sim | não | não | não |
+| Hash isolado (ex.: SHA-256) | não | só contra erros acidentais (ver ressalva) | não | não |
+| MAC / HMAC | não | sim | sim, entre as partes | não |
+| Assinatura digital | não | sim | sim | sim |
 
 **Ressalva sobre o hash isolado:** se um atacante pode trocar a mensagem, pode também recalcular e trocar o hash. Por isso, hash sozinho protege contra corrupção acidental; contra adversários, ele precisa estar protegido por uma chave (HMAC) ou por uma assinatura.
 
@@ -46,8 +46,8 @@ E a **disponibilidade**? Ela integra a tríade CID (Confidencialidade, Integrida
 
 ### As três famílias que você precisa dominar
 
-- **Criptografia simétrica** — uma única chave secreta compartilhada cifra e decifra. Rápida.
-- **Criptografia assimétrica** (de chave pública) — par de chaves matematicamente relacionadas: pública e privada. Mais lenta, mas resolve a distribuição de chaves e permite assinaturas.
-- **Funções hash** — resumo de tamanho fixo, sem chave, de mão única.
+- **Criptografia simétrica**: uma única chave secreta compartilhada cifra e decifra. Rápida.
+- **Criptografia assimétrica** (de chave pública): par de chaves matematicamente relacionadas: pública e privada. Mais lenta, mas resolve a distribuição de chaves e permite assinaturas.
+- **Funções hash**: resumo de tamanho fixo, sem chave, de mão única.
 
 Na prática, os sistemas reais (HTTPS, VPNs, e-mail seguro) **combinam as três**, como veremos na última seção.

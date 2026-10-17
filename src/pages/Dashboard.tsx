@@ -33,45 +33,42 @@ export function Dashboard() {
       </section>
 
       {rec ? (
-        <section className="card border-gold/60 p-4">
-          <p className="font-display text-xs uppercase tracking-widest text-gold">Próxima missão</p>
-          <h2 className="mt-1 text-lg">{rec.title}</h2>
-          <p className="mt-1 text-sm text-muted">
-            <span className="text-ink">Por quê?</span> {rec.reason}
-          </p>
-          <Link to={rec.to} className="btn-primary mt-3 w-full">
+        <section className="manuscript rounded-sm p-4">
+          <p className="font-display text-sm text-ember">Próxima missão</p>
+          <h2 className="mt-1 text-lg text-gold">{rec.title}</h2>
+          <p className="mt-2 text-[0.95rem] opacity-90">{rec.reason}</p>
+          <Link to={rec.to} className="btn-primary mt-4 w-full">
             Começar
           </Link>
         </section>
       ) : (
-        <section className="card p-4">
-          <h2 className="text-lg">Todo o conteúdo disponível foi dominado!</h2>
-          <p className="text-sm text-muted">Novos grimórios estão sendo escritos. Enquanto isso, refaça as lições para manter a memória viva.</p>
+        <section className="manuscript rounded-sm p-4">
+          <h2 className="text-lg text-gold">Você concluiu todo o material disponível</h2>
+          <p className="mt-1 opacity-90">Novos grimórios estão sendo escritos. Enquanto isso, refaça as lições para manter a memória viva.</p>
         </section>
       )}
 
-      <section className="grid grid-cols-3 gap-3 text-center">
-        <div className="card p-3">
-          <p className="font-display text-xl text-gold">{lv.level}</p>
-          <p className="text-xs text-muted">Nível · {xp} XP</p>
-          <div className="mt-2 h-1.5 rounded bg-raised">
-            <div className="h-1.5 rounded bg-gold" style={{ width: `${(lv.into / lv.span) * 100}%` }} />
-          </div>
+      <section aria-label="Resumo do dia" className="ledger">
+        <div className="ledger-row">
+          <span>Nível {lv.level}</span>
+          <span className="text-muted">
+            {xp} XP, faltam {lv.span - lv.into} para o nível {lv.level + 1}
+          </span>
         </div>
-        <div className="card p-3">
-          <p className="font-display text-xl">
-            {answeredToday}/{dailyGoal}
-          </p>
-          <p className="text-xs text-muted">Meta de hoje (questões)</p>
+        <div className="ledger-row">
+          <span>Questões hoje</span>
+          <span className={answeredToday >= dailyGoal ? 'text-ok' : 'text-muted'}>
+            {answeredToday} de {dailyGoal}
+          </span>
         </div>
-        <Link to="/revisao" className="card p-3">
-          <p className={`font-display text-xl ${queue.length ? 'text-ember' : ''}`}>{queue.length}</p>
-          <p className="text-xs text-muted">Revisões pendentes</p>
+        <Link to="/revisao" className="ledger-row">
+          <span>Revisões pendentes</span>
+          <span className={queue.length ? 'text-ember' : 'text-muted'}>{queue.length}</span>
         </Link>
       </section>
 
       {!session && (
-        <p className="rounded-lg border border-line p-3 text-sm text-muted">
+        <p className="border-l-2 border-gold/60 pl-3 text-sm text-muted">
           Você está estudando como visitante: o progresso fica só neste aparelho.{' '}
           <Link to="/conta" className="text-gold underline">
             Entre ou crie uma conta

@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Question } from '@/content/types';
 import { getChapter } from '@/content';
+import { Icon } from '@/components/Icon';
 
 const originLabel: Record<Question['origin'], string> = {
   autoral: 'Questão autoral (não oficial)',
   oficial: 'Questão oficial',
-  'gerada-nao-revisada': 'Gerada — não revisada',
+  'gerada-nao-revisada': 'Gerada, não revisada',
 };
 
 interface Props {
@@ -27,7 +28,7 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
     <article className="card p-4" aria-live="polite">
       <div className="mb-3 flex flex-wrap gap-2">
         <span className="chip">{originLabel[q.origin]}</span>
-        <span className="chip">Dificuldade {'◆'.repeat(q.difficulty)}</span>
+        <span className="chip">{['Fácil', 'Média', 'Difícil'][q.difficulty - 1]}</span>
       </div>
       <p className="mb-4 text-[1.05rem] leading-relaxed">{q.stem}</p>
       <ol className="space-y-2">
@@ -48,7 +49,7 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
                 disabled={confirmed}
                 onClick={() => setSelected(o.key)}
                 aria-pressed={isSel}
-                className={`flex w-full items-start gap-3 rounded-lg border p-3 text-left transition ${cls}`}
+                className={`flex w-full items-start gap-3 rounded-sm border p-3 text-left transition ${cls}`}
               >
                 <span className="font-display font-bold text-gold">{o.key}</span>
                 <span className="flex-1">
@@ -79,10 +80,11 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
       ) : (
         <div className="mt-4 space-y-3">
           <p className={`font-display text-lg ${correct ? 'text-ok' : 'text-bad'}`}>
-            {correct ? '✔ Correto!' : `✘ Resposta correta: ${q.answer}`}
+            <Icon name={correct ? 'certo' : 'errado'} className="mr-1 inline align-[-3px]" />
+            {correct ? 'Correto' : `Resposta correta: ${q.answer}`}
           </p>
-          <div className="rounded-lg bg-raised p-3 text-[0.98rem] leading-relaxed">{q.explanation}</div>
-          <details className="rounded-lg border border-line p-3 text-sm">
+          <div className="rounded-sm bg-raised p-3 text-[0.98rem] leading-relaxed">{q.explanation}</div>
+          <details className="rounded-sm border border-line p-3 text-sm">
             <summary className="cursor-pointer text-muted">Comentário de todas as alternativas</summary>
             <ul className="mt-2 space-y-1">
               {q.options.map((o) => (
@@ -94,7 +96,7 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
           </details>
           {chapter && section && (
             <Link to={`/capitulo/${chapter.id}#${section.id}`} className="block text-sm text-gold underline">
-              📖 Estudar no grimório: {section.title}
+              Estudar no grimório: {section.title}
             </Link>
           )}
           {onNext && (

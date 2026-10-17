@@ -6,6 +6,7 @@ import { getChapter, getGrimoire, getLesson } from '@/content';
 import { Markdown } from '@/components/Markdown';
 import { markSectionRead, setLastSection, toggleBookmark } from '@/lib/study';
 import { reviewLabel } from './Library';
+import { Icon } from '@/components/Icon';
 
 function stripMd(s: string) {
   return s.replace(/[#*_`>|]/g, ' ').replace(/\s+/g, ' ');
@@ -76,7 +77,7 @@ export function ReaderPage() {
       {/* Barra do leitor */}
       <div className="sticky top-12 z-10 -mx-4 mb-3 flex items-center gap-2 border-b border-line bg-bg/95 px-4 py-2 backdrop-blur">
         <button className="btn-ghost px-3 py-2" onClick={() => setTocOpen((v) => !v)} aria-expanded={tocOpen}>
-          ☰ Sumário
+          <Icon name="sumario" size={18} /> Sumário
         </button>
         <span className="flex-1 truncate text-center text-xs text-muted">
           {rp?.sectionsRead.length ?? 0}/{chapter.sections.length} lidas
@@ -88,7 +89,7 @@ export function ReaderPage() {
           A+
         </button>
         <button className="btn-ghost px-3 py-2" aria-label="Alternar tema" onClick={() => setPrefs({ theme: prefs.theme === 'dark' ? 'light' : 'dark' })}>
-          {prefs.theme === 'dark' ? '☀' : '☾'}
+          <Icon name={prefs.theme === 'dark' ? 'sol' : 'lua'} size={18} />
         </button>
       </div>
 
@@ -99,7 +100,7 @@ export function ReaderPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar no capítulo…"
-            className="mb-3 w-full rounded-lg border border-line bg-raised px-3 py-2 text-ink placeholder:text-muted"
+            className="mb-3 w-full rounded-sm border border-line bg-raised px-3 py-2 text-ink placeholder:text-muted"
           />
           {query.trim().length >= 2 && (
             <ul className="mb-3 space-y-2 text-sm">
@@ -118,9 +119,9 @@ export function ReaderPage() {
             {chapter.sections.map((s) => (
               <li key={s.id}>
                 <button className="flex w-full items-center gap-2 py-1 text-left" onClick={() => go(s.id)}>
-                  <span className={rp?.sectionsRead.includes(s.id) ? 'text-ok' : 'text-muted'}>{rp?.sectionsRead.includes(s.id) ? '✓' : '○'}</span>
+                  <span className={rp?.sectionsRead.includes(s.id) ? 'text-ok' : 'text-muted'}>{rp?.sectionsRead.includes(s.id) ? <Icon name="certo" size={16} /> : <span className="inline-block w-4 text-center">·</span>}</span>
                   <span className="flex-1">{s.title}</span>
-                  {isBookmarked(s.id) && <span aria-label="marcada">🔖</span>}
+                  {isBookmarked(s.id) && <Icon name="fitaCheia" size={16} className="text-ember" aria-label="marcada" />}
                 </button>
               </li>
             ))}
@@ -133,9 +134,9 @@ export function ReaderPage() {
         </nav>
       )}
 
-      <article className="manuscript rounded-lg px-5 py-6 sm:px-8">
+      <article className="manuscript rounded-sm px-5 py-6 sm:px-8">
         <header className="mb-6 text-center">
-          <Link to={`/grimorio/${chapter.grimoireId}`} className="text-xs uppercase tracking-widest opacity-70">
+          <Link to={`/grimorio/${chapter.grimoireId}`} className="font-display text-xs opacity-70">
             {grimoire?.title}
           </Link>
           <p className="mt-2 font-display text-sm opacity-70">Capítulo {chapter.number}</p>
@@ -158,16 +159,16 @@ export function ReaderPage() {
               }}
               className="scroll-mt-28"
             >
-              {idx > 0 && <div className="divider-ornament" aria-hidden>✦</div>}
+              {idx > 0 && <div className="divider-ornament" aria-hidden>❧</div>}
               <div className="mb-3 flex items-start justify-between gap-3">
                 <h2 className="text-lg text-gold">{s.title}</h2>
                 <button
-                  className="text-xl"
+                  className="p-1"
                   aria-label={isBookmarked(s.id) ? 'Remover marcador' : 'Adicionar marcador'}
                   aria-pressed={isBookmarked(s.id)}
                   onClick={() => update((d) => toggleBookmark(d, chapter.id, s.id))}
                 >
-                  {isBookmarked(s.id) ? '🔖' : '🏷️'}
+                  <Icon name={isBookmarked(s.id) ? 'fitaCheia' : 'fita'} size={22} className={isBookmarked(s.id) ? 'text-ember' : 'opacity-60'} />
                 </button>
               </div>
               <div className="prose-manuscript">
@@ -176,24 +177,24 @@ export function ReaderPage() {
                 </div>
               </div>
               <button
-                className={`mt-2 w-full rounded-lg border px-4 py-3 text-sm ${read ? 'border-ok/50 text-ok' : 'border-gold/50 text-gold'}`}
+                className={`mt-2 w-full rounded-sm border px-4 py-3 text-sm ${read ? 'border-ok/50 text-ok' : 'border-gold/50 text-gold'}`}
                 disabled={read}
                 onClick={() =>
                   update((d) => {
                     const r = markSectionRead(d, chapter, s.id);
-                    if (r.xp) flash(`Capítulo concluído! +${r.xp.amount} XP`);
+                    if (r.xp) flash(`Capítulo concluído. +${r.xp.amount} XP`);
                     return r.data;
                   })
                 }
               >
-                {read ? '✓ Seção lida' : 'Marcar seção como lida'}
+                {read ? 'Seção lida' : 'Marcar seção como lida'}
               </button>
             </section>
           );
         })}
 
         <div className="divider-ornament" aria-hidden>
-          ✦ ✦ ✦
+          ❧
         </div>
         <section id="glossario" ref={(el) => (sectionRefs.current.glossario = el)} className="prose-manuscript scroll-mt-28">
           <h2 className="mb-3 text-lg text-gold">Glossário</h2>
@@ -209,7 +210,7 @@ export function ReaderPage() {
           <ul>
             {chapter.references.map((r) => (
               <li key={r.title}>
-                <b>{r.title}</b> — {r.detail}
+                <b>{r.title}</b>. {r.detail}
               </li>
             ))}
           </ul>
@@ -227,14 +228,14 @@ export function ReaderPage() {
                 <span className="block">{l.title}</span>
                 <span className="text-xs text-muted">{l.questionIds.length} questões</span>
               </span>
-              <span className="text-sm text-gold">{done ? `Melhor: ${done.bestScore}%` : 'Iniciar →'}</span>
+              <span className="text-sm text-gold">{done ? `Melhor: ${done.bestScore}%` : 'Iniciar'}</span>
             </Link>
           );
         })}
       </section>
 
       {toast && (
-        <div role="status" className="fixed inset-x-4 bottom-24 z-30 mx-auto max-w-sm rounded-lg bg-gold px-4 py-3 text-center font-display text-bg shadow-lg">
+        <div role="status" className="fixed inset-x-4 bottom-24 z-30 mx-auto max-w-sm rounded-sm bg-gold px-4 py-3 text-center font-display text-bg shadow-lg">
           {toast}
         </div>
       )}

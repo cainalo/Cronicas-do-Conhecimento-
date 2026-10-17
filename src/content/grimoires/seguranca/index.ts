@@ -50,7 +50,7 @@ export const capCriptografia: Chapter = {
     { title: 'NIST FIPS 197', detail: 'Advanced Encryption Standard (AES), 2001 (atualizado em 2023).' },
     { title: 'NIST FIPS 180-4', detail: 'Secure Hash Standard (SHA-1 e família SHA-2).' },
     { title: 'NIST FIPS 202', detail: 'SHA-3 Standard: Permutation-Based Hash and Extendable-Output Functions.' },
-    { title: 'NIST SP 800-57 Parte 1', detail: 'Recommendation for Key Management — equivalência de níveis de segurança entre RSA e ECC.' },
+    { title: 'NIST SP 800-57 Parte 1', detail: 'Recommendation for Key Management (equivalência de níveis de segurança entre RSA e ECC).' },
     { title: 'IETF RFC 8446', detail: 'The Transport Layer Security (TLS) Protocol Version 1.3.' },
     { title: 'IETF RFC 2104', detail: 'HMAC: Keyed-Hashing for Message Authentication.' },
     { title: 'OWASP Password Storage Cheat Sheet', detail: 'Recomendações de armazenamento de senhas (Argon2id, scrypt, bcrypt, PBKDF2).' },

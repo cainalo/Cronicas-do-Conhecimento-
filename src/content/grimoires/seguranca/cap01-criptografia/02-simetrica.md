@@ -13,12 +13,12 @@ Texto claro
 ### Vantagens e limitações
 
 - **Vantagem:** é muito **rápida** e eficiente, adequada para grandes volumes de dados (discos, arquivos, tráfego de rede).
-- **Limitação 1 — distribuição de chaves:** como fazer a chave chegar ao outro lado sem que alguém a intercepte? Esse é o problema que a criptografia assimétrica veio resolver.
-- **Limitação 2 — escalabilidade:** cada par de pessoas que deseja sigilo entre si precisa de uma chave própria. Para **n** participantes, são necessárias **n(n − 1) / 2** chaves.
+- **Limitação 1, a distribuição de chaves:** como fazer a chave chegar ao outro lado sem que alguém a intercepte? Esse é o problema que a criptografia assimétrica veio resolver.
+- **Limitação 2, a escalabilidade:** cada par de pessoas que deseja sigilo entre si precisa de uma chave própria. Para **n** participantes, são necessárias **n(n − 1) / 2** chaves.
 
 > **Exemplo de cálculo:** 10 pessoas → 10 × 9 / 2 = **45 chaves**. 100 pessoas → 100 × 99 / 2 = **4.950 chaves**.
 
-- **Limitação 3 — não repúdio:** como as partes compartilham a chave, a simétrica não oferece não repúdio.
+- **Limitação 3, o não repúdio:** como as partes compartilham a chave, a simétrica não oferece não repúdio.
 
 ### Cifras de bloco e cifras de fluxo
 
@@ -29,15 +29,15 @@ Texto claro
 
 | Algoritmo | Tipo | Bloco | Chave | Situação |
 |---|---|---|---|---|
-| **DES** | Bloco | 64 bits | 56 bits efetivos | **Inseguro** — chave curta, quebrável por força bruta. |
+| **DES** | Bloco | 64 bits | 56 bits efetivos | Inseguro: chave curta, quebrável por força bruta. |
 | **3DES** (Triple DES) | Bloco | 64 bits | 112 ou 168 bits (nominais) | Legado; descontinuado pelo NIST. |
 | **AES** (Rijndael) | Bloco | **128 bits** | **128, 192 ou 256 bits** | **Padrão atual** (NIST FIPS 197, 2001). |
-| **ChaCha20** | Fluxo | — | 256 bits | Moderno; comum em dispositivos móveis. |
-| **RC4** | Fluxo | — | variável | **Inseguro**. |
+| **ChaCha20** | Fluxo | não se aplica | 256 bits | Moderno; comum em dispositivos móveis. |
+| **RC4** | Fluxo | não se aplica | variável | **Inseguro**. |
 
 Pontos de atenção:
 
-- O **AES** foi escolhido pelo NIST em concurso público; o vencedor foi o algoritmo **Rijndael**. O AES tem bloco fixo de 128 bits — o que varia é o **tamanho da chave** (e, com ele, o número de rodadas: 10, 12 ou 14).
+- O **AES** foi escolhido pelo NIST em concurso público; o vencedor foi o algoritmo **Rijndael**. O AES tem bloco fixo de 128 bits; o que varia é o **tamanho da chave** (e, com ele, o número de rodadas: 10, 12 ou 14).
 - O **3DES** aplica o DES três vezes (cifrar–decifrar–cifrar, "EDE"). Com três chaves distintas, a chave nominal é de 168 bits, mas a segurança efetiva é menor por causa do ataque *meet-in-the-middle*.
 
 ### Modos de operação das cifras de bloco
@@ -48,10 +48,10 @@ Uma cifra de bloco sozinha só cifra **um** bloco. Para mensagens maiores, usa-s
 |---|---|---|
 | **ECB** (*Electronic Codebook*) | Cada bloco é cifrado isoladamente com a mesma chave. | **Blocos iguais geram cifrados iguais** → revela padrões. Não deve ser usado para dados reais. |
 | **CBC** (*Cipher Block Chaining*) | Cada bloco é combinado (XOR) com o cifrado anterior; o primeiro usa um **IV**. | O IV deve ser **imprevisível**. Cifragem sequencial (não paralelizável). |
-| **CTR** (*Counter*) | Cifra um contador e faz XOR com o texto — transforma a cifra de bloco em cifra de fluxo. | Paralelizável; **nunca repetir** o par chave + contador (*nonce*). |
+| **CTR** (*Counter*) | Cifra um contador e faz XOR com o texto; na prática, transforma a cifra de bloco em cifra de fluxo. | Paralelizável; **nunca repetir** o par chave + contador (*nonce*). |
 | **GCM** (*Galois/Counter Mode*) | CTR + autenticação. | **Cifragem autenticada (AEAD)**: confidencialidade **e** integridade/autenticidade. Padrão no TLS. |
 
-> **Pegadinha clássica:** "O modo ECB é recomendado por permitir paralelismo e ser simples." — **Errado.** ECB vaza padrões do texto claro (o exemplo famoso é a imagem de um pinguim que continua reconhecível após cifrada em ECB).
+> **Pegadinha clássica:** "O modo ECB é recomendado por permitir paralelismo e ser simples." **Errado.** ECB vaza padrões do texto claro (o exemplo famoso é a imagem de um pinguim que continua reconhecível após cifrada em ECB).
 
 ### Onde a simétrica é usada
 

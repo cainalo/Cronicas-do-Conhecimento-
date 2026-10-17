@@ -22,3 +22,14 @@ Cabeçalho fixo de 48px (nome, estado de sync, nível) + barra inferior com 5 de
 
 ## Pendente de decisão
 Ícones próprios (hoje emojis), ilustrações, personagens, mapa.
+
+## Anti-padrões proibidos ("cara de site feito por IA")
+Levantados em 17/10/2026 (pesquisa sobre *vibe-coded design tells* e sinais de texto gerado por IA). Não usar:
+- Emojis como ícones. Usar `src/components/Icon.tsx` (SVG próprio, traço de pena 1.6).
+- Bibliotecas de ícones padrão (Lucide etc.) e paleta cinza padrão do shadcn/Tailwind.
+- Gradiente roxo, texto com gradiente, brilho neon, "orbs" desfocados, glassmorphism.
+- Hero centralizado seguido de três cartões iguais; fileiras de cartões de estatística idênticos (usar `.ledger` com linhas).
+- Rótulos pequenos em MAIÚSCULAS com espaçamento largo ("eyebrow") acima de títulos.
+- Cantos muito arredondados em tudo (`rounded-xl`, `rounded-full`): usar `rounded-sm`.
+- Texto: excesso de travessões (—), construção "não é X, é Y", palavras-muleta ("robusto", "sem esforço", "mergulhar", "Além disso" em série), exclamações, negrito em frases inteiras.
+Usar no lugar: elementos de manuscrito reais, como rubricas em vermelho (`ember`) nos subtítulos, ❧ (hedera) como separador, capitular iluminada e linhas duplas de livro-razão.

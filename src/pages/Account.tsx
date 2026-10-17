@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { useStudy } from '@/app/StudyProvider';
 import { usePrefs } from '@/app/prefs';
 import { supabase } from '@/lib/supabase';
+import { Icon } from '@/components/Icon';
 
 type Mode = 'entrar' | 'criar' | 'recuperar';
 
@@ -91,7 +92,7 @@ export function AccountPage() {
         </section>
       ) : (
         <section className="card p-4">
-          <div className="mb-4 grid grid-cols-3 gap-1 rounded-lg bg-raised p-1 text-sm">
+          <div className="mb-4 grid grid-cols-3 gap-1 rounded-sm bg-raised p-1 text-sm">
             {(['entrar', 'criar', 'recuperar'] as Mode[]).map((m) => (
               <button key={m} className={`rounded-md py-2 ${mode === m ? 'bg-gold text-bg' : 'text-muted'}`} onClick={() => setMode(m)} type="button">
                 {{ entrar: 'Entrar', criar: 'Criar conta', recuperar: 'Recuperar' }[m]}
@@ -120,16 +121,16 @@ export function AccountPage() {
         </section>
       )}
 
-      {msg && <p className={`rounded-lg border p-3 text-sm ${msg.ok ? 'border-ok/50 text-ok' : 'border-bad/50 text-bad'}`}>{msg.t}</p>}
+      {msg && <p className={`rounded-sm border p-3 text-sm ${msg.ok ? 'border-ok/50 text-ok' : 'border-bad/50 text-bad'}`}>{msg.t}</p>}
 
       <section className="card space-y-2 p-4">
         <h2 className="text-base">Aparência</h2>
         <div className="flex gap-2">
           <button className={prefs.theme === 'dark' ? 'btn-primary flex-1' : 'btn-ghost flex-1'} onClick={() => setPrefs({ theme: 'dark' })}>
-            ☾ Noite na torre
+            <Icon name="lua" size={18} /> Noite na torre
           </button>
           <button className={prefs.theme === 'light' ? 'btn-primary flex-1' : 'btn-ghost flex-1'} onClick={() => setPrefs({ theme: 'light' })}>
-            ☀ Pergaminho
+            <Icon name="sol" size={18} /> Pergaminho
           </button>
         </div>
       </section>

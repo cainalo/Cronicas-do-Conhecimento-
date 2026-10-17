@@ -52,12 +52,14 @@ h1, h2, h3, .font-display { font-family: Cinzel, Georgia, serif; letter-spacing:
 :focus-visible { outline: 2px solid rgb(var(--gold)); outline-offset: 2px; }
 
 @layer components {
-  .card { @apply rounded-xl border border-line bg-surface; }
-  .btn { @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 font-display text-sm font-medium transition active:scale-[0.98] disabled:opacity-50; min-height: 44px; }
+  .card { @apply rounded-sm border border-line bg-surface; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-sm px-4 py-3 font-display text-sm font-medium transition active:scale-[0.98] disabled:opacity-50; min-height: 44px; }
   .btn-primary { @apply btn bg-gold text-bg hover:brightness-110; }
   .btn-ghost { @apply btn border border-line bg-transparent text-ink hover:bg-raised; }
-  .chip { @apply inline-flex items-center rounded-full border border-line px-2 py-0.5 text-xs text-muted; }
-  .divider-ornament { @apply my-6 flex items-center gap-3 text-gold; }
+  .chip { @apply inline-flex items-center rounded-sm border border-line px-1.5 py-0.5 text-xs text-muted; }
+  .ledger { @apply border-y-[3px] border-double border-line; }
+  .ledger-row { @apply flex items-baseline justify-between gap-3 border-b border-dashed border-line py-2.5 last:border-b-0; }
+  .divider-ornament { @apply my-6 flex items-center gap-3 text-xl text-ember; }
   .divider-ornament::before, .divider-ornament::after { content: ''; @apply h-px flex-1 bg-gold/40; }
 }
 
@@ -76,7 +78,7 @@ h1, h2, h3, .font-display { font-family: Cinzel, Georgia, serif; letter-spacing:
   line-height: 1.75;
 }
 .prose-manuscript p { margin: 0 0 1em; }
-.prose-manuscript h3 { font-size: 1.1em; margin: 1.6em 0 0.6em; color: rgb(var(--gold)); }
+.prose-manuscript h3 { font-size: 1.1em; margin: 1.6em 0 0.6em; color: rgb(var(--ember)); }
 .prose-manuscript strong { font-weight: 600; }
 .prose-manuscript ul, .prose-manuscript ol { margin: 0 0 1em 1.25em; }
 .prose-manuscript ul { list-style: disc; }
@@ -105,5 +107,5 @@ mark.search-hit { background: rgb(var(--gold) / 0.45); color: inherit; border-ra
 .safe-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 @layer components {
-  .input { @apply w-full rounded-lg border border-line bg-raised px-3 py-3 text-ink placeholder:text-muted; }
+  .input { @apply w-full rounded-sm border border-line bg-raised px-3 py-3 text-ink placeholder:text-muted; }
 }

@@ -1,7 +1,7 @@
 Na criptografia **assimétrica** (ou de **chave pública**), cada participante possui um **par de chaves** matematicamente relacionadas:
 
-- **Chave pública** — pode ser divulgada a qualquer pessoa.
-- **Chave privada** — fica somente com o titular e nunca é compartilhada.
+- **Chave pública**: pode ser divulgada a qualquer pessoa.
+- **Chave privada**: fica somente com o titular e nunca é compartilhada.
 
 O que uma chave cifra, **somente a outra chave do mesmo par** desfaz. E, conhecendo a chave pública, não é computacionalmente viável descobrir a privada.
 
@@ -30,7 +30,7 @@ Ana assina com a PRIVADA de Ana
 Qualquer um verifica com a PÚBLICA de Ana
 ```
 
-> **Erro comum:** "Para garantir sigilo, Ana cifra a mensagem com sua chave privada." — **Errado.** Qualquer pessoa tem a chave pública de Ana e poderia decifrar. Cifrar com a privada do remetente serve para provar a autoria, não para esconder o conteúdo.
+> **Erro comum:** "Para garantir sigilo, Ana cifra a mensagem com sua chave privada." **Errado.** Qualquer pessoa tem a chave pública de Ana e poderia decifrar. Cifrar com a privada do remetente serve para provar a autoria, não para esconder o conteúdo.
 
 ### Por que ela resolve a distribuição de chaves
 
@@ -49,7 +49,7 @@ A chave pública pode trafegar abertamente. Não é preciso um canal secreto pr�
 
 ### Diffie-Hellman e o ataque do intermediário
 
-O DH "puro" permite que duas partes que nunca se falaram combinem uma chave secreta, mas **não autentica** quem está do outro lado. Um atacante posicionado no meio (*man-in-the-middle*) pode fazer um acordo com cada lado separadamente e repassar as mensagens. A defesa é **autenticar** a troca — por exemplo, assinando os parâmetros com uma chave vinculada a um **certificado digital**, como faz o TLS.
+O DH "puro" permite que duas partes que nunca se falaram combinem uma chave secreta, mas **não autentica** quem está do outro lado. Um atacante posicionado no meio (*man-in-the-middle*) pode fazer um acordo com cada lado separadamente e repassar as mensagens. A defesa é **autenticar** a troca, por exemplo assinando os parâmetros com uma chave vinculada a um **certificado digital**, como faz o TLS.
 
 ### Desvantagem: desempenho
 

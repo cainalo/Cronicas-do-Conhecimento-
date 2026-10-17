@@ -17,7 +17,7 @@ const d = (id: string, title: string, block: Discipline['block'], questions: num
 export const tceGo2026: Contest = {
   id: 'tce-go-2026-tecnico-ti',
   name: 'TCE-GO 2026',
-  role: 'Técnico de Controle Externo — Especialidade: Tecnologia da Informação (código B02)',
+  role: 'Técnico de Controle Externo, especialidade Tecnologia da Informação (código B02)',
   board: 'Fundação Carlos Chagas (FCC)',
   examDate: '2027-01-17',
   facts: [
@@ -32,19 +32,19 @@ export const tceGo2026: Contest = {
   ],
   exam: [
     {
-      title: 'Prova objetiva — 70 questões de 5 alternativas',
+      title: 'Prova objetiva: 70 questões de 5 alternativas',
       detail:
         'Conhecimentos Gerais: 25 questões, peso 1. Conhecimentos Específicos: 45 questões, peso 2. Ambas eliminatórias e classificatórias. As questões podem avaliar compreensão, aplicação e análise, e contemplar mais de um objeto de avaliação (item 7.3).',
       status: OF,
     },
     {
-      title: 'Nota da objetiva — escore padronizado',
+      title: 'Nota da objetiva: escore padronizado',
       detail:
         'Cada prova vira nota padronizada NP = [(A − média do grupo) / desvio padrão] × 10 + 50, multiplicada pelo peso. Habilitado: soma das NPs ponderadas ≥ 150 (itens 9.3 a 9.5). Ou seja, o resultado depende do desempenho relativo ao grupo, não de um percentual fixo de acertos.',
       status: OF,
     },
     {
-      title: 'Prova Discursiva — Estudo de Caso',
+      title: 'Prova Discursiva: Estudo de Caso',
       detail:
         '1 questão prática com solução por escrito sobre os Conhecimentos Específicos (as disciplinas podem estar inter-relacionadas). Avalia domínio do tema, experiência prévia e adequação às atribuições do cargo. Nota de 0 a 100; habilitado com ≥ 50. Limite de linhas definido na própria questão. Corrigida apenas para os habilitados na objetiva até a 48ª posição (ampla), 12ª (negros) e todos os PcD habilitados (Capítulo 11).',
       status: OF,
@@ -167,14 +167,14 @@ export const tceGo2026: Contest = {
   ],
   sources: [
     {
-      title: 'Edital nº 01/2026 — Abertura de Inscrições (retificado), versão consolidada de 15/09/2026',
+      title: 'Edital nº 01/2026, Abertura de Inscrições (retificado), versão consolidada de 15/09/2026',
       url: 'https://www.concursosfcc.com.br/concursos/tcego125/index.html',
       kind: 'oficial',
       accessed: '2026-10-17',
       note: 'PDF enviado pelo usuário; cópia em docs/fontes/.',
     },
     {
-      title: 'TCE-GO — notícia de abertura do concurso',
+      title: 'TCE-GO: notícia de abertura do concurso',
       url: 'https://portal.tce.go.gov.br/-/concurso-publico-tce-go-abre-inscricoes-para-vagas-com-salario-de-r-11-8-mil',
       kind: 'oficial',
       accessed: '2026-10-17',
@@ -184,7 +184,7 @@ export const tceGo2026: Contest = {
   editalVersions: [
     {
       id: 'edital-01-2026-consolidado-2026-09-15',
-      title: 'Edital nº 01/2026 (retificado) — consolidado em 15/09/2026',
+      title: 'Edital nº 01/2026 (retificado), consolidado em 15/09/2026',
       date: '2026-09-15',
       summary:
         'Versão vigente usada no app. Incorpora a retificação nº 02/2026 (DOE-GO 16/09/2026): distribuição de questões por disciplina e nova redação de Legislação Institucional.',

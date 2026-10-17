@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { getQuestion } from '@/content';
+import { Icon } from '@/components/Icon';
 
 type Filter = 'todas' | 'certas' | 'erradas';
 
@@ -17,7 +18,7 @@ export function HistoryPage() {
   return (
     <div className="space-y-4">
       <Link to="/progresso" className="text-sm text-muted">
-        ← Progresso
+        Voltar ao progresso
       </Link>
       <h1 className="text-xl text-gold">Histórico de questões</h1>
       <div className="flex gap-2" role="tablist">
@@ -35,7 +36,7 @@ export function HistoryPage() {
             <li key={a.id} className="card p-3 text-sm">
               <details>
                 <summary className="cursor-pointer list-none">
-                  <span className={a.isCorrect ? 'text-ok' : 'text-bad'}>{a.isCorrect ? '✔' : '✘'}</span> {q ? q.stem.slice(0, 90) + '…' : a.questionId}
+                  <Icon name={a.isCorrect ? 'certo' : 'errado'} size={16} className={`mr-1 inline align-[-2px] ${a.isCorrect ? 'text-ok' : 'text-bad'}`} /> {q ? q.stem.slice(0, 90) + '…' : a.questionId}
                   <span className="mt-1 block text-xs text-muted">
                     {new Date(a.answeredAt).toLocaleString('pt-BR')} · {ctx[a.context]} · marcou {a.selectedOption}
                     {q && ` · gabarito ${q.answer}`} · {pending.has(a.id) ? 'pendente de envio' : 'salvo no servidor'}

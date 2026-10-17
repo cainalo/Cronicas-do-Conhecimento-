@@ -1,13 +1,14 @@
 import { NavLink, Outlet, Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { levelInfo, totalXp } from '@/lib/study';
+import { Icon, type IconName } from '@/components/Icon';
 
-const nav = [
-  { to: '/', label: 'Torre', icon: '🏰', end: true },
-  { to: '/biblioteca', label: 'Grimórios', icon: '📜' },
-  { to: '/revisao', label: 'Revisão', icon: '🔁' },
-  { to: '/progresso', label: 'Progresso', icon: '🧭' },
-  { to: '/conta', label: 'Conta', icon: '🗝️' },
+const nav: { to: string; label: string; icon: IconName; end?: boolean }[] = [
+  { to: '/', label: 'Torre', icon: 'torre', end: true },
+  { to: '/biblioteca', label: 'Grimórios', icon: 'grimorio' },
+  { to: '/revisao', label: 'Revisão', icon: 'ampulheta' },
+  { to: '/progresso', label: 'Progresso', icon: 'mapa' },
+  { to: '/conta', label: 'Conta', icon: 'chave' },
 ];
 
 export function SyncBadge() {
@@ -22,7 +23,8 @@ export function SyncBadge() {
   const m = map[sync.state];
   return (
     <Link to="/conta" className={`whitespace-nowrap text-xs ${m.c}`} title={session ? (sync.error ?? '') : 'Entre para salvar no servidor'}>
-      ● {m.t}
+      <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-current align-middle" />
+      {m.t}
     </Link>
   );
 }
@@ -57,9 +59,7 @@ export function Layout() {
                   `flex min-h-[56px] flex-col items-center justify-center gap-0.5 text-[11px] ${isActive ? 'text-gold' : 'text-muted'}`
                 }
               >
-                <span aria-hidden className="text-lg leading-none">
-                  {n.icon}
-                </span>
+                <Icon name={n.icon} size={22} />
                 {n.label}
               </NavLink>
             </li>

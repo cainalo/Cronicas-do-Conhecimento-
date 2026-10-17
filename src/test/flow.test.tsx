@@ -54,7 +54,7 @@ it('fluxo: lição → erro → revisão → recuperação, com persistência lo
   const opt = screen.getAllByRole('button').find((b) => b.textContent?.startsWith(q0.answer))!;
   await user.click(opt);
   await user.click(screen.getByRole('button', { name: 'Confirmar resposta' }));
-  expect(screen.getByText('✔ Correto!')).toBeInTheDocument();
+  expect(screen.getByText('Correto')).toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: 'Concluir' }));
   expect(screen.getByText(/Recuperadas: 1 de 1/)).toBeInTheDocument();
   expect(loadData('visitante').attempts).toHaveLength(11);

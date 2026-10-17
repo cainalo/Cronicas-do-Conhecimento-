@@ -31,5 +31,8 @@ Trabalhe em fluxos completos e testados, um de cada vez. Estética nunca atrasa 
 ## Ao final de cada etapa
 Atualize `docs/SESSION_HANDOFF.md`, `PROJECT_STATUS.md`, `ROADMAP.md`, `SESSION_LOG.md`, `TESTING.md` e demais afetados. Nunca declare concluído o que não foi testado. Commit com mensagem descritiva e push no branch de trabalho.
 
+## Visual e texto
+Siga a lista "Anti-padrões proibidos" em `docs/DESIGN_SYSTEM.md` (nada de emojis como ícones, gradiente roxo, três cartões iguais, rótulos em maiúsculas espaçadas, excesso de travessões).
+
 ## Convenções de código
 React 18 + TS + Vite + Tailwind 3 + React Router 6. Regras de estudo puras em `src/lib/study.ts` (testáveis, sem React). Telas só acessam conteúdo via `src/content/index.ts`. Texto da UI em pt-BR.

@@ -53,7 +53,7 @@ Um **MAC** (*Message Authentication Code*) é um valor calculado a partir da men
 
 ### Armazenamento seguro de senhas
 
-Guardar senhas em texto claro é inaceitável; guardar apenas `SHA-256(senha)` também é insuficiente, porque hashes de propósito geral são **rápidos** — o que favorece ataques de dicionário e força bruta — e porque senhas iguais gerariam resumos iguais.
+Guardar senhas em texto claro é inaceitável; guardar apenas `SHA-256(senha)` também é insuficiente, porque hashes de propósito geral são **rápidos**, o que favorece ataques de dicionário e de força bruta. Além disso, senhas iguais gerariam resumos iguais.
 
 Boas práticas (conforme a OWASP *Password Storage Cheat Sheet*):
 

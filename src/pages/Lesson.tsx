@@ -5,6 +5,7 @@ import { getLesson, getQuestion } from '@/content';
 import { Markdown } from '@/components/Markdown';
 import { QuestionCard } from '@/components/QuestionCard';
 import { completeLesson, recordAnswer, totalXp } from '@/lib/study';
+import { Icon } from '@/components/Icon';
 
 type Phase = { k: 'cards'; i: number } | { k: 'q'; i: number } | { k: 'done' };
 
@@ -26,7 +27,7 @@ export function LessonPage() {
     <div className="space-y-4">
       <div className="flex items-center gap-3">
         <Link to={`/capitulo/${lesson.chapterId}`} className="text-xl text-muted" aria-label="Sair da lição">
-          ✕
+          <Icon name="sair" size={22} />
         </Link>
         <div className="h-2 flex-1 rounded bg-raised">
           <div className="h-2 rounded bg-gold transition-all" style={{ width: `${progress * 100}%` }} />
@@ -34,8 +35,8 @@ export function LessonPage() {
       </div>
 
       {phase.k === 'cards' && (
-        <section className="manuscript rounded-lg p-5">
-          <p className="font-display text-xs uppercase tracking-widest text-gold">
+        <section className="manuscript rounded-sm p-5">
+          <p className="font-display text-sm text-gold">
             {lesson.title} · {phase.i + 1}/{lesson.cards.length}
           </p>
           <h1 className="mt-2 text-xl">{lesson.cards[phase.i].title}</h1>
@@ -89,16 +90,16 @@ export function LessonPage() {
 
       {phase.k === 'done' && (
         <section className="card space-y-3 p-5 text-center">
-          <p className="font-display text-xs uppercase tracking-widest text-gold">Lição concluída</p>
+          <p className="font-display text-sm text-gold">Lição concluída</p>
           <h1 className="text-2xl">{score}%</h1>
           <p className="text-muted">
             {correct} de {qs.length} corretas · +{totalXp(data) - startXp.current} XP
           </p>
-          <p className="text-sm text-muted">XP só é concedido na primeira vez que cada conquista acontece; refazer a lição serve para fixar, não para acumular pontos.</p>
+          <p className="text-sm text-muted">Cada conquista rende XP uma única vez. Refazer a lição ajuda a fixar o conteúdo, mas não soma pontos de novo.</p>
           <ul className="space-y-1 text-left text-sm">
             {qs.map((q, i) => (
               <li key={q.id} className={results[q.id] ? 'text-ok' : 'text-bad'}>
-                {results[q.id] ? '✔' : '✘'} Questão {i + 1}: {q.stem.slice(0, 70)}…
+                <Icon name={results[q.id] ? 'certo' : 'errado'} size={16} className="mr-1 inline align-[-2px]" />Questão {i + 1}: {q.stem.slice(0, 70)}…
               </li>
             ))}
           </ul>

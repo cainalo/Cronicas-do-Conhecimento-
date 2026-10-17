@@ -16,13 +16,13 @@ A assinatura digital combina **hash** e **criptografia assimétrica**:
 
 **Por que assinar o hash e não o documento inteiro?** Porque a operação assimétrica é lenta; o hash tem tamanho fixo e pequeno, e qualquer alteração no documento altera o hash.
 
-### O que a assinatura garante — e o que não garante
+### O que a assinatura garante e o que não garante
 
 | Garante | Não garante |
 |---|---|
-| **Integridade** — qualquer alteração invalida a assinatura. | **Confidencialidade** — o documento assinado continua legível. |
-| **Autenticidade** — só o titular da chave privada poderia tê-la produzido. | **Disponibilidade**. |
-| **Não repúdio** — o signatário não pode negar a autoria. | |
+| **Integridade**: qualquer alteração invalida a assinatura. | **Confidencialidade**: o documento assinado continua legível. |
+| **Autenticidade**: só o titular da chave privada poderia tê-la produzido. | **Disponibilidade**. |
+| **Não repúdio**: o signatário não pode negar a autoria. | |
 
 Se for preciso **sigilo e assinatura**, faz-se as duas coisas: assina-se com a privada do remetente **e** cifra-se para o destinatário (na prática, com uma chave simétrica protegida pela chave pública do destinatário).
 
@@ -46,9 +46,9 @@ Um **certificado digital** é um documento eletrônico que **vincula uma chave p
 
 A **ICP** é o conjunto de entidades, normas e tecnologias que emite e gerencia certificados:
 
-- **AC Raiz** — topo da hierarquia; seu certificado é autoassinado e confiado previamente (vem instalado em sistemas e navegadores).
-- **ACs intermediárias / subordinadas** — emitem certificados aos usuários finais.
-- **Autoridades de Registro (AR)** — fazem a identificação do solicitante e encaminham o pedido à AC.
+- **AC Raiz**: topo da hierarquia; seu certificado é autoassinado e confiado previamente (vem instalado em sistemas e navegadores).
+- **ACs intermediárias / subordinadas**: emitem certificados aos usuários finais.
+- **Autoridades de Registro (AR)**: fazem a identificação do solicitante e encaminham o pedido à AC.
 
 A confiança forma uma **cadeia de certificação**: o navegador valida o certificado do site, depois o da AC que o assinou, e assim por diante, até chegar a uma raiz confiável.
 

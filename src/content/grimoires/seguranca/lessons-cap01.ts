@@ -9,7 +9,7 @@ export const licoesCap01: Lesson[] = [
     cards: [
       {
         title: 'Uma chave ou um par?',
-        body: '**Simétrica:** a mesma chave cifra e decifra — rápida, mas exige combinar a chave antes. Para *n* pessoas: **n(n − 1)/2** chaves.\n\n**Assimétrica:** par de chaves (pública e privada) — resolve a distribuição de chaves e permite assinaturas, mas é lenta. Para *n* pessoas: **n pares**.',
+        body: '**Simétrica:** a mesma chave cifra e decifra; é rápida, mas exige combinar a chave antes. Para *n* pessoas: **n(n − 1)/2** chaves.\n\n**Assimétrica:** par de chaves (pública e privada) — resolve a distribuição de chaves e permite assinaturas, mas é lenta. Para *n* pessoas: **n pares**.',
       },
       {
         title: 'As duas regras de ouro',
@@ -34,7 +34,7 @@ export const licoesCap01: Lesson[] = [
       },
       {
         title: 'Assinatura e certificado',
-        body: 'Assina-se o **hash** com a **privada** do signatário. Garante **integridade, autenticidade e não repúdio** — **não** sigilo.\n\nO **certificado X.509** liga uma chave **pública** a uma identidade e é assinado por uma **AC**. ICP-Brasil: MP 2.200-2/2001, AC Raiz = **ITI**.',
+        body: 'Assina-se o **hash** com a **privada** do signatário. Garante **integridade, autenticidade e não repúdio**, mas não sigilo.\n\nO **certificado X.509** liga uma chave **pública** a uma identidade e é assinado por uma **AC**. ICP-Brasil: MP 2.200-2/2001, AC Raiz = **ITI**.',
       },
       {
         title: 'TLS é híbrido',

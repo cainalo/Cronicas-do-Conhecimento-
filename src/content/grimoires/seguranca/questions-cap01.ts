@@ -206,11 +206,11 @@ export const questoesCap01: Question[] = [
     difficulty: 2,
     stem: 'Considerando os algoritmos de hash, assinale a alternativa que associa corretamente algoritmo, tamanho do resumo e situação atual.',
     options: [
-      { key: 'A', text: 'MD5 — 160 bits — recomendado para assinaturas digitais.', comment: 'MD5 tem 128 bits e está quebrado para colisões.' },
-      { key: 'B', text: 'SHA-1 — 128 bits — considerado seguro contra colisões.', comment: 'SHA-1 tem 160 bits; colisão prática demonstrada em 2017.' },
-      { key: 'C', text: 'SHA-256 — 256 bits — integrante da família SHA-2, considerado seguro.', comment: 'Correta.' },
-      { key: 'D', text: 'SHA-3 — 128 bits — versão simplificada do MD5.', comment: 'SHA-3 (Keccak) tem construção própria (esponja) e saídas de 224 a 512 bits.' },
-      { key: 'E', text: 'SHA-512 — 512 bits — algoritmo de cifragem simétrica.', comment: 'SHA-512 é hash, não cifra.' },
+      { key: 'A', text: 'MD5, com resumo de 160 bits, recomendado para assinaturas digitais.', comment: 'MD5 tem 128 bits e está quebrado para colisões.' },
+      { key: 'B', text: 'SHA-1, com resumo de 128 bits, considerado seguro contra colisões.', comment: 'SHA-1 tem 160 bits; colisão prática demonstrada em 2017.' },
+      { key: 'C', text: 'SHA-256, com resumo de 256 bits, integrante da família SHA-2, considerado seguro.', comment: 'Correta.' },
+      { key: 'D', text: 'SHA-3, com resumo de 128 bits, versão simplificada do MD5.', comment: 'SHA-3 (Keccak) tem construção própria (esponja) e saídas de 224 a 512 bits.' },
+      { key: 'E', text: 'SHA-512, com resumo de 512 bits, algoritmo de cifragem simétrica.', comment: 'SHA-512 é hash, não cifra.' },
     ],
     answer: 'C',
     explanation:
@@ -257,11 +257,11 @@ export const questoesCap01: Question[] = [
     difficulty: 1,
     stem: 'Em um esquema de assinatura digital, o signatário utiliza ____ para assinar, e o verificador utiliza ____ para conferir a assinatura. As lacunas são preenchidas, respectivamente, por',
     options: [
-      { key: 'A', text: 'a chave pública do signatário — a chave privada do signatário', comment: 'Invertido.' },
-      { key: 'B', text: 'a chave privada do signatário — a chave pública do signatário', comment: 'Correta.' },
-      { key: 'C', text: 'a chave privada do verificador — a chave pública do verificador', comment: 'As chaves envolvidas são as do signatário.' },
-      { key: 'D', text: 'a chave pública do verificador — a chave privada do verificador', comment: 'Isso descreve a cifragem para sigilo, não assinatura.' },
-      { key: 'E', text: 'uma chave simétrica compartilhada — a mesma chave simétrica', comment: 'Isso seria um MAC, sem não repúdio.' },
+      { key: 'A', text: 'a chave pública do signatário; a chave privada do signatário', comment: 'Invertido.' },
+      { key: 'B', text: 'a chave privada do signatário; a chave pública do signatário', comment: 'Correta.' },
+      { key: 'C', text: 'a chave privada do verificador; a chave pública do verificador', comment: 'As chaves envolvidas são as do signatário.' },
+      { key: 'D', text: 'a chave pública do verificador; a chave privada do verificador', comment: 'Isso descreve a cifragem para sigilo, não assinatura.' },
+      { key: 'E', text: 'uma chave simétrica compartilhada; a mesma chave simétrica', comment: 'Isso seria um MAC, sem não repúdio.' },
     ],
     answer: 'B',
     explanation:
