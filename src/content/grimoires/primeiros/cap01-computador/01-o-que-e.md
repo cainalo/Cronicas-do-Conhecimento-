@@ -15,14 +15,14 @@ Por dentro, o computador só entende dois estados: ligado ou desligado. Escrevem
 
 Um bit sozinho diz pouco. Por isso os bits andam em grupos. Um grupo de **8 bits** forma um **byte**. Um byte basta para guardar uma letra simples, como "A".
 
-Os tamanhos crescem em múltiplos:
+Os tamanhos crescem em degraus:
 
 - **quilobyte (KB)**: cerca de mil bytes, um texto curto;
 - **megabyte (MB)**: cerca de um milhão de bytes, uma foto de celular;
 - **gigabyte (GB)**: cerca de um bilhão de bytes, um filme;
 - **terabyte (TB)**: cerca de um trilhão de bytes, um disco grande.
 
-Em computação, cada degrau costuma valer 1.024 do anterior, e não 1.000 exatos.
+Em computação, cada degrau costuma valer 1.024 vezes o anterior, e não 1.000 vezes exatas.
 
 ### Por que isso importa no Tribunal
 

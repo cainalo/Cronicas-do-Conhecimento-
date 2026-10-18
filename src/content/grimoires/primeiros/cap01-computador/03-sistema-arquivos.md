@@ -29,7 +29,7 @@ Cuidado: a extensão é só parte do nome. Trocar ".exe" por ".pdf" não transfo
 
 ### Permissões básicas
 
-O sistema operacional guarda **permissões**: regras que dizem quem pode **ler**, **alterar** (gravar) ou **executar** cada arquivo. No Linux essas três permissões são chamadas de leitura, escrita e execução.
+O sistema operacional guarda **permissões**: regras que dizem quem pode **ler**, **alterar** (gravar) ou **executar** (rodar, se for um programa) cada arquivo. No Linux essas três permissões são chamadas de leitura, escrita e execução.
 
 Exemplo: no Tribunal, o servidor do setor de contratos pode alterar a planilha de contratos. Um estagiário talvez só possa ler. Isso protege a informação contra mudanças indevidas.
 

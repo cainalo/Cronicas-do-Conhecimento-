@@ -2,15 +2,13 @@ Uma **rede** é um grupo de computadores ligados entre si para trocar informaç�
 
 ### Endereço IP: o endereço da casa
 
-Para uma carta chegar, ela precisa de endereço. Na rede é igual. Cada aparelho conectado recebe um **endereço IP** (IP quer dizer Protocolo de Internet). Um exemplo de IP no formato mais comum, o **IPv4**, é `192.168.0.10`: quatro números separados por pontos.
+Para uma carta chegar, ela precisa de endereço. Na rede é igual. Um **protocolo** é um conjunto de regras combinadas para a conversa funcionar. Cada aparelho conectado recebe um **endereço IP** (IP quer dizer Protocolo de Internet). Um exemplo de IP no formato mais comum, o **IPv4**, é `192.168.0.10`: quatro números separados por pontos.
 
 Existe também o **IPv6**, um formato mais novo e mais longo, criado porque os endereços IPv4 estavam acabando.
 
-Um **protocolo** é um conjunto de regras combinadas para a conversa funcionar.
-
 ### Roteador: o carteiro da esquina
 
-O **roteador** é o aparelho que liga uma rede a outra e escolhe por onde cada pacote de dados deve seguir. O roteador da sua casa liga os seus aparelhos à internet. Na internet, muitos roteadores passam a mensagem de mão em mão até o destino, como agências de correio.
+O **roteador** é o aparelho que liga uma rede a outra e escolhe por onde cada **pacote** de dados, um pedacinho da mensagem, deve seguir. O roteador da sua casa liga os seus aparelhos à internet. Na internet, muitos roteadores passam a mensagem de mão em mão até o destino, como agências de correio.
 
 ### Cliente e servidor
 
@@ -27,7 +25,7 @@ O **navegador** é o programa que você usa para abrir páginas: Chrome, Firefox
 
 Um **site** é um conjunto de páginas guardado em um servidor. Você chega a ele por um nome fácil, como `www.exemplo.gov.br`, em vez de decorar o IP. Um serviço chamado **DNS** faz essa tradução de nome para IP, como uma agenda telefônica.
 
-Quando o endereço começa com **https**, a conversa entre o navegador e o site vai protegida por criptografia.
+Quando o endereço começa com **https**, a conversa entre o navegador e o site vai protegida por **criptografia**: a mensagem vira um código que só as duas pontas conseguem ler.
 
 ### Nuvem em uma frase
 

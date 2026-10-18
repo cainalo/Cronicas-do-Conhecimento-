@@ -385,7 +385,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'A regra de ouro',
-        text: 'Nunca separe com uma vírgula só quem faz a ação e a ação. Errado: "Os auditores, concluíram o relatório". Certo: "Os auditores concluíram o relatório". Se houver algo no meio, use duas vírgulas: "Os auditores, após três meses, concluíram o relatório".',
+        text: 'Nunca separe com uma vírgula só o **sujeito**, quem faz a ação, e o verbo, a ação. Errado: "Os auditores, concluíram o relatório". Certo: "Os auditores concluíram o relatório". Se houver algo no meio, use duas vírgulas: "Os auditores, após três meses, concluíram o relatório".',
       },
       {
         title: 'Vírgulas que mudam o sentido',
@@ -393,7 +393,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Outros usos da vírgula',
-        text: 'Use vírgula para chamar alguém: "Senhor Presidente, encaminho o relatório". Use também para uma explicação no meio da frase: "O TCE-GO, órgão de controle, emitiu parecer". E antes de "mas": "Analisou as notas, mas não achou o contrato".',
+        text: 'Use vírgula no **vocativo**, o chamado a alguém: "Senhor Presidente, encaminho o relatório". Use também para uma explicação no meio da frase: "O TCE-GO, órgão de controle, emitiu parecer". E antes de "mas": "Analisou as notas, mas não achou o contrato".',
       },
       {
         title: 'Pronome antes ou depois?',
@@ -413,7 +413,6 @@ export const simpleGerais: Record<string, SimpleSection> = {
       { term: 'Vocativo', meaning: 'Chamado a alguém, como "Senhor Presidente,".' },
       { term: 'Pronome oblíquo', meaning: 'Palavrinha que completa o verbo, como me, se, lhe, o.' },
       { term: 'Cujo', meaning: 'Palavra que indica posse, como "do qual". Nunca vem com "o" depois.' },
-      { term: 'Ponto e vírgula', meaning: 'Sinal que separa partes longas, como itens de uma lei.' },
     ],
     checks: [
       { statement: '"Os auditores, concluíram o relatório" está bem pontuado.', answer: false, why: 'Uma vírgula só não pode separar quem age da ação.' },
@@ -466,7 +465,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
     pages: [
       {
         title: 'O que é concordância?',
-        text: '**Concordância** é fazer as palavras combinarem. Se quem age é plural, o verbo vai ao plural: "os auditores trabalham". É o assunto de gramática que mais cai na prova. A técnica é sempre a mesma: ache o verbo, ache quem age e confira.',
+        text: '**Concordância** é fazer as palavras combinarem. Se quem age, o **sujeito**, está no plural, o verbo vai ao plural: "os auditores trabalham". É o assunto de gramática que mais cai na prova. A técnica é sempre a mesma: ache o verbo, ache quem age e confira.',
       },
       {
         title: 'Quem age vem depois',
@@ -474,7 +473,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Haver no sentido de existir',
-        text: 'Quando "haver" quer dizer existir, ele fica sempre no singular. Certo: "Havia irregularidades". Errado: "Haviam irregularidades". Já "existir" vai ao plural: "Existiam irregularidades". O singular passa para o verbo ao lado: "Deve haver falhas", nunca "devem haver".',
+        text: 'Quando "haver" quer dizer existir, ele é um **verbo impessoal**: não tem ninguém agindo e fica no singular. Certo: "Havia irregularidades". Errado: "Haviam irregularidades". Já "existir" vai ao plural: "Existiam irregularidades". O singular passa para o verbo ao lado: "Deve haver falhas", nunca "devem haver".',
       },
       {
         title: 'Fazer quando fala de tempo',
@@ -522,11 +521,11 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Ativa e passiva',
-        text: 'Na **voz ativa**, quem age vem primeiro: "O Tribunal julgou as contas". Na **voz passiva**, o destaque vai para o que sofreu a ação: "As contas foram julgadas pelo Tribunal". O tempo combina: "aprovará" vira "será aprovado".',
+        text: 'Na **voz ativa**, quem age vem primeiro: "O Tribunal julgou as contas". Na **voz passiva**, o destaque vai para o que sofreu a ação: "As contas foram julgadas pelo Tribunal". Quem agiu vem depois de "por": é o **agente da passiva**. O tempo combina: "aprovará" vira "será aprovado".',
       },
       {
         title: 'Tempos que combinam',
-        text: 'Os tempos dos verbos precisam combinar. "Se o prazo fosse maior, a equipe concluiria." "Se o prazo for maior, a equipe concluirá." Errado: "Se o gestor tivesse prestado contas, não será multado". Certo: "não seria multado".',
+        text: 'Os tempos dos verbos precisam combinar. Isso é a **correlação de tempos**. "Se o prazo fosse maior, a equipe concluiria." "Se o prazo for maior, a equipe concluirá." Errado: "Se o gestor tivesse prestado contas, não será multado". Certo: "não seria multado".',
       },
       {
         title: 'Ver e vir',
@@ -534,7 +533,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Resumindo',
-        text: 'Regência é saber se a palavra pede preposição. "Prefiro isto a aquilo", sem "mais" e sem "do que". Os tempos dos verbos precisam combinar entre si.',
+        text: 'Regência é saber se a palavra pede preposição. "Prefiro revisar a reescrever", sem "mais" e sem "do que". Os tempos dos verbos precisam combinar entre si.',
       },
     ],
     words: [
@@ -563,7 +562,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'O que cada ligação diz',
-        text: 'Cada palavra de ligação tem um sentido. "Mas", "porém", "contudo" mostram oposição. "Portanto" e "logo" trazem conclusão. "Porque" e "já que" dão a causa. "Se" e "caso" trazem condição. "Embora" mostra uma ideia que não impede a outra.',
+        text: 'Cada palavra de ligação tem um sentido. "Mas", "porém", "contudo" mostram oposição. "Portanto" e "logo" trazem conclusão. "Porque" e "já que" dão a causa. "Se" e "caso" trazem condição. "Embora" mostra uma **concessão**: uma ideia que não impede a outra.',
       },
       {
         title: 'Troca segura',
@@ -595,7 +594,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
     pages: [
       {
         title: 'O que é redação oficial?',
-        text: '**Redação oficial** é o jeito como o poder público escreve seus documentos e comunicações. No Tribunal, você vai ler e escrever esse tipo de texto. A base usada pelas bancas é o **Manual de Redação da Presidência da República**, cuja 3ª edição saiu em 2018.',
+        text: '**Redação oficial** é o jeito como o poder público escreve seus documentos e comunicações. No Tribunal, você vai ler e escrever esse tipo de texto. A base usada pelas bancas é o **Manual de Redação da Presidência da República**. A 3ª edição dele saiu em 2018.',
       },
       {
         title: 'Como deve ser o texto',
@@ -611,7 +610,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Um só nome: ofício',
-        text: 'Antes existiam ofício, aviso e memorando, cada um com seu formato. A 3ª edição do Manual juntou os três num formato só, o **padrão ofício**. Hoje o nome usado nos três casos é "ofício". Ele tem partes fixas, como local e data, assunto, texto e assinatura.',
+        text: 'Antes existiam ofício, aviso e memorando, cada um com seu formato. A 3ª edição do Manual juntou os três num formato só, o **padrão ofício**. Hoje o nome usado nos três casos é "ofício". Ele tem partes fixas, como local e data, assunto, texto e identificação de quem assina.',
       },
       {
         title: 'Resumindo',
@@ -645,16 +644,16 @@ export const simpleGerais: Record<string, SimpleSection> = {
         text: 'Os **números inteiros** incluem os negativos, como uma conta bancária no vermelho: −50 é dever 50 reais. Na multiplicação, sinais iguais dão positivo e sinais diferentes dão negativo. Exemplo: (−2) × (−3) = 6. Já (−2) × 3 = −6.',
       },
       {
+        title: 'O que é potência?',
+        text: '**Potência** é multiplicar um número por ele mesmo várias vezes. 2³ quer dizer 2 × 2 × 2 = 8. Cuidado com o sinal: (−2)² = (−2) × (−2) = 4. Mas −2² = −4, porque sem parênteses o **expoente**, o número pequeno no alto, vale só para o 2.',
+      },
+      {
         title: 'A ordem das contas',
         text: 'Numa conta grande, siga esta ordem. Primeiro o que está entre parênteses. Depois as potências. Depois multiplicação e divisão, da esquerda para a direita. Por último, soma e subtração. Exemplo: 20 ÷ 4 × 5. Primeiro 20 ÷ 4 = 5. Depois 5 × 5 = 25.',
       },
       {
-        title: 'O que é potência?',
-        text: '**Potência** é multiplicar um número por ele mesmo várias vezes. 2³ quer dizer 2 × 2 × 2. Passo a passo: 2 × 2 = 4, e 4 × 2 = 8. Cuidado com o sinal: (−2)² = (−2) × (−2) = 4. Mas −2² = −4, porque sem parênteses o expoente vale só para o 2.',
-      },
-      {
         title: 'O que é fração?',
-        text: 'Uma **fração** é uma parte de um todo, como fatias de uma pizza. Em 3/8, o 8 diz em quantas partes o todo foi dividido. O 3 diz quantas partes você pega. Para achar 3/8 de 1.200: primeiro 1.200 ÷ 8 = 150. Depois 150 × 3 = 450.',
+        text: 'Uma **fração** é uma parte de um todo, como fatias de uma pizza. Em 3/8, o 8, o **denominador**, diz em quantas partes o todo foi dividido. O 3, o **numerador**, diz quantas partes você pega. Para achar 3/8 de 1.200: primeiro 1.200 ÷ 8 = 150. Depois 150 × 3 = 450.',
       },
       {
         title: 'A fração do que sobrou',
@@ -736,7 +735,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Junto ou ao contrário?',
-        text: 'Duas grandezas são **diretamente proporcionais** quando uma dobra e a outra também dobra. Exemplo: mais páginas, mais tempo de impressão. São **inversamente proporcionais** quando uma dobra e a outra cai pela metade. Exemplo: mais servidores, menos dias para terminar a mesma tarefa.',
+        text: 'Uma **grandeza** é algo que se mede ou conta, como tempo ou páginas. Duas grandezas são **diretamente proporcionais** quando uma dobra e a outra também dobra. Exemplo: mais páginas, mais tempo de impressão. São **inversamente proporcionais** quando uma dobra e a outra cai pela metade. Exemplo: mais servidores, menos dias para terminar a mesma tarefa.',
       },
       {
         title: 'Dividir em partes',
@@ -781,7 +780,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'O número que multiplica',
-        text: 'Use o **fator multiplicativo**, o número que já faz o aumento ou o desconto. Aumento de 8%: multiplique por 1,08. Desconto de 15%: multiplique por 0,85. Exemplo: R$ 100 com aumento de 8% vira 100 × 1,08 = 108.',
+        text: 'Use o **fator multiplicativo**, o número que já faz o aumento ou o desconto. Um **acréscimo** (aumento) de 8%: multiplique por 1,08. Desconto de 15%: multiplique por 0,85. Exemplo: R$ 100 com aumento de 8% vira 100 × 1,08 = 108.',
       },
       {
         title: 'Um aumento depois do outro',
@@ -793,7 +792,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Ponto percentual',
-        text: 'Uma taxa passou de 40% para 50%. A diferença é de 10 **pontos percentuais**, que é a conta 50 − 40. Mas o aumento relativo é de 25%, porque 10 ÷ 40 = 0,25. Dizer "aumentou 10%" nesse caso está errado.',
+        text: 'Uma taxa passou de 40% para 50%. A diferença é de 10 **pontos percentuais**, que é a conta 50 − 40. Mas, em relação aos 40% do início, o aumento é de 25%, porque 10 ÷ 40 = 0,25. Dizer "aumentou 10%" nesse caso está errado.',
       },
       {
         title: 'Resumindo',
@@ -833,11 +832,11 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Todo, algum, nenhum',
-        text: 'Desenhe círculos. "Todo auditor é servidor": o círculo dos auditores fica dentro do dos servidores. Agora, "algum servidor é engenheiro" não garante que algum auditor seja engenheiro. Os engenheiros podem estar fora do círculo dos auditores.',
+        text: 'Desenhe círculos. "Todo auditor é servidor": o círculo dos auditores fica dentro do dos servidores. Agora, "algum servidor é engenheiro" não garante que algum auditor seja engenheiro. Os engenheiros podem estar fora do círculo dos auditores. E o contrário de "todo relatório foi entregue" é "algum relatório não foi entregue".',
       },
       {
         title: 'Se isto, então aquilo',
-        text: '"Se chove, a sessão é adiada." Se choveu, a sessão foi adiada: certo. Se a sessão não foi adiada, não choveu: certo. Mas se a sessão foi adiada, não dá para concluir que choveu. Pode ter sido outro motivo. Outra regra: o contrário de "todo relatório foi entregue" é "algum relatório não foi entregue".',
+        text: 'Uma **premissa** é uma pista dada como verdadeira: "Se chove, a sessão é adiada". Choveu? Então a sessão foi adiada. A sessão não foi adiada? Então não choveu. Mas, se a sessão foi adiada, você não pode concluir que choveu. Pode ter sido outro motivo.',
       },
       {
         title: 'Resumindo',
@@ -849,7 +848,6 @@ export const simpleGerais: Record<string, SimpleSection> = {
       { term: 'Hipótese', meaning: 'Suposição que você testa para ver se dá certo.' },
       { term: 'Premissa', meaning: 'Informação dada como verdadeira no início do raciocínio.' },
       { term: 'Conclusão', meaning: 'O que se descobre a partir das premissas.' },
-      { term: 'Argumento válido', meaning: 'Se as premissas são verdadeiras, a conclusão é obrigatoriamente verdadeira.' },
       { term: 'Negação', meaning: 'A frase contrária. A de "todo" é "algum não".' },
     ],
     checks: [
@@ -866,7 +864,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Primeiro, olhe os saltos',
-        text: 'Uma **sequência** é uma lista em que cada item segue uma regra. Veja 5, 9, 13, 17. Calcule os saltos: 9 − 5 = 4; 13 − 9 = 4; 17 − 13 = 4. O salto é sempre 4. Então o próximo é 17 + 4 = 21.',
+        text: 'Uma **sequência** é uma lista em que cada item, o **termo**, segue uma regra. Veja 5, 9, 13, 17. Calcule os saltos: 9 − 5 = 4; 13 − 9 = 4; 17 − 13 = 4. O salto é sempre 4. Então o próximo é 17 + 4 = 21.',
       },
       {
         title: 'Saltos que crescem',
@@ -878,7 +876,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Padrões que se repetem',
-        text: 'A palavra TCEGO se repete: TCEGOTCEGO. Qual é a 12ª letra? O ciclo tem 5 letras. Divida: 12 ÷ 5 = 2, sobra 2. A sobra diz a posição no ciclo. A 2ª letra de TCEGO é C. Se sobrar zero, é a última letra do ciclo.',
+        text: 'A palavra TCEGO se repete: TCEGOTCEGO. Qual é a 12ª letra? O ciclo tem 5 letras. Divida: 12 ÷ 5 = 2, sobra 2. A sobra, o **resto**, diz a posição no ciclo. A 2ª letra de TCEGO é C. Se sobrar zero, é a última letra do ciclo.',
       },
       {
         title: 'O intruso do grupo',
@@ -894,7 +892,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       { term: 'Termo', meaning: 'Cada item de uma sequência.' },
       { term: 'Ciclo', meaning: 'Grupo de itens que se repete sempre na mesma ordem.' },
       { term: 'Resto', meaning: 'O que sobra numa divisão: 12 ÷ 5 dá 2 e sobra 2.' },
-      { term: 'Analogia', meaning: 'Relação que se repete: auditor está para auditoria como juiz para julgamento.' },
+      { term: 'Intruso', meaning: 'Item que não segue a regra do resto do grupo.' },
     ],
     checks: [
       { statement: 'Em 5, 9, 13, 17, o próximo número é 21.', answer: true, why: 'O salto é sempre 4: 17 + 4 = 21.' },
@@ -910,7 +908,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'A semana tem 7 dias',
-        text: 'A cada 7 dias, o dia da semana se repete. Então divida o número de dias por 7 e olhe a sobra. Exemplo: hoje é terça. Daqui a 100 dias? 100 ÷ 7 = 14, sobra 2. Ande 2 dias a partir de terça: quarta, quinta. Será quinta-feira.',
+        text: 'A cada 7 dias, o dia da semana se repete. Então divida o número de dias por 7 e olhe a sobra, o **resto**. Exemplo: hoje é terça. Daqui a 100 dias? 100 ÷ 7 = 14, sobra 2. Ande 2 dias a partir de terça: quarta, quinta. Será quinta-feira.',
       },
       {
         title: 'Contar prazos sem errar',
@@ -926,7 +924,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Girar no lugar',
-        text: 'Pense nas direções como graus: norte é 0, leste é 90, sul é 180, oeste é 270. Girar no **sentido horário**, o dos ponteiros do relógio, soma. Girar ao contrário subtrai. Exemplo: de frente para o norte, gire 90 no horário: 0 + 90 = 90. Você fica de frente para o leste.',
+        text: 'Os **pontos cardeais**, as quatro direções, viram graus: norte é 0, leste é 90, sul é 180, oeste é 270. Girar no **sentido horário**, o dos ponteiros do relógio, soma. Girar ao contrário subtrai. Exemplo: de frente para o norte, gire 90 no horário: 0 + 90 = 90. Você fica de frente para o leste.',
       },
       {
         title: 'Resumindo',
@@ -938,7 +936,6 @@ export const simpleGerais: Record<string, SimpleSection> = {
       { term: 'Prazo', meaning: 'Tempo marcado para fazer algo.' },
       { term: 'Sentido horário', meaning: 'Girar para o mesmo lado dos ponteiros do relógio.' },
       { term: 'Pontos cardeais', meaning: 'As quatro direções principais: norte, sul, leste e oeste.' },
-      { term: 'Ano bissexto', meaning: 'Ano com 29 de fevereiro, ou seja, 366 dias.' },
     ],
     checks: [
       { statement: '0,5 hora é o mesmo que 50 minutos.', answer: false, why: '0,5 × 60 = 30 minutos.' },
@@ -953,7 +950,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
     pages: [
       {
         title: 'As regras do serviço público',
-        text: 'A **Constituição Federal** é a lei mais importante do país. O **art. 37** dela traz as regras básicas de todo o serviço público. O Tribunal de Contas usa essas regras para avaliar se um gasto ou uma nomeação foi correta. A prova cobra o texto ao pé da letra.',
+        text: 'A **Constituição Federal** é a lei mais importante do país. O **art. 37** dela traz as regras básicas de todo o serviço público. O Tribunal de Contas usa essas regras para avaliar se um gasto ou uma nomeação seguiu a lei. A prova cobra o texto ao pé da letra.',
       },
       {
         title: 'Os cinco princípios: LIMPE',
@@ -1055,11 +1052,11 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Apreciar não é julgar',
-        text: 'Esta é a pegadinha mais comum. As contas do Presidente da República, o Tribunal **aprecia**: dá uma opinião, o **parecer prévio**, em sessenta dias. Quem julga essas contas é o Congresso. Já as contas dos administradores do dinheiro público, o próprio Tribunal **julga**.',
+        text: 'Esta é a pegadinha mais comum. O Tribunal **aprecia** as contas do Presidente da República: dá uma opinião, o **parecer prévio**, em sessenta dias. Quem julga essas contas é o Congresso. O próprio Tribunal **julga** as contas de quem administra dinheiro público.',
       },
       {
         title: 'Ato ou contrato?',
-        text: 'Se um **ato** irregular não for corrigido, o próprio Tribunal pode **sustar**, ou seja, suspender, sua execução. Se for um **contrato**, quem susta é o Legislativo. O Tribunal só decide se, em noventa dias, o Legislativo ou o Executivo não tomarem as medidas.',
+        text: 'Um **ato** é uma decisão do gestor. Se um ato irregular não for corrigido, o próprio Tribunal pode **sustar**, ou seja, suspender, sua execução. Se for um **contrato**, quem susta é o Legislativo. O Tribunal só decide se, em noventa dias, o Legislativo ou o Executivo não tomarem as medidas.',
       },
       {
         title: 'Qualquer pessoa pode denunciar',
@@ -1067,7 +1064,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Resumindo',
-        text: 'O Legislativo faz o controle externo com o auxílio do Tribunal de Contas. As contas do chefe do Executivo, o Tribunal só aprecia; as dos administradores, ele julga. Contrato quem susta é o Legislativo.',
+        text: 'O Legislativo faz o controle externo com o auxílio do Tribunal de Contas. O Tribunal só aprecia as contas do chefe do Executivo e julga as dos administradores. Quem susta contrato é o Legislativo.',
       },
     ],
     words: [
@@ -1093,7 +1090,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'O que o TCE-GO faz',
-        text: 'O TCE-GO ajuda a **Assembleia Legislativa**, os deputados estaduais, a fiscalizar o dinheiro público. Ele aprecia as contas do Governador com um parecer prévio, em sessenta dias. Quem julga essas contas é a Assembleia. Já as contas dos administradores, o próprio Tribunal julga.',
+        text: 'O TCE-GO ajuda a **Assembleia Legislativa**, os deputados estaduais, a fiscalizar o dinheiro público. Ele aprecia as contas do Governador com um parecer prévio, em sessenta dias. Quem julga essas contas é a Assembleia. O próprio Tribunal julga as contas dos administradores.',
       },
       {
         title: 'Quem compõe o Tribunal',
@@ -1105,11 +1102,11 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Quando não dá para julgar',
-        text: 'As contas são **iliquidáveis** quando um caso fortuito ou de força maior torna impossível julgar. Exemplo: os documentos se perderam numa enchente que ninguém poderia evitar. Nesse caso, o Tribunal manda **trancar** as contas, ou seja, encerrá-las sem julgar o mérito.',
+        text: 'As contas são **iliquidáveis** quando um **caso fortuito ou de força maior**, algo que ninguém podia evitar, torna impossível julgar. Exemplo: os documentos se perderam numa enchente que ninguém poderia evitar. Nesse caso, o Tribunal manda **trancar** as contas, ou seja, encerrá-las sem dizer se estão certas ou erradas.',
       },
       {
         title: 'Resumindo',
-        text: 'O TCE-GO tem sete conselheiros e ajuda a Assembleia. As contas do Governador ele aprecia; as dos administradores ele julga. Falha só de forma, sem prejuízo, leva a contas regulares com ressalva.',
+        text: 'O TCE-GO tem sete conselheiros e ajuda a Assembleia. Ele aprecia as contas do Governador e julga as dos administradores. Falha só de forma, sem prejuízo, leva a contas regulares com ressalva.',
       },
     ],
     words: [
@@ -1139,7 +1136,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'O período de teste',
-        text: 'O **estágio probatório** é um período de teste depois que o servidor entra. No estatuto de Goiás, ele dura três anos de efetivo exercício. Serve para ver se o servidor é apto para o cargo. Quem não é aprovado é exonerado, ou seja, sai do cargo.',
+        text: 'O **estágio probatório** é um período de teste depois que o servidor entra. No estatuto de Goiás, ele dura três anos de efetivo exercício. Serve para ver se o servidor é apto para o cargo. Quem não é aprovado é exonerado, ou seja, sai do cargo. Se já era estável em outro cargo, volta para ele.',
       },
       {
         title: 'O que é avaliado',
@@ -1180,7 +1177,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Cada resolução, um assunto',
-        text: 'Uma resolução é como uma portaria interna. O edital diz o assunto de cada uma. A RA 14/2025 trata da estrutura do Tribunal. A RA 17/2024 trata da segurança da informação. A RN 5/2024 trata da proteção de dados pessoais. A RA 24/2024 trata do uso de inteligência artificial.',
+        text: 'Uma resolução é uma regra interna do Tribunal. O edital diz o assunto de cada uma. A RA 14/2025 trata da estrutura do Tribunal. A RA 17/2024 trata da segurança da informação. A RN 5/2024 trata da proteção de dados pessoais. A RA 24/2024 trata do uso de inteligência artificial.',
       },
       {
         title: 'Mais duas para lembrar',

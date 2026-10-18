@@ -7,7 +7,7 @@
 - App publicado automaticamente no GitHub Pages a cada push (workflow `.github/workflows/pages.yml` → branch `gh-pages`): https://cainalo.github.io/Cronicas-do-Conhecimento-/ e APK em `/download/`. Usuário confirmou que o APK instala e funciona.
 - Edital oficial conferido (`docs/fontes/`), 68 tópicos em `contest.ts`.
 - **Conteúdo: 68/68 tópicos com material** (14 grimórios, 33 capítulos, 37 lições, 407 questões autorais, 8 estudos de caso), incluindo o grimório introdutório **O Primeiro Pergaminho**.
-- **Estudo do zero**: cada trecho começa em **Aprender** (`/aprender/:cap/:trecho`, explicação simples de 4–7 páginas curtas, palavras novas, 3 verificações) → **Praticar** (aquecimento fácil primeiro) → **Desafio**; texto completo opcional. As 112 seções têm camada simples (`content/game/simple/`, `grimoires/primeiros/simple.ts`), escrita por agentes e **não revisada por humano**.
+- **Estudo do zero**: cada trecho começa em **Aprender** (`/aprender/:cap/:trecho`, explicação simples de 4–7 páginas curtas, palavras novas, 3 verificações) → **Praticar** (aquecimento fácil primeiro) → **Desafio**; texto completo opcional. As 112 seções têm camada simples (`content/game/simple/`, `grimoires/primeiros/simple.ts`), escrita e revisada por agentes (leitura de iniciante, 8 erros de fato corrigidos), **ainda sem revisão humana**.
 - **Livro de couro** (`components/LeatherBook.tsx`): capa, folhas empilhadas, pergaminho envelhecido, virada por dobra mostrando o verso. Ver `docs/CONTENT_COVERAGE.md`; normas estaduais/TCE-GO e LC 205 só em panorama (faltam os PDFs oficiais).
 - **Estudo estilo Duolingo**: livro com páginas que viram, trilha Ler → Praticar por trecho e Desafio por capítulo; 105 seções com cena e atividades próprias (`content/game/scenes/`).
 - Narrativa (Fase F): prólogo, falas por região e diário de pistas (`src/content/game/story.ts`).
@@ -16,7 +16,7 @@
 - Fases D e E completas; Supabase com RLS verificado; login/sync pelo navegador ainda **não confirmados pelo usuário**.
 
 ## Testes
-`npm test` 688/688; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
+`npm test` 689/689; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
 
 ## Pendências com o usuário
 - Pedir retorno sobre a clareza da explicação simples (o usuário disse que não entendia nada) e sobre o livro de couro; e sobre login/sincronização.

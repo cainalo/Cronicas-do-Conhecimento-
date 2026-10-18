@@ -60,7 +60,7 @@ export const simplePrimeiros: Record<string, SimpleSection> = {
       { title: 'Arquivos e pastas', text: 'Um **arquivo** é um conjunto de dados com um nome, como um contrato ou uma foto. Uma **pasta** agrupa arquivos, como uma pasta de papel na gaveta. Uma pasta pode ficar dentro de outra.' },
       { title: 'O final do nome', text: 'A **extensão** é o final do nome, depois do ponto. Ela diz o tipo do arquivo. Exemplos: ".pdf" é documento, ".xlsx" é planilha do Excel, ".jpg" é imagem e ".exe" é programa do Windows.' },
       { title: 'Cuidado com nomes', text: 'Trocar o final do nome não muda o que está dentro. Um programa renomeado para ".pdf" continua sendo programa. Golpistas usam esse truque para enganar.' },
-      { title: 'Quem pode o quê?', text: 'O sistema guarda **permissões**: regras de quem pode **ler**, **alterar** ou **executar** cada arquivo. Exemplo: o servidor do setor de contratos pode alterar a planilha. O estagiário talvez só possa ler.' },
+      { title: 'Quem pode o quê?', text: 'O sistema guarda **permissões**: regras de quem pode **ler**, **alterar** ou **executar** (rodar, no caso de programa) cada arquivo. Exemplo: o funcionário do setor de contratos pode alterar a planilha. O estagiário talvez só possa ler.' },
       { title: 'Resumindo', text: 'O sistema operacional gerencia a máquina e os arquivos. A extensão indica o tipo do arquivo. Permissões dizem quem pode ler, alterar ou executar.' },
     ],
     words: [
@@ -84,7 +84,7 @@ export const simplePrimeiros: Record<string, SimpleSection> = {
       { title: 'O que é um programa?', text: 'Um **programa** é um algoritmo escrito em uma **linguagem de programação**. A linguagem é um jeito de escrever que o computador consegue seguir. Exemplos: Python, Java e JavaScript.' },
       { title: 'O pote com etiqueta', text: 'Uma **variável** é um lugar na memória com um nome, onde o programa guarda um valor. É como um pote com etiqueta "açúcar". Exemplo: `valor = 1500` guarda 1500 no pote chamado valor. Depois, o conteúdo pode mudar.' },
       { title: 'O "se"', text: 'Uma **condição** faz o programa escolher um caminho. Exemplo: se estiver chovendo, leve o guarda-chuva; senão, leve o boné. No Tribunal: se o contrato passar do limite, marque para análise; senão, arquive.' },
-      { title: 'Fazer de novo', text: 'Uma **repetição**, ou **laço**, repete passos. "Para cada nota, confira o valor" repete uma vez por nota. "Enquanto houver fila, atenda" repete até a fila acabar. Se a condição nunca acabar, o laço fica infinito.' },
+      { title: 'Fazer de novo', text: 'Uma **repetição**, ou **laço**, repete passos. "Para cada nota, confira o valor" repete uma vez por nota. "Enquanto houver fila, atenda" repete até a fila acabar. Se o "enquanto" nunca encontrar o fim, o laço não para: é o **laço infinito**.' },
       { title: 'Resumindo', text: 'Algoritmo é uma receita. Variável guarda um valor. Condição escolhe um caminho, e repetição faz o mesmo passo várias vezes.' },
     ],
     words: [
@@ -93,7 +93,7 @@ export const simplePrimeiros: Record<string, SimpleSection> = {
       { term: 'Variável', meaning: 'Pote com nome na memória, onde se guarda um valor.' },
       { term: 'Condição', meaning: 'Teste que faz o programa escolher um caminho: se ou senão.' },
       { term: 'Laço', meaning: 'Repetição de passos, uma vez por item ou enquanto algo valer.' },
-      { term: 'Laço infinito', meaning: 'Repetição que nunca termina, porque a condição nunca fica falsa.' },
+      { term: 'Laço infinito', meaning: 'Repetição que nunca termina, porque o fim nunca chega.' },
     ],
     checks: [
       { statement: 'Uma receita de bolo é um exemplo de algoritmo.', answer: true, why: 'Ela é uma lista de passos em ordem.' },
@@ -106,10 +106,10 @@ export const simplePrimeiros: Record<string, SimpleSection> = {
     pages: [
       { title: 'Para que serve isso?', text: 'Quando você abre um sistema do Tribunal ou manda um e-mail, a informação viaja por uma rede. Entender essa viagem ajuda a perceber por que algo fica lento, cai ou precisa de proteção.' },
       { title: 'O que é uma rede?', text: 'Uma **rede** é um grupo de computadores ligados para trocar informação. A **internet** é a rede gigante que liga redes do mundo inteiro.' },
-      { title: 'O endereço da casa', text: 'Para uma carta chegar, ela precisa de endereço. Na rede, cada aparelho tem um **endereço IP**. Exemplo: 192.168.0.10, quatro números separados por pontos. Existe também o **IPv6**, um formato mais novo e mais longo.' },
+      { title: 'O endereço da casa', text: 'Para uma carta chegar, ela precisa de endereço. Na rede, cada aparelho tem um **endereço IP**, um número que o identifica. Exemplo: 192.168.0.10, quatro números separados por pontos. Existe também o **IPv6**, um formato mais novo e mais longo.' },
       { title: 'O carteiro da esquina', text: 'O **roteador** é o aparelho que liga uma rede a outra e escolhe o caminho dos dados. O roteador da sua casa liga seus aparelhos à internet. Na internet, muitos roteadores passam a mensagem adiante até o destino.' },
       { title: 'Quem pede e quem atende', text: 'O **cliente** é quem pede, como seu celular abrindo uma página. O **servidor** é o computador que atende e entrega a resposta. É como no restaurante: você pede e a cozinha entrega o prato.' },
-      { title: 'Nomes em vez de números', text: 'O **navegador**, como o Chrome, abre os sites. Você digita um nome, e o **DNS** traduz esse nome para o IP, como uma agenda telefônica. **Nuvem** é usar computadores de outra empresa pela internet, pagando pelo uso.' },
+      { title: 'Nomes em vez de números', text: 'O **navegador**, como o Chrome, abre os sites. Você digita um nome, e o **DNS**, um serviço da rede, traduz esse nome para o IP, como uma agenda telefônica. **Nuvem** é usar computadores de outra empresa pela internet, pagando pelo uso.' },
       { title: 'Resumindo', text: 'O IP é o endereço do aparelho. O roteador escolhe o caminho. O cliente pede, o servidor atende, e o DNS troca nome por número.' },
     ],
     words: [
@@ -132,10 +132,10 @@ export const simplePrimeiros: Record<string, SimpleSection> = {
     pages: [
       { title: 'Para que serve isso?', text: 'O Tribunal guarda milhares de contratos, pagamentos e fornecedores. Para achar e conferir essas informações, elas precisam estar bem organizadas. É isso que um banco de dados faz.' },
       { title: 'Dado e informação', text: 'Um **dado** é um registro solto, como "1500" ou "Maria". A **informação** aparece quando o dado ganha sentido: "Maria recebeu R$ 1.500 em 10/03/2026".' },
-      { title: 'O arquivo organizado', text: 'Um **banco de dados** é um conjunto de dados guardados em ordem, como um grande arquivo de fichas. O programa que cuida dele se chama **SGBD**. Exemplos: PostgreSQL e MySQL.' },
+      { title: 'O arquivo organizado', text: 'Um **banco de dados** é um conjunto de dados guardados em ordem, como um grande arquivo de fichas. O programa que cuida dele se chama **SGBD** (sistema gerenciador de banco de dados). Exemplos: PostgreSQL e MySQL.' },
       { title: 'Tabela, linha e coluna', text: 'Os dados ficam em **tabelas**, parecidas com uma planilha. Cada **coluna** é uma característica, como nome ou cidade. Cada **linha** é um registro completo. Exemplo: na tabela Fornecedores, uma linha é um fornecedor com seu CNPJ, nome e cidade.' },
       { title: 'A identidade do registro', text: 'A **chave primária** é a coluna que identifica cada linha sem repetir. É como o CPF de uma pessoa. Na tabela Fornecedores, o CNPJ pode ser a chave primária.' },
-      { title: 'Ligando tabelas', text: 'A **chave estrangeira** é uma coluna que aponta para a chave de outra tabela. Na tabela Contratos, o CNPJ do fornecedor liga cada contrato ao fornecedor certo. Para conversar com o banco, usamos uma linguagem chamada **SQL**.' },
+      { title: 'Ligando tabelas', text: 'A **chave estrangeira** é uma coluna que aponta para a chave de outra tabela. Na tabela Contratos, o CNPJ do fornecedor liga cada contrato ao fornecedor certo. Para pedir, incluir, alterar ou apagar dados, usamos a linguagem **SQL**.' },
       { title: 'Resumindo', text: 'Tabelas têm colunas e linhas. A chave primária não se repete. A chave estrangeira liga uma tabela a outra.' },
     ],
     words: [
