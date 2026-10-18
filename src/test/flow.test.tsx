@@ -95,6 +95,8 @@ it('prática: abre a rodada do trecho e mostra a primeira atividade', async () =
   await user.click(screen.getByRole('button', { name: /Começar/ }));
   expect(screen.getByRole('button', { name: 'Sair da prática' })).toBeInTheDocument();
   expect(screen.getByText(/Verdadeiro ou falso\?|Qual é o termo\?|Complete a frase|Associe cada termo|Questão no estilo da prova/)).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: 'Palavras do trecho' }));
+  expect(screen.getByRole('dialog', { name: 'Palavras do trecho' })).toBeInTheDocument();
 });
 
 it('simulado: monta, responde, entrega e mostra o boletim', async () => {

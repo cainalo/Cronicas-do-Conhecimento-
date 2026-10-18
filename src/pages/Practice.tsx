@@ -132,6 +132,7 @@ export function PracticePage() {
   const [verdict, setVerdict] = useState<Verdict>();
   const [firstTry, setFirstTry] = useState<Record<string, boolean>>({});
   const [combo, setCombo] = useState(0);
+  const [help, setHelp] = useState(false);
 
   if (!chapter || !section) return <p>Trecho não encontrado.</p>;
   const total = initial.length;
@@ -195,10 +196,36 @@ export function PracticePage() {
         <div className="h-3.5 flex-1 overflow-hidden rounded-full bg-raised">
           <div className="h-full rounded-full bg-ok transition-all duration-500" style={{ width: `${progress * 100}%` }} />
         </div>
+        {simple && phase === 'play' && (
+          <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => setHelp(true)} aria-label="Palavras do trecho">
+            <Icon name="pergaminho" size={20} />
+          </button>
+        )}
         <span className={`inline-flex items-center gap-1 text-sm font-bold ${combo >= 2 ? 'anim-hop text-ember' : 'text-muted'}`} aria-label={`Sequência de ${combo}`}>
           <Icon name="chama" size={18} strokeWidth={2.2} /> {combo}
         </span>
       </div>
+
+      {help && simple && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-3 sm:items-center" onClick={() => setHelp(false)}>
+          <div className="anim-toast-in max-h-[75dvh] w-full max-w-md overflow-y-auto rounded-[1.8rem] bg-bg p-4 shadow-2xl" role="dialog" aria-label="Palavras do trecho" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-2 flex items-center justify-between">
+              <h2 className="text-lg">Palavras do trecho</h2>
+              <button className="grid h-9 w-9 place-items-center rounded-full hover:bg-raised" onClick={() => setHelp(false)} aria-label="Fechar">
+                <Icon name="errado" size={18} />
+              </button>
+            </div>
+            <dl className="space-y-2">
+              {simple.words.map((w) => (
+                <div key={w.term} className="rounded-xl bg-raised/60 px-3 py-2">
+                  <dt className="font-bold">{w.term}</dt>
+                  <dd className="text-sm text-muted">{w.meaning}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+      )}
 
       {phase === 'intro' && (
         <div className="flex flex-1 flex-col">
