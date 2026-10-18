@@ -48,6 +48,20 @@ export const chapters: Chapter[] = [capPrimComputador, capPrimRedesDados, capCri
 export const lessons: Lesson[] = [...licoesPrimeiros, ...licoesCap01, ...licoesCap02, ...licoesIa, ...licoesIa34, ...licoesDev, ...licoesDev34, ...licoesInfra, ...licoesInfraSo, ...licoesDados, ...licoesGovernanca, ...licoesLegislacao, ...licoesEngSoft, ...licoesDevops, ...licoesIngles, ...licoesPortugues, ...licoesInstitucional, ...licoesMatematica];
 export const questions: Question[] = [...questoesPrimeiros, ...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesIaCap0304, ...questoesDev, ...questoesDevCap0304, ...questoesInfra, ...questoesInfraSo, ...questoesDados, ...questoesGovernanca, ...questoesLegislacao, ...questoesEngSoft, ...questoesDevops, ...questoesIngles, ...questoesPortugues, ...questoesInstitucional, ...questoesMatematica];
 
+/**
+ * Caminho recomendado, do mais fácil ao mais difícil: começa pelo básico (Primeiro Pergaminho,
+ * sistema operacional, redes, dados, lógica), intercala as matérias gerais e deixa para depois
+ * os assuntos que dependem dos anteriores (criptografia, identidade, agentes, normas).
+ */
+const JOURNEY = [
+  'cap.prim.01', 'cap.prim.02', 'cap.infra.03', 'cap.infra.01', 'cap.dados.01', 'cap.dev.03', 'cap.mat.01', 'cap.port.01',
+  'cap.seg.02', 'cap.ia.03', 'cap.ia.01', 'cap.dev.01', 'cap.dados.02', 'cap.infra.02', 'cap.seg.01', 'cap.dev.02',
+  'cap.mat.02', 'cap.port.02', 'cap.dev.04', 'cap.es.01', 'cap.es.02', 'cap.devops.01', 'cap.devops.02', 'cap.ia.02',
+  'cap.ia.04', 'cap.ingles.01', 'cap.ingles.02', 'cap.gov.01', 'cap.gov.02', 'cap.leg.01', 'cap.leg.02', 'cap.inst.01', 'cap.inst.02',
+];
+const rank = (id: string) => (JOURNEY.indexOf(id) < 0 ? JOURNEY.length : JOURNEY.indexOf(id));
+export const journey: Chapter[] = [...chapters].sort((a, b) => rank(a.id) - rank(b.id));
+
 const byId = <T extends { id: string }>(list: T[]) => new Map(list.map((x) => [x.id, x]));
 const contestMap = byId(contests);
 const grimoireMap = byId(grimoires);

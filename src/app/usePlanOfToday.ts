@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useStudy } from '@/app/StudyProvider';
-import { DEFAULT_CONTEST_ID, chapters, essayPrompts, flashcards, lessons, questionsForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, essayPrompts, flashcards, journey, lessons, questionsForContest } from '@/content';
 import { buildPlan, isDone, localDay, settingsOf, type Plan } from '@/lib/planner';
 import { GUEST } from '@/lib/storage';
 import { recommend } from '@/lib/study';
@@ -13,7 +13,7 @@ export function usePlanOfToday() {
   const { data, session } = useStudy();
   const owner = session?.user.id ?? GUEST;
   const content = useMemo(
-    () => ({ chapters, lessons, bank: questionsForContest(DEFAULT_CONTEST_ID), cardIds: flashcards.map((f) => f.id), essays: essayPrompts }),
+    () => ({ chapters: journey, lessons, bank: questionsForContest(DEFAULT_CONTEST_ID), cardIds: flashcards.map((f) => f.id), essays: essayPrompts }),
     [],
   );
   const key = `cronicas:plano:${owner}:${localDay(new Date())}`;

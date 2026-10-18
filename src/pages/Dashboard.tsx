@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
-import { DEFAULT_CONTEST_ID, chapters, flashcards, getContest, lessons, questionsForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, flashcards, getContest, journey, lessons, questionsForContest } from '@/content';
 import { recommend, reviewQueue } from '@/lib/study';
 import { dueCards } from '@/lib/training';
 import { isDone, settingsOf } from '@/lib/planner';
@@ -27,7 +27,7 @@ export function Dashboard() {
   const c = (k: Parameters<typeof areaColor>[0]) => areaColor(k, dark);
   const contest = getContest(DEFAULT_CONTEST_ID)!;
   const bank = questionsForContest(contest.id);
-  const rec = recommend(data, chapters, lessons, bank);
+  const rec = recommend(data, journey, lessons, bank);
   const sheet = characterSheet(data);
   const queue = reviewQueue(data, bank);
   const cardsDue = dueCards(data, flashcards.map((f) => f.id)).length;

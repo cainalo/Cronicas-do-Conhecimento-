@@ -101,3 +101,13 @@ describe('explicação simples por trecho', () => {
     expect(s.checks.some((c) => !c.answer)).toBe(true);
   });
 });
+
+import { journey } from '@/content';
+describe('caminho recomendado', () => {
+  it('contém todos os capítulos uma vez e começa pelo Primeiro Pergaminho', () => {
+    expect(journey).toHaveLength(chapters.length);
+    expect(new Set(journey.map((c) => c.id)).size).toBe(chapters.length);
+    expect(journey[0].id).toBe('cap.prim.01');
+    expect(journey.findIndex((c) => c.id === 'cap.seg.01')).toBeGreaterThan(journey.findIndex((c) => c.id === 'cap.seg.02'));
+  });
+});

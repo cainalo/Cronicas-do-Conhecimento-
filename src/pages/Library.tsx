@@ -37,13 +37,18 @@ export function LibraryPage() {
     <div className="space-y-6">
       <PageHeader area="grimorios" crumb={false} title="Grimórios" subtitle={`${written.length} livros escritos para o ${contest.name}`} />
       <SceneBanner scene="biblioteca" dark={dark}>
-        Escolha um livro. Cada capítulo é uma trilha com paradas e uma lição no fim.
+        Nunca estudou TI? Comece pelo Primeiro Pergaminho. Em cada trecho você aprende, pratica e, no fim do capítulo, enfrenta o desafio.
       </SceneBanner>
       <ul className="stagger grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3">
         {written.map((g) => (
           <li key={g.id}>
             <Link to={`/grimorio/${g.id}`} className="group block">
-              <BookCover g={g} className="transition duration-300 ease-out group-hover:[transform:perspective(700px)_rotateY(-10deg)_translateY(-4px)] group-active:scale-[0.98]" />
+              <span className="relative block">
+                <BookCover g={g} className="transition duration-300 ease-out group-hover:[transform:perspective(700px)_rotateY(-10deg)_translateY(-4px)] group-active:scale-[0.98]" />
+                {g.id === 'grim.primeiros' && (
+                  <span className="anim-hop absolute -right-1 -top-2 rounded-full bg-ember px-2.5 py-1 text-[11px] font-bold text-white shadow-md">Comece aqui</span>
+                )}
+              </span>
               <p className="mt-3 text-xs font-semibold" style={{ color }}>{g.epithet.replace('Grimório de ', '')}</p>
               <h2 className="text-base leading-tight">{g.title}</h2>
               <p className="mt-0.5 text-xs text-muted">
