@@ -17,11 +17,11 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       },
       {
         title: 'O que é REST?',
-        text: '**REST** é um jeito muito usado de montar APIs na web. Nele, cada coisa tem um endereço, chamado **URI**, como `/processos/123`. Uma regra central: o REST é **sem estado**. Cada pedido traz tudo o que o servidor precisa. O servidor não guarda lembrança da conversa anterior.',
+        text: '**REST** é um jeito muito usado de montar APIs na web. Nele, cada coisa tem um endereço, chamado **URI**, como `/processos/123`. Uma regra central: o REST é **sem estado**. Cada pedido traz tudo o que o **servidor**, o computador que responde, precisa. Ele não guarda lembrança da conversa anterior.',
       },
       {
         title: 'Os verbos do pedido',
-        text: 'O **método HTTP** diz o que você quer fazer com o endereço. **GET** lê. **POST** cria. **PUT** troca o item inteiro. **PATCH** altera só uma parte. **DELETE** apaga. Exemplo: `GET /processos/123` pede para ver o processo 123.',
+        text: 'O **HTTP** é o conjunto de regras da web. O **método HTTP** diz o que você quer fazer com o endereço. **GET** lê. **POST** cria. **PUT** troca o item inteiro. **PATCH** altera só uma parte. **DELETE** apaga. Exemplo: `GET /processos/123` pede para ver o processo 123.',
       },
       {
         title: 'Repetir faz diferença?',
@@ -144,7 +144,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
     pages: [
       {
         title: 'Por que documentar uma API?',
-        text: 'Uma API só ajuda se as pessoas souberem usá-la. Pense no manual de um eletrodoméstico: sem ele, você aperta botões no escuro. A **documentação** de uma API explica quais endereços existem, o que cada um pede e o que cada um devolve.',
+        text: 'Uma API só ajuda se as pessoas souberem usá-la. Pense no manual de um eletrodoméstico: sem ele, você aperta botões no escuro. A **documentação** de uma API explica quais endereços existem. Ela diz o que cada um pede e o que devolve.',
       },
       {
         title: 'O que é OpenAPI?',
@@ -201,11 +201,11 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       },
       {
         title: 'A pegadinha do MFA',
-        text: 'Senha mais pergunta secreta parecem duas provas. Mas as duas são algo que você sabe. Então isso não é MFA. Já senha mais um código no celular é MFA, porque junta algo que você sabe com algo que você tem. Pense em duas fechaduras diferentes, e não em duas cópias da mesma chave.',
+        text: 'Senha mais pergunta secreta parecem duas provas. Mas as duas são algo que você sabe. Então isso não é MFA. Já senha mais um código no celular é MFA. Ela junta algo que você sabe com algo que você tem. Pense em duas fechaduras diferentes, e não em duas cópias da mesma chave.',
       },
       {
         title: 'Depois do login',
-        text: 'Depois que você entra, o sistema não quer pedir a senha a cada clique. Ele pode guardar uma **sessão** no servidor e dar ao navegador um número num **cookie**. Ou pode entregar um **token**, um passe assinado que carrega informações. Cada informação dentro do token se chama **claim**.',
+        text: 'Depois que você entra, o sistema não quer pedir a senha a cada clique. Ele pode guardar uma **sessão** no servidor. O navegador recebe um número num **cookie**, um pequeno arquivo que ele guarda. Ou pode entregar um **token**, um passe assinado que carrega informações. Cada informação dentro do token se chama **claim**.',
       },
       {
         title: 'Um login para vários sistemas',
@@ -299,11 +299,11 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       },
       {
         title: 'Dois tipos de lacre',
-        text: 'No **HS256**, quem cria e quem confere o passe usam o mesmo segredo, como duas cópias da mesma chave. No **RS256**, existe um par de chaves. A **chave privada** assina e fica guardada com quem emite. A **chave pública** confere a assinatura, e qualquer um pode tê-la.',
+        text: 'No **HS256**, quem cria e quem confere o passe usam o mesmo segredo. São como duas cópias da mesma chave. No **RS256**, existe um par de chaves. A **chave privada** assina e fica guardada com quem emite. A **chave pública** confere a assinatura, e qualquer um pode tê-la.',
       },
       {
         title: 'Como conferir um JWT?',
-        text: 'Quem recebe um JWT deve conferir a assinatura com a chave esperada. Deve aceitar só os algoritmos combinados e nunca aceitar `alg: none`, que quer dizer sem assinatura. Também deve conferir `exp`, para ver se venceu, `iss`, quem emitiu, e `aud`, para quem o passe foi feito.',
+        text: 'Quem recebe um JWT deve conferir a assinatura com a chave esperada. Deve aceitar só os algoritmos combinados e nunca aceitar `alg: none`, que quer dizer sem assinatura. Também deve conferir três claims: `exp`, se venceu; `iss`, quem emitiu; e `aud`, para quem o passe foi feito.',
       },
       {
         title: 'Resumindo',
@@ -441,7 +441,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       },
       {
         title: 'Colocar em ordem',
-        text: 'Ordenar é pôr os itens em ordem, como organizar cartas na mão. O **bubble sort** compara vizinhos e é lento, O(n²). O **merge sort** divide ao meio, ordena as partes e junta, com O(n log n) sempre. O **quick sort** é muito rápido na prática, mas no pior caso chega a O(n²).',
+        text: 'Ordenar é pôr os itens em ordem, como organizar cartas na mão. O **bubble sort** compara vizinhos e é lento, O(n²). O **merge sort** divide ao meio, ordena as partes e junta. Ele é sempre O(n log n), bem mais rápido que O(n²). O **quick sort** é muito rápido na prática, mas no pior caso chega a O(n²).',
       },
       {
         title: 'Resumindo',
@@ -519,7 +519,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
     pages: [
       {
         title: 'Por que Java e Python?',
-        text: '**Linguagens de programação** são idiomas para dar ordens ao computador. Java e Python são muito usadas em órgãos públicos. Com Python, por exemplo, você pode criar um pequeno programa que soma os valores de várias planilhas de gastos. O edital pede o básico das duas.',
+        text: '**Linguagens de programação** são idiomas para dar ordens ao computador. Java e Python são muito usadas em órgãos públicos. Exemplo: com Python, você pode criar um pequeno programa que soma várias planilhas de gastos. O edital pede o básico das duas.',
       },
       {
         title: 'Como o Java roda?',
@@ -527,7 +527,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       },
       {
         title: 'As siglas do Java',
-        text: 'A **JVM** executa o bytecode. O **JRE** é o ambiente para rodar programas: a JVM mais as bibliotecas. O **JDK** é o kit de quem programa: o JRE mais o compilador e outras ferramentas. Pense em caixas, uma dentro da outra. O Java também limpa a memória sozinho, com o **coletor de lixo**.',
+        text: 'A **JVM** executa o bytecode. O **JRE** é o ambiente para rodar programas: a JVM mais as bibliotecas, que são códigos prontos. O **JDK** é o kit de quem programa: o JRE mais o compilador e outras ferramentas. Pense em caixas, uma dentro da outra. O Java também limpa a memória sozinho, com o **coletor de lixo**.',
       },
       {
         title: 'Erros que o Java obriga a tratar',
@@ -625,7 +625,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       },
       {
         title: 'Quem vence no CSS?',
-        text: 'Quando duas regras de CSS brigam, vence a de maior **especificidade**, uma espécie de peso. Um seletor por **ID**, que aponta um único elemento, pesa mais que um por **classe**, que aponta um grupo. A classe pesa mais que o nome da etiqueta. Se o peso empatar, vence a regra escrita por último.',
+        text: 'Quando duas regras de CSS brigam, vence a de maior **especificidade**, uma espécie de peso. Um seletor por **ID** aponta um único elemento. Ele pesa mais que um seletor por **classe**, que aponta um grupo. A classe pesa mais que o nome da etiqueta. Se o peso empatar, vence a regra escrita por último.',
       },
       {
         title: 'Flexbox e grid',
@@ -651,7 +651,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       { term: 'Props', meaning: 'Dados que o componente pai passa ao filho, só para leitura.' },
     ],
     checks: [
-      { statement: 'Validar com required no HTML dispensa validar no servidor.', answer: false, why: 'O usuário pode contornar o navegador, então o servidor também valida.' },
+      { statement: 'Validar os campos no navegador dispensa validar no servidor.', answer: false, why: 'O usuário pode contornar o navegador, então o servidor também valida.' },
       { statement: 'O flexbox arruma em uma direção, e o grid em duas.', answer: true, why: 'Flexbox é linha ou coluna; grid é linhas e colunas.' },
       { statement: 'Um componente React pode alterar as props que recebeu.', answer: false, why: 'As props são só de leitura para o filho.' },
     ],
@@ -727,11 +727,11 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       },
       {
         title: 'O que são portas?',
-        text: 'Um servidor roda vários serviços ao mesmo tempo. A **porta** é um número que indica qual serviço deve receber a mensagem, como o número do apartamento num prédio. Exemplos: HTTP usa a porta 80, HTTPS usa a 443, SSH usa a 22 e DNS usa a 53.',
+        text: 'Um servidor roda vários serviços ao mesmo tempo. A **porta** é um número que indica qual serviço recebe a mensagem. É como o número do apartamento num prédio. Exemplos: HTTP usa a porta 80, HTTPS usa a 443, SSH usa a 22 e DNS usa a 53.',
       },
       {
         title: 'Bater na porta com ping',
-        text: 'O **ICMP** leva mensagens de controle e de erro da rede. O comando `ping` usa o ICMP para perguntar a outra máquina se ela está respondendo, como bater na porta de alguém. O `traceroute` mostra o caminho que a mensagem percorre até o destino.',
+        text: 'O **ICMP** leva mensagens de controle e de erro da rede. O comando `ping` usa o ICMP para perguntar se outra máquina está respondendo. É como bater na porta de alguém. O `traceroute` mostra o caminho que a mensagem percorre até o destino.',
       },
       {
         title: 'Resumindo',
@@ -763,7 +763,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       },
       {
         title: 'Como é um IPv4?',
-        text: 'Um IPv4 tem 32 bits, escritos como quatro números separados por pontos: `192.168.10.37`. Um **bit** é a menor unidade de informação, um 0 ou um 1. O endereço tem uma parte que indica a **rede**, como a rua, e uma parte que indica a máquina, chamada **host**, como o número da casa.',
+        text: 'Um **bit** é a menor unidade de informação, um 0 ou um 1. Um IPv4 tem 32 bits, escritos como quatro números separados por pontos: `192.168.10.37`. Uma parte indica a **rede**, como a rua. A outra indica a máquina, chamada **host**, como o número da casa.',
       },
       {
         title: 'O que quer dizer /24?',
@@ -857,7 +857,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       },
       {
         title: 'O firewall, porteiro da rede',
-        text: 'O **firewall** é como o porteiro de um prédio: decide o que entra e o que sai, seguindo regras. O **firewall com estado** lembra das conversas abertas e deixa passar as respostas a pedidos feitos de dentro. O **WAF** protege sites e bloqueia ataques contra eles, como a injeção de SQL.',
+        text: 'O **firewall** é como o porteiro de um prédio: decide o que entra e o que sai, seguindo regras. O **firewall com estado** lembra das conversas abertas e deixa passar as respostas a pedidos feitos de dentro. O **WAF** protege sites e bloqueia ataques contra eles. Exemplo: a injeção de SQL, um truque para enganar o banco de dados.',
       },
       {
         title: 'A DMZ, a recepção da rede',
@@ -873,7 +873,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       },
       {
         title: 'Dividir o trabalho',
-        text: 'O **balanceador de carga** distribui os pedidos entre vários servidores, como um gerente que manda cada cliente a um caixa livre. O **round robin** é o rodízio: um pedido para cada servidor, em ordem. Se um servidor para de responder, a **verificação de saúde** o tira do rodízio.',
+        text: 'O **balanceador de carga** distribui os pedidos entre vários servidores. É como um gerente que manda cada cliente a um caixa livre. O **round robin** é o rodízio: um pedido para cada servidor, em ordem. Se um servidor para de responder, a **verificação de saúde** o tira do rodízio.',
       },
       {
         title: 'Resumindo',
@@ -903,7 +903,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
     pages: [
       {
         title: 'O que é computação em nuvem?',
-        text: '**Computação em nuvem** é usar computadores, programas e espaço de armazenamento pela rede, na hora em que precisa, e liberar quando não precisa mais. É como usar a energia da rede elétrica em vez de manter um gerador. Você liga quando precisa e paga pelo que usa. A definição mais citada é a do **NIST**, de 2011.',
+        text: '**Computação em nuvem** é usar computadores, programas e espaço de guardar dados pela rede. Você usa na hora em que precisa e libera depois. É como usar a energia da rede elétrica em vez de manter um gerador: você paga pelo que usa. A definição mais citada é a do **NIST**, um órgão de padrões dos Estados Unidos, de 2011.',
       },
       {
         title: 'As cinco características',
@@ -1005,7 +1005,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       },
       {
         title: 'Os estados de um processo',
-        text: 'Um processo muda de estado. **Pronto**: espera só a vez de usar o processador. **Executando**: está usando agora. **Bloqueado**: espera algo, como a leitura do disco. Quem escolhe o próximo a rodar é o **escalonador**, como o atendente que chama a próxima senha da fila.',
+        text: 'Um processo muda de estado. **Pronto**: espera só a vez de usar o processador. **Executando**: está usando agora. **Bloqueado**: espera algo, como a leitura do disco. Quem escolhe o próximo a rodar é o **escalonador**. Ele é como o atendente que chama a próxima senha.',
       },
       {
         title: 'Encerrar um processo no Linux',
@@ -1017,7 +1017,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       },
       {
         title: 'Serviços do sistema',
-        text: '**Serviços** são programas que rodam em segundo plano, como um servidor web. No Linux, o `systemctl start` liga o serviço agora. O `systemctl enable` faz o serviço ligar sozinho quando o computador for iniciado. Um não faz o outro: você pode ligar hoje com start sem que ele volte na próxima vez que o computador ligar.',
+        text: '**Serviços** são programas que rodam em segundo plano, como um servidor web. No Linux, o `systemctl start` liga o serviço agora. O `systemctl enable` faz o serviço ligar sozinho quando o computador for iniciado. Um não faz o outro. Com start, o serviço liga hoje, mas pode não voltar depois de reiniciar.',
       },
       {
         title: 'Resumindo',
@@ -1065,7 +1065,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       },
       {
         title: 'Permissões no Windows',
-        text: 'No Windows, o NTFS usa **listas de controle de acesso**, as **ACL**: cada arquivo tem uma lista de quem pode fazer o quê. Por padrão, uma pasta passa suas permissões às de dentro, a **herança**. Quando alguém acessa pela rede, valem as permissões do compartilhamento e as do NTFS, e vence a mais restritiva.',
+        text: 'No Windows, o NTFS usa **listas de controle de acesso**, as **ACL**: cada arquivo tem uma lista de quem pode fazer o quê. Por padrão, uma pasta passa suas permissões às de dentro, a **herança**. No acesso pela rede, valem as permissões do compartilhamento e as do NTFS. Vence a mais restritiva.',
       },
       {
         title: 'Resumindo',
@@ -1139,7 +1139,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
     pages: [
       {
         title: 'Para que serve um diretório?',
-        text: 'Um órgão tem centenas de pessoas e computadores. Um **serviço de diretório** é um grande cadastro que guarda quem são os usuários, suas senhas e seus grupos. É como a lista telefônica da empresa, mas com chaves de acesso. O mais conhecido é o **Active Directory**, ou **AD**, da Microsoft.',
+        text: 'Um órgão tem centenas de pessoas e computadores. Um **serviço de diretório** é um grande cadastro. Ele guarda os usuários, suas senhas e seus grupos. É como a lista telefônica da empresa, mas com chaves de acesso. O mais conhecido é o **Active Directory**, ou **AD**, da Microsoft.',
       },
       {
         title: 'Domínio, árvore e floresta',
@@ -1159,7 +1159,7 @@ export const simpleDevInfra: Record<string, SimpleSection> = {
       },
       {
         title: 'Máquina virtual ou container?',
-        text: 'A **virtualização** faz uma máquina física rodar várias máquinas virtuais, as VMs. Quem as controla é o **hipervisor**. O tipo 1 roda direto no hardware; o tipo 2, como o VirtualBox, roda dentro de outro sistema. O **container** é mais leve: isola programas, mas divide o **núcleo**, a parte central do sistema principal.',
+        text: 'A **virtualização** faz uma máquina física rodar várias máquinas virtuais, as VMs. Quem as controla é o **hipervisor**. O tipo 1 roda direto na máquina física. O tipo 2, como o VirtualBox, roda dentro de outro sistema. O **container** é mais leve: isola programas, mas divide o **núcleo**, a parte central do sistema principal.',
       },
       {
         title: 'Resumindo',

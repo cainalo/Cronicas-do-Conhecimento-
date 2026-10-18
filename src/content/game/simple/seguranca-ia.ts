@@ -18,7 +18,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'O segredo fica só na chave',
-        text: 'Imagine um cadeado vendido em qualquer loja. Todo mundo sabe como ele funciona, mas só você tem a chave. Esse é o **princípio de Kerckhoffs**: o método pode ser público, só a chave precisa ser secreta. Por isso métodos famosos, como o AES, são abertos e mesmo assim seguros.',
+        text: 'Imagine um cadeado vendido em qualquer loja. Todo mundo sabe como ele funciona, mas só você tem a chave. Esse é o **princípio de Kerckhoffs**: o método pode ser público, só a chave precisa ser secreta. Por isso métodos famosos, como o AES (um cadeado digital muito usado), são abertos e seguros.',
       },
       {
         title: 'O que ela protege',
@@ -60,11 +60,11 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Por que ela é usada?',
-        text: 'Ela é muito **rápida**. Por isso serve para proteger grandes volumes de dados, como o disco inteiro de um computador ou os dados que passam pela rede. O **AES** é o nome do cadeado digital simétrico mais usado hoje. É o padrão oficial atual.',
+        text: 'Ela é muito **rápida**. Por isso serve para proteger muitos dados de uma vez. Exemplo: o disco inteiro de um computador ou os dados que passam pela rede. O **AES** é o nome do cadeado digital simétrico mais usado hoje. É o padrão oficial atual.',
       },
       {
         title: 'O problema de entregar a chave',
-        text: 'Se você e um colega precisam da mesma chave, como entregar a chave sem que alguém a copie no caminho? Esse é o problema da **distribuição de chaves**. Outro ponto: como os dois têm a mesma chave, a simétrica não oferece não repúdio. Qualquer um dos dois poderia ter escrito.',
+        text: 'Você e um colega precisam da mesma chave. Como entregar a chave sem que alguém a copie no caminho? Esse é o problema da **distribuição de chaves**. Outro ponto: como os dois têm a mesma chave, a simétrica não oferece não repúdio. Qualquer um dos dois poderia ter escrito.',
       },
       {
         title: 'Muitas pessoas, muitas chaves',
@@ -72,11 +72,11 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Nomes que caem em prova',
-        text: 'O **DES** é antigo e hoje é inseguro, porque a chave é curta. O **AES** é o padrão atual. Ele sempre trabalha em pedaços de 128 bits; o que muda é o tamanho da chave: 128, 192 ou 256 bits. O **RC4** também é considerado inseguro.',
+        text: 'O **DES** é antigo e hoje é inseguro, porque a chave é curta. O **AES** é o padrão atual. Um **bit** é a menor unidade de informação do computador. O AES sempre trabalha em pedaços de 128 bits. O que muda é o tamanho da chave: 128, 192 ou 256 bits. O **RC4** também é considerado inseguro.',
       },
       {
         title: 'Um modo que revela padrões',
-        text: 'O **ECB** é um jeito de usar o cadeado em que pedaços iguais da mensagem viram pedaços cifrados iguais. Isso deixa desenhos aparecerem. Uma imagem de pinguim cifrada assim continua reconhecível. Por isso o ECB não deve ser usado. O modo **GCM** é o recomendado: esconde e também detecta alterações.',
+        text: 'O **ECB** é um modo, ou seja, um jeito de usar o cadeado. Nele, pedaços iguais da mensagem viram pedaços cifrados iguais. Isso deixa desenhos aparecerem. Uma imagem de pinguim cifrada assim continua reconhecível. Por isso o ECB não deve ser usado. O modo **GCM** é o recomendado: esconde e também detecta alterações.',
       },
       {
         title: 'Resumindo',
@@ -114,7 +114,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Por que ela foi criada',
-        text: 'A chave pública pode circular à vontade, então o problema de entregar a chave some. Também são precisas menos chaves: cada pessoa tem um par. Com 100 pessoas, são 100 pares, ou 200 chaves. Na simétrica seriam 4.950 chaves.',
+        text: 'A chave pública pode circular à vontade, então o problema de entregar a chave some. Também são necessárias menos chaves: cada pessoa tem um par. Com 100 pessoas, são 100 pares, ou 200 chaves. Na simétrica seriam 4.950 chaves.',
       },
       {
         title: 'Nomes importantes',
@@ -163,7 +163,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Hash com chave',
-        text: 'O **HMAC** é um hash calculado junto com uma chave secreta que os dois lados conhecem. Ele mostra que ninguém mexeu e que veio de quem tem a chave. Mas ele não esconde a mensagem e não dá não repúdio, porque os dois lados têm a mesma chave.',
+        text: 'O **HMAC** é um hash calculado junto com uma chave secreta que os dois lados conhecem. Ele mostra que ninguém mexeu e que veio de quem tem a chave. Mas ele não esconde a mensagem. Também não dá não repúdio, porque os dois lados têm a mesma chave.',
       },
       {
         title: 'Como guardar senhas',
@@ -209,7 +209,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Certificados no Brasil',
-        text: 'A **ICP-Brasil** é o sistema oficial de certificados do país. Ela foi criada pela Medida Provisória 2.200-2, de 2001. A AC Raiz, que fica no topo, é o **ITI**. Um certificado pode ser cancelado antes do prazo, por exemplo se a chave privada vazar. Isso se chama **revogação**.',
+        text: 'A **ICP-Brasil** é o sistema oficial de certificados do país. Ela foi criada pela Medida Provisória 2.200-2, de 2001. A AC Raiz, que fica no topo, é o **ITI**, o Instituto Nacional de Tecnologia da Informação. Um certificado pode ser cancelado antes do prazo, por exemplo se a chave privada vazar. Isso se chama **revogação**.',
       },
       {
         title: 'Digital não é digitalizada',
@@ -292,15 +292,15 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Fraqueza, ameaça e risco',
-        text: 'Uma **vulnerabilidade** é uma fraqueza, como uma senha fraca. Uma **ameaça** é o que pode causar dano, como um invasor. O **risco** é a chance de a ameaça usar a fraqueza, somada ao tamanho do estrago. Pense em uma janela aberta (fraqueza) e um ladrão (ameaça).',
+        text: 'Uma **vulnerabilidade** é uma fraqueza, como uma senha fraca. Uma **ameaça** é o que pode causar dano, como um invasor. O **risco** junta a chance de a ameaça usar a fraqueza e o tamanho do estrago. Pense em uma janela aberta (fraqueza) e um ladrão (ameaça).',
       },
       {
         title: 'O que fazer com um risco',
-        text: 'Há quatro saídas. **Mitigar**: reduzir o risco, por exemplo atualizando o sistema. **Transferir**: passar o prejuízo a outro, como num seguro. **Evitar**: parar a atividade arriscada. **Aceitar**: assumir o risco de propósito, com registro. Aceitar não é ignorar.',
+        text: 'Há quatro saídas. **Mitigar**: reduzir o risco, por exemplo atualizando o sistema. **Transferir**: passar o prejuízo a outro, como num seguro. **Evitar**: parar a atividade arriscada. **Aceitar**: assumir de propósito o **risco residual**, o que sobra, com registro. Aceitar não é ignorar.',
       },
       {
         title: 'Dar nível de segredo',
-        text: '**Classificar** a informação é dizer o quanto ela é sensível. A Lei de Acesso à Informação prevê três graus de sigilo: **reservada**, até 5 anos; **secreta**, até 15 anos; e **ultrassecreta**, até 25 anos. Na lei, a regra é a informação ser pública; o sigilo é exceção.',
+        text: '**Classificar** a informação é dizer o quanto ela é sensível. A Lei de Acesso à Informação (LAI) prevê três graus de sigilo: **reservada**, até 5 anos; **secreta**, até 15 anos; e **ultrassecreta**, até 25 anos. Na lei, a regra é a informação ser pública; o sigilo é exceção.',
       },
       {
         title: 'Resumindo',
@@ -368,7 +368,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
     pages: [
       {
         title: 'Uma lista de erros comuns',
-        text: 'Os sistemas do Tribunal funcionam pela web. A **OWASP** é uma fundação que publica o **OWASP Top 10**: a lista dos dez riscos mais importantes em aplicações web. O edital cobra a edição de 2025.',
+        text: 'Os sistemas do Tribunal funcionam pela web. A **OWASP** é uma fundação que publica o **OWASP Top 10**. É a lista dos dez riscos mais importantes em **aplicações web**, os sistemas usados pelo navegador. O edital cobra a edição de 2025.',
       },
       {
         title: 'O primeiro lugar',
@@ -426,7 +426,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Alarme ou bloqueio?',
-        text: 'O **IDS** é um alarme: ele detecta um ataque e avisa, mas não bloqueia. O **IPS** fica no caminho do tráfego e **bloqueia** o ataque. Pense no IDS como a câmera de segurança e no IPS como o porteiro que fecha a porta.',
+        text: 'O **IDS** é um alarme: ele detecta um ataque e avisa, mas não bloqueia. O **IPS** fica no caminho dos dados da rede e **bloqueia** o ataque. Pense no IDS como a câmera de segurança e no IPS como o porteiro que fecha a porta.',
       },
       {
         title: 'Testar antes do invasor',
@@ -443,7 +443,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       { term: 'Ransomware', meaning: 'Malware que tranca seus dados e pede resgate.' },
       { term: 'Phishing', meaning: 'Mensagem falsa que tenta roubar senhas ou induzir cliques.' },
       { term: 'IDS', meaning: 'Sistema que detecta ataques e avisa, sem bloquear.' },
-      { term: 'IPS', meaning: 'Sistema no caminho do tráfego que bloqueia ataques.' },
+      { term: 'IPS', meaning: 'Sistema no caminho dos dados da rede que bloqueia ataques.' },
       { term: 'Pentest', meaning: 'Teste de invasão autorizado para mostrar falhas reais.' },
     ],
     checks: [
@@ -469,7 +469,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'A regra 3-2-1',
-        text: 'Uma boa prática é a **regra 3-2-1**: tenha **3** cópias dos dados, em **2** tipos de mídia diferentes, com **1** delas fora do prédio. Contra ransomware, mantenha também uma cópia desconectada. E teste: um backup nunca restaurado não é garantia.',
+        text: 'Uma boa prática é a **regra 3-2-1**: tenha **3** cópias dos dados, em **2** tipos de **mídia** diferentes, com **1** delas fora do prédio. Mídia é o meio onde a cópia fica guardada. Contra ransomware, mantenha também uma cópia desconectada. E teste: um backup nunca restaurado não é garantia.',
       },
       {
         title: 'Quanto tempo e quanto dado',
@@ -499,7 +499,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
     pages: [
       {
         title: 'Um manual internacional',
-        text: 'Como saber se um órgão cuida bem da segurança? Existem **normas**: documentos com regras aceitas no mundo todo. A **família ISO/IEC 27000** trata da gestão da segurança da informação. No Brasil, a ABNT adota essas normas com a sigla NBR.',
+        text: 'Como saber se um órgão cuida bem da segurança? Existem **normas**: documentos com regras aceitas no mundo todo. A ISO e a IEC são organizações internacionais que publicam normas. A **família ISO/IEC 27000** trata da gestão da segurança da informação. No Brasil, a ABNT, órgão brasileiro de normas, adota essas normas com a sigla NBR.',
       },
       {
         title: 'O que diz e como fazer',
@@ -546,7 +546,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Caixas dentro de caixas',
-        text: 'A **inteligência artificial** é a caixa maior: máquinas fazendo tarefas que parecem exigir inteligência. Dentro dela está o **aprendizado de máquina**: o sistema aprende com exemplos. Dentro dele, o **aprendizado profundo**, com redes de muitas camadas. Um **LLM** é um grande modelo de linguagem, treinado com muito texto.',
+        text: 'A **inteligência artificial** é a caixa maior: máquinas fazendo tarefas que parecem exigir inteligência. Dentro dela está o **aprendizado de máquina**: o sistema aprende com exemplos. Dentro dele, o **aprendizado profundo**, que usa redes inspiradas no cérebro, com muitas camadas. Um **LLM** é um grande modelo de linguagem, treinado com muito texto.',
       },
       {
         title: 'Um autocompletar gigante',
@@ -592,7 +592,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'As partes de um pedido',
-        text: 'O **prompt de sistema** traz regras gerais para toda a conversa, como "responda em português". O **prompt do usuário** é o pedido do momento. Você também pode dar **contexto**, como um documento, e dizer o **formato** da resposta, como uma lista ou uma tabela.',
+        text: 'O **prompt de sistema** traz regras gerais para toda a conversa, como "responda em português". O **prompt do usuário** é o pedido do momento. Você também pode dar **contexto**, como um documento. E pode dizer o **formato** da resposta, como uma lista.',
       },
       {
         title: 'Com ou sem exemplos',
@@ -600,7 +600,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Um pedido melhor',
-        text: 'Pedido fraco: "Fale sobre o edital". Pedido melhor: "Com base só no trecho do edital abaixo, liste as disciplinas e o número de questões em uma tabela. Se faltar dado, escreva não informado". O segundo diz o papel, a fonte, o formato e o que fazer quando falta dado.',
+        text: 'Pedido fraco: "Fale sobre o edital". Pedido melhor: "Use só o trecho do edital abaixo. Liste as disciplinas e o número de questões em uma tabela. Se faltar dado, escreva não informado". O segundo diz o papel, a fonte, o formato e o que fazer quando falta dado.',
       },
       {
         title: 'O golpe do texto escondido',
@@ -621,7 +621,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
     checks: [
       { statement: 'No few-shot, os exemplos mudam o modelo por dentro.', answer: false, why: 'Os exemplos ficam só no pedido.' },
       { statement: 'Um bom prompt pode dizer o formato da resposta.', answer: true, why: 'Formato é uma das partes de um bom pedido.' },
-      { statement: 'A injeção de prompt pode estar escondida em uma página web.', answer: true, why: 'É a injeção indireta.' },
+      { statement: 'A injeção de prompt pode estar escondida em uma página web.', answer: true, why: 'Ela pode vir em um conteúdo que o modelo lê.' },
     ],
   },
 
@@ -633,7 +633,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Tudo disputa espaço',
-        text: 'Na janela de contexto entram as regras do projeto, a conversa, os arquivos lidos, os resultados de comandos e a própria resposta. Tudo divide o mesmo espaço. Contexto demais custa caro, deixa a resposta lenta e pode até piorar a qualidade.',
+        text: 'Na janela de contexto entram as regras do projeto e a conversa. Entram também os arquivos lidos, os resultados de comandos e a própria resposta. Tudo divide o mesmo espaço. Contexto demais custa caro, deixa a resposta lenta e pode até piorar a qualidade.',
       },
       {
         title: 'Problemas comuns',
@@ -641,11 +641,11 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Como organizar',
-        text: 'Você pode **selecionar** só os arquivos certos. Pode **buscar** a informação só quando precisar. Pode **compactar**, ou seja, resumir a conversa antiga guardando as decisões. E pode **isolar**: mandar uma subtarefa para outro agente e receber só o resultado.',
+        text: 'Você pode **selecionar** só os arquivos certos. Pode **buscar** a informação só quando precisar. Pode **compactar**, ou seja, resumir a conversa antiga guardando as decisões. E pode **isolar**: mandar uma parte da tarefa para outro assistente de IA e receber só o resultado.',
       },
       {
         title: 'O modelo não lembra sozinho',
-        text: 'O modelo não guarda nada de uma conversa para outra. A **memória** é feita pelo programa em volta dele. Exemplo: no Claude Code, o arquivo `CLAUDE.md` guarda as regras do projeto e é lido no início de cada sessão. Assim, o trabalho continua sem depender da conversa anterior.',
+        text: 'O modelo não guarda nada de uma conversa para outra. A **memória** é feita pelo programa em volta dele. Exemplo: no Claude Code, um assistente de programação, o arquivo `CLAUDE.md` guarda as regras do projeto. Ele é lido no início de cada sessão. Assim, o trabalho continua sem depender da conversa anterior.',
       },
       {
         title: 'Resumindo',
@@ -682,7 +682,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Na hora da pergunta',
-        text: 'A pergunta também vira embedding. O banco devolve os pedaços mais parecidos. Esses pedaços entram no pedido, junto da pergunta. Exemplo: você pergunta sobre diárias, e o sistema traz o trecho da norma de diárias antes de o modelo responder.',
+        text: 'A pergunta também vira embedding. O banco devolve os pedaços mais parecidos. Esses pedaços entram no pedido, junto da pergunta. Exemplo: você pergunta sobre diárias. O sistema traz o trecho da norma de diárias, e só então o modelo responde.',
       },
       {
         title: 'RAG ou novo treino?',
@@ -703,7 +703,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
     checks: [
       { statement: 'Para atualizar um sistema RAG, é preciso treinar o modelo de novo.', answer: false, why: 'Basta atualizar os documentos da base.' },
       { statement: 'O RAG elimina totalmente as alucinações.', answer: false, why: 'Ele reduz, mas a busca pode falhar.' },
-      { statement: 'No RAG, os trechos encontrados entram no pedido junto da pergunta.', answer: true, why: 'Essa é a etapa de aumento.' },
+      { statement: 'No RAG, os trechos encontrados entram no pedido junto da pergunta.', answer: true, why: 'Assim o modelo responde apoiado nesses trechos.' },
     ],
   },
 
@@ -723,11 +723,11 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Onde ficam os números',
-        text: 'Um **banco vetorial** guarda os embeddings e responde "quais são os mais parecidos com este?". Com milhões de itens, comparar um por um é lento. Então ele usa uma busca **aproximada**, que perde um pouco de precisão e ganha muita velocidade. O **pgvector** é uma extensão do PostgreSQL que faz isso.',
+        text: 'Um **banco vetorial** guarda os embeddings e responde "quais são os mais parecidos com este?". Com milhões de itens, comparar um por um é lento. Então ele usa uma busca **aproximada**, que perde um pouco de precisão e ganha muita velocidade. O **pgvector** faz isso. Ele é um complemento do PostgreSQL, um banco de dados muito usado.',
       },
       {
         title: 'Cuidados',
-        text: 'Use **o mesmo modelo** de embedding para guardar e para perguntar. Números de modelos diferentes não se comparam. E atenção: embeddings feitos a partir de dados pessoais também são dados pessoais para a LGPD.',
+        text: 'Use **o mesmo modelo** de embedding para guardar e para perguntar. Números de modelos diferentes não se comparam. E atenção: a LGPD é a lei que protege dados pessoais. Para ela, embeddings feitos com dados pessoais também são dados pessoais.',
       },
       {
         title: 'Resumindo',
@@ -760,7 +760,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Como pedir',
-        text: '**Few-shot** é dar exemplos no pedido, sem mudar o modelo. **Cadeia de pensamento** é pedir raciocínio passo a passo. Temperatura alta deixa a resposta mais variada, não mais previsível. Delimitadores ajudam contra injeção de prompt, mas não resolvem sozinhos.',
+        text: '**Few-shot** é dar exemplos no pedido, sem mudar o modelo. **Cadeia de pensamento** é pedir raciocínio passo a passo. Temperatura alta deixa a resposta mais variada, não mais previsível. **Delimitadores**, marcas que separam a instrução do texto colado, ajudam contra injeção de prompt. Mas não resolvem sozinhos.',
       },
       {
         title: 'Como dar conhecimento',
@@ -810,7 +810,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Dizer o quê, não o como',
-        text: 'Na **programação baseada em intenção**, você descreve **o que** quer, em palavras comuns, e o agente decide **como** fazer. O seu papel vira explicar bem, revisar e conferir. Aceitar o código quase sem ler é perigoso, sobretudo no setor público.',
+        text: 'Na **programação baseada em intenção**, você descreve **o que** quer, em palavras comuns. O agente decide **como** fazer. O seu papel vira explicar bem, revisar e conferir. Aceitar o código quase sem ler é perigoso, sobretudo no setor público.',
       },
       {
         title: 'Resumindo',
@@ -876,11 +876,11 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
     pages: [
       {
         title: 'Uma tomada padrão',
-        text: 'Antes, cada aplicativo de IA precisava de uma ligação própria com cada sistema. O **MCP**, ou Model Context Protocol, é um **protocolo**: um conjunto de regras comum para essas ligações. A documentação oficial compara o MCP a uma porta USB-C. Ele foi lançado pela Anthropic em novembro de 2024.',
+        text: 'Antes, cada aplicativo de IA precisava de uma ligação própria com cada sistema. O **MCP**, ou Model Context Protocol, é um **protocolo**: um conjunto de regras comum para essas ligações. A documentação oficial compara o MCP a uma porta USB-C. Ele foi lançado pela Anthropic, empresa de IA, em novembro de 2024.',
       },
       {
         title: 'Menos ligações',
-        text: 'Imagine 3 aplicativos de IA e 4 sistemas. Sem padrão, podem ser preciso até 3 vezes 4, ou 12 ligações diferentes. Com o MCP, cada aplicativo e cada sistema implementa o padrão uma vez: 3 mais 4, ou 7.',
+        text: 'Imagine 3 aplicativos de IA e 4 sistemas. Sem padrão, podem ser necessárias até 3 vezes 4, ou 12 ligações diferentes. Com o MCP, cada aplicativo e cada sistema implementa o padrão uma vez: 3 mais 4, ou 7.',
       },
       {
         title: 'Quem é quem',
@@ -967,7 +967,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Um golpe com nomes inventados',
-        text: 'Atacantes registram pacotes com nomes que a IA costuma inventar. Quando alguém instala o pacote sugerido, instala o programa do golpista. Isso ganhou o apelido de **slopsquatting**. A defesa é conferir no repositório oficial antes de instalar.',
+        text: 'Atacantes registram pacotes com nomes que a IA costuma inventar. Quando alguém instala o pacote sugerido, instala o programa do golpista. Isso ganhou o apelido de **slopsquatting**. A defesa é conferir no **repositório oficial**, o site que distribui os pacotes, antes de instalar.',
       },
       {
         title: 'Como conferir',
@@ -1013,7 +1013,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Aprender sem gabarito',
-        text: 'No **aprendizado não supervisionado**, os dados não têm rótulo. O sistema procura padrões sozinho. Exemplo: o **agrupamento** junta itens parecidos, como fornecedores com comportamento semelhante. No **k-means**, você precisa dizer antes quantos grupos quer.',
+        text: 'No **aprendizado não supervisionado**, os dados não têm rótulo. O sistema procura padrões sozinho. Exemplo: o **agrupamento** junta itens parecidos, como fornecedores com comportamento semelhante. No **k-means**, um método de agrupamento famoso, você precisa dizer antes quantos grupos quer.',
       },
       {
         title: 'Aprender por tentativa',
@@ -1103,7 +1103,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Texto vira número',
-        text: 'No **saco de palavras**, o texto vira uma contagem de palavras, e a ordem é ignorada. Assim, "o fiscal multou a empresa" e "a empresa multou o fiscal" ficam iguais. O **TF-IDF** dá peso baixo a palavras que aparecem em quase todos os documentos e peso alto às raras.',
+        text: 'No **saco de palavras**, o texto vira uma contagem de palavras, e a ordem é ignorada. Assim, "o fiscal multou a empresa" e "a empresa multou o fiscal" ficam iguais. O **TF-IDF** é outra forma de contar. Ele dá peso baixo a palavras presentes em quase todos os documentos. As raras ganham peso alto.',
       },
       {
         title: 'Tarefas comuns',
@@ -1184,7 +1184,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Anonimizado ou pseudonimizado',
-        text: 'Um dado **anonimizado** não permite mais saber de quem é, e a lei deixa de se aplicar a ele, salvo se der para reverter com esforço razoável. Um dado **pseudonimizado** só troca o nome por um código. Como a ligação ainda pode ser refeita, ele continua sendo dado pessoal.',
+        text: 'Um dado **anonimizado** não permite mais saber de quem é. Então a lei deixa de valer para ele. A exceção é quando dá para reverter com esforço razoável. Um dado **pseudonimizado** só troca o nome por um código. Como a ligação ainda pode ser refeita, ele continua sendo dado pessoal.',
       },
       {
         title: 'Só o necessário',
@@ -1196,11 +1196,11 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Decisão feita por máquina',
-        text: 'O **artigo 20** dá à pessoa o direito de pedir **revisão** de decisões tomadas só por máquina que afetem seus interesses. Pegadinha: o texto atual não exige que a revisão seja feita por uma pessoa. Mesmo assim, revisão humana é uma boa prática.',
+        text: 'Às vezes uma máquina decide sozinha algo que afeta você. O **artigo 20** dá o direito de pedir **revisão** dessa decisão. Pegadinha: o texto atual não exige que a revisão seja feita por uma pessoa. Mesmo assim, revisão humana é uma boa prática.',
       },
       {
         title: 'O plano do Brasil para IA',
-        text: 'A **Estratégia Brasileira de Inteligência Artificial**, ou **EBIA**, orienta a política pública de IA no país. Segundo as fontes usadas no material, ela foi criada por portaria do MCTI em 2021 e tem nove eixos temáticos. Esses dados vieram de fontes secundárias; o texto oficial deve ser conferido.',
+        text: 'A **Estratégia Brasileira de Inteligência Artificial**, ou **EBIA**, orienta a política pública de IA no país. Segundo as fontes do material, ela foi criada em 2021 pelo MCTI, o ministério da ciência. Ela tem nove eixos, ou seja, nove temas. Esses dados vieram de fontes secundárias; o texto oficial deve ser conferido.',
       },
       {
         title: 'Resumindo',
@@ -1269,7 +1269,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
     pages: [
       {
         title: 'Dados demais para um computador',
-        text: 'Pense em todas as notas fiscais de um estado durante vários anos. Um computador comum não dá conta. **Big Data** é o nome dado a conjuntos de dados grandes, rápidos ou variados demais para as ferramentas tradicionais.',
+        text: 'Pense em todas as notas fiscais de um estado durante vários anos. Um computador comum não dá conta. **Big Data** é o nome dado a dados grandes, rápidos ou variados demais para as ferramentas comuns.',
       },
       {
         title: 'Os três Vs',
@@ -1277,15 +1277,15 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Dividir o trabalho',
-        text: 'No **processamento distribuído**, o trabalho é dividido entre várias máquinas, que formam um **cluster**. É como uma fila de banco com muitos caixas. Para crescer, você acrescenta máquinas comuns. E a ideia é levar o processamento até onde os dados estão, em vez de mover tudo pela rede.',
+        text: 'No **processamento distribuído**, o trabalho é dividido entre várias máquinas, que formam um **cluster**. É como uma fila de banco com muitos caixas. Para crescer, você acrescenta máquinas comuns. A ideia é levar o trabalho até onde os dados estão. Assim, não é preciso mover tudo pela rede.',
       },
       {
         title: 'Hadoop',
-        text: 'O **Hadoop** é um conjunto de ferramentas para guardar e processar dados em cluster. O **HDFS** divide arquivos em blocos e guarda cópias em várias máquinas. O **NameNode** sabe onde está cada bloco; os **DataNodes** guardam os blocos. O **MapReduce** processa em partes e depois junta os resultados.',
+        text: 'O **Hadoop** é um conjunto de ferramentas para guardar e processar dados em cluster. O **HDFS**, o sistema de arquivos do Hadoop, divide arquivos em blocos e guarda cópias em várias máquinas. O **NameNode** sabe onde está cada bloco; os **DataNodes** guardam os blocos. O **MapReduce** processa em partes e depois junta os resultados.',
       },
       {
         title: 'Spark e onde guardar',
-        text: 'O **Spark** mantém os dados na memória entre as etapas, por isso costuma ser mais rápido que o MapReduce em tarefas repetitivas. O **data warehouse** guarda dados já tratados e organizados. O **data lake** guarda dados brutos, em qualquer formato.',
+        text: 'O **Spark** mantém os dados na memória entre as etapas. Por isso costuma ser mais rápido que o MapReduce em tarefas repetitivas. O **data warehouse** guarda dados já tratados e organizados. O **data lake** guarda dados brutos, em qualquer formato.',
       },
       {
         title: 'Resumindo',

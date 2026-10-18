@@ -119,7 +119,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Possibilidade: may e might',
-        text: '*May* pode ser permissão ou possibilidade: *This may take several minutes* (Isto pode levar vários minutos). *Might* também é possibilidade, mas mais fraca. *Will* indica futuro ou certeza: *The token will expire* (A senha temporária vai expirar).',
+        text: '*May* pode ser permissão ou possibilidade: *This may take several minutes* (Isto pode levar vários minutos). *Might* também é possibilidade, mas mais fraca. *Will* indica futuro ou certeza: *The token will expire* (O token vai expirar). Um **token** é um passe digital de acesso.',
       },
       {
         title: 'Pedacinhos que dão sentido',
@@ -199,7 +199,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'O README',
-        text: 'O **README** (leia-me) é o arquivo de apresentação de um projeto. Ele tem partes como *Installation* (instalação), *Usage* (uso) e *Configuration* (configuração). Exemplo: *Node.js 20 or later* quer dizer "Node.js 20 ou mais novo".',
+        text: 'O **README** (leia-me) é o arquivo de apresentação de um projeto. Ele tem partes como *Installation* (instalação), *Usage* (uso) e *Configuration* (configuração). Exemplo: *Node.js 20 or later* quer dizer "Node.js 20 ou mais novo". Node.js é um programa.',
       },
       {
         title: 'O que mudou na versão?',
@@ -207,7 +207,7 @@ export const simpleGerais: Record<string, SimpleSection> = {
       },
       {
         title: 'Mensagens de erro',
-        text: 'Erros aparecem em frases curtas. *Permission denied* é "permissão negada". *File not found* é "arquivo não encontrado". *Connection timed out* é "tempo de conexão esgotado". *Access token expired* é "a senha temporária de acesso expirou".',
+        text: 'Erros aparecem em frases curtas. *Permission denied* é "permissão negada". *File not found* é "arquivo não encontrado". *Connection timed out* é "tempo de conexão esgotado". *Access token expired* é "o passe de acesso expirou".',
       },
       {
         title: 'Artigos falam com cautela',
