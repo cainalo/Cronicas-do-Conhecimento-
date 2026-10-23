@@ -14,7 +14,7 @@ import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
 import { Mascot } from '@/components/Mascot';
 import { SceneArt } from '@/components/SceneBanner';
-import { LeatherBook, Leaf } from '@/components/LeatherBook';
+import { LeatherBook, Leaf, useSpread, visiblePages } from '@/components/LeatherBook';
 import { reviewLabel } from './Library';
 
 export function Pegadinha({ item }: { item: { statement: string; answer: boolean; why: string } }) {
@@ -231,7 +231,9 @@ export function BookPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapter?.id, hash, pages.length]);
 
-  const cur = pages[Math.min(page, pages.length - 1)] ?? [];
+  const spread = useSpread();
+  // No códice, as duas páginas visíveis contam (para marcar o trecho e o marcador).
+  const cur = visiblePages(Math.min(page, pages.length - 1), pages.length, spread).flatMap((p) => pages[p] ?? []);
   const curSection = (() => {
     for (const bi of cur) {
       const b = blocks[bi];
@@ -327,6 +329,7 @@ export function BookPage() {
 
       {/* O livro */}
       <LeatherBook
+        spread={spread}
         page={Math.min(page, total - 1)}
         total={total}
         onPage={setPage}

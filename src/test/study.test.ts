@@ -147,3 +147,12 @@ describe('prática e livro', () => {
     expect(cluesRevealed(140, 140, 35)).toBe(35);
   });
 });
+
+import { visiblePages } from '@/components/LeatherBook';
+describe('códice de duas páginas', () => {
+  it('mostra a dupla que começa na página par e não passa do fim', () => {
+    expect(visiblePages(3, 10, true)).toEqual([2, 3]);
+    expect(visiblePages(8, 9, true)).toEqual([8]);
+    expect(visiblePages(5, 10, false)).toEqual([5]);
+  });
+});

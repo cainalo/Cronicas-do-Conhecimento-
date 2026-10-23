@@ -212,6 +212,18 @@ a { text-underline-offset: 3px; }
 .curl-flap-shade { background: linear-gradient(90deg, rgb(90 55 20 / 0.30), rgb(255 250 235 / 0.10) 40%, rgb(255 250 235 / 0.35) calc(var(--p) * 100% - 2px), rgb(90 55 20 / 0.25) calc(var(--p) * 100%)); }
 .curl-under-shade { left: calc((1 - var(--p)) * 100%); width: 70px; background: linear-gradient(90deg, rgb(30 15 0 / 0.38), transparent); opacity: calc(1 - var(--p)); }
 
+/* Códice: duas páginas, lombada ao centro e a folha que gira sobre ela */
+.codex-gutter { background: linear-gradient(90deg, transparent, rgb(60 35 12 / 0.28) 42%, rgb(30 15 0 / 0.45) 50%, rgb(60 35 12 / 0.28) 58%, transparent); }
+.codex-leaf { transform-style: preserve-3d; z-index: 3; }
+.codex-fwd { transform-origin: left center; animation: codex-fwd 0.7s cubic-bezier(0.45, 0.05, 0.35, 1) forwards; }
+.codex-back { transform-origin: right center; animation: codex-back 0.7s cubic-bezier(0.45, 0.05, 0.35, 1) forwards; }
+.codex-face { position: absolute; inset: 0; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.codex-back-face { transform: rotateY(180deg); }
+.codex-face::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgb(30 15 0 / 0.25), transparent 30%, rgb(255 250 235 / 0.12) 70%, rgb(30 15 0 / 0.2)); animation: codex-shade 0.7s ease-in-out forwards; }
+@keyframes codex-fwd { from { transform: rotateY(0deg); } to { transform: rotateY(-180deg); } }
+@keyframes codex-back { from { transform: rotateY(0deg); } to { transform: rotateY(180deg); } }
+@keyframes codex-shade { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+
 .learn-text { font-size: calc(1.22rem * var(--font-scale)); line-height: 1.6; }
 .learn-text strong { color: rgb(var(--ember)); }
 

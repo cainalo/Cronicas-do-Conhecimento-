@@ -13,7 +13,7 @@ import { roman } from '@/lib/roman';
 import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
 import { Mascot } from '@/components/Mascot';
-import { LeatherBook, Leaf } from '@/components/LeatherBook';
+import { LeatherBook, Leaf, useSpread, visiblePages } from '@/components/LeatherBook';
 import { Pegadinha, SceneLines } from './Book';
 
 /** Vinheta de rodapé: pena e tinteiro ou vela, alternando, como nos manuscritos. */
@@ -51,6 +51,7 @@ export function LearnPage() {
   const { prefs } = usePrefs();
   const { sfx, confetti, toast } = useFx();
   const [page, setPage] = useState(0);
+  const spread = useSpread();
 
   const pages = useMemo<LearnPage[]>(() => {
     if (!simple) return [];
@@ -70,7 +71,7 @@ export function LearnPage() {
 
   // Chegar à última página conta como trecho estudado.
   useEffect(() => {
-    if (!chapter || !section || pages[page]?.kind !== 'end') return;
+    if (!chapter || !section || !visiblePages(page, pages.length, spread).some((p) => pages[p]?.kind === 'end')) return;
     if (data.reading[chapter.id]?.sectionsRead.includes(section.id)) return;
     const r = markSectionRead(data, chapter, section.id);
     update((d) => markSectionRead(d, chapter, section.id).data);
@@ -78,7 +79,7 @@ export function LearnPage() {
     confetti(r.xp ? 90 : 40);
     if (r.xp) toast({ text: 'Capítulo estudado!', sub: `+${r.xp.amount} XP`, icon: 'grimorio', color: '#2c5f6e' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, pages]);
+  }, [page, pages, spread]);
 
   if (!chapter || !section) return <p>Trecho não encontrado.</p>;
   // Sem explicação simples, abre o texto completo.
@@ -209,6 +210,7 @@ export function LearnPage() {
         </span>
       </div>
       <LeatherBook
+        spread={spread}
         page={page}
         total={pages.length}
         onPage={setPage}

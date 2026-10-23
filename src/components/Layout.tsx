@@ -162,7 +162,7 @@ export function Layout() {
       </header>
 
       {showPrologue && <Prologue onClose={() => setShowPrologue(false)} />}
-      <main className={`mx-auto w-full max-w-3xl flex-1 px-4 sm:px-6 ${immersive ? 'pb-3 pt-4' : 'pb-32 pt-5 lg:pb-12'}`}>
+      <main className={`mx-auto w-full flex-1 px-4 sm:px-6 ${/^\/(capitulo|aprender)\//.test(pathname) ? 'max-w-3xl lg:max-w-6xl' : 'max-w-3xl'} ${immersive ? 'pb-3 pt-4' : 'pb-32 pt-5 lg:pb-12'}`}>
         <div key={pathname} className="page-enter">
           <Outlet />
         </div>
