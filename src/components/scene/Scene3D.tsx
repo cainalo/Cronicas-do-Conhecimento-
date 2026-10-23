@@ -3,7 +3,8 @@
 // esqueleto e animações (andar, gesticular, pegar objetos). Cada fala tem um enquadramento: a câmera
 // se move entre plano geral, dois personagens, close e detalhe; velas e tocha tremulam e projetam
 // sombra; um relâmpago abre a cena; a folha do livro de empenhos se desenrola sobre a mesa.
-// Legendas sempre visíveis, controles de pausar, voltar, avançar, pular e som; sem WebGL, com
+// Legendas sempre visíveis, controles de pausar, voltar, avançar, pular e som (lareira e música do
+// ambiente do app, em src/app/ambience.ts); sem WebGL, com
 // "reduzir movimento" ou em caso de erro, a missão usa a transcrição.
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
@@ -118,14 +119,16 @@ function makeOwl(): THREE.Group {
 
 export default function Scene3D({ beats, onEnd, onFallback }: { beats: SceneBeat[]; onEnd: () => void; onFallback: () => void }) {
   const host = useRef<HTMLDivElement>(null);
-  const { prefs } = usePrefs();
+  const { prefs, setPrefs } = usePrefs();
   const [loading, setLoading] = useState(0);
   const [ready, setReady] = useState(false);
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [sound, setSound] = useState(!!prefs.sound);
+  // Som da cena = o ambiente do app (lareira e música medieval), ligado pelo mesmo botão.
+  const sound = !!(prefs.music || prefs.fire);
+  const setSound = (on: boolean) => setPrefs({ music: on, fire: on });
   const [done, setDone] = useState(false);
-  const api = useRef<{ beat: (n: number) => void; audio: (on: boolean) => void } | null>(null);
+  const api = useRef<{ beat: (n: number) => void } | null>(null);
   const reduce = typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
@@ -338,34 +341,7 @@ export default function Scene3D({ beats, onEnd, onFallback }: { beats: SceneBeat
     const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(resize) : undefined;
     ro?.observe(el);
 
-    // Som ambiente opcional: chuva (ruído filtrado), gerado na hora, sem arquivo de áudio.
-    let ctx: AudioContext | undefined;
-    let gain: GainNode | undefined;
-    const audio = (on: boolean) => {
-      if (on && !ctx) {
-        try {
-          ctx = new AudioContext();
-          const buf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
-          const d = buf.getChannelData(0);
-          for (let k = 0; k < d.length; k++) d[k] = Math.random() * 2 - 1;
-          const src = ctx.createBufferSource();
-          src.buffer = buf;
-          src.loop = true;
-          const f = ctx.createBiquadFilter();
-          f.type = 'bandpass';
-          f.frequency.value = 1400;
-          f.Q.value = 0.6;
-          gain = ctx.createGain();
-          gain.gain.value = 0;
-          src.connect(f).connect(gain).connect(ctx.destination);
-          src.start();
-        } catch {
-          return;
-        }
-      }
-      if (gain && ctx) gain.gain.linearRampToValueAtTime(on ? 0.06 : 0, ctx.currentTime + 0.4);
-    };
-    api.current = { beat, audio };
+    api.current = { beat };
 
     const clock = new THREE.Clock();
     let raf = 0;
@@ -423,7 +399,6 @@ export default function Scene3D({ beats, onEnd, onFallback }: { beats: SceneBeat
       disposed = true;
       cancelAnimationFrame(raf);
       ro?.disconnect();
-      void ctx?.close();
       renderer.dispose();
       scene.traverse((o) => {
         const m = o as THREE.Mesh;
@@ -442,9 +417,7 @@ export default function Scene3D({ beats, onEnd, onFallback }: { beats: SceneBeat
     return () => window.clearTimeout(t);
   }, [i, ready, paused, done, beats]);
 
-  useEffect(() => {
-    api.current?.audio(sound && ready);
-  }, [sound, ready]);
+
 
   const b = beats[i];
   return (
@@ -478,8 +451,8 @@ export default function Scene3D({ beats, onEnd, onFallback }: { beats: SceneBeat
             <span className="flex-1 text-center text-xs opacity-75">
               {i + 1}/{beats.length}
             </span>
-            <button className="rounded-full bg-black/45 px-3 py-2 text-xs font-semibold" onClick={() => setSound(!sound)} aria-pressed={sound} aria-label={sound ? 'Desligar o som ambiente' : 'Ligar o som ambiente'}>
-              {sound ? 'Som: ligado' : 'Som: desligado'}
+            <button className="rounded-full bg-black/45 px-3 py-2 text-xs font-semibold" onClick={() => setSound(!sound)} aria-pressed={sound} aria-label={sound ? 'Desligar lareira e música' : 'Ligar lareira e música medieval'}>
+              {sound ? 'Lareira e música: ligadas' : 'Ligar lareira e música'}
             </button>
             <button className="rounded-full bg-black/45 px-3 py-2 text-xs font-semibold" onClick={() => { setI(0); setDone(false); setPaused(false); }} aria-label="Rever a cena do início">
               Rever

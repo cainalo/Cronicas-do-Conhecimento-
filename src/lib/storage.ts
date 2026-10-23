@@ -52,6 +52,10 @@ export interface Prefs {
   /** Efeitos sonoros curtos (acerto, erro, conclusão). */
   sound?: boolean;
   theme: 'dark' | 'light';
+  /** Música medieval de fundo. */
+  music?: boolean;
+  /** Lareira crepitando. */
+  fire?: boolean;
 }
 // v3 (23/10/2026): visual medieval, com a "Noite" (tochas e pedra) como padrão. Quem vinha da v2
 // mantém tamanho de letra e som; o tema passa para a noite uma vez, e a escolha volta a ser livre.

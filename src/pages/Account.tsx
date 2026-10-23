@@ -147,6 +147,29 @@ export function AccountPage() {
             <Icon name="sol" size={18} /> Dia (pergaminho)
           </button>
         </div>
+        {(
+          [
+            ['music', 'Música medieval', 'Alaúde, flauta, bordão e tambor, gerados no aparelho.'],
+            ['fire', 'Lareira', 'Fogo crepitando ao fundo enquanto você estuda.'],
+          ] as const
+        ).map(([k, title, sub]) => (
+          <label key={k} className="flex items-center justify-between gap-3 pt-2">
+            <span>
+              <span className="block font-semibold">{title}</span>
+              <span className="block text-sm text-muted">{sub}</span>
+            </span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={!!prefs[k]}
+              aria-label={title}
+              onClick={() => setPrefs({ [k]: !prefs[k] })}
+              className={`relative h-7 w-12 shrink-0 rounded-full transition ${prefs[k] ? 'bg-ok' : 'bg-line'}`}
+            >
+              <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${prefs[k] ? 'left-6' : 'left-1'}`} />
+            </button>
+          </label>
+        ))}
         <label className="flex items-center justify-between gap-3 pt-2">
           <span>
             <span className="block font-semibold">Sons</span>

@@ -8,6 +8,7 @@ import { DEFAULT_CONTEST_ID, chapters, questionsForContest, totalUnits } from '@
 import { useCelebrations, useRegionCelebration } from '@/app/fx';
 import { useRegions } from '@/pages/Realm';
 import { Torch } from '@/components/Torch';
+import { usePrefs } from '@/app/prefs';
 import { Icon } from '@/components/Icon';
 import { useIsDark } from '@/components/Page';
 import { useState } from 'react';
@@ -148,6 +149,7 @@ export function Layout() {
             <span className="hidden lg:inline-flex">
               <ContinueButton variant="pill" />
             </span>
+            <AmbienceButton />
             <Link
               to="/conta"
               aria-label={`Conta · nível ${lv.level}`}
@@ -182,6 +184,24 @@ export function Layout() {
         <Tab area="reino" variant="bottom" />
       </nav>}
     </div>
+  );
+}
+
+/** Liga e desliga o ambiente (lareira e música). */
+function AmbienceButton() {
+  const { prefs, setPrefs } = usePrefs();
+  const on = !!(prefs.music || prefs.fire);
+  return (
+    <button
+      type="button"
+      onClick={() => setPrefs({ music: !on, fire: !on })}
+      aria-pressed={on}
+      aria-label={on ? 'Desligar música e lareira' : 'Ligar música medieval e lareira'}
+      title={on ? 'Desligar música e lareira' : 'Ligar música medieval e lareira'}
+      className={`grid h-10 w-10 place-items-center rounded-full transition ${on ? 'bg-[#e8b13b]/25 text-[#ffd36b]' : 'text-[#c4b08e] hover:bg-white/5'}`}
+    >
+      <Icon name="alaude" size={20} strokeWidth={1.9} />
+    </button>
   );
 }
 
