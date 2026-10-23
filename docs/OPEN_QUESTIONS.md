@@ -1,6 +1,7 @@
 # Perguntas pendentes
 
 ## Bloqueio técnico (aguardando o usuário)
+- **PDFs do kit (23/10/2026):** conhecimento.fgv.br, eticaconcursos.com.br e portal.tce.go.gov.br dão 403 no proxy. Para questões oficiais, anexar: prova TCE-GO 2014 FCC TI + gabarito; prova objetiva TCE-GO 2024 TI Tipo 1 + gabarito definitivo; discursiva 2024; edital 2024 retificado.
 - ~~Edital oficial~~ resolvido: o usuário enviou o PDF consolidado (17/10/2026).
 - **Rede:** `qptxcdksufdpbxddqpsw.supabase.co` continua bloqueado no container; a sincronização real precisa ser testada pelo usuário no navegador (ou liberando o domínio em *Network access*).
 - **Normativos do TCE-GO e LC estadual 205/2025:** portais oficiais (gnoi.tce.go.gov.br, goias.gov.br) bloqueados no contêiner. O cap. 2 de Legislação traz só o que foi verificável (edital + buscas). Pedir ao usuário os PDFs de RN 13/2016 (compilada), RA 14/2024, RA 17/2024, RA 14/2025, PDTI 2025–2026 e LC 205/2025 para ampliar o capítulo.
