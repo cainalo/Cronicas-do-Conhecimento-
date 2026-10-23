@@ -12,6 +12,7 @@ import { practiceDone } from '@/lib/practice';
 import { roman } from '@/lib/roman';
 import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
+import { StepGuide } from '@/components/StepGuide';
 import { Mascot } from '@/components/Mascot';
 import { LeatherBook, Leaf, useSpread, visiblePages } from '@/components/LeatherBook';
 import { Pegadinha, SceneLines } from './Book';
@@ -208,6 +209,9 @@ export function LearnPage() {
         <span className="text-xs font-semibold text-muted">
           {page + 1}/{pages.length}
         </span>
+      </div>
+      <div className="mb-2 shrink-0">
+        <StepGuide chapterId={chapterId} sectionId={sectionId} current="aprender" />
       </div>
       <LeatherBook
         spread={spread}

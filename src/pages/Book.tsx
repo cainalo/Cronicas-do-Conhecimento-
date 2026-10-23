@@ -12,6 +12,7 @@ import { practiceDone, practiceId } from '@/lib/practice';
 import { roman } from '@/lib/roman';
 import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
+import { StepGuide } from '@/components/StepGuide';
 import { Mascot } from '@/components/Mascot';
 import { SceneArt } from '@/components/SceneBanner';
 import { LeatherBook, Leaf, useSpread, visiblePages } from '@/components/LeatherBook';
@@ -296,6 +297,9 @@ export function BookPage() {
 
   return (
     <div className="-mt-2 flex h-[calc(100dvh-5.5rem-env(safe-area-inset-top))] flex-col" style={{ ['--font-scale' as string]: prefs.fontScale }}>
+      <div className="mb-2 shrink-0">
+        <StepGuide chapterId={chapter.id} sectionId={curSection} current="texto" />
+      </div>
       {/* Barra do livro */}
       <div className="mb-2 flex shrink-0 items-center gap-1.5">
         <button className="btn-ghost !min-h-[38px] !px-3 !py-1 text-sm" onClick={() => setToc(true)} aria-label="Sumário">

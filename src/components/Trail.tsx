@@ -38,7 +38,7 @@ export function chapterStops(c: Chapter, data: StudyData): Stop[] {
       },
       ...(() => {
         const m = missionForSection(c.id, s.id);
-        return m ? [{ key: m.id, to: `/missao/${m.id}`, label: `Missão: ${m.title}`, icon: 'mapa' as IconName, done: missionDone(data, m.id), kind: 'mission' as const }] : [];
+        return m ? [{ key: `${c.id}:${s.id}:missao`, to: `/missao/${m.id}`, label: `Missão: ${m.title}`, icon: 'mapa' as IconName, done: missionDone(data, m.id), kind: 'mission' as const }] : [];
       })(),
     ];
   });

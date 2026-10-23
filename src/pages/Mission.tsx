@@ -32,6 +32,18 @@ const STEP_LABEL: Record<Step, string> = {
   revisao: 'Revisão',
 };
 
+/** O que acontece em cada etapa, dito com calma. */
+const STEP_NOW: Record<Step, string> = {
+  cena: 'Assista à cena: ela mostra o problema que você vai investigar. Pode pausar, voltar ou ler em texto.',
+  objetivos: 'Veja o mistério e o que você precisa aprender para resolvê-lo.',
+  descoberta: 'Uma ideia de cada vez, com a tabela na sua frente. Responda a pergunta de cada ideia antes de seguir.',
+  laboratorio: 'Agora é com você: monte a consulta, execute e compare o resultado com o pedido. As dicas ajudam se travar.',
+  treino: 'Treino variado para fixar. Se errar, a explicação aparece e você pode tentar uma parecida.',
+  prova: 'Uma questão no estilo da prova, para ver se o assunto ficou firme.',
+  desfecho: 'Decida o que fazer com o que descobriu. A escolha muda a história, não o que você estuda.',
+  revisao: 'Resumo do que aprendeu, onde tropeçou e quando revisar.',
+};
+
 const can3D = () => {
   if (import.meta.env.MODE === 'test' || typeof window === 'undefined') return false;
   try {
@@ -107,6 +119,9 @@ export function MissionPage() {
         </ol>
         <span className="text-xs font-semibold text-muted">{STEP_LABEL[step]}</span>
       </div>
+      <p className="guide-bar -mt-2 mb-4 rounded-2xl px-3 py-2 text-sm" role="note">
+        <b>Etapa {idx + 1} de {STEPS.length}: {STEP_LABEL[step]}.</b> {STEP_NOW[step]}
+      </p>
 
       {step === 'cena' && (
         <section className="flex flex-1 flex-col" aria-label="Cena de abertura">

@@ -8,6 +8,7 @@ import { DEFAULT_CONTEST_ID, getChapter, getSectionExtras, getSimpleSection, que
 import { buildPractice, completePractice, type Activity } from '@/lib/practice';
 import { recordAnswer, totalXp } from '@/lib/study';
 import { Icon } from '@/components/Icon';
+import { StepGuide } from '@/components/StepGuide';
 import { Mascot, SpeechBubble } from '@/components/Mascot';
 import { QuestionStem } from '@/components/QuestionCard';
 
@@ -229,6 +230,9 @@ export function PracticePage() {
 
       {phase === 'intro' && (
         <div className="flex flex-1 flex-col">
+          <div className="mb-3">
+            <StepGuide chapterId={chapterId} sectionId={sectionId} current="praticar" open />
+          </div>
           <p className="rubric text-sm font-semibold">{chapter.title}</p>
           <h1 className="text-2xl leading-tight">Prática: {section.title.replace(/^\d+\.\s*/, '')}</h1>
           <div className="mt-6 flex items-end gap-2">

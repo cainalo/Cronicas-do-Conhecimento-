@@ -81,7 +81,8 @@ it('aprender: livro simples do trecho, palavras novas e convite para praticar', 
   expect(screen.getByText(/Trecho I/)).toBeInTheDocument();
   for (let i = 0; i < 12 && !screen.queryByTestId('praticar-computador'); i++) {
     await user.click(screen.getByRole('button', { name: 'Próxima página' }));
-    if (i === 0) expect(screen.getByText(/1 de \d/)).toBeInTheDocument();
+    if (i === 0) expect(screen.getByText(/^1 de \d$/)).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Onde você está" })).toHaveTextContent("Trecho 1 de");
   }
   expect(screen.getByText('Trecho aprendido!')).toBeInTheDocument();
   expect(loadData('visitante').reading['cap.prim.01'].sectionsRead).toEqual(['computador']);
@@ -156,4 +157,12 @@ it('missão SQL: cena em texto, objetivos, descoberta e laboratório com a consu
   await user.selectOptions(screen.getAllByLabelText('Operador')[0], 'IS NULL');
   await user.click(screen.getByRole('button', { name: /Executar/ }));
   expect(screen.getByText('Consulta certa')).toBeInTheDocument();
+});
+
+it('torre: mostra os dias até a prova e a meta de hoje para terminar o curso a tempo', () => {
+  renderAt('/');
+  const card = screen.getByRole('region', { name: 'Ritmo até a prova' });
+  expect(card).toHaveTextContent(/Faltam \d+ dias para a prova/);
+  expect(card).toHaveTextContent(/Meta de hoje: \d+ atividade/);
+  expect(card).toHaveTextContent(/O curso inteiro tem \d+ atividades/);
 });

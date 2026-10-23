@@ -224,6 +224,8 @@ a { text-underline-offset: 3px; }
 @keyframes codex-back { from { transform: rotateY(0deg); } to { transform: rotateY(180deg); } }
 @keyframes codex-shade { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
 
+.guide-bar { background: rgb(var(--raised) / 0.7); border: 1px solid rgb(var(--line)); }
+
 .learn-text { font-size: calc(1.22rem * var(--font-scale)); line-height: 1.6; }
 .learn-text strong { color: rgb(var(--ember)); }
 

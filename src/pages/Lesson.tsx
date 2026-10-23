@@ -6,6 +6,7 @@ import { Markdown } from '@/components/Markdown';
 import { QuestionCard } from '@/components/QuestionCard';
 import { completeLesson, recordAnswer, totalXp } from '@/lib/study';
 import { Icon } from '@/components/Icon';
+import { StepGuide } from '@/components/StepGuide';
 import { useFx } from '@/app/fx';
 import { Mascot, SpeechBubble } from '@/components/Mascot';
 
@@ -36,6 +37,8 @@ export function LessonPage() {
           <span className="transition-all" style={{ width: `${progress * 100}%` }} />
         </div>
       </div>
+
+      {phase.k === 'cards' && phase.i === 0 && <StepGuide chapterId={lesson.chapterId} current="desafio" open />}
 
       {phase.k === 'cards' && (
         <section className="manuscript p-5">

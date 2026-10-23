@@ -100,6 +100,8 @@ export function markSectionRead(data: StudyData, chapter: Chapter, sectionId: st
       [chapter.id]: { ...cur, sectionsRead, lastSectionId: sectionId, completedAt: cur.completedAt ?? (done ? now : undefined), updatedAt: now },
     },
     pending: { ...data.pending, reading: uniq([...data.pending.reading, chapter.id]) },
+    // Data da primeira vez que o trecho foi estudado (para o ritmo diário).
+    unitLog: data.unitLog?.[`aprender:${chapter.id}:${sectionId}`] ? data.unitLog : { ...data.unitLog, [`aprender:${chapter.id}:${sectionId}`]: now },
   };
   let xp: XpEvent | undefined;
   if (done) {

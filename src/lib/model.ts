@@ -122,6 +122,8 @@ export interface StudyData {
   cards: Record<string, CardState>;
   settings?: StudySettings;
   story?: StoryState;
+  /** Primeira conclusão de atividades que não guardam data própria (ex.: "aprender:cap:trecho"). */
+  unitLog?: Record<string, string>;
   pending: Pending;
   lastSyncAt?: string;
 }

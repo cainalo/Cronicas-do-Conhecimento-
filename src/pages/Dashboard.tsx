@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { DEFAULT_CONTEST_ID, flashcards, getContest, journey, lessons, missions, questionsForContest } from '@/content';
 import { missionDone, missionsDue } from '@/lib/mission';
+import { computePace, courseUnits, daysUntilExam, type Pace } from '@/lib/pace';
 import { recommend, reviewQueue } from '@/lib/study';
 import { dueCards } from '@/lib/training';
 import { isDone, settingsOf } from '@/lib/planner';
@@ -17,9 +18,47 @@ import { SyncBadge } from '@/components/Layout';
 import { IconBadge, SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
 import { Mascot } from '@/components/Mascot';
 
-function daysUntil(iso: string) {
-  const ms = new Date(iso + 'T00:00:00-03:00').getTime() - Date.now();
-  return Math.max(0, Math.ceil(ms / 86400000));
+const longDate = (iso: string, year = false) => {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', ...(year ? { year: 'numeric' } : {}) });
+};
+
+/** Ritmo até a prova: meta de hoje, total do curso e quanto falta. */
+export function PaceCard({ pace, examDate }: { pace: Pace; examDate: string }) {
+  const today = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+  const pips = Math.min(pace.perDay, 12);
+  return (
+    <section className="card p-4 sm:p-5" aria-label="Ritmo até a prova">
+      <p className="text-sm text-muted first-letter:uppercase">
+        {today}. Faltam <b className="text-ink">{pace.daysLeft} dias</b> para a prova ({longDate(examDate, true)}).
+      </p>
+      <h2 className="mt-2 text-xl leading-snug">
+        {pace.remaining === 0 ? 'Todo o curso foi feito. Agora é revisão e simulado.' : pace.leftToday === 0 ? 'Meta de hoje cumprida' : `Meta de hoje: ${pace.perDay} atividade${pace.perDay > 1 ? 's' : ''}`}
+      </h2>
+      {pace.remaining > 0 && (
+        <>
+          <div className="mt-2 flex flex-wrap gap-1.5" aria-label={`${pace.doneToday} de ${pace.perDay} feitas hoje`}>
+            {Array.from({ length: pips }, (_, i) => (
+              <span key={i} className={`h-3 flex-1 rounded-full ${i < pace.doneToday ? 'bg-gold' : 'bg-raised'}`} style={{ minWidth: 14 }} />
+            ))}
+          </div>
+          <p className="mt-1 text-sm">
+            Hoje você fez <b>{pace.doneToday}</b> de {pace.perDay}.{pace.leftToday > 0 ? ` Faltam ${pace.leftToday}.` : ' Se quiser adiantar, o amanhã fica mais leve.'}
+          </p>
+          <p className="mt-3 text-sm text-muted">
+            O curso inteiro tem <b className="text-ink">{pace.total} atividades</b> (cada trecho tem Aprender e Praticar; cada capítulo tem Desafio; há missões). Você já fez {pace.done} e faltam{' '}
+            {pace.remaining}. Para terminar tudo até {longDate(pace.finishBy)}
+            {pace.studyDays < pace.daysLeft ? ' e usar a última semana para revisão e simulados' : ''}, são {pace.perDay} por dia. Se pular um dia, a meta dos próximos sobe um pouco.
+          </p>
+          {pace.next && (
+            <Link to={pace.next.to} className="btn-primary mt-4 w-full">
+              <Icon name="play" size={18} fill="currentColor" /> Próxima: {pace.next.title}
+            </Link>
+          )}
+        </>
+      )}
+    </section>
+  );
 }
 
 export function Dashboard() {
@@ -36,7 +75,8 @@ export function Dashboard() {
   const today = localDay(new Date().toISOString());
   const answeredToday = data.attempts.filter((a) => localDay(a.answeredAt) === today).length;
   const dailyGoal = settingsOf(data).dailyQuestionGoal;
-  const days = daysUntil(contest.examDate);
+  const days = daysUntilExam(contest.examDate);
+  const pace = computePace(data, courseUnits(journey, lessons, missions), contest.examDate);
   const { plan } = usePlanOfToday();
   const pending = plan.items.filter((i) => !isDone(i, data, plan.day));
   const torre = c('torre');
@@ -84,7 +124,7 @@ export function Dashboard() {
             {contest.name} · FCC
           </span>
           <p className="mt-2 font-display text-[2rem] font-bold leading-none text-[#f8ead0] drop-shadow">{days} dias</p>
-          <p className="text-[0.95rem] text-[#e9d6b4]">até a prova, em 17 de janeiro</p>
+          <p className="text-[0.95rem] text-[#e9d6b4]">até a prova, em {longDate(contest.examDate, true)}</p>
         </HeroScene>
         <div className="p-4 sm:p-5">
           <div className="flex items-center justify-between gap-2">
@@ -111,6 +151,8 @@ export function Dashboard() {
           )}
         </div>
       </section>
+
+      <PaceCard pace={pace} examDate={contest.examDate} />
 
       {/* Missões do Arquivo Real: a nova, ou a que tem revisão marcada para hoje */}
       {(() => {
