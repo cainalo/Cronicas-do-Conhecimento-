@@ -15,49 +15,55 @@
 @tailwind utilities;
 
 /*
-  Paleta do Arquivo Real (kit de reformulação, 23/10/2026): verde profundo para estrutura,
-  carvão para o texto, pergaminho para superfícies de leitura, bronze/cobre para ações e
-  recompensas, vermelho queimado para alertas. Cores de área ficam em src/app/areas.ts.
+  Arquivo Real, visual medieval imersivo (pedido do usuário em 23/10/2026): nada de branco limpo.
+  "Noite" (padrão): parede de pedra iluminada por tochas, painéis de madeira escura com friso de
+  bronze, texto cor de pergaminho. "Dia": pergaminho envelhecido sobre madeira. Verde profundo para
+  estrutura, bronze para ações e recompensas, vermelho queimado para alertas.
 */
 
 :root {
-  /* Claro (padrão) */
-  --bg: 239 238 231;
-  --surface: 251 250 246;
-  --raised: 227 230 222;
-  --ink: 27 32 30;
-  --muted: 84 92 88;
-  --line: 210 213 203;
+  /* Dia: pergaminho envelhecido */
+  --bg: 214 196 160;
+  --surface: 236 223 194;
+  --raised: 222 205 170;
+  --ink: 43 30 17;
+  --muted: 98 78 52;
+  --line: 168 138 96;
   --gold: 31 92 69; /* verde profundo: estrutura, links, destaques */
-  --ember: 150 88 32; /* bronze: ações e rubricas */
+  --ember: 140 74 22; /* bronze escuro: ações e rubricas */
   --azure: 44 95 110;
-  --ok: 40 116 72;
-  --bad: 166 55 40;
+  --ok: 40 112 64;
+  --bad: 160 50 34;
   --leather: 74 40 22;
   --leaf: 214 170 96;
-  --parchment: 246 239 222;
+  --parchment: 242 230 200;
   --sepia: 36 28 18;
   --font-scale: 1;
-  --shadow-card: 0 8px 24px -18px rgb(20 30 26 / 0.32), 0 1px 2px rgb(20 30 26 / 0.06);
-  --shadow-lift: 0 14px 30px -16px rgb(20 30 26 / 0.36), 0 2px 6px -2px rgb(20 30 26 / 0.1);
+  --shadow-card: 0 10px 22px -14px rgb(50 30 10 / 0.55), 0 1px 2px rgb(50 30 10 / 0.2);
+  --shadow-lift: 0 16px 30px -14px rgb(50 30 10 / 0.6), 0 2px 6px -2px rgb(50 30 10 / 0.25);
+  --wall: radial-gradient(ellipse 120% 80% at 50% -10%, rgb(255 236 190 / 0.35), transparent 60%), radial-gradient(ellipse 140% 100% at 50% 50%, transparent 55%, rgb(80 50 20 / 0.35)), var(--tex-grain), var(--tex-grain);
+  --panel: linear-gradient(180deg, rgb(255 248 230 / 0.35), transparent 40%), var(--tex-grain);
   color-scheme: light;
 }
 
 :root[data-theme='dark'] {
-  --bg: 19 23 22;
-  --surface: 27 32 31;
-  --raised: 37 44 42;
-  --ink: 236 231 218;
-  --muted: 160 168 160;
-  --line: 50 59 56;
-  --gold: 111 174 140;
-  --ember: 214 150 82;
+  /* Noite: pedra, madeira e tochas */
+  --bg: 21 17 14;
+  --surface: 46 35 26;
+  --raised: 60 46 34;
+  --ink: 240 228 202;
+  --muted: 186 168 138;
+  --line: 98 76 52;
+  --gold: 120 182 146;
+  --ember: 222 160 86;
   --azure: 127 179 194;
-  --ok: 118 190 140;
-  --bad: 226 112 92;
-  --parchment: 236 226 202;
-  --shadow-card: 0 10px 26px -18px rgb(0 0 0 / 0.75), 0 1px 2px rgb(0 0 0 / 0.3);
-  --shadow-lift: 0 16px 32px -16px rgb(0 0 0 / 0.8), 0 2px 6px -2px rgb(0 0 0 / 0.35);
+  --ok: 122 192 140;
+  --bad: 230 120 96;
+  --parchment: 236 224 196;
+  --shadow-card: 0 12px 26px -14px rgb(0 0 0 / 0.85), 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-lift: 0 18px 34px -14px rgb(0 0 0 / 0.9), 0 2px 6px -2px rgb(0 0 0 / 0.45);
+  --wall: radial-gradient(circle at 6% 0%, rgb(255 150 60 / 0.22), transparent 32%), radial-gradient(circle at 94% 0%, rgb(255 150 60 / 0.2), transparent 32%), radial-gradient(ellipse 130% 90% at 50% 40%, transparent 50%, rgb(0 0 0 / 0.6)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='192'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/%3E%3CfeComposite in2='SourceGraphic' operator='in'/%3E%3C/filter%3E%3Crect x='2' y='2' width='86' height='28' rx='5' fill='rgb(64,56,50)' fill-opacity='.55'/%3E%3Crect x='92' y='2' width='91' height='28' rx='5' fill='rgb(61,53,47)' fill-opacity='.55'/%3E%3Crect x='187' y='2' width='70' height='28' rx='5' fill='rgb(77,69,63)' fill-opacity='.55'/%3E%3Crect x='261' y='2' width='72' height='28' rx='5' fill='rgb(71,63,57)' fill-opacity='.55'/%3E%3Crect x='-35' y='34' width='69' height='28' rx='5' fill='rgb(76,68,62)' fill-opacity='.55'/%3E%3Crect x='38' y='34' width='79' height='28' rx='5' fill='rgb(61,53,47)' fill-opacity='.55'/%3E%3Crect x='121' y='34' width='71' height='28' rx='5' fill='rgb(73,65,59)' fill-opacity='.55'/%3E%3Crect x='196' y='34' width='92' height='28' rx='5' fill='rgb(62,54,48)' fill-opacity='.55'/%3E%3Crect x='292' y='34' width='81' height='28' rx='5' fill='rgb(62,54,48)' fill-opacity='.55'/%3E%3Crect x='2' y='66' width='101' height='28' rx='5' fill='rgb(73,65,59)' fill-opacity='.55'/%3E%3Crect x='107' y='66' width='69' height='28' rx='5' fill='rgb(78,70,64)' fill-opacity='.55'/%3E%3Crect x='180' y='66' width='73' height='28' rx='5' fill='rgb(67,59,53)' fill-opacity='.55'/%3E%3Crect x='257' y='66' width='106' height='28' rx='5' fill='rgb(78,70,64)' fill-opacity='.55'/%3E%3Crect x='-58' y='98' width='69' height='28' rx='5' fill='rgb(78,70,64)' fill-opacity='.55'/%3E%3Crect x='15' y='98' width='103' height='28' rx='5' fill='rgb(72,64,58)' fill-opacity='.55'/%3E%3Crect x='122' y='98' width='69' height='28' rx='5' fill='rgb(67,59,53)' fill-opacity='.55'/%3E%3Crect x='195' y='98' width='68' height='28' rx='5' fill='rgb(77,69,63)' fill-opacity='.55'/%3E%3Crect x='267' y='98' width='74' height='28' rx='5' fill='rgb(69,61,55)' fill-opacity='.55'/%3E%3Crect x='2' y='130' width='92' height='28' rx='5' fill='rgb(64,56,50)' fill-opacity='.55'/%3E%3Crect x='98' y='130' width='100' height='28' rx='5' fill='rgb(63,55,49)' fill-opacity='.55'/%3E%3Crect x='202' y='130' width='102' height='28' rx='5' fill='rgb(69,61,55)' fill-opacity='.55'/%3E%3Crect x='308' y='130' width='101' height='28' rx='5' fill='rgb(65,57,51)' fill-opacity='.55'/%3E%3Crect x='-4' y='162' width='103' height='28' rx='5' fill='rgb(78,70,64)' fill-opacity='.55'/%3E%3Crect x='103' y='162' width='106' height='28' rx='5' fill='rgb(66,58,52)' fill-opacity='.55'/%3E%3Crect x='213' y='162' width='89' height='28' rx='5' fill='rgb(63,55,49)' fill-opacity='.55'/%3E%3Crect x='306' y='162' width='101' height='28' rx='5' fill='rgb(62,54,48)' fill-opacity='.55'/%3E%3Crect width='320' height='192' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  --panel: repeating-linear-gradient(92deg, rgb(255 220 170 / 0.025) 0 2px, transparent 2px 9px), repeating-linear-gradient(88deg, rgb(0 0 0 / 0.06) 0 1px, transparent 1px 13px), linear-gradient(180deg, rgb(255 210 150 / 0.06), transparent 50%), var(--tex-grain);
   color-scheme: dark;
 }
 
@@ -76,7 +82,10 @@ body {
   color: rgb(var(--ink));
   min-height: 100dvh;
   background-color: rgb(var(--bg));
+  background-image: var(--wall);
+  background-attachment: fixed;
 }
+h1, h2 { font-family: 'Cinzel', 'Libre Baskerville', Georgia, serif; font-weight: 700; letter-spacing: 0.01em; }
 
 h1, h2, h3, .font-display { font-family: 'Libre Baskerville', Georgia, serif; }
 h1, h2 { font-weight: 700; letter-spacing: -0.01em; }
@@ -224,7 +233,33 @@ a { text-underline-offset: 3px; }
 @keyframes codex-back { from { transform: rotateY(0deg); } to { transform: rotateY(180deg); } }
 @keyframes codex-shade { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
 
-.guide-bar { background: rgb(var(--raised) / 0.7); border: 1px solid rgb(var(--line)); }
+.guide-bar { background-color: rgb(var(--raised) / 0.85); background-image: var(--panel); border: 1px solid rgb(var(--ember) / 0.35); box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.15); }
+
+/* Barras de madeira com cravos de ferro (cabeçalho e menu de baixo) */
+.wood-bar {
+  background-color: #2b1d12;
+  background-image:
+    radial-gradient(circle at 14px 50%, #8a7a62 0 2.5px, #3a2c1e 3.2px, transparent 3.8px),
+    radial-gradient(circle at calc(100% - 14px) 50%, #8a7a62 0 2.5px, #3a2c1e 3.2px, transparent 3.8px),
+    repeating-linear-gradient(0deg, rgb(255 210 150 / 0.035) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.12) 0 1px, transparent 1px 11px),
+    linear-gradient(180deg, #3a2716, #24180e);
+  color: #f0e4ca;
+  --ink: 240 228 202;
+  --muted: 196 176 142;
+  --raised: 70 52 36;
+  --line: 110 84 56;
+}
+.wood-bar-top { border-bottom: 2px solid #7a5a2c; box-shadow: 0 6px 16px -6px rgb(0 0 0 / 0.7), inset 0 -1px 0 rgb(255 210 140 / 0.15); }
+.wood-bar-bottom { border-top: 2px solid #7a5a2c; box-shadow: 0 -6px 16px -6px rgb(0 0 0 / 0.7), inset 0 1px 0 rgb(255 210 140 / 0.15); }
+
+/* Tocha: chama em camadas que tremula, com halo de luz */
+@keyframes torch-flame { 0%, 100% { transform: scaleY(1) scaleX(1) rotate(-2deg); } 25% { transform: scaleY(1.12) scaleX(0.92) rotate(2deg); } 50% { transform: scaleY(0.94) scaleX(1.05) rotate(-1deg); } 75% { transform: scaleY(1.08) scaleX(0.96) rotate(3deg); } }
+@keyframes torch-glow { 0%, 100% { opacity: 0.55; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.12); } }
+.torch-flame { transform-origin: 50% 100%; transform-box: fill-box; animation: torch-flame 0.9s ease-in-out infinite; }
+.torch-flame-in { transform-origin: 50% 100%; transform-box: fill-box; animation: torch-flame 0.6s ease-in-out infinite reverse; }
+.torch-glow { animation: torch-glow 1.7s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@media (prefers-reduced-motion: reduce) { .torch-flame, .torch-flame-in, .torch-glow { animation: none; } }
 
 .learn-text { font-size: calc(1.22rem * var(--font-scale)); line-height: 1.6; }
 .learn-text strong { color: rgb(var(--ember)); }
@@ -242,11 +277,13 @@ a { text-underline-offset: 3px; }
 .pop { animation: pop 0.35s ease-out; }
 
 @layer components {
+  /* Painel: madeira escura (noite) ou pergaminho (dia), com friso de bronze por dentro */
   .card {
     @apply rounded-3xl border;
     border-color: rgb(var(--line));
     background-color: rgb(var(--surface));
-    box-shadow: var(--shadow-card);
+    background-image: var(--panel);
+    box-shadow: var(--shadow-card), inset 0 0 0 1px rgb(var(--ember) / 0.12), inset 0 1px 0 rgb(255 230 190 / 0.08);
   }
   a.card, button.card, .card-interactive {
     @apply transition duration-200 ease-out;
@@ -261,26 +298,31 @@ a { text-underline-offset: 3px; }
     @apply inline-flex select-none items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[0.95rem] font-semibold transition duration-150 ease-out active:scale-[0.97] disabled:pointer-events-none disabled:opacity-45;
     min-height: 46px;
   }
+  /* Placa de bronze: relevo, borda escura e brilho no topo */
   .btn-primary {
     @apply btn;
-    color: #fffaf7;
-    background: rgb(var(--ember));
-    box-shadow: 0 10px 24px -14px rgb(var(--ember) / 0.9);
+    color: #fff6e6;
+    background: linear-gradient(180deg, color-mix(in srgb, rgb(var(--ember)) 82%, #fff 18%), rgb(var(--ember)) 45%, color-mix(in srgb, rgb(var(--ember)) 70%, #000 30%));
+    border: 1px solid color-mix(in srgb, rgb(var(--ember)) 55%, #000 45%);
+    box-shadow: inset 0 1px 0 rgb(255 240 210 / 0.45), inset 0 -2px 0 rgb(0 0 0 / 0.25), 0 8px 18px -10px rgb(0 0 0 / 0.7);
+    text-shadow: 0 1px 0 rgb(0 0 0 / 0.35);
   }
-  :root[data-theme='dark'] .btn-primary { color: #221008; }
+  :root[data-theme='dark'] .btn-primary { color: #1e1208; text-shadow: 0 1px 0 rgb(255 230 180 / 0.35); }
   .btn-primary:hover { filter: brightness(1.06); }
   .btn-ghost {
     @apply btn border;
     color: rgb(var(--ink));
-    border-color: rgb(var(--line));
-    background: rgb(var(--surface));
+    border-color: rgb(var(--ember) / 0.45);
+    background-color: rgb(var(--surface));
+    background-image: var(--panel);
+    box-shadow: inset 0 1px 0 rgb(255 230 190 / 0.08), 0 6px 14px -10px rgb(0 0 0 / 0.6);
   }
   .btn-ghost:hover { background: rgb(var(--raised)); }
 
   .chip { @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium; background: rgb(var(--raised)); color: rgb(var(--muted)); }
 
   /* Lista em cartão */
-  .ledger { @apply overflow-hidden rounded-3xl border; border-color: rgb(var(--line)); background: rgb(var(--surface)); box-shadow: var(--shadow-card); }
+  .ledger { @apply overflow-hidden rounded-3xl border; border-color: rgb(var(--line)); background-color: rgb(var(--surface)); background-image: var(--panel); box-shadow: var(--shadow-card); }
   .ledger > * + * { border-top: 1px solid rgb(var(--line)); }
   .ledger-row { @apply flex items-center justify-between gap-3 px-4 py-3.5; }
   a.ledger-row { @apply transition-colors duration-150; }

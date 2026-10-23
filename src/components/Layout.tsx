@@ -7,6 +7,7 @@ import { achievements, cluesRevealed } from '@/lib/game';
 import { DEFAULT_CONTEST_ID, chapters, questionsForContest, totalUnits } from '@/content';
 import { useCelebrations, useRegionCelebration } from '@/app/fx';
 import { useRegions } from '@/pages/Realm';
+import { Torch } from '@/components/Torch';
 import { Icon } from '@/components/Icon';
 import { useIsDark } from '@/components/Page';
 import { useState } from 'react';
@@ -110,7 +111,7 @@ export function Layout() {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <header className="safe-top sticky top-0 z-30 border-b border-line bg-bg/90 backdrop-blur-md">
+      <header className="wood-bar wood-bar-top safe-top sticky top-0 z-30">
         <div className="relative mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 px-3 sm:px-5">
           <div className="flex min-w-[2.5rem] items-center gap-1">
             {inner ? (
@@ -134,8 +135,10 @@ export function Layout() {
             </nav>
           </div>
 
-          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 lg:hidden">
+          <span className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 lg:hidden">
+            <Torch size={30} className="-mt-1" />
             <Logo />
+            <Torch size={30} className="-mt-1" />
           </span>
 
           <div className="flex items-center gap-2">
@@ -170,7 +173,7 @@ export function Layout() {
 
       {!immersive && <nav
         aria-label="Navegação principal"
-        className="safe-bottom-nav fixed inset-x-0 bottom-0 z-30 flex items-stretch justify-around border-t border-line bg-bg/95 shadow-[0_-4px_16px_-8px_rgb(0_0_0/0.15)] backdrop-blur-md lg:hidden"
+        className="wood-bar wood-bar-bottom safe-bottom-nav fixed inset-x-0 bottom-0 z-30 flex items-stretch justify-around lg:hidden"
       >
         <Tab area="torre" variant="bottom" />
         <Tab area="grimorios" variant="bottom" />

@@ -141,10 +141,10 @@ export function AccountPage() {
         <h2 className="text-base">Aparência</h2>
         <div className="flex gap-2">
           <button className={prefs.theme === 'dark' ? 'btn-primary flex-1' : 'btn-ghost flex-1'} onClick={() => setPrefs({ theme: 'dark' })}>
-            <Icon name="lua" size={18} /> Escuro
+            <Icon name="lua" size={18} /> Noite (tochas)
           </button>
           <button className={prefs.theme === 'light' ? 'btn-primary flex-1' : 'btn-ghost flex-1'} onClick={() => setPrefs({ theme: 'light' })}>
-            <Icon name="sol" size={18} /> Claro
+            <Icon name="sol" size={18} /> Dia (pergaminho)
           </button>
         </div>
         <label className="flex items-center justify-between gap-3 pt-2">

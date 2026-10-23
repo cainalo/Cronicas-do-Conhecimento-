@@ -11,8 +11,9 @@ export async function applyStatusBar(theme: 'light' | 'dark') {
   if (!isNative()) return;
   const { StatusBar, Style } = await import('@capacitor/status-bar');
   try {
-    await StatusBar.setStyle({ style: theme === 'dark' ? Style.Dark : Style.Light });
-    await StatusBar.setBackgroundColor({ color: theme === 'dark' ? '#141817' : '#efeee7' });
+    await StatusBar.setStyle({ style: Style.Dark }); // barra de madeira escura nos dois temas
+    void theme;
+    await StatusBar.setBackgroundColor({ color: '#2b1d12' });
   } catch {
     /* indisponível em algumas versões do Android */
   }

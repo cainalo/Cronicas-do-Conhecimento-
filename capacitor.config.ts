@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Crônicas do Arquivo Real',
   webDir: 'dist',
   android: {
-    backgroundColor: '#efeee7',
+    backgroundColor: '#15110e',
   },
 };
 

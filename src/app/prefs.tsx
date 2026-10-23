@@ -8,7 +8,7 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
   const [prefs, set] = useState<Prefs>(loadPrefs);
   useEffect(() => {
     document.documentElement.dataset.theme = prefs.theme;
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', prefs.theme === 'dark' ? '#141817' : '#efeee7');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', prefs.theme === 'dark' ? '#2b1d12' : '#2b1d12');
     void applyStatusBar(prefs.theme);
     savePrefs(prefs);
   }, [prefs]);

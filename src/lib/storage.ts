@@ -53,13 +53,18 @@ export interface Prefs {
   sound?: boolean;
   theme: 'dark' | 'light';
 }
-// v2: o tema claro passou a ser o padrão (o escuro antigo era padrão, não escolha).
-const PREFS = 'cronicas:prefs:v2';
+// v3 (23/10/2026): visual medieval, com a "Noite" (tochas e pedra) como padrão. Quem vinha da v2
+// mantém tamanho de letra e som; o tema passa para a noite uma vez, e a escolha volta a ser livre.
+const PREFS = 'cronicas:prefs:v3';
+const OLD = 'cronicas:prefs:v2';
 export function loadPrefs(): Prefs {
   try {
-    return { fontScale: 1, theme: 'light', ...JSON.parse(localStorage.getItem(PREFS) ?? '{}') };
+    const cur = localStorage.getItem(PREFS);
+    if (cur) return { fontScale: 1, theme: 'dark', ...JSON.parse(cur) };
+    const old = JSON.parse(localStorage.getItem(OLD) ?? '{}');
+    return { fontScale: 1, ...old, theme: 'dark' };
   } catch {
-    return { fontScale: 1, theme: 'light' };
+    return { fontScale: 1, theme: 'dark' };
   }
 }
 export function savePrefs(p: Prefs) {
