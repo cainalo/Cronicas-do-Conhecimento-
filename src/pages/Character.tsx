@@ -20,7 +20,7 @@ export function CharacterPage() {
   const next = TITLES.find((t) => t.minLevel > sheet.level);
   const dark = useIsDark();
   const color = areaColor('reino', dark);
-  const gold = dark ? '#e8b13b' : '#a8740c';
+  const gold = dark ? '#e8b13b' : '#9a5b20';
   const [allArtifacts, setAllArtifacts] = useState(false);
   // Conquistados primeiro, depois os mais próximos de surgir.
   const ranked = [...artifacts].sort((a, b) => topicMastery(data, b.topicId, bank) - topicMastery(data, a.topicId, bank));
@@ -46,7 +46,7 @@ export function CharacterPage() {
           </div>
         </div>
         {next && <p className="mt-3 text-xs text-muted">Próximo título: <b className="text-ink">{next.title}</b>, no nível {next.minLevel}.</p>}
-        <p className="mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-bold text-white" style={{ background: '#c2571f' }}>
+        <p className="mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-bold text-white" style={{ background: '#1f5c45' }}>
           <Icon name="chama" size={16} strokeWidth={2.2} />
           {sheet.streak ? `${sheet.streak} dia(s) seguido(s)` : 'Estude hoje para acender a chama'}
         </p>
@@ -83,7 +83,7 @@ export function CharacterPage() {
       </section>
 
       <section>
-        <SectionTitle icon="selo" color="#c2571f" action={<span className="text-muted">{seals.filter((x) => x.done).length}/{seals.length}</span>}>
+        <SectionTitle icon="selo" color="#1f5c45" action={<span className="text-muted">{seals.filter((x) => x.done).length}/{seals.length}</span>}>
           Selos
         </SectionTitle>
         <ul className="grid grid-cols-3 gap-2">
@@ -97,7 +97,7 @@ export function CharacterPage() {
               <WaxSeal letter={s.name[0]} size={54} className={s.done ? 'mx-auto drop-shadow-md' : 'mx-auto opacity-25 grayscale'} />
               {!s.done && (
                 <span className="meter mx-auto mt-1 block w-14">
-                  <span style={{ width: `${(s.cur / s.max) * 100}%`, background: '#c2571f' }} />
+                  <span style={{ width: `${(s.cur / s.max) * 100}%`, background: '#1f5c45' }} />
                 </span>
               )}
               <p className={`mt-1 text-[0.8rem] font-semibold leading-tight ${s.done ? '' : 'text-muted'}`}>{s.name}</p>

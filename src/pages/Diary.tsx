@@ -28,7 +28,7 @@ export function DiaryPage() {
           </li>
         ))}
         {revealed === clues.length && (
-          <li className="shine relative overflow-hidden rounded-[1.8rem] p-5 text-center text-white shadow-[var(--shadow-lift)]" style={{ background: 'linear-gradient(140deg, #c2571f, #7a2e10)' }}>
+          <li className="shine relative overflow-hidden rounded-[1.8rem] p-5 text-center text-white shadow-[var(--shadow-lift)]" style={{ background: 'linear-gradient(140deg, #1f5c45, #7a2e10)' }}>
             <p className="text-xs font-bold uppercase tracking-wide opacity-85">Fim do diário</p>
             <p className="mt-1 font-display text-2xl">O Grande Exame aguarda</p>
             <p className="mt-2 text-sm opacity-90">Você reuniu todas as pistas. Agora a névoa só se vence no dia da prova: mantenha a revisão em dia e faça a prova completa no simulado.</p>

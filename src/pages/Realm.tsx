@@ -37,7 +37,7 @@ export function RealmPage() {
   const sheet = characterSheet(data);
   const seals = achievements(data, chapters, questionsForContest(DEFAULT_CONTEST_ID));
   const sealsWon = seals.filter((s) => s.done).length;
-  const shades = dark ? ['#78b873', '#8f9df0', '#e8b13b', '#ef7a5a'] : ['#4a7f46', '#5160c4', '#a8740c', '#c2571f'];
+  const shades = dark ? ['#a5b86a', '#a9b0ba', '#e8b13b', '#ef7a5a'] : ['#5b6b2e', '#4a4f57', '#9a5b20', '#1f5c45'];
   const [prologue, setPrologue] = useState(false);
   const revealed = cluesRevealed(Object.keys(data.lessons).length, totalUnits, clues.length);
 

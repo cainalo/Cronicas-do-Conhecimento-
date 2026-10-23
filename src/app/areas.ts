@@ -17,13 +17,13 @@ export interface Area {
 }
 
 export const AREAS: Record<AreaKey, Area> = {
-  torre: { key: 'torre', label: 'Torre', to: '/', icon: 'torre', color: ['#c2571f', '#f08a4b'], paths: [] },
+  torre: { key: 'torre', label: 'Torre', to: '/', icon: 'torre', color: ['#1f5c45', '#6fae8c'], paths: [] },
   grimorios: {
     key: 'grimorios',
     label: 'Grimórios',
     to: '/biblioteca',
     icon: 'grimorio',
-    color: ['#3b6fb0', '#6aa6e6'],
+    color: ['#2c5f6e', '#7fb3c2'],
     paths: ['/biblioteca', '/grimorio', '/capitulo', '/pratica', '/licao'],
   },
   treino: {
@@ -31,7 +31,7 @@ export const AREAS: Record<AreaKey, Area> = {
     label: 'Treino',
     to: '/treino',
     icon: 'ampulheta',
-    color: ['#a8740c', '#e8b13b'],
+    color: ['#9a5b20', '#e8b13b'],
     paths: ['/treino', '/relampago', '/plano', '/revisao', '/flashcards', '/simulado', '/discursiva', '/historico'],
   },
   reino: {
@@ -39,10 +39,10 @@ export const AREAS: Record<AreaKey, Area> = {
     label: 'Reino',
     to: '/reino',
     icon: 'mapa',
-    color: ['#4a7f46', '#78b873'],
+    color: ['#5b6b2e', '#a5b86a'],
     paths: ['/reino', '/diario', '/personagem', '/progresso', '/edital'],
   },
-  conta: { key: 'conta', label: 'Conta', to: '/conta', icon: 'pessoa', color: ['#5160c4', '#8f9df0'], paths: ['/conta'] },
+  conta: { key: 'conta', label: 'Conta', to: '/conta', icon: 'pessoa', color: ['#4a4f57', '#a9b0ba'], paths: ['/conta'] },
 };
 
 export function areaOf(pathname: string): AreaKey {

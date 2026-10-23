@@ -1,8 +1,8 @@
-// História do Crônicas do Conhecimento (decidida com o usuário em 17/10/2026):
-// o jogador é um auditor aprendiz da Ordem dos Auditores; a Névoa do Esquecimento apaga os
-// registros do Reino; Bubo, a coruja escriba, é o mentor. A história aparece em três lugares:
-// prólogo (primeira visita), falas por região do mapa e o diário de pistas (uma pista por lição
-// concluída, sempre na mesma ordem, qualquer que seja a lição).
+// História das Crônicas do Arquivo Real (kit de reformulação, aprovado em 23/10/2026). Antes era
+// "Crônicas do Conhecimento" (17/10/2026); a Névoa do Esquecimento continua, agora como o nome que o
+// Arquivo dá ao escuro em que o Conselho decide quando faltam registros. O jogador é aprendiz do Arquivo
+// Real; a mentora é a arquivista-mor Isolda, e Bubo é a coruja dela, que acompanha os estudos.
+// A história aparece no prólogo (primeira visita), nas falas por região, no diário de pistas e nas missões.
 
 export interface ProloguePage {
   title: string;
@@ -12,19 +12,19 @@ export interface ProloguePage {
 
 export const prologue: ProloguePage[] = [
   {
-    title: 'A Névoa do Esquecimento',
+    title: 'A noite em que as torres calaram',
     scene: 'reino',
-    text: 'Há três invernos, uma névoa cinzenta desceu sobre o Reino. Por onde passa, apaga registros: contratos somem dos arquivos, livros perdem páginas, e regiões inteiras desaparecem do mapa.',
+    text: 'Na noite da tempestade, as torres de mensageiros do Reino pararam de responder. Pela manhã, o Arquivo Real deu falta de registros da Coroa: contratos, folhas de pagamento e atas do Conselho.',
   },
   {
-    title: 'A Torre dos Escribas',
+    title: 'O Arquivo Real',
     scene: 'biblioteca',
-    text: 'Só a Ordem dos Auditores enxerga através dela. Você acaba de chegar à Torre como aprendiz. Eu sou Bubo, guardião da biblioteca, e vou acompanhar seus estudos.',
+    text: 'Sou Isolda, arquivista-mor. Esta é Bubo, minha coruja, que vai acompanhar seus estudos. Você entra hoje como aprendiz do Arquivo. Quando faltam registros, o Conselho decide no escuro, e aqui chamamos esse escuro de Névoa.',
   },
   {
-    title: 'O Grande Exame',
+    title: 'A investigação',
     scene: 'treino',
-    text: 'Cada tópico que você domina dissipa a névoa de um pedaço do mapa. Em janeiro, o Conselho realiza o Grande Exame e nomeia os novos auditores. Até lá, estude, colecione pistas e descubra quem alimenta a névoa.',
+    text: 'Cada assunto que você domina devolve ao Conselho a capacidade de decidir com evidências. Ninguém é culpado sem prova. Em janeiro, o Conselho realiza o Grande Exame e nomeia novos auditores. Até lá, investigue.',
   },
 ];
 
@@ -136,4 +136,4 @@ export const clues: string[] = [
   'Pista 37. Bubo fecha o diário: "Agora você sabe tudo o que eu sei. O resto se decide no dia do Exame. Estude, aprendiz, e a névoa não terá onde se esconder."',
 ];
 
-export const PROLOGUE_KEY = 'cronicas:prologo:v1';
+export const PROLOGUE_KEY = 'cronicas:prologo:v2';

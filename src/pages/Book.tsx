@@ -65,9 +65,9 @@ export function SceneLines({ lines }: { lines: { who: string; text: string }[] }
               {bubo ? (
                 <Mascot mood={i === lines.length - 1 ? 'talk' : 'idle'} size={38} />
               ) : (
-                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#5160c4] text-xs font-bold text-white">{l.who[0]}</span>
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#4a4f57] text-xs font-bold text-white">{l.who[0]}</span>
               )}
-              <span className={`rounded-2xl px-3 py-2 text-[0.92rem] leading-snug shadow-sm ${bubo ? 'rounded-bl-sm bg-surface' : 'rounded-br-sm bg-[#5160c4]/12'}`}>
+              <span className={`rounded-2xl px-3 py-2 text-[0.92rem] leading-snug shadow-sm ${bubo ? 'rounded-bl-sm bg-surface' : 'rounded-br-sm bg-[#4a4f57]/12'}`}>
                 <b className="block text-[0.72rem] opacity-70">{l.who}</b>
                 {l.text}
               </span>
@@ -252,7 +252,7 @@ export function BookPage() {
         sfx(r.xp ? 'done' : 'ok');
         if (r.xp) {
           confetti(80);
-          toast({ text: 'Capítulo lido!', sub: `+${r.xp.amount} XP`, icon: 'grimorio', color: '#3b6fb0' });
+          toast({ text: 'Capítulo lido!', sub: `+${r.xp.amount} XP`, icon: 'grimorio', color: '#2c5f6e' });
         }
       }
     }
@@ -301,7 +301,7 @@ export function BookPage() {
         </button>
         <span className="flex-1 px-1">
           <span className="meter block !h-1.5">
-            <span style={{ width: `${((page + 1) / Math.max(1, total)) * 100}%`, background: '#3b6fb0' }} />
+            <span style={{ width: `${((page + 1) / Math.max(1, total)) * 100}%`, background: '#2c5f6e' }} />
           </span>
           <span className="mt-0.5 block text-center text-[0.65rem] text-muted">
             página {page + 1} de {total}

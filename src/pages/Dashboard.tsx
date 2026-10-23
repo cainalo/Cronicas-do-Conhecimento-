@@ -60,13 +60,13 @@ export function Dashboard() {
             </p>
           </div>
           <div className="mt-2 flex flex-wrap gap-1.5">
-            <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold text-white shadow-sm" style={{ background: '#c2571f' }}>
+            <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold text-white shadow-sm" style={{ background: '#1f5c45' }}>
               <Icon name="chama" size={14} strokeWidth={2.2} /> {sheet.streak} dia(s)
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold text-white shadow-sm" style={{ background: '#a8740c' }}>
+            <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold text-white shadow-sm" style={{ background: '#9a5b20' }}>
               <Icon name="estrela" size={14} strokeWidth={2.2} /> {sheet.xp} XP
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold text-white shadow-sm" style={{ background: '#4a7f46' }}>
+            <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold text-white shadow-sm" style={{ background: '#5b6b2e' }}>
               <Icon name="escudo" size={14} strokeWidth={2.2} /> nível {sheet.level}
             </span>
           </div>

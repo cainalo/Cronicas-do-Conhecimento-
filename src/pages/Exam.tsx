@@ -51,7 +51,7 @@ function ExamSetup() {
         </MascotSays>
       </header>
 
-      <section className="shine relative overflow-hidden rounded-[1.8rem] p-4 text-white shadow-[var(--shadow-card)]" style={{ background: 'linear-gradient(140deg, #3b6fb0, #1f3d66)' }}>
+      <section className="shine relative overflow-hidden rounded-[1.8rem] p-4 text-white shadow-[var(--shadow-card)]" style={{ background: 'linear-gradient(140deg, #2c5f6e, #1f3d66)' }}>
         <p className="text-xs font-bold uppercase tracking-wide opacity-85">Formato do edital</p>
         <h2 className="mt-1 text-xl">Prova completa</h2>
         <p className="mt-1 text-sm opacity-90">

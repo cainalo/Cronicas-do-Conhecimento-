@@ -184,10 +184,10 @@ export function Layout() {
 
 function Logo() {
   return (
-    <Link to="/" className="flex items-center gap-2" aria-label="Crônicas do Conhecimento, início">
+    <Link to="/" className="flex items-center gap-2" aria-label="Crônicas do Arquivo Real, início">
       <img src={`${import.meta.env.BASE_URL}pwa-192.png`} alt="" className="h-7 w-7 rounded-lg shadow-sm" />
       <span className="whitespace-nowrap font-logo text-[1.05rem] leading-none text-ink">
-        Crônicas<span className="hidden text-ember sm:inline lg:hidden"> do Conhecimento</span>
+        Crônicas<span className="hidden text-ember sm:inline lg:hidden"> do Arquivo Real</span>
       </span>
     </Link>
   );

@@ -76,7 +76,7 @@ export function LearnPage() {
     update((d) => markSectionRead(d, chapter, section.id).data);
     sfx('done');
     confetti(r.xp ? 90 : 40);
-    if (r.xp) toast({ text: 'Capítulo estudado!', sub: `+${r.xp.amount} XP`, icon: 'grimorio', color: '#3b6fb0' });
+    if (r.xp) toast({ text: 'Capítulo estudado!', sub: `+${r.xp.amount} XP`, icon: 'grimorio', color: '#2c5f6e' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, pages]);
 
@@ -202,7 +202,7 @@ export function LearnPage() {
           <Icon name="errado" size={22} />
         </button>
         <div className="h-3 flex-1 overflow-hidden rounded-full bg-raised">
-          <div className="h-full rounded-full bg-[#3b6fb0] transition-all duration-500" style={{ width: `${((page + 1) / pages.length) * 100}%` }} />
+          <div className="h-full rounded-full bg-[#2c5f6e] transition-all duration-500" style={{ width: `${((page + 1) / pages.length) * 100}%` }} />
         </div>
         <span className="text-xs font-semibold text-muted">
           {page + 1}/{pages.length}

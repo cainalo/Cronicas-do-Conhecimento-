@@ -12,7 +12,7 @@ export async function applyStatusBar(theme: 'light' | 'dark') {
   const { StatusBar, Style } = await import('@capacitor/status-bar');
   try {
     await StatusBar.setStyle({ style: theme === 'dark' ? Style.Dark : Style.Light });
-    await StatusBar.setBackgroundColor({ color: theme === 'dark' ? '#1f1b15' : '#faf7f0' });
+    await StatusBar.setBackgroundColor({ color: theme === 'dark' ? '#141817' : '#efeee7' });
   } catch {
     /* indisponível em algumas versões do Android */
   }

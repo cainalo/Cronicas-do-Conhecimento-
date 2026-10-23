@@ -44,7 +44,7 @@ export function SceneArt({ scene, dark }: { scene: Scene; dark: boolean }) {
               <rect x="150" y={36 + r * 32} width="200" height="4" rx="2" fill={dark ? '#5a4330' : '#b88a5c'} />
               {Array.from({ length: 12 }, (_, i) => {
                 const h = 18 + ((i * 7 + r * 5) % 9);
-                const colors = ['#9b3b2a', '#3b6fb0', '#4a7f46', '#a8740c', '#6b4a8f', '#c2571f'];
+                const colors = ['#9b3b2a', '#2c5f6e', '#5b6b2e', '#9a5b20', '#6b4a8f', '#1f5c45'];
                 return <rect key={i} x={156 + i * 16} y={36 + r * 32 - h} width="12" height={h} rx="2" fill={colors[(i + r) % colors.length]} opacity={dark ? 0.75 : 0.9} />;
               })}
             </g>
@@ -64,12 +64,12 @@ export function SceneArt({ scene, dark }: { scene: Scene; dark: boolean }) {
           <g transform="translate(290 70)">
             <rect x="-2" y="10" width="4" height="40" fill={dark ? '#5a4330' : '#8a6240'} />
             <circle r="22" fill="#f4ead6" />
-            <circle r="16" fill="#c2571f" />
+            <circle r="16" fill="#1f5c45" />
             <circle r="10" fill="#f4ead6" />
-            <circle r="4" fill="#c2571f" />
+            <circle r="4" fill="#1f5c45" />
             <g className="anim-hop">
               <path d="M-40 -6l38 6" stroke="#5a3c22" strokeWidth="2.5" />
-              <path d="M-44 -10l6 4-6 4" fill="#a8740c" />
+              <path d="M-44 -10l6 4-6 4" fill="#9a5b20" />
             </g>
           </g>
           {/* boneco de treino */}
@@ -81,8 +81,8 @@ export function SceneArt({ scene, dark }: { scene: Scene; dark: boolean }) {
           </g>
           {/* ampulheta */}
           <g transform="translate(150 78)">
-            <path d="M-10 0h20M-10 36h20" stroke="#a8740c" strokeWidth="3" strokeLinecap="round" />
-            <path d="M-8 1c0 10 8 11 8 17s-8 7-8 17h16c0-10-8-11-8-17s8-7 8-17z" fill="none" stroke="#a8740c" strokeWidth="2" />
+            <path d="M-10 0h20M-10 36h20" stroke="#9a5b20" strokeWidth="3" strokeLinecap="round" />
+            <path d="M-8 1c0 10 8 11 8 17s-8 7-8 17h16c0-10-8-11-8-17s8-7 8-17z" fill="none" stroke="#9a5b20" strokeWidth="2" />
             <path className="anim-sand" d="M-6 3h12c-1 6-6 9-6 12 0-3-5-6-6-12z" fill="#e8b13b" />
             <path className="anim-sand-fill" d="M-6 34h12c-2-5-4-6-6-8-2 2-4 3-6 8z" fill="#e8b13b" />
           </g>
@@ -97,7 +97,7 @@ export function SceneArt({ scene, dark }: { scene: Scene; dark: boolean }) {
           <g transform="translate(250 50)">
             <path d="M0 62V22l-4-3v-9h6v5h6v-5h12v5h6v-5h6v9l-4 3v40" fill={dark ? '#1b1520' : '#8a7a68'} />
             <path d="M22 10V-4" stroke={dark ? '#1b1520' : '#8a7a68'} strokeWidth="2" />
-            <path className="anim-flag" d="M22 -4h14l-4 4 4 4H22z" fill="#c2571f" />
+            <path className="anim-flag" d="M22 -4h14l-4 4 4 4H22z" fill="#1f5c45" />
             <rect className="anim-flicker" x="13" y="30" width="6" height="10" rx="3" fill="#e8b13b" />
           </g>
           {/* estrada */}
@@ -109,12 +109,12 @@ export function SceneArt({ scene, dark }: { scene: Scene; dark: boolean }) {
         <g>
           <path d="M0 116c70-10 140-8 200 0s110 8 160-2v26H0z" fill={dark ? '#2b241c' : '#e7d6b6'} />
           <g transform="translate(280 60)" className="anim-floaty">
-            <path d="M0 0l22 8v16c0 14-10 24-22 28-12-4-22-14-22-28V8z" fill="#5160c4" />
+            <path d="M0 0l22 8v16c0 14-10 24-22 28-12-4-22-14-22-28V8z" fill="#4a4f57" />
             <path d="M-9 26l7 7 13-14" stroke="#fff" strokeWidth="3.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
           </g>
           <g transform="translate(200 86)">
-            <circle r="9" fill="none" stroke="#a8740c" strokeWidth="3" />
-            <path d="M7 6l18 18M18 18l4-4M22 22l4-4" stroke="#a8740c" strokeWidth="3" strokeLinecap="round" />
+            <circle r="9" fill="none" stroke="#9a5b20" strokeWidth="3" />
+            <path d="M7 6l18 18M18 18l4-4M22 22l4-4" stroke="#9a5b20" strokeWidth="3" strokeLinecap="round" />
           </g>
         </g>
       )}

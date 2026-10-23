@@ -2,10 +2,10 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.github.cainalo.cronicas',
-  appName: 'Crônicas do Conhecimento',
+  appName: 'Crônicas do Arquivo Real',
   webDir: 'dist',
   android: {
-    backgroundColor: '#faf7f0',
+    backgroundColor: '#efeee7',
   },
 };
 

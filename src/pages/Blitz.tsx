@@ -68,7 +68,7 @@ export function BlitzPage() {
             </div>
             <span
               className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold text-white transition ${combo >= 2 ? 'anim-hop' : ''}`}
-              style={{ background: combo ? '#c2571f' : 'rgb(var(--muted))' }}
+              style={{ background: combo ? '#1f5c45' : 'rgb(var(--muted))' }}
               aria-label={`Sequência de ${combo} acertos`}
             >
               <Icon name="chama" size={14} strokeWidth={2.2} /> x{combo}

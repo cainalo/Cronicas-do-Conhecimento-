@@ -22,7 +22,7 @@ export function TrainingPage() {
   const done = plan.items.filter((i) => isDone(i, data, plan.day)).length;
 
   // Tons vizinhos da cor da área, para diferenciar os cartões sem sair da família.
-  const shades = dark ? ['#e8b13b', '#ef7a5a', '#f0c25e', '#6aa6e6', '#78b873', '#c9a27a'] : ['#a8740c', '#c2571f', '#b8860b', '#3b6fb0', '#4a7f46', '#8a6a48'];
+  const shades = dark ? ['#e8b13b', '#ef7a5a', '#f0c25e', '#7fb3c2', '#a5b86a', '#c9a27a'] : ['#9a5b20', '#1f5c45', '#b8860b', '#2c5f6e', '#5b6b2e', '#8a6a48'];
 
   return (
     <div className="space-y-6">
@@ -49,7 +49,7 @@ export function TrainingPage() {
             text={plan.restDay ? 'Hoje é dia de descanso. Volte amanhã ou estude livremente.' : 'Atividades do dia montadas a partir do seu histórico e do tempo disponível.'}
             badge={plan.restDay ? 'descanso' : `${done} de ${plan.items.length}`}
           />
-          <Tile to="/relampago" icon="chama" color={dark ? '#ef7a5a' : '#c2571f'} title="Rodada relâmpago" text="5 questões rápidas, com sequência de acertos." />
+          <Tile to="/relampago" icon="chama" color={dark ? '#ef7a5a' : '#1f5c45'} title="Rodada relâmpago" text="5 questões rápidas, com sequência de acertos." />
           <Tile to="/revisao" icon="ampulheta" color={shades[1]} title="Revisão de erros" text="Questões erradas voltam até você acertar." badge={wrong ? `${wrong}` : undefined} />
           <Tile wide to="/flashcards" icon="cartas" color={shades[2]} title="Flashcards" text="Repetição espaçada dos glossários." badge={due ? `${due} hoje` : undefined} />
         </TileGrid>

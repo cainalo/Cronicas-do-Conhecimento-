@@ -21,7 +21,7 @@ interface Fx {
 const FxCtx = createContext<Fx>({ confetti: () => {}, toast: () => {}, sfx: () => {} });
 export const useFx = () => useContext(FxCtx);
 
-const COLORS = ['#c2571f', '#e8b13b', '#3b6fb0', '#4a7f46', '#5160c4', '#d6456b'];
+const COLORS = ['#1f5c45', '#e8b13b', '#2c5f6e', '#5b6b2e', '#4a4f57', '#d6456b'];
 const reducedMotion = () => typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 let audio: AudioContext | null = null;
@@ -129,18 +129,18 @@ export function useCelebrations(xp: number, level: number, seals: { id: string; 
     last.current = { xp, level, seals: doneSeals, lessons: lessonsDone };
     if (!prev) return;
     if (level > prev.level) {
-      toast({ text: `Nível ${level}!`, sub: 'Você subiu de nível', icon: 'escudo', color: '#4a7f46' });
+      toast({ text: `Nível ${level}!`, sub: 'Você subiu de nível', icon: 'escudo', color: '#5b6b2e' });
       confetti(90);
       sfx('level');
     } else if (xp > prev.xp) {
-      toast({ text: `+${xp - prev.xp} XP`, icon: 'selo', color: '#a8740c' });
+      toast({ text: `+${xp - prev.xp} XP`, icon: 'selo', color: '#9a5b20' });
     }
     if (lessonsDone > prev.lessons && lessonsDone <= cluesTotal) {
-      toast({ text: 'Nova pista no diário', sub: `Pista ${lessonsDone} de ${cluesTotal}`, icon: 'pergaminho', color: '#4a7f46' });
+      toast({ text: 'Nova pista no diário', sub: `Pista ${lessonsDone} de ${cluesTotal}`, icon: 'pergaminho', color: '#5b6b2e' });
     }
     for (const s of seals) {
       if (s.done && !prev.seals.has(s.id)) {
-        toast({ text: 'Selo conquistado', sub: s.name, icon: 'selo', color: '#c2571f' });
+        toast({ text: 'Selo conquistado', sub: s.name, icon: 'selo', color: '#1f5c45' });
         confetti(50);
       }
     }
@@ -160,7 +160,7 @@ export function useRegionCelebration(cleared: string[]) {
     if (!prev) return;
     for (const name of cleared) {
       if (!prev.has(name)) {
-        toast({ text: 'A névoa se dissipou', sub: name, icon: 'mapa', color: '#4a7f46' });
+        toast({ text: 'A névoa se dissipou', sub: name, icon: 'mapa', color: '#5b6b2e' });
         confetti(100);
         sfx('level');
       }

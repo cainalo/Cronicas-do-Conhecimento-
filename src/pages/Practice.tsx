@@ -25,7 +25,7 @@ function shuffle<T>(a: T[]): T[] {
 const choiceCls = (state: 'idle' | 'sel' | 'ok' | 'bad' | 'dim') =>
   ({
     idle: 'border-line bg-surface hover:bg-raised/60',
-    sel: 'border-[#3b6fb0] bg-[#3b6fb0]/10 shadow-[inset_0_0_0_1px_#3b6fb0]',
+    sel: 'border-[#2c5f6e] bg-[#2c5f6e]/10 shadow-[inset_0_0_0_1px_#2c5f6e]',
     ok: 'border-ok bg-ok/10',
     bad: 'border-bad bg-bad/10',
     dim: 'border-line bg-surface opacity-60',
@@ -269,7 +269,7 @@ export function PracticePage() {
                     <span key={i}>
                       {part}
                       {i < arr.length - 1 && (
-                        <span className={`mx-1 inline-block min-w-[4rem] rounded-lg border-b-2 px-2 text-center ${value ? 'border-[#3b6fb0] text-[#3b6fb0]' : 'border-muted text-transparent'}`}>{value ?? '____'}</span>
+                        <span className={`mx-1 inline-block min-w-[4rem] rounded-lg border-b-2 px-2 text-center ${value ? 'border-[#2c5f6e] text-[#2c5f6e]' : 'border-muted text-transparent'}`}>{value ?? '____'}</span>
                       )}
                     </span>
                   ))}
@@ -339,15 +339,15 @@ export function PracticePage() {
           <h1 className="mt-2 text-2xl">Trecho praticado!</h1>
           <div className="mt-4 grid w-full grid-cols-3 gap-2">
             <span className="rounded-2xl border-2 border-[#e8b13b] p-2">
-              <b className="block text-xl text-[#a8740c]">+{totalXp(data) - startXp}</b>
+              <b className="block text-xl text-[#9a5b20]">+{totalXp(data) - startXp}</b>
               <span className="text-xs text-muted">XP</span>
             </span>
             <span className="rounded-2xl border-2 border-ok p-2">
               <b className="block text-xl text-ok">{score}%</b>
               <span className="text-xs text-muted">de primeira</span>
             </span>
-            <span className="rounded-2xl border-2 border-[#3b6fb0] p-2">
-              <b className="block text-xl text-[#3b6fb0]">{total}</b>
+            <span className="rounded-2xl border-2 border-[#2c5f6e] p-2">
+              <b className="block text-xl text-[#2c5f6e]">{total}</b>
               <span className="text-xs text-muted">atividades</span>
             </span>
           </div>
