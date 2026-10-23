@@ -7,6 +7,7 @@ import { Dashboard } from '@/pages/Dashboard';
 import { GrimoirePage, LibraryPage } from '@/pages/Library';
 import { BookPage } from '@/pages/Book';
 import { MissionPage } from '@/pages/Mission';
+import { DownloadPage } from '@/pages/Download';
 import { PracticePage } from '@/pages/Practice';
 import { LearnPage } from '@/pages/Learn';
 import { LessonPage } from '@/pages/Lesson';
@@ -35,6 +36,7 @@ export function AppRoutes() {
         <Route path="capitulo/:id" element={<BookPage />} />
         <Route path="aprender/:chapterId/:sectionId" element={<LearnPage />} />
         <Route path="missao/:id" element={<MissionPage />} />
+        <Route path="download" element={<DownloadPage />} />
         <Route path="pratica/:chapterId/:sectionId" element={<PracticePage />} />
         <Route path="licao/:id" element={<LessonPage />} />
         <Route path="revisao" element={<ReviewPage />} />
