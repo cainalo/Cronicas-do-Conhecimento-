@@ -4,6 +4,7 @@
 **Fase:** reformulação "Arquivo Real" (kit em `docs/kit/`, auditoria em `docs/AUDITORIA_REFORMULACAO.md`): fases 0 a 5 do kit feitas para o piloto; expansão pendente.
 
 ## Situação atual
+- **23/10, rodada 2:** ritmo até a prova na Torre (dias, total de atividades, meta de hoje); guia "Onde estou"; visual medieval imersivo (Noite padrão, prefs `cronicas:prefs:v3`); ambiente sonoro gerado no aparelho (`app/ambience.ts`, botão de alaúde no cabeçalho, chaves em Conta; a cena 3D usa o mesmo); sem vozes. Aguardando retorno do usuário sobre a amostra de som e o visual.
 - **Reformulação Arquivo Real (23/10/2026):** nome "Crônicas do Arquivo Real"; paleta verde profundo, carvão, pergaminho e bronze em todo o app; elenco em `content/game/cast.ts` (Isolda mentora, Bubo coruja dela, Brites, Tomé, Leonor, Ambrósio, Conde Valério); novo prólogo (`PROLOGUE_KEY` v2).
 - **Missão-piloto SQL** (`/missao/missao.sql.01`, conteúdo em `content/missions/sql-01.ts`): cena 3D (Three.js + KayKit CC0, `public/scene/arquivo/`, créditos em `CREDITOS.txt`) com legendas e transcrição; objetivos; descoberta com tabela; laboratório SQL (`lib/sql.ts`, `components/activities/SqlLab.tsx`); treino com 7 famílias de atividade (`lib/activities.ts`, `components/activities/ActivityView.tsx`); questão de prova autoral rotulada; desfecho com escolha persistente (`StudyData.story`, `lib/mission.ts`); revisão marcada. Aparece na Torre, na trilha do cap. de Banco de Dados e no Diário.
 - **Códice:** em tela larga deitada, livro e Aprender abrem em duas páginas (`useSpread`), a folha gira sobre a lombada; setas do teclado.
@@ -19,7 +20,7 @@
 - Fases D e E completas; Supabase com RLS verificado; login/sync pelo navegador ainda **não confirmados pelo usuário**.
 
 ## Testes
-`npm test` 709/709; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
+`npm test` 715/715; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
 
 ## Pendências com o usuário
 - Pedir retorno sobre a clareza da explicação simples (o usuário disse que não entendia nada) e sobre o livro de couro; e sobre login/sincronização.

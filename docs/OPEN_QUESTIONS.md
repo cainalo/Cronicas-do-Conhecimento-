@@ -21,3 +21,4 @@ Tom (mistério investigativo), trilha (mapa do reino), recompensas (selos, inven
 5. **Metas:** meta diária padrão em questões (hoje fixa em 10) ou em minutos? Lembretes?
 6. **Simulados:** prioridade de simulado completo (70 questões, 4h30) vs. minissimulados por disciplina.
 7. **Ordem dos próximos grimórios** (sugestão: IA → Segurança (OWASP/Zero Trust) → Governança → Redes/Nuvem → Legislação TI → Banco de Dados → Gerais).
+- **Áudio real (23/10/2026):** sites de áudio bloqueados no contêiner. Se o usuário quiser gravações reais, anexar arquivos CC0 (ex.: OpenGameArt "Fire Crackling", "Medieval: Minstrel Dance", "Medieval: The Old Tower Inn") para substituir a síntese. Vozes: só com voz natural (ex.: arquivos gerados pelo usuário numa ferramenta de voz), uma por fala da cena.

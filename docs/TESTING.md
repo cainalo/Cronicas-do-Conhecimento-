@@ -17,7 +17,9 @@
 | `src/test/content.test.ts` (camada simples) | toda seção tem explicação simples; 4–7 páginas; até 70 palavras por página; última "Resumindo"; 4–8 palavras novas; 3 verificações com V e F |
 
 ## Últimos resultados (2026-10-23)
-- `npm test`: **709/709** (inclui `sql.test.ts`, `mission.test.ts`, `activities.test.tsx`, fluxo da missão e códice)
+- `npm test`: **715/715** (inclui `pace.test.ts`, cartão de ritmo e guia no fluxo)
+- Áudio: ambiente renderizado offline (node-web-audio-api) 40 s: pico 0,34, −25 dB RMS, sem clipagem; espectrograma conferido.
+- `npm test` anterior: **709/709** (inclui `sql.test.ts`, `mission.test.ts`, `activities.test.tsx`, fluxo da missão e códice)
 - Missão completa percorrida no Chromium em 1280×800 e 390×844 (Playwright): sem erros; história salva. Cena 3D renderizada (SwiftShader) nas duas larguras.
 - `npm test` anterior: **689/689** ✅ (content, study, merge, training, planner, game, flow)
 - `npm run build`: ✅ (aviso de chunk > 500 kB)
