@@ -1,9 +1,12 @@
 # Handoff de sessão
 
-**Última atualização:** 2026-10-17 (sessão 1)
-**Fase:** C em andamento (conteúdo e persistência).
+**Última atualização:** 2026-10-23
+**Fase:** reformulação "Arquivo Real" (kit em `docs/kit/`, auditoria em `docs/AUDITORIA_REFORMULACAO.md`): fases 0 a 5 do kit feitas para o piloto; expansão pendente.
 
 ## Situação atual
+- **Reformulação Arquivo Real (23/10/2026):** nome "Crônicas do Arquivo Real"; paleta verde profundo, carvão, pergaminho e bronze em todo o app; elenco em `content/game/cast.ts` (Isolda mentora, Bubo coruja dela, Brites, Tomé, Leonor, Ambrósio, Conde Valério); novo prólogo (`PROLOGUE_KEY` v2).
+- **Missão-piloto SQL** (`/missao/missao.sql.01`, conteúdo em `content/missions/sql-01.ts`): cena 3D (Three.js + KayKit CC0, `public/scene/arquivo/`, créditos em `CREDITOS.txt`) com legendas e transcrição; objetivos; descoberta com tabela; laboratório SQL (`lib/sql.ts`, `components/activities/SqlLab.tsx`); treino com 7 famílias de atividade (`lib/activities.ts`, `components/activities/ActivityView.tsx`); questão de prova autoral rotulada; desfecho com escolha persistente (`StudyData.story`, `lib/mission.ts`); revisão marcada. Aparece na Torre, na trilha do cap. de Banco de Dados e no Diário.
+- **Códice:** em tela larga deitada, livro e Aprender abrem em duas páginas (`useSpread`), a folha gira sobre a lombada; setas do teclado.
 - App publicado automaticamente no GitHub Pages a cada push (workflow `.github/workflows/pages.yml` → branch `gh-pages`): https://cainalo.github.io/Cronicas-do-Conhecimento-/ e APK em `/download/`. Usuário confirmou que o APK instala e funciona.
 - Edital oficial conferido (`docs/fontes/`), 68 tópicos em `contest.ts`.
 - **Conteúdo: 68/68 tópicos com material** (14 grimórios, 33 capítulos, 37 lições, 407 questões autorais, 8 estudos de caso), incluindo o grimório introdutório **O Primeiro Pergaminho**.
@@ -16,15 +19,19 @@
 - Fases D e E completas; Supabase com RLS verificado; login/sync pelo navegador ainda **não confirmados pelo usuário**.
 
 ## Testes
-`npm test` 689/689; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
+`npm test` 709/709; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
 
 ## Pendências com o usuário
 - Pedir retorno sobre a clareza da explicação simples (o usuário disse que não entendia nada) e sobre o livro de couro; e sobre login/sincronização.
 - Configurar Site URL/Redirect URLs no Supabase (passo em `docs/MOBILE_AND_OFFLINE.md`).
 - PDFs: LC estadual 205/2025, RN 13/2016, RA 14/2024, RA 17/2024, RA 14/2025, PDTI 2025–2026, Lei 16.168/2007, Regimento (Res. 22/2008), Lei 15.122/2005, Lei 20.756/2020, Código de Ética, RN 5/2024, RA 24/2024, RA 5/2024, RA 19/2024, RA 15/2024, Constituição de Goiás (TCE).
-- Nome definitivo da plataforma (segue "Crônicas do Conhecimento", provisório).
+- Nome definitivo: "Crônicas do Arquivo Real" (provisório do kit, aprovado).
+- **PDFs das provas** (rede bloqueia FGV/eticaconcursos/TCE): prova TCE-GO 2014 FCC TI + gabarito; prova 2024 TI Tipo 1 + gabarito definitivo, para questões OFICIAIS rotuladas.
 
 ## Próxima tarefa exata
+0a. Ouvir o usuário sobre a missão-piloto (cena 3D, laboratório, atividades, desfecho) e o códice. Só depois expandir o padrão para outras disciplinas (fase 8 do kit): próximas missões sugeridas Redes (topologia), Segurança (incidente), Aquisição (propostas).
+0b. Ao receber os PDFs, criar o campo `source` em Question e importar lote pequeno de questões oficiais conferidas.
+0c. Dividir o bundle principal (2,4 MB) por rota.
 0. Ouvir o usuário sobre o Aprender e ajustar o tom/tamanho; considerar revisão humana da camada simples por amostragem.
 1. Conferir no texto oficial os pontos que a revisão não confirmou: multa de até 2x o dano (art. 111 da Lei 16.168/2007), arts. 26/28 da Constituição de Goiás, arts. 73/77 da Lei Orgânica, art. 33 da Lei 20.756 (precisa dos PDFs).
 2. Quando o usuário enviar os PDFs, ampliar `legislacao/cap02-normas/02-goias-tce.md` e `institucional/cap02-goias/*` e suas questões.

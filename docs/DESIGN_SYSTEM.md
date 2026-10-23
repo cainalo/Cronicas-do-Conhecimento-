@@ -44,6 +44,11 @@ Aprovado em 17/10/2026 (substitui o "medieval moderno" escuro). O usuário relat
 - **Aprender** (`pages/Learn.tsx`): barra azul de progresso, abertura com cena, páginas curtas com texto maior (`.learn-text`, termos em negrito na cor de destaque), "Palavras novas", "Você entendeu?" e página final com Praticar e Texto completo.
 - **Prática** (`pages/Practice.tsx`): barra de progresso verde, sequência (chama), opções com relevo, botão Verificar e painel verde/vermelho com Continuar, como no Duolingo.
 
+## Arquivo Real (23/10/2026)
+- Paleta: verde profundo `--gold` 31 92 69 (estrutura), bronze `--ember` 150 88 32 (ações), carvão `--ink`, fundo pedra-pergaminho `--bg` 239 238 231; escuro com carvão 19 23 22. Cores de área: torre #1f5c45, grimórios #2c5f6e, treino #9a5b20, reino #5b6b2e, conta #4a4f57.
+- Missão: barra de etapas no topo; cena 3D em cartão escuro com legenda e controles; laboratório com abas Dados/Consulta/Resultado no celular e dados em cima + consulta ao lado do resultado no desktop; painel de resposta verde/vermelho com ícone e texto, tipo de erro e "Tentar uma parecida".
+- Códice: `.codex-*` (lombada, folha 3D com frente e verso).
+
 ## Componentes
 `PageHeader`, `SectionTitle`, `Tile`, `TileGrid`, `IconBadge` (Page.tsx); `.card`, `.btn-primary`, `.btn-ghost`, `.chip`, `.ledger`/`.ledger-row`, `.meter`, `.input`, `.manuscript`, `.prose-manuscript`; `ProgressRing`, `HeroScene`, `BookCover`, `WaxSeal`, `RealmMap`, `AppDownload`.
 

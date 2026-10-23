@@ -16,8 +16,10 @@
 | `src/test/flow.test.tsx` | fluxo real de telas: lição com erro → resultado 90% → nova sessão → revisão → recuperação; leitor (marcar lida, busca); Aprender (páginas, trecho estudado, link do texto completo); prática; simulado |
 | `src/test/content.test.ts` (camada simples) | toda seção tem explicação simples; 4–7 páginas; até 70 palavras por página; última "Resumindo"; 4–8 palavras novas; 3 verificações com V e F |
 
-## Últimos resultados (2026-10-17)
-- `npm test`: **689/689** ✅ (content, study, merge, training, planner, game, flow)
+## Últimos resultados (2026-10-23)
+- `npm test`: **709/709** (inclui `sql.test.ts`, `mission.test.ts`, `activities.test.tsx`, fluxo da missão e códice)
+- Missão completa percorrida no Chromium em 1280×800 e 390×844 (Playwright): sem erros; história salva. Cena 3D renderizada (SwiftShader) nas duas larguras.
+- `npm test` anterior: **689/689** ✅ (content, study, merge, training, planner, game, flow)
 - `npm run build`: ✅ (aviso de chunk > 500 kB)
 - `rls_check.sql` no remoto: 13/13 conforme esperado ✅
 - Visual (Playwright/Chromium, 390×844, escuro e claro): sem overflow horizontal, sem erros de console ✅
