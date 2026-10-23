@@ -112,6 +112,7 @@ export function mergeData(base: StudyData, incoming: StudyData, incomingIsPendin
     essays: mergeRecords(base.essays, incoming.essays, newest),
     cards: mergeRecords(base.cards, incoming.cards, newest),
     settings: newest(base.settings, incoming.settings),
+    story: newest(base.story, incoming.story),
     pending,
     lastSyncAt: base.lastSyncAt,
   };

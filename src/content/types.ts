@@ -178,3 +178,54 @@ export interface SimpleSection {
   /** Verificações bem fáceis, tiradas das páginas. */
   checks: { statement: string; answer: boolean; why: string }[];
 }
+
+// ---------- Missões (kit de reformulação "Arquivo Real", seção 4) ----------
+import type { Db, Query } from '@/lib/sql';
+import type { MissionActivity } from '@/lib/activities';
+
+/** Fala do prólogo, com indicação de câmera e ação para a cena 3D. */
+export interface SceneBeat {
+  who: string;
+  text: string;
+  /** Enquadramento: plano geral, dois personagens, close em alguém, objeto. */
+  shot: 'geral' | 'dupla' | 'close' | 'objeto';
+  /** Ação de corpo ou do cenário neste momento (ex.: "valerio-entra"). */
+  action?: string;
+}
+
+export interface LabTask {
+  id: string;
+  title: string;
+  ask: string;
+  /** Consulta inicial que o aluno recebe (pode estar errada de propósito). */
+  start: Query;
+  /** Consulta de referência: o resultado dela é o esperado. */
+  expected: Query;
+  hints: string[];
+  /** Explicação depois do acerto. */
+  explain: string;
+  allowJoin?: boolean;
+}
+
+export interface Mission {
+  id: string;
+  title: string;
+  chapterId: string;
+  sectionId: string;
+  topicIds: string[];
+  minutes: number;
+  place: string;
+  mystery: string;
+  scene: SceneBeat[];
+  objectives: string[];
+  discovery: { title: string; text: string; table?: string; check: MissionActivity }[];
+  lab: { db: Db; tasks: LabTask[] };
+  training: MissionActivity[];
+  exam: MissionActivity;
+  ending: {
+    text: string;
+    prompt: string;
+    options: { id: string; label: string; result: string; trust: Record<string, number>; clue: string }[];
+  };
+  recap: { learned: string[]; watch: string[] };
+}

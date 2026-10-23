@@ -14,6 +14,7 @@ import { capIaEticaDados, capIaFundamentos, licoesIa34 } from './grimoires/ia/ca
 import { questoesIaCap0304 } from './grimoires/ia/questions-cap03-04';
 import { capPrimComputador, capPrimRedesDados, grimorioPrimeiros, licoesPrimeiros } from './grimoires/primeiros';
 import { questoesPrimeiros } from './grimoires/primeiros/questions';
+import { missaoSql01 } from './missions/sql-01';
 import { estudosDeCaso } from './discursivas/tce-go-2026';
 import { capDevApis, capDevIdentidade, grimorioDev, licoesDev } from './grimoires/dev';
 import { questoesDev } from './grimoires/dev/questions';
@@ -119,5 +120,10 @@ export const getFlashcard = (id: string) => flashcards.find((f) => f.id === id);
 export { getSectionExtras, allSectionExtras } from './game/scenes';
 export { getSimpleSection, allSimpleSections } from './game/simple';
 
+/** Missões do Arquivo Real (piloto: SQL). */
+export const missions = [missaoSql01];
+export const getMission = (id: string) => missions.find((m) => m.id === id);
+export const missionForSection = (chapterId: string, sectionId: string) => missions.find((m) => m.chapterId === chapterId && m.sectionId === sectionId);
+
 /** Unidades da jornada: um trecho praticado por seção e um desafio por lição. */
-export const totalUnits = chapters.reduce((n, c) => n + c.sections.length, 0) + lessons.length;
+export const totalUnits = chapters.reduce((n, c) => n + c.sections.length, 0) + lessons.length + missions.length;

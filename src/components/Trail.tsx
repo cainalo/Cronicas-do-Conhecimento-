@@ -3,7 +3,8 @@
 import { Link } from 'react-router-dom';
 import type { Chapter } from '@/content/types';
 import type { StudyData } from '@/lib/model';
-import { getLesson } from '@/content';
+import { getLesson, missionForSection } from '@/content';
+import { missionDone } from '@/lib/mission';
 import { Icon, type IconName } from '@/components/Icon';
 import { Mascot } from '@/components/Mascot';
 import { tint } from '@/app/areas';
@@ -15,7 +16,7 @@ interface Stop {
   label: string;
   icon: IconName;
   done: boolean;
-  kind: 'read' | 'practice' | 'lesson';
+  kind: 'read' | 'practice' | 'lesson' | 'mission';
 }
 
 const OFFSETS = [0, 62, 92, 62, 0, -62, -92, -62];
@@ -35,6 +36,10 @@ export function chapterStops(c: Chapter, data: StudyData): Stop[] {
         done: practiceDone(data, c.id, s.id),
         kind: 'practice' as const,
       },
+      ...(() => {
+        const m = missionForSection(c.id, s.id);
+        return m ? [{ key: m.id, to: `/missao/${m.id}`, label: `Missão: ${m.title}`, icon: 'mapa' as IconName, done: missionDone(data, m.id), kind: 'mission' as const }] : [];
+      })(),
     ];
   });
   for (const lid of c.lessonIds) {
@@ -125,7 +130,7 @@ export function Trail({ chapter, data, color, guide = true }: { chapter: Chapter
               {isCurrent && guide && (
                 <div className={`pointer-events-none absolute -top-6 flex flex-col items-center ${x >= 0 ? 'right-full mr-1' : 'left-full ml-1'}`}>
                   <span className="anim-toast-in whitespace-nowrap rounded-xl border border-line bg-surface px-2 py-1 text-[11px] font-bold shadow-sm" style={{ color: 'rgb(var(--ember))' }}>
-                    {s.kind === 'lesson' ? 'Hora do desafio!' : s.kind === 'practice' ? 'Hora de praticar!' : 'Comece aqui'}
+                    {s.kind === 'lesson' ? 'Hora do desafio!' : s.kind === 'mission' ? 'Uma missão!' : s.kind === 'practice' ? 'Hora de praticar!' : 'Comece aqui'}
                   </span>
                   <Mascot mood="talk" size={52} />
                 </div>

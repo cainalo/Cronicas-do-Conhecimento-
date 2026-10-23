@@ -100,6 +100,16 @@ export interface Pending {
   settings: boolean;
 }
 
+/** Estado da história das missões: escolhas, confiança dos personagens, pistas e revisões marcadas. Fica no aparelho. */
+export interface StoryState {
+  choices: Record<string, string>;
+  trust: Record<string, number>;
+  clues: string[];
+  /** Próxima revisão de cada missão concluída (data ISO). */
+  reviews: Record<string, string>;
+  updatedAt: string;
+}
+
 export interface StudyData {
   version: 1;
   attempts: Attempt[];
@@ -111,6 +121,7 @@ export interface StudyData {
   essays: Record<string, EssayAnswer>;
   cards: Record<string, CardState>;
   settings?: StudySettings;
+  story?: StoryState;
   pending: Pending;
   lastSyncAt?: string;
 }

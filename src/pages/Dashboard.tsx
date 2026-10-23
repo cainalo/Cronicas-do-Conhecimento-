@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
-import { DEFAULT_CONTEST_ID, flashcards, getContest, journey, lessons, questionsForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, flashcards, getContest, journey, lessons, missions, questionsForContest } from '@/content';
+import { missionDone, missionsDue } from '@/lib/mission';
 import { recommend, reviewQueue } from '@/lib/study';
 import { dueCards } from '@/lib/training';
 import { isDone, settingsOf } from '@/lib/planner';
@@ -110,6 +111,27 @@ export function Dashboard() {
           )}
         </div>
       </section>
+
+      {/* Missões do Arquivo Real: a nova, ou a que tem revisão marcada para hoje */}
+      {(() => {
+        const due = missionsDue(data);
+        const m = missions.find((x) => due.includes(x.id)) ?? missions.find((x) => !missionDone(data, x.id));
+        if (!m) return null;
+        const review = due.includes(m.id);
+        return (
+          <Link to={`/missao/${m.id}`} className="card relative flex items-center gap-4 overflow-hidden border-l-4 p-4" style={{ borderLeftColor: torre }}>
+            <IconBadge icon="mapa" color={torre} />
+            <span className="min-w-0 flex-1">
+              <span className="block text-xs font-semibold" style={{ color: torre }}>
+                {review ? 'Revisão de missão marcada para hoje' : 'Missão do Arquivo Real'}
+              </span>
+              <span className="block font-display text-lg leading-snug">{m.title}</span>
+              <span className="block text-sm text-muted">Cena 3D, laboratório de consultas e um desfecho que depende de você · {m.minutes} min</span>
+            </span>
+            <Icon name="seta" size={18} />
+          </Link>
+        );
+      })()}
 
       {/* Números do dia */}
       <section className="grid grid-cols-3 gap-3 sm:grid-cols-4">

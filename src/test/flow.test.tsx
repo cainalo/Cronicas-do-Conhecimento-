@@ -124,3 +124,36 @@ it('flashcards: revela e avalia um cartão', async () => {
   expect(screen.getByText(/Próxima revisão amanhã/)).toBeInTheDocument();
   expect(Object.keys(loadData('visitante').cards)).toHaveLength(1);
 });
+
+it('missão SQL: cena em texto, objetivos, descoberta e laboratório com a consulta montada', async () => {
+  const user = userEvent.setup();
+  renderAt('/missao/missao.sql.01');
+  expect(screen.getByRole('list', { name: 'Transcrição da cena' })).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: /Começar a investigação/ }));
+  expect(screen.getByText(/Por que a lista de empenhos/)).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: 'Vamos lá' }));
+  // Descoberta: a primeira alternativa é a certa nas quatro verificações.
+  for (let k = 0; k < 4; k++) {
+    const sec = screen.getByRole('region', { name: 'Descoberta guiada' });
+    await user.click(within(sec).getAllByRole('button', { pressed: false })[0]);
+    await user.click(screen.getByRole('button', { name: 'Verificar' }));
+    expect(screen.getByRole('status')).toHaveTextContent('Correto');
+    await user.click(screen.getByRole('button', { name: 'Continuar' }));
+  }
+  // Laboratório, tarefa 1: SELECT nome FROM fornecedor WHERE cidade = 'Goiânia'.
+  expect(screen.getByText('Mostre o nome dos fornecedores de Goiânia.')).toBeInTheDocument();
+  await user.click(screen.getAllByRole('button', { name: 'nome' })[0]);
+  await user.click(screen.getAllByRole('button', { name: '+ filtro' })[0]);
+  await user.selectOptions(screen.getAllByLabelText('Coluna do filtro')[0], 'cidade');
+  await user.selectOptions(screen.getAllByLabelText('Valor')[0], 'Goiânia');
+  expect(screen.getAllByLabelText('SQL montado')[0]).toHaveTextContent("WHERE cidade = 'Goiânia'");
+  await user.click(screen.getByRole('button', { name: /Executar/ }));
+  expect(screen.getByText('Consulta certa')).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: 'Continuar' }));
+  // Tarefa 2: a consulta do Tesoureiro vem com "= NULL"; rodar mostra o diagnóstico.
+  await user.click(screen.getByRole('button', { name: /Executar/ }));
+  expect(screen.getByText(/comparação com NULL/)).toBeInTheDocument();
+  await user.selectOptions(screen.getAllByLabelText('Operador')[0], 'IS NULL');
+  await user.click(screen.getByRole('button', { name: /Executar/ }));
+  expect(screen.getByText('Consulta certa')).toBeInTheDocument();
+});
