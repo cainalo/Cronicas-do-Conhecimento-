@@ -108,7 +108,7 @@ export function SqlLab({ db, task, onSolved }: { db: Db; task: LabTask; onSolved
   const diag = res && !solved ? diagnose(q, res, expected) : undefined;
 
   const dataPanel = (
-    <div className="space-y-2">
+    <div className="grid gap-2 sm:grid-cols-2">
       {tables.map((t) => (
         <TableView key={t.name} t={t} caption={`Tabela ${t.name}`} />
       ))}
@@ -223,7 +223,7 @@ export function SqlLab({ db, task, onSolved }: { db: Db; task: LabTask; onSolved
         )}
       </fieldset>
 
-      <pre className="overflow-x-auto rounded-2xl bg-[#1b2120] p-3 font-mono text-[0.8rem] leading-relaxed text-[#e6e1d3]" aria-label="SQL montado">
+      <pre className="whitespace-pre-wrap break-words rounded-2xl bg-[#1b2120] p-3 font-mono text-[0.8rem] leading-relaxed text-[#e6e1d3]" aria-label="SQL montado">
         {toSql(q)}
       </pre>
     </div>
@@ -238,6 +238,11 @@ export function SqlLab({ db, task, onSolved }: { db: Db; task: LabTask; onSolved
             {res.rows.length} linha(s) · esperado: {expected.rows.length}
           </p>
           <TableView t={res} />
+          {!solved && (
+            <button type="button" className="btn-ghost w-full text-sm lg:hidden" onClick={() => setTab('consulta')}>
+              Editar a consulta
+            </button>
+          )}
         </>
       ) : (
         <p className="rounded-2xl border border-dashed border-line p-4 text-center text-sm text-muted">Execute a consulta para ver o resultado.</p>
@@ -261,10 +266,12 @@ export function SqlLab({ db, task, onSolved }: { db: Db; task: LabTask; onSolved
         ))}
       </div>
       <div className="lg:hidden">{tab === 'dados' ? dataPanel : tab === 'consulta' ? queryPanel : resultPanel}</div>
-      <div className="hidden gap-3 lg:grid lg:grid-cols-3">
+      <div className="hidden space-y-3 lg:block">
         {dataPanel}
-        {queryPanel}
-        {resultPanel}
+        <div className="grid grid-cols-2 gap-3">
+          {queryPanel}
+          {resultPanel}
+        </div>
       </div>
 
       {diag && <p className="rounded-2xl bg-[#e8b13b]/15 p-3 text-sm">{diag}</p>}
