@@ -4,6 +4,8 @@ import type { Chapter, EssayPrompt, Lesson, Question } from '@/content/types';
 import type { StudyData, StudySettings } from './model';
 import { reviewQueue, latestAttempt } from './study';
 import { dueCards } from './training';
+import { unitDone, type Unit } from './pace';
+import { getLearningCheckpoint } from './checkpoint';
 
 export const DEFAULT_SETTINGS: Omit<StudySettings, 'updatedAt'> = { minutesPerDay: 60, weekdays: [1, 2, 3, 4, 5, 6], dailyQuestionGoal: 10 };
 
@@ -18,9 +20,9 @@ export function setSettings(data: StudyData, s: Omit<StudySettings, 'updatedAt'>
 /** Data local AAAA-MM-DD (o estudo acontece no fuso do usuário). */
 export const localDay = (d: Date | string) => new Date(d).toLocaleDateString('sv');
 
-export const MINUTES = { lesson: 12, reviewQuestion: 2, card: 0.5, essay: 45, examPerQuestion: 2 } as const;
+export const MINUTES = { lesson: 12, practice: 8, mission: 15, reviewQuestion: 2, card: 0.5, essay: 45, examPerQuestion: 2 } as const;
 
-export type PlanKind = 'read' | 'lesson' | 'review' | 'cards' | 'exam' | 'essay';
+export type PlanKind = 'read' | 'lesson' | 'trail' | 'review' | 'cards' | 'exam' | 'essay';
 export interface PlanItem {
   key: string;
   kind: PlanKind;
@@ -32,6 +34,8 @@ export interface PlanItem {
   target?: number;
   ref?: string;
   chapterId?: string;
+  /** Atividade da trilha única (kind 'trail'). */
+  unit?: Unit;
 }
 
 export interface Plan {
@@ -47,7 +51,16 @@ interface Content {
   bank: Question[];
   cardIds: string[];
   essays: EssayPrompt[];
+  /** Trilha única (courseUnits). Quando presente, o conteúdo novo segue a mesma ordem do Continuar. */
+  units?: Unit[];
 }
+
+const TRAIL_WHY: Record<Unit['kind'], string> = {
+  aprender: 'Próximo trecho da trilha, explicado parte por parte.',
+  praticar: 'Praticar logo após aprender fixa o conteúdo.',
+  missao: 'Usar o que aprendeu num caso do Arquivo Real.',
+  desafio: 'Fechar o capítulo com questões no estilo da prova.',
+};
 
 const sectionMinutes = (c: Chapter) => Math.max(5, Math.round(c.estimatedMinutes / c.sections.length));
 
@@ -97,7 +110,22 @@ export function buildPlan(data: StudyData, s: Omit<StudySettings, 'updatedAt'>, 
     add({ key: 'exam', kind: 'exam', title: `Simulado de ${n} questões`, why: 'Medir o progresso semanal em condição de prova.', minutes: n * MINUTES.examPerQuestion, to: '/simulado', target: n });
   }
 
-  // 5. Conteúdo novo na ordem dos grimórios, intercalando a lição ao terminar cada capítulo.
+  // 5. Conteúdo novo. Com a trilha única, a ordem é a mesma do Continuar: primeiro a atividade em
+  // andamento (se houver), depois as pendentes na ordem do caminho. Nada já concluído entra.
+  if (content.units) {
+    const cp = getLearningCheckpoint(data, content.units);
+    const pending = content.units.filter((u) => !unitDone(data, u));
+    const ordered = cp.unit ? [cp.unit, ...pending.filter((u) => u.key !== cp.unit!.key)] : pending;
+    for (const u of ordered) {
+      if (left < 5) break;
+      const ch = content.chapters.find((c) => c.id === u.chapterId);
+      const minutes = u.kind === 'aprender' && ch ? sectionMinutes(ch) : MINUTES[u.kind === 'missao' ? 'mission' : u.kind === 'desafio' ? 'lesson' : 'practice'];
+      add({ key: `trail:${u.key}`, kind: 'trail', title: u.title, why: TRAIL_WHY[u.kind], minutes, to: u.to, ref: u.key, chapterId: u.chapterId, unit: u });
+    }
+    return { day, restDay: false, items, budget };
+  }
+
+  // Sem a trilha (uso antigo): conteúdo novo na ordem dos grimórios, com a lição ao fim de cada capítulo.
   for (const ch of content.chapters) {
     if (left < 5) break;
     const read = data.reading[ch.id]?.sectionsRead ?? [];
@@ -124,6 +152,8 @@ export function isDone(it: PlanItem, data: StudyData, day: string): boolean {
       return !!data.reading[it.chapterId!]?.sectionsRead.includes(it.ref!);
     case 'lesson':
       return !!data.lessons[it.ref!];
+    case 'trail':
+      return !!(it.unit && unitDone(data, it.unit));
     case 'review':
       return data.attempts.filter((a) => a.context === 'review' && today(a.answeredAt)).length >= (it.target ?? 1);
     case 'cards':

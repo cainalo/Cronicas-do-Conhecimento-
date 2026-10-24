@@ -1,4 +1,7 @@
 import { chapters, lessons, questionsForContest, flashcards, essayPrompts, DEFAULT_CONTEST_ID } from '@/content';
+import { journey, missions } from '@/content';
+import { courseUnits } from '@/lib/pace';
+import { getLearningCheckpoint, saveProgress } from '@/lib/checkpoint';
 import { emptyData, emptyPending } from '@/lib/model';
 import { buildPlan, isDone, localDay, remainingMinutes, setSettings, settingsOf, studyDaysUntil, DEFAULT_SETTINGS } from '@/lib/planner';
 import { markSectionRead, recordAnswer } from '@/lib/study';
@@ -54,5 +57,36 @@ describe('planejador', () => {
     const older = setSettings(emptyData(), { minutesPerDay: 30, weekdays: [1], dailyQuestionGoal: 5 }, '2026-10-16T10:00:00.000Z');
     expect(mergeData({ ...older, pending: emptyPending() }, d).settings!.minutesPerDay).toBe(90);
     expect(localDay(new Date(2026, 0, 2, 23, 30))).toBe('2026-01-02');
+  });
+});
+
+describe('ordem do dia seguindo a trilha única', () => {
+  const units = courseUnits(journey, lessons, missions);
+  const withTrail = { ...content, chapters: journey, units };
+  const trail = (p: ReturnType<typeof buildPlan>) => p.items.filter((i) => i.kind === 'trail');
+
+  it('o primeiro item da trilha é o mesmo destino do Continuar', () => {
+    const d = emptyData();
+    const p = buildPlan(d, DEFAULT_SETTINGS, withTrail, tue);
+    expect(trail(p)[0].to).toBe(getLearningCheckpoint(d, units).to);
+    expect(p.items.some((i) => i.kind === 'read' || i.kind === 'lesson')).toBe(false);
+  });
+
+  it('a atividade em andamento vem primeiro e nada concluído aparece', () => {
+    let d = emptyData();
+    const first = units[0];
+    d = markSectionRead(d, journey.find((c) => c.id === first.chapterId)!, first.sectionId!).data;
+    const later = units[5];
+    d = saveProgress(d, later.key, { page: 2 }, 'Página 3');
+    const p = buildPlan(d, { ...DEFAULT_SETTINGS, minutesPerDay: 120 }, withTrail, tue);
+    const t = trail(p);
+    expect(t[0].ref).toBe(later.key);
+    expect(t[0].to).toBe(getLearningCheckpoint(d, units).to);
+    expect(t.some((i) => i.ref === first.key)).toBe(false);
+    expect(t.every((i) => !isDone(i, d, p.day))).toBe(true);
+    // Ao concluir, o item fica marcado como feito.
+    const read = t.find((i) => i.unit?.kind === 'aprender')!;
+    d = markSectionRead(d, journey.find((c) => c.id === read.chapterId)!, read.unit!.sectionId!).data;
+    expect(isDone(read, d, p.day)).toBe(true);
   });
 });

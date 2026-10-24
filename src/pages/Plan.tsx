@@ -4,6 +4,7 @@ import { useStudy } from '@/app/StudyProvider';
 import { DEFAULT_CONTEST_ID, chapters, getContest } from '@/content';
 import { isDone, remainingMinutes, setSettings, settingsOf, studyDaysUntil } from '@/lib/planner';
 import { usePlanOfToday } from '@/app/usePlanOfToday';
+import { useCheckpoint } from '@/app/useCheckpoint';
 import { latestAttempt } from '@/lib/study';
 import { Icon } from '@/components/Icon';
 import { PageHeader } from '@/components/Page';
@@ -29,6 +30,7 @@ export function TodayPlanSummary() {
 export function PlanPage() {
   const { data, update } = useStudy();
   const { plan, rebuild, content } = usePlanOfToday();
+  const checkpoint = useCheckpoint();
   const s = settingsOf(data);
   const [edit, setEdit] = useState(!data.settings);
   const [form, setForm] = useState(s);
@@ -54,7 +56,7 @@ export function PlanPage() {
         <MascotSays mood={done.length === plan.items.length ? 'cheer' : 'talk'} size={72}>
           {done.length === plan.items.length
             ? 'Ordem do dia cumprida! Descanse a pena ou siga treinando.'
-            : `Faltam ${plan.items.length - done.length} atividade(s). O botão Continuar leva direto à próxima.`}
+            : `Faltam ${plan.items.length - done.length} atividade(s). A trilha segue a mesma ordem do botão Continuar.`}
         </MascotSays>
       )}
 
@@ -80,6 +82,7 @@ export function PlanPage() {
             <ol className="ledger mt-2">
               {plan.items.map((it) => {
                 const ok = isDone(it, data, plan.day);
+                const here = !ok && !!it.unit && it.unit.key === checkpoint.unit?.key;
                 return (
                   <li key={it.key}>
                     <Link to={it.to} className="ledger-row items-start">
@@ -91,6 +94,7 @@ export function PlanPage() {
                       </span>
                       <span className="flex-1">
                         <span className={ok ? 'line-through decoration-ink/40' : ''}>{it.title}</span>
+                        {here && <span className="ml-2 rounded-full bg-gold/20 px-2 py-0.5 text-xs font-semibold text-gold">{checkpoint.resuming ? 'Você parou aqui' : 'Próximo passo'}</span>}
                         <span className="block text-sm text-muted">{it.why}</span>
                       </span>
                       <span className="shrink-0 text-sm text-muted">{fmtMin(it.minutes)}</span>

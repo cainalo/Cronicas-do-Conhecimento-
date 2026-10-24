@@ -132,3 +132,7 @@ export const missionForSection = (chapterId: string, sectionId: string) => missi
 
 /** Unidades da jornada: um trecho praticado por seção e um desafio por lição. */
 export const totalUnits = chapters.reduce((n, c) => n + c.sections.length, 0) + lessons.length + missions.length;
+
+// Página Estudos: materiais externos com fonte verificável e videoaulas conferidas.
+export { externalMaterials, curatedVideos } from './estudos/materiais';
+export type { ExternalMaterial, CuratedVideo } from './estudos/materiais';

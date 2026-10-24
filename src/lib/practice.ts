@@ -130,3 +130,54 @@ export function completePractice(data: StudyData, chapterId: string, sectionId: 
 }
 
 export const practiceDone = (data: StudyData, chapterId: string, sectionId: string) => !!data.lessons[practiceId(chapterId, sectionId)];
+
+/** Marca dos itens de recuperação (não contam na nota da primeira tentativa). */
+export const RECOVERY_MARK = '#rec';
+export const isRecovery = (id: string) => id.includes(RECOVERY_MARK);
+
+/**
+ * Recuperação adaptativa: depois de um erro, um item equivalente com outros dados (outro termo do
+ * mesmo glossário, outra questão do mesmo trecho). Sem equivalente, devolve undefined e a própria
+ * atividade volta no fim da fila, como antes.
+ */
+export function recoveryFor(
+  act: Activity,
+  ctx: { chapter: Chapter; sectionId: string; bank: Question[]; simple?: SimpleSection; queue: Activity[] },
+  rand: () => number = Math.random,
+): Activity | undefined {
+  const base = act.id.split(RECOVERY_MARK)[0];
+  const n = (act.id.split(RECOVERY_MARK)[1] ?? '').length + 1;
+  const id = `${base}${RECOVERY_MARK}${'x'.repeat(n)}`;
+  if (act.kind === 'term') {
+    const pool = base.endsWith(':w0') && ctx.simple ? ctx.simple.words.map((w) => ({ term: w.term, definition: w.meaning })) : ctx.chapter.glossary;
+    const inQueue = new Set(ctx.queue.flatMap((a) => (a.kind === 'term' ? [a.answer] : [])));
+    const cands = pool.filter((g) => g.term !== act.answer && !inQueue.has(g.term));
+    if (!cands.length || pool.length < 4) return undefined;
+    const g = shuffle(cands, rand)[0];
+    const others = shuffle(
+      pool.filter((x) => x.term !== g.term),
+      rand,
+    )
+      .slice(0, 3)
+      .map((x) => x.term);
+    return { kind: 'term', id, definition: g.definition, options: shuffle([g.term, ...others], rand), answer: g.term };
+  }
+  if (act.kind === 'mcq') {
+    const used = new Set([act.question.id, ...ctx.queue.flatMap((a) => (a.kind === 'mcq' ? [a.question.id] : []))]);
+    const same = ctx.bank.filter((q) => q.chapterId === ctx.chapter.id && q.sectionId === ctx.sectionId && !used.has(q.id));
+    if (!same.length) return undefined;
+    const q = shuffle(same, rand)[0];
+    return { kind: 'mcq', id: `${q.id}${RECOVERY_MARK}${'x'.repeat(n)}`, question: q };
+  }
+  return undefined;
+}
+
+/** Fila depois de responder: acerto sai; erro traz o equivalente logo adiante, ou a mesma no fim. */
+export function nextQueue(queue: Activity[], ok: boolean, recovery?: Activity): Activity[] {
+  const [head, ...rest] = queue;
+  if (!head) return [];
+  if (ok) return rest;
+  if (!recovery) return [...rest, head];
+  const at = Math.min(1, rest.length);
+  return [...rest.slice(0, at), recovery, ...rest.slice(at)];
+}

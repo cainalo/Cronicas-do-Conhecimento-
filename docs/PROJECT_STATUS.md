@@ -3,6 +3,10 @@
 ## Funciona e foi testado
 | Fonte única do próximo passo e retomada exata (Aprender, Prática, Desafio, Missão, Microaula) | `checkpoint.test.ts`, `flow.test.tsx` |
 | Microaula-piloto Processos, memória e serviços (15 etapas com checagem e recuperação) | `micro.test.ts`, `flow.test.tsx`, captura 390×844 |
+| Ordem do dia seguindo a trilha única (mesmo destino do Continuar, nada concluído como próximo) | `planner.test.ts` |
+| Página Estudos (/estudos): Continuar, atalhos, videoaulas só ao tocar (sem autoplay), materiais oficiais | `studies.test.tsx`, capturas 390×844 e 1280×800 |
+| Página não encontrada dentro do app; Conta sem servidor em modo local; volumes separados de música e lareira | `studies.test.tsx` |
+| Prática: no erro, item equivalente com outros dados logo adiante (termo do glossário, questão do trecho) | `studies.test.tsx` |
 | Livro sem rolagem dentro da folha + leitura contínua | `study.test.ts` (divisão), varredura Playwright de 33 capítulos |
 | Funcionalidade | Evidência |
 |---|---|

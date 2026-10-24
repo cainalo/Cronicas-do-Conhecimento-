@@ -363,28 +363,30 @@ class Ambience {
   }
 
   /** Liga ou desliga as camadas (precisa vir de um toque do usuário na primeira vez). */
-  set(opts: { music: boolean; fire: boolean; volume?: number }) {
+  set(opts: { music: boolean; fire: boolean; musicVolume?: number; fireVolume?: number }) {
     if (!opts.music && !opts.fire && !this.ctx) return;
     this.init();
     const ctx = this.ctx;
     if (!ctx) return;
     void ctx.resume();
     const now = ctx.currentTime;
-    const vol = opts.volume ?? 1;
+    const clamp = (v: number | undefined) => Math.min(1, Math.max(0, v ?? 1));
+    const mv = clamp(opts.musicVolume);
+    const fv = clamp(opts.fireVolume);
     if (opts.fire && !this.fireOn) {
       this.fireOn = true;
       this.startFire();
     }
     if (!opts.fire) this.fireOn = false;
     this.fireBus!.gain.cancelScheduledValues(now);
-    this.fireBus!.gain.linearRampToValueAtTime(opts.fire ? 1.1 * vol : 0, now + 1.2);
+    this.fireBus!.gain.linearRampToValueAtTime(opts.fire ? 1.1 * fv : 0, now + 1.2);
     if (!opts.fire && this.crackleTimer) {
       window.clearInterval(this.crackleTimer);
       this.crackleTimer = undefined;
     }
     this.musicOn = opts.music;
     this.musicBus!.gain.cancelScheduledValues(now);
-    this.musicBus!.gain.linearRampToValueAtTime(opts.music ? 0.55 * vol : 0, now + 1.5);
+    this.musicBus!.gain.linearRampToValueAtTime(opts.music ? 0.55 * mv : 0, now + 1.5);
     if (opts.music) this.startScheduler();
     else if (this.timer) {
       window.clearInterval(this.timer);

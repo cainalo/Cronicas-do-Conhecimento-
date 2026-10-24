@@ -5,7 +5,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
 import { DEFAULT_CONTEST_ID, getChapter, getSectionExtras, getSimpleSection, questionsForContest } from '@/content';
-import { buildPractice, completePractice, practiceId, type Activity } from '@/lib/practice';
+import { buildPractice, completePractice, isRecovery, nextQueue, practiceId, recoveryFor, type Activity } from '@/lib/practice';
 import { useSession } from '@/app/useSession';
 import { recordAnswer, totalXp } from '@/lib/study';
 import { Icon } from '@/components/Icon';
@@ -13,7 +13,7 @@ import { StepGuide } from '@/components/StepGuide';
 import { Mascot, SpeechBubble } from '@/components/Mascot';
 import { QuestionStem } from '@/components/QuestionCard';
 
-type Verdict = { ok: boolean; title: string; detail?: string };
+type Verdict = { ok: boolean; title: string; detail?: string; recovery?: Activity };
 
 function shuffle<T>(a: T[]): T[] {
   const b = [...a];
@@ -153,10 +153,12 @@ export function PracticePage() {
   const score = total ? Math.round((correctFirst / total) * 100) : 100;
 
   const judge = (ok: boolean, title: string, detail?: string) => {
-    setVerdict({ ok, title, detail });
+    // Errou: além da explicação, prepara um item equivalente com outros dados (quando existe).
+    const recovery = !ok && act ? recoveryFor(act, { chapter, sectionId, bank: questionsForContest(DEFAULT_CONTEST_ID), simple, queue }) : undefined;
+    setVerdict({ ok, title, detail, recovery });
     sfx(ok ? 'ok' : 'bad');
     setCombo((c) => (ok ? c + 1 : 0));
-    if (act && !(act.id in firstTry)) setFirstTry((f) => ({ ...f, [act.id]: ok }));
+    if (act && !isRecovery(act.id) && !(act.id in firstTry)) setFirstTry((f) => ({ ...f, [act.id]: ok }));
     if (act?.kind === 'mcq' && value) update((d) => recordAnswer(d, act.question, value, 'practice', `pratica:${chapterId}:${sectionId}`).data);
   };
 
@@ -170,7 +172,7 @@ export function PracticePage() {
       judge(ok, ok ? 'Correto!' : `Resposta: ${act.answer}`, act.why);
     } else if (act.kind === 'term') {
       const ok = value === act.answer;
-      judge(ok, ok ? 'Correto!' : `Resposta: ${act.answer}`);
+      judge(ok, ok ? 'Correto!' : `Resposta: ${act.answer}`, ok ? undefined : `${act.answer} é: ${act.definition}`);
     } else if (act.kind === 'mcq') {
       const q = act.question;
       const ok = value === q.answer;
@@ -179,12 +181,12 @@ export function PracticePage() {
   };
 
   const next = () => {
-    const ok = verdict?.ok;
+    const ok = !!verdict?.ok;
+    const recovery = verdict?.recovery;
     setVerdict(undefined);
     setValue(undefined);
-    const [head, ...rest] = queue;
-    // Errou: a atividade volta no fim da fila, como no Duolingo.
-    const q = ok ? rest : [...rest, head];
+    // Errou: vem logo adiante um item equivalente com outros dados; sem equivalente, a mesma volta no fim.
+    const q = nextQueue(queue, ok, recovery);
     if (q.length === 0) {
       const finalScore = total ? Math.round((Object.values({ ...firstTry }).filter(Boolean).length / total) * 100) : 100;
       update((d) => completePractice(d, chapterId, sectionId, finalScore).data);
@@ -335,6 +337,11 @@ export function PracticePage() {
                 <Icon name={verdict.ok ? 'certo' : 'errado'} size={22} strokeWidth={2.6} /> {verdict.title}
               </p>
               {verdict.detail && <p className="mt-1 text-sm leading-snug">{verdict.detail}</p>}
+              {!verdict.ok && (
+                <p className="mt-1 text-sm font-semibold leading-snug">
+                  {verdict.recovery ? 'Logo adiante vem uma parecida, com outro exemplo, para firmar a ideia.' : 'Esta volta no fim da rodada para você tentar de novo.'}
+                </p>
+              )}
               <button className={`mt-3 w-full rounded-full px-5 py-3 font-bold text-white shadow-md ${verdict.ok ? 'bg-[#3d7d42]' : 'bg-[#aa3d2a]'}`} onClick={next}>
                 Continuar
               </button>

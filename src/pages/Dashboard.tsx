@@ -187,7 +187,7 @@ export function Dashboard() {
           Atalhos
         </SectionTitle>
         <TileGrid>
-          <Tile to="/biblioteca" icon="grimorio" color={c('grimorios')} title="Grimórios" text="Ler os capítulos e fazer as lições." />
+          <Tile to="/estudos" icon="grimorio" color={c('grimorios')} title="Estudos" text="Trilha, livros, atividades rápidas, vídeos e materiais." />
           <Tile to="/plano" icon="calendario" color={c('treino')} title="Ordem do dia" text="O que estudar hoje, no seu ritmo." badge={plan.restDay ? undefined : `${plan.items.length - pending.length}/${plan.items.length}`} />
           <Tile to="/simulado" icon="relogio" color={c('treino')} title="Simulado" text="Questões sorteadas com tempo e boletim." />
           <Tile to="/reino" icon="mapa" color={c('reino')} title="Mapa do reino" text="Seu domínio em cada disciplina." />

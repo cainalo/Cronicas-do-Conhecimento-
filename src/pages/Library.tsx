@@ -35,7 +35,11 @@ export function LibraryPage() {
   };
   return (
     <div className="space-y-6">
-      <PageHeader area="grimorios" crumb={false} title="Grimórios" subtitle={`${written.length} livros escritos para o ${contest.name}`} />
+      <PageHeader area="grimorios" crumb={false} title="Grimórios" subtitle={`${written.length} livros escritos para o ${contest.name}`}>
+        <Link to="/estudos" className="btn-ghost mt-3 w-full text-sm">
+          Estudos: trilha, atividades rápidas, vídeos e materiais
+        </Link>
+      </PageHeader>
       <SceneBanner scene="biblioteca" dark={dark}>
         Nunca estudou TI? Comece pelo Primeiro Pergaminho. Em cada trecho você aprende, pratica e, no fim do capítulo, enfrenta o desafio.
       </SceneBanner>

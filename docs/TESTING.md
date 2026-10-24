@@ -17,7 +17,7 @@
 | `src/test/content.test.ts` (camada simples) | toda seção tem explicação simples; 4–7 páginas; até 70 palavras por página; última "Resumindo"; 4–8 palavras novas; 3 verificações com V e F |
 
 ## Últimos resultados (2026-10-24, auditoria)
-- `npm test`: **731/731** (novos: `checkpoint.test.ts`, `micro.test.ts`, divisão de blocos do livro, fluxos de retomada em Aprender/Missão/Desafio/Prática/Microaula, destino único dos botões, leitura contínua).
+- `npm test`: **740/740** (rodada Estudos: `studies.test.tsx` com página Estudos, vídeo só ao tocar, página não encontrada, Conta sem servidor e volumes, recuperação adaptativa; `planner.test.ts` com a ordem do dia seguindo a trilha). Antes: 731 (novos: `checkpoint.test.ts`, `micro.test.ts`, divisão de blocos do livro, fluxos de retomada em Aprender/Missão/Desafio/Prática/Microaula, destino único dos botões, leitura contínua).
 - Livro: script Playwright percorreu todas as folhas dos 33 capítulos em 390×844 (fonte 1) e 1280×800 (fonte 1,4): **0 folhas com conteúdo transbordando**, sem erros de console; 20 combinações extras (fontes 1 e 1,4 em 5 capítulos) também 0.
 - Microaula no Chromium 390×844: explicação, checagem, erro com recuperação e Torre mostrando "Você parou aqui".
 - Não testado: sincronização real com o Supabase (domínio bloqueado), APK em aparelho, leitor de tela.

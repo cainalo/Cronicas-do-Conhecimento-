@@ -24,7 +24,7 @@ export const AREAS: Record<AreaKey, Area> = {
     to: '/biblioteca',
     icon: 'grimorio',
     color: ['#2c5f6e', '#7fb3c2'],
-    paths: ['/biblioteca', '/grimorio', '/capitulo', '/pratica', '/licao'],
+    paths: ['/biblioteca', '/estudos', '/grimorio', '/capitulo', '/pratica', '/licao'],
   },
   treino: {
     key: 'treino',

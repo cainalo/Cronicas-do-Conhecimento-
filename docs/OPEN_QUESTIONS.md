@@ -22,3 +22,6 @@ Tom (mistério investigativo), trilha (mapa do reino), recompensas (selos, inven
 6. **Simulados:** prioridade de simulado completo (70 questões, 4h30) vs. minissimulados por disciplina.
 7. **Ordem dos próximos grimórios** (sugestão: IA → Segurança (OWASP/Zero Trust) → Governança → Redes/Nuvem → Legislação TI → Banco de Dados → Gerais).
 - **Áudio real (23/10/2026):** sites de áudio bloqueados no contêiner. Se o usuário quiser gravações reais, anexar arquivos CC0 (ex.: OpenGameArt "Fire Crackling", "Medieval: Minstrel Dance", "Medieval: The Old Tower Inn") para substituir a síntese. Vozes: só com voz natural (ex.: arquivos gerados pelo usuário numa ferramenta de voz), uma por fala da cena.
+- **Videoaulas (24/10/2026):** a página Estudos tem o player, mas a lista curada está vazia: o contêiner não acessa o YouTube para conferir título, canal e duração. O usuário pode enviar links que já usa (ou guardar os seus na própria página) para entrarem na curadoria.
+- **Navegação (24/10/2026):** Estudos entrou como página da área Grimórios (atalho na Torre e na Biblioteca), sem mudar as abas. Perguntar se deve virar aba própria no lugar de "Grimórios".
+

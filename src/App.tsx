@@ -25,6 +25,8 @@ import { RealmPage } from '@/pages/Realm';
 import { CharacterPage } from '@/pages/Character';
 import { BlitzPage } from '@/pages/Blitz';
 import { DiaryPage } from '@/pages/Diary';
+import { StudiesPage } from '@/pages/Studies';
+import { NotFoundPage } from '@/pages/NotFound';
 
 export function AppRoutes() {
   return (
@@ -32,6 +34,7 @@ export function AppRoutes() {
       <Route element={<Layout />}>
         <Route index element={<Dashboard />} />
         <Route path="biblioteca" element={<LibraryPage />} />
+        <Route path="estudos" element={<StudiesPage />} />
         <Route path="grimorio/:id" element={<GrimoirePage />} />
         <Route path="capitulo/:id" element={<BookPage />} />
         <Route path="aprender/:chapterId/:sectionId" element={<LearnPage />} />
@@ -55,7 +58,7 @@ export function AppRoutes() {
         <Route path="simulado/:id" element={<ExamResultPage />} />
         <Route path="discursiva" element={<EssayListPage />} />
         <Route path="discursiva/:id" element={<EssayPage />} />
-        <Route path="*" element={<p>Página não encontrada.</p>} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );
