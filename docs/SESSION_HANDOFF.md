@@ -4,6 +4,11 @@
 **Fase:** reformulação "Arquivo Real" (kit em `docs/kit/`, auditoria em `docs/AUDITORIA_REFORMULACAO.md`): fases 0 a 5 do kit feitas para o piloto; expansão pendente.
 
 ## Situação atual
+- **Auditoria de 24/10/2026** (pacote em `docs/auditoria/`, baseline em `docs/BASELINE_2026-10-24.md`). Feitas as fases 0, 1, 2 e 4:
+  - **Fase 1:** fonte única da trilha (`lib/checkpoint.ts`, `app/useCheckpoint.ts`): Torre, cabeçalho e botão do menu levam ao mesmo passo. Retomada exata (`StudyData.progress`, `app/useSession.ts`) em Aprender, Prática, Desafio, Missão e Microaula.
+  - **Fase 2:** microaula-piloto `cap.infra.03/processos` (`content/micro/infra-processos.ts`, `pages/MicroLesson.tsx`) com 15 etapas, cada uma com explicação, exemplo, checagem imediata e recuperação. **Aguarda aprovação do usuário antes de migrar outras seções.**
+  - **Fase 4:** livro sem rolagem interna (divisão de blocos em `lib/book.ts`) e leitura contínua; verificado em 33 capítulos.
+  - Pendentes do roteiro: fase 3 (schema único para todo o conteúdo e motor de prática compartilhado), fase 5 (página Estudos e vídeos), fase 6 (polimento visual e áudio com volume separado), fase 7 (auditoria total de conteúdo), plano do dia ainda com lógica própria (P1-14), divisão do bundle (P2-05).
 - **23/10, rodada 2:** ritmo até a prova na Torre (dias, total de atividades, meta de hoje); guia "Onde estou"; visual medieval imersivo (Noite padrão, prefs `cronicas:prefs:v3`); ambiente sonoro gerado no aparelho (`app/ambience.ts`, botão de alaúde no cabeçalho, chaves em Conta; a cena 3D usa o mesmo); sem vozes. Aguardando retorno do usuário sobre a amostra de som e o visual.
 - **Reformulação Arquivo Real (23/10/2026):** nome "Crônicas do Arquivo Real"; paleta verde profundo, carvão, pergaminho e bronze em todo o app; elenco em `content/game/cast.ts` (Isolda mentora, Bubo coruja dela, Brites, Tomé, Leonor, Ambrósio, Conde Valério); novo prólogo (`PROLOGUE_KEY` v2).
 - **Missão-piloto SQL** (`/missao/missao.sql.01`, conteúdo em `content/missions/sql-01.ts`): cena 3D (Three.js + KayKit CC0, `public/scene/arquivo/`, créditos em `CREDITOS.txt`) com legendas e transcrição; objetivos; descoberta com tabela; laboratório SQL (`lib/sql.ts`, `components/activities/SqlLab.tsx`); treino com 7 famílias de atividade (`lib/activities.ts`, `components/activities/ActivityView.tsx`); questão de prova autoral rotulada; desfecho com escolha persistente (`StudyData.story`, `lib/mission.ts`); revisão marcada. Aparece na Torre, na trilha do cap. de Banco de Dados e no Diário.
@@ -20,7 +25,7 @@
 - Fases D e E completas; Supabase com RLS verificado; login/sync pelo navegador ainda **não confirmados pelo usuário**.
 
 ## Testes
-`npm test` 715/715; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
+`npm test` 731/731; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
 
 ## Pendências com o usuário
 - Pedir retorno sobre a clareza da explicação simples (o usuário disse que não entendia nada) e sobre o livro de couro; e sobre login/sincronização.
@@ -30,6 +35,7 @@
 - **PDFs das provas** (rede bloqueia FGV/eticaconcursos/TCE): prova TCE-GO 2014 FCC TI + gabarito; prova 2024 TI Tipo 1 + gabarito definitivo, para questões OFICIAIS rotuladas.
 
 ## Próxima tarefa exata
+0. Ouvir o usuário sobre a microaula de Processos (clareza, ritmo, tamanho). Se aprovada: fase 3 do roteiro da auditoria (schema único e migração por lotes), começando pelas outras seções de SO; depois página Estudos.
 0a. Ouvir o usuário sobre a missão-piloto (cena 3D, laboratório, atividades, desfecho) e o códice. Só depois expandir o padrão para outras disciplinas (fase 8 do kit): próximas missões sugeridas Redes (topologia), Segurança (incidente), Aquisição (propostas).
 0b. Ao receber os PDFs, criar o campo `source` em Question e importar lote pequeno de questões oficiais conferidas.
 0c. Dividir o bundle principal (2,4 MB) por rota.

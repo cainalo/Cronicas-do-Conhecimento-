@@ -16,7 +16,13 @@
 | `src/test/flow.test.tsx` | fluxo real de telas: lição com erro → resultado 90% → nova sessão → revisão → recuperação; leitor (marcar lida, busca); Aprender (páginas, trecho estudado, link do texto completo); prática; simulado |
 | `src/test/content.test.ts` (camada simples) | toda seção tem explicação simples; 4–7 páginas; até 70 palavras por página; última "Resumindo"; 4–8 palavras novas; 3 verificações com V e F |
 
-## Últimos resultados (2026-10-23)
+## Últimos resultados (2026-10-24, auditoria)
+- `npm test`: **731/731** (novos: `checkpoint.test.ts`, `micro.test.ts`, divisão de blocos do livro, fluxos de retomada em Aprender/Missão/Desafio/Prática/Microaula, destino único dos botões, leitura contínua).
+- Livro: script Playwright percorreu todas as folhas dos 33 capítulos em 390×844 (fonte 1) e 1280×800 (fonte 1,4): **0 folhas com conteúdo transbordando**, sem erros de console; 20 combinações extras (fontes 1 e 1,4 em 5 capítulos) também 0.
+- Microaula no Chromium 390×844: explicação, checagem, erro com recuperação e Torre mostrando "Você parou aqui".
+- Não testado: sincronização real com o Supabase (domínio bloqueado), APK em aparelho, leitor de tela.
+
+## Resultados de 2026-10-23
 - `npm test`: **715/715** (inclui `pace.test.ts`, cartão de ritmo e guia no fluxo)
 - Áudio: ambiente renderizado offline (node-web-audio-api) 40 s: pico 0,34, −25 dB RMS, sem clipagem; espectrograma conferido.
 - `npm test` anterior: **709/709** (inclui `sql.test.ts`, `mission.test.ts`, `activities.test.tsx`, fluxo da missão e códice)

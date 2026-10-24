@@ -1,0 +1,41 @@
+﻿ID,Tarefa,Prioridade,Área,Arquivos prováveis,Critério de aceite,Risco,Dependências
+P0-01,Unificar a fonte de verdade da trilha,P0,Navegação/progresso,src/app/usePlanOfToday.ts; src/lib/pace.ts; src/pages/Dashboard.tsx; src/components/Layout.tsx,Todos os CTAs principais resolvem o mesmo checkpoint em estado limpo e após uma conclusão.,Alta,Baseline de rotas e regras de progresso
+P0-02,Persistir checkpoint de microaula,P0,Continuidade,src/pages/Learn.tsx; src/lib/model.ts; src/app/StudyProvider.tsx,Sair/recarregar e clicar Continuar abre etapa e questão exatas.,Alta,P0-01 e modelo de conteúdo
+P0-03,Persistir checkpoint de missão SQL,P0,Continuidade,src/pages/Mission.tsx; src/lib/mission.ts; model/storage/sync relevantes,Retomar em descoberta/laboratório/treino sem reiniciar o passo.,Alta,Inspecionar sync e merge
+P0-04,Criar schema de microetapas canônico,P0,Pedagogia/conteúdo,src/content/types.ts; src/content/index.ts; schema novo,"Toda unidade tem objetivo, explicação, exemplo, checagem e feedback.",Alta,P0-01
+P0-05,"Reescrever piloto Processos, Memória e Serviços",P0,Conteúdo,src/content/grimoires/infra/cap03-so/01-processos-memoria.md; src/content/game/simple/dev-infra.ts e schema novo,Aula progride programa→processo→PID→threads/estados→comandos e checa cada conceito.,Alta,P0-04
+P0-06,Remover rolagem vertical dentro do fólio,P0,Livro/UI,src/components/LeatherBook.tsx; src/lib/book.ts; CSS de livro,Nenhuma folha normal exige scroll interno; tabela/código passam de página sem cortes.,Alta,Baseline visual
+P0-07,Escrever testes de retomada exata,P0,QA,src/test/flow.test.tsx e novos testes,"Cobertura de visitante, atualizar página, missão e recuperação.",Alta,P0-02/P0-03
+P1-01,Substituir verificações agrupadas no fim,P1,Pedagogia,src/pages/Learn.tsx e conteúdo canônico,"Cada conceito é verificado antes do próximo, com feedback.",Alta,P0-04/P0-05
+P1-02,Compartilhar motor de atividades,P1,Prática,src/lib/practice.ts; src/lib/activities.ts; ActivityView/PracticePage,Prática padrão suporta famílias variadas; diversidade avaliada automaticamente.,Média,P0-04
+P1-03,Implementar recuperação adaptativa,P1,Pedagogia,src/lib/practice.ts; ActivityView/feedback,Erro gera pista e variante equivalente; feedback aponta confusão específica.,Alta,P1-02
+P1-04,Unificar cartões Continue/Start/Next,P1,UX,Dashboard/Layout/PaceCard e nav,Um único CTA primário; outras opções secundárias e coerentes.,Alta,P0-01
+P1-05,Reorganizar Dashboard,P1,UX,src/pages/Dashboard.tsx; Layout,"Ordem: Continuar, progresso compacto, plano, Estudos; reduzir competição visual.",Média,P1-04
+P1-06,Criar rota/página Estudos,P1,IA/UX,src/App.tsx; navegação; nova page,"Cards para Biblioteca, Atividades rápidas, Videoaulas, Revisão e Materiais externos.",Média,P1-04
+P1-07,Criar auditoria automática de densidade,P1,Conteúdo/QA,src/test/content.test.ts e script editorial,"Relatório sinaliza outliers, siglas não definidas, ausência de exemplos e excesso de repetição.",Média,P0-04
+P1-08,Atualizar testes que impõem 4–7 páginas/70 palavras,P1,QA/conteúdo,src/test/content.test.ts,"Testes validam objetivo/etapas/feedback, não a arquitetura antiga.",Alta,P0-04 e migração
+P1-09,Atualizar documentação contraditória,P1,Docs,docs/PROJECT_STATUS.md; ROADMAP; HANDOFF; TESTING,Números e estado batem com branch e commit atual.,Média,Fase 0
+P1-10,Refazer paginação de tabela e código,P1,Livro/UI,src/lib/book.ts e components,Cabeçalho de tabela repete; código não é cortado; fonte ampliada recalcula folhas.,Alta,P0-06
+P1-11,Padronizar tokens de grid/spacing,P1,Design,CSS/Tailwind/components,"Títulos, cards e CTAs alinhados; nenhuma tela usa valores locais arbitrários sem necessidade.",Média,Fase visual
+P1-12,Garantir estados vazios/carregamento/erro/offline,P1,UX,Componentes e páginas de dados,Nenhum controle sem feedback e sem ação para recuperar.,Média,Auditoria página a página
+P1-13,Adicionar teste de alinhamento e overflow,P1,QA visual,Playwright e fluxo visual,"Screenshots/checks em 360, 390, 768, 1024 e 1280 sem overflow inesperado.",Alta,P1-11
+P1-14,Verificar destino único no plano diário,P1,Progresso,src/app/usePlanOfToday.ts; src/lib/planner.ts,Itens concluídos nunca aparecem como próximo e planejamento não contradiz a trilha.,Alta,P0-01
+P1-15,Revisar contagem de unidades totalUnits,P1,Progresso,src/content/index.ts; chamadas de cluesRevealed; testes,"Contagem declarada representa as mesmas unidades que a jornada realmente usa, ou recebe nome/definição explícitos.",Média,Fase 0
+P2-01,Implementar componente de YouTube embed,P2,Mídia,Componente novo; rota Estudos; conteúdo mídia,"Player lazy, sem autoplay, com título, transcrição, fallback e URL validada.",Média,P1-06
+P2-02,Diferenciar cena narrativa de microaula visual,P2,Mídia/arquitetura,types de conteúdo; Scene3D; player de microaula,Cada bloco declara tipo; não se apresenta cena RPG como videoaula.,Média,P1-06
+P2-03,Polir áudio com controle independente,P2,Acessibilidade/visual,src/app/ambience.ts; prefs; Layout/Scene3D,Música/lareira/volume separáveis; estado persistido e sem autoplay.,Média,Baseline áudio atual
+P2-04,Aplicar tokens visuais medievais,P2,Design,CSS/tailwind; LeatherBook; Layout; Tile,"Paleta carvão/verde/pergaminho/bronze consistente, textura legível e alinhamento regular.",Média,Design system
+P2-05,Otimizar carregamento por rota,P2,Performance,src/content/index.ts; Vite config; scene/video lazy,Chunk inicial medido e reduzido sem quebrar importação/testes.,Média,Baseline raw/gzip
+P2-06,Testar áudio e vídeo juntos,P2,QA multimídia,playback components/prefs,Narração/YouTube não compete com música; fallback silencioso correto.,Média,P2-01/P2-03
+P2-07,Adicionar modo acessível de leitura contínua,P2,Acessibilidade,BookPage/LeatherBook,Texto longo acessível sem gesto de página; mesmo conteúdo canônico.,Média,P0-06
+P2-08,Curar referências externas por objetivo,P2,Conteúdo,registros de mídia/referência,"Cada link descreve objetivo, fonte e data de verificação.",Média,P1-06
+P2-09,Testar APK em Android real,P2,Release,CI/Capacitor,Instalar/abrir/retomar offline/sincronizar depois de rede.,Alta,Build funcionando
+P2-10,Definir orçamento de bundle no CI,P2,Performance/CI,.github/workflows/pages.yml; Vite config,Relatório raw/gzip e limite explícito; regressão acima do limite falha ou exige justificativa.,Média,Baseline de build
+P2-11,Auditar acessibilidade de botões/feedback,P2,A11y,todas as páginas/componentes,"Labels, foco, tab order, aria-live e teclado validados.",Média,P1-13
+P2-12,Auditar consistência de ícones,P2,Design,src/components/Icon.tsx e usage,Sem misturar estilos de ícone e sem ícone ambíguo em controles críticos.,Baixa,Design tokens
+P2-13,Revisar cena 3D em aparelhos modestos,P2,Performance,src/components/scene/Scene3D.tsx,"Fallback confiável, uso aceitável de memória e sem bloquear navegação.",Média,P2-05
+P2-14,Rever meta diária e contagem das tarefas,P2,Produto,lib/pace/planner; content/index,Número exibido corresponde ao conteúdo real e não gera metas contraditórias.,Média,Fase 0
+P2-15,Fazer revisão técnica humana de lotes,P2,Editorial,content por disciplina e status,"Cada lote tem parecer, fonte, pendências e revisor anotados.",Alta,Relatório de outliers
+P0-08,"Persistir sessões de Lição, Prática, Revisão, Flashcards e Relâmpago",P0,Continuidade,src/pages/Lesson.tsx; Practice.tsx; Review.tsx; Flashcards.tsx; Blitz.tsx; modelo/storage/sync,"Atualizar/sair no meio de qualquer sessão e retomar etapa/fila/questão exatas, ou exibir escolha explícita de reinício.",Alta,Inspeção do StudyData e checkpoint central
+P1-16,Padronizar fallback de Conta sem Supabase e rota desconhecida,P1,UX/Resiliência,src/pages/Account.tsx; src/App.tsx; Page/Layout,Estados de backend ausente e 404 usam layout/tokens e oferecem ação clara de retorno; nenhum parágrafo solto.,Baixa,Tokens comuns de página
+P1-17,Auditar autosave da discursiva e o ciclo de sessão,P1,Continuidade/conteúdo,src/pages/Essay.tsx; src/lib/training.ts,Última edição não se perde ao sair antes do debounce; há indicador confiável de salvo/pendente e restauração do rascunho.,Média,Teste manual e persistência existente

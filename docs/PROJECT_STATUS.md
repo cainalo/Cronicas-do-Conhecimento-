@@ -1,6 +1,9 @@
 # Estado do projeto (atualizado em 2026-10-17)
 
 ## Funciona e foi testado
+| Fonte única do próximo passo e retomada exata (Aprender, Prática, Desafio, Missão, Microaula) | `checkpoint.test.ts`, `flow.test.tsx` |
+| Microaula-piloto Processos, memória e serviços (15 etapas com checagem e recuperação) | `micro.test.ts`, `flow.test.tsx`, captura 390×844 |
+| Livro sem rolagem dentro da folha + leitura contínua | `study.test.ts` (divisão), varredura Playwright de 33 capítulos |
 | Funcionalidade | Evidência |
 |---|---|
 | Leitor do capítulo (sumário, busca com destaque, marcadores, retomada pela última seção, fonte A−/A+, tema claro/escuro, glossário, referências, marcar seção lida) | Teste de fluxo `flow.test.tsx` + inspeção visual 390×844 |
