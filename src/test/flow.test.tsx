@@ -256,3 +256,14 @@ it('microaula: explica, confere na hora, ensina de novo quando erra e retoma na 
   renderAt('/aprender/cap.infra.03/processos');
   expect(screen.getByRole('heading', { name: 'O número de cada processo: PID' })).toBeInTheDocument();
 });
+
+it('livro: modo de leitura contínua mostra o mesmo conteúdo sem virar páginas', async () => {
+  const user = userEvent.setup();
+  renderAt('/capitulo/cap.seg.01');
+  await user.click(screen.getByRole('button', { name: 'Leitura contínua, sem virar páginas' }));
+  const art = screen.getByRole('article', { name: 'Leitura contínua' });
+  expect(within(art).getAllByText(/Kerckhoffs/).length).toBeGreaterThan(0);
+  expect(screen.queryByRole('button', { name: 'Próxima página' })).toBeNull();
+  await user.click(screen.getByRole('button', { name: 'Voltar ao livro com páginas' }));
+  expect(screen.getByRole('button', { name: 'Próxima página' })).toBeInTheDocument();
+});

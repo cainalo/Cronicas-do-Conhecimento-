@@ -31,12 +31,12 @@ export function useSpread(): boolean {
 export const visiblePages = (page: number, total: number, spread: boolean) => (spread ? [page - (page % 2), page - (page % 2) + 1].filter((p) => p < total) : [page]);
 
 /** Uma folha de pergaminho: moldura da página com cabeçalho e número do fólio. */
-export function Leaf({ head, folio, children }: { head?: ReactNode; folio?: ReactNode; children: ReactNode }) {
+export function Leaf({ head, folio, children, bodyRef }: { head?: ReactNode; folio?: ReactNode; children: ReactNode; bodyRef?: (el: HTMLDivElement | null) => void }) {
   return (
     <div className="absolute inset-0">
       <div className="book-page manuscript parchment-aged flex h-full flex-col overflow-hidden px-5 pb-2 pt-3">
         {head && <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[rgb(var(--line)/0.35)] pb-1 text-[0.68rem] tracking-wide text-muted">{head}</div>}
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain py-3 [scrollbar-width:none]">{children}</div>
+        <div ref={bodyRef} className="leaf-body min-h-0 flex-1 overflow-hidden py-3">{children}</div>
         {folio !== undefined && <div className="shrink-0 text-center font-logo text-[0.7rem] text-muted">{folio}</div>}
       </div>
     </div>

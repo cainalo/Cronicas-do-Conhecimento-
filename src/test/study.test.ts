@@ -156,3 +156,30 @@ describe('códice de duas páginas', () => {
     expect(visiblePages(5, 10, false)).toEqual([5]);
   });
 });
+
+import { splitMdBlock, splitBlockAt } from '@/lib/book';
+describe('livro sem rolagem: divisão de blocos altos', () => {
+  it('tabela: metade das linhas em cada pedaço, repetindo o cabeçalho', () => {
+    const t = '| a | b |\n|---|---|\n| 1 | 2 |\n| 3 | 4 |\n| 5 | 6 |';
+    const [x, y] = splitMdBlock(t)!;
+    expect(x.split('\n').slice(0, 2)).toEqual(['| a | b |', '|---|---|']);
+    expect(y.split('\n').slice(0, 2)).toEqual(['| a | b |', '|---|---|']);
+    expect(x.split('\n').length - 2 + y.split('\n').length - 2).toBe(3);
+  });
+  it('código mantém a cerca nos dois pedaços; lista divide por itens; parágrafo por frase', () => {
+    const [c1, c2] = splitMdBlock('```sql\nSELECT 1;\nSELECT 2;\nSELECT 3;\n```')!;
+    expect(c1.startsWith('```sql') && c1.endsWith('```') && c2.startsWith('```sql') && c2.endsWith('```')).toBe(true);
+    expect(splitMdBlock('- um\n- dois\n- três\n- quatro')).toEqual(['- um\n- dois', '- três\n- quatro']);
+    const p = splitMdBlock('Primeira frase aqui. Segunda frase ali. Terceira frase lá.')!;
+    expect(p.join(' ')).toBe('Primeira frase aqui. Segunda frase ali. Terceira frase lá.');
+    expect(p.every((x) => /[.]$/.test(x))).toBe(true);
+    expect(splitMdBlock('palavra')).toBeNull();
+  });
+  it('subtítulo fica com o primeiro pedaço; cenas e pegadinhas também se dividem', () => {
+    const [h1] = splitMdBlock('### Título\n\n- a\n- b')!;
+    expect(h1.startsWith('### Título')).toBe(true);
+    const out = splitBlockAt([{ kind: 'scene', sectionId: 's', lines: [{ who: 'A', text: '1' }, { who: 'B', text: '2' }] }], 0)!;
+    expect(out).toHaveLength(2);
+    expect(out[1].kind === 'scene' && out[1].cont).toBe(true);
+  });
+});

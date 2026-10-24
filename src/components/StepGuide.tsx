@@ -57,11 +57,11 @@ export function StepGuide({ chapterId, sectionId, current, open: startOpen = fal
           {open ? 'Fechar' : 'Entender esta etapa'}
         </button>
       </div>
-      <ol className="mt-1.5 flex flex-wrap items-center gap-1" aria-label="Passos">
+      <ol className="mt-1.5 flex flex-nowrap items-center gap-1 overflow-hidden whitespace-nowrap" aria-label="Passos">
         {steps.map((s, i) => {
           const here = i === curIdx;
           return (
-            <li key={s.key} className="flex items-center gap-1">
+            <li key={s.key} className="flex shrink-0 items-center gap-1">
               {i > 0 && <span className="text-muted" aria-hidden="true">›</span>}
               <span className={`rounded-full px-2 py-0.5 text-[0.72rem] font-semibold ${here ? 'bg-ember text-[rgb(var(--bg))]' : s.done ? 'bg-gold/20 text-gold' : 'bg-raised text-muted'}`} aria-current={here ? 'step' : undefined}>
                 {s.done && !here ? '✓ ' : ''}

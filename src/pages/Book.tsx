@@ -6,7 +6,7 @@ import { useStudy } from '@/app/StudyProvider';
 import { usePrefs } from '@/app/prefs';
 import { useFx } from '@/app/fx';
 import { getChapter, getGrimoire, getSectionExtras } from '@/content';
-import { chapterBlocks, paginate, type BookBlock } from '@/lib/book';
+import { chapterBlocks, paginate, splitBlockAt, type BookBlock } from '@/lib/book';
 import { markSectionRead, setLastSection, toggleBookmark } from '@/lib/study';
 import { practiceDone, practiceId } from '@/lib/practice';
 import { roman } from '@/lib/roman';
@@ -51,13 +51,17 @@ export function Pegadinha({ item }: { item: { statement: string; answer: boolean
   );
 }
 
-export function SceneLines({ lines }: { lines: { who: string; text: string }[] }) {
+export function SceneLines({ lines, art = true }: { lines: { who: string; text: string }[]; art?: boolean }) {
   return (
     <div className="space-y-2">
-      <div className="relative h-24 overflow-hidden rounded-2xl">
-        <SceneArt scene="biblioteca" dark={false} />
-      </div>
-      <p className="rubric text-center font-logo text-sm font-bold">Cena</p>
+      {art && (
+        <>
+          <div className="relative h-24 overflow-hidden rounded-2xl">
+            <SceneArt scene="biblioteca" dark={false} />
+          </div>
+          <p className="rubric text-center font-logo text-sm font-bold">Cena</p>
+        </>
+      )}
       <ul className="space-y-2">
         {lines.map((l, i) => {
           const bubo = l.who.toLowerCase() === 'bubo';
@@ -87,12 +91,12 @@ function BlockView({ b, chapterId, measuring }: { b: BookBlock; chapterId: strin
   switch (b.kind) {
     case 'cover':
       return (
-        <div className="flex h-full flex-col items-center justify-center py-6 text-center">
+        <div className="flex flex-col items-center justify-center py-1 text-center">
           <p className="text-sm text-muted">{grimoire?.title}</p>
           <p className="rubric mt-4 font-logo text-lg">Capítulo {roman(chapter.number).toUpperCase()}</p>
-          <h1 className="mt-2 text-[1.9rem] leading-tight">{chapter.title}</h1>
+          <h1 className="mt-2 text-[1.6rem] leading-tight">{chapter.title}</h1>
           <p className="mt-2 max-w-xs font-serif italic text-muted">{chapter.subtitle}</p>
-          <div className="divider-ornament w-40" aria-hidden>
+          <div className="divider-ornament !my-3 w-40" aria-hidden>
             ✠
           </div>
           <p className="text-xs text-muted">
@@ -104,7 +108,7 @@ function BlockView({ b, chapterId, measuring }: { b: BookBlock; chapterId: strin
         </div>
       );
     case 'scene':
-      return <SceneLines lines={b.lines} />;
+      return <SceneLines lines={b.lines} art={!b.cont} />;
     case 'title':
       return (
         <div className="mb-2 pt-1">
@@ -179,6 +183,31 @@ function BlockView({ b, chapterId, measuring }: { b: BookBlock; chapterId: strin
   }
 }
 
+/** Leitura contínua: todos os blocos numa coluna rolável; o fim de cada trecho marca a leitura. */
+function ContinuousReading({ blocks, chapterId, onEnd }: { blocks: BookBlock[]; chapterId: string; onEnd: (sectionId: string) => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const endRef = useRef(onEnd);
+  endRef.current = onEnd;
+  useEffect(() => {
+    const root = ref.current;
+    if (!root || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && endRef.current((e.target as HTMLElement).dataset.end!)), { root });
+    root.querySelectorAll('[data-end]').forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [blocks]);
+  return (
+    <div ref={ref} className="manuscript parchment-aged min-h-0 flex-1 overflow-y-auto px-5 py-4" role="article" aria-label="Leitura contínua">
+      <div className="mx-auto max-w-[42rem] space-y-3">
+        {blocks.map((b, i) => (
+          <div key={i} data-end={b.kind === 'end' ? b.sectionId : undefined}>
+            <BlockView b={b} chapterId={chapterId} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function BookPage() {
   const { id = '' } = useParams();
   const { hash } = useLocation();
@@ -187,35 +216,79 @@ export function BookPage() {
   const { data, update } = useStudy();
   const { prefs, setPrefs } = usePrefs();
   const { sfx, confetti, toast } = useFx();
-  const blocks = useMemo(() => (chapter ? chapterBlocks(chapter, (sid) => getSectionExtras(chapter.id, sid)) : []), [chapter]);
+  const baseBlocks = useMemo(() => (chapter ? chapterBlocks(chapter, (sid) => getSectionExtras(chapter.id, sid)) : []), [chapter]);
+  // Blocos altos demais são divididos (tabela por linhas, lista por itens, código por linhas,
+  // parágrafo por frases) até cada um caber numa folha: nada de rolagem dentro da página.
+  const [blocks, setBlocks] = useState(baseBlocks);
   const bodyRef = useRef<HTMLDivElement>(null);
   const measureRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [pages, setPages] = useState<number[][]>(() => paginate(blocks, [], Infinity));
   const [page, setPage] = useState(0);
   const [toc, setToc] = useState(false);
+  // Leitura contínua (sem virar páginas), para quem prefere ou precisa: mesmo conteúdo, rolagem da tela.
+  const [flow, setFlowState] = useState(() => {
+    try {
+      return localStorage.getItem('cronicas:leitura-continua') === '1';
+    } catch {
+      return false;
+    }
+  });
+  const setFlow = (on: boolean) => {
+    setFlowState(on);
+    try {
+      localStorage.setItem('cronicas:leitura-continua', on ? '1' : '0');
+    } catch {
+      /* ignora */
+    }
+  };
   const [query, setQuery] = useState('');
   const placed = useRef<string | null>(null);
 
-  // Tamanho útil da página.
+  // Tamanho útil da página: medido no corpo de uma folha de verdade (sem o espaçamento interno),
+  // com a referência aproximada como reserva enquanto a folha ainda não existe.
+  const [leafBody, setLeafBody] = useState<HTMLDivElement | null>(null);
+  const keepLeafBody = useMemo(() => (el: HTMLDivElement | null) => el && setLeafBody((cur) => (cur === el ? cur : el)), []);
   useLayoutEffect(() => {
-    const el = bodyRef.current;
+    const el = leafBody ?? bodyRef.current;
     if (!el) return;
-    const read = () => setSize({ w: el.clientWidth, h: el.clientHeight });
+    const read = () => {
+      const pad = leafBody ? parseFloat(getComputedStyle(el).paddingTop) + parseFloat(getComputedStyle(el).paddingBottom) : 0;
+      const w = el.clientWidth;
+      const h = Math.floor(el.clientHeight - pad);
+      // Folha desmontada durante a virada: mantém a medida anterior.
+      if (!el.isConnected || h < 80) return;
+      // Pequenas variações (arredondamento) não refazem a paginação.
+      setSize((s) => (Math.abs(s.w - w) < 3 && Math.abs(s.h - h) < 3 ? s : { w, h }));
+    };
     read();
     if (typeof ResizeObserver === 'undefined') return;
     const ro = new ResizeObserver(read);
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [leafBody]);
 
-  // Mede cada bloco e monta as páginas.
+  // Ao mudar capítulo, tamanho da tela ou fonte, recomeça dos blocos originais.
+  useLayoutEffect(() => {
+    setBlocks(baseBlocks);
+  }, [baseBlocks, size.w, size.h, prefs.fontScale]);
+
+  // Mede cada bloco; se algum não cabe na folha, divide e mede de novo; senão, monta as páginas.
   useLayoutEffect(() => {
     const m = measureRef.current;
     if (!m) return;
     const heights = Array.from(m.children).map((c) => (c as HTMLElement).offsetHeight + 12);
-    const next = paginate(blocks, heights, size.h > 80 ? size.h : Infinity);
-    setPages(next);
+    const pageH = size.h > 80 ? size.h : Infinity;
+    if (pageH !== Infinity) {
+      // Divide de uma vez todos os que não cabem (do fim para o começo, para os índices valerem).
+      let next = blocks;
+      for (let i = blocks.length - 1; i >= 0; i--) if (heights[i] > pageH) next = splitBlockAt(next, i) ?? next;
+      if (next !== blocks) {
+        setBlocks(next);
+        return;
+      }
+    }
+    setPages(paginate(blocks, heights, pageH));
   }, [blocks, size.w, size.h, prefs.fontScale]);
 
   const pageOfBlock = (bi: number) => Math.max(0, pages.findIndex((p) => p.includes(bi)));
@@ -284,6 +357,7 @@ export function BookPage() {
         </>
       }
       folio={`fol. ${roman(pi + 1)}`}
+      bodyRef={pi === Math.min(page, pages.length - 1) ? keepLeafBody : undefined}
     >
       <div className="space-y-3">
         {(pages[pi] ?? []).map((bi) => (
@@ -316,6 +390,9 @@ export function BookPage() {
         <button className="btn-ghost !min-h-[38px] !px-2.5 !py-1 text-sm" aria-label="Diminuir fonte" onClick={() => setPrefs({ fontScale: Math.max(0.85, +(prefs.fontScale - 0.1).toFixed(2)) })}>
           A−
         </button>
+        <button className="btn-ghost !min-h-[38px] !px-2.5 !py-1 text-sm" aria-pressed={flow} aria-label={flow ? 'Voltar ao livro com páginas' : 'Leitura contínua, sem virar páginas'} title={flow ? 'Voltar ao livro' : 'Leitura contínua'} onClick={() => setFlow(!flow)}>
+          <Icon name={flow ? 'grimorio' : 'lista'} size={18} />
+        </button>
         <button className="btn-ghost !min-h-[38px] !px-2.5 !py-1 text-sm" aria-label="Aumentar fonte" onClick={() => setPrefs({ fontScale: Math.min(1.4, +(prefs.fontScale + 0.1).toFixed(2)) })}>
           A+
         </button>
@@ -331,33 +408,42 @@ export function BookPage() {
         )}
       </div>
 
+      {flow ? (
+        <ContinuousReading blocks={baseBlocks} chapterId={chapter.id} onEnd={(sid) => {
+          if (data.reading[chapter.id]?.sectionsRead.includes(sid)) return;
+          update((d) => markSectionRead(d, chapter, sid).data);
+        }} />
+      ) : (
+        <>
       {/* O livro */}
-      <LeatherBook
-        spread={spread}
-        page={Math.min(page, total - 1)}
-        total={total}
-        onPage={setPage}
-        render={renderPage}
-        overlay={
-          <>
-            {/* Medidor invisível: mesma largura do corpo da página */}
-            <div ref={measureRef} aria-hidden="true" className="book-page pointer-events-none invisible absolute left-0 top-0 -z-10 space-y-0 px-5" style={{ width: size.w ? size.w + 40 : undefined }}>
-              {blocks.map((b, i) => (
-                <div key={i} style={{ width: size.w || undefined }}>
-                  <BlockView b={b} chapterId={chapter.id} measuring />
-                </div>
-              ))}
-            </div>
-            {/* Corpo de referência para a altura útil */}
-            <div className="pointer-events-none absolute inset-x-5 bottom-[1.6rem] top-[2.6rem]" ref={bodyRef} aria-hidden="true" />
+        <LeatherBook
+          spread={spread}
+          page={Math.min(page, total - 1)}
+          total={total}
+          onPage={setPage}
+          render={renderPage}
+          overlay={
+            <>
+              {/* Medidor invisível: mesma largura do corpo da página */}
+              <div ref={measureRef} aria-hidden="true" className="book-page pointer-events-none invisible absolute left-0 top-0 -z-10 space-y-0 px-5" style={{ width: size.w ? size.w + 40 : undefined }}>
+                {blocks.map((b, i) => (
+                  <div key={i} style={{ width: size.w || undefined }}>
+                    <BlockView b={b} chapterId={chapter.id} measuring />
+                  </div>
+                ))}
+              </div>
+              {/* Corpo de referência para a altura útil */}
+              <div className="pointer-events-none absolute inset-x-5 bottom-[1.6rem] top-[2.6rem]" ref={bodyRef} aria-hidden="true" />
+            </>
+          }
+          last={
+            <button className="btn-primary !min-h-[44px] flex-1 text-sm" onClick={() => navigate(`/grimorio/${chapter.grimoireId}`)}>
+              Voltar à trilha
+            </button>
+          }
+        />
           </>
-        }
-        last={
-          <button className="btn-primary !min-h-[44px] flex-1 text-sm" onClick={() => navigate(`/grimorio/${chapter.grimoireId}`)}>
-            Voltar à trilha
-          </button>
-        }
-      />
+      )}
 
       {/* Sumário */}
       {toc && (
