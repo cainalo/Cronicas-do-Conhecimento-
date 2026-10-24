@@ -229,3 +229,36 @@ export interface Mission {
   };
   recap: { learned: string[]; watch: string[] };
 }
+
+// ---------- Microaulas (auditoria de 24/10/2026, P0-04): uma ideia por vez, com checagem imediata ----------
+export interface MicroStep {
+  id: string;
+  /** Parte da aula (ex.: "Processos", "Memória"). */
+  part: string;
+  title: string;
+  /** O que a pessoa deve conseguir fazer ao fim desta etapa. */
+  goal: string;
+  /** Explicação curta, termos definidos na hora (Markdown). */
+  explain: string;
+  /** Exemplo trabalhado (Markdown; pode ter tabela ou comando). */
+  example?: string;
+  /** Checagem imediata do que acabou de ser ensinado. */
+  check: import('@/lib/activities').MissionActivity;
+  /** Se errar: outra explicação e um item equivalente com outros dados. */
+  recovery: { explain: string; check: import('@/lib/activities').MissionActivity };
+}
+
+export interface MicroLesson {
+  id: string;
+  chapterId: string;
+  sectionId: string;
+  title: string;
+  /** Problema concreto de abertura (pergunta antes da explicação). */
+  opening: import('@/lib/activities').MissionActivity;
+  steps: MicroStep[];
+  /** Prática cumulativa, depois de todas as etapas. */
+  consolidation: import('@/lib/activities').MissionActivity[];
+  /** Questão(ões) no estilo da prova, só sobre o que já foi ensinado. */
+  exam: import('@/lib/activities').MissionActivity[];
+  summary: string[];
+}

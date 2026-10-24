@@ -1,0 +1,222 @@
+// Microaula: uma ideia por vez. Cada etapa tem explicação, exemplo e checagem imediata; se errar,
+// vem outra explicação e um item equivalente com outros dados. Depois: prática cumulativa, questão
+// no estilo da prova e síntese. O ponto exato fica salvo (useSession), e o Continuar volta aqui.
+import { useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import type { MicroLesson } from '@/content/types';
+import { getChapter, getQuestion } from '@/content';
+import { useStudy } from '@/app/StudyProvider';
+import { useFx } from '@/app/fx';
+import { useSession } from '@/app/useSession';
+import { learnKey } from '@/lib/pace';
+import { markSectionRead, recordAnswer } from '@/lib/study';
+import { Markdown } from '@/components/Markdown';
+import { Icon } from '@/components/Icon';
+import { Mascot } from '@/components/Mascot';
+import { StepGuide } from '@/components/StepGuide';
+import { ActivityView } from '@/components/activities/ActivityView';
+
+type Phase =
+  | { k: 'abertura' }
+  | { k: 'explicar'; i: number }
+  | { k: 'checar'; i: number }
+  | { k: 'recuperar'; i: number }
+  | { k: 'rechecar'; i: number }
+  | { k: 'praticar'; i: number }
+  | { k: 'prova'; i: number }
+  | { k: 'sintese' };
+
+interface Saved {
+  phase: Phase;
+  /** Acerto na primeira tentativa de cada checagem. */
+  first: Record<string, boolean>;
+  /** Etapas que precisaram de recuperação (para a síntese e a revisão). */
+  struggled: string[];
+}
+
+export function MicroLessonPage({ lesson }: { lesson: MicroLesson }) {
+  const navigate = useNavigate();
+  const { update } = useStudy();
+  const { sfx, confetti } = useFx();
+  const chapter = getChapter(lesson.chapterId)!;
+  const n = lesson.steps.length;
+  const session = useSession<Saved>(
+    learnKey(lesson.chapterId, lesson.sectionId),
+    () => ({ phase: { k: 'abertura' }, first: {}, struggled: [] }),
+    (s) => ('i' in s.phase && ['explicar', 'checar', 'recuperar', 'rechecar'].includes(s.phase.k) ? `Aula: etapa ${s.phase.i + 1} de ${n}` : s.phase.k === 'praticar' ? 'Aula: prática final' : s.phase.k === 'prova' ? 'Aula: questão de prova' : 'Aula'),
+  );
+  const { phase, first, struggled } = session.state;
+  const set = (p: Phase, extra?: Partial<Saved>) => {
+    session.setState((s) => ({ ...s, ...extra, phase: p }));
+    window.scrollTo?.({ top: 0 });
+  };
+  const note = (id: string, ok: boolean) => session.setState((s) => (id in s.first ? s : { ...s, first: { ...s.first, [id]: ok } }));
+
+  // Barra de progresso: abertura, etapas, prática, prova, síntese.
+  const totalSlots = n + 3;
+  const slot = phase.k === 'abertura' ? 0 : phase.k === 'praticar' ? n + 1 : phase.k === 'prova' ? n + 2 : phase.k === 'sintese' ? n + 3 : phase.i + 1;
+  const step = 'i' in phase && ['explicar', 'checar', 'recuperar', 'rechecar'].includes(phase.k) ? lesson.steps[phase.i] : undefined;
+  const examQs = useMemo(() => lesson.exam.map((a) => (a.kind === 'exam' ? getQuestion(a.questionId) : undefined)), [lesson]);
+
+  const finishLesson = () => {
+    update((d) => markSectionRead(d, chapter, lesson.sectionId).data);
+    const ok = Object.values(first).filter(Boolean).length;
+    if (ok / Math.max(1, Object.keys(first).length) >= 0.7) confetti(90);
+    sfx('done');
+    set({ k: 'sintese' });
+    session.finish();
+  };
+
+  return (
+    <div className="-mt-2 flex min-h-[calc(100dvh-5.5rem)] flex-col">
+      <div className="mb-3 flex items-center gap-3">
+        <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => navigate(`/grimorio/${chapter.grimoireId}`)} aria-label="Sair (o lugar fica salvo)">
+          <Icon name="errado" size={22} />
+        </button>
+        <div className="h-3 flex-1 overflow-hidden rounded-full bg-raised" aria-label={`Progresso: ${slot} de ${totalSlots}`}>
+          <div className="h-full rounded-full bg-gold transition-all duration-500" style={{ width: `${(slot / totalSlots) * 100}%` }} />
+        </div>
+        <span className="text-xs font-semibold text-muted">
+          {slot}/{totalSlots}
+        </span>
+      </div>
+      <div className="mb-3">
+        <StepGuide chapterId={lesson.chapterId} sectionId={lesson.sectionId} current="aprender" />
+      </div>
+
+      {phase.k === 'abertura' && (
+        <section className="flex flex-1 flex-col" aria-label="Abertura">
+          <div className="mb-3 flex items-end gap-2">
+            <Mascot mood="talk" size={64} />
+            <p className="mb-4 rounded-2xl rounded-bl-sm bg-surface px-3 py-2 text-sm shadow-sm">
+              Antes de explicar, uma pergunta. Não vale nota: é só para você pensar no problema.
+            </p>
+          </div>
+          <ActivityView key="abertura" a={lesson.opening} onNext={() => set({ k: 'explicar', i: 0 })} />
+        </section>
+      )}
+
+      {step && (phase.k === 'explicar' || phase.k === 'recuperar') && (
+        <section className="flex flex-1 flex-col" aria-label={phase.k === 'explicar' ? 'Explicação' : 'Outra explicação'}>
+          <p className="text-xs font-semibold text-gold">
+            {step.part} · etapa {phase.i + 1} de {n}
+          </p>
+          <h1 className="mt-1 text-2xl leading-tight">{phase.k === 'explicar' ? step.title : 'Vamos ver de outro jeito'}</h1>
+          {phase.k === 'explicar' && <p className="mt-1 text-sm text-muted">Objetivo: {step.goal}</p>}
+          <div className="card mt-3 p-4">
+            <div className="prose-manuscript !font-sans !text-[1.02rem] [&_table]:!text-sm">
+              <Markdown>{phase.k === 'explicar' ? step.explain : step.recovery.explain}</Markdown>
+            </div>
+          </div>
+          {phase.k === 'explicar' && step.example && (
+            <div className="mt-3 rounded-2xl border-l-4 border-ember bg-ember/5 p-4">
+              <p className="mb-1 text-sm font-bold text-ember">Exemplo</p>
+              <div className="prose-manuscript !font-sans !text-[0.98rem] [&_table]:!text-sm">
+                <Markdown>{step.example}</Markdown>
+              </div>
+            </div>
+          )}
+          <div className="mt-auto flex gap-2 pt-4">
+            {phase.k === 'explicar' && phase.i > 0 && (
+              <button className="btn-ghost" onClick={() => set({ k: 'explicar', i: phase.i - 1 })}>
+                <Icon name="voltar" size={18} /> Anterior
+              </button>
+            )}
+            <button className="btn-primary flex-1" onClick={() => set({ k: phase.k === 'explicar' ? 'checar' : 'rechecar', i: phase.i })}>
+              Entendi, quero conferir
+            </button>
+          </div>
+        </section>
+      )}
+
+      {step && (phase.k === 'checar' || phase.k === 'rechecar') && (
+        <section className="flex flex-1 flex-col" aria-label="Checagem">
+          <p className="mb-1 text-xs font-semibold text-gold">
+            {phase.k === 'checar' ? 'Confira o que acabou de aprender' : 'Mais uma, com outro exemplo'} · etapa {phase.i + 1} de {n}
+          </p>
+          <ActivityView
+            key={`${phase.k}-${step.id}`}
+            a={phase.k === 'checar' ? step.check : step.recovery.check}
+            onNext={(o) => {
+              if (phase.k === 'checar') {
+                note(step.check.id, o.ok);
+                if (!o.ok) return set({ k: 'recuperar', i: phase.i }, { struggled: [...new Set([...struggled, step.id])] });
+              }
+              set(phase.i + 1 < n ? { k: 'explicar', i: phase.i + 1 } : { k: 'praticar', i: 0 });
+            }}
+          />
+        </section>
+      )}
+
+      {phase.k === 'praticar' && (
+        <section className="flex flex-1 flex-col" aria-label="Prática final">
+          <p className="mb-1 text-xs font-semibold text-gold">
+            Prática com tudo o que você aprendeu · {phase.i + 1} de {lesson.consolidation.length}
+          </p>
+          <ActivityView
+            key={lesson.consolidation[phase.i].id}
+            a={lesson.consolidation[phase.i]}
+            onNext={(o) => {
+              note(lesson.consolidation[phase.i].id, o.ok);
+              set(phase.i + 1 < lesson.consolidation.length ? { k: 'praticar', i: phase.i + 1 } : { k: 'prova', i: 0 });
+            }}
+          />
+        </section>
+      )}
+
+      {phase.k === 'prova' && examQs[phase.i] && (
+        <section className="flex flex-1 flex-col" aria-label="Questão de prova">
+          <ActivityView
+            key={lesson.exam[phase.i].id}
+            a={lesson.exam[phase.i]}
+            question={examQs[phase.i]}
+            onExamAnswer={(q, key) => update((d) => recordAnswer(d, q, key, 'practice', `micro:${lesson.id}`).data)}
+            onNext={(o) => {
+              note(lesson.exam[phase.i].id, o.ok);
+              if (phase.i + 1 < lesson.exam.length) set({ k: 'prova', i: phase.i + 1 });
+              else finishLesson();
+            }}
+          />
+        </section>
+      )}
+
+      {phase.k === 'sintese' && (
+        <section className="flex flex-1 flex-col" aria-label="Síntese">
+          <div className="flex items-end gap-2">
+            <Mascot mood="cheer" size={80} />
+            <h1 className="mb-4 text-2xl">Aula concluída</h1>
+          </div>
+          <h2 className="mt-3 text-lg">O que você aprendeu</h2>
+          <ul className="mt-1 space-y-1.5">
+            {lesson.summary.map((s) => (
+              <li key={s} className="flex gap-2">
+                <Icon name="certo" size={16} className="mt-1 shrink-0 text-ok" /> {s}
+              </li>
+            ))}
+          </ul>
+          {struggled.length > 0 && (
+            <>
+              <h2 className="mt-4 text-lg">Vale revisar</h2>
+              <ul className="mt-1 list-disc pl-5 text-sm text-muted">
+                {lesson.steps
+                  .filter((s) => struggled.includes(s.id))
+                  .map((s) => (
+                    <li key={s.id}>{s.title}</li>
+                  ))}
+              </ul>
+            </>
+          )}
+          <p className="mt-4 text-sm text-muted">Próximo passo da trilha: praticar este trecho.</p>
+          <div className="mt-auto flex gap-2 pt-4">
+            <Link to={`/capitulo/${lesson.chapterId}#${lesson.sectionId}`} className="btn-ghost flex-1 text-sm">
+              Texto de referência
+            </Link>
+            <Link to={`/pratica/${lesson.chapterId}/${lesson.sectionId}`} className="btn-primary flex-1">
+              Praticar
+            </Link>
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}

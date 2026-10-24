@@ -15,6 +15,7 @@ import { questoesIaCap0304 } from './grimoires/ia/questions-cap03-04';
 import { capPrimComputador, capPrimRedesDados, grimorioPrimeiros, licoesPrimeiros } from './grimoires/primeiros';
 import { questoesPrimeiros } from './grimoires/primeiros/questions';
 import { missaoSql01 } from './missions/sql-01';
+import { microInfraProcessos } from './micro/infra-processos';
 import { estudosDeCaso } from './discursivas/tce-go-2026';
 import { capDevApis, capDevIdentidade, grimorioDev, licoesDev } from './grimoires/dev';
 import { questoesDev } from './grimoires/dev/questions';
@@ -119,6 +120,10 @@ export const getFlashcard = (id: string) => flashcards.find((f) => f.id === id);
 
 export { getSectionExtras, allSectionExtras } from './game/scenes';
 export { getSimpleSection, allSimpleSections } from './game/simple';
+
+/** Microaulas (piloto da auditoria: Processos, memória e serviços). Substituem o Aprender do trecho. */
+export const microLessons = [microInfraProcessos];
+export const getMicroLesson = (chapterId: string, sectionId: string) => microLessons.find((m) => m.chapterId === chapterId && m.sectionId === sectionId);
 
 /** Missões do Arquivo Real (piloto: SQL). */
 export const missions = [missaoSql01];

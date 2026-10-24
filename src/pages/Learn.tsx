@@ -8,7 +8,8 @@ import { usePrefs } from '@/app/prefs';
 import { useFx } from '@/app/fx';
 import { useSession } from '@/app/useSession';
 import { learnKey } from '@/lib/pace';
-import { getChapter, getSectionExtras, getSimpleSection } from '@/content';
+import { getChapter, getMicroLesson, getSectionExtras, getSimpleSection } from '@/content';
+import { MicroLessonPage } from './MicroLesson';
 import { markSectionRead, setLastSection } from '@/lib/study';
 import { practiceDone } from '@/lib/practice';
 import { roman } from '@/lib/roman';
@@ -43,6 +44,14 @@ function Vignette({ i }: { i: number }) {
 type LearnPage = { kind: 'open' } | { kind: 'text'; i: number } | { kind: 'words' } | { kind: 'checks' } | { kind: 'end' };
 
 export function LearnPage() {
+  const { chapterId = '', sectionId = '' } = useParams();
+  const micro = getMicroLesson(chapterId, sectionId);
+  // Trecho com microaula: a aula em etapas é o caminho principal (fonte única do conteúdo didático).
+  if (micro) return <MicroLessonPage key={micro.id} lesson={micro} />;
+  return <SimpleLearnPage />;
+}
+
+function SimpleLearnPage() {
   const { chapterId = '', sectionId = '' } = useParams();
   const navigate = useNavigate();
   const chapter = getChapter(chapterId);

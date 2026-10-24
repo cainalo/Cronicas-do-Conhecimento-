@@ -229,3 +229,30 @@ it('retomada exata: Desafio e Prática continuam na mesma questão/atividade', a
   expect(screen.queryByRole('heading', { name: /Prática:/ })).toBeNull();
   expect(screen.getByRole('button', { name: 'Verificar' })).toBeInTheDocument();
 });
+
+it('microaula: explica, confere na hora, ensina de novo quando erra e retoma na mesma etapa', async () => {
+  const user = userEvent.setup();
+  const a = renderAt('/aprender/cap.infra.03/processos');
+  // Abertura
+  await user.click(screen.getByRole('button', { name: /Cada execução em andamento/ }));
+  await user.click(screen.getByRole('button', { name: 'Verificar' }));
+  await user.click(screen.getByRole('button', { name: 'Continuar' }));
+  // Etapa 1: explicação, depois checagem errada de propósito.
+  expect(screen.getByRole('heading', { name: 'Programa e processo' })).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: 'Entendi, quero conferir' }));
+  await user.click(screen.getByRole('button', { name: /Sim, porque o arquivo existe/ }));
+  await user.click(screen.getByRole('button', { name: 'Verificar' }));
+  await user.click(screen.getByRole('button', { name: 'Continuar' }));
+  // Recuperação: outra explicação e item equivalente.
+  expect(screen.getByRole('heading', { name: 'Vamos ver de outro jeito' })).toBeInTheDocument();
+  expect(screen.getByText(/receita de bolo/)).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: 'Entendi, quero conferir' }));
+  await user.click(screen.getByRole('button', { name: /1 programa e 3 processos/ }));
+  await user.click(screen.getByRole('button', { name: 'Verificar' }));
+  await user.click(screen.getByRole('button', { name: 'Continuar' }));
+  expect(screen.getByRole('heading', { name: 'O número de cada processo: PID' })).toBeInTheDocument();
+  a.unmount();
+  // Sai e volta: mesma etapa.
+  renderAt('/aprender/cap.infra.03/processos');
+  expect(screen.getByRole('heading', { name: 'O número de cada processo: PID' })).toBeInTheDocument();
+});
