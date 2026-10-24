@@ -113,6 +113,11 @@ export function mergeData(base: StudyData, incoming: StudyData, incomingIsPendin
     cards: mergeRecords(base.cards, incoming.cards, newest),
     settings: newest(base.settings, incoming.settings),
     story: newest(base.story, incoming.story),
+    progress: (() => {
+      const out: Record<string, { step: unknown; label?: string; updatedAt: string }> = { ...incoming.progress };
+      for (const [k, v] of Object.entries(base.progress ?? {})) if (!out[k] || v.updatedAt > out[k].updatedAt) out[k] = v;
+      return Object.keys(out).length ? out : undefined;
+    })(),
     unitLog: (() => {
       const out: Record<string, string> = { ...incoming.unitLog };
       for (const [k, v] of Object.entries(base.unitLog ?? {})) if (!out[k] || v < out[k]) out[k] = v;

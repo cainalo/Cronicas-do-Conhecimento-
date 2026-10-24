@@ -1,11 +1,13 @@
 // Aprender: a porta de entrada de cada trecho, para quem está começando do zero. Um livrinho de
 // poucas páginas curtas (uma ideia por página), as palavras novas, três verificações fáceis e,
 // no fim, o convite para praticar. O texto completo fica para depois, como aprofundamento.
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { usePrefs } from '@/app/prefs';
 import { useFx } from '@/app/fx';
+import { useSession } from '@/app/useSession';
+import { learnKey } from '@/lib/pace';
 import { getChapter, getSectionExtras, getSimpleSection } from '@/content';
 import { markSectionRead, setLastSection } from '@/lib/study';
 import { practiceDone } from '@/lib/practice';
@@ -51,7 +53,10 @@ export function LearnPage() {
   const { data, update } = useStudy();
   const { prefs } = usePrefs();
   const { sfx, confetti, toast } = useFx();
-  const [page, setPage] = useState(0);
+  // Página exata guardada para o Continuar retomar aqui.
+  const session = useSession<number>(learnKey(chapterId, sectionId), () => 0, (p) => `Aprender: página ${p + 1}`);
+  const page = session.state;
+  const setPage = session.setState;
   const spread = useSpread();
 
   const pages = useMemo<LearnPage[]>(() => {
@@ -76,6 +81,7 @@ export function LearnPage() {
     if (data.reading[chapter.id]?.sectionsRead.includes(section.id)) return;
     const r = markSectionRead(data, chapter, section.id);
     update((d) => markSectionRead(d, chapter, section.id).data);
+    session.finish();
     sfx('done');
     confetti(r.xp ? 90 : 40);
     if (r.xp) toast({ text: 'Capítulo estudado!', sub: `+${r.xp.amount} XP`, icon: 'grimorio', color: '#2c5f6e' });

@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { AREAS, areaColor, areaOf, isAreaHome, tint, type AreaKey } from '@/app/areas';
-import { useNextActivity } from '@/app/usePlanOfToday';
+import { useCheckpoint } from '@/app/useCheckpoint';
 import { levelInfo, totalXp } from '@/lib/study';
 import { achievements, cluesRevealed } from '@/lib/game';
 import { DEFAULT_CONTEST_ID, chapters, questionsForContest, totalUnits } from '@/content';
@@ -70,11 +70,12 @@ function Tab({ area, variant }: { area: AreaKey; variant: 'bottom' | 'top' }) {
 }
 
 function ContinueButton({ variant }: { variant: 'fab' | 'pill' }) {
-  const next = useNextActivity();
+  // Mesmo destino da Torre e do cartão de ritmo (fonte única: lib/checkpoint.ts).
+  const next = useCheckpoint();
   if (variant === 'pill') {
     return (
-      <Link to={next.to} className="btn-primary !min-h-[40px] !px-4 !py-2 text-sm" title={next.title}>
-        <Icon name="play" size={16} fill="currentColor" /> Continuar
+      <Link to={next.to} className="btn-primary !min-h-[40px] !px-4 !py-2 text-sm" title={`${next.title} · ${next.context}`} data-testid="continuar-topo">
+        <Icon name="play" size={16} fill="currentColor" /> {next.action}
       </Link>
     );
   }
@@ -82,8 +83,9 @@ function ContinueButton({ variant }: { variant: 'fab' | 'pill' }) {
     <div className="flex flex-1 items-center justify-center">
       <Link
         to={next.to}
-        aria-label={`Continuar: ${next.title}`}
-        title={next.title}
+        aria-label={`${next.action}: ${next.title}`}
+        title={`${next.title} · ${next.context}`}
+        data-testid="continuar-menu"
         className="grid h-14 w-14 -translate-y-3 place-items-center rounded-full bg-ember text-white shadow-[0_10px_24px_-10px_rgb(var(--ember))] ring-4 ring-bg transition active:scale-95"
       >
         <Icon name="play" size={24} fill="currentColor" />

@@ -5,7 +5,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
 import { DEFAULT_CONTEST_ID, getChapter, getSectionExtras, getSimpleSection, questionsForContest } from '@/content';
-import { buildPractice, completePractice, type Activity } from '@/lib/practice';
+import { buildPractice, completePractice, practiceId, type Activity } from '@/lib/practice';
+import { useSession } from '@/app/useSession';
 import { recordAnswer, totalXp } from '@/lib/study';
 import { Icon } from '@/components/Icon';
 import { StepGuide } from '@/components/StepGuide';
@@ -127,16 +128,25 @@ export function PracticePage() {
   const { sfx, confetti } = useFx();
   const startXp = useMemo(() => totalXp(data), []); // eslint-disable-line react-hooks/exhaustive-deps
   const initial = useMemo(() => (chapter ? buildPractice(chapter, sectionId, questionsForContest(DEFAULT_CONTEST_ID), extras, Math.random, simple) : []), [chapter, sectionId, extras, simple]);
-  const [queue, setQueue] = useState<Activity[]>(initial);
-  const [phase, setPhase] = useState<'intro' | 'play' | 'done'>('intro');
+  // Fila, fase e acertos guardados: ao voltar, a prática continua na mesma atividade.
+  type Saved = { queue: Activity[]; phase: 'intro' | 'play' | 'done'; firstTry: Record<string, boolean>; total: number };
+  const session = useSession<Saved>(
+    practiceId(chapterId, sectionId),
+    () => ({ queue: initial, phase: 'intro', firstTry: {}, total: initial.length }),
+    (s) => (s.phase === 'play' ? `Praticar: atividade ${s.total - s.queue.length + 1} de ${s.total}` : 'Praticar'),
+  );
+  const { queue, phase } = session.state;
+  const firstTry = session.state.firstTry;
+  const setQueue = (q: Activity[]) => session.setState((s) => ({ ...s, queue: q }));
+  const setPhase = (p: Saved['phase']) => session.setState((s) => ({ ...s, phase: p }));
+  const setFirstTry = (f: (x: Record<string, boolean>) => Record<string, boolean>) => session.setState((s) => ({ ...s, firstTry: f(s.firstTry) }));
   const [value, setValue] = useState<string>();
   const [verdict, setVerdict] = useState<Verdict>();
-  const [firstTry, setFirstTry] = useState<Record<string, boolean>>({});
   const [combo, setCombo] = useState(0);
   const [help, setHelp] = useState(false);
 
   if (!chapter || !section) return <p>Trecho não encontrado.</p>;
-  const total = initial.length;
+  const total = session.state.total;
   const progress = phase === 'done' ? 1 : Math.min(1, Math.max(0, (total - queue.length) / Math.max(1, total)));
   const act = queue[0];
   const correctFirst = Object.values(firstTry).filter(Boolean).length;
@@ -178,6 +188,7 @@ export function PracticePage() {
     if (q.length === 0) {
       const finalScore = total ? Math.round((Object.values({ ...firstTry }).filter(Boolean).length / total) * 100) : 100;
       update((d) => completePractice(d, chapterId, sectionId, finalScore).data);
+      session.finish();
       sfx('done');
       if (finalScore >= 70) confetti(finalScore === 100 ? 110 : 60);
       setPhase('done');

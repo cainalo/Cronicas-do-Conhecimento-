@@ -166,3 +166,66 @@ it('torre: mostra os dias até a prova e a meta de hoje para terminar o curso a 
   expect(card).toHaveTextContent(/Meta de hoje: \d+ atividade/);
   expect(card).toHaveTextContent(/O curso inteiro tem \d+ atividades/);
 });
+
+it('um só destino: Torre, cabeçalho e menu levam ao mesmo passo', () => {
+  renderAt('/');
+  const torre = screen.getByTestId('continuar-torre').getAttribute('href');
+  expect(screen.getByTestId('continuar-topo').getAttribute('href')).toBe(torre);
+  expect(screen.getByTestId('continuar-menu').getAttribute('href')).toBe(torre);
+  expect(torre).toBe('/aprender/cap.prim.01/computador');
+});
+
+it('retomada exata: Aprender e Missão voltam ao mesmo ponto depois de sair', async () => {
+  const user = userEvent.setup();
+  const first = renderAt('/aprender/cap.prim.01/computador');
+  for (let i = 0; i < 3; i++) await user.click(screen.getByRole('button', { name: 'Próxima página' }));
+  expect(screen.getByText('4/11')).toBeInTheDocument();
+  first.unmount();
+  // A Torre agora oferece Continuar, no mesmo trecho.
+  const home = renderAt('/');
+  expect(screen.getByTestId('continuar-torre')).toHaveTextContent('Continuar');
+  expect(screen.getByText(/Aprender: página 4/)).toBeInTheDocument();
+  home.unmount();
+  const again = renderAt('/aprender/cap.prim.01/computador');
+  expect(screen.getByText('4/11')).toBeInTheDocument();
+  again.unmount();
+
+  const m1 = renderAt('/missao/missao.sql.01');
+  await user.click(screen.getByRole('button', { name: /Começar a investigação/ }));
+  await user.click(screen.getByRole('button', { name: 'Vamos lá' }));
+  const sec = screen.getByRole('region', { name: 'Descoberta guiada' });
+  await user.click(within(sec).getAllByRole('button', { pressed: false })[0]);
+  await user.click(screen.getByRole('button', { name: 'Verificar' }));
+  await user.click(screen.getByRole('button', { name: 'Continuar' }));
+  expect(screen.getByText('Descoberta 2 de 4')).toBeInTheDocument();
+  m1.unmount();
+  renderAt('/missao/missao.sql.01');
+  expect(screen.getByText('Descoberta 2 de 4')).toBeInTheDocument();
+});
+
+it('retomada exata: Desafio e Prática continuam na mesma questão/atividade', async () => {
+  const user = userEvent.setup();
+  const lesson = getLesson('lic.seg.01.a')!;
+  const a = renderAt(`/licao/${lesson.id}`);
+  for (let i = 0; i < lesson.cards.length; i++) await user.click(screen.getByRole('button', { name: /Próximo|Começar questões/ }));
+  for (let i = 0; i < 2; i++) {
+    const q = getQuestion(lesson.questionIds[i])!;
+    await user.click(screen.getAllByRole('button').find((b) => b.textContent?.startsWith(q.answer))!);
+    await user.click(screen.getByRole('button', { name: 'Confirmar resposta' }));
+    await user.click(screen.getByRole('button', { name: 'Próxima questão' }));
+  }
+  expect(screen.getByText(/Questão 3 de 10/)).toBeInTheDocument();
+  a.unmount();
+  const b = renderAt(`/licao/${lesson.id}`);
+  expect(screen.getByText(/Questão 3 de 10/)).toBeInTheDocument();
+  b.unmount();
+
+  const c = renderAt('/pratica/cap.seg.01/fundamentos');
+  await user.click(screen.getByRole('button', { name: /Começar/ }));
+  expect(screen.getByRole('button', { name: 'Sair da prática' })).toBeInTheDocument();
+  c.unmount();
+  renderAt('/pratica/cap.seg.01/fundamentos');
+  // Volta direto para a atividade, sem a tela de abertura.
+  expect(screen.queryByRole('heading', { name: /Prática:/ })).toBeNull();
+  expect(screen.getByRole('button', { name: 'Verificar' })).toBeInTheDocument();
+});

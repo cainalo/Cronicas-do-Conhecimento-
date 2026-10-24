@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { getLesson, getQuestion } from '@/content';
@@ -7,6 +7,7 @@ import { QuestionCard } from '@/components/QuestionCard';
 import { completeLesson, recordAnswer, totalXp } from '@/lib/study';
 import { Icon } from '@/components/Icon';
 import { StepGuide } from '@/components/StepGuide';
+import { useSession } from '@/app/useSession';
 import { useFx } from '@/app/fx';
 import { Mascot, SpeechBubble } from '@/components/Mascot';
 
@@ -18,9 +19,25 @@ export function LessonPage() {
   const { data, update } = useStudy();
   const { confetti, sfx } = useFx();
   const startXp = useRef(totalXp(data));
-  const [phase, setPhase] = useState<Phase>({ k: 'cards', i: 0 });
-  const [results, setResults] = useState<Record<string, boolean>>({});
   const qs = useMemo(() => lesson?.questionIds.map((q) => getQuestion(q)!).filter(Boolean) ?? [], [lesson]);
+  // Ponto exato (cartão ou questão e respostas já dadas) guardado para retomar depois.
+  const session = useSession<{ phase: Phase; results: Record<string, boolean> }>(
+    id,
+    () => ({ phase: { k: 'cards', i: 0 }, results: {} }),
+    (s) => (s.phase.k === 'q' ? `Desafio: questão ${s.phase.i + 1} de ${qs.length}` : s.phase.k === 'cards' ? `Desafio: cartão ${s.phase.i + 1}` : 'Desafio concluído'),
+  );
+  const saved = session.state;
+  const phase: Phase = saved.phase;
+  // Ao reabrir: se a questão atual já tinha sido respondida antes de sair, segue para a próxima
+  // (assim a mesma resposta não é registrada duas vezes).
+  useEffect(() => {
+    const pq = saved.phase.k === 'q' ? qs[saved.phase.i] : undefined;
+    if (session.resumed && pq && pq.id in saved.results && saved.phase.k === 'q' && saved.phase.i + 1 < qs.length) setPhase({ k: 'q', i: saved.phase.i + 1 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const results = saved.results;
+  const setPhase = (p: Phase) => session.setState((s) => ({ ...s, phase: p }));
+  const setResults = (f: (r: Record<string, boolean>) => Record<string, boolean>) => session.setState((s) => ({ ...s, results: f(s.results) }));
 
   if (!lesson) return <p>Lição não encontrada.</p>;
   const correct = Object.values(results).filter(Boolean).length;
@@ -88,6 +105,7 @@ export function LessonPage() {
                 const finalScore = Math.round((Object.values(results).filter(Boolean).length / qs.length) * 100);
                 update((d) => completeLesson(d, lesson, finalScore).data);
                 setPhase({ k: 'done' });
+                session.finish();
                 window.scrollTo(0, 0);
                 sfx('done');
                 if (finalScore >= 70) confetti(finalScore === 100 ? 120 : 70);

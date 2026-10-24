@@ -3,7 +3,8 @@ import { useStudy } from '@/app/StudyProvider';
 import { DEFAULT_CONTEST_ID, flashcards, getContest, journey, lessons, missions, questionsForContest } from '@/content';
 import { missionDone, missionsDue } from '@/lib/mission';
 import { computePace, courseUnits, daysUntilExam, type Pace } from '@/lib/pace';
-import { recommend, reviewQueue } from '@/lib/study';
+import { reviewQueue } from '@/lib/study';
+import { useCheckpoint } from '@/app/useCheckpoint';
 import { dueCards } from '@/lib/training';
 import { isDone, settingsOf } from '@/lib/planner';
 import { characterSheet } from '@/lib/game';
@@ -50,11 +51,6 @@ export function PaceCard({ pace, examDate }: { pace: Pace; examDate: string }) {
             {pace.remaining}. Para terminar tudo até {longDate(pace.finishBy)}
             {pace.studyDays < pace.daysLeft ? ' e usar a última semana para revisão e simulados' : ''}, são {pace.perDay} por dia. Se pular um dia, a meta dos próximos sobe um pouco.
           </p>
-          {pace.next && (
-            <Link to={pace.next.to} className="btn-primary mt-4 w-full">
-              <Icon name="play" size={18} fill="currentColor" /> Próxima: {pace.next.title}
-            </Link>
-          )}
         </>
       )}
     </section>
@@ -67,7 +63,7 @@ export function Dashboard() {
   const c = (k: Parameters<typeof areaColor>[0]) => areaColor(k, dark);
   const contest = getContest(DEFAULT_CONTEST_ID)!;
   const bank = questionsForContest(contest.id);
-  const rec = recommend(data, journey, lessons, bank);
+  const cp = useCheckpoint();
   const sheet = characterSheet(data);
   const queue = reviewQueue(data, bank);
   const cardsDue = dueCards(data, flashcards.map((f) => f.id)).length;
@@ -129,26 +125,17 @@ export function Dashboard() {
         <div className="p-4 sm:p-5">
           <div className="flex items-center justify-between gap-2">
             <p className="text-sm font-semibold" style={{ color: torre }}>
-              Próxima missão
+              {cp.resuming ? 'Você parou aqui' : cp.action === 'Começar' ? 'Primeiro passo' : 'Próximo passo da trilha'}
             </p>
             <span className="sm:hidden">
               <SyncBadge />
             </span>
           </div>
-          {rec ? (
-            <>
-              <h2 className="mt-1 text-xl leading-snug">{rec.title}</h2>
-              <p className="mt-1 text-sm text-muted">{rec.reason}</p>
-              <Link to={rec.to} className="btn-primary mt-4 w-full">
-                <Icon name="play" size={18} fill="currentColor" /> Começar
-              </Link>
-            </>
-          ) : (
-            <>
-              <h2 className="mt-1 text-xl">Todo o material disponível foi estudado</h2>
-              <p className="mt-1 text-sm text-muted">Refaça as lições e revise os erros para manter a memória viva.</p>
-            </>
-          )}
+          <h2 className="mt-1 text-xl leading-snug">{cp.title}</h2>
+          <p className="mt-1 text-sm text-muted">{cp.context}</p>
+          <Link to={cp.to} className="btn-primary mt-4 w-full" data-testid="continuar-torre">
+            <Icon name="play" size={18} fill="currentColor" /> {cp.action}
+          </Link>
         </div>
       </section>
 
@@ -157,7 +144,7 @@ export function Dashboard() {
       {/* Missões do Arquivo Real: a nova, ou a que tem revisão marcada para hoje */}
       {(() => {
         const due = missionsDue(data);
-        const m = missions.find((x) => due.includes(x.id)) ?? missions.find((x) => !missionDone(data, x.id));
+        const m = missions.find((x) => due.includes(x.id) && missionDone(data, x.id));
         if (!m) return null;
         const review = due.includes(m.id);
         return (

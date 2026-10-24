@@ -8,7 +8,8 @@ import { useFx } from '@/app/fx';
 import { getMission, getQuestion, topicTitle, DEFAULT_CONTEST_ID } from '@/content';
 import { cast } from '@/content/game/cast';
 import type { MissionActivity } from '@/lib/activities';
-import { chooseEnding, completeMission, missionDone } from '@/lib/mission';
+import { chooseEnding, completeMission, missionDone, missionKey } from '@/lib/mission';
+import { useSession } from '@/app/useSession';
 import { recordAnswer } from '@/lib/study';
 import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
@@ -63,14 +64,33 @@ export function MissionPage() {
   const { data, update } = useStudy();
   const { sfx, confetti } = useFx();
   const seen = m ? missionDone(data, m.id) : false;
-  const [step, setStep] = useState<Step>('cena');
-  const [di, setDi] = useState(0);
-  const [li, setLi] = useState(0);
-  const [queue, setQueue] = useState<MissionActivity[]>(() => m?.training ?? []);
-  const [firstTry, setFirstTry] = useState<Record<string, boolean>>({});
-  const [errors, setErrors] = useState<string[]>([]);
+  // Etapa, descoberta, tarefa do laboratório, fila do treino e acertos ficam salvos: sair no meio e
+  // voltar retoma na mesma parte (antes, a missão recomeçava da cena).
+  type Saved = { step: Step; di: number; li: number; queue: string[]; firstTry: Record<string, boolean>; errors: string[]; score?: number };
+  const session = useSession<Saved>(
+    missionKey(id),
+    () => ({ step: 'cena', di: 0, li: 0, queue: (m?.training ?? []).map((a) => a.id), firstTry: {}, errors: [] }),
+    (s) => `Missão: etapa ${STEPS.indexOf(s.step) + 1} de ${STEPS.length} (${STEP_LABEL[s.step]})`,
+  );
+  const byId = useMemo(() => {
+    const out = new Map<string, MissionActivity>();
+    for (const a of m?.training ?? []) {
+      out.set(a.id, a);
+      if (a.variant) out.set(a.variant.id, a.variant);
+    }
+    return out;
+  }, [m]);
+  const { step, di, li, firstTry, errors, score } = session.state;
+  const queue = session.state.queue.map((qid) => byId.get(qid)).filter((a): a is MissionActivity => !!a);
+  const patch = (p: Partial<Saved> | ((s: Saved) => Partial<Saved>)) => session.setState((s) => ({ ...s, ...(typeof p === 'function' ? p(s) : p) }));
+  const setStep = (x: Step) => patch({ step: x });
+  const setDi = (x: number) => patch({ di: x });
+  const setLi = (x: number) => patch({ li: x });
+  const setQueue = (q: MissionActivity[]) => patch({ queue: q.map((a) => a.id) });
+  const setFirstTry = (f: (x: Record<string, boolean>) => Record<string, boolean>) => patch((s) => ({ firstTry: f(s.firstTry) }));
+  const setErrors = (f: (x: string[]) => string[]) => patch((s) => ({ errors: f(s.errors) }));
+  const setScore = (x: number) => patch({ score: x });
   const [mode3d, setMode3d] = useState(can3D);
-  const [score, setScore] = useState<number>();
   const chosen = m ? data.story?.choices[m.id] : undefined;
   const total = useMemo(() => (m ? m.training.length + m.discovery.length + 1 : 1), [m]);
 
@@ -287,7 +307,14 @@ export function MissionPage() {
               );
             })}
           </div>
-          <button className="btn-primary mt-auto w-full" disabled={!chosen} onClick={() => go('revisao')}>
+          <button
+            className="btn-primary mt-auto w-full"
+            disabled={!chosen}
+            onClick={() => {
+              go('revisao');
+              session.finish();
+            }}
+          >
             Ver o resumo
           </button>
         </section>

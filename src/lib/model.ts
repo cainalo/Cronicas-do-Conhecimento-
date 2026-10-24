@@ -100,6 +100,13 @@ export interface Pending {
   settings: boolean;
 }
 
+/** Ponto exato de uma atividade em andamento (fica no aparelho). */
+export interface SessionProgress {
+  step: unknown;
+  label?: string;
+  updatedAt: string;
+}
+
 /** Estado da história das missões: escolhas, confiança dos personagens, pistas e revisões marcadas. Fica no aparelho. */
 export interface StoryState {
   choices: Record<string, string>;
@@ -124,6 +131,8 @@ export interface StudyData {
   story?: StoryState;
   /** Primeira conclusão de atividades que não guardam data própria (ex.: "aprender:cap:trecho"). */
   unitLog?: Record<string, string>;
+  /** Retomada exata por atividade (chave = chave da unidade da trilha). */
+  progress?: Record<string, SessionProgress>;
   pending: Pending;
   lastSyncAt?: string;
 }
