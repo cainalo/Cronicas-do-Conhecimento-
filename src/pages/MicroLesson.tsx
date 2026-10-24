@@ -1,6 +1,7 @@
 // Microaula: uma ideia por vez. Cada etapa tem explicação, exemplo e checagem imediata; se errar,
 // vem outra explicação e um item equivalente com outros dados. Depois: prática cumulativa, questão
 // no estilo da prova e síntese. O ponto exato fica salvo (useSession), e o Continuar volta aqui.
+// Nenhuma tela rola para baixo: o que não cabe vira outra parte, ao lado (SwipePages).
 import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { MicroLesson } from '@/content/types';
@@ -11,6 +12,8 @@ import { useSession } from '@/app/useSession';
 import { learnKey } from '@/lib/pace';
 import { markSectionRead, recordAnswer } from '@/lib/study';
 import { Markdown } from '@/components/Markdown';
+import { PageDots, SwipePages, type PageItem } from '@/components/SwipePages';
+import { splitMarkdown } from '@/lib/book';
 import { Icon } from '@/components/Icon';
 import { Mascot } from '@/components/Mascot';
 import { StepGuide } from '@/components/StepGuide';
@@ -67,9 +70,57 @@ export function MicroLessonPage({ lesson }: { lesson: MicroLesson }) {
     session.finish();
   };
 
+  const renderMd = (md: string) => (
+    <div className="prose-manuscript !font-sans !text-[1.02rem] [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0 [&_table]:!text-sm">
+      <Markdown>{md}</Markdown>
+    </div>
+  );
+
+  // Explicação em partes que cabem na tela: parágrafos (divisíveis) e o exemplo numa moldura.
+  const explainItems = (): PageItem[] => {
+    if (!step) return [];
+    const body = phase.k === 'explicar' ? step.explain : step.recovery.explain;
+    const items: PageItem[] = splitMarkdown(body).map((md, k) => ({ key: `e${k}`, md }));
+    if (phase.k === 'explicar' && step.example) {
+      items.push({
+        key: 'ex',
+        md: step.example,
+        wrap: (c, cont) => (
+          <div className="rounded-2xl border-l-4 border-ember bg-ember/5 px-4 py-3">
+            <p className="mb-1 text-sm font-bold text-ember">{cont ? 'Exemplo (continuação)' : 'Exemplo'}</p>
+            {c}
+          </div>
+        ),
+      });
+    }
+    return items;
+  };
+
+  const summaryItems = (): PageItem[] => [
+    { key: 'h', node: <h2 className="text-lg">O que você aprendeu</h2> },
+    ...lesson.summary.map((t, k) => ({
+      key: `s${k}`,
+      node: (
+        <p className="flex gap-2">
+          <Icon name="certo" size={16} className="mt-1 shrink-0 text-ok" /> {t}
+        </p>
+      ),
+    })),
+    ...(struggled.length
+      ? [
+          { key: 'rh', node: <h2 className="text-lg">Vale revisar</h2> },
+          ...lesson.steps
+            .filter((x) => struggled.includes(x.id))
+            .map((x) => ({ key: `r${x.id}`, node: <p className="text-sm text-muted">• {x.title}</p> })),
+        ]
+      : []),
+    { key: 'n', node: <p className="text-sm text-muted">Próximo passo da trilha: praticar este trecho.</p> },
+  ];
+
   return (
-    <div className="-mt-2 flex min-h-[calc(100dvh-5.5rem)] flex-col">
-      <div className="mb-3 flex items-center gap-3">
+    // Altura fixa da tela: nada rola para baixo. O que não cabe vai para a parte seguinte, ao lado.
+    <div className="-mt-2 flex flex-col overflow-hidden" style={{ height: 'calc(100dvh - 5.5rem - env(safe-area-inset-top, 0px))' }}>
+      <div className="mb-2 flex items-center gap-3">
         <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => navigate(`/grimorio/${chapter.grimoireId}`)} aria-label="Sair (o lugar fica salvo)">
           <Icon name="errado" size={22} />
         </button>
@@ -80,62 +131,67 @@ export function MicroLessonPage({ lesson }: { lesson: MicroLesson }) {
           {slot}/{totalSlots}
         </span>
       </div>
-      <div className="mb-3">
-        <StepGuide chapterId={lesson.chapterId} sectionId={lesson.sectionId} current="aprender" />
+      <div className="mb-2">
+        <StepGuide chapterId={lesson.chapterId} sectionId={lesson.sectionId} current="aprender" compact />
       </div>
 
       {phase.k === 'abertura' && (
-        <section className="flex flex-1 flex-col" aria-label="Abertura">
-          <div className="mb-3 flex items-end gap-2">
-            <Mascot mood="talk" size={64} />
-            <p className="mb-4 rounded-2xl rounded-bl-sm bg-surface px-3 py-2 text-sm shadow-sm">
-              Antes de explicar, uma pergunta. Não vale nota: é só para você pensar no problema.
-            </p>
+        <section className="flex min-h-0 flex-1 flex-col" aria-label="Abertura">
+          <div className="mb-2 flex items-end gap-2">
+            <Mascot mood="talk" size={52} />
+            <p className="mb-2 rounded-2xl rounded-bl-sm bg-surface px-3 py-2 text-sm shadow-sm">Antes de explicar, uma pergunta. Não vale nota: é só para você pensar no problema.</p>
           </div>
-          <ActivityView key="abertura" a={lesson.opening} onNext={() => set({ k: 'explicar', i: 0 })} />
+          <ActivityView key="abertura" fit a={lesson.opening} onNext={() => set({ k: 'explicar', i: 0 })} />
         </section>
       )}
 
       {step && (phase.k === 'explicar' || phase.k === 'recuperar') && (
-        <section className="flex flex-1 flex-col" aria-label={phase.k === 'explicar' ? 'Explicação' : 'Outra explicação'}>
+        <section className="flex min-h-0 flex-1 flex-col" aria-label={phase.k === 'explicar' ? 'Explicação' : 'Outra explicação'}>
           <p className="text-xs font-semibold text-gold">
             {step.part} · etapa {phase.i + 1} de {n}
           </p>
-          <h1 className="mt-1 text-2xl leading-tight">{phase.k === 'explicar' ? step.title : 'Vamos ver de outro jeito'}</h1>
-          {phase.k === 'explicar' && <p className="mt-1 text-sm text-muted">Objetivo: {step.goal}</p>}
-          <div className="card mt-3 p-4">
-            <div className="prose-manuscript !font-sans !text-[1.02rem] [&_table]:!text-sm">
-              <Markdown>{phase.k === 'explicar' ? step.explain : step.recovery.explain}</Markdown>
-            </div>
-          </div>
-          {phase.k === 'explicar' && step.example && (
-            <div className="mt-3 rounded-2xl border-l-4 border-ember bg-ember/5 p-4">
-              <p className="mb-1 text-sm font-bold text-ember">Exemplo</p>
-              <div className="prose-manuscript !font-sans !text-[0.98rem] [&_table]:!text-sm">
-                <Markdown>{step.example}</Markdown>
-              </div>
-            </div>
-          )}
-          <div className="mt-auto flex gap-2 pt-4">
-            {phase.k === 'explicar' && phase.i > 0 && (
-              <button className="btn-ghost" onClick={() => set({ k: 'explicar', i: phase.i - 1 })}>
-                <Icon name="voltar" size={18} /> Anterior
-              </button>
-            )}
-            <button className="btn-primary flex-1" onClick={() => set({ k: phase.k === 'explicar' ? 'checar' : 'rechecar', i: phase.i })}>
-              Entendi, quero conferir
-            </button>
+          <h1 className="mt-0.5 text-2xl leading-tight">{phase.k === 'explicar' ? step.title : 'Vamos ver de outro jeito'}</h1>
+          {phase.k === 'explicar' && <p className="mb-2 mt-0.5 text-sm text-muted">Objetivo: {step.goal}</p>}
+          <div className="mt-2 flex min-h-0 flex-1 flex-col">
+            <SwipePages
+              items={explainItems()}
+              layoutKey={`${phase.k}-${step.id}`}
+              renderMd={renderMd}
+              label="Explicação"
+              footer={({ page, total, go }) => (
+                <div className="pt-1">
+                  <PageDots page={page} total={total} go={go} />
+                  <div className="flex gap-2 pt-1">
+                    {(page > 0 || (phase.k === 'explicar' && phase.i > 0)) && (
+                      <button className="btn-ghost" onClick={() => (page > 0 ? go(page - 1) : set({ k: 'explicar', i: phase.i - 1 }))}>
+                        <Icon name="voltar" size={18} /> {page > 0 ? 'Parte anterior' : 'Anterior'}
+                      </button>
+                    )}
+                    {page < total - 1 ? (
+                      <button className="btn-primary flex-1" onClick={() => go(page + 1)}>
+                        Próxima parte <Icon name="seta" size={18} />
+                      </button>
+                    ) : (
+                      <button className="btn-primary flex-1" onClick={() => set({ k: phase.k === 'explicar' ? 'checar' : 'rechecar', i: phase.i })}>
+                        Entendi, quero conferir
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+            />
           </div>
         </section>
       )}
 
       {step && (phase.k === 'checar' || phase.k === 'rechecar') && (
-        <section className="flex flex-1 flex-col" aria-label="Checagem">
+        <section className="flex min-h-0 flex-1 flex-col" aria-label="Checagem">
           <p className="mb-1 text-xs font-semibold text-gold">
             {phase.k === 'checar' ? 'Confira o que acabou de aprender' : 'Mais uma, com outro exemplo'} · etapa {phase.i + 1} de {n}
           </p>
           <ActivityView
             key={`${phase.k}-${step.id}`}
+            fit
             a={phase.k === 'checar' ? step.check : step.recovery.check}
             onNext={(o) => {
               if (phase.k === 'checar') {
@@ -149,12 +205,13 @@ export function MicroLessonPage({ lesson }: { lesson: MicroLesson }) {
       )}
 
       {phase.k === 'praticar' && (
-        <section className="flex flex-1 flex-col" aria-label="Prática final">
+        <section className="flex min-h-0 flex-1 flex-col" aria-label="Prática final">
           <p className="mb-1 text-xs font-semibold text-gold">
             Prática com tudo o que você aprendeu · {phase.i + 1} de {lesson.consolidation.length}
           </p>
           <ActivityView
             key={lesson.consolidation[phase.i].id}
+            fit
             a={lesson.consolidation[phase.i]}
             onNext={(o) => {
               note(lesson.consolidation[phase.i].id, o.ok);
@@ -165,9 +222,10 @@ export function MicroLessonPage({ lesson }: { lesson: MicroLesson }) {
       )}
 
       {phase.k === 'prova' && examQs[phase.i] && (
-        <section className="flex flex-1 flex-col" aria-label="Questão de prova">
+        <section className="flex min-h-0 flex-1 flex-col" aria-label="Questão de prova">
           <ActivityView
             key={lesson.exam[phase.i].id}
+            fit
             a={lesson.exam[phase.i]}
             question={examQs[phase.i]}
             onExamAnswer={(q, key) => update((d) => recordAnswer(d, q, key, 'practice', `micro:${lesson.id}`).data)}
@@ -181,39 +239,32 @@ export function MicroLessonPage({ lesson }: { lesson: MicroLesson }) {
       )}
 
       {phase.k === 'sintese' && (
-        <section className="flex flex-1 flex-col" aria-label="Síntese">
+        <section className="flex min-h-0 flex-1 flex-col" aria-label="Síntese">
           <div className="flex items-end gap-2">
-            <Mascot mood="cheer" size={80} />
-            <h1 className="mb-4 text-2xl">Aula concluída</h1>
+            <Mascot mood="cheer" size={56} />
+            <h1 className="mb-3 text-2xl">Aula concluída</h1>
           </div>
-          <h2 className="mt-3 text-lg">O que você aprendeu</h2>
-          <ul className="mt-1 space-y-1.5">
-            {lesson.summary.map((s) => (
-              <li key={s} className="flex gap-2">
-                <Icon name="certo" size={16} className="mt-1 shrink-0 text-ok" /> {s}
-              </li>
-            ))}
-          </ul>
-          {struggled.length > 0 && (
-            <>
-              <h2 className="mt-4 text-lg">Vale revisar</h2>
-              <ul className="mt-1 list-disc pl-5 text-sm text-muted">
-                {lesson.steps
-                  .filter((s) => struggled.includes(s.id))
-                  .map((s) => (
-                    <li key={s.id}>{s.title}</li>
-                  ))}
-              </ul>
-            </>
-          )}
-          <p className="mt-4 text-sm text-muted">Próximo passo da trilha: praticar este trecho.</p>
-          <div className="mt-auto flex gap-2 pt-4">
-            <Link to={`/capitulo/${lesson.chapterId}#${lesson.sectionId}`} className="btn-ghost flex-1 text-sm">
-              Texto de referência
-            </Link>
-            <Link to={`/pratica/${lesson.chapterId}/${lesson.sectionId}`} className="btn-primary flex-1">
-              Praticar
-            </Link>
+          <div className="mt-2 flex min-h-0 flex-1 flex-col">
+            <SwipePages
+              items={summaryItems()}
+              layoutKey="sintese"
+              renderMd={renderMd}
+              gap={8}
+              label="Síntese"
+              footer={(s) => (
+                <div className="pt-1">
+                  <PageDots {...s} />
+                  <div className="flex gap-2 pt-1">
+                    <Link to={`/capitulo/${lesson.chapterId}#${lesson.sectionId}`} className="btn-ghost flex-1 text-sm">
+                      Texto de referência
+                    </Link>
+                    <Link to={`/pratica/${lesson.chapterId}/${lesson.sectionId}`} className="btn-primary flex-1">
+                      Praticar
+                    </Link>
+                  </div>
+                </div>
+              )}
+            />
           </div>
         </section>
       )}

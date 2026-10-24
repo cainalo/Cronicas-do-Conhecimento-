@@ -444,3 +444,7 @@ mark.search-hit { background: rgb(232 177 59 / 0.45); color: inherit; border-rad
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
+
+/* Partes lado a lado (SwipePages): desliza sem mostrar a barra de rolagem. */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }

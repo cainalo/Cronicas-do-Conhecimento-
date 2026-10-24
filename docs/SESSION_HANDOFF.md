@@ -25,7 +25,7 @@
 - Fases D e E completas; Supabase com RLS verificado; login/sync pelo navegador ainda **não confirmados pelo usuário**.
 
 ## Testes
-`npm test` 740/740; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
+`npm test` 741/741; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
 
 ## Pendências com o usuário
 - Pedir retorno sobre a clareza da explicação simples (o usuário disse que não entendia nada) e sobre o livro de couro; e sobre login/sincronização.
@@ -35,6 +35,7 @@
 - **PDFs das provas** (rede bloqueia FGV/eticaconcursos/TCE): prova TCE-GO 2014 FCC TI + gabarito; prova 2024 TI Tipo 1 + gabarito definitivo, para questões OFICIAIS rotuladas.
 
 ## Próxima tarefa exata
+000. Microaula de Processos **aprovada** pelo usuário (24/10). Ela agora não tem rolagem vertical (SwipePages; `ActivityView fit`; `StepGuide compact`). Próximo: fase 3 da auditoria, migrar as demais seções para microaulas, começando pelas outras seções de SO, já no formato sem rolagem. Avaliar levar o mesmo formato à Prática, ao Aprender simples e à Missão.
 00. Rodada de 24/10 (tarde) feita: ordem do dia segue a trilha única (itens `trail`, chave do plano `cronicas:plano:v2`), página `/estudos` (Continuar, biblioteca, relâmpago, flashcards, revisão, videoaulas sob demanda, materiais oficiais), página "não encontrada" dentro do app, Conta sem servidor em modo local, volumes separados de música e lareira, recuperação adaptativa na Prática (`recoveryFor`/`nextQueue`). Videoaulas curadas: lista vazia de propósito até conferência humana.
 0. Ouvir o usuário sobre a microaula de Processos (clareza, ritmo, tamanho). Se aprovada: fase 3 do roteiro da auditoria (schema único e migração por lotes), começando pelas outras seções de SO; depois página Estudos.
 0a. Ouvir o usuário sobre a missão-piloto (cena 3D, laboratório, atividades, desfecho) e o códice. Só depois expandir o padrão para outras disciplinas (fase 8 do kit): próximas missões sugeridas Redes (topologia), Segurança (incidente), Aquisição (propostas).

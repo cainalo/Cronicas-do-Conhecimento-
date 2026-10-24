@@ -26,7 +26,20 @@ const NOW: Record<StepKind, string> = {
 const LABEL: Record<string, string> = { read: 'Aprender', practice: 'Praticar', mission: 'Missão', lesson: 'Desafio' };
 const KIND: Record<StepKind, string> = { aprender: 'read', praticar: 'practice', missao: 'mission', desafio: 'lesson', texto: 'read' };
 
-export function StepGuide({ chapterId, sectionId, current, open: startOpen = false }: { chapterId: string; sectionId?: string; current: StepKind; open?: boolean }) {
+export function StepGuide({
+  chapterId,
+  sectionId,
+  current,
+  open: startOpen = false,
+  compact,
+}: {
+  chapterId: string;
+  sectionId?: string;
+  current: StepKind;
+  open?: boolean;
+  /** Uma linha só; a explicação abre numa janela por cima (telas sem rolagem). */
+  compact?: boolean;
+}) {
   const { data } = useStudy();
   const [open, setOpen] = useState(startOpen);
   const chapter = getChapter(chapterId);
@@ -40,55 +53,97 @@ export function StepGuide({ chapterId, sectionId, current, open: startOpen = fal
   const curIdx = steps.findIndex((s) => s.kind === KIND[current] && (s.kind === 'lesson' || current !== 'desafio'));
   const next = steps.slice(curIdx + 1).find((s) => !s.done) ?? (idx >= 0 && idx + 1 < chapter.sections.length ? { label: `Próximo trecho: ${chapter.sections[idx + 1].title.replace(/^\d+\.\s*/, '')}`, to: `/aprender/${chapter.id}/${chapter.sections[idx + 1].id}` } : undefined);
 
+  const location = (
+    <>
+      <span className="text-muted">
+        {grimoire?.title} › Cap. {chapter.number}
+      </span>
+      {section && (
+        <>
+          {' '}
+          › <b>Trecho {idx + 1} de {chapter.sections.length}</b>
+        </>
+      )}
+    </>
+  );
+  const pills = (
+    <ol className="flex min-w-0 flex-1 flex-nowrap items-center gap-1 overflow-hidden whitespace-nowrap" aria-label="Passos">
+      {steps.map((s, i) => {
+        const here = i === curIdx;
+        return (
+          <li key={s.key} className="flex shrink-0 items-center gap-1">
+            {i > 0 && (
+              <span className="text-muted" aria-hidden="true">
+                ›
+              </span>
+            )}
+            <span
+              className={`rounded-full px-2 py-0.5 text-[0.72rem] font-semibold ${here ? 'bg-ember text-[rgb(var(--bg))]' : s.done ? 'bg-gold/20 text-gold' : 'bg-raised text-muted'}`}
+              aria-current={here ? 'step' : undefined}
+            >
+              {s.done && !here ? '✓ ' : ''}
+              {LABEL[s.kind]}
+              {s.kind === 'lesson' ? ' do capítulo' : ''}
+            </span>
+          </li>
+        );
+      })}
+      {current === 'texto' && <li className="rounded-full bg-ember px-2 py-0.5 text-[0.72rem] font-semibold text-[rgb(var(--bg))]">Texto completo</li>}
+    </ol>
+  );
+  const details = (
+    <>
+      <p>
+        <b>O que acontece agora.</b> {NOW[current]}
+      </p>
+      {section && <p className="text-muted">Trecho: {section.title.replace(/^\d+\.\s*/, '')}.</p>}
+      {next && (
+        <p>
+          <b>Depois:</b>{' '}
+          <Link to={next.to} className="underline">
+            {next.label}
+          </Link>
+        </p>
+      )}
+    </>
+  );
+
+  if (compact) {
+    return (
+      <div className="guide-bar flex items-center gap-2 rounded-2xl px-3 py-1.5 text-sm" role="region" aria-label="Onde você está">
+        <Icon name="mapa" size={16} className="shrink-0 text-ember" />
+        {pills}
+        <button type="button" className="shrink-0 rounded-full px-1 text-[0.75rem] font-semibold text-ember underline" onClick={() => setOpen(true)} aria-expanded={open}>
+          Entender
+        </button>
+        {open && (
+          <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-3 sm:items-center" onClick={() => setOpen(false)}>
+            <div className="anim-toast-in w-full max-w-md space-y-2 rounded-[1.6rem] bg-bg p-4 shadow-2xl" role="dialog" aria-label="Entender esta etapa" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-start justify-between gap-2">
+                <p className="text-[0.8rem]">{location}</p>
+                <button type="button" className="grid h-8 w-8 shrink-0 place-items-center rounded-full hover:bg-raised" onClick={() => setOpen(false)} aria-label="Fechar">
+                  <Icon name="errado" size={16} />
+                </button>
+              </div>
+              {details}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="guide-bar rounded-2xl px-3 py-2 text-sm" role="region" aria-label="Onde você está">
       <div className="flex items-center gap-2">
         <Icon name="mapa" size={16} className="shrink-0 text-ember" />
-        <p className="min-w-0 flex-1 truncate text-[0.8rem]">
-          <span className="text-muted">{grimoire?.title} › Cap. {chapter.number}</span>
-          {section && (
-            <>
-              {' '}
-              › <b>Trecho {idx + 1} de {chapter.sections.length}</b>
-            </>
-          )}
-        </p>
+        <p className="min-w-0 flex-1 truncate text-[0.8rem]">{location}</p>
         <button type="button" className="shrink-0 rounded-full px-2 py-0.5 text-[0.75rem] font-semibold text-ember underline" onClick={() => setOpen(!open)} aria-expanded={open}>
           {open ? 'Fechar' : 'Entender esta etapa'}
         </button>
       </div>
-      <ol className="mt-1.5 flex flex-nowrap items-center gap-1 overflow-hidden whitespace-nowrap" aria-label="Passos">
-        {steps.map((s, i) => {
-          const here = i === curIdx;
-          return (
-            <li key={s.key} className="flex shrink-0 items-center gap-1">
-              {i > 0 && <span className="text-muted" aria-hidden="true">›</span>}
-              <span className={`rounded-full px-2 py-0.5 text-[0.72rem] font-semibold ${here ? 'bg-ember text-[rgb(var(--bg))]' : s.done ? 'bg-gold/20 text-gold' : 'bg-raised text-muted'}`} aria-current={here ? 'step' : undefined}>
-                {s.done && !here ? '✓ ' : ''}
-                {LABEL[s.kind]}
-                {s.kind === 'lesson' ? ' do capítulo' : ''}
-              </span>
-            </li>
-          );
-        })}
-        {current === 'texto' && <li className="rounded-full bg-ember px-2 py-0.5 text-[0.72rem] font-semibold text-[rgb(var(--bg))]">Texto completo</li>}
-      </ol>
-      {open && (
-        <div className="anim-toast-in mt-2 space-y-1.5 border-t border-line/60 pt-2">
-          <p>
-            <b>O que acontece agora.</b> {NOW[current]}
-          </p>
-          {section && <p className="text-muted">Trecho: {section.title.replace(/^\d+\.\s*/, '')}.</p>}
-          {next && (
-            <p>
-              <b>Depois:</b>{' '}
-              <Link to={next.to} className="underline">
-                {next.label}
-              </Link>
-            </p>
-          )}
-        </div>
-      )}
+      <div className="mt-1.5 flex">{pills}</div>
+      {open && <div className="anim-toast-in mt-2 space-y-1.5 border-t border-line/60 pt-2">{details}</div>}
     </div>
   );
 }
