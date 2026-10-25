@@ -32,6 +32,7 @@ import { CustomizePage } from '@/pages/Customize';
 import { ScenarioListPage, ScenarioPage } from '@/pages/Scenarios';
 import { TeachersRoomPage } from '@/pages/TeachersRoom';
 import { WorldPage } from '@/pages/World';
+import { NarratedPage } from '@/pages/Narrated';
 
 export function AppRoutes() {
   return (
@@ -54,6 +55,7 @@ export function AppRoutes() {
         <Route path="simulador/:id" element={<ScenarioPage />} />
         <Route path="sala" element={<TeachersRoomPage />} />
         <Route path="escritorio" element={<WorldPage />} />
+        <Route path="aula-narrada/:id" element={<NarratedPage />} />
         <Route path="pratica/:chapterId/:sectionId" element={<PracticePage />} />
         <Route path="licao/:id" element={<LessonPage />} />
         <Route path="revisao" element={<ReviewPage />} />

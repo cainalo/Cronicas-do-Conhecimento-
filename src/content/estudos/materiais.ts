@@ -16,12 +16,25 @@ export interface ExternalMaterial {
 export interface CuratedVideo {
   id: string;
   title: string;
+  /** Canal que publica; "não conferido" enquanto ninguém abriu o vídeo no YouTube. */
   channel: string;
   url: string;
-  /** Duração conferida no próprio vídeo, "mm:ss". */
-  duration: string;
+  /** Duração conferida no próprio vídeo, "mm:ss" (só quando conferida). */
+  duration?: string;
   chapterId: string;
+  sectionId?: string;
+  /** Aula da trilha que ensina o mesmo assunto em texto. */
+  lessonId?: string;
+  /** O que o vídeo ajuda a aprender. */
+  objective: string;
+  /**
+   * "conferido": uma pessoa abriu o vídeo e conferiu título, canal, duração e se cobre o edital.
+   * "a-conferir": encontrado por busca, sem acesso ao YouTube para conferir. Aparece com aviso.
+   */
+  status: 'conferido' | 'a-conferir';
   checkedAt: string;
+  /** Onde o vídeo foi encontrado, quando ainda não conferido. */
+  source?: string;
 }
 
 /** Documentação oficial dos assuntos já escritos (endereços estáveis dos próprios mantenedores). */
@@ -63,5 +76,50 @@ export const externalMaterials: ExternalMaterial[] = [
   },
 ];
 
-/** Videoaulas conferidas por uma pessoa. Vazio de propósito: nada entra sem conferência. */
-export const curatedVideos: CuratedVideo[] = [];
+// Encontrados em 26/10/2026 por busca na web. O YouTube não é acessível do ambiente onde o app foi
+// montado, então título e canal vêm do índice de busca e a duração não foi conferida. Ficam marcados
+// como "a conferir" até alguém abrir cada um e confirmar.
+const BUSCA = 'Índice de busca na web (página de resumo de terceiros); não aberto no YouTube';
+
+/** Videoaulas: conferidas por uma pessoa, ou sugestões marcadas "a conferir". */
+export const curatedVideos: CuratedVideo[] = [
+  {
+    id: 'yt-YJyY6A_MOQc',
+    title: 'FRAÇÕES (Parte 1): Notação de Frações e suas propriedades | Matemática Básica - Aula 4',
+    channel: 'Não conferido',
+    url: 'https://www.youtube.com/watch?v=YJyY6A_MOQc',
+    chapterId: 'cap.mat.01',
+    sectionId: 'inteiros',
+    lessonId: 'mat.inteiros.6',
+    objective: 'O que é uma fração, frações equivalentes e simplificação.',
+    status: 'a-conferir',
+    checkedAt: '2026-10-26',
+    source: BUSCA,
+  },
+  {
+    id: 'yt-SgJpB78R7x0',
+    title: 'FRAÇÕES (Parte 2): Operações Básicas | Matemática Básica - Aula 5',
+    channel: 'Não conferido',
+    url: 'https://www.youtube.com/watch?v=SgJpB78R7x0',
+    chapterId: 'cap.mat.01',
+    sectionId: 'inteiros',
+    lessonId: 'mat.inteiros.7',
+    objective: 'Somar, subtrair, multiplicar e dividir frações.',
+    status: 'a-conferir',
+    checkedAt: '2026-10-26',
+    source: BUSCA,
+  },
+  {
+    id: 'yt-4Vfw1XiHTpM',
+    title: 'POTENCIAÇÃO: Definição e Propriedades | Matemática Básica - Aula 6',
+    channel: 'Não conferido',
+    url: 'https://www.youtube.com/watch?v=4Vfw1XiHTpM',
+    chapterId: 'cap.mat.01',
+    sectionId: 'inteiros',
+    lessonId: 'mat.inteiros.5',
+    objective: 'Potência como multiplicação repetida, sinais e propriedades.',
+    status: 'a-conferir',
+    checkedAt: '2026-10-26',
+    source: BUSCA,
+  },
+];

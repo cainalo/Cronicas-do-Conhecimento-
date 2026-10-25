@@ -182,3 +182,10 @@ export const scenarios: Scenario[] = [cenarioSuporteLento];
 export const getScenario = (id: string) => scenarios.find((s) => s.id === id);
 export { teachers, teacherPosts } from './teachers';
 export type { FictionalTeacher, TeacherPost } from './teachers';
+
+// Aulas visuais narradas (pacote v4, etapa 3): alternativa à aula em texto, com voz e cenas.
+import { narradaSomarInteiros } from './narrated/mat-somar-inteiros';
+import type { NarratedLesson } from './narrated/types';
+export const narratedLessons: NarratedLesson[] = [narradaSomarInteiros];
+export const getNarrated = (id: string) => narratedLessons.find((n) => n.id === id);
+export const narratedFor = (lessonId: string) => narratedLessons.find((n) => n.lessonId === lessonId);

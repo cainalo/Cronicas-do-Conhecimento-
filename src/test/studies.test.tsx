@@ -32,7 +32,9 @@ describe('página Estudos', () => {
     expect(cont).toHaveTextContent('Começar');
     expect(cont.getAttribute('href')).toBe(screen.getByTestId('continuar-topo').getAttribute('href'));
     for (const name of [/Biblioteca/, /Rodada relâmpago/, /Flashcards/, /Revisão de erros/]) expect(screen.getByRole('link', { name })).toBeInTheDocument();
-    expect(screen.getByText(/Ainda não há videoaulas conferidas/)).toBeInTheDocument();
+    // Biblioteca: sugestões não conferidas aparecem com aviso, e nenhum vídeo carrega sozinho.
+    expect(screen.getAllByTestId('video-a-conferir').length).toBe(curatedVideos.filter((v) => v.status === 'a-conferir').length);
+    expect(document.querySelector('iframe')).toBeNull();
     expect(screen.getByRole('link', { name: /Lei nº 13.709\/2018/ })).toHaveAttribute('target', '_blank');
   });
 
@@ -58,7 +60,13 @@ describe('página Estudos', () => {
     expect(youTubeId('https://youtube.com/shorts/abcdefghijk')).toBe('abcdefghijk');
     expect(youTubeId('https://youtu.be/curto')).toBeUndefined();
     expect(youTubeId('nada')).toBeUndefined();
-    for (const v of curatedVideos) expect(v.title && v.channel && v.duration && v.checkedAt).toBeTruthy();
+    for (const v of curatedVideos) {
+      expect(v.title && v.channel && v.checkedAt && v.objective).toBeTruthy();
+      expect(youTubeId(v.url)).toBeTruthy();
+      // Conferido exige duração e canal; não conferido exige a origem declarada e nunca finge canal.
+      if (v.status === 'conferido') expect(v.duration && v.channel !== 'Não conferido').toBeTruthy();
+      else expect(v.source && !v.duration).toBeTruthy();
+    }
     for (const m of externalMaterials) expect(m.url).toMatch(/^https:\/\//);
   });
 });

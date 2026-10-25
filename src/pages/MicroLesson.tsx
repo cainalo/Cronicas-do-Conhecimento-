@@ -5,7 +5,7 @@
 import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { MicroLesson } from '@/content/types';
-import { getChapter, getQuestion } from '@/content';
+import { getChapter, getQuestion, narratedFor } from '@/content';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
 import { useSession } from '@/app/useSession';
@@ -42,6 +42,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   const { update } = useStudy();
   const { sfx, confetti } = useFx();
   const chapter = getChapter(lesson.chapterId)!;
+  const narrated = narratedFor(lesson.id);
   const n = lesson.steps.length;
   // Em série, cada aula tem o seu ponto salvo; sozinha, usa a chave do trecho (como antes).
   const key = series ? seriesKey(lesson.chapterId, lesson.sectionId, lesson.id) : learnKey(lesson.chapterId, lesson.sectionId);
@@ -141,6 +142,14 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
       {series ? (
         <p className="mb-2 truncate text-sm text-muted">
           <span className="font-title italic">Aula {series.index + 1} de {series.total}</span> · {lesson.title}
+          {narrated && (
+            <>
+              {' · '}
+              <Link to={`/aula-narrada/${narrated.id}`} className="font-semibold text-gold">
+                ouvir em aula narrada
+              </Link>
+            </>
+          )}
         </p>
       ) : (
         <div className="mb-2">

@@ -6,11 +6,12 @@ import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { useCheckpoint } from '@/app/useCheckpoint';
 import { areaColor } from '@/app/areas';
-import { DEFAULT_CONTEST_ID, curatedVideos, externalMaterials, flashcards, getChapter, getContest, questionsForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, externalMaterials, flashcards, getContest, narratedLessons, questionsForContest } from '@/content';
 import { reviewQueue } from '@/lib/study';
 import { dueCards, unlockedCardIds } from '@/lib/training';
 import { Icon } from '@/components/Icon';
 import { PageHeader, SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
+import { VideoLibrary } from '@/components/VideoLibrary';
 import { VideoEmbed, youTubeId } from '@/components/VideoEmbed';
 
 interface OwnVideo {
@@ -94,27 +95,30 @@ export function StudiesPage() {
         </TileGrid>
       </section>
 
+      <section aria-label="Aulas narradas">
+        <SectionTitle icon="play" color={color}>
+          Aulas narradas
+        </SectionTitle>
+        <ul className="ledger">
+          {narratedLessons.map((n) => (
+            <li key={n.id}>
+              <Link to={`/aula-narrada/${n.id}`} className="ledger-row">
+                <span className="min-w-0 flex-1">
+                  <span className="block font-semibold">{n.title}</span>
+                  <span className="block text-sm text-muted">Voz explicando enquanto a cena se monta · {n.minutes} min · com legenda e transcrição</span>
+                </span>
+                <Icon name="avancar" size={18} className="shrink-0 text-muted" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section aria-label="Videoaulas">
         <SectionTitle icon="play" color={color}>
           Videoaulas
         </SectionTitle>
-        {curatedVideos.length > 0 ? (
-          <div className="grid gap-3 sm:grid-cols-2">
-            {curatedVideos.map((v) => (
-              <VideoEmbed
-                key={v.id}
-                url={v.url}
-                title={v.title}
-                meta={`${v.channel} · ${v.duration}${getChapter(v.chapterId) ? ` · ${getChapter(v.chapterId)!.title}` : ''}`}
-              />
-            ))}
-          </div>
-        ) : (
-          <p className="text-sm text-muted">
-            Ainda não há videoaulas conferidas por nós. Só entra aqui vídeo com título, canal e duração verificados e que cubra um tópico do edital. Enquanto
-            isso, guarde abaixo as aulas que você já usa.
-          </p>
-        )}
+        <VideoLibrary />
 
         <h3 className="mt-4 font-semibold">Suas videoaulas</h3>
         {own.length > 0 && (
