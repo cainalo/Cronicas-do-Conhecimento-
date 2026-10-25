@@ -10,7 +10,7 @@ import { useFx } from '@/app/fx';
 export function TableView({ t, caption, highlight }: { t: Table | Result & { name?: string }; caption?: string; highlight?: (row: Cell[]) => boolean }) {
   const cols = t.columns;
   return (
-    <div className="overflow-x-auto rounded-2xl border border-line bg-surface">
+    <div className="rounded-2xl border border-line bg-surface [&_td]:[overflow-wrap:anywhere] [&_th]:[overflow-wrap:anywhere]">
       <table className="w-full border-collapse text-left text-sm">
         {caption && <caption className="px-3 pt-2 text-left text-xs font-bold text-muted">{caption}</caption>}
         <thead>

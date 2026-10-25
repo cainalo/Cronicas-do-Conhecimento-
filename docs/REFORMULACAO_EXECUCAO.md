@@ -67,6 +67,21 @@ Pacote: `Cronicas_Reformulacao_Pacote_Tecnico` (specs lidos: README, 00, 03, 04,
 - O pacote offline da unidade é da Fase 5. Hoje o conteúdo vai no bundle, então funciona sem rede depois de carregado, mas não há service worker.
 - O bloqueio por pré-requisito existe na página Trilha e no validador do conteúdo, mas não impede abrir uma URL de atividade futura (Fase 4).
 
+## Rodada visual "bem colorido" (25/10/2026, pedido do usuário)
+
+- Fundo nunca branco: tinta lavanda com manchas de cor fixas e duas manchas que flutuam devagar (`body::before/after`).
+- Cards (`.card`, `.ledger`) tingidos, alternando azul, verde-água, rosa, laranja e lilás pela posição, com faixa colorida no topo e elevação no hover. Tiles em degradê vivo com texto branco (contraste AA no claro; no escuro a cor é escurecida) e bolhas animadas.
+- Botão principal em degradê com brilho, faixa colorida sob o cabeçalho, entradas de página e de listas animadas. Tudo é desligado com `prefers-reduced-motion`.
+- Nenhuma rolagem interna:
+  - tabelas e código quebram linha;
+  - o laboratório SQL quebra células;
+  - a leitura contínua do livro passou a rolar a própria página;
+  - o sumário e a ajuda da Prática viraram painéis de tela cheia;
+  - o flashcard cresce até caber o verso.
+
+  Exceção: o deslizar lateral das aulas antigas (SwipePages), escolha anterior do usuário.
+- Testes 805/805, typecheck e build ok, capturas em 390×844 e 1280×800 sem overflow.
+
 ## Próxima ação exata
 
 Fase 3 (spec 12):

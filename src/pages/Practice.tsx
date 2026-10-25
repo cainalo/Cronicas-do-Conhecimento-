@@ -221,8 +221,8 @@ export function PracticePage() {
       </div>
 
       {help && simple && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-3 sm:items-center" onClick={() => setHelp(false)}>
-          <div className="anim-toast-in max-h-[75dvh] w-full max-w-md overflow-y-auto rounded-[1.8rem] bg-bg p-4 shadow-2xl" role="dialog" aria-label="Palavras do trecho" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex justify-center overflow-y-auto bg-black/40 p-3" onClick={() => setHelp(false)}>
+          <div className="anim-toast-in my-auto h-fit w-full max-w-md rounded-[1.8rem] bg-bg p-4 shadow-2xl" role="dialog" aria-label="Palavras do trecho" onClick={(e) => e.stopPropagation()}>
             <div className="mb-2 flex items-center justify-between">
               <h2 className="text-lg">Palavras do trecho</h2>
               <button className="grid h-9 w-9 place-items-center rounded-full hover:bg-raised" onClick={() => setHelp(false)} aria-label="Fechar">

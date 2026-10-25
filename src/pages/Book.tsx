@@ -191,12 +191,12 @@ function ContinuousReading({ blocks, chapterId, onEnd }: { blocks: BookBlock[]; 
   useEffect(() => {
     const root = ref.current;
     if (!root || typeof IntersectionObserver === 'undefined') return;
-    const io = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && endRef.current((e.target as HTMLElement).dataset.end!)), { root });
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && endRef.current((e.target as HTMLElement).dataset.end!)), { root: null });
     root.querySelectorAll('[data-end]').forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, [blocks]);
   return (
-    <div ref={ref} className="manuscript parchment-aged min-h-0 flex-1 overflow-y-auto px-5 py-4" role="article" aria-label="Leitura contínua">
+    <div ref={ref} className="manuscript parchment-aged flex-1 rounded-[1.4rem] px-5 py-4" role="article" aria-label="Leitura contínua">
       <div className="mx-auto max-w-[42rem] space-y-3">
         {blocks.map((b, i) => (
           <div key={i} data-end={b.kind === 'end' ? b.sectionId : undefined}>
@@ -370,7 +370,7 @@ export function BookPage() {
   );
 
   return (
-    <div className="-mt-2 flex h-[calc(100dvh-5.5rem-env(safe-area-inset-top))] flex-col" style={{ ['--font-scale' as string]: prefs.fontScale }}>
+    <div className={`-mt-2 flex flex-col ${flow ? 'min-h-[calc(100dvh-5.5rem-env(safe-area-inset-top))]' : 'h-[calc(100dvh-5.5rem-env(safe-area-inset-top))]'}`} style={{ ['--font-scale' as string]: prefs.fontScale }}>
       <div className="mb-2 shrink-0">
         <StepGuide chapterId={chapter.id} sectionId={curSection} current="texto" />
       </div>
@@ -447,8 +447,8 @@ export function BookPage() {
 
       {/* Sumário */}
       {toc && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-3 sm:items-center" onClick={() => setToc(false)}>
-          <nav className="anim-toast-in max-h-[80dvh] w-full max-w-md overflow-y-auto rounded-[1.8rem] bg-bg p-4 shadow-2xl" aria-label="Sumário do capítulo" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex justify-center overflow-y-auto bg-black/40 p-3" onClick={() => setToc(false)}>
+          <nav className="anim-toast-in my-auto h-fit w-full max-w-md rounded-[1.8rem] bg-bg p-4 shadow-2xl" aria-label="Sumário do capítulo" onClick={(e) => e.stopPropagation()}>
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-lg">Sumário</h2>
               <button className="grid h-9 w-9 place-items-center rounded-full hover:bg-raised" onClick={() => setToc(false)} aria-label="Fechar sumário">

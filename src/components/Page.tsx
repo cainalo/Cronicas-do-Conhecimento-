@@ -118,37 +118,35 @@ export function useTilt<T extends HTMLElement>() {
   return { ref, onPointerMove, onPointerLeave };
 }
 
-/** Cartão de função: fundo suave na cor do cartão, ícone em placa, desenho animado, título e descrição curta. */
+/** Cartão de função: cartão colorido (degradê da cor), texto branco, ícone em placa translúcida e bolhas animadas. */
 export function Tile({ to, icon, color, title, text, badge, wide, art, index = 0 }: TileProps) {
   const tilt = useTilt<HTMLAnchorElement>();
-  const artId = art ? art : null; // ilustrações automáticas desligadas na reformulação
-  // Reformulação: cartão claro com a cor só no ícone e numa faixa fina, sem gradiente.
+  const dark = useIsDark();
+  const artId = art ? art : null;
+  // As cores de área no tema claro já têm contraste AA com branco; no escuro, escurecemos a mistura.
   const style: CSSProperties = {
-    background: 'rgb(var(--surface))',
-    borderColor: 'rgb(var(--line))',
-    boxShadow: `inset 0 3px 0 ${color}, var(--shadow-card)`,
+    background: dark
+      ? `linear-gradient(145deg, color-mix(in srgb, ${color} 52%, #0e131d), color-mix(in srgb, ${color} 30%, #0e131d))`
+      : `linear-gradient(145deg, ${color}, color-mix(in srgb, ${color} 70%, #10162a))`,
+    boxShadow: `0 12px 26px -14px ${color}, 0 2px 6px rgb(0 0 0 / 0.08)`,
   };
   return (
-    <div className={`anim-tile-in ${wide ? 'col-span-2' : ''}`} style={{ animationDelay: `${Math.min(index, 12) * 50}ms` }}>
+    <div className={`anim-tile-in ${wide ? 'col-span-2' : ''}`} style={{ animationDelay: `${Math.min(index, 12) * 60}ms` }}>
       <Link
         to={to}
         {...tilt}
-        className="tilt group relative flex h-full min-h-[8.75rem] flex-col items-start gap-2 overflow-hidden rounded-[1.6rem] border p-3.5 text-left shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lift)] active:scale-[0.98]"
+        className="tilt tile-color group relative flex h-full min-h-[8.75rem] flex-col items-start gap-2 overflow-hidden rounded-[1.4rem] p-3.5 text-left text-white active:scale-[0.98]"
         style={style}
       >
-        {artId && <TileArt art={artId} color={color} />}
-        <span className="relative transition duration-300 group-hover:-rotate-6 group-hover:scale-110">
-          <IconBadge icon={icon} color={color} />
+        <span className="tile-bubble tile-bubble-a" aria-hidden="true" />
+        <span className="tile-bubble tile-bubble-b" aria-hidden="true" />
+        {artId && <TileArt art={artId} color="#ffffff" />}
+        <span className="relative grid h-10 w-10 place-items-center rounded-2xl bg-white/20 transition duration-300 group-hover:-rotate-6 group-hover:scale-110">
+          <Icon name={icon} size={20} strokeWidth={2.2} />
         </span>
-        {badge && (
-          <span className="relative mt-auto max-w-full truncate rounded-full px-2 py-0.5 text-[11px] font-bold text-white shadow-sm" style={{ background: color }}>
-            {badge}
-          </span>
-        )}
-        <span className={`relative text-[0.95rem] font-bold leading-tight ${badge ? '' : 'mt-auto'}`} style={{ color: 'rgb(var(--ink))' }}>
-          {title}
-        </span>
-        <span className="relative line-clamp-2 text-xs leading-snug text-ink/70">{text}</span>
+        {badge && <span className="relative mt-auto max-w-full truncate rounded-full bg-white px-2 py-0.5 text-[11px] font-bold" style={{ color: dark ? '#1d2a3a' : color }}>{badge}</span>}
+        <span className={`relative text-[0.98rem] font-bold leading-tight ${badge ? '' : 'mt-auto'}`}>{title}</span>
+        <span className="relative line-clamp-2 text-xs leading-snug text-white/90">{text}</span>
       </Link>
     </div>
   );

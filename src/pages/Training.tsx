@@ -22,7 +22,7 @@ export function TrainingPage() {
   const done = plan.items.filter((i) => isDone(i, data, plan.day)).length;
 
   // Tons vizinhos da cor da área, para diferenciar os cartões sem sair da família.
-  const shades = dark ? ['#889eff', '#5ec8c0', '#f5a868', '#c4acf5', '#70ce98', '#a3afc1'] : ['#4258cd', '#127672', '#a85314', '#704eb6', '#1e704a', '#526072'];
+  const shades = dark ? ['#889eff', '#5ec8c0', '#f078b4', '#c4acf5', '#70ce98', '#a3afc1'] : ['#4258cd', '#127672', '#c2357a', '#704eb6', '#1e704a', '#526072'];
 
   return (
     <div className="space-y-6">

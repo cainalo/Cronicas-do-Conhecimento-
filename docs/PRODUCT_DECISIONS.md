@@ -46,4 +46,5 @@
 - O usuário enviou o pacote `Cronicas_Reformulacao_Pacote_Tecnico` e mandou remodelar o repositório existente. Valem as decisões do pacote (ADR-001 a ADR-017, `specs/30_REGISTRO_DECISOES.md`): identidade moderna e colorida, texto interativo como canal principal, trilha única com pré-requisitos, planner em minutos, armazenamento local estruturado + Supabase, `appId` preservado.
 - Isso **substitui** as decisões anteriores de identidade medieval (Arquivo Real, Noite com tochas, coruja Bubo, som medieval como ambientação). O conteúdo, os IDs, o progresso e o banco continuam.
 - Nome: Crônicas do Conhecimento.
+- **25/10/2026 (usuário):** site e app **bem coloridos**, cheios de **cards coloridos**, com **animações e movimento**, **páginas não brancas** e **sem rolagem interna** nos componentes. A página pode rolar normalmente; nenhum quadro ou caixa tem barra de rolagem própria (tabelas e código quebram linha, diálogos ocupam a tela). Isso resolve a questão aberta sobre rolagem: no texto interativo vale a rolagem natural da página.
 

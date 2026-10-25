@@ -569,3 +569,96 @@ h1, h2 { font-weight: 700; }
 .prose-manuscript ul { list-style: disc; padding-left: 1.4em; }
 .prose-manuscript ul > li { padding-left: 0.15em; }
 .prose-manuscript ul > li::marker { content: '•  '; color: rgb(var(--gold)); }
+
+/* =====================================================================================
+   Rodada "bem colorido" (25/10/2026, pedido do usuário): fundo nunca branco, cards em cores
+   que se alternam, movimento com propósito e nenhuma rolagem interna nos componentes.
+   ===================================================================================== */
+:root {
+  --bg: 236 240 255;
+  --surface: 255 255 255;
+  --raised: 228 234 252;
+  --pink: 214 62 132;
+  --sun: 244 180 40;
+  --page-wash:
+    radial-gradient(38rem 26rem at 8% -6%, rgb(var(--gold) / 0.22), transparent 70%),
+    radial-gradient(34rem 24rem at 100% 8%, rgb(var(--pink) / 0.16), transparent 70%),
+    radial-gradient(40rem 30rem at 85% 100%, rgb(var(--teal) / 0.18), transparent 70%),
+    radial-gradient(30rem 22rem at 0% 90%, rgb(var(--sun) / 0.18), transparent 70%);
+}
+:root[data-theme='dark'] {
+  --bg: 15 18 38;
+  --surface: 26 31 58;
+  --raised: 37 44 78;
+  --pink: 240 120 180;
+  --sun: 250 200 90;
+  --page-wash:
+    radial-gradient(38rem 26rem at 8% -6%, rgb(var(--gold) / 0.28), transparent 70%),
+    radial-gradient(34rem 24rem at 100% 8%, rgb(var(--pink) / 0.2), transparent 70%),
+    radial-gradient(40rem 30rem at 85% 100%, rgb(var(--teal) / 0.22), transparent 70%),
+    radial-gradient(30rem 22rem at 0% 90%, rgb(var(--sun) / 0.14), transparent 70%);
+}
+body { background-color: rgb(var(--bg)); background-image: var(--page-wash); background-attachment: fixed; }
+
+/* Manchas de cor que flutuam devagar atrás do conteúdo */
+body::before, body::after {
+  content: ''; position: fixed; z-index: -1; border-radius: 9999px; filter: blur(48px); opacity: 0.55; pointer-events: none;
+  animation: blob-drift 22s ease-in-out infinite alternate;
+}
+body::before { width: 22rem; height: 22rem; left: -6rem; top: 30vh; background: rgb(var(--azure) / 0.35); }
+body::after { width: 20rem; height: 20rem; right: -5rem; top: 55vh; background: rgb(var(--leaf) / 0.3); animation-delay: -9s; }
+@keyframes blob-drift { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(3rem, -2rem) scale(1.12); } 100% { transform: translate(-2rem, 2.5rem) scale(0.95); } }
+
+/* Cards tingidos: cada card pega uma cor da paleta, alternando na sequência da página */
+.card, .ledger {
+  --tint: var(--gold);
+  background-color: rgb(var(--surface));
+  background-image: linear-gradient(150deg, rgb(var(--tint) / 0.16), rgb(var(--tint) / 0.04) 55%, transparent);
+  border-color: rgb(var(--tint) / 0.28);
+  border-top: 4px solid rgb(var(--tint) / 0.85);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.card:nth-of-type(5n + 2), .ledger:nth-of-type(5n + 2) { --tint: var(--teal); }
+.card:nth-of-type(5n + 3), .ledger:nth-of-type(5n + 3) { --tint: var(--pink); }
+.card:nth-of-type(5n + 4), .ledger:nth-of-type(5n + 4) { --tint: var(--leaf); }
+.card:nth-of-type(5n + 5), .ledger:nth-of-type(5n + 5) { --tint: var(--azure); }
+a.card:hover, button.card:hover, .card-interactive:hover { transform: translateY(-3px); box-shadow: 0 16px 30px -16px rgb(var(--tint) / 0.7); }
+.guide-bar { background-image: linear-gradient(120deg, rgb(var(--gold) / 0.12), rgb(var(--teal) / 0.1)); }
+
+/* Barras de navegação com faixa colorida */
+.wood-bar-top { border-bottom: 0; box-shadow: 0 2px 0 0 transparent; background-image: linear-gradient(90deg, rgb(var(--gold) / 0.07), rgb(var(--pink) / 0.06), rgb(var(--teal) / 0.07)); }
+.wood-bar-top::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: linear-gradient(90deg, rgb(var(--gold)), rgb(var(--pink)), rgb(var(--leaf)), rgb(var(--teal))); }
+.wood-bar-bottom { background-image: linear-gradient(90deg, rgb(var(--teal) / 0.06), rgb(var(--gold) / 0.07)); }
+
+/* Botão principal em degradê com brilho que passa */
+.btn-primary { background: linear-gradient(120deg, rgb(var(--gold)), rgb(var(--azure))); position: relative; overflow: hidden; }
+.btn-primary::after { content: ''; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 0.35) 50%, transparent 70%); transform: translateX(-120%); }
+.btn-primary:hover::after { animation: shine 0.9s ease; }
+.btn-ghost { background: rgb(var(--surface) / 0.85); }
+
+/* Bolhas dos cartões coloridos */
+.tile-color { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.tile-color:hover { transform: translateY(-4px) scale(1.01); }
+.tile-bubble { position: absolute; border-radius: 9999px; background: rgb(255 255 255 / 0.14); pointer-events: none; }
+.tile-bubble-a { width: 7rem; height: 7rem; right: -2.2rem; top: -2.4rem; animation: floaty 7s ease-in-out infinite; }
+.tile-bubble-b { width: 3.6rem; height: 3.6rem; right: 1.6rem; bottom: -1.4rem; animation: floaty 9s ease-in-out infinite reverse; }
+
+/* Barras de progresso com brilho em movimento */
+.bg-gold, .bg-ok { background-size: 200% 100%; }
+[role='progressbar'] > *, .progress-shine { background-image: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.35), transparent); background-size: 200% 100%; animation: bar-shine 2.4s linear infinite; }
+@keyframes bar-shine { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+/* Entrada das páginas e listas com mais vida */
+.page-enter { animation: page-in 0.38s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes page-in { from { opacity: 0; transform: translateY(14px) scale(0.99); } to { opacity: 1; transform: none; } }
+.stagger > * { animation: fade-up 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+/* Nenhuma rolagem interna: código e tabelas quebram linha em vez de rolar de lado */
+.prose-manuscript pre, .prose-stem pre { overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere; }
+.prose-manuscript .table-wrap { overflow: visible; }
+.prose-manuscript table, .prose-stem table { table-layout: auto; width: 100%; }
+.prose-manuscript th, .prose-manuscript td, .prose-stem th, .prose-stem td { overflow-wrap: anywhere; hyphens: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  body::before, body::after, .tile-bubble, [role='progressbar'] > *, .progress-shine { animation: none !important; }
+}

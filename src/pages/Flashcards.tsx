@@ -64,15 +64,15 @@ export function FlashcardsPage() {
             aria-label={shown ? 'Cartão revelado' : 'Virar o cartão'}
           >
             <div
-              className="relative min-h-[17rem] transition-transform duration-500 [transform-style:preserve-3d]"
+              className="relative grid min-h-[17rem] transition-transform duration-500 [transform-style:preserve-3d]"
               style={{ transform: shown ? 'rotateY(180deg)' : 'none' }}
             >
-              <section className="manuscript absolute inset-0 flex flex-col items-center justify-center gap-4 px-5 py-8 text-center [backface-visibility:hidden]">
+              <section className="manuscript flex flex-col items-center justify-center gap-4 px-5 py-8 text-center [backface-visibility:hidden] [grid-area:1/1]">
                 <p className="rubric text-sm font-semibold">Frente</p>
                 <p className="text-2xl leading-snug">{card.front}</p>
                 <p className="mt-2 text-xs text-muted">toque para virar</p>
               </section>
-              <section className="manuscript absolute inset-0 flex flex-col items-center justify-center gap-3 overflow-y-auto px-5 py-8 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]">
+              <section className="manuscript flex flex-col items-center justify-center gap-3 px-5 py-8 text-center [backface-visibility:hidden] [grid-area:1/1] [transform:rotateY(180deg)]">
                 <p className="rubric text-sm font-semibold">{card.front}</p>
                 <p className="text-[1.15rem] leading-relaxed">{card.back}</p>
               </section>
