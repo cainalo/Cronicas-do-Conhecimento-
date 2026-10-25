@@ -1,6 +1,7 @@
 # Estado do projeto (atualizado em 2026-10-17)
 
 ## Funciona e foi testado
+- **25/10 (noite):** série piloto com história em cap.prim.01 / computador; aula narrada e vídeo dentro da aula; feed com perfis, revisões rápidas e comentários; Escritório 2D em tela cheia (mapa novo, 4 direções). Testes automáticos e capturas em 390 e 1280 px.
 - **Pacote v4 (25/10/2026):** Conta em áreas, sons para estudar, reinício seguro do progresso (testado com servidor simulado), Hoje editorial, sem telas de RPG, escritório 2D, aula narrada, feed curricular. Detalhes em `docs/V4_EXECUCAO.md`.
 | Fonte única do próximo passo e retomada exata (Aprender, Prática, Desafio, Missão, Microaula) | `checkpoint.test.ts`, `flow.test.tsx` |
 | Microaula-piloto Processos, memória e serviços (15 etapas com checagem e recuperação) | `micro.test.ts`, `flow.test.tsx`, captura 390×844 |
@@ -35,6 +36,7 @@
 | Gamificação: mapa do reino (`/reino`), ficha do personagem (`/personagem`) com título, sequência, missões semanais com resgate de XP, 12 selos e inventário de artefatos | `game.test.ts`, capturas |
 
 ## Implementado, mas NÃO testado ponta a ponta
+- **Fotos reais no feed:** estrutura pronta, sem fotos (Wikimedia bloqueada na rede do ambiente).
 - **Modo imersivo no Android** (barras ocultas, reveladas por deslize): compila no CI, sem teste em aparelho.
 - **Reinício do progresso contra o servidor real** (marca em `profiles.progress_reset_at`): só testado com servidor simulado.
 - **Sincronização real com Supabase e Auth (cadastro, login, recuperação de senha) pelo app.** O container bloqueia `*.supabase.co`; o caminho SQL foi validado, o cliente HTTP não. Testar no navegador do celular/PC.

@@ -4,6 +4,13 @@
 **Fase:** reformulação "Arquivo Real" (kit em `docs/kit/`, auditoria em `docs/AUDITORIA_REFORMULACAO.md`): fases 0 a 5 do kit feitas para o piloto; expansão pendente.
 
 ## Situação atual
+- **Rodada de 25/10/2026 (noite): pedidos do usuário. Decisões em PRODUCT_DECISIONS.md, seção "ritmo das aulas, sequência única, feed e Escritório".**
+  - **Ritmo lento com história (piloto):** cap.prim.01 / computador virou a série `prim.computador`, com 4 aulas: história, quatro tarefas, bit e tamanhos. O texto do capítulo ganhou "Como o computador surgiu".
+  - **Sequência única:** aula narrada e videoaula conferida entram dentro da aula ("Veja de outro jeito", fase `midia` em `MicroLesson.tsx`). As bibliotecas mostram "Na trilha" (`components/TrailPlace.tsx`, `trailPlaceOf`).
+  - **Aulas narradas novas:** "Do ábaco ao celular", com a cena nova de linha do tempo, e "As quatro tarefas".
+  - **Feed:** retratos ilustrados (`components/TeacherAvatar.tsx`), perfis, revisões rápidas, posts com desenho, hashtags, curtir, comentário fixado e anotações como comentários. O espaço para fotos reais (`content/estudos/imagens.ts`) está vazio enquanto a Wikimedia segue bloqueada na rede.
+  - **Escritório 2D em tela cheia:** mapa novo 24×16 com 7 ambientes, móveis em vetor, personagem em 4 direções com passos e braços, painéis por cima (`pages/World.tsx`, `content/world/escritorio.ts`, versão 2).
+  - **Ilustrações:** 10 novas em traço (`Illustration.tsx`). O antigo mascote virou ilustração de momento.
 - **Pacote v4 (25/10/2026), registro em `docs/V4_EXECUCAO.md`.** As etapas 1 a 8 estão feitas e a 9 tem varredura automática.
   - **Telas novas:** Conta em áreas (`src/pages/settings/`); sons para estudar (`app/soundscape.ts`); reinício seguro do progresso (`lib/reset.ts`, coluna `profiles.progress_reset_at`); modo imersivo no Android (`MainActivity.java`, `ImmersivePlugin.java`); Hoje editorial.
   - **Removido:** telas de RPG e a dependência `three`.
@@ -49,15 +56,16 @@ Antes: `npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escur
 - **PDFs das provas** (rede bloqueia FGV/eticaconcursos/TCE): prova TCE-GO 2014 FCC TI + gabarito; prova 2024 TI Tipo 1 + gabarito definitivo, para questões OFICIAIS rotuladas.
 
 ## Próxima tarefa exata
-1. **Com o usuário:**
-   - Validar no Galaxy A14 5G o modo imersivo (checklist em `docs/V4_EXECUCAO.md`) e o reinício com a conta real.
-   - Ouvir o retorno sobre o visual editorial e sobre os sons.
-2. **Telas que ainda usam peças antigas (Biblioteca, disciplina, cartões e 404 já foram refeitos):**
-   - Ainda usam `SceneBanner` / `Mascot`: Training, Library, Book, Review, Exam, Practice, Lesson, Blitz, Plan, NotFound, Trail e Learn.
-   - Trocar essas peças por notas editoriais e ilustrações em traço.
-   - Revisar o `PaceCard` (texto longo).
-3. **Conteúdo:** o grimório de Segurança está todo em microaulas desde 25/10 (cap.seg.01 e cap.seg.02, 12 aulas). Próximos: Dados (banco de dados) e mais aulas de Matemática.
-4. **Vídeos:** os 3 vídeos "a conferir" precisam de conferência humana (YouTube bloqueado nesta rede).
+1. **Ouvir o usuário sobre o piloto do novo ritmo** (série "O que é um computador", com história) e, se aprovado, aplicar o mesmo formato aos trechos seguintes, um por vez:
+   - **Primeiros Passos:** hardware, sistema, programação, redes, dados, segurança.
+   - **Depois:** os demais capítulos.
+   - **Regra:** cada trecho começa contando como aquilo surgiu, usando só fatos verificáveis, acrescentados também ao texto do capítulo.
+2. **Fotos reais no feed:** quando a Wikimedia (`commons.wikimedia.org` e `upload.wikimedia.org`) estiver liberada na rede do ambiente, preencher `content/estudos/imagens.ts`. Usar só domínio público ou licença livre, com autor, licença e link conferidos na página do arquivo.
+3. **Mais aulas narradas** para as aulas em série, cada uma entrando na fase "Veja de outro jeito".
+4. **Com o usuário:**
+   - modo imersivo no Galaxy A14;
+   - reinício com a conta real;
+   - opinião sobre o novo Escritório e o novo feed.
 - Fase 7 do pacote técnico: auditoria de RLS e fluxos de Auth (só leitura no banco), checklist de release (spec 36) com evidência real e riscos declarados.
 - Depois: mais cenários no simulador (Redes, Banco de Dados) e mais posts; aula visual narrada opcional (spec 20); microaulas de cap.seg.01 (simetrica, assimetrica, hash, assinatura, hibrida); remover as telas medievais restantes (Reino, Diário, Personagem).
 0000. Fase 3 em andamento: grimório de Infraestrutura inteiro em microaulas (cap.infra.01, .02, .03; `src/content/micro/infra-*.ts`, 10 aulas, 123 etapas). Segurança iniciada: `seg-fundamentos` (cap.seg.01/fundamentos, 10 etapas). Próximo: cap.seg.01 simetrica, assimetrica, hash, assinatura, hibrida; depois cap.seg.02 e Dados. Varredura sem rolagem: `scratchpad/pw/runall.sh <tela>` (usa mscroll4.cjs). Regras novas: sem listas aninhadas nas explicações (teste), correção do 'ordenar' em blocos por item.

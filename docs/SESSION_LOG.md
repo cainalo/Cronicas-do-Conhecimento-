@@ -59,3 +59,13 @@
 - **Modo imersivo no Android:** sem teste em aparelho.
 - **Varredura visual:** 216 combinações sem estouro nem erro.
 - **Validação:** 913 testes, tsc e build OK, CI 72 com APK verde. Registro em `docs/V4_EXECUCAO.md`.
+
+## 25/10/2026 (noite): ritmo com história, sequência única, feed social e Escritório em tela cheia
+- **Perguntas ao usuário:** 4 perguntas por AskUserQuestion, respostas registradas.
+- **Aulas:** piloto do ritmo lento com história em cap.prim.01 / computador (4 aulas).
+- **Sequência única:** aula narrada e vídeo dentro da aula; "Na trilha" nas bibliotecas.
+- **Feed:** retratos, perfis, revisões rápidas e comentários.
+- **Escritório:** 2D em tela cheia, refeito.
+- **Ilustrações:** 10 novas; o mascote virou ilustração.
+- **Limpeza:** removidas 18 capturas que tinham entrado no repositório por engano.
+- **Validação:** 1003 testes; build OK.

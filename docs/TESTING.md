@@ -38,3 +38,6 @@ Login/cadastro/recuperação e sincronização HTTP com o Supabase (rede do cont
 
 ## Última execução (25/10/2026)
 `npm test`: 913/913 em 26 arquivos; `tsc -b` e build OK; varredura Playwright de 36 rotas × 3 larguras × 2 temas sem estouro nem erro de JavaScript; CI 72 verde (site e APK).
+
+## Execução de 25/10/2026 (noite)
+`npm test`: 1003/1003; `tsc -b` e build OK. Testes novos: fase de mídia da aula (narrada dentro da aula), feed social (perfil, curtir, revisão rápida), tela do Escritório (ir até, objeto, conversa, teclado, Esc), móveis e direção no mapa, retomada da microaula com ponto salvo inválido.
