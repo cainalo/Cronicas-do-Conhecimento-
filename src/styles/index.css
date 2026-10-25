@@ -438,3 +438,10 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 
 /* Detalhe de cor das ilustrações: entra depois do traço */
 .ill-accent { animation: fade-in 0.5s ease-out 0.9s both; }
+
+/* Pessoas do escritório 2D: passo alternado ao andar, respiração discreta parada */
+@keyframes leg-step { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2.2px); } }
+@keyframes breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-0.6px); } }
+.person .torso { animation: breathe 3.2s ease-in-out infinite; }
+.person.walking .leg-a { animation: leg-step 0.3s ease-in-out infinite; }
+.person.walking .leg-b { animation: leg-step 0.3s ease-in-out 0.15s infinite; }

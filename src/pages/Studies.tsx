@@ -89,7 +89,7 @@ export function StudiesPage() {
             text="As questões que você errou voltam até acertar."
             badge={wrong ? `${wrong} a revisar` : undefined}
           />
-          <Tile to="/simulador" icon="tela" color="rgb(var(--teal))" title="Simulador" text="Resolva um chamado de suporte com o que estudou." />
+          <Tile to="/escritorio" icon="tela" color="rgb(var(--teal))" title="Escritório de TI" text="Ande pelo escritório, converse com a equipe e resolva um chamado." />
           <Tile to="/sala" icon="balao" color="rgb(var(--azure))" title="Sala dos Professores" text="Dicas, pegadinhas e mini-desafios." />
         </TileGrid>
       </section>
