@@ -26,6 +26,9 @@ describe.each(microLessons)('microaula $id', (m) => {
     const checks = m.steps.map((s) => s.check);
     expect(checks.filter((a) => a.kind === 'tf').length).toBeLessThanOrEqual(Math.ceil(checks.length * 0.1));
   });
+  it('sem listas aninhadas (não se dividem em partes e quebrariam a tela sem rolagem)', () => {
+    for (const s of m.steps) for (const t of [s.explain, s.example ?? '', s.recovery.explain]) expect(/\n\s{2,}[-*\d]/.test(t), s.id).toBe(false);
+  });
   it('prática final variada e questão de prova autoral existente', () => {
     expect(diversityProblems(m.consolidation)).toEqual([]);
     expect(new Set(m.consolidation.map((a) => FAMILY[a.kind])).size).toBeGreaterThanOrEqual(3);

@@ -16,6 +16,16 @@ import { capPrimComputador, capPrimRedesDados, grimorioPrimeiros, licoesPrimeiro
 import { questoesPrimeiros } from './grimoires/primeiros/questions';
 import { missaoSql01 } from './missions/sql-01';
 import { microInfraProcessos } from './micro/infra-processos';
+import { microInfraArquivos } from './micro/infra-arquivos';
+import { microInfraShell } from './micro/infra-shell';
+import { microInfraDiretorio } from './micro/infra-diretorio';
+import { microInfraTcpip } from './micro/infra-tcpip';
+import { microInfraEnderecos } from './micro/infra-enderecos';
+import { microInfraServicos } from './micro/infra-servicos';
+import { microInfraPerimetro } from './micro/infra-perimetro';
+import { microInfraNuvemModelos } from './micro/infra-nuvem-modelos';
+import { microInfraNuvemEscala } from './micro/infra-nuvem-escala';
+import { microSegFundamentos } from './micro/seg-fundamentos';
 import { estudosDeCaso } from './discursivas/tce-go-2026';
 import { capDevApis, capDevIdentidade, grimorioDev, licoesDev } from './grimoires/dev';
 import { questoesDev } from './grimoires/dev/questions';
@@ -122,7 +132,7 @@ export { getSectionExtras, allSectionExtras } from './game/scenes';
 export { getSimpleSection, allSimpleSections } from './game/simple';
 
 /** Microaulas (piloto da auditoria: Processos, memória e serviços). Substituem o Aprender do trecho. */
-export const microLessons = [microInfraProcessos];
+export const microLessons = [microInfraProcessos, microInfraArquivos, microInfraShell, microInfraDiretorio, microInfraTcpip, microInfraEnderecos, microInfraServicos, microInfraPerimetro, microInfraNuvemModelos, microInfraNuvemEscala, microSegFundamentos];
 export const getMicroLesson = (chapterId: string, sectionId: string) => microLessons.find((m) => m.chapterId === chapterId && m.sectionId === sectionId);
 
 /** Missões do Arquivo Real (piloto: SQL). */

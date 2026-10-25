@@ -25,3 +25,25 @@ Seções do cap. 1: fundamentos e objetivos · simétrica (DES/3DES/AES, ECB/CBC
 
 ## Prioridade sugerida (peso 2 e volume)
 IA total = 9 questões (Eng. Software Assistida por IA 4 + IA/Ciência de Dados 5) → Desenvolvimento 5 → SO/Redes/Nuvem 5 → Segurança (restante) → Banco de Dados, DevOps, Governança, Legislação de TI, Eng. de Software (4 cada) → Gerais.
+
+## Microaulas (formato aprovado em 24/10/2026)
+Uma ideia por etapa, checagem imediata, recuperação com outro exemplo, prática final variada e questão no estilo da prova. Telas sem rolagem vertical. Todas autorais, `nao-revisado`.
+
+| Microaula | Trecho | Etapas | Questões de prova usadas |
+|---|---|---|---|
+| Processos, memória e serviços | cap.infra.03 / processos | 15 | q.infra.03.001, q.infra.03.003 |
+| Sistemas de arquivos e permissões | cap.infra.03 / arquivos | 15 | q.infra.03.005, q.infra.03.006 |
+| Shell Linux, PowerShell e scripts | cap.infra.03 / shell | 16 | q.infra.03.008, q.infra.03.009 |
+| Active Directory, LDAP, virtualização e containers | cap.infra.03 / diretorio | 16 | q.infra.03.012, q.infra.03.013 |
+
+| Arquitetura TCP/IP | cap.infra.01 / tcpip | 10 | q.infra.01.002, q.infra.01.003 |
+| Endereçamento IPv4 e IPv6 | cap.infra.01 / enderecos | 10 | q.infra.01.004, q.infra.01.006 |
+| DNS, DHCP e protocolos de aplicação | cap.infra.01 / servicos | 12 | q.infra.01.009, q.infra.01.010 |
+| Firewalls, VPN, proxies e balanceamento | cap.infra.01 / perimetro | 9 | q.infra.01.011, q.infra.01.012 |
+
+| Modelos de nuvem | cap.infra.02 / modelos | 10 | q.infra.02.003, q.infra.02.004 |
+| Escala, disponibilidade e serverless | cap.infra.02 / escala | 10 | q.infra.02.007, q.infra.02.008 |
+
+Grimório de Infraestrutura inteiro em microaulas: cap.infra.01 (Redes, 41 etapas), cap.infra.02 (Nuvem, 20 etapas) e cap.infra.03 (Sistemas Operacionais, 62 etapas). Total: 10 microaulas, 123 etapas.
+
+| Fundamentos e objetivos da criptografia | cap.seg.01 / fundamentos | 10 | q.seg.01.001, q.seg.01.002 |

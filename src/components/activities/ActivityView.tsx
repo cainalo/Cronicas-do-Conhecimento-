@@ -154,18 +154,22 @@ export function ActivityView({
           )
           .filter(Boolean) as ReactNode[];
       case 'order':
+        // Cada item da ordem certa é um bloco: a correção pode ir para outra parte sem cortar a lista.
         return [
           <p key="w">{a.why}</p>,
-          !result.ok && (
-            <ol key="o" className="ml-5 list-decimal">
-              {a.items.map((it) => (
-                <li key={it}>
-                  <code>{it}</code>
-                </li>
-              ))}
-            </ol>
-          ),
-        ].filter(Boolean) as ReactNode[];
+          ...(result.ok
+            ? []
+            : [
+                <p key="h" className="font-semibold">
+                  Ordem certa:
+                </p>,
+                ...a.items.map((it, i) => (
+                  <p key={`o${i}`}>
+                    {i + 1}. <code>{it}</code>
+                  </p>
+                )),
+              ]),
+        ];
       case 'sort':
         return result.ok
           ? [<p key="ok">Todos no lugar certo.</p>]
