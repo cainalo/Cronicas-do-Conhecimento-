@@ -49,6 +49,7 @@ Grimório de Infraestrutura inteiro em microaulas: cap.infra.01 (Redes, 41 etapa
 | Fundamentos e objetivos da criptografia | cap.seg.01 / fundamentos | 10 | q.seg.01.001, q.seg.01.002 |
 | Criptografia simétrica | cap.seg.01 / simetrica | 10 | q.seg.01.003, q.seg.01.004, q.seg.01.005, q.seg.01.006 |
 | Criptografia assimétrica | cap.seg.01 / assimetrica | 9 | q.seg.01.007, q.seg.01.008, q.seg.01.009, q.seg.01.010 |
+| Funções hash, MAC e senhas | cap.seg.01 / hash | 8 | q.seg.01.011, q.seg.01.012, q.seg.01.013, q.seg.01.014 |
 
 ## Simulador e Sala dos Professores (25/10/2026)
 - Cenário `cen.suporte-lento` (SO: memória, swap, thrashing, sinais, nice). Fonte: microaula `micro.infra.processos`. Não revisado por humano.

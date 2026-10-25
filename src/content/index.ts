@@ -28,6 +28,7 @@ import { microInfraNuvemEscala } from './micro/infra-nuvem-escala';
 import { microSegFundamentos } from './micro/seg-fundamentos';
 import { microSegSimetrica } from './micro/seg-simetrica';
 import { microSegAssimetrica } from './micro/seg-assimetrica';
+import { microSegHash } from './micro/seg-hash';
 import { estudosDeCaso } from './discursivas/tce-go-2026';
 import { capDevApis, capDevIdentidade, grimorioDev, licoesDev } from './grimoires/dev';
 import { questoesDev } from './grimoires/dev/questions';
@@ -147,7 +148,7 @@ export const microLessons: MicroLesson[] = [
   matSomarFracoes,
   matMultiplicarFracoes,
   matRacionaisRestante,
-  microInfraProcessos, microInfraArquivos, microInfraShell, microInfraDiretorio, microInfraTcpip, microInfraEnderecos, microInfraServicos, microInfraPerimetro, microInfraNuvemModelos, microInfraNuvemEscala, microSegFundamentos, microSegSimetrica, microSegAssimetrica];
+  microInfraProcessos, microInfraArquivos, microInfraShell, microInfraDiretorio, microInfraTcpip, microInfraEnderecos, microInfraServicos, microInfraPerimetro, microInfraNuvemModelos, microInfraNuvemEscala, microSegFundamentos, microSegSimetrica, microSegAssimetrica, microSegHash];
 export const getMicroLesson = (chapterId: string, sectionId: string) => microSeries(chapterId, sectionId)[0];
 /** Títulos das aulas em série de um trecho (para montar a trilha). */
 export const seriesOf = (chapterId: string, sectionId: string) => microSeries(chapterId, sectionId).map((m) => ({ id: m.id, title: m.title }));
