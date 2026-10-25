@@ -132,9 +132,9 @@ export function LessonPage() {
           <p className="rubric text-sm font-semibold">Lição concluída</p>
           <h1 className="font-display text-5xl">{score}%</h1>
           <p className="text-muted">
-            {correct} de {qs.length} corretas · +{totalXp(data) - startXp.current} XP
+            {correct} de {qs.length} corretas · +{totalXp(data) - startXp.current} pontos
           </p>
-          <p className="text-sm text-muted">Cada conquista rende XP uma única vez. Refazer a lição ajuda a fixar o conteúdo, mas não soma pontos de novo.</p>
+          <p className="text-sm text-muted">Cada conquista rende pontos uma única vez. Refazer a lição ajuda a fixar o conteúdo, mas não soma pontos de novo.</p>
           <ul className="space-y-1 text-left text-sm">
             {qs.map((q, i) => (
               <li key={q.id} className={results[q.id] ? 'text-ok' : 'text-bad'}>

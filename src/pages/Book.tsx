@@ -13,8 +13,6 @@ import { roman } from '@/lib/roman';
 import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
 import { StepGuide } from '@/components/StepGuide';
-import { Mascot } from '@/components/Mascot';
-import { SceneArt } from '@/components/SceneBanner';
 import { LeatherBook, Leaf, useSpread, visiblePages } from '@/components/LeatherBook';
 import { reviewLabel } from './Library';
 
@@ -51,38 +49,6 @@ export function Pegadinha({ item }: { item: { statement: string; answer: boolean
   );
 }
 
-export function SceneLines({ lines, art = true }: { lines: { who: string; text: string }[]; art?: boolean }) {
-  return (
-    <div className="space-y-2">
-      {art && (
-        <>
-          <div className="relative h-24 overflow-hidden rounded-2xl">
-            <SceneArt scene="biblioteca" dark={false} />
-          </div>
-          <p className="rubric text-center font-logo text-sm font-bold">Cena</p>
-        </>
-      )}
-      <ul className="space-y-2">
-        {lines.map((l, i) => {
-          const bubo = l.who.toLowerCase() === 'bubo';
-          return (
-            <li key={i} className={`flex items-end gap-2 ${bubo ? '' : 'flex-row-reverse'}`}>
-              {bubo ? (
-                <Mascot mood={i === lines.length - 1 ? 'talk' : 'idle'} size={38} />
-              ) : (
-                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#4a4f57] text-xs font-bold text-white">{l.who[0]}</span>
-              )}
-              <span className={`rounded-2xl px-3 py-2 text-[0.92rem] leading-snug shadow-sm ${bubo ? 'rounded-bl-sm bg-surface' : 'rounded-br-sm bg-[#4a4f57]/12'}`}>
-                <b className="block text-[0.72rem] opacity-70">{l.who}</b>
-                {l.text}
-              </span>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
-}
 
 function BlockView({ b, chapterId, measuring }: { b: BookBlock; chapterId: string; measuring?: boolean }) {
   const chapter = getChapter(chapterId)!;
@@ -108,7 +74,8 @@ function BlockView({ b, chapterId, measuring }: { b: BookBlock; chapterId: strin
         </div>
       );
     case 'scene':
-      return <SceneLines lines={b.lines} art={!b.cont} />;
+      // Cenas da história antiga não são mais geradas (pacote v4).
+      return null;
     case 'title':
       return (
         <div className="mb-2 pt-1">
@@ -328,7 +295,7 @@ export function BookPage() {
         sfx(r.xp ? 'done' : 'ok');
         if (r.xp) {
           confetti(80);
-          toast({ text: 'Capítulo lido!', sub: `+${r.xp.amount} XP`, icon: 'grimorio', color: '#2c5f6e' });
+          toast({ text: 'Capítulo lido!', sub: `+${r.xp.amount} pontos`, icon: 'grimorio', color: '#2c5f6e' });
         }
       }
     }

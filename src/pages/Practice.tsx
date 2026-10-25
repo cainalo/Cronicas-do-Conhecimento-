@@ -401,7 +401,7 @@ function PracticeRun() {
           <div className="mt-4 grid w-full grid-cols-3 gap-2">
             <span className="rounded-2xl border-2 border-[#e8b13b] p-2">
               <b className="block text-xl text-[#9a5b20]">+{totalXp(data) - startXp}</b>
-              <span className="text-xs text-muted">XP</span>
+              <span className="text-xs text-muted">pontos</span>
             </span>
             <span className="rounded-2xl border-2 border-ok p-2">
               <b className="block text-xl text-ok">{score}%</b>

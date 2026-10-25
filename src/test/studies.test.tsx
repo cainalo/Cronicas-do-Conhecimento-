@@ -73,7 +73,7 @@ describe('página Estudos', () => {
 
 it('endereço inexistente fica dentro do app, com saída para a trilha e para Estudos', () => {
   renderAt('/nao-existe/mesmo');
-  expect(screen.getByRole('heading', { name: 'Este corredor não existe' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Página não encontrada' })).toBeInTheDocument();
   expect(screen.getByTestId('nao-encontrada-trilha').getAttribute('href')).toBe(screen.getByTestId('continuar-topo').getAttribute('href'));
   expect(screen.getByRole('link', { name: 'Abrir Estudos' })).toHaveAttribute('href', '/estudos');
 });

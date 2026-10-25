@@ -16,7 +16,7 @@ const NOW: Record<StepKind, string> = {
   praticar:
     'Você vai treinar o que acabou de ler. Começa fácil (verdadeiro ou falso, palavras novas) e termina com questões no estilo da prova. Errou? Sem problema: a atividade volta no fim, até você acertar.',
   missao:
-    'Você vai usar o que aprendeu numa investigação do Arquivo: assiste à cena, recebe os objetivos, faz o laboratório, treina, responde uma questão de prova e decide o que fazer com o achado.',
+    'Um caso prático de trabalho: você recebe os objetivos, descobre o problema, faz o laboratório, treina, responde uma questão de prova e revisa o que aprendeu.',
   desafio:
     'Este é o desafio do capítulo, no nível da prova: alguns cartões de resumo e depois questões com correção comentada. As que você errar vão para a revisão.',
   texto:

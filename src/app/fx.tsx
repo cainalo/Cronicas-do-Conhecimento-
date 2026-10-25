@@ -1,6 +1,6 @@
 // Efeitos de comemoração: confete, avisos flutuantes (+XP, novo nível, selo) e sons curtos
 // sintetizados (Web Audio, sem arquivos). Tudo respeita "reduzir movimento" e a preferência de som.
-import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from 'react';
 import { usePrefs } from '@/app/prefs';
 import { Icon, type IconName } from '@/components/Icon';
 
@@ -119,52 +119,3 @@ export function FxProvider({ children }: { children: ReactNode }) {
   );
 }
 
-/** Observa o estudo e comemora: +XP, novo nível e selos conquistados. */
-export function useCelebrations(xp: number, level: number, seals: { id: string; name: string; done: boolean }[], lessonsDone = 0, cluesTotal = 0) {
-  const { toast, confetti, sfx } = useFx();
-  const last = useRef<{ xp: number; level: number; seals: Set<string>; lessons: number } | null>(null);
-  useEffect(() => {
-    const doneSeals = new Set(seals.filter((s) => s.done).map((s) => s.id));
-    const prev = last.current;
-    last.current = { xp, level, seals: doneSeals, lessons: lessonsDone };
-    if (!prev) return;
-    if (level > prev.level) {
-      toast({ text: `Nível ${level}!`, sub: 'Você subiu de nível', icon: 'escudo', color: '#5b6b2e' });
-      confetti(90);
-      sfx('level');
-    } else if (xp > prev.xp) {
-      toast({ text: `+${xp - prev.xp} XP`, icon: 'selo', color: '#9a5b20' });
-    }
-    if (lessonsDone > prev.lessons && lessonsDone <= cluesTotal) {
-      toast({ text: 'Nova pista no diário', sub: `Pista ${lessonsDone} de ${cluesTotal}`, icon: 'pergaminho', color: '#5b6b2e' });
-    }
-    for (const s of seals) {
-      if (s.done && !prev.seals.has(s.id)) {
-        toast({ text: 'Selo conquistado', sub: s.name, icon: 'selo', color: '#1f5c45' });
-        confetti(50);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [xp, level, seals.filter((s) => s.done).length, lessonsDone]);
-}
-
-/** Comemora quando uma região do mapa passa de 80% de domínio (a névoa se dissipa). */
-export function useRegionCelebration(cleared: string[]) {
-  const { toast, confetti, sfx } = useFx();
-  const last = useRef<Set<string> | null>(null);
-  const key = cleared.join('|');
-  useEffect(() => {
-    const now = new Set(cleared);
-    const prev = last.current;
-    last.current = now;
-    if (!prev) return;
-    for (const name of cleared) {
-      if (!prev.has(name)) {
-        toast({ text: 'A névoa se dissipou', sub: name, icon: 'mapa', color: '#5b6b2e' });
-        confetti(100);
-        sfx('level');
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
-}

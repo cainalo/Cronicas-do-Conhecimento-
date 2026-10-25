@@ -108,7 +108,7 @@ function SimpleLearnPage() {
     session.finish();
     sfx('done');
     confetti(r.xp ? 90 : 40);
-    if (r.xp) toast({ text: 'Capítulo estudado!', sub: `+${r.xp.amount} XP`, icon: 'grimorio', color: '#2c5f6e' });
+    if (r.xp) toast({ text: 'Capítulo estudado!', sub: `+${r.xp.amount} pontos`, icon: 'grimorio', color: '#2c5f6e' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, pages, spread]);
 

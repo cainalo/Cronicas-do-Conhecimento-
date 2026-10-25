@@ -2,16 +2,14 @@
 import { Link } from 'react-router-dom';
 import { useCheckpoint } from '@/app/useCheckpoint';
 import { Icon } from '@/components/Icon';
-import { MascotSays } from '@/components/Mascot';
 
 export function NotFoundPage() {
   const next = useCheckpoint();
   return (
     <section className="space-y-4" aria-label="Página não encontrada">
-      <h1 className="text-2xl">Este corredor não existe</h1>
-      <MascotSays mood="think" size={72}>
-        Procurei em todas as estantes do Arquivo e não achei esta página. Talvez o endereço tenha mudado ou esteja incompleto. Seu progresso continua guardado.
-      </MascotSays>
+      <p className="kicker">Erro 404</p>
+      <h1 className="text-2xl">Página não encontrada</h1>
+      <p className="border-l-2 border-gold pl-3 text-sm text-muted">Este endereço não existe ou mudou. Seu progresso continua guardado.</p>
       <Link to={next.to} className="btn-primary w-full" data-testid="nao-encontrada-trilha">
         <Icon name="play" size={18} fill="currentColor" /> Voltar à trilha
       </Link>
