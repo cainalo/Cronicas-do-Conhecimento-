@@ -18,6 +18,7 @@ import { Markdown } from '@/components/Markdown';
 import { PageDots, SwipePages, type PageItem } from '@/components/SwipePages';
 import { splitMarkdown } from '@/lib/book';
 import { Icon } from '@/components/Icon';
+import { Illustration } from '@/components/Illustration';
 import { StepGuide } from '@/components/StepGuide';
 import { ActivityView } from '@/components/activities/ActivityView';
 
@@ -114,6 +115,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
     if (!step) return [];
     const body = phase.k === 'explicar' ? step.explain : step.recovery.explain;
     const items: PageItem[] = splitMarkdown(body).map((md, k) => ({ key: `e${k}`, md }));
+    if (phase.k === 'explicar' && step.art) items.unshift({ key: 'art', node: <Illustration name={step.art} className="mx-auto h-24 w-auto text-ink" /> });
     if (phase.k === 'explicar' && step.example) {
       items.push({
         key: 'ex',

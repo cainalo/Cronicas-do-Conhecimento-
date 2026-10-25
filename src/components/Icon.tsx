@@ -94,6 +94,13 @@ const paths = {
   ),
   fita: <path d="M7 3.5h10v17l-5-3.8-5 3.8z" />,
   fitaCheia: <path d="M7 3.5h10v17l-5-3.8-5 3.8z" fill="currentColor" />,
+  coracao: <path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.4 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z" />,
+  coracaoCheio: <path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.4 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z" fill="currentColor" />,
+  compartilhar: (
+    <>
+      <path d="M12 15V4M8 8l4-4 4 4M5 13v6.5h14V13" />
+    </>
+  ),
   sumario: (
     <>
       <path d="M9 6.5h11M9 12h11M9 17.5h7" />

@@ -25,6 +25,7 @@ export const primHistoria: MicroLesson = {
   steps: [
     {
       id: 'abaco',
+      art: 'abaco',
       part: 'O começo',
       title: 'Contar com as mãos e com o ábaco',
       goal: 'Entender que o computador nasceu da vontade de fazer contas mais depressa e sem erro.',
@@ -61,6 +62,7 @@ export const primHistoria: MicroLesson = {
     },
     {
       id: 'pascal',
+      art: 'engrenagem',
       part: 'O começo',
       title: '1642: a primeira máquina que somava sozinha',
       goal: 'Saber que as primeiras máquinas de calcular eram mecânicas e faziam uma só tarefa.',
@@ -96,6 +98,7 @@ export const primHistoria: MicroLesson = {
     },
     {
       id: 'jacquard',
+      art: 'cartao',
       part: 'Instruções',
       title: '1804: um tear que seguia cartões',
       goal: 'Entender a ideia de dar instruções a uma máquina.',
@@ -131,6 +134,7 @@ export const primHistoria: MicroLesson = {
     },
     {
       id: 'babbage',
+      art: 'engrenagem',
       part: 'Instruções',
       title: 'Babbage e Ada: a máquina que nunca ficou pronta',
       goal: 'Conhecer a máquina analítica e o primeiro programa de Ada Lovelace.',
@@ -164,6 +168,7 @@ export const primHistoria: MicroLesson = {
     },
     {
       id: 'hollerith',
+      art: 'cartao',
       part: 'Eletricidade',
       title: '1890: contar um país inteiro',
       goal: 'Ver como cartões perfurados e eletricidade aceleraram o trabalho de contar.',
@@ -199,6 +204,7 @@ export const primHistoria: MicroLesson = {
     },
     {
       id: 'eniac',
+      art: 'valvula',
       part: 'Eletricidade',
       title: '1946: o ENIAC, um computador do tamanho de uma sala',
       goal: 'Conhecer o ENIAC e por que ele era tão grande.',
@@ -234,6 +240,7 @@ export const primHistoria: MicroLesson = {
     },
     {
       id: 'chip',
+      art: 'chip',
       part: 'Encolhendo',
       title: 'Do transistor ao celular no bolso',
       goal: 'Seguir o caminho do transistor ao smartphone.',
@@ -328,6 +335,7 @@ export const primQuatroTarefas: MicroLesson = {
   steps: [
     {
       id: 'cozinha',
+      art: 'computador',
       part: 'A ideia',
       title: 'Receber, trabalhar, guardar e mostrar',
       goal: 'Reconhecer as quatro tarefas de todo computador.',
@@ -358,6 +366,7 @@ export const primQuatroTarefas: MicroLesson = {
     },
     {
       id: 'entrada',
+      art: 'teclado',
       part: 'As tarefas',
       title: 'Entrada: por onde a informação chega',
       goal: 'Identificar dispositivos de entrada.',
@@ -393,6 +402,7 @@ export const primQuatroTarefas: MicroLesson = {
     },
     {
       id: 'saida',
+      art: 'pessoal',
       part: 'As tarefas',
       title: 'Saída: por onde o resultado sai',
       goal: 'Identificar dispositivos de saída e diferenciá-los dos de entrada.',
@@ -428,6 +438,7 @@ export const primQuatroTarefas: MicroLesson = {
     },
     {
       id: 'processamento',
+      art: 'chip',
       part: 'As tarefas',
       title: 'Processamento: a CPU trabalha',
       goal: 'Saber que o processador (CPU) é quem faz as contas e toma as decisões.',
@@ -463,6 +474,7 @@ export const primQuatroTarefas: MicroLesson = {
     },
     {
       id: 'memoria',
+      art: 'degraus',
       part: 'As tarefas',
       title: 'Memória: guardar por pouco e por muito tempo',
       goal: 'Diferenciar a memória de trabalho do armazenamento.',
@@ -498,6 +510,7 @@ export const primQuatroTarefas: MicroLesson = {
     },
     {
       id: 'juntando',
+      art: 'computador',
       part: 'Juntando',
       title: 'As quatro tarefas numa conta só',
       goal: 'Acompanhar as quatro tarefas num exemplo completo.',

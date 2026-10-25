@@ -24,6 +24,7 @@ export const primBits: MicroLesson = {
   steps: [
     {
       id: 'dois-estados',
+      art: 'interruptor',
       part: 'O bit',
       title: 'Por dentro, só dois estados',
       goal: 'Entender que o computador, por dentro, só distingue ligado e desligado.',
@@ -59,6 +60,7 @@ export const primBits: MicroLesson = {
     },
     {
       id: 'bit',
+      art: 'interruptor',
       part: 'O bit',
       title: 'O bit: a menor informação',
       goal: 'Saber o que é um bit.',
@@ -95,6 +97,7 @@ export const primBits: MicroLesson = {
     },
     {
       id: 'juntar',
+      art: 'interruptor',
       part: 'Juntando bits',
       title: 'Juntando bits, as combinações dobram',
       goal: 'Perceber que cada bit a mais dobra as combinações possíveis.',
@@ -130,6 +133,7 @@ export const primBits: MicroLesson = {
     },
     {
       id: 'byte',
+      art: 'teclado',
       part: 'Juntando bits',
       title: 'Oito bits formam um byte',
       goal: 'Saber que um byte tem 8 bits e guarda uma letra simples.',
@@ -229,6 +233,7 @@ export const primTamanhos: MicroLesson = {
   steps: [
     {
       id: 'degraus',
+      art: 'degraus',
       part: 'Tamanhos',
       title: 'Os degraus: KB, MB, GB e TB',
       goal: 'Conhecer os degraus de tamanho a partir do byte.',
@@ -259,6 +264,7 @@ export const primTamanhos: MicroLesson = {
     },
     {
       id: 'mil-vinte-quatro',
+      art: 'degraus',
       part: 'Tamanhos',
       title: 'Por que 1.024 e não 1.000',
       goal: 'Saber que, em computação, cada degrau costuma valer 1.024 vezes o anterior.',
@@ -294,6 +300,7 @@ export const primTamanhos: MicroLesson = {
     },
     {
       id: 'tribunal',
+      art: 'celular',
       part: 'No trabalho',
       title: 'Por que isso importa no Tribunal',
       goal: 'Relacionar tamanhos de arquivo com espaço em disco e tempo de envio.',

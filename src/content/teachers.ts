@@ -10,6 +10,10 @@ export interface FictionalTeacher {
   biography: string;
   tone: 'gold' | 'azure' | 'teal' | 'pink' | 'leaf' | 'ember';
   fictional: true;
+  /** Nome de usuário no feed. */
+  handle?: string;
+  /** Assuntos que a pessoa costuma postar (aparecem no perfil). */
+  topics?: string[];
 }
 
 export interface TeacherPost {
@@ -33,6 +37,8 @@ export interface TeacherPost {
 export const teachers: FictionalTeacher[] = [
   {
     id: 'prof.clara',
+    handle: 'clara.numeros',
+    topics: ['Matemática', 'Raciocínio lógico', 'Primeiros passos'],
     name: 'Professora Clara',
     expertiseLabel: 'Matemática e raciocínio lógico',
     biography: 'Personagem fictícia. Começa sempre por um exemplo de dinheiro, fila ou pizza antes da regra.',
@@ -41,6 +47,8 @@ export const teachers: FictionalTeacher[] = [
   },
   {
     id: 'prof.lia',
+    handle: 'lia.sistemas',
+    topics: ['Primeiros passos', 'Sistemas operacionais', 'Linha de comando'],
     name: 'Professora Lia',
     expertiseLabel: 'Sistemas operacionais e linha de comando',
     biography: 'Personagem fictícia. Gosta de comparar o computador com um cartório bem organizado.',
@@ -49,6 +57,8 @@ export const teachers: FictionalTeacher[] = [
   },
   {
     id: 'prof.davi',
+    handle: 'davi.redes',
+    topics: ['Redes', 'Internet', 'Serviços'],
     name: 'Professor Davi',
     expertiseLabel: 'Redes e serviços',
     biography: 'Personagem fictício. Explica rede como se fosse o serviço dos Correios.',
@@ -57,6 +67,8 @@ export const teachers: FictionalTeacher[] = [
   },
   {
     id: 'prof.iara',
+    handle: 'iara.seguranca',
+    topics: ['Segurança', 'Criptografia', 'Nuvem'],
     name: 'Professora Iara',
     expertiseLabel: 'Segurança e nuvem',
     biography: 'Personagem fictícia. Sempre pergunta: "o que acontece se esta peça quebrar?".',

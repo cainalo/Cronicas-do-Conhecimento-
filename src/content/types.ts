@@ -242,6 +242,8 @@ export interface MicroStep {
   explain: string;
   /** Exemplo trabalhado (Markdown; pode ter tabela ou comando). */
   example?: string;
+  /** Ilustração própria da etapa (aparece na explicação e no post do feed). */
+  art?: import('@/components/Illustration').IllustrationName;
   /** Checagem imediata do que acabou de ser ensinado. */
   check: import('@/lib/activities').MissionActivity;
   /** Se errar: outra explicação e um item equivalente com outros dados. */

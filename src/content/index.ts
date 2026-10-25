@@ -212,6 +212,7 @@ export const narratedFor = (lessonId: string) => narratedLessons.find((n) => n.l
 import { postsOfLesson, type FeedPost } from '@/lib/feed';
 import { teacherPosts as _tips } from './teachers';
 import { curatedVideos as _videos } from './estudos/materiais';
+import { realImages } from './estudos/imagens';
 /** Aulas do feed, na ordem da trilha (capítulos, trechos e aulas da série). */
 export const feedLessons: MicroLesson[] = journey.flatMap((c) => c.sections.flatMap((s) => microSeries(c.id, s.id)));
 const feedCache = new Map<string, FeedPost[]>();
@@ -228,6 +229,7 @@ export function feedPostsOf(lessonId: string): FeedPost[] {
         narrated: narratedFor(m.id),
         // Dicas do trecho entram no fim da última aula dele (tudo o que citam já foi ensinado).
         tips: last ? _tips.filter((t) => t.chapterId === m.chapterId && t.sectionId === m.sectionId) : [],
+        images: realImages,
       }),
     );
   }

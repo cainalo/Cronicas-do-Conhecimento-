@@ -180,6 +180,137 @@ const ART = {
     ),
     accent: <circle cx="80" cy="18" r="3.5" />,
   },
+  // História do computador e primeiros conceitos (25/10/2026): ilustrações para a série
+  // "O que é um computador" e para os posts do feed.
+  abaco: {
+    draw: (
+      <>
+        <rect {...L} x="22" y="16" width="116" height="92" rx="3" />
+        <path {...L} d="M22 40h116M22 62h116M22 84h116" />
+        <circle {...L} cx="40" cy="40" r="6" />
+        <circle {...L} cx="54" cy="40" r="6" />
+        <circle {...L} cx="108" cy="40" r="6" />
+        <circle {...L} cx="40" cy="62" r="6" />
+        <circle {...L} cx="94" cy="62" r="6" />
+        <circle {...L} cx="108" cy="62" r="6" />
+        <circle {...L} cx="122" cy="62" r="6" />
+        <circle {...L} cx="54" cy="84" r="6" />
+        <circle {...L} cx="68" cy="84" r="6" />
+        <path {...L} d="M14 116h132" />
+      </>
+    ),
+    accent: <circle cx="122" cy="40" r="6" />,
+  },
+  engrenagem: {
+    draw: (
+      <>
+        <circle {...L} cx="62" cy="62" r="26" />
+        <circle {...L} cx="62" cy="62" r="7" />
+        <path {...L} d="M62 28v8M62 88v8M28 62h8M88 62h8M38 38l6 6M80 80l6 6M38 86l6-6M80 44l6-6" />
+        <circle {...L} cx="114" cy="40" r="16" />
+        <circle {...L} cx="114" cy="40" r="4.5" />
+        <path {...L} d="M114 18v6M114 56v6M92 40h6M130 40h6" />
+        <path {...L} d="M18 112h124" />
+      </>
+    ),
+    accent: <circle cx="62" cy="62" r="3" />,
+  },
+  cartao: {
+    draw: (
+      <>
+        <path {...L} d="M24 30h104l12 12v58H24z" />
+        <path {...L} d="M128 30v12h12" />
+        <path {...L} d="M38 48h6M56 48h6M86 48h6M38 62h6M74 62h6M104 62h6M48 76h6M66 76h6M96 76h6M38 90h6M86 90h6M116 90h6" />
+        <path {...L} d="M16 112h128" />
+      </>
+    ),
+    accent: <rect x="114" y="46" width="6" height="4" />,
+  },
+  valvula: {
+    draw: (
+      <>
+        <path {...L} d="M60 92V44a20 20 0 0 1 40 0v48z" />
+        <path {...L} d="M56 92h48v10H56zM66 102v12M80 102v12M94 102v12" />
+        <path {...L} d="M70 80V58h20v22M80 58V48" />
+        <path {...L} d="M112 30l8-6M116 44h10M48 30l-8-6M44 44H34" />
+      </>
+    ),
+    accent: <circle cx="80" cy="44" r="4" />,
+  },
+  chip: {
+    draw: (
+      <>
+        <rect {...L} x="48" y="30" width="64" height="64" rx="4" />
+        <rect {...L} x="62" y="44" width="36" height="36" rx="2" />
+        <path {...L} d="M58 30V18M70 30V18M82 30V18M94 30V18M106 30V18M58 106V94M70 106V94M82 106V94M94 106V94M106 106V94M48 40H36M48 52H36M48 64H36M48 76H36M48 88H36M112 40h12M112 52h12M112 64h12M112 76h12M112 88h12" />
+      </>
+    ),
+    accent: <rect x="74" y="56" width="12" height="12" />,
+  },
+  pessoal: {
+    draw: (
+      <>
+        <path {...L} d="M40 18h80v62H40z" />
+        <rect {...L} x="50" y="28" width="60" height="42" rx="2" />
+        <path {...L} d="M60 42h20M60 52h32" />
+        <path {...L} d="M66 80l-6 10h40l-6-10" />
+        <path {...L} d="M28 98h104l6 10H22z" />
+        <path {...L} d="M42 102h76" />
+      </>
+    ),
+    accent: <rect x="84" y="40" width="8" height="5" />,
+  },
+  celular: {
+    draw: (
+      <>
+        <rect {...L} x="56" y="12" width="48" height="96" rx="7" />
+        <path {...L} d="M74 20h12" />
+        <rect {...L} x="62" y="28" width="36" height="58" rx="2" />
+        <path {...L} d="M68 40h24M68 50h16M68 60h20" />
+        <circle {...L} cx="80" cy="97" r="4" />
+        <path {...L} d="M116 40c6 4 6 14 0 18M124 34c10 7 10 23 0 30" />
+      </>
+    ),
+    accent: <rect x="68" y="70" width="10" height="8" />,
+  },
+  teclado: {
+    draw: (
+      <>
+        <rect {...L} x="16" y="58" width="128" height="44" rx="4" />
+        <path {...L} d="M26 70h8M40 70h8M54 70h8M68 70h8M82 70h8M96 70h8M110 70h8M124 70h8M30 82h8M44 82h8M58 82h8M72 82h8M86 82h8M100 82h8M114 82h8M50 94h60" />
+        <path {...L} d="M80 58V40c0-10 12-12 18-6" />
+        <rect {...L} x="96" y="18" width="20" height="28" rx="10" />
+        <path {...L} d="M106 18v10" />
+      </>
+    ),
+    accent: <rect x="68" y="66" width="8" height="8" />,
+  },
+  interruptor: {
+    draw: (
+      <>
+        <rect {...L} x="22" y="30" width="48" height="70" rx="4" />
+        <rect {...L} x="36" y="44" width="20" height="42" rx="3" />
+        <path {...L} d="M40 48h12v16H40z" />
+        <rect {...L} x="90" y="30" width="48" height="70" rx="4" />
+        <rect {...L} x="104" y="44" width="20" height="42" rx="3" />
+        <path {...L} d="M108 66h12v16h-12z" />
+        <path {...L} d="M43 15l3-3v14" />
+        <ellipse {...L} cx="114" cy="19" rx="4" ry="6" />
+        <path {...L} d="M14 112h132" />
+      </>
+    ),
+    accent: <rect x="40" y="48" width="12" height="16" />,
+  },
+  degraus: {
+    draw: (
+      <>
+        <path {...L} d="M18 104h28V84h28V62h28V40h28V18" />
+        <path {...L} d="M18 104h124" />
+        <path {...L} d="M26 98h12M54 78h12M82 56h12M110 34h12" />
+      </>
+    ),
+    accent: <rect x="130" y="12" width="8" height="8" />,
+  },
 } satisfies Record<string, Art>;
 
 export type IllustrationName = keyof typeof ART;

@@ -6,7 +6,9 @@ import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
 import { feedLessons, feedPostsOf, microLessons } from '@/content';
 import { emptyFeed, lessonAnswered, lessonUnlocked } from '@/lib/feed';
-import { loadData } from '@/lib/storage';
+import { loadData, saveData } from '@/lib/storage';
+import { emptyData } from '@/lib/model';
+import { logUnit } from '@/lib/pace';
 
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
 beforeEach(() => localStorage.clear());
@@ -103,4 +105,33 @@ it('concluir a aula no feed registra na trilha a mesma aula (e libera a próxima
   const log = loadData('visitante').unitLog ?? {};
   expect(Object.keys(log).some((k) => k.includes(first.chapterId) && k.includes(first.sectionId))).toBe(true);
   expect(screen.getByRole('button', { name: /Próxima aula/ })).toBeInTheDocument();
+});
+
+it('rede social do feed: perfil do professor, curtir guardado e revisão rápida das aulas concluídas', async () => {
+  const user = userEvent.setup();
+  const first = feedLessons[0];
+  // Aula 1 concluída na trilha: aparece nas revisões rápidas.
+  saveData('visitante', logUnit(emptyData(), `aprender:${first.chapterId}:${first.sectionId}#${first.id}`));
+  renderAt('/sala');
+  // Perfil.
+  await user.click(screen.getAllByRole('button', { name: /Ver o perfil de Professora Lia/ })[0]);
+  const dlg = screen.getByRole('dialog', { name: 'Perfil de Professora Lia' });
+  expect(dlg).toHaveTextContent('@lia.sistemas');
+  expect(dlg).toHaveTextContent('personagem fictício');
+  await user.click(within(dlg).getByRole('button', { name: 'Fechar' }));
+  // Curtir é privado e fica guardado.
+  const posts = feedPostsOf(screen.getByRole('combobox', { name: 'Escolher aula' }).getAttribute('value') ?? feedLessons[1].id);
+  const card = screen.getAllByRole('article')[0];
+  await user.click(within(card).getByRole('button', { name: 'Curtir' }));
+  const st = JSON.parse(localStorage.getItem('cronicas:feed:v1')!);
+  expect(Object.values(st.react).some((r) => (r as { curti?: boolean }).curti)).toBe(true);
+  expect(posts.length).toBeGreaterThan(0);
+  // Revisão rápida: resumo da aula concluída, tela por tela.
+  await user.click(screen.getByRole('button', { name: `Revisão rápida: ${first.title}` }));
+  const story = screen.getByRole('dialog', { name: `Revisão rápida: ${first.title}` });
+  expect(story).toHaveTextContent(first.summary[0]);
+  await user.click(within(story).getByRole('button', { name: 'Próximo' }));
+  expect(story).toHaveTextContent(first.summary[1]);
+  await user.click(within(story).getByRole('button', { name: 'Fechar a revisão' }));
+  expect(screen.queryByRole('dialog')).toBeNull();
 });

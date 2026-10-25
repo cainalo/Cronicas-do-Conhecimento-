@@ -28,15 +28,38 @@ export interface FeedPost {
   narrated?: NarratedLesson;
   tip?: TeacherPost;
   summary?: string[];
+  /** Ilustração própria (da etapa da aula). */
+  art?: import('@/components/Illustration').IllustrationName;
+  /** Foto real com crédito e licença (só de acervo livre conferido). */
+  image?: FeedImage;
+  /** Objetivo da etapa: vira o comentário fixado do professor. */
+  goal?: string;
+  /** Assunto do post, mostrado como hashtag. */
+  tags?: string[];
 }
 
+/** Foto real de acervo livre (domínio público ou licença livre), sempre com autor, licença e fonte. */
+export interface FeedImage {
+  src: string;
+  alt: string;
+  credit: string;
+  license: string;
+  sourceUrl: string;
+}
+
+const tag = (t: string) => t.split(/[^\p{L}\p{N}]+/u).filter(Boolean).map((w) => w[0].toUpperCase() + w.slice(1)).join('');
+
 /** Explicações com 3 partes ou mais viram carrossel; menores, um post só. */
-export function postsOfLesson(m: MicroLesson, extras: { videos: CuratedVideo[]; narrated?: NarratedLesson; tips: TeacherPost[] }): FeedPost[] {
+export function postsOfLesson(
+  m: MicroLesson,
+  extras: { videos: CuratedVideo[]; narrated?: NarratedLesson; tips: TeacherPost[]; images?: Record<string, FeedImage> },
+): FeedPost[] {
   const out: FeedPost[] = [];
   m.steps.forEach((s) => {
     const parts = splitMarkdown(s.explain);
-    if (parts.length >= 3) out.push({ id: `${m.id}:${s.id}:c`, kind: 'carrossel', lessonId: m.id, stepId: s.id, title: s.title, slides: parts });
-    else out.push({ id: `${m.id}:${s.id}:e`, kind: 'explica', lessonId: m.id, stepId: s.id, title: s.title, md: s.explain });
+    const media = { art: s.art, image: extras.images?.[`${m.id}:${s.id}`], goal: s.goal, tags: [tag(s.part)].filter(Boolean) };
+    if (parts.length >= 3) out.push({ id: `${m.id}:${s.id}:c`, kind: 'carrossel', lessonId: m.id, stepId: s.id, title: s.title, slides: parts, ...media });
+    else out.push({ id: `${m.id}:${s.id}:e`, kind: 'explica', lessonId: m.id, stepId: s.id, title: s.title, md: s.explain, ...media });
     if (s.example) out.push({ id: `${m.id}:${s.id}:x`, kind: 'exemplo', lessonId: m.id, stepId: s.id, title: `Exemplo: ${s.title.toLowerCase()}`, md: s.example });
     out.push({ id: `${m.id}:${s.id}:a`, kind: 'atividade', lessonId: m.id, stepId: s.id, title: `Confira: ${s.title.toLowerCase()}`, activity: s.check, recovery: { md: s.recovery.explain, activity: s.recovery.check } });
   });
@@ -51,7 +74,7 @@ export function postsOfLesson(m: MicroLesson, extras: { videos: CuratedVideo[]; 
 export interface FeedPrefs {
   /** Último post aberto em cada aula. */
   cursor: Record<string, number>;
-  react: Record<string, { entendi?: boolean; rever?: boolean; salvo?: boolean }>;
+  react: Record<string, { entendi?: boolean; rever?: boolean; salvo?: boolean; curti?: boolean }>;
   notes: Record<string, string>;
   /** Dúvidas guardadas para levar ao professor (sem resposta automática). */
   questions: Record<string, string>;
