@@ -21,6 +21,7 @@ import { AppearancePage } from '@/pages/settings/Appearance';
 import { SoundsPage } from '@/pages/settings/Sounds';
 import { DataPage } from '@/pages/settings/Data';
 import { AboutPage } from '@/pages/settings/About';
+import { ScreenPage } from '@/pages/settings/Screen';
 import { AccountPage } from '@/pages/Account';
 import { TrainingPage } from '@/pages/Training';
 import { FlashcardsPage } from '@/pages/Flashcards';
@@ -72,6 +73,7 @@ export function AppRoutes() {
         <Route path="conta/sons" element={<SoundsPage />} />
         <Route path="conta/dados" element={<DataPage />} />
         <Route path="conta/sobre" element={<AboutPage />} />
+        <Route path="conta/tela" element={<ScreenPage />} />
         <Route path="treino" element={<TrainingPage />} />
         <Route path="plano" element={<PlanPage />} />
         <Route path="reino" element={<Navigate to="/progresso" replace />} />

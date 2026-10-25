@@ -1,5 +1,5 @@
 // Integração com o app nativo (Capacitor). No navegador, nada acontece.
-import { Capacitor } from '@capacitor/core';
+import { Capacitor, registerPlugin } from '@capacitor/core';
 
 export const isNative = () => Capacitor.isNativePlatform();
 
@@ -27,4 +27,18 @@ export async function setupNative() {
     if (canGoBack) window.history.back();
     else void App.exitApp();
   });
+}
+
+/** Plugin nativo do próprio app (MainActivity/ImmersivePlugin): barras do sistema ocultas por padrão. */
+const Immersive = registerPlugin<{ get(): Promise<{ enabled: boolean }>; set(o: { enabled: boolean }): Promise<{ enabled: boolean }> }>('Immersive');
+
+/** Liga ou desliga o modo imersivo no Android. No navegador não há controle das barras: devolve false. */
+export async function setImmersive(enabled: boolean): Promise<boolean> {
+  if (!isNative()) return false;
+  try {
+    await Immersive.set({ enabled });
+    return true;
+  } catch {
+    return false;
+  }
 }

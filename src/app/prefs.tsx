@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { loadPrefs, savePrefs, type Prefs } from '@/lib/storage';
-import { applyStatusBar } from '@/app/native';
+import { applyStatusBar, setImmersive } from '@/app/native';
 import { normalizeMix, soundscape } from '@/app/soundscape';
 import { LOOK_VERSION, applyLook, migrateLook, normalizeLook } from '@/lib/theme';
 
@@ -20,6 +20,11 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
     void applyStatusBar(prefs.theme);
     savePrefs(prefs);
   }, [prefs]);
+  // Modo imersivo do Android: o nativo guarda a escolha; aqui só reforça quando a pessoa o desligou.
+  useEffect(() => {
+    if (prefs.immersive === false) void setImmersive(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   // Sons para estudar: a mistura salva é aplicada, mas só toca depois que a pessoa aperta Tocar.
   useEffect(() => {
     soundscape.setMix(normalizeMix(prefs.sounds));
