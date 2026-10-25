@@ -4,7 +4,8 @@ import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
-import { DEFAULT_CONTEST_ID, getChapter, getSectionExtras, getSimpleSection, questionsForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, concepts, getChapter, getLearningUnit, getSectionExtras, getSimpleSection, learningUnits, questionsForContest } from '@/content';
+import { practiceUnlocked, taughtConcepts } from '@/lib/engine';
 import { buildPractice, completePractice, isRecovery, nextQueue, practiceId, recoveryFor, type Activity } from '@/lib/practice';
 import { useSession } from '@/app/useSession';
 import { recordAnswer, totalXp } from '@/lib/study';
@@ -117,7 +118,35 @@ function Pairs({ a, onDone }: { a: Extract<Activity, { kind: 'pairs' }>; onDone:
   );
 }
 
+/** Gate da trilha (reformulação, Fase 3): a Prática só abre depois do Aprender do mesmo trecho. */
 export function PracticePage() {
+  const { chapterId = '', sectionId = '' } = useParams();
+  const { data } = useStudy();
+  const chapter = getChapter(chapterId);
+  const section = chapter?.sections.find((s) => s.id === sectionId);
+  if (chapter && section && !practiceUnlocked(data, chapter, sectionId)) {
+    return (
+      <section className="card mx-auto mt-6 max-w-xl p-5" aria-label="Prática bloqueada">
+        <p className="text-sm font-semibold text-leaf">Ainda não</p>
+        <h1 className="mt-1 text-2xl">Primeiro, aprenda este trecho</h1>
+        <p className="mt-2 text-muted">
+          A prática de <b className="text-ink">{section.title.replace(/^\d+\.\s*/, '')}</b> só cobra o que já foi ensinado. Conclua o Aprender deste trecho e ela abre em seguida.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Link to={`/aprender/${chapterId}/${sectionId}`} className="btn-primary flex-1">
+            <Icon name="play" size={18} fill="currentColor" /> Ir para o Aprender
+          </Link>
+          <Link to="/trilha" className="btn-ghost flex-1">
+            Ver a trilha
+          </Link>
+        </div>
+      </section>
+    );
+  }
+  return <PracticeRun />;
+}
+
+function PracticeRun() {
   const { chapterId = '', sectionId = '' } = useParams();
   const navigate = useNavigate();
   const chapter = getChapter(chapterId);
@@ -127,7 +156,17 @@ export function PracticePage() {
   const { data, update } = useStudy();
   const { sfx, confetti } = useFx();
   const startXp = useMemo(() => totalXp(data), []); // eslint-disable-line react-hooks/exhaustive-deps
-  const initial = useMemo(() => (chapter ? buildPractice(chapter, sectionId, questionsForContest(DEFAULT_CONTEST_ID), extras, Math.random, simple) : []), [chapter, sectionId, extras, simple]);
+  // Trecho com unidade interativa: as palavras da prática vêm só dos conceitos já ensinados (gate).
+  const glossary = useMemo(() => {
+    const unit = getLearningUnit(chapterId, sectionId);
+    if (!unit) return undefined;
+    const taught = taughtConcepts(data, learningUnits);
+    return concepts.filter((c) => unit.conceptIds.includes(c.id) && taught.has(c.id)).map((c) => ({ term: c.term, definition: c.definition }));
+  }, [chapterId, sectionId]); // eslint-disable-line react-hooks/exhaustive-deps
+  const initial = useMemo(
+    () => (chapter ? buildPractice(chapter, sectionId, questionsForContest(DEFAULT_CONTEST_ID), extras, Math.random, simple, glossary) : []),
+    [chapter, sectionId, extras, simple, glossary],
+  );
   // Fila, fase e acertos guardados: ao voltar, a prática continua na mesma atividade.
   type Saved = { queue: Activity[]; phase: 'intro' | 'play' | 'done'; firstTry: Record<string, boolean>; total: number };
   const session = useSession<Saved>(
@@ -154,7 +193,7 @@ export function PracticePage() {
 
   const judge = (ok: boolean, title: string, detail?: string) => {
     // Errou: além da explicação, prepara um item equivalente com outros dados (quando existe).
-    const recovery = !ok && act ? recoveryFor(act, { chapter, sectionId, bank: questionsForContest(DEFAULT_CONTEST_ID), simple, queue }) : undefined;
+    const recovery = !ok && act ? recoveryFor(act, { chapter, sectionId, bank: questionsForContest(DEFAULT_CONTEST_ID), simple, queue, glossary }) : undefined;
     setVerdict({ ok, title, detail, recovery });
     sfx(ok ? 'ok' : 'bad');
     setCombo((c) => (ok ? c + 1 : 0));

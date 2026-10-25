@@ -4,7 +4,7 @@ Pacote: `Cronicas_Reformulacao_Pacote_Tecnico` (specs lidos: README, 00, 03, 04,
 
 ## Fase ativa
 
-**Fase 3: engine de atividades e validação pedagógica.** As Fases 0, 1 e 2 foram concluídas (a Fase 2 com o piloto).
+**Fase 4: trilha, modelo do estudante, revisão e planejamento.** As Fases 0 a 3 foram concluídas (2 e 3 com o piloto Processos).
 
 ## Fase 0 — baseline (concluída, 25/10/2026)
 
@@ -82,10 +82,30 @@ Pacote: `Cronicas_Reformulacao_Pacote_Tecnico` (specs lidos: README, 00, 03, 04,
   Exceção: o deslizar lateral das aulas antigas (SwipePages), escolha anterior do usuário.
 - Testes 805/805, typecheck e build ok, capturas em 390×844 e 1280×800 sem overflow.
 
+## Fase 3 — engine de atividades e gate de pré-requisitos (concluída, 25/10/2026)
+
+**Feito**
+- `src/lib/engine.ts`:
+  - contrato único `EngineActivity` (tipos do spec 12 implementados no app, família, modo diagnóstico/ensino/prática/revisão/prova, `requiresConceptIds`/`assessesConceptIds`, `ErrorCode` do spec 12 §5);
+  - adaptadores `fromMission` e `fromPractice`, sem reescrever os renderers;
+  - `diversityReport` (V/F até ~10%, sem três da mesma família seguidas) e `interleave` determinístico;
+  - `taughtConcepts`: conceitos ensinados a partir das etapas salvas, entendendo o formato novo e o antigo; diagnóstico não conta;
+  - `eligible` (gate) e `practiceUnlocked`.
+- Gate na trilha: a Prática de um trecho mostra "Primeiro, aprenda este trecho" até o Aprender ser concluído (antes abria direto pela URL).
+- Prática do piloto: termos e pares vêm só dos conceitos ensinados da unidade. Antes vinham do glossário do capítulo inteiro (LDAP, permissão 750, AD...). A recuperação usa o mesmo glossário.
+- Testes: `src/test/engine.test.ts` (6) e fluxo da prática bloqueada. Os testes antigos que abriam a Prática direto passaram a marcar o trecho como aprendido antes.
+
+**Comandos e resultados**: typecheck ok; `npm test` **812/812** (17 arquivos); build ok.
+
+**Limitações**
+- Os renderers continuam sendo dois (ActivityView e Prática): a unificação é de contrato e regras, não de componente.
+- Não há tipos novos (label_diagram, terminal_simulator, scenario_branch, predict_result).
+- Tentativas ainda não guardam `changeId` nem versão da atividade (Fase 5, com o outbox).
+
 ## Próxima ação exata
 
-Fase 3 (spec 12):
-1. Ler `specs/12_ENGINE_DE_ATIVIDADES.md` e `specs/11_GRAFO_PRE_REQUISITOS.md`.
-2. Unificar `lib/practice.ts` (tf/blank/term/pairs/mcq) e `lib/activities.ts` (choice/multi/order/sort/compare/fix/tf/exam) numa união discriminada com adaptador para os registros antigos.
-3. Fazer a Prática do trecho Processos usar `assesses` da unidade, para cobrar só conceitos ensinados.
-4. Testar diversidade (V/F não domina) e a recuperação com item equivalente.
+Fase 4 (specs 10, 13, 14, 15):
+1. Ler os specs.
+2. Separar no checkpoint a recuperação obrigatória (com `parentCheckpointId`/`returnStepId`) das atividades livres.
+3. Migrar os flashcards para um agendador de revisão que só recebe conceitos já ensinados.
+4. Fazer o planner em minutos com viabilidade: data final do conteúdo novo e déficit explícito quando a meta não cabe, com testes de cenário.

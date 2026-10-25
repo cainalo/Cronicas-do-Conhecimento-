@@ -5,7 +5,14 @@ import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
 import { getLesson, getQuestion } from '@/content';
-import { loadData } from '@/lib/storage';
+import { loadData, saveData } from '@/lib/storage';
+import { getChapter } from '@/content';
+import { markSectionRead } from '@/lib/study';
+
+/** A Prática só abre depois do Aprender do trecho (gate da trilha). */
+function readSection(chapterId: string, sectionId: string) {
+  saveData('visitante', markSectionRead(loadData('visitante'), getChapter(chapterId)!, sectionId).data);
+}
 
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
 
@@ -91,6 +98,7 @@ it('aprender: livro simples do trecho, palavras novas e convite para praticar', 
 
 it('prática: abre a rodada do trecho e mostra a primeira atividade', async () => {
   const user = userEvent.setup();
+  readSection('cap.seg.01', 'fundamentos');
   renderAt('/pratica/cap.seg.01/fundamentos');
   expect(screen.getByRole('heading', { name: /Prática:/ })).toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: /Começar/ }));
@@ -220,6 +228,7 @@ it('retomada exata: Desafio e Prática continuam na mesma questão/atividade', a
   expect(screen.getByText(/Questão 3 de 10/)).toBeInTheDocument();
   b.unmount();
 
+  readSection('cap.seg.01', 'fundamentos');
   const c = renderAt('/pratica/cap.seg.01/fundamentos');
   await user.click(screen.getByRole('button', { name: /Começar/ }));
   expect(screen.getByRole('button', { name: 'Sair da prática' })).toBeInTheDocument();
@@ -314,4 +323,11 @@ it('livro: modo de leitura contínua mostra o mesmo conteúdo sem virar páginas
   expect(screen.queryByRole('button', { name: 'Próxima página' })).toBeNull();
   await user.click(screen.getByRole('button', { name: 'Voltar ao livro com páginas' }));
   expect(screen.getByRole('button', { name: 'Próxima página' })).toBeInTheDocument();
+});
+
+it('prática bloqueada antes do Aprender do trecho, com caminho para aprender', () => {
+  renderAt('/pratica/cap.infra.03/processos');
+  expect(screen.getByRole('heading', { name: 'Primeiro, aprenda este trecho' })).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: /Ir para o Aprender/ })).toHaveAttribute('href', '/aprender/cap.infra.03/processos');
+  expect(screen.queryByRole('button', { name: /Começar/ })).toBeNull();
 });

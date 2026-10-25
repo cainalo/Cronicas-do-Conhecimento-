@@ -46,6 +46,8 @@ export function buildPractice(
   extras?: SectionExtras,
   rand: () => number = Math.random,
   simple?: SimpleSection,
+  /** Glossário permitido (reformulação: só conceitos já ensinados). Padrão: o glossário do capítulo. */
+  glossary: { term: string; definition: string }[] = chapter.glossary,
 ): Activity[] {
   const section = chapter.sections.find((s) => s.id === sectionId);
   if (!section) return [];
@@ -67,10 +69,10 @@ export function buildPractice(
   }));
 
   // Glossário do capítulo: escolher o termo certo e associar pares.
-  const gloss = shuffle(chapter.glossary, rand);
+  const gloss = shuffle(glossary, rand);
   const terms: Activity[] = gloss.slice(0, 2).map((g, i) => {
     const others = shuffle(
-      chapter.glossary.filter((x) => x.term !== g.term),
+      glossary.filter((x) => x.term !== g.term),
       rand,
     )
       .slice(0, 3)
@@ -78,7 +80,7 @@ export function buildPractice(
     return { kind: 'term' as const, id: `${key}:t${i}`, definition: g.definition, options: shuffle([g.term, ...others], rand), answer: g.term };
   });
   const pairs: Activity[] =
-    chapter.glossary.length >= 4 ? [{ kind: 'pairs', id: `${key}:pares`, pairs: gloss.slice(2, 6).length === 4 ? gloss.slice(2, 6) : gloss.slice(0, 4) }] : [];
+    glossary.length >= 4 ? [{ kind: 'pairs', id: `${key}:pares`, pairs: gloss.slice(2, 6).length === 4 ? gloss.slice(2, 6) : gloss.slice(0, 4) }] : [];
 
   const mcqs: Activity[] = shuffle(
     bank.filter((q) => q.chapterId === chapter.id && q.sectionId === sectionId),
@@ -142,14 +144,14 @@ export const isRecovery = (id: string) => id.includes(RECOVERY_MARK);
  */
 export function recoveryFor(
   act: Activity,
-  ctx: { chapter: Chapter; sectionId: string; bank: Question[]; simple?: SimpleSection; queue: Activity[] },
+  ctx: { chapter: Chapter; sectionId: string; bank: Question[]; simple?: SimpleSection; queue: Activity[]; glossary?: { term: string; definition: string }[] },
   rand: () => number = Math.random,
 ): Activity | undefined {
   const base = act.id.split(RECOVERY_MARK)[0];
   const n = (act.id.split(RECOVERY_MARK)[1] ?? '').length + 1;
   const id = `${base}${RECOVERY_MARK}${'x'.repeat(n)}`;
   if (act.kind === 'term') {
-    const pool = base.endsWith(':w0') && ctx.simple ? ctx.simple.words.map((w) => ({ term: w.term, definition: w.meaning })) : ctx.chapter.glossary;
+    const pool = base.endsWith(':w0') && ctx.simple ? ctx.simple.words.map((w) => ({ term: w.term, definition: w.meaning })) : (ctx.glossary ?? ctx.chapter.glossary);
     const inQueue = new Set(ctx.queue.flatMap((a) => (a.kind === 'term' ? [a.answer] : [])));
     const cands = pool.filter((g) => g.term !== act.answer && !inQueue.has(g.term));
     if (!cands.length || pool.length < 4) return undefined;
