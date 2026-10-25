@@ -16,7 +16,8 @@ import { FeasibilityCard } from '@/components/FeasibilityCard';
 import { AppDownload } from '@/components/AppDownload';
 import { Icon } from '@/components/Icon';
 import { SyncBadge } from '@/components/Layout';
-import { IconBadge, SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
+import { SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
+import { useCountUp } from '@/app/useCountUp';
 
 const longDate = (iso: string, year = false) => {
   const [y, m, d] = iso.split('-').map(Number);
@@ -71,79 +72,66 @@ export function Dashboard() {
   const answeredToday = data.attempts.filter((a) => localDay(a.answeredAt) === today).length;
   const dailyGoal = settingsOf(data).dailyQuestionGoal;
   const days = daysUntilExam(contest.examDate);
+  const shownDays = useCountUp(days);
   const pace = computePace(data, trailUnits(), contest.examDate);
   const { plan } = usePlanOfToday();
   const pending = plan.items.filter((i) => !isDone(i, data, plan.day));
-  const torre = c('torre');
   const hour = new Date().getHours();
   const greet = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
+  const dateLine = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
   // "Você sabia?": um termo de glossário por dia, sempre o mesmo durante o dia.
   const dayNum = Math.floor(Date.now() / 86400000);
   const fact = flashcards[dayNum % flashcards.length];
 
   return (
-    <div className="stagger space-y-6">
-      {/* Saudação e indicadores do dia */}
-      <section aria-label="Saudação">
-        <h1 className="text-[1.6rem] leading-tight">{greet}!</h1>
-        <p className="mt-0.5 text-sm text-muted">
-          {sheet.streak ? `Você estuda há ${sheet.streak} dia(s) seguido(s).` : 'Um pouco de estudo hoje já conta.'} Este é o seu painel de hoje.
+    <div className="stagger space-y-8">
+      {/* Cabeçalho editorial: data, saudação e a contagem até a prova em números grandes */}
+      <header aria-label="Saudação" className="border-b border-ink pb-5">
+        <p className="kicker first-letter:uppercase">{dateLine}</p>
+        <div className="mt-1 flex items-end justify-between gap-4">
+          <h1 className="text-[2.2rem] leading-[1.02] sm:text-[2.8rem]">{greet}.</h1>
+          <span className="sm:hidden">
+            <SyncBadge />
+          </span>
+        </div>
+        <p className="mt-4 flex items-baseline gap-3">
+          <span className="font-display text-[3.4rem] leading-none tabular-nums text-gold">{shownDays}</span>
+          <span className="text-[0.95rem] leading-snug text-muted">
+            dias até a prova
+            <br />
+            {contest.name}, {longDate(contest.examDate, true)}
+          </span>
         </p>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          <span className="inline-flex items-center gap-1 rounded-full bg-leaf/15 px-2.5 py-1 text-xs font-semibold text-ink">
-            <Icon name="chama" size={14} strokeWidth={2.2} className="text-leaf" /> {sheet.streak} dia(s) seguidos
-          </span>
-          <span className="inline-flex items-center gap-1 rounded-full bg-gold/12 px-2.5 py-1 text-xs font-semibold text-ink">
-            <Icon name="estrela" size={14} strokeWidth={2.2} className="text-gold" /> {sheet.xp} pontos
-          </span>
-        </div>
-      </section>
+        <p className="mt-3 text-sm text-muted">
+          {sheet.streak ? `${sheet.streak} dia${sheet.streak > 1 ? 's' : ''} seguido${sheet.streak > 1 ? 's' : ''} de estudo` : 'Um pouco de estudo hoje já conta'} · {sheet.xp} pontos
+        </p>
+      </header>
 
-      {/* Abertura: contagem regressiva e a próxima missão, no mesmo cartão */}
-      <section
-        className="card overflow-hidden"
-      >
-        <div className="bg-gold px-4 py-5 text-white sm:px-5" style={{ backgroundImage: 'linear-gradient(135deg, rgb(var(--gold)), rgb(var(--azure)))' }}>
-          <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold">{contest.name} · FCC</span>
-          <p className="mt-2 text-[2rem] font-bold leading-none">{days} dias</p>
-          <p className="text-[0.95rem] text-white/90">até a prova, em {longDate(contest.examDate, true)}</p>
-        </div>
-        <div className="p-4 sm:p-5">
-          <div className="flex items-center justify-between gap-2">
-            <p className="text-sm font-semibold" style={{ color: torre }}>
-              {cp.resuming ? 'Você parou aqui' : cp.action === 'Começar' ? 'Primeiro passo' : 'Próximo passo da trilha'}
-            </p>
-            <span className="sm:hidden">
-              <SyncBadge />
-            </span>
-          </div>
-          <h2 className="mt-1 text-xl leading-snug">{cp.title}</h2>
-          <p className="mt-1 text-sm text-muted">{cp.context}</p>
-          <Link to={cp.to} className="btn-primary mt-4 w-full" data-testid="continuar-torre">
-            <Icon name="play" size={18} fill="currentColor" /> {cp.action}
-          </Link>
-        </div>
+      {/* Próximo passo da trilha: a mesma fonte do Continuar do topo */}
+      <section aria-label="Próximo passo">
+        <p className="kicker">{cp.resuming ? 'Você parou aqui' : cp.action === 'Começar' ? 'Primeiro passo' : 'Próximo passo da trilha'}</p>
+        <h2 className="mt-1 text-[1.5rem] leading-snug">{cp.title}</h2>
+        <p className="mt-1 text-sm text-muted">{cp.context}</p>
+        <Link to={cp.to} className="btn-primary mt-4 w-full sm:w-auto" data-testid="continuar-torre">
+          {cp.action} <Icon name="avancar" size={18} />
+        </Link>
       </section>
 
       <PaceCard pace={pace} examDate={contest.examDate} />
 
       <FeasibilityCard />
 
-      {/* Missões do Arquivo Real: a nova, ou a que tem revisão marcada para hoje */}
+      {/* Caso prático com revisão marcada para hoje */}
       {(() => {
         const due = missionsDue(data);
         const m = missions.find((x) => due.includes(x.id) && missionDone(data, x.id));
         if (!m) return null;
-        const review = due.includes(m.id);
         return (
-          <Link to={`/missao/${m.id}`} className="card relative flex items-center gap-4 overflow-hidden border-l-4 p-4" style={{ borderLeftColor: torre }}>
-            <IconBadge icon="mapa" color={torre} />
+          <Link to={`/missao/${m.id}`} className="card flex items-center gap-4 border-l-2 border-l-gold p-4">
             <span className="min-w-0 flex-1">
-              <span className="block text-xs font-semibold" style={{ color: torre }}>
-                {review ? 'Revisão de missão marcada para hoje' : 'Missão do Arquivo Real'}
-              </span>
+              <span className="kicker block">Revisão do caso prático marcada para hoje</span>
               <span className="block font-display text-lg leading-snug">{m.title}</span>
-              <span className="block text-sm text-muted">Cena 3D, laboratório de consultas e um desfecho que depende de você · {m.minutes} min</span>
+              <span className="block text-sm text-muted">Objetivos, laboratório de consultas e revisão · {m.minutes} min</span>
             </span>
             <Icon name="seta" size={18} />
           </Link>
@@ -151,51 +139,40 @@ export function Dashboard() {
       })()}
 
       {/* Números do dia */}
-      <section className="grid grid-cols-3 gap-3 sm:grid-cols-4">
-        <Link to="/plano" className="card col-span-3 flex items-center gap-4 p-4 sm:col-span-1 sm:flex-col sm:text-center">
-          <ProgressRing value={answeredToday / dailyGoal}>
-            <span className="font-display text-xl font-bold">{answeredToday}</span>
-            <span className="-mt-1 text-[0.7rem] text-muted">de {dailyGoal}</span>
+      <section aria-label="Números do dia" className="grid grid-cols-3 border-y border-line">
+        <Link to="/plano" className="flex flex-col items-start gap-2 py-4 pr-3">
+          <ProgressRing value={answeredToday / dailyGoal} size={52}>
+            <span className="font-display text-base tabular-nums">{answeredToday}</span>
           </ProgressRing>
-          <span className="min-w-0">
-            <span className="block font-semibold">Meta do dia</span>
-            <span className="block text-sm text-muted">
-              {plan.restDay ? 'hoje é dia de descanso' : `${pending.length} atividade(s) na ordem do dia`}
-            </span>
+          <span className="text-xs leading-snug text-muted">
+            de {dailyGoal} questões hoje{plan.restDay ? ' · descanso' : pending.length ? ` · ${pending.length} na ordem do dia` : ''}
           </span>
         </Link>
-        <Stat to="/revisao" label="Erros a revisar" value={queue.length} color={c('treino')} />
-        <Stat to="/flashcards" label="Cartões para hoje" value={cardsDue} color={c('treino')} />
-        <Stat to="/personagem" label={sheet.title} value={`Nv ${sheet.level}`} color={c('reino')} small />
+        <Stat to="/revisao" label="erros a revisar" value={queue.length} />
+        <Stat to="/flashcards" label="cartões para hoje" value={cardsDue} />
       </section>
 
-      {/* Atalhos, como a página Funções do NutriConnect */}
       <section>
-        <SectionTitle icon="torre" color={torre}>
-          Atalhos
-        </SectionTitle>
+        <SectionTitle>Atalhos</SectionTitle>
         <TileGrid>
-          <Tile to="/estudos" icon="grimorio" color={c('grimorios')} title="Estudos" text="Trilha, livros, atividades rápidas, vídeos e materiais." />
+          <Tile to="/estudos" icon="livro" color={c('grimorios')} title="Estudos" text="Trilha, livros, atividades rápidas, vídeos e materiais." />
           <Tile to="/plano" icon="calendario" color={c('treino')} title="Ordem do dia" text="O que estudar hoje, no seu ritmo." badge={plan.restDay ? undefined : `${plan.items.length - pending.length}/${plan.items.length}`} />
           <Tile to="/simulado" icon="relogio" color={c('treino')} title="Simulado" text="Questões sorteadas com tempo e boletim." />
-          <Tile to="/reino" icon="mapa" color={c('reino')} title="Mapa do reino" text="Seu domínio em cada disciplina." />
+          <Tile to="/progresso" icon="progresso" color={c('reino')} title="Progresso" text="Seu domínio em cada disciplina e trecho." />
         </TileGrid>
       </section>
 
       {fact && (
-        <Link to="/flashcards" className="card group relative block overflow-hidden p-4">
-          <span className="absolute -right-4 -top-4 h-24 w-24 rounded-full opacity-15" style={{ background: c('grimorios') }} />
-          <p className="flex items-center gap-2 text-sm font-semibold" style={{ color: c('grimorios') }}>
-            <Icon name="estrela" size={16} strokeWidth={2.2} className="anim-twinkle" /> Você sabia?
-          </p>
+        <Link to="/flashcards" className="block border-l-2 border-l-gold pl-4">
+          <p className="kicker">Você sabia?</p>
           <p className="mt-1 font-display text-lg leading-snug">{fact.front}</p>
           <p className="mt-1 text-sm text-muted">{fact.back}</p>
         </Link>
       )}
 
       {!session && (
-        <Link to="/conta" className="card flex items-center gap-3 p-4">
-          <IconBadge icon="chave" color={c('conta')} />
+        <Link to="/conta/acesso" className="card flex items-center gap-3 p-4">
+          <Icon name="nuvem" size={20} className="shrink-0 text-gold" />
           <span className="flex-1 text-[0.95rem]">
             <span className="block font-semibold">Você está como visitante</span>
             <span className="block text-sm text-muted">Crie uma conta para guardar o progresso no servidor e usar em outros aparelhos.</span>
@@ -207,22 +184,19 @@ export function Dashboard() {
       <AppDownload compact />
 
       <section>
-        <SectionTitle icon="grafico" color={c('reino')} action={<Link to="/progresso" className="text-gold">ver tópicos</Link>}>
-          Domínio por disciplina
-        </SectionTitle>
+        <SectionTitle action={<Link to="/progresso" className="link-grow text-gold">ver tópicos</Link>}>Domínio por disciplina</SectionTitle>
         <DisciplineSummary />
       </section>
     </div>
   );
 }
 
-function Stat({ to, label, value, color, small }: { to: string; label: string; value: number | string; color: string; small?: boolean }) {
+function Stat({ to, label, value }: { to: string; label: string; value: number }) {
+  const n = useCountUp(value);
   return (
-    <Link to={to} className="card flex flex-col justify-between gap-1 p-3.5">
-      <span className={`font-display font-bold leading-none ${small ? 'text-lg' : 'text-2xl'}`} style={{ color }}>
-        {value}
-      </span>
-      <span className="line-clamp-2 text-xs leading-snug text-muted">{label}</span>
+    <Link to={to} className="flex flex-col justify-between gap-2 border-l border-line py-4 pl-3">
+      <span className="font-display text-[2rem] leading-none tabular-nums">{n}</span>
+      <span className="text-xs leading-snug text-muted">{label}</span>
     </Link>
   );
 }
