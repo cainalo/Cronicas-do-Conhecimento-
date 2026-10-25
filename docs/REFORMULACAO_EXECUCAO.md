@@ -4,7 +4,7 @@ Pacote: `Cronicas_Reformulacao_Pacote_Tecnico` (specs lidos: README, 00, 03, 04,
 
 ## Fase ativa
 
-**Fase 2: contrato declarativo de unidades e blocos + texto interativo (piloto).** As Fases 0 e 1 foram concluídas.
+**Fase 3: engine de atividades e validação pedagógica.** As Fases 0, 1 e 2 foram concluídas (a Fase 2 com o piloto).
 
 ## Fase 0 — baseline (concluída, 25/10/2026)
 
@@ -34,11 +34,43 @@ Pacote: `Cronicas_Reformulacao_Pacote_Tecnico` (specs lidos: README, 00, 03, 04,
 - Ainda há telas internas com textos do tema antigo (Reino, Diário, Personagem, missão 3D, prólogo).
 - O ícone do app (`pwa-192.png`) ainda é o antigo.
 
+## Fase 2 — contrato declarativo + texto interativo, piloto Processos (concluída, 25/10/2026)
+
+**Feito**
+- `src/content/learning.ts`: tipos `Concept`, `ContentBlock` (`paragraph`, `workedExample`, `inlineActivity`), `LearningStep`, `LearningUnit` (versão, edital, tópicos, objetivo, faixa de minutos, dificuldade, pré-requisitos, conceitos, abertura diagnóstica, etapas, prática, prova, status editorial) e `UnitMap`.
+- `unitFromMicro` adapta a microaula existente à unidade **sem copiar o texto**: a microaula continua sendo a fonte, e a unidade só acrescenta o mapa de conceitos.
+- `src/content/units/infra-processos.ts`: glossário com 21 conceitos (definições fiéis ao texto) e o mapa do que cada etapa introduz e do que cada uma das 37 atividades cobra.
+- `src/lib/contentValidator.ts` acusa, com unidade, id e vínculo:
+  - conceito cobrado antes de ser ensinado;
+  - atividade antes da explicação;
+  - id duplicado;
+  - conceito não registrado;
+  - unidade sem objetivo, etapas ou tempo;
+  - alias de glossário ambíguo;
+  - ciclo de pré-requisitos (`findCycle`).
+
+  A abertura é diagnóstica e não conta como ensino.
+- Leitor `src/pages/InteractiveUnit.tsx`, aberto pelo Aprender quando o trecho tem unidade:
+  - leitura com rolagem natural, em que cada etapa aparece abaixo da anterior depois da checagem;
+  - termos em negrito que são conceitos **já apresentados** viram botões e abrem a definição em diálogo acessível (foco, Escape, foco devolvido), sem mudar o checkpoint; conceito futuro não vira link;
+  - erro na checagem leva a outra explicação e a uma atividade equivalente, e depois se volta ao ponto e se avança;
+  - prática final, prova e síntese;
+  - o ponto (etapa) fica salvo na mesma chave do Aprender; o formato antigo da microaula é convertido (`normalizeSession`), sem perder o lugar de quem estava no meio.
+- `Markdown` aceita a opção `strong` para termos clicáveis.
+- Testes: `src/test/units.test.ts` (8) e 2 fluxos novos em `flow.test.tsx`. O teste da microaula antiga passou a usar Arquivos, que continua no formato antigo.
+
+**Comandos e resultados**: `npm run typecheck` ok; `npm test` **805/805** (16 arquivos); `npm run build` ok. Captura Playwright do leitor e do diálogo de termo em 390×844 e 1280×800, sem overflow nem erro.
+
+**Limitações**
+- Só Processos tem unidade interativa. As demais seções seguem em microaula (sem rolagem) ou no Aprender simples.
+- Não há anotação, destaque nem "marcar para revisar" por bloco (spec 09 §3): ficam para a Fase 4, junto com a revisão.
+- O pacote offline da unidade é da Fase 5. Hoje o conteúdo vai no bundle, então funciona sem rede depois de carregado, mas não há service worker.
+- O bloqueio por pré-requisito existe na página Trilha e no validador do conteúdo, mas não impede abrir uma URL de atividade futura (Fase 4).
+
 ## Próxima ação exata
 
-Fase 2: ler `specs/08_CONTRATO_DO_CONTEUDO.md` e `specs/09_LEITURA_INTERATIVA.md`. Depois:
-1. Adaptar `MicroLesson` para `LearningUnit`/`LearningStep`/`ContentBlock`, com conceitos introduzidos e exigidos por etapa.
-2. Criar o validador de "conceito cobrado antes de ensinado", com teste.
-3. Fazer o piloto `infra-processos` com glossário clicável (InteractiveTerm), checkpoint por `stepId` e leitura em página com rolagem natural.
-
-Ponto em aberto (OPEN_QUESTIONS): o pedido anterior de "sem rolagem vertical" contra o spec 07 do pacote ("rolagem natural").
+Fase 3 (spec 12):
+1. Ler `specs/12_ENGINE_DE_ATIVIDADES.md` e `specs/11_GRAFO_PRE_REQUISITOS.md`.
+2. Unificar `lib/practice.ts` (tf/blank/term/pairs/mcq) e `lib/activities.ts` (choice/multi/order/sort/compare/fix/tf/exam) numa união discriminada com adaptador para os registros antigos.
+3. Fazer a Prática do trecho Processos usar `assesses` da unidade, para cobrar só conceitos ensinados.
+4. Testar diversidade (V/F não domina) e a recuperação com item equivalente.

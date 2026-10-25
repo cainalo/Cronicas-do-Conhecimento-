@@ -553,3 +553,19 @@ h1, h2 { font-weight: 700; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* Termo do glossário dentro do texto (texto interativo): sublinhado pontilhado, foco e toque claros */
+.term-link {
+  font-weight: 700;
+  color: rgb(var(--teal));
+  text-decoration: underline dotted;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  border-radius: 4px;
+  padding: 0 1px;
+}
+.term-link:hover { background: rgb(var(--teal) / 0.1); }
+.prose-manuscript ul > li::before, .prose-manuscript ul > li::marker { content: none; }
+.prose-manuscript ul { list-style: disc; padding-left: 1.4em; }
+.prose-manuscript ul > li { padding-left: 0.15em; }
+.prose-manuscript ul > li::marker { content: '•  '; color: rgb(var(--gold)); }

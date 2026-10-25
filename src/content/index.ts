@@ -146,3 +146,12 @@ export const totalUnits = chapters.reduce((n, c) => n + c.sections.length, 0) + 
 // Página Estudos: materiais externos com fonte verificável e videoaulas conferidas.
 export { externalMaterials, curatedVideos } from './estudos/materiais';
 export type { ExternalMaterial, CuratedVideo } from './estudos/materiais';
+
+// Reformulação (Fase 2): unidades em texto interativo, com mapa de conceitos. O texto continua nas
+// microaulas; a unidade só acrescenta o que cada etapa ensina e o que cada atividade cobra.
+import { unitFromMicro, type Concept, type LearningUnit } from './learning';
+import { conceitosProcessos, mapaProcessos } from './units/infra-processos';
+export const concepts: Concept[] = [...conceitosProcessos];
+export const learningUnits: LearningUnit[] = [unitFromMicro(microInfraProcessos, mapaProcessos, DEFAULT_CONTEST_ID)];
+export const getLearningUnit = (chapterId: string, sectionId: string) => learningUnits.find((u) => u.chapterId === chapterId && u.sectionId === sectionId);
+export type { Concept, LearningUnit, LearningStep, ContentBlock } from './learning';

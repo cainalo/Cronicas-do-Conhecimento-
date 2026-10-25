@@ -8,7 +8,8 @@ import { usePrefs } from '@/app/prefs';
 import { useFx } from '@/app/fx';
 import { useSession } from '@/app/useSession';
 import { learnKey } from '@/lib/pace';
-import { getChapter, getMicroLesson, getSectionExtras, getSimpleSection } from '@/content';
+import { getChapter, getLearningUnit, getMicroLesson, getSectionExtras, getSimpleSection } from '@/content';
+import { InteractiveUnitPage } from '@/pages/InteractiveUnit';
 import { MicroLessonPage } from './MicroLesson';
 import { markSectionRead, setLastSection } from '@/lib/study';
 import { practiceDone } from '@/lib/practice';
@@ -45,6 +46,9 @@ type LearnPage = { kind: 'open' } | { kind: 'text'; i: number } | { kind: 'words
 
 export function LearnPage() {
   const { chapterId = '', sectionId = '' } = useParams();
+  // Reformulação: trecho com unidade interativa abre o leitor de texto interativo (piloto).
+  const unit = getLearningUnit(chapterId, sectionId);
+  if (unit) return <InteractiveUnitPage key={unit.id} unit={unit} />;
   const micro = getMicroLesson(chapterId, sectionId);
   // Trecho com microaula: a aula em etapas é o caminho principal (fonte única do conteúdo didático).
   if (micro) return <MicroLessonPage key={micro.id} lesson={micro} />;

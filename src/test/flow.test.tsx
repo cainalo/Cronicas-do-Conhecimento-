@@ -232,29 +232,77 @@ it('retomada exata: Desafio e Prática continuam na mesma questão/atividade', a
 
 it('microaula: explica, confere na hora, ensina de novo quando erra e retoma na mesma etapa', async () => {
   const user = userEvent.setup();
-  const a = renderAt('/aprender/cap.infra.03/processos');
+  const a = renderAt('/aprender/cap.infra.03/arquivos');
   // Abertura
-  await user.click(screen.getByRole('button', { name: /Cada execução em andamento/ }));
+  await user.click(screen.getByRole('button', { name: /pelas permissões do arquivo/ }));
   await user.click(screen.getByRole('button', { name: 'Verificar' }));
   await user.click(screen.getByRole('button', { name: 'Continuar' }));
   // Etapa 1: explicação, depois checagem errada de propósito.
-  expect(screen.getByRole('heading', { name: 'Programa e processo' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'O que um sistema de arquivos faz' })).toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: 'Entendi, quero conferir' }));
-  await user.click(screen.getByRole('button', { name: /Sim, porque o arquivo existe/ }));
+  await user.click(screen.getByRole('button', { name: /Conteúdo do arquivo/ }));
   await user.click(screen.getByRole('button', { name: 'Verificar' }));
   await user.click(screen.getByRole('button', { name: 'Continuar' }));
   // Recuperação: outra explicação e item equivalente.
   expect(screen.getByRole('heading', { name: 'Vamos ver de outro jeito' })).toBeInTheDocument();
-  expect(screen.getByText(/receita de bolo/)).toBeInTheDocument();
+  expect(screen.getByText(/pasta de processo físico/)).toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: 'Entendi, quero conferir' }));
+  for (const [item, cat] of [['O texto do relatório', 'Conteúdo'], ['O dono: maria', 'Metadado'], ['Tamanho: 8192 bytes', 'Metadado']]) {
+    await user.click(within(screen.getByRole('group', { name: `Categoria de ${item}` })).getByRole('button', { name: cat }));
+  }
+  await user.click(screen.getByRole('button', { name: 'Verificar' }));
+  await user.click(screen.getByRole('button', { name: 'Continuar' }));
+  expect(screen.getByRole('heading', { name: 'NTFS, FAT32, exFAT e ReFS' })).toBeInTheDocument();
+  a.unmount();
+  // Sai e volta: mesma etapa.
+  renderAt('/aprender/cap.infra.03/arquivos');
+  expect(screen.getByRole('heading', { name: 'NTFS, FAT32, exFAT e ReFS' })).toBeInTheDocument();
+});
+
+it('texto interativo (piloto Processos): termo clicável, recuperação com retorno e retomada na etapa exata', async () => {
+  const user = userEvent.setup();
+  const a = renderAt('/aprender/cap.infra.03/processos');
+  expect(screen.getByRole('heading', { level: 1, name: 'Processos, memória e serviços' })).toBeInTheDocument();
+  // Abertura (diagnóstica, não vale nota)
+  await user.click(screen.getByRole('button', { name: /Cada execução em andamento/ }));
+  await user.click(screen.getByRole('button', { name: 'Verificar' }));
+  await user.click(screen.getByRole('button', { name: 'Continuar' }));
+  // Etapa 1 em texto, com termo do glossário que abre a definição sem sair do lugar.
+  expect(screen.getByRole('heading', { name: 'Programa e processo' })).toBeInTheDocument();
+  await user.click(screen.getAllByRole('button', { name: /^processo \(abrir definição\)/ })[0]);
+  const dialog = screen.getByRole('dialog', { name: 'Conceito: Processo' });
+  expect(within(dialog).getByText(/Programa em execução/)).toBeInTheDocument();
+  await user.keyboard('{Escape}');
+  expect(screen.queryByRole('dialog')).toBeNull();
+  // Termo de conceito futuro não vira link.
+  expect(screen.queryByRole('button', { name: /Thrashing \(abrir definição\)/ })).toBeNull();
+  // Erra a checagem: recuperação com outra explicação e item equivalente; depois volta e avança.
+  await user.click(screen.getByRole('button', { name: /Sim, porque o arquivo existe/ }));
+  await user.click(screen.getByRole('button', { name: 'Verificar' }));
+  await user.click(screen.getByRole('button', { name: 'Continuar' }));
+  const rec = screen.getByRole('generic', { name: 'Recuperação' });
+  expect(within(rec).getByText(/receita de bolo/)).toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: /1 programa e 3 processos/ }));
   await user.click(screen.getByRole('button', { name: 'Verificar' }));
   await user.click(screen.getByRole('button', { name: 'Continuar' }));
   expect(screen.getByRole('heading', { name: 'O número de cada processo: PID' })).toBeInTheDocument();
+  expect(screen.getByText('Etapa 2 de 15')).toBeInTheDocument();
   a.unmount();
-  // Sai e volta: mesma etapa.
+  // Sai e volta: mesma etapa; o Continuar de Hoje aponta para cá.
   renderAt('/aprender/cap.infra.03/processos');
-  expect(screen.getByRole('heading', { name: 'O número de cada processo: PID' })).toBeInTheDocument();
+  expect(screen.getByText('Etapa 2 de 15')).toBeInTheDocument();
+  expect(screen.getByRole('listitem', { current: 'step' })).toHaveTextContent('O número de cada processo: PID');
+});
+
+it('ponto salvo pela microaula antiga continua valendo no texto interativo', () => {
+  const data = loadData('visitante');
+  localStorage.setItem(
+    'cronicas:v1:visitante',
+    JSON.stringify({ ...data, progress: { 'aprender:cap.infra.03:processos': { step: { phase: { k: 'checar', i: 3 }, first: {}, struggled: [] }, updatedAt: new Date().toISOString() } } }),
+  );
+  renderAt('/aprender/cap.infra.03/processos');
+  expect(screen.getByText('Etapa 4 de 15')).toBeInTheDocument();
+  expect(screen.getByRole('listitem', { current: 'step' })).toHaveTextContent('Pronto, executando e bloqueado');
 });
 
 it('livro: modo de leitura contínua mostra o mesmo conteúdo sem virar páginas', async () => {

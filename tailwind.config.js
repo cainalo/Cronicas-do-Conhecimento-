@@ -18,6 +18,7 @@ export default {
         parchment: 'rgb(var(--parchment) / <alpha-value>)',
         sepia: 'rgb(var(--sepia) / <alpha-value>)',
         azure: 'rgb(var(--azure) / <alpha-value>)',
+        teal: 'rgb(var(--teal) / <alpha-value>)',
         leaf: 'rgb(var(--leaf) / <alpha-value>)',
         leather: 'rgb(var(--leather) / <alpha-value>)',
       },

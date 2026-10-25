@@ -19,7 +19,16 @@ function highlight(children: ReactNode, term?: string): ReactNode {
   });
 }
 
-export function Markdown({ children, highlightTerm }: { children: string; highlightTerm?: string }) {
+export function Markdown({
+  children,
+  highlightTerm,
+  strong,
+}: {
+  children: string;
+  highlightTerm?: string;
+  /** Troca um trecho em negrito por outro elemento (ex.: termo clicável do glossário). */
+  strong?: (text: string) => ReactNode | undefined;
+}) {
   const h = (Tag: 'p' | 'li' | 'td' | 'th') =>
     function Hl({ children: c }: { children?: ReactNode }) {
       return <Tag>{highlight(c, highlightTerm)}</Tag>;
@@ -37,6 +46,14 @@ export function Markdown({ children, highlightTerm }: { children: string; highli
         li: h('li'),
         td: h('td'),
         th: h('th'),
+        ...(strong
+          ? {
+              strong: ({ children: c }: { children?: ReactNode }) => {
+                const text = Children.toArray(c).filter((x) => typeof x === 'string').join('');
+                return (text && strong(text)) || <strong>{c}</strong>;
+              },
+            }
+          : {}),
       }}
     >
       {children}
