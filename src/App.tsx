@@ -28,6 +28,7 @@ import { DiaryPage } from '@/pages/Diary';
 import { StudiesPage } from '@/pages/Studies';
 import { NotFoundPage } from '@/pages/NotFound';
 import { TrailPage } from '@/pages/Trail';
+import { CustomizePage } from '@/pages/Customize';
 
 export function AppRoutes() {
   return (
@@ -44,6 +45,7 @@ export function AppRoutes() {
         <Route path="aprender/:chapterId/:sectionId" element={<LearnPage />} />
         <Route path="missao/:id" element={<MissionPage />} />
         <Route path="download" element={<DownloadPage />} />
+        <Route path="personalizar" element={<CustomizePage />} />
         <Route path="pratica/:chapterId/:sectionId" element={<PracticePage />} />
         <Route path="licao/:id" element={<LessonPage />} />
         <Route path="revisao" element={<ReviewPage />} />

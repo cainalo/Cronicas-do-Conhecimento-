@@ -90,6 +90,8 @@ export interface Prefs {
   /** Volumes separados, de 0 a 1 (ausente = 1). */
   musicVolume?: number;
   fireVolume?: number;
+  /** Aparência personalizada (paleta, cores e estilos). Ausente = padrão. */
+  look?: import('./theme').Look;
 }
 // v4 (25/10/2026, reformulação): identidade moderna clara. Quem vinha da v3/v2 mantém tamanho de
 // letra, som, música e lareira; o tema passa para o claro uma vez, e a escolha volta a ser livre.

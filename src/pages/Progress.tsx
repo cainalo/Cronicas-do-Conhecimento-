@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
-import { DEFAULT_CONTEST_ID, chapters, getContest, questionsForContest, topicsForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, chapters, getContest, journey, questionsForContest, topicsForContest } from '@/content';
 import { topicStats } from '@/lib/study';
+import { FIRM_SCORE, MASTERY_LABEL, chapterMastery, type MasteryLevel } from '@/lib/mastery';
 import { PageHeader } from '@/components/Page';
 
 const pct = (x: number) => `${Math.round(x * 100)}%`;
@@ -60,8 +61,62 @@ export function ProgressPage() {
           Edital e cobertura
         </Link>
       </div>
+      <SectionMasteryList />
+      <h2 className="pt-2 text-xl">Por tópico do edital</h2>
       <TopicProgressList />
     </div>
+  );
+}
+
+const LEVEL_TONE: Record<MasteryLevel, string> = {
+  novo: 'bg-raised text-muted',
+  lido: 'bg-azure/15 text-azure',
+  aprendendo: 'bg-ember/15 text-ink',
+  firme: 'bg-ok/15 text-ok',
+};
+
+/** Domínio estimado por trecho, com os motivos de cada nível. */
+export function SectionMasteryList() {
+  const { data } = useStudy();
+  const bank = questionsForContest(DEFAULT_CONTEST_ID);
+  const rows = journey.map((c) => ({ c, m: chapterMastery(data, c, bank) })).filter((r) => r.m.fresh < r.c.sections.length);
+  return (
+    <section aria-label="Domínio por trecho" className="space-y-2">
+      <h2 className="text-xl">Domínio estimado por trecho</h2>
+      <p className="text-sm text-muted">
+        Firme = acerto de pelo menos {Math.round(FIRM_SCORE * 100)}% na última resposta, em metade das questões do trecho ou mais, com acertos em dois dias
+        diferentes. Toque num trecho para ver os motivos.
+      </p>
+      {rows.length === 0 ? (
+        <p className="card p-3 text-sm">Assim que você estudar o primeiro trecho, ele aparece aqui.</p>
+      ) : (
+        rows.map(({ c, m }) => (
+          <div key={c.id} className="card p-3">
+            <p className="font-semibold">{c.title}</p>
+            <p className="text-xs text-muted">
+              Firmes {m.firm} · Aprendendo {m.learning} · Lidos {m.read} · Não estudados {m.fresh}
+            </p>
+            <ul className="mt-2 space-y-1">
+              {m.sections.map(({ section, m: s }) => (
+                <li key={section.id}>
+                  <details>
+                    <summary className="flex cursor-pointer items-center justify-between gap-2 text-sm">
+                      <span className="min-w-0 break-words">{section.title}</span>
+                      <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold ${LEVEL_TONE[s.level]}`}>{MASTERY_LABEL[s.level]}</span>
+                    </summary>
+                    <ul className="mt-1 list-disc pl-5 text-xs text-muted">
+                      {s.reasons.map((r) => (
+                        <li key={r}>{r}</li>
+                      ))}
+                    </ul>
+                  </details>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      )}
+    </section>
   );
 }
 

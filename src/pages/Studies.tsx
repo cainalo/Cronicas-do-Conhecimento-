@@ -71,11 +71,11 @@ export function StudiesPage() {
         </SectionTitle>
         <TileGrid>
           <Tile wide to="/biblioteca" icon="grimorio" color={color} title="Biblioteca" text="Os grimórios de cada disciplina, para ler na ordem que quiser." />
-          <Tile to="/relampago" icon="chama" color={dark ? '#f5a868' : '#a85314'} title="Rodada relâmpago" text="5 questões rápidas." />
+          <Tile to="/relampago" icon="chama" color="rgb(var(--leaf))" title="Rodada relâmpago" text="5 questões rápidas." />
           <Tile
             to="/flashcards"
             icon="cartas"
-            color={dark ? '#c4acf5' : '#704eb6'}
+            color="rgb(var(--pink))"
             title="Flashcards"
             text="Repetição espaçada dos glossários."
             badge={due ? `${due} hoje` : undefined}
@@ -84,7 +84,7 @@ export function StudiesPage() {
             wide
             to="/revisao"
             icon="ampulheta"
-            color={dark ? '#70ce98' : '#1e704a'}
+            color="rgb(var(--ok))"
             title="Revisão de erros"
             text="As questões que você errou voltam até acertar."
             badge={wrong ? `${wrong} a revisar` : undefined}

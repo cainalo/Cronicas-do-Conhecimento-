@@ -9,7 +9,7 @@ import { latestAttempt } from '@/lib/study';
 import { Icon } from '@/components/Icon';
 import { PageHeader } from '@/components/Page';
 import { MascotSays } from '@/components/Mascot';
-import { FeasibilityCard } from '@/components/FeasibilityCard';
+import { FeasibilityCard, WeekPlanCard } from '@/components/FeasibilityCard';
 
 const WEEK = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 const fmtMin = (m: number) => (m >= 60 ? `${Math.floor(m / 60)}h${m % 60 ? String(m % 60).padStart(2, '0') : ''}` : `${m} min`);
@@ -111,6 +111,7 @@ export function PlanPage() {
       )}
 
       <FeasibilityCard />
+      <WeekPlanCard />
 
       <section>
         <h2 className="text-xl">Até a prova</h2>

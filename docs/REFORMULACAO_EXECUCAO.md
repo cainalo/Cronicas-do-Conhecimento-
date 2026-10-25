@@ -136,11 +136,46 @@ Pacote: `Cronicas_Reformulacao_Pacote_Tecnico` (specs lidos: README, 00, 03, 04,
 
 **Limitações**: o outbox continua sendo `StudyData.pending`, sem `changeId` por evento; não há `SQLite` (avaliar com o plugin do Capacitor só se o IndexedDB do WebView se mostrar insuficiente); a sincronização não foi testada contra o Supabase real neste contêiner.
 
+## Painel de personalização (pedido do usuário, 25/10/2026)
+
+O usuário não gostou da paleta e pediu um painel para mudar as cores e os estilos de tudo.
+
+**Feito**
+- `src/lib/theme.ts`:
+  - 8 paletas (Aurora, Oceano, Pôr do sol, Floresta, Doce, Lavanda, Grafite, Arco-íris). Cada uma gera os tons de fundo, cartão, linha e texto para o claro e o escuro;
+  - 21 cores ajustáveis por tema: destaques, acerto/erro, fundo/texto e as cores de cada área;
+  - estilos: fundo (manchas, degradê, pontinhos, listras, liso), cartões (coloridos, brancos, contorno, vidro), atalhos (degradê, sólido, claros), botões (arredondados, pílula, retos), sombras, espaçamento, fonte (Plex, do aparelho, arredondada, serifada, monoespaçada), animações (todas, poucas, nenhuma), arredondamento e espaço entre linhas;
+  - aviso de contraste (WCAG), exportar e importar a aparência como código.
+- `src/styles/look.css`: o efeito de cada estilo por atributo `data-*` no `<html>` e os valores iniciais das variáveis.
+- Cores das áreas e dos cartões de Revisar e Explorar viraram variáveis (antes eram hex fixos), então a paleta muda tudo de uma vez.
+- `src/pages/Customize.tsx` (rota `/personalizar`, botão "Personalizar cores e estilos" em Conta): prévia ao vivo, tema, paletas, cores por grupo com "Voltar" individual, estilos, controles deslizantes, copiar/colar e restaurar padrão.
+- A aparência é aplicada antes da primeira pintura (`main.tsx`) e salva nas preferências do aparelho (`prefs.look`).
+- Testes `src/test/theme.test.tsx`:
+  - todas as paletas com texto em contraste AA no claro e no escuro;
+  - cor por tema e avisos;
+  - aplicação das variáveis;
+  - exportar/importar;
+  - fluxo do painel salvando e restaurando.
+
+## Fase 4, parte 2: domínio estimado e plano semanal
+
+- `src/lib/mastery.ts`: domínio por trecho, com níveis Ainda não estudado, Lido, Aprendendo e Firme. É uma heurística explicável: leitura vale 20%, e o resto vem do acerto na última resposta × cobertura das questões. "Firme" exige acerto ≥ 80%, cobertura ≥ 50% e acertos em dois dias diferentes. Cada nível traz os motivos. O banco de questões é marcado por trecho (`sectionId`), por isso a granularidade é o trecho.
+- Página Progresso: nova seção "Domínio estimado por trecho". Cada trecho abre com toque e mostra os motivos.
+- `weeklyPlan` (`src/lib/feasibility.ts`): monta os próximos 7 dias em minutos. A revisão vem primeiro e ocupa no máximo 30% do dia; depois entra a trilha, na ordem, sem repetir atividades. Não há estudo no dia da prova. Quando o conteúdo acaba, o tempo livre vira revisão.
+- `snapshotPlan`: fotografia versionada (`version: 1`) com os minutos e as atividades por dia. O botão "Guardar este plano para comparar depois" grava as 12 fotografias mais recentes, só no aparelho (`cronicas:plan-snapshots`). Isso não muda o banco remoto.
+- Página Plano: cartão "Próximos 7 dias" com barra novo/prática/revisão.
+- Teste: `src/test/mastery.test.ts`.
+
+## Fase 5, parte 2: idempotência conferida
+
+O identificador de mudança já existe e se chama `id`. Cada tentativa e cada simulado nasce com um `id` único no aparelho, e `src/lib/sync.ts` envia com `upsert(..., { onConflict: 'id', ignoreDuplicates: true })`. Reenviar a mesma fila não duplica nada.
+- Tabelas de estado (leitura, lições, cartões, configurações) usam chave natural (`user_id` + item), e a última escrita vence.
+- Marcadores e eventos de XP usam chave composta com `ignoreDuplicates`.
+- Nenhuma migração foi necessária; o banco remoto não foi tocado.
+- Service worker do site: segue pendente em OPEN_QUESTIONS, porque a decisão de 17/10 foi "app nativo, não PWA". O espelho em IndexedDB já protege os dados no navegador.
+
 ## Próxima ação exata
 
-Fase 4, parte 2 (specs 13 e 14):
-1. Estimativa de domínio por conceito a partir das tentativas, como heurística explicada.
-2. Plano semanal com minutos por dia: novo, prática e revisão.
-3. Snapshot versionado do plano, que preserva os itens concluídos ao replanejar.
-
-Depois, Fase 5: armazenamento local estruturado (IndexedDB na web) com migração do `localStorage` sem apagar a chave antiga, e outbox idempotente.
+Depois:
+- Fase 6: Sala dos Professores, simulador 2D e aula visual opcional.
+- Fase 7: auditoria de RLS, release e checklist.

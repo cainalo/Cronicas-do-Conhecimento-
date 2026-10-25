@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 import { loadPrefs, savePrefs, type Prefs } from '@/lib/storage';
 import { applyStatusBar } from '@/app/native';
 import { ambience } from '@/app/ambience';
+import { applyLook, normalizeLook } from '@/lib/theme';
 
 const PrefsCtx = createContext<{ prefs: Prefs; setPrefs: (p: Partial<Prefs>) => void } | null>(null);
 
@@ -9,6 +10,8 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
   const [prefs, set] = useState<Prefs>(loadPrefs);
   useEffect(() => {
     document.documentElement.dataset.theme = prefs.theme;
+    // Paleta e estilos escolhidos no painel de personalização (o padrão é a paleta Aurora).
+    applyLook(normalizeLook(prefs.look), prefs.theme);
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', prefs.theme === 'dark' ? '#171e2c' : '#ffffff');
     void applyStatusBar(prefs.theme);
     savePrefs(prefs);

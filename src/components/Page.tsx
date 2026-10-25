@@ -129,6 +129,8 @@ export function Tile({ to, icon, color, title, text, badge, wide, art, index = 0
       ? `linear-gradient(145deg, color-mix(in srgb, ${color} 52%, #0e131d), color-mix(in srgb, ${color} 30%, #0e131d))`
       : `linear-gradient(145deg, ${color}, color-mix(in srgb, ${color} 70%, #10162a))`,
     boxShadow: `0 12px 26px -14px ${color}, 0 2px 6px rgb(0 0 0 / 0.08)`,
+    // Cor do cartão para os estilos alternativos do painel de personalização (sólido, claro).
+    ['--tile' as string]: color,
   };
   return (
     <div className={`anim-tile-in ${wide ? 'col-span-2' : ''}`} style={{ animationDelay: `${Math.min(index, 12) * 60}ms` }}>

@@ -1,11 +1,11 @@
 // Viabilidade do plano (reformulação, Fase 4; spec 15): horas que faltam contra horas disponíveis. Se
 // não cabe, mostra o déficit e opções reais; nunca uma barra verde "no ritmo certo".
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { trailUnits } from '@/app/useCheckpoint';
 import { DEFAULT_CONTEST_ID, flashcards, getContest, journey, learningUnits, missions, questionsForContest } from '@/content';
-import { computeFeasibility, fmtHours } from '@/lib/feasibility';
+import { computeFeasibility, fmtHours, snapshotPlan, weeklyPlan, type PlanSnapshot } from '@/lib/feasibility';
 import { settingsOf } from '@/lib/planner';
 import { reviewQueue } from '@/lib/study';
 import { dueCards, unlockedCardIds } from '@/lib/training';
@@ -17,22 +17,91 @@ export function useFeasibility() {
   const { data } = useStudy();
   return useMemo(() => {
     const s = settingsOf(data);
-    return {
-      settings: s,
-      f: computeFeasibility({
-        data,
-        units: trailUnits(),
-        chapters: journey,
-        learningUnits,
-        missions,
-        examDate: getContest(DEFAULT_CONTEST_ID)!.examDate,
-        minutesPerDay: s.minutesPerDay,
-        weekdays: s.weekdays,
-        pendingReviewQuestions: reviewQueue(data, questionsForContest(DEFAULT_CONTEST_ID)).length,
-        dueCards: dueCards(data, unlockedCardIds(data, flashcards)).length,
-      }),
+    const input = {
+      data,
+      units: trailUnits(),
+      chapters: journey,
+      learningUnits,
+      missions,
+      examDate: getContest(DEFAULT_CONTEST_ID)!.examDate,
+      minutesPerDay: s.minutesPerDay,
+      weekdays: s.weekdays,
+      pendingReviewQuestions: reviewQueue(data, questionsForContest(DEFAULT_CONTEST_ID)).length,
+      dueCards: dueCards(data, unlockedCardIds(data, flashcards)).length,
     };
+    return { settings: s, f: computeFeasibility(input), week: weeklyPlan(input) };
   }, [data]);
+}
+
+const SNAP_KEY = 'cronicas:plan-snapshots';
+
+/** Guarda a fotografia do plano neste aparelho (as 12 mais recentes). */
+export function savePlanSnapshot(snap: PlanSnapshot) {
+  try {
+    const list = JSON.parse(localStorage.getItem(SNAP_KEY) ?? '[]') as PlanSnapshot[];
+    localStorage.setItem(SNAP_KEY, JSON.stringify([...list, snap].slice(-12)));
+  } catch {
+    /* sem armazenamento: o plano continua funcionando */
+  }
+}
+
+export function WeekPlanCard() {
+  const { week, f, settings } = useFeasibility();
+  const [saved, setSaved] = useState(false);
+  const today = week[0]?.date;
+  return (
+    <section className="card p-4 sm:p-5" aria-label="Plano da semana">
+      <h2 className="text-lg">Próximos 7 dias</h2>
+      <p className="mt-1 text-sm text-muted">Revisão primeiro, depois a trilha na ordem. Os minutos são estimativas típicas.</p>
+      <ol className="mt-3 space-y-2">
+        {week.map((d) => {
+          const total = d.newMinutes + d.practiceMinutes + d.reviewMinutes;
+          const [, m, dd] = d.date.split('-');
+          return (
+            <li key={d.date} className={`rounded-2xl border border-line p-3 ${d.study ? 'bg-surface' : 'bg-raised/60'}`} data-testid={`dia-${d.date}`}>
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="font-semibold">
+                  {d.date === today ? 'Hoje' : WEEK[d.weekday]} <span className="text-sm font-normal text-muted">{dd}/{m}</span>
+                </span>
+                <span className="text-sm text-muted">{d.study ? fmtHours(total) : 'descanso'}</span>
+              </div>
+              {d.study && total > 0 && (
+                <>
+                  <div className="mt-2 flex h-2.5 overflow-hidden rounded-full bg-raised" role="img" aria-label={`Novo ${d.newMinutes} min, prática ${d.practiceMinutes} min, revisão ${d.reviewMinutes} min`}>
+                    <span className="bg-gold" style={{ width: `${(d.newMinutes / total) * 100}%` }} />
+                    <span className="bg-azure" style={{ width: `${(d.practiceMinutes / total) * 100}%` }} />
+                    <span className="bg-leaf" style={{ width: `${(d.reviewMinutes / total) * 100}%` }} />
+                  </div>
+                  <p className="mt-1 text-xs text-muted">
+                    Novo {d.newMinutes} min · Prática {d.practiceMinutes} min · Revisão {d.reviewMinutes} min
+                  </p>
+                  {d.units.length > 0 && (
+                    <ul className="mt-1 space-y-0.5 text-sm">
+                      {d.units.map((u) => (
+                        <li key={u.key} className="break-words">
+                          {u.title} <span className="text-muted">({u.minutes} min)</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+      <button
+        type="button"
+        className="btn-ghost mt-3 w-full text-sm"
+        onClick={() => {
+          savePlanSnapshot(snapshotPlan(f, week, { minutesPerDay: settings.minutesPerDay, weekdays: settings.weekdays, examDate: getContest(DEFAULT_CONTEST_ID)!.examDate }));
+          setSaved(true);
+        }}
+      >
+        {saved ? 'Plano guardado neste aparelho' : 'Guardar este plano para comparar depois'}
+      </button>
+    </section>
+  );
 }
 
 export function FeasibilityCard() {

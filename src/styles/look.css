@@ -1,0 +1,77 @@
+/* =====================================================================================
+   Personalização da aparência (painel em /personalizar). Os valores de cor são escritos no
+   <html> por lib/theme.ts (applyLook); aqui ficam os padrões (primeira pintura) e o efeito de
+   cada opção de estilo, por atributo data-* no <html>.
+   ===================================================================================== */
+
+/* Cores das áreas: padrão da paleta Aurora (o tema aplica as da paleta escolhida). */
+:root {
+  --area-hoje: 66 88 205;
+  --area-trilha: 18 118 114;
+  --area-explorar: 112 78 182;
+  --area-revisar: 196 98 26;
+  --area-progresso: 30 112 74;
+  --area-conta: 82 96 114;
+  --leading: 1.6;
+}
+:root[data-theme='dark'] {
+  --area-hoje: 136 158 255;
+  --area-trilha: 94 200 192;
+  --area-explorar: 196 172 245;
+  --area-revisar: 245 168 104;
+  --area-progresso: 112 206 152;
+  --area-conta: 163 175 193;
+}
+
+/* ---------- Fundo da página ---------- */
+:root[data-bg='degrade'] body { background-image: linear-gradient(160deg, rgb(var(--gold) / 0.22), rgb(var(--pink) / 0.14) 45%, rgb(var(--teal) / 0.18)); }
+:root[data-bg='liso'] body { background-image: none; }
+:root[data-bg='pontos'] body { background-image: radial-gradient(rgb(var(--gold) / 0.22) 1.4px, transparent 1.6px), var(--page-wash); background-size: 18px 18px, auto; }
+:root[data-bg='listras'] body { background-image: repeating-linear-gradient(135deg, rgb(var(--gold) / 0.07) 0 14px, transparent 14px 28px), var(--page-wash); }
+:root[data-bg='liso'] body::before, :root[data-bg='liso'] body::after, :root[data-bg='degrade'] body::before, :root[data-bg='degrade'] body::after { display: none; }
+
+/* ---------- Cartões ---------- */
+.card, .ledger { border-radius: var(--radius-card); }
+:root[data-cards='solido'] .card, :root[data-cards='solido'] .ledger { background-image: none; background-color: rgb(var(--surface)); border-top-width: 1px; border-color: rgb(var(--line)); }
+:root[data-cards='contorno'] .card, :root[data-cards='contorno'] .ledger { background-image: none; background-color: transparent; border: 2px solid rgb(var(--tint) / 0.7); box-shadow: none; }
+:root[data-cards='vidro'] .card, :root[data-cards='vidro'] .ledger { background-image: none; background-color: rgb(var(--surface) / 0.55); backdrop-filter: blur(14px) saturate(1.3); border-top-width: 1px; border-color: rgb(255 255 255 / 0.4); }
+
+/* ---------- Cartões de atalho (tiles) ---------- */
+.tile-color { border-radius: var(--radius-card) !important; }
+:root[data-tiles='solido'] .tile-color { background: var(--tile) !important; }
+:root[data-tiles='claro'] .tile-color { background: color-mix(in srgb, var(--tile) 16%, rgb(var(--surface))) !important; color: rgb(var(--ink)) !important; border: 2px solid color-mix(in srgb, var(--tile) 45%, transparent); }
+:root[data-tiles='claro'] .tile-color .text-white\/90 { color: rgb(var(--muted)) !important; }
+:root[data-tiles='claro'] .tile-color .bg-white\/20 { background: var(--tile) !important; color: #fff; }
+:root[data-tiles='claro'] .tile-bubble { background: color-mix(in srgb, var(--tile) 14%, transparent); }
+
+/* ---------- Botões ---------- */
+:root[data-buttons='pilula'] .btn { border-radius: 9999px; }
+:root[data-buttons='reto'] .btn { border-radius: 6px; }
+
+/* ---------- Sombras ---------- */
+:root[data-shadow='forte'] { --shadow-card: 0 14px 34px -10px rgb(20 30 60 / 0.35), 0 2px 6px rgb(20 30 60 / 0.12); }
+:root[data-shadow='nenhuma'] { --shadow-card: none; --shadow-lift: none; }
+:root[data-shadow='nenhuma'] .tile-color { box-shadow: none !important; }
+
+/* ---------- Densidade ---------- */
+:root[data-density='compacto'] .space-y-6 > * + * { margin-top: 1rem; }
+:root[data-density='compacto'] .card.p-4, :root[data-density='compacto'] .card.p-5 { padding: 0.75rem; }
+:root[data-density='amplo'] .space-y-6 > * + * { margin-top: 2.25rem; }
+:root[data-density='amplo'] .card.p-4 { padding: 1.4rem; }
+
+/* ---------- Fonte e leitura ---------- */
+:root[data-font='sistema'] body, :root[data-font='sistema'] h1, :root[data-font='sistema'] h2, :root[data-font='sistema'] h3, :root[data-font='sistema'] .prose-manuscript { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+:root[data-font='arredondada'] body, :root[data-font='arredondada'] h1, :root[data-font='arredondada'] h2, :root[data-font='arredondada'] h3, :root[data-font='arredondada'] .prose-manuscript { font-family: ui-rounded, 'SF Pro Rounded', 'Nunito', 'Varela Round', system-ui, sans-serif; }
+:root[data-font='serifada'] body, :root[data-font='serifada'] h1, :root[data-font='serifada'] h2, :root[data-font='serifada'] h3, :root[data-font='serifada'] .prose-manuscript { font-family: 'Alegreya', Georgia, 'Times New Roman', serif; }
+:root[data-font='mono'] body, :root[data-font='mono'] h1, :root[data-font='mono'] h2, :root[data-font='mono'] h3, :root[data-font='mono'] .prose-manuscript { font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; }
+.prose-manuscript, .learn-text { line-height: var(--leading); }
+
+/* ---------- Movimento ---------- */
+:root[data-motion='reduzido'] body::before, :root[data-motion='reduzido'] body::after, :root[data-motion='reduzido'] .tile-bubble { animation: none; }
+:root[data-motion='nenhum'] *, :root[data-motion='nenhum'] *::before, :root[data-motion='nenhum'] *::after { animation: none !important; transition: none !important; }
+
+/* Amostras do painel de personalização */
+.swatch { width: 1.6rem; height: 1.6rem; border-radius: 9999px; border: 2px solid rgb(255 255 255 / 0.85); box-shadow: 0 1px 3px rgb(0 0 0 / 0.25); }
+.color-input { width: 2.75rem; height: 2.75rem; padding: 0; border: 2px solid rgb(var(--line)); border-radius: 12px; background: none; cursor: pointer; }
+.color-input::-webkit-color-swatch-wrapper { padding: 3px; }
+.color-input::-webkit-color-swatch { border: none; border-radius: 8px; }

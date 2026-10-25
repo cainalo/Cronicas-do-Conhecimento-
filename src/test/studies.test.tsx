@@ -74,7 +74,8 @@ it('conta sem servidor explica o modo local e mantém aparência e volumes', asy
   const user = userEvent.setup();
   renderAt('/conta');
   expect(screen.getByText('Estudando só neste aparelho')).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: /Noite/ })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /Escuro/ })).toBeInTheDocument();
+  expect(screen.getByTestId('abrir-personalizar')).toHaveAttribute('href', '/personalizar');
   await user.click(screen.getByRole('switch', { name: 'Lareira' }));
   const slider = screen.getByLabelText('Volume: Lareira');
   expect(screen.queryByLabelText('Volume: Música medieval')).toBeNull();

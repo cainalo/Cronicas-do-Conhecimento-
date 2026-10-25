@@ -113,6 +113,100 @@ export function computeFeasibility(input: {
   };
 }
 
+export interface PlannedDay {
+  /** AAAA-MM-DD, horário local. */
+  date: string;
+  weekday: number;
+  study: boolean;
+  newMinutes: number;
+  practiceMinutes: number;
+  reviewMinutes: number;
+  units: { key: string; title: string; kind: Unit['kind']; minutes: number }[];
+}
+
+/** Parcela máxima do dia reservada a revisão (erros, cartões e revisão espaçada). */
+export const REVIEW_DAY_SHARE = 0.3;
+
+const ymd = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+/**
+ * Próximos 7 dias em minutos: revisão primeiro (até 30% do dia), depois as atividades pendentes da
+ * trilha, na ordem, pelo tempo típico. Uma atividade que não cabe no resto do dia passa para o
+ * seguinte (exceto se o dia ainda está vazio, para nunca travar com uma atividade longa).
+ */
+export function weeklyPlan(input: {
+  data: StudyData;
+  units: Unit[];
+  chapters: Chapter[];
+  learningUnits: LearningUnit[];
+  missions: Mission[];
+  minutesPerDay: number;
+  weekdays: number[];
+  examDate: string;
+  pendingReviewQuestions: number;
+  dueCards: number;
+  now?: Date;
+}): PlannedDay[] {
+  const now = input.now ?? new Date();
+  const ctx = { chapters: input.chapters, learningUnits: input.learningUnits, missions: input.missions };
+  const queue = input.units.filter((u) => !unitDone(input.data, u));
+  let backlog = input.pendingReviewQuestions * MIN.revisaoQuestao + input.dueCards * MIN.cartao;
+  const out: PlannedDay[] = [];
+  for (let i = 0; i < 7; i++) {
+    const day = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+    const date = ymd(day);
+    const study = input.weekdays.includes(day.getDay()) && date < input.examDate;
+    const pd: PlannedDay = { date, weekday: day.getDay(), study, newMinutes: 0, practiceMinutes: 0, reviewMinutes: 0, units: [] };
+    if (study) {
+      let left = input.minutesPerDay;
+      // Revisão: o atraso acumulado, mais a revisão espaçada do que já foi aprendido (a partir do 2º dia de estudo).
+      const spaced = out.some((d) => d.study && d.newMinutes) ? Math.round(input.minutesPerDay * SPACED_REVIEW_SHARE) : 0;
+      const review = Math.min(Math.round(left * REVIEW_DAY_SHARE), Math.ceil(backlog) + spaced);
+      backlog = Math.max(0, backlog - review);
+      pd.reviewMinutes = review;
+      left -= review;
+      while (queue.length) {
+        const u = queue[0];
+        const m = Math.round(unitMinutes(u, ctx).typical);
+        if (m > left && pd.units.length) break;
+        queue.shift();
+        pd.units.push({ key: u.key, title: u.title, kind: u.kind, minutes: m });
+        if (u.kind === 'aprender') pd.newMinutes += m;
+        else pd.practiceMinutes += m;
+        left -= m;
+        if (left <= 0) break;
+      }
+      // Sem conteúdo novo, o tempo livre vira revisão e treino.
+      if (!queue.length && left > 0) pd.reviewMinutes += left;
+    }
+    out.push(pd);
+  }
+  return out;
+}
+
+/** Fotografia versionada do plano, para comparar com o que foi feito depois. */
+export interface PlanSnapshot {
+  version: 1;
+  createdAt: string;
+  minutesPerDay: number;
+  weekdays: number[];
+  examDate: string;
+  requiredMinutes: number;
+  availableMinutes: number;
+  days: { date: string; minutes: number; unitKeys: string[] }[];
+}
+
+export function snapshotPlan(f: PlanFeasibility, days: PlannedDay[], s: { minutesPerDay: number; weekdays: number[]; examDate: string }, now = new Date()): PlanSnapshot {
+  return {
+    version: 1,
+    createdAt: now.toISOString(),
+    ...s,
+    requiredMinutes: f.requiredMinutes,
+    availableMinutes: f.availableMinutes,
+    days: days.filter((d) => d.study).map((d) => ({ date: d.date, minutes: d.newMinutes + d.practiceMinutes + d.reviewMinutes, unitKeys: d.units.map((u) => u.key) })),
+  };
+}
+
 /** "3 h 20 min" a partir de minutos. */
 export const fmtHours = (m: number) => {
   const h = Math.floor(m / 60);

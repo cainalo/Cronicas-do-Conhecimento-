@@ -191,12 +191,15 @@ export function AccountPage() {
 
       <section className="card space-y-2 p-4">
         <h2 className="text-base">Aparência</h2>
+        <Link to="/personalizar" className="btn-primary w-full" data-testid="abrir-personalizar">
+          <Icon name="estrela" size={18} /> Personalizar cores e estilos
+        </Link>
         <div className="flex gap-2">
           <button className={prefs.theme === 'dark' ? 'btn-primary flex-1' : 'btn-ghost flex-1'} onClick={() => setPrefs({ theme: 'dark' })}>
-            <Icon name="lua" size={18} /> Noite (tochas)
+            <Icon name="lua" size={18} /> Escuro
           </button>
           <button className={prefs.theme === 'light' ? 'btn-primary flex-1' : 'btn-ghost flex-1'} onClick={() => setPrefs({ theme: 'light' })}>
-            <Icon name="sol" size={18} /> Dia (pergaminho)
+            <Icon name="sol" size={18} /> Claro
           </button>
         </div>
         {(
