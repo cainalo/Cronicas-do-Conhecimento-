@@ -7,11 +7,11 @@ export function TrailPlace({ lessonId, className = '' }: { lessonId?: string; cl
   const p = lessonId ? trailPlaceOf(lessonId) : undefined;
   if (!p) return null;
   return (
-    <Link to={p.to} className={`group inline-flex min-w-0 items-center gap-1.5 text-sm ${className}`} data-testid="na-trilha">
-      <Icon name="trilha" size={15} className="shrink-0 text-gold" />
-      <span className="min-w-0 truncate">
+    <Link to={p.to} className={`group inline-flex min-w-0 items-start gap-1.5 text-sm ${className}`} data-testid="na-trilha">
+      <Icon name="trilha" size={15} className="mt-0.5 shrink-0 text-gold" />
+      <span className="min-w-0 break-words">
         <span className="text-muted">Na trilha: </span>
-        <span className="link-grow font-semibold">{p.label}</span>
+        <span className="font-semibold underline decoration-line underline-offset-2">{p.label}</span>
       </span>
     </Link>
   );
