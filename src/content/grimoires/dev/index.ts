@@ -12,8 +12,8 @@ export const grimorioDev: Grimoire = {
   id: 'grim.dev',
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.dev',
-  title: 'O Tratado das Pontes e dos Selos',
-  epithet: 'Grimório de Desenvolvimento de Sistemas',
+  title: 'Desenvolvimento de Sistemas',
+  epithet: 'Desenvolvimento de Sistemas',
   description: 'Como os sistemas conversam (REST, GraphQL, WebSockets, OpenAPI), como provam quem pode entrar (OAuth 2.0, OIDC, JWT), os algoritmos e estruturas de dados que os movem e as linguagens em que são escritos (Java, JavaScript/Node, React, Python, TypeScript), com pacotes e publicação.',
   chapterIds: ['cap.dev.01', 'cap.dev.02', 'cap.dev.03', 'cap.dev.04'],
   sigil: 'grimorio',
@@ -96,7 +96,7 @@ export const licoesDev: Lesson[] = [
   {
     id: 'lic.dev.01',
     chapterId: 'cap.dev.01',
-    title: 'As Pontes entre os Reinos',
+    title: 'APIs, HTTP e formatos de dados',
     goal: 'Dominar REST, métodos e códigos HTTP, JSON e XML, GraphQL, WebSockets e OpenAPI.',
     cards: [
       {
@@ -117,7 +117,7 @@ export const licoesDev: Lesson[] = [
   {
     id: 'lic.dev.02',
     chapterId: 'cap.dev.02',
-    title: 'Os Selos de Passagem',
+    title: 'Autenticação, autorização, OAuth e JWT',
     goal: 'Distinguir autenticação de autorização e dominar OAuth 2.0, OIDC e JWT.',
     cards: [
       {

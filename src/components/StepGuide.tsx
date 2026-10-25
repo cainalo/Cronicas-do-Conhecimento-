@@ -23,7 +23,7 @@ const NOW: Record<StepKind, string> = {
     'Este é o texto completo do capítulo, mais longo e mais difícil. Use para aprofundar depois do Aprender e do Praticar. Não é obrigatório para seguir a trilha.',
 };
 
-const LABEL: Record<string, string> = { read: 'Aprender', practice: 'Praticar', mission: 'Missão', lesson: 'Desafio' };
+const LABEL: Record<string, string> = { read: 'Aprender', practice: 'Praticar', mission: 'Caso prático', lesson: 'Desafio' };
 const KIND: Record<StepKind, string> = { aprender: 'read', praticar: 'practice', missao: 'mission', desafio: 'lesson', texto: 'read' };
 
 export function StepGuide({

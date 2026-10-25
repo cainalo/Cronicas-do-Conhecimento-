@@ -13,7 +13,7 @@ export function DownloadPage() {
       </a>
       <p className="text-sm text-muted">Depois de baixar, abra o arquivo e permita a instalação. Para atualizar, baixe e instale de novo: o progresso fica guardado.</p>
       <Link to="/" className="btn-ghost w-full">
-        Voltar à Torre
+        Voltar para Hoje
       </Link>
     </div>
   );

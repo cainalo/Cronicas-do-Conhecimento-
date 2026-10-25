@@ -87,7 +87,7 @@ it('livro: vira páginas, marca o trecho como lido e busca no sumário', async (
 it('aprender: livro simples do trecho, palavras novas e convite para praticar', async () => {
   const user = userEvent.setup();
   renderAt('/aprender/cap.prim.01/computador');
-  expect(screen.getByText(/Trecho I/)).toBeInTheDocument();
+  expect(screen.getAllByText(/Trecho 1/).length).toBeGreaterThan(0);
   for (let i = 0; i < 12 && !screen.queryByTestId('praticar-computador'); i++) {
     await user.click(screen.getByRole('button', { name: 'Próxima página' }));
     if (i === 0) expect(screen.getByText(/^1 de \d$/)).toBeInTheDocument();
@@ -140,11 +140,10 @@ it('flashcards: só de capítulos já estudados; revela e avalia um cartão', as
   expect(Object.keys(loadData('visitante').cards)).toHaveLength(1);
 });
 
-it('missão SQL: cena em texto, objetivos, descoberta e laboratório com a consulta montada', async () => {
+it('caso prático de SQL: objetivos (sem cena de jogo), descoberta e laboratório com a consulta montada', async () => {
   const user = userEvent.setup();
   renderAt('/missao/missao.sql.01');
-  expect(screen.getByRole('list', { name: 'Transcrição da cena' })).toBeInTheDocument();
-  await user.click(screen.getByRole('button', { name: /Começar a investigação/ }));
+  expect(screen.queryByRole('list', { name: 'Transcrição da cena' })).toBeNull();
   expect(screen.getByText(/Por que a lista de empenhos/)).toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: 'Vamos lá' }));
   // Descoberta: a primeira alternativa é a certa nas quatro verificações.
@@ -205,7 +204,6 @@ it('retomada exata: Aprender e Missão voltam ao mesmo ponto depois de sair', as
   again.unmount();
 
   const m1 = renderAt('/missao/missao.sql.01');
-  await user.click(screen.getByRole('button', { name: /Começar a investigação/ }));
   await user.click(screen.getByRole('button', { name: 'Vamos lá' }));
   const sec = screen.getByRole('region', { name: 'Descoberta guiada' });
   await user.click(within(sec).getAllByRole('button', { pressed: false })[0]);

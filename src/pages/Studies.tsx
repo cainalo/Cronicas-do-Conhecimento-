@@ -71,7 +71,7 @@ export function StudiesPage() {
           Livros e atividades
         </SectionTitle>
         <TileGrid>
-          <Tile wide to="/biblioteca" icon="grimorio" color={color} title="Biblioteca" text="Os grimórios de cada disciplina, para ler na ordem que quiser." />
+          <Tile wide to="/biblioteca" icon="grimorio" color={color} title="Biblioteca" text="Os livros de cada disciplina, para ler na ordem que quiser." />
           <Tile to="/relampago" icon="chama" color="rgb(var(--leaf))" title="Rodada relâmpago" text="5 questões rápidas." />
           <Tile
             to="/flashcards"

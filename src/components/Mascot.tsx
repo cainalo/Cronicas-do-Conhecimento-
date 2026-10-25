@@ -77,25 +77,21 @@ export function MascotOwl({ mood = 'idle', size = 96, className = '' }: { mood?:
 }
 
 const MOOD_ICON: Record<MascotMood, IconName> = { idle: 'pergaminho', talk: 'pergaminho', cheer: 'certo', sad: 'aviso', think: 'aviso' };
-const MOOD_BG: Record<MascotMood, string> = { idle: 'bg-gold', talk: 'bg-gold', cheer: 'bg-ok', sad: 'bg-bad', think: 'bg-leaf' };
 
 /** Guia de estudo (reformulação): ícone em círculo colorido, sem personagem. Mesma API do mascote antigo. */
 export function Mascot({ mood = 'idle', size = 96, className = '' }: { mood?: MascotMood; size?: number; className?: string }) {
-  const d = Math.max(36, Math.round(size * 0.5));
+  // Identidade editorial: só o ícone de traço, pequeno, na cor de destaque (sem placa colorida).
+  const d = Math.min(26, Math.max(18, Math.round(size * 0.28)));
   return (
-    <span className={`grid shrink-0 place-items-center rounded-2xl text-white ${MOOD_BG[mood]} ${className}`} style={{ width: d, height: d }} aria-hidden="true">
-      <Icon name={MOOD_ICON[mood]} size={Math.round(d * 0.5)} strokeWidth={2.2} />
+    <span className={`grid shrink-0 place-items-center text-gold ${className}`} style={{ width: d, height: d }} aria-hidden="true">
+      <Icon name={MOOD_ICON[mood]} size={d} />
     </span>
   );
 }
 
 /** Balão de fala do mascote. */
 export function SpeechBubble({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return (
-    <div className={`relative rounded-2xl rounded-bl-sm border border-line bg-surface px-3.5 py-2.5 text-sm font-medium leading-snug text-ink shadow-[var(--shadow-card)] ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`border-l-2 border-gold py-0.5 pl-3 text-sm leading-snug text-ink ${className}`}>{children}</div>;
 }
 
 /** Mascote com fala, para o topo das páginas e para os momentos de resultado. */

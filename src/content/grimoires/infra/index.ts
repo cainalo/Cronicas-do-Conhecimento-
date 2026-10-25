@@ -10,8 +10,8 @@ export const grimorioInfra: Grimoire = {
   id: 'grim.infra',
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.infra',
-  title: 'O Atlas das Estradas e das Nuvens',
-  epithet: 'Grimório de Sistemas Operacionais, Redes e Nuvem',
+  title: 'Sistemas Operacionais, Redes e Nuvem',
+  epithet: 'Sistemas Operacionais, Redes e Nuvem',
   description: 'As estradas por onde correm os pacotes (TCP/IP, endereços, DNS, HTTP/3, firewalls, VPN), os castelos alugados nas nuvens (IaaS, PaaS, SaaS, escala) e as engrenagens de cada máquina (Windows, Linux, shell, PowerShell, Active Directory, virtualização).',
   chapterIds: ['cap.infra.01', 'cap.infra.02', 'cap.infra.03'],
   sigil: 'selo',
@@ -87,7 +87,7 @@ export const licoesInfra: Lesson[] = [
   {
     id: 'lic.infra.01',
     chapterId: 'cap.infra.01',
-    title: 'As Estradas do Reino',
+    title: 'Redes, endereçamento e perímetro',
     goal: 'Camadas TCP/IP, TCP e UDP, portas, sub-redes, IPv6, DNS, DHCP, HTTP/3 e defesa de perímetro.',
     cards: [
       { title: 'Camadas e transporte', body: 'TCP/IP: aplicação, transporte, internet, acesso à rede.\n\n**TCP**: conexão, confiável, ordenado. **UDP**: sem conexão, rápido, sem garantias.\n\nPortas: SSH 22, DNS 53, HTTP 80, HTTPS 443, DHCP 67/68.' },

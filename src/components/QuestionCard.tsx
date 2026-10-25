@@ -115,7 +115,7 @@ export function QuestionCard({ question: q, onAnswer, onNext, nextLabel = 'Conti
           </details>
           {chapter && section && (
             <Link to={`/capitulo/${chapter.id}#${section.id}`} className="rubric block underline">
-              Estudar no grimório: {section.title}
+              Estudar no livro: {section.title}
             </Link>
           )}
           {onNext && (

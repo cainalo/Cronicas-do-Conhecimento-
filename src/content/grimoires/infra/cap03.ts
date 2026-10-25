@@ -48,7 +48,7 @@ export const licoesInfraSo: Lesson[] = [
   {
     id: 'lic.infra.03',
     chapterId: 'cap.infra.03',
-    title: 'As Engrenagens da Torre',
+    title: 'Sistemas operacionais e serviços de diretório',
     goal: 'Processos, memória, permissões, shell, PowerShell, Active Directory, LDAP, hipervisores e containers.',
     cards: [
       { title: 'Processos e permissões', body: '`kill PID` envia **SIGTERM (15)**; `kill -9` envia **SIGKILL**. *nice*: **-20** mais prioritário, **19** menos.\n\nr=4, w=2, x=1. **750** = `rwxr-x---`; **640** = `rw-r-----`. `chown user:grupo`. Sticky bit em `/tmp`.' },

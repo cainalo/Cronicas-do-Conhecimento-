@@ -9,8 +9,8 @@ export const grimorioGovernanca: Grimoire = {
   id: 'grim.governanca',
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.governanca',
-  title: 'As Atas do Conselho',
-  epithet: 'Grimório de Governança de TI',
+  title: 'Governança de TI',
+  epithet: 'Governança de TI',
   description: 'Como o reino decide o que fazer com a sua tecnologia: ISO/IEC 38500, COBIT 2019, ITIL 4, PMBOK 8 e métodos ágeis, contratações de TIC na Lei 14.133 e a estratégia de governo digital.',
   chapterIds: ['cap.gov.01', 'cap.gov.02'],
   sigil: 'selo',
@@ -91,7 +91,7 @@ export const licoesGovernanca: Lesson[] = [
   {
     id: 'lic.gov.01',
     chapterId: 'cap.gov.01',
-    title: 'O Conselho e as Oficinas',
+    title: 'Governança, gestão e frameworks',
     goal: 'Governança × gestão, ISO/IEC 38500, COBIT 2019, práticas do ITIL 4, PMBOK 8 e Scrum.',
     cards: [
       { title: 'Governar × gerir', body: 'Governança **avalia, dirige e monitora** (ISO/IEC 38500; domínio **EDM** do COBIT).\n\nCOBIT 2019: **40 objetivos**; EDM 5, APO 14, BAI 11, DSS 6, MEA 4.' },

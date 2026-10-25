@@ -8,8 +8,8 @@ export const grimorioLegislacao: Grimoire = {
   id: 'grim.legislacao',
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.legislacao',
-  title: 'O Livro das Leis do Reino',
-  epithet: 'Grimório de Legislação Aplicada à TI',
+  title: 'Legislação Aplicada à TI',
+  epithet: 'Legislação Aplicada à TI',
   description: 'As leis que todo sistema deve obedecer: LGPD aplicada ao código, Marco Civil da Internet, segurança nas contratações, certificação digital e as normas de Goiás e do próprio Tribunal.',
   chapterIds: ['cap.leg.01', 'cap.leg.02'],
   sigil: 'pena',
@@ -99,7 +99,7 @@ export const licoesLegislacao: Lesson[] = [
   {
     id: 'lic.leg.02',
     chapterId: 'cap.leg.02',
-    title: 'Selos, Contratos e Regimentos',
+    title: 'Segurança em contratações e normas do TCE-GO',
     goal: 'Segurança no ciclo da contratação de TIC, ICP-Brasil e assinaturas, LC 205/2025 e normativos do TCE-GO.',
     cards: [
       { title: 'Contratos e certificados', body: 'Segurança desde o **ETP e o TR**; termos de **sigilo** e de **ciência**; dados devolvidos e eliminados no fim.\n\nA1 em software, **A3 em token**. Qualificada = **ICP-Brasil**. Valide cadeia e revogação.' },

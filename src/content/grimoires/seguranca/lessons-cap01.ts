@@ -4,7 +4,7 @@ export const licoesCap01: Lesson[] = [
   {
     id: 'lic.seg.01.a',
     chapterId: 'cap.seg.01',
-    title: 'O Segredo Partilhado e o Selo Público',
+    title: 'Criptografia simétrica e assimétrica',
     goal: 'Distinguir criptografia simétrica e assimétrica e saber qual chave usar em cada situação.',
     cards: [
       {
@@ -25,7 +25,7 @@ export const licoesCap01: Lesson[] = [
   {
     id: 'lic.seg.01.b',
     chapterId: 'cap.seg.01',
-    title: 'Resumos, Selos e o Cadeado da Rede',
+    title: 'Hash, assinatura digital, certificados e TLS',
     goal: 'Dominar hash, HMAC, armazenamento de senhas, assinatura digital, certificados e TLS.',
     cards: [
       {

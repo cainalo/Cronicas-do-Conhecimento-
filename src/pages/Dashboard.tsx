@@ -46,7 +46,7 @@ export function PaceCard({ pace, examDate }: { pace: Pace; examDate: string }) {
             Hoje você fez <b>{pace.doneToday}</b> de {pace.perDay}.{pace.leftToday > 0 ? ` Faltam ${pace.leftToday}.` : ' Se quiser adiantar, o amanhã fica mais leve.'}
           </p>
           <p className="mt-3 text-sm text-muted">
-            O curso inteiro tem <b className="text-ink">{pace.total} atividades</b> (cada trecho tem Aprender e Praticar; cada capítulo tem Desafio; há missões). Você já fez {pace.done} e faltam{' '}
+            O curso inteiro tem <b className="text-ink">{pace.total} atividades</b> (cada trecho tem Aprender e Praticar; cada capítulo tem Desafio; há casos práticos). Você já fez {pace.done} e faltam{' '}
             {pace.remaining}. Para terminar tudo até {longDate(pace.finishBy)}
             {pace.studyDays < pace.daysLeft ? ' e usar a última semana para revisão e simulados' : ''}, são {pace.perDay} por dia. Se pular um dia, a meta dos próximos sobe um pouco.
           </p>

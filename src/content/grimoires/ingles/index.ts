@@ -10,8 +10,8 @@ export const grimorioIngles: Grimoire = {
   id: 'grim.ingles',
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.ingles',
-  title: 'O Códice dos Estrangeiros',
-  epithet: 'Grimório de Língua Inglesa (Leitura Técnica)',
+  title: 'Língua Inglesa (Leitura Técnica)',
+  epithet: 'Língua Inglesa (Leitura Técnica)',
   description: 'Como decifrar manuais, documentação de software, artigos técnicos e APIs escritos em inglês: skimming e scanning, falsos cognatos, conectivos, referência pronominal, modais, voz passiva, afixos e o vocabulário de TI.',
   chapterIds: ['cap.ingles.01', 'cap.ingles.02'],
   sigil: 'pena',
@@ -110,7 +110,7 @@ export const licoesIngles: Lesson[] = [
   {
     id: 'lic.ingles.02',
     chapterId: 'cap.ingles.02',
-    title: 'Os Pergaminhos das Máquinas',
+    title: 'Inglês técnico: APIs, versões e erros',
     goal: 'Vocabulário de APIs, códigos de status, versionamento, README, release notes, erros, artigos, abreviações, segurança e nuvem.',
     cards: [
       { title: 'APIs', body: '*endpoint*, *request/response*, *payload*, *header*, *query parameter* (`?x=1`).\n\n*deprecated* = obsoleto, ainda funciona. *breaking change* = incompatível (MAJOR no semver).\n\n401 sem autenticação; 403 sem permissão; 404 não encontrado; 429 limite excedido.' },

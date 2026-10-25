@@ -19,7 +19,7 @@ import { Icon } from '@/components/Icon';
 import { StepGuide } from '@/components/StepGuide';
 import { Mascot } from '@/components/Mascot';
 import { LeatherBook, Leaf, useSpread, visiblePages } from '@/components/LeatherBook';
-import { Pegadinha, SceneLines } from './Book';
+import { Pegadinha } from './Book';
 
 /** Vinheta de rodapé: pena e tinteiro ou vela, alternando, como nos manuscritos. */
 function Vignette({ i }: { i: number }) {
@@ -125,20 +125,10 @@ function SimpleLearnPage() {
         return (
           <div className="flex h-full flex-col">
             <div className="text-center">
-              <p className="rubric font-logo text-sm">Trecho {roman(idx + 1).toUpperCase()}</p>
+              <p className="kicker">Trecho {idx + 1}</p>
               <h1 className="mt-1 text-[1.6rem] leading-tight">{title}</h1>
-              <div className="divider-ornament mx-auto w-32" aria-hidden>
-                ✠
-              </div>
             </div>
-            {extras?.scene?.length ? (
-              <SceneLines lines={extras.scene} />
-            ) : (
-              <div className="mt-4 flex items-end gap-2">
-                <Mascot mood="talk" size={64} />
-                <p className="rounded-2xl rounded-bl-sm bg-surface px-3 py-2 text-[0.95rem] shadow-sm">Vamos começar do começo. Vire a página.</p>
-              </div>
-            )}
+            <p className="mt-6 border-l-2 border-gold pl-3 text-[0.98rem]">Vamos começar do começo, uma ideia por página. Vire a página quando estiver pronto.</p>
             <p className="mt-auto pt-3 text-center text-xs text-muted">
               {textTotal} páginas curtas · explicação do zero <Icon name="seta" size={12} className="inline" />
             </p>

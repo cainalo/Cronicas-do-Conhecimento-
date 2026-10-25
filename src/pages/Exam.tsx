@@ -356,7 +356,7 @@ export function ExamResultPage() {
                 </p>
                 <p>{q.explanation}</p>
                 <Link to={`/capitulo/${q.chapterId}#${q.sectionId}`} className="rubric underline">
-                  Estudar no grimório
+                  Estudar no livro
                 </Link>
               </div>
             </details>

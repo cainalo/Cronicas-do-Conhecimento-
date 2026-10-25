@@ -149,7 +149,7 @@ export function LessonPage() {
               </Link>
             )}
             <Link to="/" className="btn-ghost flex-1">
-              Voltar à Torre
+              Voltar para Hoje
             </Link>
           </div>
         </section>

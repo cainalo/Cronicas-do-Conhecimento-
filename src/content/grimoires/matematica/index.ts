@@ -11,8 +11,8 @@ export const grimorioMatematica: Grimoire = {
   id: 'grim.matematica',
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'cg.matematica',
-  title: 'O Ábaco do Tesoureiro',
-  epithet: 'Grimório de Matemática e Raciocínio Lógico',
+  title: 'Matemática e Raciocínio Lógico',
+  epithet: 'Matemática e Raciocínio Lógico',
   description: 'As contas que guardam o erário e as deduções que desmascaram mentirosos: inteiros, frações, MMC e MDC, razões, divisão proporcional, regra de três, porcentagem, associações, sequências, calendários e relógios.',
   chapterIds: ['cap.mat.01', 'cap.mat.02'],
   sigil: 'selo',
@@ -96,7 +96,7 @@ export const licoesMatematica: Lesson[] = [
   {
     id: 'lic.mat.01',
     chapterId: 'cap.mat.01',
-    title: 'O Livro-Caixa do Tesoureiro',
+    title: 'Aritmética, proporções e porcentagem',
     goal: 'Expressões, potências e frações; MMC e MDC; razões, divisão proporcional e regra de três; porcentagem e percentuais sucessivos.',
     cards: [
       { title: 'Contas e frações', body: 'Ordem: parênteses, **potências**, × e ÷ da esquerda para a direita, + e −.\n\n**−2² = −4**, mas (−2)² = 4. a⁻ⁿ = 1/aⁿ.\n\nFração **do restante**: multiplique o que sobra em cada etapa (5/8 × 3/5 = 3/8).' },

@@ -37,7 +37,7 @@ export function TopicProgressList({ onlyWithContent = false }: { onlyWithContent
                 </p>
               </>
             ) : (
-              <p className="mt-1 text-xs text-muted">Grimório ainda não escrito.</p>
+              <p className="mt-1 text-xs text-muted">Material ainda não escrito.</p>
             )}
           </li>
         );

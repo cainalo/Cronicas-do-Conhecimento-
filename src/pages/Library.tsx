@@ -41,7 +41,7 @@ export function LibraryPage() {
         </Link>
       </PageHeader>
       <SceneBanner scene="biblioteca" dark={dark}>
-        Nunca estudou TI? Comece pelo Primeiro Pergaminho. Em cada trecho você aprende, pratica e, no fim do capítulo, enfrenta o desafio.
+        Nunca estudou TI? Comece por Primeiros Passos em TI. Em cada trecho você aprende, pratica e, no fim do capítulo, enfrenta o desafio.
       </SceneBanner>
       <ul className="stagger grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3">
         {written.map((g) => (
@@ -53,7 +53,7 @@ export function LibraryPage() {
                   <span className="anim-hop absolute -right-1 -top-2 rounded-full bg-ember px-2.5 py-1 text-[11px] font-bold text-white shadow-md">Comece aqui</span>
                 )}
               </span>
-              <p className="mt-3 text-xs font-semibold" style={{ color }}>{g.epithet.replace('Grimório de ', '')}</p>
+              <p className="mt-3 text-xs font-semibold" style={{ color }}>{g.epithet}</p>
               <h2 className="text-base leading-tight">{g.title}</h2>
               <p className="mt-0.5 text-xs text-muted">
                 {g.chapterIds.length === 1 ? 'um capítulo' : `${g.chapterIds.length} capítulos`} · {Math.round(bookProgress(g.chapterIds) * 100)}% lido
@@ -69,7 +69,7 @@ export function LibraryPage() {
         <SectionTitle icon="pena" color={color}>
           Livros por escrever
         </SectionTitle>
-        <p className="mb-3 text-sm text-muted">Disciplinas do edital que ainda aguardam o seu grimório.</p>
+        <p className="mb-3 text-sm text-muted">Disciplinas do edital que ainda aguardam material.</p>
         <ul className="card columns-2 gap-6 p-4 text-[0.95rem]">
           {contest.disciplines
             .filter((d) => !hasMaterial(d.topics.map((t) => t.id)))
@@ -90,7 +90,7 @@ export function GrimoirePage() {
   const g = getGrimoire(id);
   const color = areaColor('grimorios', useIsDark());
   const regions = useRegions();
-  if (!g) return <p>Grimório não encontrado.</p>;
+  if (!g) return <p>Disciplina não encontrada.</p>;
   const region = regions.find((r) => r.discipline.id === g.disciplineId);
   const story = regionStories[g.disciplineId];
   // O mascote espera só no primeiro capítulo ainda não concluído.
@@ -103,7 +103,7 @@ export function GrimoirePage() {
           className="mb-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold"
           style={{ color, backgroundColor: tint(color, 12) }}
         >
-          <Icon name="voltar" size={14} strokeWidth={2.2} /> Grimórios
+          <Icon name="voltar" size={14} strokeWidth={2.2} /> Biblioteca
         </Link>
         <div className="flex items-center gap-4">
           <BookCover g={g} className="w-24 shrink-0" />

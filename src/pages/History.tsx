@@ -44,7 +44,7 @@ export function HistoryPage() {
                   <div className="mt-2 space-y-2">
                     <p className="rounded bg-raised p-2">{q.explanation}</p>
                     <Link to={`/capitulo/${q.chapterId}#${q.sectionId}`} className="rubric underline">
-                      Estudar no grimório
+                      Estudar no livro
                     </Link>
                   </div>
                 )}

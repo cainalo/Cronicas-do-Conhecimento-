@@ -20,7 +20,7 @@ export function NotFoundPage() {
           Abrir Estudos
         </Link>
         <Link to="/" className="btn-ghost flex-1">
-          Ir à Torre
+          Ir para Hoje
         </Link>
       </div>
     </section>

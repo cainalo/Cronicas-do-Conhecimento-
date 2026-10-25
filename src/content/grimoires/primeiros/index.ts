@@ -14,8 +14,8 @@ export const grimorioPrimeiros: Grimoire = {
   id: 'grim.primeiros',
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.infra',
-  title: 'O Primeiro Pergaminho',
-  epithet: 'Grimório de Primeiros Passos em TI',
+  title: 'Primeiros Passos em TI',
+  epithet: 'Primeiros Passos em TI',
   description: 'Para quem começa do zero: o que é um computador, hardware e software, sistema operacional e arquivos, algoritmos, redes e internet, bancos de dados e as primeiras regras de segurança.',
   chapterIds: ['cap.prim.01', 'cap.prim.02'],
   sigil: 'grimorio',
@@ -109,7 +109,7 @@ export const licoesPrimeiros: Lesson[] = [
   {
     id: 'lic.prim.02',
     chapterId: 'cap.prim.02',
-    title: 'Mensageiros, Arquivos e Lacres',
+    title: 'Redes, dados e segurança básica',
     goal: 'Endereço IP, roteador, cliente e servidor, navegador, DNS e nuvem; tabela, linha, coluna e chaves; confidencialidade, integridade, disponibilidade, senha, backup e phishing.',
     cards: [
       { title: 'A rede', body: '**IP** é o endereço do aparelho. **Roteador** liga redes.\n\n**Cliente** pede, **servidor** atende. O **navegador** é cliente.\n\n**DNS** troca nome de site por IP. **Nuvem** é usar computadores de outra empresa pela internet.' },

@@ -25,7 +25,7 @@ export const licoesIa: Lesson[] = [
   {
     id: 'lic.ia.01.b',
     chapterId: 'cap.ia.01',
-    title: 'O Arquivo que Responde',
+    title: 'Memória, RAG e bancos vetoriais',
     goal: 'Dominar memória, RAG, embeddings e bancos vetoriais.',
     cards: [
       {
@@ -59,7 +59,7 @@ export const licoesIa: Lesson[] = [
   {
     id: 'lic.ia.02.b',
     chapterId: 'cap.ia.02',
-    title: 'Protocolos, Selos e Provas',
+    title: 'MCP, skills, hooks e validação de código',
     goal: 'Dominar MCP, skills, hooks e a validação do código gerado por IA.',
     cards: [
       {

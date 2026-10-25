@@ -115,7 +115,7 @@ export const licoesIa34: Lesson[] = [
   {
     id: 'lic.ia.04',
     chapterId: 'cap.ia.04',
-    title: 'O Selo da Prestação de Contas',
+    title: 'Ética, LGPD na IA e avaliação de modelos',
     goal: 'Dominar ética e explicabilidade, LGPD aplicada à IA, EBIA, métricas de avaliação e fundamentos de Big Data.',
     cards: [
       {

@@ -36,8 +36,8 @@ export const missaoSql01: Mission = {
   sectionId: 'sql',
   topicIds: ['ti.dados.sql'],
   minutes: 12,
-  place: 'Sala dos Livros de Empenho, no subsolo do Arquivo Real, à noite',
-  mystery: 'Por que a lista de empenhos sem conferência veio vazia, se o Conselho tem certeza de que há pagamentos pendentes?',
+  place: 'Setor de controle de empenhos',
+  mystery: 'Por que a lista de empenhos sem conferência veio vazia, se a equipe de controle tem certeza de que há pagamentos pendentes?',
   scene: [
     { who: 'Narração', text: 'Subsolo do Arquivo Real, noite fria desde a queda das torres. A lareira e as velas da mesa de Isolda são a única luz.', shot: 'geral', action: 'camera-entra' },
     { who: 'Conde Valério', text: 'Pedi ao sistema a lista dos empenhos ainda sem conferência. Veio vazia. Então está tudo em ordem, não está?', shot: 'dupla', action: 'valerio-entra' },
@@ -135,8 +135,8 @@ export const missaoSql01: Mission = {
       },
       {
         id: 'l2',
-        title: 'A consulta do Tesoureiro',
-        ask: 'Esta é a consulta que o Conde Valério usou. Rode, veja que vem vazia e corrija para mostrar os empenhos sem status.',
+        title: 'A consulta do relatório',
+        ask: 'Esta é a consulta que o relatório usou. Rode, veja que vem vazia e corrija para mostrar os empenhos sem status.',
         start: { select: ['id', 'valor'], from: 'empenho', where: [{ col: 'status', op: '=', value: null }] },
         expected: { select: ['id', 'valor'], from: 'empenho', where: [{ col: 'status', op: 'IS NULL' }] },
         hints: ['Rode a consulta como está. O que vem?', 'Comparar com "= NULL" nunca é verdadeiro. Troque o operador.', 'Use o operador IS NULL.'],
@@ -202,7 +202,7 @@ export const missaoSql01: Mission = {
     {
       kind: 'compare',
       id: 't4',
-      prompt: 'O Conselho quer a lista de todos os fornecedores, inclusive os que não receberam nenhum empenho. Qual consulta atende?',
+      prompt: 'A coordenação quer a lista de todos os fornecedores, inclusive os que não receberam nenhum empenho. Qual consulta atende?',
       scenarios: [
         { title: 'Consulta A', body: '```sql\nSELECT nome, valor\nFROM fornecedor\nINNER JOIN empenho\n  ON empenho.cnpj_fornecedor = fornecedor.cnpj;\n```' },
         { title: 'Consulta B', body: '```sql\nSELECT nome, valor\nFROM fornecedor\nLEFT JOIN empenho\n  ON empenho.cnpj_fornecedor = fornecedor.cnpj;\n```' },
@@ -214,7 +214,7 @@ export const missaoSql01: Mission = {
     {
       kind: 'fix',
       id: 't5',
-      prompt: 'Brites escreveu esta consulta para achar os fornecedores sem cidade, mas ela não traz nada. Toque na linha com o erro.',
+      prompt: 'Uma colega escreveu esta consulta para achar os fornecedores sem cidade, mas ela não traz nada. Toque na linha com o erro.',
       lines: ['SELECT nome', 'FROM fornecedor', 'WHERE cidade = NULL;'],
       bug: 2,
       why: 'O erro está no "= NULL". Comparar com NULL nunca dá verdadeiro.',
@@ -223,7 +223,7 @@ export const missaoSql01: Mission = {
       variant: {
         kind: 'fix',
         id: 't5b',
-        prompt: 'Outra de Brites: deveria listar os empenhos que já têm status. Onde está o erro?',
+        prompt: 'Outra consulta da colega: deveria listar os empenhos que já têm status. Onde está o erro?',
         lines: ['SELECT id, status', 'FROM empenho', 'WHERE status <> NULL;'],
         bug: 2,
         why: '"<> NULL" também dá desconhecido em todas as linhas.',

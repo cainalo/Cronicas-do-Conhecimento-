@@ -1,7 +1,7 @@
 // Cenas ilustradas do topo das páginas centrais (biblioteca, campo de treino, reino), com o
 // mascote e uma fala. Desenhos próprios em SVG, com detalhes animados.
 import type { ReactNode } from 'react';
-import { Mascot, type MascotMood } from '@/components/Mascot';
+import type { MascotMood } from '@/components/Mascot';
 
 export type Scene = 'biblioteca' | 'treino' | 'reino' | 'conta';
 
@@ -123,11 +123,11 @@ export function SceneArt({ scene, dark }: { scene: Scene; dark: boolean }) {
 }
 
 /** Aviso no topo da página (reformulação): texto com ícone, sem cenário ilustrado. */
-export function SceneBanner({ children, mood = 'talk' }: { scene: Scene; children: ReactNode; mood?: MascotMood; dark?: boolean }) {
+export function SceneBanner({ children }: { scene: Scene; children: ReactNode; mood?: MascotMood; dark?: boolean }) {
+  // Identidade editorial: nota curta com fio de destaque, sem cena nem mascote.
   return (
-    <div className="card mb-5 flex items-center gap-3 p-3.5" role="note">
-      <Mascot mood={mood} size={80} />
-      <p className="text-sm font-medium leading-snug">{children}</p>
-    </div>
+    <p className="mb-5 border-l-2 border-gold py-0.5 pl-3 text-sm text-muted" role="note">
+      {children}
+    </p>
   );
 }

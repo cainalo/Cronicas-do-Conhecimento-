@@ -2,16 +2,8 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { AREAS, areaOf, isAreaHome, type AreaKey } from '@/app/areas';
 import { useCheckpoint } from '@/app/useCheckpoint';
-import { levelInfo, totalXp } from '@/lib/study';
-import { achievements, cluesRevealed } from '@/lib/game';
-import { DEFAULT_CONTEST_ID, chapters, questionsForContest, totalUnits } from '@/content';
-import { useCelebrations, useRegionCelebration } from '@/app/fx';
-import { useRegions } from '@/pages/Realm';
 import { Icon } from '@/components/Icon';
 import { Logo } from '@/components/Logo';
-import { useState } from 'react';
-import { Prologue, prologueSeen } from '@/components/Prologue';
-import { clues } from '@/content/game/story';
 
 // Reformulação (Fase 1): cinco áreas, iguais no celular (menu de baixo) e no computador (topo).
 const TABS: AreaKey[] = ['torre', 'grimorios', 'explorar', 'treino', 'reino'];
@@ -80,22 +72,12 @@ function ContinueButton({ variant }: { variant: 'compact' | 'pill' }) {
 }
 
 export function Layout() {
-  const { data } = useStudy();
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const xp = totalXp(data);
-  const lv = levelInfo(xp);
-  useCelebrations(xp, lv.level, achievements(data, chapters, questionsForContest(DEFAULT_CONTEST_ID)), cluesRevealed(Object.keys(data.lessons).length, totalUnits, clues.length), clues.length);
-  const regions = useRegions();
-  useRegionCelebration(regions.filter((r) => r.explored && r.mastery >= 0.8).map((r) => r.name));
   const inner = !isAreaHome(pathname);
   // Leitura e prática ocupam a tela toda, como as lições do Duolingo (sem a barra inferior).
   const immersive = /^\/(capitulo|aprender|pratica|licao|missao)\//.test(pathname);
   const onAccount = areaOf(pathname) === 'conta';
-  // Prólogo na primeira visita (fora dos testes automatizados).
-  // Reformulação: o prólogo medieval não abre mais sozinho (o componente fica, sem uso, até a limpeza).
-  const [showPrologue, setShowPrologue] = useState(() => false && !prologueSeen());
-
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="wood-bar wood-bar-top safe-top sticky top-0 z-30">
@@ -136,20 +118,16 @@ export function Layout() {
             )}
             <Link
               to="/conta"
-              aria-label={`Conta · nível ${lv.level}`}
-              title={`Conta · nível ${lv.level} (${lv.into}/${lv.span} XP)`}
+              aria-label="Conta e configurações"
+              title="Conta e configurações"
               className={`relative grid h-10 w-10 place-items-center rounded-full border text-ink transition hover:border-ink ${onAccount ? 'border-ink' : 'border-ink/20'}`}
             >
               <Icon name="pessoa" size={19} />
-              <span className="absolute -bottom-1 -right-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ink px-1 text-[10px] font-semibold tabular-nums text-bg">
-                {lv.level}
-              </span>
             </Link>
           </div>
         </div>
       </header>
 
-      {showPrologue && <Prologue onClose={() => setShowPrologue(false)} />}
       <main className={`mx-auto w-full flex-1 px-4 sm:px-6 ${/^\/(capitulo|aprender)\//.test(pathname) ? 'max-w-3xl lg:max-w-6xl' : 'max-w-3xl'} ${immersive ? 'pb-3 pt-4' : 'pb-32 pt-5 lg:pb-12'}`}>
         <div key={pathname} className="page-enter">
           <Outlet />

@@ -15,8 +15,8 @@ export const grimorioIa: Grimoire = {
   id: 'grim.ia',
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.ia-eng',
-  title: 'O Livro dos Autômatos',
-  epithet: 'Grimório de Inteligência Artificial',
+  title: 'Inteligência Artificial',
+  epithet: 'Inteligência Artificial',
   description:
     'Modelos de linguagem, prompts e contexto, RAG, agentes de programação e MCP; aprendizado de máquina, redes neurais e PLN; ética, LGPD aplicada à IA, EBIA, ciência de dados e Big Data. Cobre os dois blocos de IA do edital (9 questões).',
   chapterIds: ['cap.ia.01', 'cap.ia.02', 'cap.ia.03', 'cap.ia.04'],

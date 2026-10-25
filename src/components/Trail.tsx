@@ -38,7 +38,7 @@ export function chapterStops(c: Chapter, data: StudyData): Stop[] {
       },
       ...(() => {
         const m = missionForSection(c.id, s.id);
-        return m ? [{ key: `${c.id}:${s.id}:missao`, to: `/missao/${m.id}`, label: `Missão: ${m.title}`, icon: 'mapa' as IconName, done: missionDone(data, m.id), kind: 'mission' as const }] : [];
+        return m ? [{ key: `${c.id}:${s.id}:missao`, to: `/missao/${m.id}`, label: `Caso prático: ${m.title}`, icon: 'mapa' as IconName, done: missionDone(data, m.id), kind: 'mission' as const }] : [];
       })(),
     ];
   });
@@ -130,7 +130,7 @@ export function Trail({ chapter, data, color, guide = true }: { chapter: Chapter
               {isCurrent && guide && (
                 <div className={`pointer-events-none absolute -top-6 flex flex-col items-center ${x >= 0 ? 'right-full mr-1' : 'left-full ml-1'}`}>
                   <span className="anim-toast-in whitespace-nowrap rounded-xl border border-line bg-surface px-2 py-1 text-[11px] font-bold shadow-sm" style={{ color: 'rgb(var(--ember))' }}>
-                    {s.kind === 'lesson' ? 'Hora do desafio!' : s.kind === 'mission' ? 'Uma missão!' : s.kind === 'practice' ? 'Hora de praticar!' : 'Comece aqui'}
+                    {s.kind === 'lesson' ? 'Hora do desafio!' : s.kind === 'mission' ? 'Caso prático' : s.kind === 'practice' ? 'Hora de praticar!' : 'Comece aqui'}
                   </span>
                   <Mascot mood="talk" size={52} />
                 </div>

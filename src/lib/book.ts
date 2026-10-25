@@ -56,8 +56,8 @@ export function splitMarkdown(md: string): string[] {
 export function chapterBlocks(chapter: Chapter, extras: (sectionId: string) => SectionExtras | undefined): BookBlock[] {
   const out: BookBlock[] = [{ kind: 'cover' }];
   chapter.sections.forEach((s, idx) => {
-    const ex = extras(s.id);
-    if (ex?.scene?.length) out.push({ kind: 'scene', sectionId: s.id, lines: ex.scene });
+    void extras(s.id);
+    // As cenas de diálogo da história antiga não entram mais no livro (pacote v4, limpeza de identidade).
     out.push({ kind: 'title', sectionId: s.id, number: idx + 1, title: s.title.replace(/^\d+\.\s*/, '') });
     const i = s.body.indexOf('### Pegadinhas');
     const body = i >= 0 ? s.body.slice(0, i) : s.body;

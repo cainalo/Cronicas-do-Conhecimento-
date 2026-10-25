@@ -11,7 +11,7 @@ import { Icon } from '@/components/Icon';
 import { PageHeader } from '@/components/Page';
 
 const STATE_LABEL: Record<UnitState, string> = { feita: 'Concluída', atual: 'Você está aqui', disponivel: 'Disponível', bloqueada: 'Bloqueada' };
-const KIND_LABEL = { aprender: 'Aprender', praticar: 'Praticar', missao: 'Missão', desafio: 'Desafio' } as const;
+const KIND_LABEL = { aprender: 'Aprender', praticar: 'Praticar', missao: 'Caso prático', desafio: 'Desafio' } as const;
 
 export function TrailPage() {
   const { data } = useStudy();

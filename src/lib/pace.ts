@@ -41,7 +41,7 @@ export function courseUnits(
       } else out.push({ key: learnKey(c.id, s.id), kind: 'aprender', chapterId: c.id, sectionId: s.id, title: `Aprender: ${t}`, to: `/aprender/${c.id}/${s.id}` });
       out.push({ key: practiceId(c.id, s.id), kind: 'praticar', chapterId: c.id, sectionId: s.id, title: `Praticar: ${t}`, to: `/pratica/${c.id}/${s.id}` });
       const m = missions.find((x) => x.chapterId === c.id && x.sectionId === s.id);
-      if (m) out.push({ key: missionKey(m.id), kind: 'missao', chapterId: c.id, sectionId: s.id, title: `Missão: ${m.title}`, to: `/missao/${m.id}` });
+      if (m) out.push({ key: missionKey(m.id), kind: 'missao', chapterId: c.id, sectionId: s.id, title: `Caso prático: ${m.title}`, to: `/missao/${m.id}` });
     }
     for (const lid of c.lessonIds) {
       const l = lessons.find((x) => x.id === lid);

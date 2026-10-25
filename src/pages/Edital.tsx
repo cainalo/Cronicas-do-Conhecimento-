@@ -17,7 +17,7 @@ export function EditalPage() {
       <PageHeader area="reino" icon="pergaminho" title="Edital" subtitle={c.name} />
       <p className="rounded-xl border border-ok/50 p-3 text-sm">
         Dados conferidos no <b>Edital nº 01/2026 retificado (versão consolidada de 15/09/2026)</b>. A cobertura do material ainda <b>não é integral</b>: veja abaixo o
-        que já tem grimório e questões.
+        que já tem material e questões.
       </p>
       <section className="card p-4">
         <h2 className="mb-1 text-base">{c.role}</h2>

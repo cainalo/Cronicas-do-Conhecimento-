@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { FxProvider } from '@/app/fx';
@@ -21,10 +21,7 @@ import { FlashcardsPage } from '@/pages/Flashcards';
 import { ExamPage, ExamResultPage } from '@/pages/Exam';
 import { EssayListPage, EssayPage } from '@/pages/Essay';
 import { PlanPage } from '@/pages/Plan';
-import { RealmPage } from '@/pages/Realm';
-import { CharacterPage } from '@/pages/Character';
 import { BlitzPage } from '@/pages/Blitz';
-import { DiaryPage } from '@/pages/Diary';
 import { StudiesPage } from '@/pages/Studies';
 import { NotFoundPage } from '@/pages/NotFound';
 import { TrailPage } from '@/pages/Trail';
@@ -65,11 +62,11 @@ export function AppRoutes() {
         <Route path="conta" element={<AccountPage />} />
         <Route path="treino" element={<TrainingPage />} />
         <Route path="plano" element={<PlanPage />} />
-        <Route path="reino" element={<RealmPage />} />
-        <Route path="personagem" element={<CharacterPage />} />
+        <Route path="reino" element={<Navigate to="/progresso" replace />} />
+        <Route path="personagem" element={<Navigate to="/progresso" replace />} />
         <Route path="flashcards" element={<FlashcardsPage />} />
         <Route path="relampago" element={<BlitzPage />} />
-        <Route path="diario" element={<DiaryPage />} />
+        <Route path="diario" element={<Navigate to="/progresso" replace />} />
         <Route path="simulado" element={<ExamPage />} />
         <Route path="simulado/:id" element={<ExamResultPage />} />
         <Route path="discursiva" element={<EssayListPage />} />

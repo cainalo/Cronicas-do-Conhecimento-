@@ -16,8 +16,8 @@ export const grimorioSeguranca: Grimoire = {
   id: 'grim.seguranca',
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.seguranca',
-  title: 'O Códice das Sete Chaves',
-  epithet: 'Grimório de Segurança da Informação',
+  title: 'Segurança da Informação',
+  epithet: 'Segurança da Informação',
   description:
     'Criptografia, OWASP Top 10, DevSecOps, Zero Trust e a família ISO/IEC 27000. Começa pelo segredo mais antigo: como guardar e provar a palavra escrita.',
   chapterIds: ['cap.seg.01', 'cap.seg.02'],
@@ -125,7 +125,7 @@ export const licoesCap02: Lesson[] = [
   {
     id: 'lic.seg.02.a',
     chapterId: 'cap.seg.02',
-    title: 'Os Guardiões das Portas',
+    title: 'Riscos, controle de acesso e OWASP',
     goal: 'Riscos, classificação, controle de acesso, Zero Trust e OWASP Top 10:2025.',
     cards: [
       { title: 'Risco', body: 'Vulnerabilidade (fraqueza) + ameaça (causa) + impacto. Tratar: **mitigar, transferir, evitar ou aceitar**.\n\nLAI: reservada 5, secreta 15, ultrassecreta 25 anos.' },
