@@ -56,6 +56,7 @@ Grimório de Infraestrutura inteiro em microaulas: cap.infra.01 (Redes, 41 etapa
 Capítulo de Criptografia (cap.seg.01) inteiro em microaulas: 6 aulas, 51 etapas, 20 questões autorais na prova das aulas. Revisão editorial humana pendente.
 
 | Princípios, riscos e classificação | cap.seg.02 / principios | 8 | q.seg.02.001, q.seg.02.002, q.seg.02.003 |
+| Controle de acesso, IAM e Zero Trust | cap.seg.02 / acesso | 8 | q.seg.02.004, q.seg.02.005, q.seg.02.006, q.seg.02.007 |
 
 ## Simulador e Sala dos Professores (25/10/2026)
 - Cenário `cen.suporte-lento` (SO: memória, swap, thrashing, sinais, nice). Fonte: microaula `micro.infra.processos`. Não revisado por humano.
