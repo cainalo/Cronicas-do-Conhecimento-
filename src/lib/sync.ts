@@ -88,6 +88,9 @@ export async function pullRemote(sb: SupabaseClient, userId: string): Promise<St
       updatedAt: iso(r.updated_at)!,
     };
   }
+  // Marca de reinício do progresso (pacote v4). Leitura tolerante: sem a coluna ou sem perfil, segue sem marca.
+  const pr = await sb.from('profiles').select('progress_reset_at').eq('id', userId).maybeSingle();
+  if (!pr.error && pr.data?.progress_reset_at) d.progressResetAt = iso(pr.data.progress_reset_at);
   const s0 = (st.data as Row[])[0];
   if (s0) {
     d.settings = {
@@ -246,6 +249,12 @@ export async function pushPending(sb: SupabaseClient, userId: string, data: Stud
     if (error) left.settings = true;
   }
 
+  if (p.reset && data.progressResetAt) {
+    // Só conta como gravado se a linha do perfil foi mesmo atualizada (sem perfil, nada é alterado).
+    const { data: rows, error } = await sb.from('profiles').update({ progress_reset_at: data.progressResetAt }).eq('id', userId).select('id');
+    if (error || !rows?.length) left.reset = true;
+  }
+
   for (const d of p.bookmarkDeletes) {
     const { error } = await sb.from('bookmarks').delete().eq('user_id', userId).eq('chapter_id', d.chapterId).eq('section_id', d.sectionId);
     if (error) left.bookmarkDeletes.push(d);
@@ -281,6 +290,9 @@ export async function syncAll(sb: SupabaseClient, userId: string, local: StudyDa
   merged.pending.settings = !!merged.settings && (merged.pending.settings || !same(merged.settings, remote.settings));
   // Simulados em andamento não sobem; concluídos que o servidor já tem não são reenviados.
   merged.pending.exams = merged.pending.exams.filter((id) => merged.exams[id]?.finishedAt && !remote.exams[id]);
+  // A marca de reinício sobe sempre que a local for mais nova que a do servidor.
+  if (merged.progressResetAt && merged.progressResetAt !== remote.progressResetAt) merged.pending.reset = true;
+  else delete merged.pending.reset;
   const pushed = await pushPending(sb, userId, merged);
   return { ...pushed, lastSyncAt: new Date().toISOString() };
 }

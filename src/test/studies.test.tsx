@@ -78,20 +78,48 @@ it('endereço inexistente fica dentro do app, com saída para a trilha e para Es
   expect(screen.getByRole('link', { name: 'Abrir Estudos' })).toHaveAttribute('href', '/estudos');
 });
 
-it('conta sem servidor explica o modo local e mantém aparência e volumes', async () => {
-  const user = userEvent.setup();
+it('conta sem servidor explica o modo local e organiza os ajustes em áreas', () => {
   renderAt('/conta');
-  expect(screen.getByText('Estudando só neste aparelho')).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: /Escuro/ })).toBeInTheDocument();
+  expect(screen.getByText('Estudando só neste aparelho', { selector: 'h2' })).toBeInTheDocument();
+  // A página de entrada não expõe senha nem botões sensíveis; cada área tem destino real.
+  expect(document.querySelector('input[type="password"]')).toBeNull();
+  expect(screen.queryByRole('button', { name: /Sair/ })).toBeNull();
+  for (const [id, to] of [
+    ['conta-acesso', '/conta/acesso'],
+    ['conta-sync', '/conta/sincronizacao'],
+    ['conta-aparencia', '/conta/aparencia'],
+    ['conta-sons', '/conta/sons'],
+    ['conta-dados', '/conta/dados'],
+    ['conta-sobre', '/conta/sobre'],
+  ])
+    expect(screen.getByTestId(id)).toHaveAttribute('href', to);
+});
+
+it('aparência: tema e tamanho do texto salvos, e o painel de personalização continua', async () => {
+  const user = userEvent.setup();
+  renderAt('/conta/aparencia');
   expect(screen.getByTestId('abrir-personalizar')).toHaveAttribute('href', '/personalizar');
-  await user.click(screen.getByRole('switch', { name: 'Lareira' }));
-  const slider = screen.getByLabelText('Volume: Lareira');
-  expect(screen.queryByLabelText('Volume: Música medieval')).toBeNull();
-  // Muda o volume da lareira sem mexer no da música.
+  await user.click(screen.getByRole('button', { name: /Escuro/ }));
+  await user.click(screen.getByRole('button', { name: 'Aumentar texto' }));
+  expect(loadPrefs().theme).toBe('dark');
+  expect(loadPrefs().fontScale).toBeCloseTo(1.05);
+});
+
+it('sons: tudo começa desligado; ligar um ambiente e mudar o volume não mexe nos outros', async () => {
+  const user = userEvent.setup();
+  renderAt('/conta/sons');
+  for (const s of screen.getAllByRole('switch').slice(0, 6)) expect(s).toHaveAttribute('aria-checked', 'false');
+  await user.click(screen.getByRole('switch', { name: 'Chuva suave' }));
+  const slider = screen.getByLabelText('Volume: Chuva suave');
+  expect(screen.queryByLabelText('Volume: Riacho')).toBeNull();
   fireEvent.change(slider, { target: { value: '40' } });
   expect(screen.getByText('40%')).toBeInTheDocument();
-  expect(loadPrefs().fireVolume).toBeCloseTo(0.4);
-  expect(loadPrefs().musicVolume).toBeUndefined();
+  expect(loadPrefs().sounds?.chuva).toEqual({ on: true, vol: 0.4 });
+  expect(loadPrefs().sounds?.riacho?.on).toBe(false);
+  // Predefinição liga de verdade os ambientes dela.
+  await user.click(screen.getByRole('button', { name: /Foco profundo/ }));
+  expect(loadPrefs().sounds?.marrom?.on).toBe(true);
+  expect(loadPrefs().sounds?.chuva?.on).toBe(false);
 });
 
 describe('recuperação adaptativa na prática', () => {

@@ -1,6 +1,7 @@
 // Fusão determinística entre dados locais e remotos (ou entre visitante e conta).
 // Registros imutáveis (tentativas, XP) são unidos por id; XP também por (tipo, referência).
 import type { Bookmark, LessonCompletion, MockExam, ReadingProgress, StudyData, XpEvent } from './model';
+import { dropBefore, latestReset } from './reset';
 
 const uniq = (xs: string[]) => [...new Set(xs)];
 
@@ -99,9 +100,12 @@ export function mergeData(base: StudyData, incoming: StudyData, incomingIsPendin
     essays: uniq([...p.essays, ...q.essays, ...(incomingIsPending ? Object.keys(incoming.essays) : [])]),
     cards: uniq([...p.cards, ...q.cards, ...(incomingIsPending ? Object.keys(incoming.cards) : [])]),
     settings: p.settings || q.settings || (incomingIsPending && !!incoming.settings),
+    ...(p.reset || q.reset ? { reset: true } : {}),
   };
 
-  return {
+  const progressResetAt = latestReset(base.progressResetAt, incoming.progressResetAt);
+  // O reinício vale para os dois lados: nada anterior à marca volta pela fusão.
+  return dropBefore({
     version: 1,
     attempts,
     xp,
@@ -125,5 +129,6 @@ export function mergeData(base: StudyData, incoming: StudyData, incomingIsPendin
     })(),
     pending,
     lastSyncAt: base.lastSyncAt,
-  };
+    ...(progressResetAt ? { progressResetAt } : {}),
+  }, progressResetAt);
 }

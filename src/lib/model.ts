@@ -98,6 +98,8 @@ export interface Pending {
   essays: string[];
   cards: string[];
   settings: boolean;
+  /** Marca de reinício do progresso ainda não gravada no servidor. */
+  reset?: boolean;
 }
 
 /** Ponto exato de uma atividade em andamento (fica no aparelho). */
@@ -135,6 +137,8 @@ export interface StudyData {
   progress?: Record<string, SessionProgress>;
   pending: Pending;
   lastSyncAt?: string;
+  /** Reinício do progresso (pacote v4): registros de estudo anteriores a esta data não contam. */
+  progressResetAt?: string;
 }
 
 export const emptyPending = (): Pending => ({
@@ -173,4 +177,5 @@ export const pendingCount = (p: Pending) =>
   p.exams.length +
   p.essays.length +
   p.cards.length +
-  (p.settings ? 1 : 0);
+  (p.settings ? 1 : 0) +
+  (p.reset ? 1 : 0);

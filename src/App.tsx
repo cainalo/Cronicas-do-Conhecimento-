@@ -15,6 +15,12 @@ import { ReviewPage } from '@/pages/Review';
 import { HistoryPage } from '@/pages/History';
 import { ProgressPage } from '@/pages/Progress';
 import { EditalPage } from '@/pages/Edital';
+import { AccessPage } from '@/pages/settings/Access';
+import { SyncPage } from '@/pages/settings/Sync';
+import { AppearancePage } from '@/pages/settings/Appearance';
+import { SoundsPage } from '@/pages/settings/Sounds';
+import { DataPage } from '@/pages/settings/Data';
+import { AboutPage } from '@/pages/settings/About';
 import { AccountPage } from '@/pages/Account';
 import { TrainingPage } from '@/pages/Training';
 import { FlashcardsPage } from '@/pages/Flashcards';
@@ -60,6 +66,12 @@ export function AppRoutes() {
         <Route path="progresso" element={<ProgressPage />} />
         <Route path="edital" element={<EditalPage />} />
         <Route path="conta" element={<AccountPage />} />
+        <Route path="conta/acesso" element={<AccessPage />} />
+        <Route path="conta/sincronizacao" element={<SyncPage />} />
+        <Route path="conta/aparencia" element={<AppearancePage />} />
+        <Route path="conta/sons" element={<SoundsPage />} />
+        <Route path="conta/dados" element={<DataPage />} />
+        <Route path="conta/sobre" element={<AboutPage />} />
         <Route path="treino" element={<TrainingPage />} />
         <Route path="plano" element={<PlanPage />} />
         <Route path="reino" element={<Navigate to="/progresso" replace />} />

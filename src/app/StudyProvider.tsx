@@ -2,11 +2,12 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { emptyData, emptyPending } from '@/lib/model';
-import { GUEST, clearData, hasData, loadData, saveData } from '@/lib/storage';
+import { GUEST, backupRaw, clearData, hasData, loadData, saveData } from '@/lib/storage';
 import { getSnapshot, pickRecovery, putSnapshot } from '@/lib/localdb';
 import { pendingCount, type StudyData } from '@/lib/model';
 import { mergeData } from '@/lib/merge';
 import { syncAll } from '@/lib/sync';
+import { progressStoreKeys, resetFeedState, resetProgress } from '@/lib/reset';
 
 export type SyncState = 'local' | 'idle' | 'syncing' | 'offline' | 'error';
 
@@ -16,7 +17,24 @@ interface Ctx {
   session: Session | null;
   authReady: boolean;
   sync: { state: SyncState; pending: number; lastSyncAt?: string; error?: string };
-  syncNow: () => Promise<void>;
+  syncNow: () => Promise<StudyData | undefined>;
+  /** Reinicia o progresso de estudos (pacote v4). Diz se a marca já chegou ao servidor. */
+  resetAll: () => Promise<ResetOutcome>;
+}
+
+/** local = só aparelho (visitante); synced = servidor confirmou; pending = gravado aqui, envio pendente. */
+export type ResetOutcome = 'local' | 'synced' | 'pending';
+
+/** Andamento de estudo guardado fora do StudyData: só estas chaves são tocadas (nunca um clear geral). */
+function resetLocalStores(owner: string) {
+  try {
+    const keys = Array.from({ length: localStorage.length }, (_, i) => localStorage.key(i)).filter((k): k is string => !!k);
+    for (const k of progressStoreKeys(keys, owner)) localStorage.removeItem(k);
+    const feed = localStorage.getItem('cronicas:feed:v1');
+    if (feed) localStorage.setItem('cronicas:feed:v1', JSON.stringify(resetFeedState(JSON.parse(feed))));
+  } catch {
+    /* sem armazenamento: nada a limpar */
+  }
 }
 
 const StudyCtx = createContext<Ctx | null>(null);
@@ -46,7 +64,9 @@ export function StudyProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let next = loadData(owner);
     if (owner !== GUEST) {
-      const guest = loadData(GUEST);
+      const { progressResetAt: _guestReset, ...guest } = loadData(GUEST);
+      // O reinício feito como visitante vale só para os dados do visitante, não para a conta.
+      void _guestReset;
       if (hasData(guest)) {
         next = mergeData(next, guest, true);
         saveData(owner, next);
@@ -92,11 +112,11 @@ export function StudyProvider({ children }: { children: ReactNode }) {
     [owner],
   );
 
-  const syncNow = useCallback(async () => {
-    if (!supabase || owner === GUEST || syncing.current) return;
+  const syncNow = useCallback(async (): Promise<StudyData | undefined> => {
+    if (!supabase || owner === GUEST || syncing.current) return undefined;
     if (!navigator.onLine) {
       setSyncState('offline');
-      return;
+      return undefined;
     }
     syncing.current = true;
     setSyncState('syncing');
@@ -111,13 +131,31 @@ export function StudyProvider({ children }: { children: ReactNode }) {
       });
       setSyncState(pendingCount(result.pending) ? 'error' : 'idle');
       setSyncError(pendingCount(result.pending) ? 'Alguns registros não foram enviados; nova tentativa em breve.' : undefined);
+      return result;
     } catch (e) {
       setSyncState(navigator.onLine ? 'error' : 'offline');
       setSyncError(e instanceof Error ? e.message : String(e));
+      return undefined;
     } finally {
       syncing.current = false;
     }
   }, [owner]);
+
+  const resetAll = useCallback(async (): Promise<ResetOutcome> => {
+    const cur = dataRef.current;
+    // Cópia de segurança antes de qualquer descarte (ADR-009).
+    backupRaw(owner, JSON.stringify(cur), 'antes de reiniciar o progresso de estudos');
+    const next = resetProgress(cur);
+    saveData(owner, next);
+    // O espelho recebe o estado reiniciado já agora, para nunca restaurar o progresso antigo.
+    await putSnapshot(owner, next);
+    resetLocalStores(owner);
+    dataRef.current = next;
+    setData(next);
+    if (owner === GUEST || !supabase) return 'local';
+    const result = await syncNow();
+    return result && !result.pending.reset ? 'synced' : 'pending';
+  }, [owner, syncNow]);
 
   // Sincroniza ao entrar, ao voltar a conexão, ao retornar à aba e após alterações.
   useEffect(() => {
@@ -149,8 +187,9 @@ export function StudyProvider({ children }: { children: ReactNode }) {
       authReady,
       sync: { state: syncState, pending, lastSyncAt: data.lastSyncAt, error: syncError },
       syncNow,
+      resetAll,
     }),
-    [data, update, session, authReady, syncState, pending, syncError, syncNow],
+    [data, update, session, authReady, syncState, pending, syncError, syncNow, resetAll],
   );
 
   return <StudyCtx.Provider value={value}>{children}</StudyCtx.Provider>;

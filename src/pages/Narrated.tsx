@@ -7,6 +7,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getNarrated } from '@/content';
 import type { NarratedLesson, NumberLineState, Scene } from '@/content/narrated/types';
 import { getVoice, readingMs } from '@/app/voice';
+import { soundscape } from '@/app/soundscape';
 import { nextBeat, nextScene, prevScene, revealOf, transcript, type NarrationPos } from '@/lib/narration';
 import { Icon } from '@/components/Icon';
 import { Illustration } from '@/components/Illustration';
@@ -47,6 +48,11 @@ function Player({ l }: { l: NarratedLesson }) {
   }, [voice]);
 
   useEffect(() => () => stop(), [stop]);
+  // Enquanto a voz fala, o ambiente sonoro (se estiver tocando) fica baixo.
+  useEffect(() => {
+    soundscape.duck(playing && voice.kind !== 'nenhuma');
+    return () => soundscape.duck(false);
+  }, [playing, voice]);
 
   useEffect(() => {
     if (!playing) return;

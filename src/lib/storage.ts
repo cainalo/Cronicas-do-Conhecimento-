@@ -73,7 +73,9 @@ export function hasData(d: StudyData) {
       Object.keys(d.exams).length +
       Object.keys(d.essays).length +
       Object.keys(d.cards).length >
-    0
+      0 ||
+    // Um reinício também é estado a guardar: o espelho precisa registrá-lo para não restaurar o antigo.
+    !!d.progressResetAt
   );
 }
 
@@ -83,13 +85,15 @@ export interface Prefs {
   /** Efeitos sonoros curtos (acerto, erro, conclusão). */
   sound?: boolean;
   theme: 'dark' | 'light';
-  /** Música medieval de fundo. */
+  /** Legado (música medieval e lareira, até a v4). Mantidos só para não perder o que estava salvo. */
   music?: boolean;
-  /** Lareira crepitando. */
   fire?: boolean;
-  /** Volumes separados, de 0 a 1 (ausente = 1). */
   musicVolume?: number;
   fireVolume?: number;
+  /** Sons para estudar (pacote v4): ligado e volume de cada ambiente. Nada toca sem um toque. */
+  sounds?: Partial<Record<import('@/app/soundscape').Channel, { on: boolean; vol: number }>>;
+  /** Android: esconder barras do sistema durante o estudo (padrão: ligado). */
+  immersive?: boolean;
   /** Aparência personalizada (paleta, cores e estilos). Ausente = padrão. */
   look?: import('./theme').Look;
 }
