@@ -21,12 +21,24 @@ export interface Unit {
 export const learnKey = (chapterId: string, sectionId: string) => `aprender:${chapterId}:${sectionId}`;
 
 /** Todas as atividades do curso, na ordem do caminho recomendado. */
-export function courseUnits(chapters: Chapter[], lessons: Lesson[], missions: Mission[]): Unit[] {
+/** Chave de uma aula dentro da série de um trecho. */
+export const seriesKey = (chapterId: string, sectionId: string, lessonId: string) => `${learnKey(chapterId, sectionId)}#${lessonId}`;
+
+export function courseUnits(
+  chapters: Chapter[],
+  lessons: Lesson[],
+  missions: Mission[],
+  /** Aulas em série de um trecho (quando há mais de uma, cada uma vira uma etapa da trilha). */
+  seriesOf?: (chapterId: string, sectionId: string) => { id: string; title: string }[],
+): Unit[] {
   const out: Unit[] = [];
   for (const c of chapters) {
     for (const s of c.sections) {
       const t = s.title.replace(/^\d+\.\s*/, '');
-      out.push({ key: learnKey(c.id, s.id), kind: 'aprender', chapterId: c.id, sectionId: s.id, title: `Aprender: ${t}`, to: `/aprender/${c.id}/${s.id}` });
+      const series = seriesOf?.(c.id, s.id) ?? [];
+      if (series.length > 1) {
+        for (const l of series) out.push({ key: seriesKey(c.id, s.id, l.id), kind: 'aprender', chapterId: c.id, sectionId: s.id, title: `Aprender: ${l.title}`, to: `/aprender/${c.id}/${s.id}/${l.id}` });
+      } else out.push({ key: learnKey(c.id, s.id), kind: 'aprender', chapterId: c.id, sectionId: s.id, title: `Aprender: ${t}`, to: `/aprender/${c.id}/${s.id}` });
       out.push({ key: practiceId(c.id, s.id), kind: 'praticar', chapterId: c.id, sectionId: s.id, title: `Praticar: ${t}`, to: `/pratica/${c.id}/${s.id}` });
       const m = missions.find((x) => x.chapterId === c.id && x.sectionId === s.id);
       if (m) out.push({ key: missionKey(m.id), kind: 'missao', chapterId: c.id, sectionId: s.id, title: `Missão: ${m.title}`, to: `/missao/${m.id}` });

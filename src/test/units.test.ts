@@ -47,7 +47,7 @@ describe('contrato das unidades interativas', () => {
       ),
     };
     const errs = validateUnit(bad, concepts);
-    expect(errs).toContainEqual({ unitId: u.id, ref: 'pp-c', message: 'cobra c.so.thrashing antes de ele ser ensinado' });
+    expect(errs).toContainEqual({ unitId: u.id, ref: 'hw-c', message: 'cobra c.so.thrashing antes de ele ser ensinado' });
     const early: LearningUnit = { ...u, steps: [{ ...u.steps[0], blocks: [...u.steps[0].blocks].reverse() }, ...u.steps.slice(1)] };
     expect(validateUnit(early, concepts).some((e) => e.message === 'atividade antes da explicação')).toBe(true);
   });

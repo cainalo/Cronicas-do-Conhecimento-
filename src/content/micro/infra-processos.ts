@@ -23,6 +23,41 @@ export const microInfraProcessos: MicroLesson = {
   },
   steps: [
     {
+      id: 'computador',
+      part: 'Antes de tudo',
+      title: 'O computador por dentro: processador, memória e disco',
+      goal: 'Saber o papel do processador, da memória RAM e do disco antes de falar de processos.',
+      explain:
+        'Três peças aparecem em toda esta aula.\n\nO **processador**, também chamado **CPU** (*central processing unit*, unidade central de processamento), é quem **executa as instruções**, uma depois da outra, muito rápido.\n\nA **memória RAM** é onde fica o que está **em uso agora**. É rápida, mas **apaga ao desligar** e tem tamanho limitado.\n\nO **disco** (HD ou SSD) **guarda** arquivos e programas mesmo desligado. É bem maior, mas bem mais lento que a RAM.',
+      example: 'Abrir uma planilha: o arquivo sai do **disco**, é carregado na **RAM** e a **CPU** executa as instruções do programa sobre ele.',
+      check: {
+        kind: 'choice',
+        id: 'hw-c',
+        prompt: 'O que acontece com o conteúdo da memória RAM quando o computador é desligado?',
+        options: [
+          { text: 'Apaga; o que precisa durar fica no disco', why: 'Isso. A RAM guarda só o que está em uso; o disco guarda de forma permanente.' },
+          { text: 'Fica guardado até a próxima vez', why: 'Quem guarda com o computador desligado é o disco. A RAM apaga.' },
+          { text: 'Vai para a CPU', why: 'A CPU executa instruções; ela não guarda os seus arquivos.' },
+        ],
+        answer: 0,
+        errorKind: 'confusao',
+      },
+      recovery: {
+        explain: 'Pense num escritório: o **arquivo de aço** é o disco (guarda tudo, mas buscar demora), a **mesa** é a RAM (só o que você está usando, ao alcance da mão) e **você trabalhando** é a CPU. No fim do dia, a mesa é esvaziada; o arquivo continua cheio.',
+        check: {
+          kind: 'sort',
+          id: 'hw-r',
+          prompt: 'Qual peça faz cada coisa?',
+          categories: ['CPU', 'RAM', 'Disco'],
+          items: [
+            { text: 'Executa as instruções', cat: 0, why: 'O processador executa.' },
+            { text: 'Guarda o que está em uso agora', cat: 1, why: 'Memória de trabalho, que apaga ao desligar.' },
+            { text: 'Guarda os arquivos com o computador desligado', cat: 2, why: 'Armazenamento permanente.' },
+          ],
+        },
+      },
+    },
+    {
       id: 'programa-processo',
       part: 'Processos',
       title: 'Programa e processo',
@@ -100,7 +135,7 @@ export const microInfraProcessos: MicroLesson = {
       goal: 'Saber que threads do mesmo processo compartilham a memória dele.',
       explain:
         'Um processo pode ter uma ou várias **threads** (linhas de execução). Cada thread é uma tarefa que roda **dentro** do processo.\n\nAs threads do mesmo processo **compartilham a memória** dele. Isso torna a troca de dados entre elas rápida, mas exige cuidado quando duas mexem no mesmo dado ao mesmo tempo (problema de **concorrência**).',
-      example: 'Num navegador, uma tarefa cuida da tela enquanto outra baixa dados em segundo plano. É só uma comparação: cada navegador organiza isso do seu jeito.',
+      example: 'Num navegador, uma tarefa cuida da tela enquanto outra baixa dados, sem travar o que você vê. É só uma comparação: cada navegador organiza isso do seu jeito.',
       check: {
         kind: 'choice',
         id: 'th-c',
@@ -228,7 +263,7 @@ export const microInfraProcessos: MicroLesson = {
       title: 'Observar processos no Linux: ps e top',
       goal: 'Escolher entre ps e top.',
       explain:
-        'Antes de agir sobre um processo, **observe**.\n\n- `ps aux` (ou `ps -ef`): lista os processos **naquele instante**, com PID, dono, uso de CPU e memória. É uma **foto**.\n- `top` (ou `htop`, se estiver instalado): mostra os processos **atualizando sem parar**. É um **vídeo**.',
+        'Antes de agir sobre um processo, **observe**.\n\nNo Linux, isso se faz no **terminal**: uma janela de texto onde você digita **comandos** (ordens escritas) e lê a resposta.\n\n- `ps aux` (ou `ps -ef`): lista os processos **naquele instante**, com PID, dono, uso de CPU e memória. É uma **foto**.\n- `top` (ou `htop`, se estiver instalado): mostra os processos **atualizando sem parar**. É um **vídeo**.',
       check: {
         kind: 'choice',
         id: 'ob-c',
@@ -236,7 +271,7 @@ export const microInfraProcessos: MicroLesson = {
         options: [
           { text: 'top', why: 'Isso. O top atualiza continuamente.' },
           { text: 'ps aux', why: 'O ps mostra uma foto do momento. Para acompanhar mudando, o top é melhor.' },
-          { text: 'kill', why: 'kill envia sinais (por exemplo, para encerrar). Não serve para observar.' },
+          { text: 'Abrir o arquivo do programa no disco', why: 'O arquivo é o programa parado; ele não mostra o processo nem o uso de CPU.' },
         ],
         answer: 0,
         errorKind: 'confusao',
@@ -326,7 +361,7 @@ export const microInfraProcessos: MicroLesson = {
       title: 'Primeiro e segundo plano no terminal',
       goal: 'Usar &, jobs, bg, fg, Ctrl+Z e nohup.',
       explain:
-        'No terminal do Linux:\n\n- `comando &` roda o comando em **segundo plano** e libera o terminal.\n- `jobs` lista as tarefas do terminal.\n- `Ctrl+Z` **suspende** (pausa) a tarefa que está em primeiro plano.\n- `bg` continua uma tarefa suspensa **em segundo plano**; `fg` a traz para o **primeiro plano**.\n- `nohup comando &` mantém o comando rodando **depois que a sessão termina** (por exemplo, ao fechar a conexão SSH).',
+        'No terminal do Linux:\n\n- `comando &` roda o comando em **segundo plano** e libera o terminal.\n- `jobs` lista as tarefas do terminal.\n- `Ctrl+Z` **suspende** (pausa) a tarefa que está em primeiro plano.\n- `bg` continua uma tarefa suspensa **em segundo plano**; `fg` a traz para o **primeiro plano**.\n- `nohup comando &` mantém o comando rodando **depois que a sessão termina** (por exemplo, ao fechar a conexão SSH, o acesso remoto por terminal a outro computador).',
       check: {
         kind: 'choice',
         id: 'sp-c',
@@ -460,7 +495,7 @@ export const microInfraProcessos: MicroLesson = {
       title: 'Serviços: start não é enable',
       goal: 'Diferenciar iniciar agora (start) de iniciar no boot (enable).',
       explain:
-        '**Serviços** (no Linux também chamados *daemons*) são processos que rodam em **segundo plano**, em geral desde que o sistema liga: servidor web, banco de dados, SSH.\n\nNo Linux com **systemd**:\n\n| Ação | Comando |\n|---|---|\n| Ver estado | `systemctl status nginx` |\n| Ligar agora / desligar agora | `systemctl start nginx` / `systemctl stop nginx` |\n| Reiniciar | `systemctl restart nginx` |\n| Subir no próximo boot | `systemctl enable nginx` |\n| Não subir no boot | `systemctl disable nginx` |\n| Ver registros (logs) | `journalctl -u nginx` |\n\nAtenção: **start** liga agora; **enable** faz subir no boot. Um não implica o outro. `enable --now` faz os dois.',
+        '**Serviços** (no Linux também chamados *daemons*) são processos que rodam em **segundo plano**, em geral desde que o sistema liga (o **boot**): servidor web, banco de dados, acesso remoto.\n\nNo Linux, quem cuida deles costuma ser o **systemd**, o gerenciador de serviços:\n\n| Ação | Comando |\n|---|---|\n| Ver estado | `systemctl status nginx` |\n| Ligar agora / desligar agora | `systemctl start nginx` / `systemctl stop nginx` |\n| Reiniciar | `systemctl restart nginx` |\n| Subir no próximo boot | `systemctl enable nginx` |\n| Não subir no boot | `systemctl disable nginx` |\n| Ver registros (logs) | `journalctl -u nginx` |\n\nAtenção: **start** liga agora; **enable** faz subir no boot. Um não implica o outro. `enable --now` faz os dois.',
       check: {
         kind: 'choice',
         id: 'sv-c',
@@ -592,5 +627,19 @@ export const microInfraProcessos: MicroLesson = {
     'nice vai de -20 (mais prioridade) a 19 (menos). nohup mantém o comando depois da sessão.',
     'Memória virtual dá isolamento; thrashing indica falta de RAM.',
     'start liga agora; enable sobe no boot. No Windows: Start-Service e Set-Service -StartupType.',
+  ],
+  vocab: [
+    { term: 'CPU', match: '\\bCPU\\b|processador', step: 'computador' },
+    { term: 'RAM', match: '\\bRAM\\b', step: 'computador' },
+    { term: 'PID', match: '\\bPID\\b', step: 'pid' },
+    { term: 'thread', match: '\\bthreads?\\b', step: 'thread' },
+    { term: 'escalonador', match: 'escalonador|preemptiv', step: 'escalonador' },
+    { term: 'zumbi', match: 'zumbi', step: 'zumbi' },
+    { term: 'sinais de término', match: 'SIG(TERM|KILL)|\\bkill\\b', step: 'encerrar' },
+    { term: 'nice', match: '\\bnice\\b|renice', step: 'prioridade' },
+    { term: 'segundo plano', match: 'segundo plano', step: 'segundo-plano' },
+    { term: 'memória virtual', match: 'memória virtual|\\bMMU\\b|paginação', step: 'memoria-virtual' },
+    { term: 'swap e thrashing', match: 'swap|thrashing|falta de página', step: 'swap' },
+    { term: 'serviços do Linux', match: 'daemon|systemd|systemctl', step: 'servicos' },
   ],
 };

@@ -282,7 +282,12 @@ it('texto interativo (piloto Processos): termo clicável, recuperação com reto
   await user.click(screen.getByRole('button', { name: /Cada execução em andamento/ }));
   await user.click(screen.getByRole('button', { name: 'Verificar' }));
   await user.click(screen.getByRole('button', { name: 'Continuar' }));
-  // Etapa 1 em texto, com termo do glossário que abre a definição sem sair do lugar.
+  // Etapa 1: a base (processador, memória e disco), antes de qualquer termo de processos.
+  expect(screen.getByRole('heading', { name: /O computador por dentro/ })).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: /Apaga; o que precisa durar fica no disco/ }));
+  await user.click(screen.getByRole('button', { name: 'Verificar' }));
+  await user.click(screen.getByRole('button', { name: 'Continuar' }));
+  // Etapa 2 em texto, com termo do glossário que abre a definição sem sair do lugar.
   expect(screen.getByRole('heading', { name: 'Programa e processo' })).toBeInTheDocument();
   await user.click(screen.getAllByRole('button', { name: /^processo \(abrir definição\)/ })[0]);
   const dialog = screen.getByRole('dialog', { name: 'Conceito: Processo' });
@@ -299,17 +304,17 @@ it('texto interativo (piloto Processos): termo clicável, recuperação com reto
   // Durante a recuperação, o Continuar indica reforço e aponta para a mesma aula (retorno garantido).
   const cp = getLearningCheckpoint(loadData('visitante'), trailUnits());
   expect(cp.to).toBe('/aprender/cap.infra.03/processos');
-  expect(cp.context).toContain('Reforço do assunto: etapa 1 de 15');
+  expect(cp.context).toContain('Reforço do assunto: etapa 2 de 16');
   expect(within(rec).getByText(/receita de bolo/)).toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: /1 programa e 3 processos/ }));
   await user.click(screen.getByRole('button', { name: 'Verificar' }));
   await user.click(screen.getByRole('button', { name: 'Continuar' }));
   expect(screen.getByRole('heading', { name: 'O número de cada processo: PID' })).toBeInTheDocument();
-  expect(screen.getByText('Etapa 2 de 15')).toBeInTheDocument();
+  expect(screen.getByText('Etapa 3 de 16')).toBeInTheDocument();
   a.unmount();
   // Sai e volta: mesma etapa; o Continuar de Hoje aponta para cá.
   renderAt('/aprender/cap.infra.03/processos');
-  expect(screen.getByText('Etapa 2 de 15')).toBeInTheDocument();
+  expect(screen.getByText('Etapa 3 de 16')).toBeInTheDocument();
   expect(screen.getByRole('listitem', { current: 'step' })).toHaveTextContent('O número de cada processo: PID');
 });
 
@@ -320,8 +325,10 @@ it('ponto salvo pela microaula antiga continua valendo no texto interativo', () 
     JSON.stringify({ ...data, progress: { 'aprender:cap.infra.03:processos': { step: { phase: { k: 'checar', i: 3 }, first: {}, struggled: [] }, updatedAt: new Date().toISOString() } } }),
   );
   renderAt('/aprender/cap.infra.03/processos');
-  expect(screen.getByText('Etapa 4 de 15')).toBeInTheDocument();
-  expect(screen.getByRole('listitem', { current: 'step' })).toHaveTextContent('Pronto, executando e bloqueado');
+  // A aula ganhou uma etapa inicial (processador, memória e disco): o ponto antigo abre uma etapa
+  // antes, sem perder nada.
+  expect(screen.getByText('Etapa 4 de 16')).toBeInTheDocument();
+  expect(screen.getByRole('listitem', { current: 'step' })).toHaveTextContent('Threads: tarefas dentro do processo');
 });
 
 it('livro: modo de leitura contínua mostra o mesmo conteúdo sem virar páginas', async () => {

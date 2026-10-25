@@ -7,6 +7,7 @@ import type { Concept, UnitMap } from '@/content/learning';
 const T = ['ti.infra.so'];
 
 export const conceitosProcessos: Concept[] = [
+  { id: 'c.so.hardware', term: 'Processador, RAM e disco', aliases: ['processador', 'CPU', 'memória RAM', 'disco'], definition: 'A CPU (processador) executa as instruções; a RAM guarda o que está em uso e apaga ao desligar; o disco guarda arquivos de forma permanente, mas é mais lento.', topicIds: T },
   { id: 'c.so.sistema-operacional', term: 'Sistema operacional', aliases: ['sistema operacional'], definition: 'Software que administra o computador: decide quem usa o processador, quanta memória cada programa recebe e quem pode acessar o quê.', topicIds: T },
   { id: 'c.so.programa', term: 'Programa', aliases: ['programa'], definition: 'Conjunto de instruções guardado num arquivo, no disco. Parado ali, não faz nada: é passivo.', topicIds: T },
   { id: 'c.so.processo', term: 'Processo', aliases: ['processo', 'em execução'], definition: 'Programa em execução, com memória própria, número de identificação (PID), dono e estado. Um mesmo programa pode virar vários processos.', topicIds: T },
@@ -32,13 +33,14 @@ export const conceitosProcessos: Concept[] = [
 
 export const mapaProcessos: UnitMap = {
   unitId: 'unit.infra.so.processos',
-  version: 1,
+  version: 2,
   topicIds: T,
   objective: 'Explicar o que é um processo e como o sistema o executa, observa, encerra e prioriza; relacionar memória virtual, swap e thrashing; e operar serviços no Linux e no Windows.',
   estimatedMinutes: [35, 50],
   difficulty: 2,
   prerequisiteConceptIds: [],
   introduces: {
+    computador: ['c.so.hardware'],
     'programa-processo': ['c.so.sistema-operacional', 'c.so.programa', 'c.so.processo'],
     pid: ['c.so.pid'],
     thread: ['c.so.thread', 'c.so.concorrencia'],
@@ -56,6 +58,8 @@ export const mapaProcessos: UnitMap = {
     'servicos-windows': ['c.so.admin'],
   },
   assesses: {
+    'hw-c': ['c.so.hardware'],
+    'hw-r': ['c.so.hardware'],
     'pp-c': ['c.so.programa', 'c.so.processo'],
     'pp-r': ['c.so.programa', 'c.so.processo'],
     'pid-c': ['c.so.pid'],

@@ -7,8 +7,8 @@ import { useStudy } from '@/app/StudyProvider';
 import { usePrefs } from '@/app/prefs';
 import { useFx } from '@/app/fx';
 import { useSession } from '@/app/useSession';
-import { learnKey } from '@/lib/pace';
-import { getChapter, getLearningUnit, getMicroLesson, getSectionExtras, getSimpleSection } from '@/content';
+import { learnKey, seriesKey } from '@/lib/pace';
+import { getChapter, getLearningUnit, getSectionExtras, getSimpleSection, microSeries } from '@/content';
 import { InteractiveUnitPage } from '@/pages/InteractiveUnit';
 import { MicroLessonPage } from './MicroLesson';
 import { markSectionRead, setLastSection } from '@/lib/study';
@@ -49,10 +49,21 @@ export function LearnPage() {
   // Reformulação: trecho com unidade interativa abre o leitor de texto interativo (piloto).
   const unit = getLearningUnit(chapterId, sectionId);
   if (unit) return <InteractiveUnitPage key={unit.id} unit={unit} />;
-  const micro = getMicroLesson(chapterId, sectionId);
+  return <MicroOrSimple />;
+}
+
+function MicroOrSimple() {
+  const { chapterId = '', sectionId = '', aula } = useParams();
+  const { data } = useStudy();
+  const series = microSeries(chapterId, sectionId);
+  if (!series.length) return <SimpleLearnPage />;
   // Trecho com microaula: a aula em etapas é o caminho principal (fonte única do conteúdo didático).
-  if (micro) return <MicroLessonPage key={micro.id} lesson={micro} />;
-  return <SimpleLearnPage />;
+  // Em série, abre a aula pedida ou, sem indicação, a primeira ainda não concluída.
+  const lesson =
+    series.find((m) => m.id === aula) ??
+    (series.length > 1 ? series.find((m) => !data.unitLog?.[seriesKey(chapterId, sectionId, m.id)]) ?? series[0] : series[0]);
+  const i = series.indexOf(lesson);
+  return <MicroLessonPage key={lesson.id} lesson={lesson} series={series.length > 1 ? { index: i, total: series.length, next: series[i + 1] } : undefined} />;
 }
 
 function SimpleLearnPage() {

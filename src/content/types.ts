@@ -261,4 +261,16 @@ export interface MicroLesson {
   /** Questão(ões) no estilo da prova, só sobre o que já foi ensinado. */
   exam: import('@/lib/activities').MissionActivity[];
   summary: string[];
+  /**
+   * Série de aulas curtas do mesmo trecho (revisão didática de 26/10/2026): um trecho grande vira
+   * várias aulas pequenas, em ordem. Cada aula é uma etapa da trilha; o trecho só conta como lido
+   * no fim da última.
+   */
+  series?: { id: string; order: number };
+  /**
+   * Vocabulário controlado: termos que esta aula apresenta e a etapa em que aparecem pela primeira
+   * vez. O teste de conteúdo impede que uma atividade ou explicação use o termo antes disso.
+   * `match` é uma expressão regular (sem barras), sem diferenciar maiúsculas.
+   */
+  vocab?: { term: string; match: string; step: string }[];
 }

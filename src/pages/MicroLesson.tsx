@@ -9,7 +9,7 @@ import { getChapter, getQuestion } from '@/content';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
 import { useSession } from '@/app/useSession';
-import { learnKey } from '@/lib/pace';
+import { learnKey, logUnit, seriesKey } from '@/lib/pace';
 import { markSectionRead, recordAnswer } from '@/lib/study';
 import { Markdown } from '@/components/Markdown';
 import { PageDots, SwipePages, type PageItem } from '@/components/SwipePages';
@@ -37,14 +37,16 @@ interface Saved {
   struggled: string[];
 }
 
-export function MicroLessonPage({ lesson }: { lesson: MicroLesson }) {
+export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; series?: { index: number; total: number; next?: MicroLesson } }) {
   const navigate = useNavigate();
   const { update } = useStudy();
   const { sfx, confetti } = useFx();
   const chapter = getChapter(lesson.chapterId)!;
   const n = lesson.steps.length;
+  // Em série, cada aula tem o seu ponto salvo; sozinha, usa a chave do trecho (como antes).
+  const key = series ? seriesKey(lesson.chapterId, lesson.sectionId, lesson.id) : learnKey(lesson.chapterId, lesson.sectionId);
   const session = useSession<Saved>(
-    learnKey(lesson.chapterId, lesson.sectionId),
+    key,
     () => ({ phase: { k: 'abertura' }, first: {}, struggled: [] }),
     (s) => ('i' in s.phase && ['explicar', 'checar', 'recuperar', 'rechecar'].includes(s.phase.k) ? `Aula: etapa ${s.phase.i + 1} de ${n}` : s.phase.k === 'praticar' ? 'Aula: prática final' : s.phase.k === 'prova' ? 'Aula: questão de prova' : 'Aula'),
   );
@@ -62,7 +64,9 @@ export function MicroLessonPage({ lesson }: { lesson: MicroLesson }) {
   const examQs = useMemo(() => lesson.exam.map((a) => (a.kind === 'exam' ? getQuestion(a.questionId) : undefined)), [lesson]);
 
   const finishLesson = () => {
-    update((d) => markSectionRead(d, chapter, lesson.sectionId).data);
+    // Aula da série que não é a última: registra só a aula. A última conclui o trecho.
+    if (series && series.next) update((d) => logUnit(d, key));
+    else update((d) => logUnit(markSectionRead(d, chapter, lesson.sectionId).data, key));
     const ok = Object.values(first).filter(Boolean).length;
     if (ok / Math.max(1, Object.keys(first).length) >= 0.7) confetti(90);
     sfx('done');
@@ -114,14 +118,17 @@ export function MicroLessonPage({ lesson }: { lesson: MicroLesson }) {
             .map((x) => ({ key: `r${x.id}`, node: <p className="text-sm text-muted">• {x.title}</p> })),
         ]
       : []),
-    { key: 'n', node: <p className="text-sm text-muted">Próximo passo da trilha: praticar este trecho.</p> },
+    {
+      key: 'n',
+      node: <p className="text-sm text-muted">{series?.next ? `Próxima aula: ${series.next.title}.` : 'Próximo passo da trilha: praticar este trecho.'}</p>,
+    },
   ];
 
   return (
     // Altura fixa da tela: nada rola para baixo. O que não cabe vai para a parte seguinte, ao lado.
     <div className="-mt-2 flex flex-col overflow-hidden" style={{ height: 'calc(100dvh - 5.5rem - env(safe-area-inset-top, 0px))' }}>
       <div className="mb-2 flex items-center gap-3">
-        <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => navigate(`/grimorio/${chapter.grimoireId}`)} aria-label="Sair (o lugar fica salvo)">
+        <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => navigate('/trilha')} aria-label="Sair (o lugar fica salvo)">
           <Icon name="errado" size={22} />
         </button>
         <div className="h-3 flex-1 overflow-hidden rounded-full bg-raised" aria-label={`Progresso: ${slot} de ${totalSlots}`}>
@@ -131,9 +138,15 @@ export function MicroLessonPage({ lesson }: { lesson: MicroLesson }) {
           {slot}/{totalSlots}
         </span>
       </div>
-      <div className="mb-2">
-        <StepGuide chapterId={lesson.chapterId} sectionId={lesson.sectionId} current="aprender" compact />
-      </div>
+      {series ? (
+        <p className="mb-2 truncate text-sm text-muted">
+          <span className="font-title italic">Aula {series.index + 1} de {series.total}</span> · {lesson.title}
+        </p>
+      ) : (
+        <div className="mb-2">
+          <StepGuide chapterId={lesson.chapterId} sectionId={lesson.sectionId} current="aprender" compact />
+        </div>
+      )}
 
       {phase.k === 'abertura' && (
         <section className="flex min-h-0 flex-1 flex-col" aria-label="Abertura">
@@ -215,7 +228,9 @@ export function MicroLessonPage({ lesson }: { lesson: MicroLesson }) {
             a={lesson.consolidation[phase.i]}
             onNext={(o) => {
               note(lesson.consolidation[phase.i].id, o.ok);
-              set(phase.i + 1 < lesson.consolidation.length ? { k: 'praticar', i: phase.i + 1 } : { k: 'prova', i: 0 });
+              if (phase.i + 1 < lesson.consolidation.length) set({ k: 'praticar', i: phase.i + 1 });
+              else if (lesson.exam.length) set({ k: 'prova', i: 0 });
+              else finishLesson();
             }}
           />
         </section>
@@ -258,9 +273,15 @@ export function MicroLessonPage({ lesson }: { lesson: MicroLesson }) {
                     <Link to={`/capitulo/${lesson.chapterId}#${lesson.sectionId}`} className="btn-ghost flex-1 text-sm">
                       Texto de referência
                     </Link>
-                    <Link to={`/pratica/${lesson.chapterId}/${lesson.sectionId}`} className="btn-primary flex-1">
-                      Praticar
-                    </Link>
+                    {series?.next ? (
+                      <Link to={`/aprender/${lesson.chapterId}/${lesson.sectionId}/${series.next.id}`} className="btn-primary flex-1">
+                        Próxima aula
+                      </Link>
+                    ) : (
+                      <Link to={`/pratica/${lesson.chapterId}/${lesson.sectionId}`} className="btn-primary flex-1">
+                        Praticar
+                      </Link>
+                    )}
                   </div>
                 </div>
               )}

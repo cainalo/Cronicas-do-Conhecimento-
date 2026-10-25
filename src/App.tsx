@@ -45,6 +45,7 @@ export function AppRoutes() {
         <Route path="grimorio/:id" element={<GrimoirePage />} />
         <Route path="capitulo/:id" element={<BookPage />} />
         <Route path="aprender/:chapterId/:sectionId" element={<LearnPage />} />
+        <Route path="aprender/:chapterId/:sectionId/:aula" element={<LearnPage />} />
         <Route path="missao/:id" element={<MissionPage />} />
         <Route path="download" element={<DownloadPage />} />
         <Route path="personalizar" element={<CustomizePage />} />

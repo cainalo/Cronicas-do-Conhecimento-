@@ -27,11 +27,12 @@ describe('engine de atividades', () => {
 
   it('conceitos ensinados seguem a etapa salva; diagnóstico e etapas futuras não contam', () => {
     expect(taughtConcepts(emptyData(), learningUnits).size).toBe(0);
-    let d = saveProgress(emptyData(), key, { stage: 'etapas', step: 2, recovery: null, pi: 0, results: {}, struggled: [] });
+    let d = saveProgress(emptyData(), key, { stage: 'etapas', step: 3, recovery: null, pi: 0, results: {}, struggled: [] });
     const t = taughtConcepts(d, learningUnits);
-    expect(t.has('c.so.processo')).toBe(true); // etapa 1
-    expect(t.has('c.so.pid')).toBe(true); // etapa 2
-    expect(t.has('c.so.thread')).toBe(false); // etapa 3, ainda não concluída
+    expect(t.has('c.so.hardware')).toBe(true); // etapa 1
+    expect(t.has('c.so.processo')).toBe(true); // etapa 2
+    expect(t.has('c.so.pid')).toBe(true); // etapa 3
+    expect(t.has('c.so.thread')).toBe(false); // etapa 4, ainda não concluída
     // Formato antigo da microaula também é entendido.
     d = saveProgress(emptyData(), key, { phase: { k: 'checar', i: 1 }, first: {}, struggled: [] });
     expect(taughtConcepts(d, learningUnits).has('c.so.pid')).toBe(false);

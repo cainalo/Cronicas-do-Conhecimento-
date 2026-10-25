@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
-import { DEFAULT_CONTEST_ID, flashcards, getContest, journey, lessons, missions, questionsForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, flashcards, getContest, missions, questionsForContest } from '@/content';
 import { missionDone, missionsDue } from '@/lib/mission';
-import { computePace, courseUnits, daysUntilExam, type Pace } from '@/lib/pace';
+import { computePace, daysUntilExam, type Pace } from '@/lib/pace';
 import { reviewQueue } from '@/lib/study';
-import { useCheckpoint } from '@/app/useCheckpoint';
+import { trailUnits, useCheckpoint } from '@/app/useCheckpoint';
 import { dueCards, unlockedCardIds } from '@/lib/training';
 import { isDone, settingsOf } from '@/lib/planner';
 import { characterSheet } from '@/lib/game';
@@ -71,7 +71,7 @@ export function Dashboard() {
   const answeredToday = data.attempts.filter((a) => localDay(a.answeredAt) === today).length;
   const dailyGoal = settingsOf(data).dailyQuestionGoal;
   const days = daysUntilExam(contest.examDate);
-  const pace = computePace(data, courseUnits(journey, lessons, missions), contest.examDate);
+  const pace = computePace(data, trailUnits(), contest.examDate);
   const { plan } = usePlanOfToday();
   const pending = plan.items.filter((i) => !isDone(i, data, plan.day));
   const torre = c('torre');

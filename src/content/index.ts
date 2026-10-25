@@ -1,6 +1,6 @@
 // Registro central do conteúdo. As telas consultam apenas estas funções,
 // nunca os arquivos de um concurso específico.
-import type { Chapter, Contest, EssayPrompt, Flashcard, Grimoire, Lesson, Question } from './types';
+import type { Chapter, Contest, EssayPrompt, Flashcard, Grimoire, Lesson, MicroLesson, Question } from './types';
 import { tceGo2026 } from './contests/tce-go-2026/contest';
 import { capCriptografia, capDefesa, grimorioSeguranca, licoesCap02 } from './grimoires/seguranca';
 import { questoesSegCap02 } from './grimoires/seguranca/questions-cap02';
@@ -132,8 +132,27 @@ export { getSectionExtras, allSectionExtras } from './game/scenes';
 export { getSimpleSection, allSimpleSections } from './game/simple';
 
 /** Microaulas (piloto da auditoria: Processos, memória e serviços). Substituem o Aprender do trecho. */
-export const microLessons = [microInfraProcessos, microInfraArquivos, microInfraShell, microInfraDiretorio, microInfraTcpip, microInfraEnderecos, microInfraServicos, microInfraPerimetro, microInfraNuvemModelos, microInfraNuvemEscala, microSegFundamentos];
-export const getMicroLesson = (chapterId: string, sectionId: string) => microLessons.find((m) => m.chapterId === chapterId && m.sectionId === sectionId);
+import { matNumerosReta, matSomarSubtrair, matMultiplicarDividir } from './micro/mat-inteiros-a';
+import { matOrdemOperacoes, matPotencias, matFracaoIdeia } from './micro/mat-inteiros-b';
+import { matSomarFracoes, matMultiplicarFracoes, matRacionaisRestante } from './micro/mat-inteiros-c';
+export const microLessons: MicroLesson[] = [
+  matNumerosReta,
+  matSomarSubtrair,
+  matMultiplicarDividir,
+  matOrdemOperacoes,
+  matPotencias,
+  matFracaoIdeia,
+  matSomarFracoes,
+  matMultiplicarFracoes,
+  matRacionaisRestante,
+  microInfraProcessos, microInfraArquivos, microInfraShell, microInfraDiretorio, microInfraTcpip, microInfraEnderecos, microInfraServicos, microInfraPerimetro, microInfraNuvemModelos, microInfraNuvemEscala, microSegFundamentos];
+export const getMicroLesson = (chapterId: string, sectionId: string) => microSeries(chapterId, sectionId)[0];
+/** Títulos das aulas em série de um trecho (para montar a trilha). */
+export const seriesOf = (chapterId: string, sectionId: string) => microSeries(chapterId, sectionId).map((m) => ({ id: m.id, title: m.title }));
+/** Aulas do trecho, em ordem (uma só, quando o trecho não foi dividido em série). */
+export function microSeries(chapterId: string, sectionId: string): MicroLesson[] {
+  return microLessons.filter((m) => m.chapterId === chapterId && m.sectionId === sectionId).sort((a, b) => (a.series?.order ?? 0) - (b.series?.order ?? 0));
+}
 
 /** Missões do Arquivo Real (piloto: SQL). */
 export const missions = [missaoSql01];
