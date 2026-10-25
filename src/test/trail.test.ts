@@ -1,8 +1,7 @@
 import { emptyData } from '@/lib/model';
-import { getChapter } from '@/content';
 import { trailUnits } from '@/app/useCheckpoint';
 import { getLearningCheckpoint, saveProgress } from '@/lib/checkpoint';
-import { markSectionRead } from '@/lib/study';
+import { logUnit } from '@/lib/pace';
 import { trailByChapter, unitStates } from '@/lib/trail';
 
 describe('estado das atividades da trilha', () => {
@@ -23,8 +22,8 @@ describe('estado das atividades da trilha', () => {
   });
 
   it('concluir a primeira libera a seguinte do mesmo capítulo e marca a feita', () => {
-    const first = units[0];
-    const d = markSectionRead(emptyData(), getChapter(first.chapterId)!, first.sectionId!).data;
+    // Concluir só a primeira atividade (o trecho 1 é uma série de aulas, cada uma uma atividade).
+    const d = logUnit(emptyData(), units[0].key);
     const states = unitStates(d, units, getLearningCheckpoint(d, units));
     expect(states[0]).toBe('feita');
     expect(states[1]).toBe('atual');

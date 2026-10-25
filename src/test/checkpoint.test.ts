@@ -21,15 +21,18 @@ describe('fonte única da trilha (checkpoint)', () => {
     expect(c.context).toContain('atividade 3 de 12');
   });
   it('a mais recente vence e a concluída não volta a ser oferecida', () => {
-    let d = saveProgress(emptyData(), units[2].key, 1, undefined, '2026-10-24T10:00:00.000Z');
+    // A = primeira aula; P = Praticar do mesmo trecho; H = próxima aula de outro trecho.
+    const P = units.findIndex((u) => u.kind === 'praticar');
+    const H = P + 1;
+    let d = saveProgress(emptyData(), units[H].key, 1, undefined, '2026-10-24T10:00:00.000Z');
     d = saveProgress(d, units[0].key, 4, undefined, '2026-10-24T11:00:00.000Z');
     expect(getLearningCheckpoint(d, units).to).toBe(units[0].to);
     const ch = getChapter(units[0].chapterId)!;
     d = markSectionRead(d, ch, units[0].sectionId!).data;
-    expect(getLearningCheckpoint(d, units).to).toBe(units[2].to);
-    d = clearProgress(d, units[2].key);
+    expect(getLearningCheckpoint(d, units).to).toBe(units[H].to);
+    d = clearProgress(d, units[H].key);
     const c = getLearningCheckpoint(d, units);
-    expect(c.to).toBe(units[1].to);
+    expect(c.to).toBe(units[P].to);
     expect(c.action).toBe('Continuar');
   });
   it('o ponto salvo sobrevive à fusão entre aparelhos (o mais recente vence)', () => {

@@ -146,7 +146,13 @@ export { getSimpleSection, allSimpleSections } from './game/simple';
 import { matNumerosReta, matSomarSubtrair, matMultiplicarDividir } from './micro/mat-inteiros-a';
 import { matOrdemOperacoes, matPotencias, matFracaoIdeia } from './micro/mat-inteiros-b';
 import { matSomarFracoes, matMultiplicarFracoes, matRacionaisRestante } from './micro/mat-inteiros-c';
+import { primHistoria, primQuatroTarefas } from './micro/prim-computador-a';
+import { primBits, primTamanhos } from './micro/prim-computador-b';
 export const microLessons: MicroLesson[] = [
+  primHistoria,
+  primQuatroTarefas,
+  primBits,
+  primTamanhos,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,
@@ -195,9 +201,10 @@ export { teachers, teacherPosts, teacherForChapter } from './teachers';
 export type { FictionalTeacher, TeacherPost } from './teachers';
 
 // Aulas visuais narradas (pacote v4, etapa 3): alternativa à aula em texto, com voz e cenas.
+import { narradaHistoriaComputador, narradaQuatroTarefas } from './narrated/prim-computador';
 import { narradaSomarInteiros } from './narrated/mat-somar-inteiros';
 import type { NarratedLesson } from './narrated/types';
-export const narratedLessons: NarratedLesson[] = [narradaSomarInteiros];
+export const narratedLessons: NarratedLesson[] = [narradaHistoriaComputador, narradaQuatroTarefas, narradaSomarInteiros];
 export const getNarrated = (id: string) => narratedLessons.find((n) => n.id === id);
 export const narratedFor = (lessonId: string) => narratedLessons.find((n) => n.lessonId === lessonId);
 
@@ -225,4 +232,18 @@ export function feedPostsOf(lessonId: string): FeedPost[] {
     );
   }
   return feedCache.get(lessonId)!;
+}
+
+/**
+ * Lugar de um conteúdo na trilha (sequência única, 25/10/2026): bibliotecas por tipo (vídeos, aulas
+ * narradas, feed) mostram de que aula o item faz parte e levam até ela.
+ */
+export function trailPlaceOf(lessonId: string): { to: string; label: string } | undefined {
+  const m = microLessons.find((x) => x.id === lessonId);
+  if (!m) return undefined;
+  const c = getChapter(m.chapterId);
+  const series = microSeries(m.chapterId, m.sectionId);
+  const i = series.indexOf(m);
+  const where = series.length > 1 ? `Aula ${i + 1} de ${series.length}: ${m.title}` : m.title;
+  return { to: `/aprender/${m.chapterId}/${m.sectionId}${series.length > 1 ? `/${m.id}` : ''}`, label: `${c?.title ?? ''} · ${where}` };
 }

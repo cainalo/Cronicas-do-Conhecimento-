@@ -12,6 +12,7 @@ import { dueCards, unlockedCardIds } from '@/lib/training';
 import { Icon } from '@/components/Icon';
 import { PageHeader, SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
 import { VideoLibrary } from '@/components/VideoLibrary';
+import { TrailPlace } from '@/components/TrailPlace';
 import { VideoEmbed, youTubeId } from '@/components/VideoEmbed';
 
 interface OwnVideo {
@@ -101,14 +102,15 @@ export function StudiesPage() {
         </SectionTitle>
         <ul className="ledger">
           {narratedLessons.map((n) => (
-            <li key={n.id}>
-              <Link to={`/aula-narrada/${n.id}`} className="ledger-row">
+            <li key={n.id} className="px-4 py-3.5">
+              <Link to={`/aula-narrada/${n.id}`} className="flex items-center gap-3">
                 <span className="min-w-0 flex-1">
                   <span className="block font-semibold">{n.title}</span>
                   <span className="block text-sm text-muted">Voz explicando enquanto a cena se monta · {n.minutes} min · com legenda e transcrição</span>
                 </span>
                 <Icon name="avancar" size={18} className="shrink-0 text-muted" />
               </Link>
+              <TrailPlace lessonId={n.lessonId} className="mt-1.5 max-w-full" />
             </li>
           ))}
         </ul>

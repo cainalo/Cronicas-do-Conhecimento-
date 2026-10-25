@@ -37,6 +37,7 @@ export function validateNarrated(l: NarratedLesson): string[] {
       if (!b.say.trim()) errs.push(`${s.id}/${i}: fala vazia`);
       if (s.visual.kind === 'numberline' && !s.visual.states[r]) errs.push(`${s.id}/${i}: estado ${r} da reta não existe`);
       if (s.visual.kind === 'cards' && r > s.visual.cards.length) errs.push(`${s.id}/${i}: mostra ${r} cartões, há ${s.visual.cards.length}`);
+      if (s.visual.kind === 'timeline' && r > s.visual.items.length) errs.push(`${s.id}/${i}: mostra ${r} marcos, há ${s.visual.items.length}`);
       if (s.visual.kind === 'equation' && r > s.visual.lines.length) errs.push(`${s.id}/${i}: mostra ${r} linhas, há ${s.visual.lines.length}`);
     });
     if (s.visual.kind === 'numberline')

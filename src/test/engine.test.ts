@@ -11,7 +11,7 @@ const key = learnKey(unit.chapterId, unit.sectionId);
 
 describe('engine de atividades', () => {
   it('adapta os dois formatos ao contrato único, com família e código de erro', () => {
-    const m = microLessons[0];
+    const m = microLessons.find((x) => x.id === 'mat.inteiros.1')!;
     const a = fromMission(m.steps[0].check, ['c.so.processo']);
     expect(a.kind).toBe('single_choice');
     expect(a.family).toBe('escolha');

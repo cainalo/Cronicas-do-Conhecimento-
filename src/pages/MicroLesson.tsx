@@ -2,10 +2,13 @@
 // vem outra explicação e um item equivalente com outros dados. Depois: prática cumulativa, questão
 // no estilo da prova e síntese. O ponto exato fica salvo (useSession), e o Continuar volta aqui.
 // Nenhuma tela rola para baixo: o que não cabe vira outra parte, ao lado (SwipePages).
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import type { MicroLesson } from '@/content/types';
-import { getChapter, getQuestion, narratedFor } from '@/content';
+import { curatedVideos, getChapter, getQuestion, narratedFor } from '@/content';
+import { NarratedPlayer } from './Narrated';
+import { VideoEmbed } from '@/components/VideoEmbed';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
 import { useSession } from '@/app/useSession';
@@ -24,6 +27,8 @@ type Phase =
   | { k: 'checar'; i: number }
   | { k: 'recuperar'; i: number }
   | { k: 'rechecar'; i: number }
+  /** Sequência única (25/10/2026): aula narrada e videoaula conferida, dentro da aula, antes da prática. */
+  | { k: 'midia' }
   | { k: 'praticar'; i: number }
   | { k: 'prova'; i: number }
   | { k: 'sintese' };
@@ -40,11 +45,12 @@ interface Saved {
  * Ponto salvo que não existe mais (a aula mudou de tamanho depois que foi salvo, ou o dado veio
  * corrompido) não pode derrubar a tela: vai para a fase válida mais próxima, sem perder o avanço.
  */
-export function clampPhase(p: Phase | undefined, l: Pick<MicroLesson, 'steps' | 'consolidation' | 'exam'>): Phase {
+export function clampPhase(p: Phase | undefined, l: Pick<MicroLesson, 'steps' | 'consolidation' | 'exam'>, hasMedia = false): Phase {
   const toExam = (): Phase => (l.exam.length ? { k: 'prova', i: 0 } : { k: 'sintese' });
   const toPractice = (): Phase => (l.consolidation.length ? { k: 'praticar', i: 0 } : toExam());
   if (!p || typeof p !== 'object') return { k: 'abertura' };
   if (p.k === 'abertura' || p.k === 'sintese') return p;
+  if (p.k === 'midia') return hasMedia ? p : toPractice();
   const i = 'i' in p && Number.isInteger(p.i) && p.i >= 0 ? p.i : -1;
   if (['explicar', 'checar', 'recuperar', 'rechecar'].includes(p.k)) return i >= 0 && i < l.steps.length ? p : i < 0 ? { k: 'abertura' } : toPractice();
   if (p.k === 'praticar') return i >= 0 && i < l.consolidation.length ? p : toExam();
@@ -58,6 +64,10 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   const { sfx, confetti } = useFx();
   const chapter = getChapter(lesson.chapterId)!;
   const narrated = narratedFor(lesson.id);
+  // Só videoaulas conferidas entram na sequência; as "a conferir" ficam na biblioteca de vídeos.
+  const videos = curatedVideos.filter((v) => v.lessonId === lesson.id && v.status === 'conferido');
+  const hasMedia = !!narrated || videos.length > 0;
+  const [playerOpen, setPlayerOpen] = useState(false);
   const n = lesson.steps.length;
   // Em série, cada aula tem o seu ponto salvo; sozinha, usa a chave do trecho (como antes).
   const key = series ? seriesKey(lesson.chapterId, lesson.sectionId, lesson.id) : learnKey(lesson.chapterId, lesson.sectionId);
@@ -66,7 +76,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
     () => ({ phase: { k: 'abertura' }, first: {}, struggled: [] }),
     (s) => ('i' in s.phase && ['explicar', 'checar', 'recuperar', 'rechecar'].includes(s.phase.k) ? `Aula: etapa ${s.phase.i + 1} de ${n}` : s.phase.k === 'praticar' ? 'Aula: prática final' : s.phase.k === 'prova' ? 'Aula: questão de prova' : 'Aula'),
   );
-  const phase = clampPhase(session.state.phase, lesson);
+  const phase = clampPhase(session.state.phase, lesson, hasMedia);
   const { first = {}, struggled = [] } = session.state;
   const set = (p: Phase, extra?: Partial<Saved>) => {
     session.setState((s) => ({ ...s, ...extra, phase: p }));
@@ -75,8 +85,10 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   const note = (id: string, ok: boolean) => session.setState((s) => (id in s.first ? s : { ...s, first: { ...s.first, [id]: ok } }));
 
   // Barra de progresso: abertura, etapas, prática, prova, síntese.
-  const totalSlots = n + 3;
-  const slot = phase.k === 'abertura' ? 0 : phase.k === 'praticar' ? n + 1 : phase.k === 'prova' ? n + 2 : phase.k === 'sintese' ? n + 3 : phase.i + 1;
+  const m = hasMedia ? 1 : 0;
+  const totalSlots = n + 3 + m;
+  const slot =
+    phase.k === 'abertura' ? 0 : phase.k === 'midia' ? n + 1 : phase.k === 'praticar' ? n + 1 + m : phase.k === 'prova' ? n + 2 + m : phase.k === 'sintese' ? n + 3 + m : phase.i + 1;
   const step = 'i' in phase && ['explicar', 'checar', 'recuperar', 'rechecar'].includes(phase.k) ? lesson.steps[phase.i] : undefined;
   const examQs = useMemo(() => lesson.exam.map((a) => (a.kind === 'exam' ? getQuestion(a.questionId) : undefined)), [lesson]);
 
@@ -158,14 +170,6 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
       {series ? (
         <p className="mb-2 truncate text-sm text-muted">
           <span className="font-title italic">Aula {series.index + 1} de {series.total}</span> · {lesson.title}
-          {narrated && (
-            <>
-              {' · '}
-              <Link to={`/aula-narrada/${narrated.id}`} className="font-semibold text-gold">
-                ouvir em aula narrada
-              </Link>
-            </>
-          )}
         </p>
       ) : (
         <div className="mb-2">
@@ -233,11 +237,46 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
                 note(step.check.id, o.ok);
                 if (!o.ok) return set({ k: 'recuperar', i: phase.i }, { struggled: [...new Set([...struggled, step.id])] });
               }
-              set(phase.i + 1 < n ? { k: 'explicar', i: phase.i + 1 } : { k: 'praticar', i: 0 });
+              set(phase.i + 1 < n ? { k: 'explicar', i: phase.i + 1 } : hasMedia ? { k: 'midia' } : { k: 'praticar', i: 0 });
             }}
           />
         </section>
       )}
+
+      {phase.k === 'midia' && (
+        <section className="flex min-h-0 flex-1 flex-col gap-3" aria-label="Veja de outro jeito">
+          <div>
+            <p className="kicker">Antes de praticar</p>
+            <h1 className="mt-0.5 text-2xl leading-tight">Veja de outro jeito</h1>
+            <p className="mt-1 text-sm text-muted">O mesmo assunto, explicado em voz e imagem. Ajuda a fixar.</p>
+          </div>
+          {narrated && (
+            <button className="card flex items-center gap-3 p-4 text-left" onClick={() => setPlayerOpen(true)} data-testid="midia-narrada">
+              <Icon name="play" size={22} className="shrink-0 text-gold" />
+              <span className="min-w-0 flex-1">
+                <span className="block font-semibold">Aula narrada: {narrated.title}</span>
+                <span className="block text-sm text-muted">Cerca de {narrated.minutes} min, com legendas e transcrição.</span>
+              </span>
+            </button>
+          )}
+          {videos.map((v) => (
+            <VideoEmbed key={v.id} url={v.url} title={v.title} meta={[v.channel, v.duration].filter(Boolean).join(' · ')} />
+          ))}
+          <button className="btn-primary mt-auto w-full" onClick={() => set(lesson.consolidation.length ? { k: 'praticar', i: 0 } : lesson.exam.length ? { k: 'prova', i: 0 } : { k: 'sintese' })} data-testid="midia-continuar">
+            Continuar para a prática <Icon name="avancar" size={16} />
+          </button>
+        </section>
+      )}
+      {playerOpen &&
+        narrated &&
+        createPortal(
+          <div className="fixed inset-0 z-[80] overflow-y-auto bg-bg px-4 py-4" role="dialog" aria-modal="true" aria-label={`Aula narrada: ${narrated.title}`} style={{ paddingTop: 'max(1rem, env(safe-area-inset-top))' }}>
+            <div className="mx-auto max-w-3xl">
+              <NarratedPlayer l={narrated} onClose={() => setPlayerOpen(false)} />
+            </div>
+          </div>,
+          document.body,
+        )}
 
       {phase.k === 'praticar' && (
         <section className="flex min-h-0 flex-1 flex-col" aria-label="Prática final">

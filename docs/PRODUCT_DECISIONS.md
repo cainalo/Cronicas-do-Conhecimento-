@@ -57,3 +57,9 @@
 - **Proibido daqui em diante:** degradês decorativos, manchas desfocadas, bolhas, brilho passando, faixa de arco-íris, ícone em placa colorida, rótulos em pílula.
 - **Marca:** "C" em arco com ponto final em vermelhão (`src/components/Logo.tsx`). Novos ícones do app, do site e telas de abertura.
 - **Aparência anterior:** quem tinha uma aparência salva passa à editorial, e a antiga fica guardada (Personalizar → "Voltar à aparência que eu usava antes").
+
+## 25/10/2026: ritmo das aulas, sequência única, feed e Escritório (respostas do usuário)
+- **Ritmo:** aulas ainda mais devagar, para quem não sabe nada de computação. Cada trecho vira uma **série de aulas curtas**: a primeira conta **a história de como aquilo surgiu** e foi melhorando; as seguintes ensinam uma ideia por vez, com mais páginas de explicação, comparações do dia a dia e checagens bem fáceis antes do nível de prova.
+- **Sequência única:** tudo dentro da aula, na trilha: história, explicação, **aula narrada**, **videoaula conferida** (quando houver), checagens, prática e questão de prova. Feed, vídeos, aulas narradas e Escritório viram **bibliotecas por tipo**; cada item mostra a que ponto da trilha pertence e leva até lá.
+- **Feed dos professores:** mais completo e com mais elementos de rede social, com **fotos reais da Wikimedia** (só domínio público ou licença livre, com autor, licença e link no post) **e mais ilustrações próprias** no estilo do app. Em 25/10 os domínios da Wikimedia ainda estavam bloqueados pela rede do ambiente; o usuário vai liberá-los.
+- **Escritório 2D:** vista de cima ilustrada, em vetor colorido sem degradê; **mapa em tela cheia**, com conversas e atividades em painéis por cima; mais detalhes, movimentação mais realista (passos animados nas quatro direções) e interações reais.

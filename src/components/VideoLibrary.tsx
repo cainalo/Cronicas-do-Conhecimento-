@@ -2,9 +2,9 @@
 // (só carrega ao tocar, sem tocar sozinho) e ligação com a aula em texto do mesmo assunto. Vídeo não
 // conferido aparece com aviso e a origem; nada é apresentado como curado sem conferência.
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { curatedVideos, getChapter } from '@/content';
 import { VideoEmbed } from '@/components/VideoEmbed';
+import { TrailPlace } from './TrailPlace';
 import { Icon } from '@/components/Icon';
 
 export function VideoLibrary() {
@@ -40,11 +40,7 @@ export function VideoLibrary() {
                   </span>
                 </p>
               )}
-              {v.lessonId && v.sectionId && (
-                <Link to={`/aprender/${v.chapterId}/${v.sectionId}/${v.lessonId}`} className="inline-flex items-center gap-1 text-sm font-semibold text-gold">
-                  <span className="link-grow">Estudar o mesmo assunto em texto</span> <Icon name="avancar" size={15} />
-                </Link>
-              )}
+              <TrailPlace lessonId={v.lessonId} className="max-w-full" />
             </div>
           ))}
         </div>

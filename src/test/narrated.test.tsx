@@ -6,6 +6,7 @@ import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
 import { microLessons, narratedLessons } from '@/content';
 import { nextBeat, prevScene, revealOf, transcript, validateNarrated } from '@/lib/narration';
+import { emptyData } from '@/lib/model';
 
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
 beforeEach(() => localStorage.clear());
@@ -41,7 +42,7 @@ it('validador acusa revelação fora do alcance e número fora da reta', () => {
 it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcrição; checagem no fim', async () => {
   vi.useFakeTimers({ shouldAdvanceTime: true });
   const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
-  const l = narratedLessons[0];
+  const l = narratedLessons.find((x) => x.id === 'narrada.mat.somar-inteiros')!;
   render(
     <PrefsProvider>
       <StudyProvider>
@@ -70,4 +71,30 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
   for (let i = 0; i < 6; i++) await act(async () => void vi.advanceTimersByTime(8000));
   expect(screen.getByRole('region', { name: 'Checagem' })).toHaveTextContent('Quanto é −4 + 9?');
   vi.useRealTimers();
+});
+
+it('sequência única: a aula narrada abre dentro da aula, volta à aula e segue para a prática', async () => {
+  const user = userEvent.setup();
+  const key = 'aprender:cap.prim.01:computador#prim.computador.1';
+  localStorage.setItem(
+    'cronicas:v1:visitante',
+    JSON.stringify({ ...emptyData(), progress: { [key]: { step: { phase: { k: 'midia' }, first: {}, struggled: [] }, updatedAt: new Date().toISOString() } } }),
+  );
+  render(
+    <PrefsProvider>
+      <StudyProvider>
+        <MemoryRouter initialEntries={['/aprender/cap.prim.01/computador/prim.computador.1']}>
+          <AppRoutes />
+        </MemoryRouter>
+      </StudyProvider>
+    </PrefsProvider>,
+  );
+  expect(screen.getByRole('heading', { name: 'Veja de outro jeito' })).toBeInTheDocument();
+  await user.click(screen.getByTestId('midia-narrada'));
+  expect(screen.getByRole('dialog', { name: /Aula narrada: Do ábaco ao celular/ })).toBeInTheDocument();
+  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/não foi inventado de uma vez/);
+  await user.click(screen.getByTestId('narrada-voltar'));
+  expect(screen.queryByRole('dialog')).toBeNull();
+  await user.click(screen.getByTestId('midia-continuar'));
+  expect(screen.getByText(/Organize a linha do tempo/)).toBeInTheDocument();
 });

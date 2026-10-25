@@ -29,10 +29,11 @@ export function NarratedPage() {
         </Link>
       </div>
     );
-  return <Player key={l.id} l={l} />;
+  return <NarratedPlayer key={l.id} l={l} />;
 }
 
-function Player({ l }: { l: NarratedLesson }) {
+/** Player da aula narrada. Dentro da aula (sequência principal), abre por cima e volta à aula. */
+export function NarratedPlayer({ l, onClose }: { l: NarratedLesson; onClose?: () => void }) {
   const [pos, setPos] = useState<NarrationPos>({ scene: 0, beat: 0 });
   const [playing, setPlaying] = useState(false);
   const [rate, setRate] = useState<(typeof RATES)[number]>(1);
@@ -88,7 +89,19 @@ function Player({ l }: { l: NarratedLesson }) {
 
   return (
     <div className="space-y-4">
-      <PageHeader area="explorar" title={l.title} subtitle={`Aula narrada · cerca de ${l.minutes} min · o mesmo conteúdo da aula em texto`} />
+      {onClose ? (
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="kicker">Aula narrada · cerca de {l.minutes} min</p>
+            <h2 className="text-[1.4rem] leading-tight">{l.title}</h2>
+          </div>
+          <button className="btn-ghost shrink-0 !px-3 text-sm" onClick={onClose} data-testid="narrada-voltar">
+            Voltar à aula
+          </button>
+        </div>
+      ) : (
+        <PageHeader area="explorar" title={l.title} subtitle={`Aula narrada · cerca de ${l.minutes} min · o mesmo conteúdo da aula em texto`} />
+      )}
 
       <section className="card overflow-hidden p-0" aria-label="Apresentação">
         <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-2 text-sm">
@@ -154,9 +167,11 @@ function Player({ l }: { l: NarratedLesson }) {
         <button className="btn-ghost flex-1" aria-expanded={showTranscript} onClick={() => setShowTranscript((v) => !v)}>
           {showTranscript ? 'Ocultar a transcrição' : 'Mostrar a transcrição'}
         </button>
-        <Link to={`/aprender/${l.chapterId}/${l.sectionId}/${l.lessonId}`} className="btn-ghost flex-1">
-          Estudar em texto <Icon name="avancar" size={16} />
-        </Link>
+        {!onClose && (
+          <Link to={`/aprender/${l.chapterId}/${l.sectionId}/${l.lessonId}`} className="btn-ghost flex-1">
+            Ver na trilha <Icon name="avancar" size={16} />
+          </Link>
+        )}
       </div>
       {showTranscript && (
         <section className="card space-y-3 p-4" aria-label="Transcrição">
@@ -190,6 +205,22 @@ function SceneView({ scene, reveal }: { scene: Scene; reveal: number }) {
         <h2 className="anim-tile-in mt-2 text-[1.9rem] leading-tight sm:text-[2.3rem]">{v.title}</h2>
         {v.subtitle && reveal >= 2 && <p className="anim-tile-in mt-2 font-title text-lg italic text-muted">{v.subtitle}</p>}
       </div>
+    );
+  if (v.kind === 'timeline')
+    return (
+      <ol className="relative w-full max-w-xl border-l-2 border-line pl-5">
+        {v.items.map((it, i) => (
+          <li
+            key={it.year + it.title}
+            className={`relative pb-3 transition-all duration-500 last:pb-0 ${i < reveal ? 'translate-x-0 opacity-100' : 'translate-x-2 opacity-20'}`}
+          >
+            <span className={`absolute -left-[1.72rem] top-1.5 h-3 w-3 rounded-full border-2 ${i < reveal ? 'border-gold bg-gold' : 'border-line bg-bg'}`} aria-hidden="true" />
+            <p className="font-title text-sm tabular-nums text-gold">{it.year}</p>
+            <p className={`font-title leading-tight ${i === reveal - 1 ? 'text-lg' : 'text-base'}`}>{it.title}</p>
+            {i === reveal - 1 && <p className="anim-tile-in mt-0.5 text-sm text-muted">{it.text}</p>}
+          </li>
+        ))}
+      </ol>
     );
   if (v.kind === 'numberline') return <NumberLine from={v.from} to={v.to} state={v.states[reveal] ?? {}} />;
   if (v.kind === 'cards')

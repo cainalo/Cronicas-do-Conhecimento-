@@ -15,7 +15,9 @@ export type Visual =
   | { kind: 'title'; title: string; subtitle?: string; art?: IllustrationName }
   | { kind: 'numberline'; from: number; to: number; states: NumberLineState[] }
   | { kind: 'cards'; cards: { title: string; text: string }[] }
-  | { kind: 'equation'; lines: string[]; note?: string };
+  | { kind: 'equation'; lines: string[]; note?: string }
+  /** Linha do tempo: cada marco aparece com a sua frase (história de como algo surgiu). */
+  | { kind: 'timeline'; items: { year: string; title: string; text: string }[] };
 
 export interface Beat {
   /** Texto falado (e mostrado como legenda). */

@@ -67,3 +67,13 @@ Grimório de Segurança inteiro em microaulas: cap.seg.01 (Criptografia, 6 aulas
 ## Simulador e Sala dos Professores (25/10/2026)
 - Cenário `cen.suporte-lento` (SO: memória, swap, thrashing, sinais, nice). Fonte: microaula `micro.infra.processos`. Não revisado por humano.
 - 16 posts de professores fictícios. Assuntos: processos, arquivos, shell, diretório, TCP/IP, endereços, serviços, perímetro, nuvem e fundamentos de criptografia. Todos reescrevem fatos das microaulas. Não revisados por humano.
+
+## Ritmo lento com história e sequência única (25/10/2026, pedido do usuário)
+- **Piloto do novo ritmo:** cap.prim.01 / computador virou a série `prim.computador` (4 aulas, 20 etapas).
+  - **Aula 1, Como o computador surgiu:** a história, do ábaco ao smartphone.
+  - **Aula 2, As quatro tarefas:** entrada, saída, processamento e memória, uma por etapa.
+  - **Aula 3, Ligado ou desligado: o bit:** os dois estados, o bit e as combinações.
+  - **Aula 4, Do byte ao terabyte:** os degraus de tamanho, o 1.024 e o uso no Tribunal.
+  - **Questões e fonte:** prova com q.prim.01.001 e 002. O texto do capítulo (01-o-que-e.md) ganhou a seção "Como o computador surgiu", fonte das aulas.
+- **Aulas narradas novas:** "Do ábaco ao celular", com o novo tipo de cena linha do tempo, e "As quatro tarefas do computador".
+- **Sequência única:** a aula narrada e as videoaulas conferidas entram na própria aula, numa fase "Veja de outro jeito" antes da prática. As bibliotecas de aulas narradas e de vídeos mostram "Na trilha" com o link para a aula.
