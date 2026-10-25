@@ -4,6 +4,10 @@
 **Fase:** reformulação "Arquivo Real" (kit em `docs/kit/`, auditoria em `docs/AUDITORIA_REFORMULACAO.md`): fases 0 a 5 do kit feitas para o piloto; expansão pendente.
 
 ## Situação atual
+- **Pacote v4 (25/10/2026), registro em `docs/V4_EXECUCAO.md`.** As etapas 1 a 8 estão feitas e a 9 tem varredura automática.
+  - **Telas novas:** Conta em áreas (`src/pages/settings/`); sons para estudar (`app/soundscape.ts`); reinício seguro do progresso (`lib/reset.ts`, coluna `profiles.progress_reset_at`); modo imersivo no Android (`MainActivity.java`, `ImmersivePlugin.java`); Hoje editorial.
+  - **Removido:** telas de RPG e a dependência `three`.
+  - **Pendente:** teste do modo imersivo em aparelho e reinício contra o servidor real.
 - **Reformulação do pacote técnico (25/10/2026), registro completo em `docs/REFORMULACAO_EXECUCAO.md`:** fases 0 a 6 feitas.
   - **Navegação:** 5 áreas (Hoje, Trilha, Explorar, Revisar, Progresso).
   - **Unidade interativa:** o piloto é Processos.
@@ -45,9 +49,15 @@ Antes: `npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escur
 - **PDFs das provas** (rede bloqueia FGV/eticaconcursos/TCE): prova TCE-GO 2014 FCC TI + gabarito; prova 2024 TI Tipo 1 + gabarito definitivo, para questões OFICIAIS rotuladas.
 
 ## Próxima tarefa exata
-- **Redesenho editorial em andamento (interrompido a pedido do usuário em 25/10).**
-  - **Feito:** base CSS nova (`src/styles/index.css`, `look.css`); paleta Editorial como padrão, com migração que guarda a aparência antiga; fontes Fraunces e Inter Tight; ícones redesenhados (`Icon.tsx`); ilustrações em traço (`Illustration.tsx`); logotipo (`Logo.tsx`); ícones do app e do site e telas de abertura; cabeçalho e menu; `PageHeader`, `SectionTitle` e cartão-pôster (`Page.tsx`); painel de personalização; contador `app/useCountUp.ts` (ainda sem uso).
-  - **Falta:** reescrever as telas no formato editorial, começando por Hoje (`Dashboard.tsx`): manchete com o número de dias, próximo passo com ilustração, indicadores em linha com `useCountUp`, "Termo do dia" como citação. Depois Trilha, Revisar, Progresso, Conta, `FeasibilityCard`, Simulador, Sala; trocar `SceneBanner` e `Mascot` por ilustrações; tirar textos longos e pílulas; capturas em claro e escuro, 360/390/1280.
+1. **Com o usuário:**
+   - Validar no Galaxy A14 5G o modo imersivo (checklist em `docs/V4_EXECUCAO.md`) e o reinício com a conta real.
+   - Ouvir o retorno sobre o visual editorial e sobre os sons.
+2. **Telas que ainda usam peças antigas:**
+   - Ainda usam `SceneBanner` / `Mascot`: Training, Library, Book, Review, Exam, Practice, Lesson, Blitz, Plan, NotFound, Trail e Learn.
+   - Trocar essas peças por notas editoriais e ilustrações em traço.
+   - Revisar o `PaceCard` (texto longo).
+3. **Conteúdo:** microaulas de cap.seg.01 (simétrica, assimétrica, hash, assinatura, híbrida) e mais aulas de Matemática.
+4. **Vídeos:** os 3 vídeos "a conferir" precisam de conferência humana (YouTube bloqueado nesta rede).
 - Fase 7 do pacote técnico: auditoria de RLS e fluxos de Auth (só leitura no banco), checklist de release (spec 36) com evidência real e riscos declarados.
 - Depois: mais cenários no simulador (Redes, Banco de Dados) e mais posts; aula visual narrada opcional (spec 20); microaulas de cap.seg.01 (simetrica, assimetrica, hash, assinatura, hibrida); remover as telas medievais restantes (Reino, Diário, Personagem).
 0000. Fase 3 em andamento: grimório de Infraestrutura inteiro em microaulas (cap.infra.01, .02, .03; `src/content/micro/infra-*.ts`, 10 aulas, 123 etapas). Segurança iniciada: `seg-fundamentos` (cap.seg.01/fundamentos, 10 etapas). Próximo: cap.seg.01 simetrica, assimetrica, hash, assinatura, hibrida; depois cap.seg.02 e Dados. Varredura sem rolagem: `scratchpad/pw/runall.sh <tela>` (usa mscroll4.cjs). Regras novas: sem listas aninhadas nas explicações (teste), correção do 'ordenar' em blocos por item.

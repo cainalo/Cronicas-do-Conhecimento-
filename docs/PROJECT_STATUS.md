@@ -1,6 +1,7 @@
 # Estado do projeto (atualizado em 2026-10-17)
 
 ## Funciona e foi testado
+- **Pacote v4 (25/10/2026):** Conta em áreas, sons para estudar, reinício seguro do progresso (testado com servidor simulado), Hoje editorial, sem telas de RPG, escritório 2D, aula narrada, feed curricular. Detalhes em `docs/V4_EXECUCAO.md`.
 | Fonte única do próximo passo e retomada exata (Aprender, Prática, Desafio, Missão, Microaula) | `checkpoint.test.ts`, `flow.test.tsx` |
 | Microaula-piloto Processos, memória e serviços (15 etapas com checagem e recuperação) | `micro.test.ts`, `flow.test.tsx`, captura 390×844 |
 | Ordem do dia seguindo a trilha única (mesmo destino do Continuar, nada concluído como próximo) | `planner.test.ts` |
@@ -34,12 +35,14 @@
 | Gamificação: mapa do reino (`/reino`), ficha do personagem (`/personagem`) com título, sequência, missões semanais com resgate de XP, 12 selos e inventário de artefatos | `game.test.ts`, capturas |
 
 ## Implementado, mas NÃO testado ponta a ponta
+- **Modo imersivo no Android** (barras ocultas, reveladas por deslize): compila no CI, sem teste em aparelho.
+- **Reinício do progresso contra o servidor real** (marca em `profiles.progress_reset_at`): só testado com servidor simulado.
 - **Sincronização real com Supabase e Auth (cadastro, login, recuperação de senha) pelo app.** O container bloqueia `*.supabase.co`; o caminho SQL foi validado, o cliente HTTP não. Testar no navegador do celular/PC.
 - Confirmação de e-mail: depende da configuração padrão do Supabase Auth (provavelmente ativa). URL de redirecionamento precisa ser cadastrada ao publicar.
 
 ## Incompleto / não iniciado
 - Cobertura do edital: 68 de 68 tópicos com material (13 grimórios, 391 questões autorais); normas estaduais/TCE-GO em panorama verificável (ver CONTENT_COVERAGE).
-- Narrativa (aguarda decisões: protagonista, conflito, personagens), Capacitor/Android, lembretes.
+- Narrativa de RPG removida no pacote v4 a pedido; lembretes não iniciados.
 
 ## Conhecido
 - Bundle JS ~660 kB (sem code-splitting) — aceitável por ora.

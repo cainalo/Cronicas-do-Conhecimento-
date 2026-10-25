@@ -8,6 +8,7 @@
 ## Suítes
 | Arquivo | Cobre |
 |---|---|
+| `src/test/reset.test.tsx` | reinício do progresso: regra pura, fusão com estado antigo, espelho do IndexedDB, chaves locais, sync com Supabase simulado, diálogo (cancelar, confirmar, recarregar, Continuar no início, preferências mantidas) |
 | `src/test/content.test.ts` | ids únicos; 5 alternativas; gabarito válido; comentários; nunca `oficial`; seção/tópico existentes; lições válidas |
 | `src/test/study.test.ts` | XP único, revisão/recuperação, lição (melhor nota), capítulo lido, níveis, domínio, recomendação, marcadores |
 | `src/test/merge.test.ts` | fusão entre aparelhos, XP sem duplicar, migração do visitante |
@@ -34,3 +35,6 @@
 
 ## Não testado
 Login/cadastro/recuperação e sincronização HTTP com o Supabase (rede do container bloqueia `*.supabase.co`); instalação PWA em aparelho; offline.
+
+## Última execução (25/10/2026)
+`npm test`: 913/913 em 26 arquivos; `tsc -b` e build OK; varredura Playwright de 36 rotas × 3 larguras × 2 temas sem estouro nem erro de JavaScript; CI 72 verde (site e APK).

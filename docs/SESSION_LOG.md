@@ -49,3 +49,13 @@
 - **Fase 6:** simulador 2D e Sala dos Professores.
 - **Fase 7:** auditoria de segurança somente leitura e `docs/RELEASE_CHECKLIST.md`.
 - **Redesenho editorial (parcial):** escolhido pelo usuário via perguntas. Base visual, marca, ícones, ilustrações, shell e cartões prontos; as telas ainda usam a estrutura antiga com o novo estilo. 841 testes, tsc e build OK.
+
+## 25/10/2026: pacote v4 (etapas 1 a 9)
+- **Didática:** Matemática (9 aulas de inteiros) e Processos revisados.
+- **Escritório 2D, aula narrada, videoteca e feed curricular.**
+- **Limpeza da identidade:** sem RPG; Hoje reescrita.
+- **Conta:** página de entrada com áreas; sons gerados no aparelho.
+- **Reinício seguro do progresso:** marca de tempo, sem apagar o servidor; migrações aditivas aplicadas.
+- **Modo imersivo no Android:** sem teste em aparelho.
+- **Varredura visual:** 216 combinações sem estouro nem erro.
+- **Validação:** 913 testes, tsc e build OK, CI 72 com APK verde. Registro em `docs/V4_EXECUCAO.md`.

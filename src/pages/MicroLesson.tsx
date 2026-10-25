@@ -15,7 +15,6 @@ import { Markdown } from '@/components/Markdown';
 import { PageDots, SwipePages, type PageItem } from '@/components/SwipePages';
 import { splitMarkdown } from '@/lib/book';
 import { Icon } from '@/components/Icon';
-import { Mascot } from '@/components/Mascot';
 import { StepGuide } from '@/components/StepGuide';
 import { ActivityView } from '@/components/activities/ActivityView';
 
@@ -159,10 +158,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
 
       {phase.k === 'abertura' && (
         <section className="flex min-h-0 flex-1 flex-col" aria-label="Abertura">
-          <div className="mb-2 flex items-end gap-2">
-            <Mascot mood="talk" size={52} />
-            <p className="mb-2 rounded-2xl rounded-bl-sm bg-surface px-3 py-2 text-sm shadow-sm">Antes de explicar, uma pergunta. Não vale nota: é só para você pensar no problema.</p>
-          </div>
+          <p className="mb-3 border-l-2 border-gold pl-3 text-sm text-muted">Antes de explicar, uma pergunta. Não vale nota: é só para você pensar no problema.</p>
           <ActivityView key="abertura" fit a={lesson.opening} onNext={() => set({ k: 'explicar', i: 0 })} />
         </section>
       )}
@@ -264,10 +260,8 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
 
       {phase.k === 'sintese' && (
         <section className="flex min-h-0 flex-1 flex-col" aria-label="Síntese">
-          <div className="flex items-end gap-2">
-            <Mascot mood="cheer" size={56} />
-            <h1 className="mb-3 text-2xl">Aula concluída</h1>
-          </div>
+          <p className="kicker">Fim da aula</p>
+          <h1 className="mb-3 text-2xl">Aula concluída</h1>
           <div className="mt-2 flex min-h-0 flex-1 flex-col">
             <SwipePages
               items={summaryItems()}
