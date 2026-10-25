@@ -1,5 +1,15 @@
 Quando você liga o computador, o primeiro programa importante que entra em ação é o **sistema operacional**. Ele é o gerente da máquina. Os mais conhecidos são **Windows**, **Linux** e **macOS**. No celular, **Android** e **iOS**.
 
+### Como o sistema operacional surgiu
+
+- **Anos 1940 e 1950: o operador humano.** Nos primeiros computadores não havia sistema operacional. Uma pessoa, o **operador**, carregava cada programa (em cartões ou fitas), esperava terminar e só então carregava o próximo. A máquina cara ficava parada entre um trabalho e outro.
+- **1956: o primeiro "gerente".** Programas como o **GM-NAA I/O**, feito para o computador IBM 704, passaram a encadear os trabalhos sozinhos. É considerado um dos primeiros sistemas operacionais.
+- **1969: Unix.** Nos Laboratórios Bell, **Ken Thompson** e **Dennis Ritchie** criaram o **Unix**, que organizava arquivos em pastas dentro de pastas e permitia várias pessoas e programas ao mesmo tempo. Muitas ideias dele estão até hoje no Linux e no macOS.
+- **1981: MS-DOS.** O IBM PC chegou com o **MS-DOS**, da Microsoft, em que tudo era feito digitando comandos.
+- **1984 e 1985: janelas e mouse.** O **Macintosh**, da Apple (1984), popularizou a tela com janelas, ícones e mouse; o **Windows** veio em 1985.
+- **1991: Linux.** O finlandês **Linus Torvalds** começou o **Linux**, de código aberto: qualquer um pode estudar e melhorar.
+- **2007 e 2008: celulares.** O **iOS** (2007) e o **Android** (2008) levaram o sistema operacional para o bolso.
+
 ### O que o sistema operacional faz
 
 - Divide o processador e a memória entre os programas abertos, para que todos funcionem.

@@ -75,5 +75,15 @@ Grimório de Segurança inteiro em microaulas: cap.seg.01 (Criptografia, 6 aulas
   - **Aula 3, Ligado ou desligado: o bit:** os dois estados, o bit e as combinações.
   - **Aula 4, Do byte ao terabyte:** os degraus de tamanho, o 1.024 e o uso no Tribunal.
   - **Questões e fonte:** prova com q.prim.01.001 e 002. O texto do capítulo (01-o-que-e.md) ganhou a seção "Como o computador surgiu", fonte das aulas.
+- **Trecho 2, hardware:** série `prim.hardware` (3 aulas, 11 etapas).
+  - **Aulas:** "Da fiação ao programa" (ENIAC, von Neumann e EDVAC em 1945, hardware e software), "As peças por dentro" (processador, RAM, armazenamento do cartão ao pendrive, HD e SSD) e "Sistema e aplicativo".
+  - **Questões e fonte:** prova com q.prim.01.003 e 004. O texto 02-hardware-software.md ganhou a parte histórica.
+- **Trecho 3, sistema:** série `prim.sistema` (3 aulas, 13 etapas).
+  - **Aulas:** "Do operador ao sistema operacional" (operador humano, GM-NAA I/O em 1956, Unix em 1969, MS-DOS, Macintosh e Windows, Linux, iOS e Android), "O gerente da máquina" (as quatro tarefas, com o cartório) e "Arquivos, pastas, extensões e permissões" (caminho, extensões, o golpe do .exe, leitura, escrita e execução).
+  - **Questões e fonte:** prova com q.prim.01.005 e 006. O texto 03-sistema-arquivos.md ganhou "Como o sistema operacional surgiu".
+- **Trecho 4, programação:** série `prim.programacao` (3 aulas, 14 etapas).
+  - **Aulas:** "Da receita à linguagem de programação" (al-Khwarizmi, Ada Lovelace, linguagem de máquina, a mariposa de 1947, Grace Hopper e o A-0, FORTRAN, Python, Java e JavaScript), "Algoritmo e variável" e "Condição e repetição" (se/senão, para cada, enquanto, laço infinito).
+  - **Questões e fonte:** prova com q.prim.01.007 e 008. O texto 04-programacao.md ganhou "Como a programação surgiu".
+- **Revisão:** as três séries novas ainda sem revisão humana.
 - **Aulas narradas novas:** "Do ábaco ao celular", com o novo tipo de cena linha do tempo, e "As quatro tarefas do computador".
 - **Sequência única:** a aula narrada e as videoaulas conferidas entram na própria aula, numa fase "Veja de outro jeito" antes da prática. As bibliotecas de aulas narradas e de vídeos mostram "Na trilha" com o link para a aula.

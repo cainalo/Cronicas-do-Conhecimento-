@@ -6,6 +6,7 @@
 ## Situação atual
 - **Rodada de 25/10/2026 (noite): pedidos do usuário. Decisões em PRODUCT_DECISIONS.md, seção "ritmo das aulas, sequência única, feed e Escritório".**
   - **Ritmo lento com história (piloto):** cap.prim.01 / computador virou a série `prim.computador`, com 4 aulas: história, quatro tarefas, bit e tamanhos. O texto do capítulo ganhou "Como o computador surgiu".
+  - **Ritmo lento nos trechos 2 a 4 de cap.prim.01:** séries `prim.hardware`, `prim.sistema` e `prim.programacao`, 3 aulas cada, todas começando pela história. Os textos dos capítulos ganharam as seções históricas que servem de fonte. Sem rolagem a 360×640 e 390×844.
   - **Sequência única:** aula narrada e videoaula conferida entram dentro da aula ("Veja de outro jeito", fase `midia` em `MicroLesson.tsx`). As bibliotecas mostram "Na trilha" (`components/TrailPlace.tsx`, `trailPlaceOf`).
   - **Aulas narradas novas:** "Do ábaco ao celular", com a cena nova de linha do tempo, e "As quatro tarefas".
   - **Feed:** retratos ilustrados (`components/TeacherAvatar.tsx`), perfis, revisões rápidas, posts com desenho, hashtags, curtir, comentário fixado e anotações como comentários. O espaço para fotos reais (`content/estudos/imagens.ts`) está vazio enquanto a Wikimedia segue bloqueada na rede.
@@ -56,8 +57,8 @@ Antes: `npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escur
 - **PDFs das provas** (rede bloqueia FGV/eticaconcursos/TCE): prova TCE-GO 2014 FCC TI + gabarito; prova 2024 TI Tipo 1 + gabarito definitivo, para questões OFICIAIS rotuladas.
 
 ## Próxima tarefa exata
-1. **Ouvir o usuário sobre o piloto do novo ritmo** (série "O que é um computador", com história) e, se aprovado, aplicar o mesmo formato aos trechos seguintes, um por vez:
-   - **Primeiros Passos:** hardware, sistema, programação, redes, dados, segurança.
+1. **Aplicar o novo ritmo com história aos trechos seguintes, um por vez.** O cap.prim.01 está completo (computador, hardware, sistema, programação):
+   - **Próximo:** cap.prim.02, trechos redes, dados e segurança (`src/content/grimoires/primeiros/cap02-*`), questões q.prim.02.*.
    - **Depois:** os demais capítulos.
    - **Regra:** cada trecho começa contando como aquilo surgiu, usando só fatos verificáveis, acrescentados também ao texto do capítulo.
 2. **Fotos reais no feed:** quando a Wikimedia (`commons.wikimedia.org` e `upload.wikimedia.org`) estiver liberada na rede do ambiente, preencher `content/estudos/imagens.ts`. Usar só domínio público ou licença livre, com autor, licença e link conferidos na página do arquivo.

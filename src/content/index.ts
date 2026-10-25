@@ -149,6 +149,8 @@ import { matSomarFracoes, matMultiplicarFracoes, matRacionaisRestante } from './
 import { primHistoria, primQuatroTarefas } from './micro/prim-computador-a';
 import { primBits, primTamanhos } from './micro/prim-computador-b';
 import { primHwHistoria, primHwPecas, primHwTipos } from './micro/prim-hardware';
+import { primSoHistoria, primSoGerente, primSoArquivos } from './micro/prim-sistema';
+import { primProgHistoria, primProgVariavel, primProgDecisao } from './micro/prim-programacao';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -157,6 +159,12 @@ export const microLessons: MicroLesson[] = [
   primHwHistoria,
   primHwPecas,
   primHwTipos,
+  primSoHistoria,
+  primSoGerente,
+  primSoArquivos,
+  primProgHistoria,
+  primProgVariavel,
+  primProgDecisao,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,

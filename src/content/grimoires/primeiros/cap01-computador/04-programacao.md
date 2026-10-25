@@ -1,5 +1,15 @@
 Todo programa nasce de uma lista de instruções. Escrever essa lista é **programar**.
 
+### Como a programação surgiu
+
+- **A palavra "algoritmo"** vem do nome do matemático persa **al-Khwarizmi**, que viveu no século IX e escreveu sobre como fazer contas passo a passo.
+- **1843: o primeiro programa.** **Ada Lovelace** publicou instruções para a máquina analítica de Charles Babbage, que nunca foi terminada. É considerado o primeiro programa de computador.
+- **Anos 1940: programar com números.** Os primeiros computadores só entendiam instruções em números, a chamada **linguagem de máquina**. Escrever um programa era lento e fácil de errar.
+- **1947: o "bug".** A equipe do computador **Harvard Mark II** achou uma mariposa presa numa peça da máquina e colou o inseto no caderno de registros. O caso ajudou a popularizar a palavra **bug** (inseto, em inglês) para erro em computador.
+- **1952: o tradutor automático.** **Grace Hopper** criou um dos primeiros **compiladores**, o A-0: um programa que traduz instruções escritas por pessoas para a linguagem de máquina.
+- **1957: FORTRAN.** A IBM lançou o **FORTRAN**, uma das primeiras linguagens de programação muito usadas, em que se escrevia algo parecido com fórmulas de matemática.
+- **Anos 1990: as linguagens de hoje.** O **Python** foi lançado em 1991; o **Java** e o **JavaScript**, em 1995. Elas são bem mais próximas da escrita humana do que os números dos anos 1940.
+
 ### Algoritmo: a receita
 
 Um **algoritmo** é uma sequência de passos, em ordem, para resolver um problema. Uma receita de bolo é um algoritmo: misture, bata, despeje, asse por 40 minutos. Se você troca a ordem, o resultado muda.

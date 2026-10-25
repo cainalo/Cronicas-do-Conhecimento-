@@ -69,3 +69,7 @@
 - **Ilustrações:** 10 novas; o mascote virou ilustração.
 - **Limpeza:** removidas 18 capturas que tinham entrado no repositório por engano.
 - **Validação:** 1003 testes; build OK.
+
+## 25/10/2026 (madrugada): ritmo com história no restante de cap.prim.01
+- **Aulas:** séries `prim.hardware`, `prim.sistema` e `prim.programacao` (3 aulas cada), com história verificável acrescentada aos textos dos capítulos.
+- **Validação:** 1057 testes, tsc e build OK; sem rolagem nas 18 combinações de aula e tela (360×640 e 390×844).
