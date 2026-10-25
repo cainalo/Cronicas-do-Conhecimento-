@@ -2,7 +2,7 @@
 // e o cabeçalho de cada página repete essa cor, para que ela saiba sempre onde se encontra.
 import type { IconName } from '@/components/Icon';
 
-export type AreaKey = 'torre' | 'grimorios' | 'treino' | 'reino' | 'conta';
+export type AreaKey = 'torre' | 'grimorios' | 'explorar' | 'treino' | 'reino' | 'conta';
 
 export interface Area {
   key: AreaKey;
@@ -16,33 +16,43 @@ export interface Area {
   paths: string[];
 }
 
+// Reformulação (Fase 1): cinco áreas com nomes objetivos. As chaves internas antigas continuam
+// (as páginas as usam), mas o rótulo, o destino e a cor seguem o novo design system.
 export const AREAS: Record<AreaKey, Area> = {
-  torre: { key: 'torre', label: 'Torre', to: '/', icon: 'torre', color: ['#1f5c45', '#6fae8c'], paths: [] },
+  torre: { key: 'torre', label: 'Hoje', to: '/', icon: 'calendario', color: ['#4258cd', '#889eff'], paths: ['/plano'] },
   grimorios: {
     key: 'grimorios',
-    label: 'Grimórios',
-    to: '/biblioteca',
+    label: 'Trilha',
+    to: '/trilha',
+    icon: 'mapa',
+    color: ['#127672', '#5ec8c0'],
+    paths: ['/trilha', '/aprender', '/pratica', '/licao', '/missao'],
+  },
+  explorar: {
+    key: 'explorar',
+    label: 'Explorar',
+    to: '/explorar',
     icon: 'grimorio',
-    color: ['#2c5f6e', '#7fb3c2'],
-    paths: ['/biblioteca', '/estudos', '/grimorio', '/capitulo', '/pratica', '/licao'],
+    color: ['#704eb6', '#c4acf5'],
+    paths: ['/explorar', '/estudos', '/biblioteca', '/grimorio', '/capitulo', '/edital'],
   },
   treino: {
     key: 'treino',
-    label: 'Treino',
-    to: '/treino',
+    label: 'Revisar',
+    to: '/revisar',
     icon: 'ampulheta',
-    color: ['#9a5b20', '#e8b13b'],
-    paths: ['/treino', '/relampago', '/plano', '/revisao', '/flashcards', '/simulado', '/discursiva', '/historico'],
+    color: ['#a85314', '#f5a868'],
+    paths: ['/revisar', '/treino', '/relampago', '/revisao', '/flashcards', '/simulado', '/discursiva', '/historico'],
   },
   reino: {
     key: 'reino',
-    label: 'Reino',
-    to: '/reino',
-    icon: 'mapa',
-    color: ['#5b6b2e', '#a5b86a'],
-    paths: ['/reino', '/diario', '/personagem', '/progresso', '/edital'],
+    label: 'Progresso',
+    to: '/progresso',
+    icon: 'grafico',
+    color: ['#1e704a', '#70ce98'],
+    paths: ['/progresso', '/reino', '/diario', '/personagem'],
   },
-  conta: { key: 'conta', label: 'Conta', to: '/conta', icon: 'pessoa', color: ['#4a4f57', '#a9b0ba'], paths: ['/conta'] },
+  conta: { key: 'conta', label: 'Conta', to: '/conta', icon: 'pessoa', color: ['#4a5568', '#a9b0ba'], paths: ['/conta', '/download'] },
 };
 
 export function areaOf(pathname: string): AreaKey {

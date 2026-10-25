@@ -7,15 +7,14 @@ import { achievements, cluesRevealed } from '@/lib/game';
 import { DEFAULT_CONTEST_ID, chapters, questionsForContest, totalUnits } from '@/content';
 import { useCelebrations, useRegionCelebration } from '@/app/fx';
 import { useRegions } from '@/pages/Realm';
-import { Torch } from '@/components/Torch';
-import { usePrefs } from '@/app/prefs';
 import { Icon } from '@/components/Icon';
 import { useIsDark } from '@/components/Page';
 import { useState } from 'react';
 import { Prologue, prologueSeen } from '@/components/Prologue';
 import { clues } from '@/content/game/story';
 
-const TABS: AreaKey[] = ['torre', 'grimorios', 'treino', 'reino'];
+// Reformulação (Fase 1): cinco áreas, iguais no celular (menu de baixo) e no computador (topo).
+const TABS: AreaKey[] = ['torre', 'grimorios', 'explorar', 'treino', 'reino'];
 
 export function SyncBadge() {
   const { sync, session } = useStudy();
@@ -69,28 +68,19 @@ function Tab({ area, variant }: { area: AreaKey; variant: 'bottom' | 'top' }) {
   );
 }
 
-function ContinueButton({ variant }: { variant: 'fab' | 'pill' }) {
-  // Mesmo destino da Torre e do cartão de ritmo (fonte única: lib/checkpoint.ts).
+function ContinueButton({ variant }: { variant: 'compact' | 'pill' }) {
+  // Mesmo destino de Hoje, da Trilha e do cartão de ritmo (fonte única: lib/checkpoint.ts).
   const next = useCheckpoint();
-  if (variant === 'pill') {
-    return (
-      <Link to={next.to} className="btn-primary !min-h-[40px] !px-4 !py-2 text-sm" title={`${next.title} · ${next.context}`} data-testid="continuar-topo">
-        <Icon name="play" size={16} fill="currentColor" /> {next.action}
-      </Link>
-    );
-  }
   return (
-    <div className="flex flex-1 items-center justify-center">
-      <Link
-        to={next.to}
-        aria-label={`${next.action}: ${next.title}`}
-        title={`${next.title} · ${next.context}`}
-        data-testid="continuar-menu"
-        className="grid h-14 w-14 -translate-y-3 place-items-center rounded-full bg-ember text-white shadow-[0_10px_24px_-10px_rgb(var(--ember))] ring-4 ring-bg transition active:scale-95"
-      >
-        <Icon name="play" size={24} fill="currentColor" />
-      </Link>
-    </div>
+    <Link
+      to={next.to}
+      className={`btn-primary !min-h-[40px] text-sm ${variant === 'pill' ? '!px-4 !py-2' : '!px-3 !py-2'}`}
+      title={`${next.title} · ${next.context}`}
+      aria-label={`${next.action}: ${next.title}`}
+      data-testid={variant === 'pill' ? 'continuar-topo' : 'continuar-menu'}
+    >
+      <Icon name="play" size={16} fill="currentColor" /> {next.action}
+    </Link>
   );
 }
 
@@ -110,7 +100,8 @@ export function Layout() {
   const accountColor = areaColor('conta', dark);
   const onAccount = areaOf(pathname) === 'conta';
   // Prólogo na primeira visita (fora dos testes automatizados).
-  const [showPrologue, setShowPrologue] = useState(() => import.meta.env.MODE !== 'test' && !prologueSeen());
+  // Reformulação: o prólogo medieval não abre mais sozinho (o componente fica, sem uso, até a limpeza).
+  const [showPrologue, setShowPrologue] = useState(() => false && !prologueSeen());
 
   return (
     <div className="flex min-h-dvh flex-col">
@@ -127,9 +118,7 @@ export function Layout() {
                 <Icon name="voltar" size={22} strokeWidth={2} />
               </button>
             ) : (
-              <span className="hidden lg:block">
-                <Logo />
-              </span>
+              <Logo />
             )}
             <nav aria-label="Navegação principal" className="ml-2 hidden items-center gap-1 lg:flex">
               {TABS.map((t) => (
@@ -138,20 +127,20 @@ export function Layout() {
             </nav>
           </div>
 
-          <span className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 lg:hidden">
-            <Torch size={30} className="-mt-1" />
-            <Logo />
-            <Torch size={30} className="-mt-1" />
-          </span>
-
           <div className="flex items-center gap-2">
             <span className="hidden sm:inline-flex">
               <SyncBadge />
             </span>
-            <span className="hidden lg:inline-flex">
-              <ContinueButton variant="pill" />
-            </span>
-            <AmbienceButton />
+            {!immersive && (
+              <span className="hidden lg:inline-flex">
+                <ContinueButton variant="pill" />
+              </span>
+            )}
+            {!immersive && (
+              <span className="lg:hidden">
+                <ContinueButton variant="compact" />
+              </span>
+            )}
             <Link
               to="/conta"
               aria-label={`Conta · nível ${lv.level}`}
@@ -179,40 +168,20 @@ export function Layout() {
         aria-label="Navegação principal"
         className="wood-bar wood-bar-bottom safe-bottom-nav fixed inset-x-0 bottom-0 z-30 flex items-stretch justify-around lg:hidden"
       >
-        <Tab area="torre" variant="bottom" />
-        <Tab area="grimorios" variant="bottom" />
-        <ContinueButton variant="fab" />
-        <Tab area="treino" variant="bottom" />
-        <Tab area="reino" variant="bottom" />
+        {TABS.map((t) => (
+          <Tab key={t} area={t} variant="bottom" />
+        ))}
       </nav>}
     </div>
   );
 }
 
-/** Liga e desliga o ambiente (lareira e música). */
-function AmbienceButton() {
-  const { prefs, setPrefs } = usePrefs();
-  const on = !!(prefs.music || prefs.fire);
-  return (
-    <button
-      type="button"
-      onClick={() => setPrefs({ music: !on, fire: !on })}
-      aria-pressed={on}
-      aria-label={on ? 'Desligar música e lareira' : 'Ligar música medieval e lareira'}
-      title={on ? 'Desligar música e lareira' : 'Ligar música medieval e lareira'}
-      className={`grid h-10 w-10 place-items-center rounded-full transition ${on ? 'bg-[#e8b13b]/25 text-[#ffd36b]' : 'text-[#c4b08e] hover:bg-white/5'}`}
-    >
-      <Icon name="alaude" size={20} strokeWidth={1.9} />
-    </button>
-  );
-}
-
 function Logo() {
   return (
-    <Link to="/" className="flex items-center gap-2" aria-label="Crônicas do Arquivo Real, início">
+    <Link to="/" className="flex items-center gap-2" aria-label="Crônicas do Conhecimento, início">
       <img src={`${import.meta.env.BASE_URL}pwa-192.png`} alt="" className="h-7 w-7 rounded-lg shadow-sm" />
       <span className="whitespace-nowrap font-logo text-[1.05rem] leading-none text-ink">
-        Crônicas<span className="hidden text-ember sm:inline lg:hidden"> do Arquivo Real</span>
+        Crônicas<span className="hidden text-gold sm:inline lg:hidden"> do Conhecimento</span>
       </span>
     </Link>
   );

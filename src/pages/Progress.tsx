@@ -48,7 +48,7 @@ export function TopicProgressList({ onlyWithContent = false }: { onlyWithContent
 export function ProgressPage() {
   return (
     <div className="space-y-4">
-      <PageHeader area="reino" icon="grafico" title="Progresso" subtitle="Domínio por tópico do edital" />
+      <PageHeader area="reino" crumb={false} icon="grafico" title="Progresso" subtitle="Domínio por tópico do edital" />
       <p className="text-sm text-muted">
         <b className="text-ink">Domínio</b> = parcela das questões do tópico cuja resposta mais recente está correta. Leitura concluída não conta como domínio.
       </p>

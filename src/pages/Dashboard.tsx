@@ -9,15 +9,13 @@ import { dueCards } from '@/lib/training';
 import { isDone, settingsOf } from '@/lib/planner';
 import { characterSheet } from '@/lib/game';
 import { usePlanOfToday } from '@/app/usePlanOfToday';
-import { areaColor, tint } from '@/app/areas';
+import { areaColor } from '@/app/areas';
 import { DisciplineSummary } from './Progress';
-import { HeroScene } from '@/components/HeroScene';
 import { ProgressRing } from '@/components/ProgressRing';
 import { AppDownload } from '@/components/AppDownload';
 import { Icon } from '@/components/Icon';
 import { SyncBadge } from '@/components/Layout';
 import { IconBadge, SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
-import { Mascot } from '@/components/Mascot';
 
 const longDate = (iso: string, year = false) => {
   const [y, m, d] = iso.split('-').map(Number);
@@ -84,44 +82,31 @@ export function Dashboard() {
 
   return (
     <div className="stagger space-y-6">
-      {/* Saudação do mascote, como a abertura da página Funções do NutriConnect */}
-      <section className="flex items-end gap-2">
-        <Mascot mood={sheet.streak ? 'cheer' : 'talk'} size={88} />
-        <div className="mb-3 min-w-0 flex-1">
-          <div className="anim-toast-in rounded-2xl rounded-bl-sm border border-line bg-surface px-3.5 py-2.5 shadow-[var(--shadow-card)]">
-            <p className="font-display text-lg leading-tight">
-              {greet}, {sheet.title.toLowerCase()}!
-            </p>
-            <p className="mt-0.5 text-sm text-muted">
-              {sheet.streak ? `Você estuda há ${sheet.streak} dia(s) seguido(s). Não deixe a chama apagar.` : 'Um pouco de estudo hoje acende a sua sequência.'}
-            </p>
-          </div>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold text-white shadow-sm" style={{ background: '#1f5c45' }}>
-              <Icon name="chama" size={14} strokeWidth={2.2} /> {sheet.streak} dia(s)
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold text-white shadow-sm" style={{ background: '#9a5b20' }}>
-              <Icon name="estrela" size={14} strokeWidth={2.2} /> {sheet.xp} XP
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold text-white shadow-sm" style={{ background: '#5b6b2e' }}>
-              <Icon name="escudo" size={14} strokeWidth={2.2} /> nível {sheet.level}
-            </span>
-          </div>
+      {/* Saudação e indicadores do dia */}
+      <section aria-label="Saudação">
+        <h1 className="text-[1.6rem] leading-tight">{greet}!</h1>
+        <p className="mt-0.5 text-sm text-muted">
+          {sheet.streak ? `Você estuda há ${sheet.streak} dia(s) seguido(s).` : 'Um pouco de estudo hoje já conta.'} Este é o seu painel de hoje.
+        </p>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          <span className="inline-flex items-center gap-1 rounded-full bg-leaf/15 px-2.5 py-1 text-xs font-semibold text-ink">
+            <Icon name="chama" size={14} strokeWidth={2.2} className="text-leaf" /> {sheet.streak} dia(s) seguidos
+          </span>
+          <span className="inline-flex items-center gap-1 rounded-full bg-gold/12 px-2.5 py-1 text-xs font-semibold text-ink">
+            <Icon name="estrela" size={14} strokeWidth={2.2} className="text-gold" /> {sheet.xp} pontos
+          </span>
         </div>
       </section>
 
       {/* Abertura: contagem regressiva e a próxima missão, no mesmo cartão */}
       <section
-        className="overflow-hidden rounded-[2rem] border shadow-[var(--shadow-card)]"
-        style={{ borderColor: tint(torre, 22), background: `linear-gradient(160deg, ${tint(torre, 14)}, ${tint(torre, 3)}), rgb(var(--surface))` }}
+        className="card overflow-hidden"
       >
-        <HeroScene>
-          <span className="rounded-full bg-black/35 px-3 py-1 text-xs font-medium text-[#f3e3c0] backdrop-blur">
-            {contest.name} · FCC
-          </span>
-          <p className="mt-2 font-display text-[2rem] font-bold leading-none text-[#f8ead0] drop-shadow">{days} dias</p>
-          <p className="text-[0.95rem] text-[#e9d6b4]">até a prova, em {longDate(contest.examDate, true)}</p>
-        </HeroScene>
+        <div className="bg-gold px-4 py-5 text-white sm:px-5" style={{ backgroundImage: 'linear-gradient(135deg, rgb(var(--gold)), rgb(var(--azure)))' }}>
+          <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold">{contest.name} · FCC</span>
+          <p className="mt-2 text-[2rem] font-bold leading-none">{days} dias</p>
+          <p className="text-[0.95rem] text-white/90">até a prova, em {longDate(contest.examDate, true)}</p>
+        </div>
         <div className="p-4 sm:p-5">
           <div className="flex items-center justify-between gap-2">
             <p className="text-sm font-semibold" style={{ color: torre }}>

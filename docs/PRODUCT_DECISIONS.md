@@ -41,3 +41,9 @@
 - O usuário aprovou a microaula de Processos ("A aula está boa").
 - Pedido: nenhuma tela da aula com rolagem vertical. Escolha (entre as opções que ele deu): **partes lado a lado**, trocadas deslizando para o lado ou pelos botões "Próxima parte" / "Parte anterior", com pontinhos de posição. Correção da atividade abre por cima, também em partes quando é longa. Guia "Onde você está" em uma linha, com a explicação em janela.
 - Componente `SwipePages` (mede o conteúdo na largura real e distribui pela altura; Markdown longo é dividido com a regra do livro; botões e cartões nunca são cortados).
+
+## 25/10/2026 — Reformulação pelo pacote técnico
+- O usuário enviou o pacote `Cronicas_Reformulacao_Pacote_Tecnico` e mandou remodelar o repositório existente. Valem as decisões do pacote (ADR-001 a ADR-017, `specs/30_REGISTRO_DECISOES.md`): identidade moderna e colorida, texto interativo como canal principal, trilha única com pré-requisitos, planner em minutos, armazenamento local estruturado + Supabase, `appId` preservado.
+- Isso **substitui** as decisões anteriores de identidade medieval (Arquivo Real, Noite com tochas, coruja Bubo, som medieval como ambientação). O conteúdo, os IDs, o progresso e o banco continuam.
+- Nome: Crônicas do Conhecimento.
+

@@ -448,3 +448,108 @@ mark.search-hit { background: rgb(232 177 59 / 0.45); color: inherit; border-rad
 /* Partes lado a lado (SwipePages): desliza sem mostrar a barra de rolagem. */
 .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* =====================================================================================
+   Design system 2026 (reformulação, Fase 1). Substitui a identidade medieval por uma
+   plataforma de estudo clara, colorida e confortável. Os nomes de token antigos continuam
+   (os componentes os usam), mas com novos papéis:
+   --gold = primário (azul), --ember = destaque/ação (azul escuro), --azure = conceito
+   (lilás), --leaf = foco/atenção (laranja), --ok/--bad = acerto/erro.
+   Contraste: texto sobre --bg/--surface acima de 4.5:1 (AA) no claro e no escuro.
+   ===================================================================================== */
+:root {
+  --bg: 246 248 252;
+  --surface: 255 255 255;
+  --raised: 240 244 250;
+  --ink: 29 42 58;
+  --muted: 82 96 114;
+  --line: 220 227 237;
+  --gold: 66 88 205;
+  --ember: 52 72 186;
+  --azure: 112 78 182;
+  --teal: 18 118 114;
+  --leaf: 222 128 52;
+  --ok: 30 112 74;
+  --bad: 172 53 68;
+  --parchment: 255 255 255;
+  --leather: 29 42 58;
+  --sepia: 29 42 58;
+  --radius-card: 18px;
+  --radius-control: 12px;
+  --shadow-card: 0 6px 24px rgb(25 45 72 / 0.07), 0 1px 2px rgb(25 45 72 / 0.06);
+  --shadow-lift: 0 12px 30px rgb(25 45 72 / 0.12), 0 2px 6px rgb(25 45 72 / 0.08);
+  --wall: none;
+  --panel: none;
+  --tex-grain: none;
+  --tex-leather: none;
+  --tex-leather-mottle: none;
+}
+:root[data-theme='dark'] {
+  --bg: 14 19 29;
+  --surface: 23 30 44;
+  --raised: 33 42 59;
+  --ink: 230 236 245;
+  --muted: 163 175 193;
+  --line: 52 63 84;
+  --gold: 136 158 255;
+  --ember: 150 170 255;
+  --azure: 196 172 245;
+  --teal: 94 200 192;
+  --leaf: 245 168 104;
+  --ok: 112 206 152;
+  --bad: 246 134 146;
+  --parchment: 23 30 44;
+  --leather: 230 236 245;
+  --sepia: 230 236 245;
+  --shadow-card: 0 6px 24px rgb(0 0 0 / 0.35);
+  --shadow-lift: 0 12px 30px rgb(0 0 0 / 0.45);
+  --wall: none;
+  --panel: none;
+}
+body { background-image: none; background-attachment: scroll; }
+body, .prose-manuscript, .prose-stem { font-family: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+h1, h2, h3, .font-display, .font-logo, .font-gothic, .prose-manuscript h3 { font-family: 'IBM Plex Sans', system-ui, sans-serif; letter-spacing: -0.01em; }
+h1, h2 { font-weight: 700; }
+.prose-manuscript h3 { color: rgb(var(--gold)); }
+.prose-manuscript { line-height: 1.65; }
+:focus-visible { outline: 3px solid rgb(var(--gold)); outline-offset: 2px; border-radius: 10px; }
+
+.card {
+  border-radius: var(--radius-card);
+  background-image: none;
+  box-shadow: var(--shadow-card);
+}
+.ledger { border-radius: var(--radius-card); background-image: none; }
+.btn { border-radius: var(--radius-control); }
+.btn-primary {
+  color: #fff;
+  background: rgb(var(--gold));
+  border: 1px solid transparent;
+  box-shadow: 0 6px 16px -8px rgb(var(--gold) / 0.7);
+  text-shadow: none;
+}
+:root[data-theme='dark'] .btn-primary { color: rgb(14 19 29); text-shadow: none; }
+.btn-primary:hover { filter: brightness(1.07); }
+.btn-ghost {
+  border-color: rgb(var(--line));
+  background-image: none;
+  box-shadow: none;
+}
+.btn-ghost:hover { background: rgb(var(--raised)); border-color: rgb(var(--gold) / 0.5); }
+
+/* Barras de navegação: superfície clara com borda (não mais madeira) */
+.wood-bar {
+  background-color: rgb(var(--surface) / 0.94);
+  background-image: none;
+  color: rgb(var(--ink));
+  backdrop-filter: saturate(1.4) blur(10px);
+}
+:root .wood-bar { --ink: 29 42 58; --muted: 82 96 114; --raised: 240 244 250; --line: 220 227 237; }
+:root[data-theme='dark'] .wood-bar { --ink: 230 236 245; --muted: 163 175 193; --raised: 33 42 59; --line: 52 63 84; }
+.wood-bar-top { border-bottom: 1px solid rgb(var(--line)); box-shadow: none; }
+.wood-bar-bottom { border-top: 1px solid rgb(var(--line)); box-shadow: 0 -4px 16px rgb(25 45 72 / 0.06); }
+.guide-bar { background: rgb(var(--surface)); border: 1px solid rgb(var(--line)); background-image: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}

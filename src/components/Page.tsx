@@ -98,7 +98,7 @@ export interface TileProps {
   index?: number;
 }
 
-const ARTS: string[] = ['ampulheta', 'cartas', 'relogio', 'pena', 'calendario', 'lista', 'mapa', 'escudo', 'grafico', 'pergaminho', 'grimorio', 'torre', 'chama'];
+export const TILE_ARTS: string[] = ['ampulheta', 'cartas', 'relogio', 'pena', 'calendario', 'lista', 'mapa', 'escudo', 'grafico', 'pergaminho', 'grimorio', 'torre', 'chama'];
 
 /** Inclina o elemento na direção do mouse (no toque, só afunda um pouco). */
 export function useTilt<T extends HTMLElement>() {
@@ -121,10 +121,12 @@ export function useTilt<T extends HTMLElement>() {
 /** Cartão de função: fundo suave na cor do cartão, ícone em placa, desenho animado, título e descrição curta. */
 export function Tile({ to, icon, color, title, text, badge, wide, art, index = 0 }: TileProps) {
   const tilt = useTilt<HTMLAnchorElement>();
-  const artId = art === null ? null : (art ?? (ARTS.includes(icon) ? (icon as ArtId) : null));
+  const artId = art ? art : null; // ilustrações automáticas desligadas na reformulação
+  // Reformulação: cartão claro com a cor só no ícone e numa faixa fina, sem gradiente.
   const style: CSSProperties = {
-    background: `linear-gradient(160deg, ${tint(color, 18)}, ${tint(color, 5)}), rgb(var(--surface))`,
-    borderColor: tint(color, 26),
+    background: 'rgb(var(--surface))',
+    borderColor: 'rgb(var(--line))',
+    boxShadow: `inset 0 3px 0 ${color}, var(--shadow-card)`,
   };
   return (
     <div className={`anim-tile-in ${wide ? 'col-span-2' : ''}`} style={{ animationDelay: `${Math.min(index, 12) * 50}ms` }}>
@@ -143,7 +145,7 @@ export function Tile({ to, icon, color, title, text, badge, wide, art, index = 0
             {badge}
           </span>
         )}
-        <span className={`relative text-[0.95rem] font-bold leading-tight ${badge ? '' : 'mt-auto'}`} style={{ color: `color-mix(in srgb, ${color} 55%, rgb(var(--ink)))` }}>
+        <span className={`relative text-[0.95rem] font-bold leading-tight ${badge ? '' : 'mt-auto'}`} style={{ color: 'rgb(var(--ink))' }}>
           {title}
         </span>
         <span className="relative line-clamp-2 text-xs leading-snug text-ink/70">{text}</span>

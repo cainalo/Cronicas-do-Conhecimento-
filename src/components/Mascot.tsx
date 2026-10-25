@@ -2,10 +2,12 @@
 // SVG próprio e animado (respira, pisca, acena, fala). Nome e papel provisórios até a
 // rodada de narrativa com o usuário (ver docs/OPEN_QUESTIONS.md).
 import type { ReactNode } from 'react';
+import { Icon, type IconName } from '@/components/Icon';
 
 export type MascotMood = 'idle' | 'talk' | 'cheer' | 'sad' | 'think';
 
-export function Mascot({ mood = 'idle', size = 96, className = '' }: { mood?: MascotMood; size?: number; className?: string }) {
+/** Coruja do tema medieval (sem uso desde a reformulação; mantida até a limpeza de arquivos). */
+export function MascotOwl({ mood = 'idle', size = 96, className = '' }: { mood?: MascotMood; size?: number; className?: string }) {
   const cheer = mood === 'cheer';
   const sad = mood === 'sad';
   return (
@@ -74,6 +76,19 @@ export function Mascot({ mood = 'idle', size = 96, className = '' }: { mood?: Ma
   );
 }
 
+const MOOD_ICON: Record<MascotMood, IconName> = { idle: 'pergaminho', talk: 'pergaminho', cheer: 'certo', sad: 'aviso', think: 'aviso' };
+const MOOD_BG: Record<MascotMood, string> = { idle: 'bg-gold', talk: 'bg-gold', cheer: 'bg-ok', sad: 'bg-bad', think: 'bg-leaf' };
+
+/** Guia de estudo (reformulação): ícone em círculo colorido, sem personagem. Mesma API do mascote antigo. */
+export function Mascot({ mood = 'idle', size = 96, className = '' }: { mood?: MascotMood; size?: number; className?: string }) {
+  const d = Math.max(36, Math.round(size * 0.5));
+  return (
+    <span className={`grid shrink-0 place-items-center rounded-2xl text-white ${MOOD_BG[mood]} ${className}`} style={{ width: d, height: d }} aria-hidden="true">
+      <Icon name={MOOD_ICON[mood]} size={Math.round(d * 0.5)} strokeWidth={2.2} />
+    </span>
+  );
+}
+
 /** Balão de fala do mascote. */
 export function SpeechBubble({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
@@ -86,9 +101,9 @@ export function SpeechBubble({ children, className = '' }: { children: ReactNode
 /** Mascote com fala, para o topo das páginas e para os momentos de resultado. */
 export function MascotSays({ children, mood = 'talk', size = 84 }: { children: ReactNode; mood?: MascotMood; size?: number }) {
   return (
-    <div className="flex items-end gap-2">
+    <div className="flex items-start gap-2">
       <Mascot mood={mood} size={size} />
-      <SpeechBubble className="mb-6 flex-1 anim-toast-in">{children}</SpeechBubble>
+      <SpeechBubble className="flex-1 anim-toast-in">{children}</SpeechBubble>
     </div>
   );
 }

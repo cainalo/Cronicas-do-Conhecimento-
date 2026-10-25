@@ -27,6 +27,7 @@ import { BlitzPage } from '@/pages/Blitz';
 import { DiaryPage } from '@/pages/Diary';
 import { StudiesPage } from '@/pages/Studies';
 import { NotFoundPage } from '@/pages/NotFound';
+import { TrailPage } from '@/pages/Trail';
 
 export function AppRoutes() {
   return (
@@ -35,6 +36,9 @@ export function AppRoutes() {
         <Route index element={<Dashboard />} />
         <Route path="biblioteca" element={<LibraryPage />} />
         <Route path="estudos" element={<StudiesPage />} />
+        <Route path="trilha" element={<TrailPage />} />
+        <Route path="explorar" element={<StudiesPage />} />
+        <Route path="revisar" element={<TrainingPage />} />
         <Route path="grimorio/:id" element={<GrimoirePage />} />
         <Route path="capitulo/:id" element={<BookPage />} />
         <Route path="aprender/:chapterId/:sectionId" element={<LearnPage />} />

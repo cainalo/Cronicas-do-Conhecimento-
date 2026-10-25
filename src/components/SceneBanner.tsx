@@ -122,16 +122,12 @@ export function SceneArt({ scene, dark }: { scene: Scene; dark: boolean }) {
   );
 }
 
-export function SceneBanner({ scene, children, mood = 'talk', dark = false }: { scene: Scene; children: ReactNode; mood?: MascotMood; dark?: boolean }) {
+/** Aviso no topo da página (reformulação): texto com ícone, sem cenário ilustrado. */
+export function SceneBanner({ children, mood = 'talk' }: { scene: Scene; children: ReactNode; mood?: MascotMood; dark?: boolean }) {
   return (
-    <div className="relative mb-5 h-[9.5rem] overflow-hidden rounded-[2rem] border border-line shadow-[var(--shadow-card)]">
-      <SceneArt scene={scene} dark={dark} />
-      <div className="absolute inset-x-0 bottom-0 flex items-end gap-1 p-3">
-        <Mascot mood={mood} size={74} />
-        <div className="anim-toast-in mb-10 max-w-[10.5rem] rounded-2xl rounded-bl-sm bg-surface/95 px-3 py-2 text-[13px] font-semibold leading-snug text-ink shadow-md backdrop-blur">
-          {children}
-        </div>
-      </div>
+    <div className="card mb-5 flex items-center gap-3 p-3.5" role="note">
+      <Mascot mood={mood} size={80} />
+      <p className="text-sm font-medium leading-snug">{children}</p>
     </div>
   );
 }

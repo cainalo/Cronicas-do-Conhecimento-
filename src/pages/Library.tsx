@@ -35,7 +35,7 @@ export function LibraryPage() {
   };
   return (
     <div className="space-y-6">
-      <PageHeader area="grimorios" crumb={false} title="Grimórios" subtitle={`${written.length} livros escritos para o ${contest.name}`}>
+      <PageHeader area="explorar" title="Biblioteca" subtitle={`${written.length} livros escritos para o ${contest.name}`}>
         <Link to="/estudos" className="btn-ghost mt-3 w-full text-sm">
           Estudos: trilha, atividades rápidas, vídeos e materiais
         </Link>

@@ -57,7 +57,7 @@ export function StudiesPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader area="grimorios" title="Estudos" subtitle="Todos os jeitos de estudar, num lugar só" icon="pergaminho" />
+      <PageHeader area="explorar" crumb={false} title="Explorar" subtitle="Biblioteca, atividades livres, vídeos e materiais. Nada aqui muda o ponto da trilha." />
 
       <section aria-label="Continuar a trilha" className="card p-4">
         <p className="text-sm font-semibold text-gold">{next.resuming ? 'Você parou aqui' : 'Próximo passo da trilha'}</p>
@@ -74,11 +74,11 @@ export function StudiesPage() {
         </SectionTitle>
         <TileGrid>
           <Tile wide to="/biblioteca" icon="grimorio" color={color} title="Biblioteca" text="Os grimórios de cada disciplina, para ler na ordem que quiser." />
-          <Tile to="/relampago" icon="chama" color={dark ? '#ef7a5a' : '#9a5b20'} title="Rodada relâmpago" text="5 questões rápidas." />
+          <Tile to="/relampago" icon="chama" color={dark ? '#f5a868' : '#a85314'} title="Rodada relâmpago" text="5 questões rápidas." />
           <Tile
             to="/flashcards"
             icon="cartas"
-            color={dark ? '#f0c25e' : '#b8860b'}
+            color={dark ? '#c4acf5' : '#704eb6'}
             title="Flashcards"
             text="Repetição espaçada dos glossários."
             badge={due ? `${due} hoje` : undefined}
@@ -87,7 +87,7 @@ export function StudiesPage() {
             wide
             to="/revisao"
             icon="ampulheta"
-            color={dark ? '#a5b86a' : '#5b6b2e'}
+            color={dark ? '#70ce98' : '#1e704a'}
             title="Revisão de erros"
             text="As questões que você errou voltam até acertar."
             badge={wrong ? `${wrong} a revisar` : undefined}
