@@ -119,6 +119,23 @@ Pacote: `Cronicas_Reformulacao_Pacote_Tecnico` (specs lidos: README, 00, 03, 04,
 
 **Limitações**: ainda não há agenda semanal por disciplina, modelo de domínio por conceito, `StudyPlanSnapshot` versionado nem agendador único (os flashcards seguem o SM-2 simplificado existente).
 
+## Fase 5, parte 1 — armazenamento local sem perda e espelho em IndexedDB (25/10/2026)
+
+**Decisão registrada**: em 17/10 o usuário decidiu "app nativo Android, não PWA". Por isso não foi reintroduzido service worker. O offline real vem do APK: o Capacitor empacota todo o conteúdo, e o progresso fica no aparelho. No navegador, o app funciona sem rede depois de aberto, mas não reabre sem rede. Reintroduzir PWA depende de nova decisão do usuário (OPEN_QUESTIONS).
+
+**Feito**
+- `src/lib/storage.ts`: `loadData` não descarta mais em silêncio. Com versão desconhecida ou JSON ilegível, guarda o texto original em `cronicas:backup:<dono>` (com motivo e data) e não sobrescreve a chave original. `clearData` (usado ao migrar visitante para conta) guarda a cópia antes de remover.
+- `src/lib/localdb.ts`: espelho estruturado no IndexedDB (`cronicas` / `snapshots`, uma linha por dono), sem dependência nova em produção.
+  - O `StudyProvider` grava cada mudança no espelho com atraso de 400 ms.
+  - Ao abrir, se a cópia principal estiver vazia ou ilegível e o espelho tiver progresso, recupera dele.
+  - Contas ficam isoladas por dono.
+- Sincronização (já existente e conferida): tentativas com UUID e upsert `ignoreDuplicates` no Supabase; pontos com chave única; pendências preservadas em falha de rede. A fusão local é idempotente (teste).
+- Testes: `src/test/localdb.test.ts` (backup, limpeza com cópia, espelho que sobrevive a reabrir, isolamento entre contas, fusão idempotente). Para isso entrou `fake-indexeddb` como dependência de desenvolvimento.
+
+**Comandos e resultados**: typecheck ok; `npm test` **823/823** (19 arquivos); build ok.
+
+**Limitações**: o outbox continua sendo `StudyData.pending`, sem `changeId` por evento; não há `SQLite` (avaliar com o plugin do Capacitor só se o IndexedDB do WebView se mostrar insuficiente); a sincronização não foi testada contra o Supabase real neste contêiner.
+
 ## Próxima ação exata
 
 Fase 4, parte 2 (specs 13 e 14):

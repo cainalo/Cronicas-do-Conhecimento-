@@ -1,5 +1,7 @@
 # Perguntas pendentes
 
+- **Site offline (25/10/2026):** em 17/10 o usuário decidiu "app nativo, não PWA", e o service worker foi removido. O pacote técnico pede que o site também funcione offline. Hoje o offline completo está no APK; o site precisa de rede para abrir. Perguntar se deve voltar um service worker só para o site, sem o aviso de "instalar".
+
 ## Bloqueio técnico (aguardando o usuário)
 - **PDFs do kit (23/10/2026):** conhecimento.fgv.br, eticaconcursos.com.br e portal.tce.go.gov.br dão 403 no proxy. Para questões oficiais, anexar: prova TCE-GO 2014 FCC TI + gabarito; prova objetiva TCE-GO 2024 TI Tipo 1 + gabarito definitivo; discursiva 2024; edital 2024 retificado.
 - ~~Edital oficial~~ resolvido: o usuário enviou o PDF consolidado (17/10/2026).

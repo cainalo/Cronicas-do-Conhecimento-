@@ -4,14 +4,42 @@ import { emptyData, emptyPending, type StudyData } from './model';
 export const GUEST = 'visitante';
 const key = (owner: string) => `cronicas:v1:${owner}`;
 
-export function loadData(owner: string): StudyData {
+const backupKey = (owner: string) => `cronicas:backup:${owner}`;
+
+/**
+ * Cópia de segurança antes de qualquer descarte (reformulação, Fase 5; ADR-009): nada some em
+ * silêncio. Guarda o texto original, o motivo e a data; a última cópia de cada dono fica disponível.
+ */
+export function backupRaw(owner: string, raw: string, reason: string) {
   try {
-    const raw = localStorage.getItem(key(owner));
+    localStorage.setItem(backupKey(owner), JSON.stringify({ at: new Date().toISOString(), reason, raw }));
+  } catch {
+    /* sem espaço: não há o que fazer além de não apagar o original */
+  }
+}
+
+export function readBackup(owner: string): { at: string; reason: string; raw: string } | null {
+  try {
+    return JSON.parse(localStorage.getItem(backupKey(owner)) ?? 'null');
+  } catch {
+    return null;
+  }
+}
+
+export function loadData(owner: string): StudyData {
+  let raw: string | null = null;
+  try {
+    raw = localStorage.getItem(key(owner));
     if (!raw) return emptyData();
     const parsed = JSON.parse(raw) as StudyData;
-    if (parsed.version !== 1) return emptyData();
+    if (parsed.version !== 1) {
+      // Versão desconhecida: guarda o original e não o sobrescreve sem cópia.
+      backupRaw(owner, raw, `versão desconhecida: ${String(parsed.version)}`);
+      return emptyData();
+    }
     return { ...emptyData(), ...parsed, pending: { ...emptyPending(), ...parsed.pending } };
   } catch {
+    if (raw) backupRaw(owner, raw, 'dados ilegíveis');
     return emptyData();
   }
 }
@@ -20,12 +48,15 @@ export function saveData(owner: string, data: StudyData) {
   try {
     localStorage.setItem(key(owner), JSON.stringify(data));
   } catch {
-    // Armazenamento indisponível (modo privado, cota): os dados ficam só na memória.
+    // Armazenamento indisponível (modo privado, cota): os dados ficam só na memória e no espelho local.
   }
 }
 
+/** Remove os dados de um dono, guardando antes uma cópia de segurança. */
 export function clearData(owner: string) {
   try {
+    const raw = localStorage.getItem(key(owner));
+    if (raw) backupRaw(owner, raw, 'limpeza após migração');
     localStorage.removeItem(key(owner));
   } catch {
     /* ignora */

@@ -1,7 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
+import { emptyData, emptyPending } from '@/lib/model';
 import { GUEST, clearData, hasData, loadData, saveData } from '@/lib/storage';
+import { getSnapshot, pickRecovery, putSnapshot } from '@/lib/localdb';
 import { pendingCount, type StudyData } from '@/lib/model';
 import { mergeData } from '@/lib/merge';
 import { syncAll } from '@/lib/sync';
@@ -53,7 +55,31 @@ export function StudyProvider({ children }: { children: ReactNode }) {
     }
     setData(next);
     setSyncState(owner === GUEST ? 'local' : 'idle');
+    // Recuperação: se a cópia principal estiver vazia (apagada ou ilegível), usa o espelho do IndexedDB.
+    let alive = true;
+    void getSnapshot(owner).then((snap) => {
+      const rec = pickRecovery(next, snap, hasData);
+      if (!alive || !rec) return;
+      const restored = { ...emptyData(), ...rec, pending: { ...emptyPending(), ...rec.pending } };
+      // Só restaura se nada foi feito desde a abertura (nunca sobrescreve progresso novo).
+      setData((cur) => {
+        if (hasData(cur)) return cur;
+        saveData(owner, restored);
+        return restored;
+      });
+    });
+    return () => {
+      alive = false;
+    };
   }, [owner]);
+
+  // Espelho local estruturado: cada mudança vai também para o IndexedDB (assíncrono, agrupado).
+  // Estado vazio não é gravado: assim uma cópia boa no espelho nunca é apagada por um carregamento falho.
+  useEffect(() => {
+    if (!hasData(data)) return;
+    const t = window.setTimeout(() => void putSnapshot(owner, data), 400);
+    return () => window.clearTimeout(t);
+  }, [owner, data]);
 
   const update = useCallback(
     (f: (d: StudyData) => StudyData) => {
