@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { flashcards, getChapter, getFlashcard } from '@/content';
-import { dueCards, reviewCard, type Grade } from '@/lib/training';
+import { dueCards, reviewCard, unlockedCardIds, type Grade } from '@/lib/training';
 import { PageHeader } from '@/components/Page';
 
 const grades: { g: Grade; label: string; hint: string }[] = [
@@ -21,7 +21,7 @@ function when(days: number) {
 export function FlashcardsPage() {
   const { data, update } = useStudy();
   // A fila da sessão é congelada ao abrir; cartões errados voltam ao fim da fila.
-  const [queue, setQueue] = useState<string[]>(() => dueCards(data, flashcards.map((f) => f.id)));
+  const [queue, setQueue] = useState<string[]>(() => dueCards(data, unlockedCardIds(data, flashcards)));
   const [shown, setShown] = useState(false);
   const [done, setDone] = useState(0);
   const [last, setLast] = useState<string>();

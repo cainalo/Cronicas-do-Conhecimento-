@@ -5,13 +5,14 @@ import { missionDone, missionsDue } from '@/lib/mission';
 import { computePace, courseUnits, daysUntilExam, type Pace } from '@/lib/pace';
 import { reviewQueue } from '@/lib/study';
 import { useCheckpoint } from '@/app/useCheckpoint';
-import { dueCards } from '@/lib/training';
+import { dueCards, unlockedCardIds } from '@/lib/training';
 import { isDone, settingsOf } from '@/lib/planner';
 import { characterSheet } from '@/lib/game';
 import { usePlanOfToday } from '@/app/usePlanOfToday';
 import { areaColor } from '@/app/areas';
 import { DisciplineSummary } from './Progress';
 import { ProgressRing } from '@/components/ProgressRing';
+import { FeasibilityCard } from '@/components/FeasibilityCard';
 import { AppDownload } from '@/components/AppDownload';
 import { Icon } from '@/components/Icon';
 import { SyncBadge } from '@/components/Layout';
@@ -64,7 +65,7 @@ export function Dashboard() {
   const cp = useCheckpoint();
   const sheet = characterSheet(data);
   const queue = reviewQueue(data, bank);
-  const cardsDue = dueCards(data, flashcards.map((f) => f.id)).length;
+  const cardsDue = dueCards(data, unlockedCardIds(data, flashcards)).length;
   const localDay = (iso: string) => new Date(iso).toLocaleDateString('sv');
   const today = localDay(new Date().toISOString());
   const answeredToday = data.attempts.filter((a) => localDay(a.answeredAt) === today).length;
@@ -125,6 +126,8 @@ export function Dashboard() {
       </section>
 
       <PaceCard pace={pace} examDate={contest.examDate} />
+
+      <FeasibilityCard />
 
       {/* Missões do Arquivo Real: a nova, ou a que tem revisão marcada para hoje */}
       {(() => {

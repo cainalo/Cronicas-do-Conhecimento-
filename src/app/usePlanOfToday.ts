@@ -4,6 +4,7 @@ import { DEFAULT_CONTEST_ID, essayPrompts, flashcards, journey, lessons, questio
 import { buildPlan, localDay, settingsOf, type Plan } from '@/lib/planner';
 import { GUEST } from '@/lib/storage';
 import { trailUnits } from '@/app/useCheckpoint';
+import { unlockedCardIds } from '@/lib/training';
 
 /**
  * A ordem do dia é congelada no aparelho na primeira abertura do dia, para que as
@@ -13,8 +14,9 @@ export function usePlanOfToday() {
   const { data, session } = useStudy();
   const owner = session?.user.id ?? GUEST;
   const content = useMemo(
-    () => ({ chapters: journey, lessons, bank: questionsForContest(DEFAULT_CONTEST_ID), cardIds: flashcards.map((f) => f.id), essays: essayPrompts, units: trailUnits() }),
-    [],
+    // Cartões só de capítulos já apresentados (revisão nunca cobra o que não foi ensinado).
+    () => ({ chapters: journey, lessons, bank: questionsForContest(DEFAULT_CONTEST_ID), cardIds: unlockedCardIds(data, flashcards), essays: essayPrompts, units: trailUnits() }),
+    [data],
   );
   // v2: a ordem do dia passou a seguir a trilha única; planos antigos congelados são refeitos.
   const key = `cronicas:plano:v2:${owner}:${localDay(new Date())}`;

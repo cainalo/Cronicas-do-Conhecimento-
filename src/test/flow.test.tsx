@@ -8,6 +8,8 @@ import { getLesson, getQuestion } from '@/content';
 import { loadData, saveData } from '@/lib/storage';
 import { getChapter } from '@/content';
 import { markSectionRead } from '@/lib/study';
+import { getLearningCheckpoint } from '@/lib/checkpoint';
+import { trailUnits } from '@/app/useCheckpoint';
 
 /** A Prática só abre depois do Aprender do trecho (gate da trilha). */
 function readSection(chapterId: string, sectionId: string) {
@@ -125,8 +127,12 @@ it('simulado: monta, responde, entrega e mostra o boletim', async () => {
   expect(exams[0].finishedAt).toBeTruthy();
 });
 
-it('flashcards: revela e avalia um cartão', async () => {
+it('flashcards: só de capítulos já estudados; revela e avalia um cartão', async () => {
   const user = userEvent.setup();
+  const empty = renderAt('/flashcards');
+  expect(screen.queryByRole('button', { name: 'Revelar o verso' })).toBeNull();
+  empty.unmount();
+  readSection('cap.seg.01', 'fundamentos');
   renderAt('/flashcards');
   await user.click(screen.getByRole('button', { name: 'Revelar o verso' }));
   await user.click(screen.getByRole('button', { name: /Bom/ }));
@@ -290,6 +296,10 @@ it('texto interativo (piloto Processos): termo clicável, recuperação com reto
   await user.click(screen.getByRole('button', { name: 'Verificar' }));
   await user.click(screen.getByRole('button', { name: 'Continuar' }));
   const rec = screen.getByRole('generic', { name: 'Recuperação' });
+  // Durante a recuperação, o Continuar indica reforço e aponta para a mesma aula (retorno garantido).
+  const cp = getLearningCheckpoint(loadData('visitante'), trailUnits());
+  expect(cp.to).toBe('/aprender/cap.infra.03/processos');
+  expect(cp.context).toContain('Reforço do assunto: etapa 1 de 15');
   expect(within(rec).getByText(/receita de bolo/)).toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: /1 programa e 3 processos/ }));
   await user.click(screen.getByRole('button', { name: 'Verificar' }));

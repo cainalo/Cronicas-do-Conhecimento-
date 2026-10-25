@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { DEFAULT_CONTEST_ID, chapters, getContest } from '@/content';
-import { isDone, remainingMinutes, setSettings, settingsOf, studyDaysUntil } from '@/lib/planner';
+import { isDone, setSettings, settingsOf, studyDaysUntil } from '@/lib/planner';
 import { usePlanOfToday } from '@/app/usePlanOfToday';
 import { useCheckpoint } from '@/app/useCheckpoint';
 import { latestAttempt } from '@/lib/study';
 import { Icon } from '@/components/Icon';
 import { PageHeader } from '@/components/Page';
 import { MascotSays } from '@/components/Mascot';
+import { FeasibilityCard } from '@/components/FeasibilityCard';
 
 const WEEK = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 const fmtMin = (m: number) => (m >= 60 ? `${Math.floor(m / 60)}h${m % 60 ? String(m % 60).padStart(2, '0') : ''}` : `${m} min`);
@@ -36,8 +37,6 @@ export function PlanPage() {
   const [form, setForm] = useState(s);
   const contest = getContest(DEFAULT_CONTEST_ID)!;
   const days = studyDaysUntil(contest.examDate, s.weekdays);
-  const remaining = remainingMinutes(data, content);
-  const available = days * s.minutesPerDay;
   const done = plan.items.filter((i) => isDone(i, data, plan.day));
   const doneMin = done.reduce((m, i) => m + i.minutes, 0);
 
@@ -111,20 +110,14 @@ export function PlanPage() {
         </section>
       )}
 
+      <FeasibilityCard />
+
       <section>
         <h2 className="text-xl">Até a prova</h2>
         <ul className="ledger mt-2">
           <li className="ledger-row">
             <span>Dias de estudo restantes</span>
             <span>{days}</span>
-          </li>
-          <li className="ledger-row">
-            <span>Tempo disponível</span>
-            <span>{fmtMin(available)}</span>
-          </li>
-          <li className="ledger-row">
-            <span>Tempo para o material já escrito</span>
-            <span>{fmtMin(remaining)}</span>
           </li>
           <li className="ledger-row">
             <span>Seções previstas / lidas</span>

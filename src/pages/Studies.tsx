@@ -8,7 +8,7 @@ import { useCheckpoint } from '@/app/useCheckpoint';
 import { areaColor } from '@/app/areas';
 import { DEFAULT_CONTEST_ID, curatedVideos, externalMaterials, flashcards, getChapter, getContest, questionsForContest } from '@/content';
 import { reviewQueue } from '@/lib/study';
-import { dueCards } from '@/lib/training';
+import { dueCards, unlockedCardIds } from '@/lib/training';
 import { Icon } from '@/components/Icon';
 import { PageHeader, SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
 import { VideoEmbed, youTubeId } from '@/components/VideoEmbed';
@@ -41,10 +41,7 @@ export function StudiesPage() {
   const color = areaColor('grimorios', dark);
   const next = useCheckpoint();
   const wrong = reviewQueue(data, questionsForContest(DEFAULT_CONTEST_ID)).length;
-  const due = dueCards(
-    data,
-    flashcards.map((f) => f.id)
-  ).length;
+  const due = dueCards(data, unlockedCardIds(data, flashcards)).length;
   const officialSources = getContest(DEFAULT_CONTEST_ID)?.sources ?? [];
   const [own, setOwn] = useState<OwnVideo[]>(readOwn);
   const [form, setForm] = useState({ url: '', title: '' });

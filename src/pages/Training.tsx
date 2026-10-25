@@ -1,7 +1,7 @@
 import { useStudy } from '@/app/StudyProvider';
 import { DEFAULT_CONTEST_ID, essayPrompts, flashcards, questionsForContest } from '@/content';
 import { reviewQueue } from '@/lib/study';
-import { activeExam, dueCards } from '@/lib/training';
+import { activeExam, dueCards, unlockedCardIds } from '@/lib/training';
 import { isDone } from '@/lib/planner';
 import { usePlanOfToday } from '@/app/usePlanOfToday';
 import { areaColor } from '@/app/areas';
@@ -14,7 +14,7 @@ export function TrainingPage() {
   const color = areaColor('treino', dark);
   const bank = questionsForContest(DEFAULT_CONTEST_ID);
   const wrong = reviewQueue(data, bank).length;
-  const due = dueCards(data, flashcards.map((f) => f.id)).length;
+  const due = dueCards(data, unlockedCardIds(data, flashcards)).length;
   const exam = activeExam(data);
   const finishedExams = Object.values(data.exams).filter((e) => e.finishedAt).length;
   const essaysDone = essayPrompts.filter((p) => data.essays[p.id]?.submittedAt).length;

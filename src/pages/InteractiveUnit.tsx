@@ -101,7 +101,8 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
   const chapter = getChapter(unit.chapterId)!;
   const n = unit.steps.length;
   const session = useSession<UnitSession>(learnKey(unit.chapterId, unit.sectionId), () => START, (s) =>
-    s.stage === 'etapas' ? `Aula: etapa ${Math.min(s.step + 1, n)} de ${n}` : s.stage === 'pratica' ? 'Aula: prática final' : s.stage === 'prova' ? 'Aula: questão de prova' : 'Aula',
+    // Recuperação obrigatória: o Continuar mostra que é um reforço e volta ao mesmo ponto da etapa.
+    s.stage === 'etapas' && s.recovery ? `Reforço do assunto: etapa ${Math.min(s.step + 1, n)} de ${n}` : s.stage === 'etapas' ? `Aula: etapa ${Math.min(s.step + 1, n)} de ${n}` : s.stage === 'pratica' ? 'Aula: prática final' : s.stage === 'prova' ? 'Aula: questão de prova' : 'Aula',
   );
   const st = useMemo(() => normalizeSession(session.state, unit.steps), [session.state, unit.steps]);
   const set = (patch: Partial<UnitSession>) => session.setState((s) => ({ ...normalizeSession(s, unit.steps), ...patch }));

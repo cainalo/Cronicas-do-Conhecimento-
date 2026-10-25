@@ -198,3 +198,11 @@ export function dueCards(data: StudyData, cardIds: string[], now = new Date().to
   const fresh = cardIds.filter((id) => !data.cards[id]).slice(0, newLimit);
   return [...due, ...fresh];
 }
+
+/**
+ * Revisão só do que já foi apresentado (reformulação, Fase 4): cartões de capítulos com ao menos um
+ * trecho estudado, mais os que a pessoa já começou a revisar (nunca some o que está em andamento).
+ */
+export function unlockedCardIds(data: StudyData, cards: { id: string; chapterId: string }[]): string[] {
+  return cards.filter((c) => data.cards[c.id] || (data.reading[c.chapterId]?.sectionsRead.length ?? 0) > 0).map((c) => c.id);
+}

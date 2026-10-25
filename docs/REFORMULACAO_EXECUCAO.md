@@ -4,7 +4,7 @@ Pacote: `Cronicas_Reformulacao_Pacote_Tecnico` (specs lidos: README, 00, 03, 04,
 
 ## Fase ativa
 
-**Fase 4: trilha, modelo do estudante, revisão e planejamento.** As Fases 0 a 3 foram concluídas (2 e 3 com o piloto Processos).
+**Fase 4 (continuação): modelo do estudante e agenda semanal.** Fases 0 a 3 concluídas. A primeira parte da Fase 4 (viabilidade em minutos, revisão só do que foi apresentado, reforço no checkpoint) também.
 
 ## Fase 0 — baseline (concluída, 25/10/2026)
 
@@ -102,10 +102,28 @@ Pacote: `Cronicas_Reformulacao_Pacote_Tecnico` (specs lidos: README, 00, 03, 04,
 - Não há tipos novos (label_diagram, terminal_simulator, scenario_branch, predict_result).
 - Tentativas ainda não guardam `changeId` nem versão da atividade (Fase 5, com o outbox).
 
+## Fase 4, parte 1 — viabilidade em minutos, revisão gated e reforço no checkpoint (25/10/2026)
+
+**Feito**
+- `src/lib/feasibility.ts` (spec 15 §4–5):
+  - minutos por atividade em faixa (mínimo/típico/máximo); a aula interativa usa a faixa da unidade;
+  - dias de estudo de hoje até a véspera da prova, sem o dia da prova e em data local;
+  - revisão espaçada (15%), erros e cartões pendentes, e folga de 10%;
+  - `PlanFeasibility` com necessário, disponível, déficit, minutos por dia necessários, dias necessários, semana final de revisão reservada **só se couber** e premissas explícitas.
+- `src/components/FeasibilityCard.tsx` em Hoje e no Plano: se não cabe, mostra o déficit em vermelho e as opções reais (mais minutos, mais dias, terminar depois), sem barra verde e sem retirar conteúdo. No Plano saíram as linhas antigas que contradiriam o cartão.
+- Revisão só do que foi apresentado: `unlockedCardIds` (`src/lib/training.ts`) libera cartões apenas de capítulos com algum trecho estudado, mais os já em revisão. Vale em Hoje, Revisar, Explorar, Flashcards e no plano do dia. Antes, 15 cartões de matéria nunca vista apareciam no primeiro dia.
+- Reforço no checkpoint: durante a recuperação da aula interativa, o Continuar mostra "Reforço do assunto: etapa N" e leva de volta ao mesmo ponto.
+- Testes: `src/test/feasibility.test.ts` (6); fluxos de flashcards gated e de reforço no checkpoint.
+
+**Comandos e resultados**: typecheck ok; `npm test` **818/818**; build ok; captura do cartão em 390×844 sem erro.
+
+**Limitações**: ainda não há agenda semanal por disciplina, modelo de domínio por conceito, `StudyPlanSnapshot` versionado nem agendador único (os flashcards seguem o SM-2 simplificado existente).
+
 ## Próxima ação exata
 
-Fase 4 (specs 10, 13, 14, 15):
-1. Ler os specs.
-2. Separar no checkpoint a recuperação obrigatória (com `parentCheckpointId`/`returnStepId`) das atividades livres.
-3. Migrar os flashcards para um agendador de revisão que só recebe conceitos já ensinados.
-4. Fazer o planner em minutos com viabilidade: data final do conteúdo novo e déficit explícito quando a meta não cabe, com testes de cenário.
+Fase 4, parte 2 (specs 13 e 14):
+1. Estimativa de domínio por conceito a partir das tentativas, como heurística explicada.
+2. Plano semanal com minutos por dia: novo, prática e revisão.
+3. Snapshot versionado do plano, que preserva os itens concluídos ao replanejar.
+
+Depois, Fase 5: armazenamento local estruturado (IndexedDB na web) com migração do `localStorage` sem apagar a chave antiga, e outbox idempotente.
