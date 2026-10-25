@@ -36,6 +36,22 @@ interface Saved {
   struggled: string[];
 }
 
+/**
+ * Ponto salvo que não existe mais (a aula mudou de tamanho depois que foi salvo, ou o dado veio
+ * corrompido) não pode derrubar a tela: vai para a fase válida mais próxima, sem perder o avanço.
+ */
+export function clampPhase(p: Phase | undefined, l: Pick<MicroLesson, 'steps' | 'consolidation' | 'exam'>): Phase {
+  const toExam = (): Phase => (l.exam.length ? { k: 'prova', i: 0 } : { k: 'sintese' });
+  const toPractice = (): Phase => (l.consolidation.length ? { k: 'praticar', i: 0 } : toExam());
+  if (!p || typeof p !== 'object') return { k: 'abertura' };
+  if (p.k === 'abertura' || p.k === 'sintese') return p;
+  const i = 'i' in p && Number.isInteger(p.i) && p.i >= 0 ? p.i : -1;
+  if (['explicar', 'checar', 'recuperar', 'rechecar'].includes(p.k)) return i >= 0 && i < l.steps.length ? p : i < 0 ? { k: 'abertura' } : toPractice();
+  if (p.k === 'praticar') return i >= 0 && i < l.consolidation.length ? p : toExam();
+  if (p.k === 'prova') return i >= 0 && i < l.exam.length ? p : { k: 'sintese' };
+  return { k: 'abertura' };
+}
+
 export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; series?: { index: number; total: number; next?: MicroLesson } }) {
   const navigate = useNavigate();
   const { update } = useStudy();
@@ -50,7 +66,8 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
     () => ({ phase: { k: 'abertura' }, first: {}, struggled: [] }),
     (s) => ('i' in s.phase && ['explicar', 'checar', 'recuperar', 'rechecar'].includes(s.phase.k) ? `Aula: etapa ${s.phase.i + 1} de ${n}` : s.phase.k === 'praticar' ? 'Aula: prática final' : s.phase.k === 'prova' ? 'Aula: questão de prova' : 'Aula'),
   );
-  const { phase, first, struggled } = session.state;
+  const phase = clampPhase(session.state.phase, lesson);
+  const { first = {}, struggled = [] } = session.state;
   const set = (p: Phase, extra?: Partial<Saved>) => {
     session.setState((s) => ({ ...s, ...extra, phase: p }));
     window.scrollTo?.({ top: 0 });

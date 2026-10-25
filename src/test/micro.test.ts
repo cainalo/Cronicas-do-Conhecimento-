@@ -2,6 +2,7 @@ import { microLessons, getChapter, getQuestion, microSeries } from '@/content';
 import type { MissionActivity } from '@/lib/activities';
 import type { MicroLesson } from '@/content/types';
 import { diversityProblems, FAMILY } from '@/lib/activities';
+import { clampPhase } from '@/pages/MicroLesson';
 
 describe.each(microLessons)('microaula $id', (m) => {
   it('pertence a um trecho real', () => {
@@ -133,5 +134,18 @@ describe.each(seriesIds)('série %s: ordem didática', (id) => {
 describe.each(microLessons.filter((m) => m.vocab && !m.series))('aula $id: vocabulário controlado', (m) => {
   it('nenhum termo é usado antes da etapa que o ensina', () => {
     expect(vocabProblems([m])).toEqual([]);
+  });
+});
+
+describe('retomada da microaula com ponto salvo inválido', () => {
+  const l = { steps: [{}, {}] as never[], consolidation: [{}] as never[], exam: [{}, {}] as never[] };
+  it('vai para a fase válida mais próxima em vez de quebrar a tela', () => {
+    expect(clampPhase({ k: 'explicar', i: 1 }, l)).toEqual({ k: 'explicar', i: 1 });
+    expect(clampPhase({ k: 'checar', i: 5 }, l)).toEqual({ k: 'praticar', i: 0 });
+    expect(clampPhase({ k: 'praticar', i: 3 }, l)).toEqual({ k: 'prova', i: 0 });
+    expect(clampPhase({ k: 'prova', i: 2 }, l)).toEqual({ k: 'sintese' });
+    expect(clampPhase({ k: 'praticar', i: 3 }, { ...l, exam: [] })).toEqual({ k: 'sintese' });
+    expect(clampPhase(undefined, l)).toEqual({ k: 'abertura' });
+    expect(clampPhase({ k: 'explicar', i: -1 }, l)).toEqual({ k: 'abertura' });
   });
 });
