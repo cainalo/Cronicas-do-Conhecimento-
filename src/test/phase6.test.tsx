@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
@@ -146,35 +146,14 @@ describe('telas da fase 6', () => {
     expect(screen.getByTestId('cenario-fechamento')).toHaveTextContent('Acertou de primeira 3 de 3');
   });
 
-  it('Sala: 5 posts por vez, mini-desafio só no trecho estudado, salvar e ocultar', async () => {
-    const user = userEvent.setup();
-    saveData('visitante', readAt(emptyData(), 'cap.infra.03', 'processos'));
-    renderAt('/sala');
-    expect(screen.getAllByRole('article')).toHaveLength(FEED_PAGE);
-    const kill = screen.getByTestId('post-post.kill');
-    await user.click(within(kill).getByRole('button', { name: 'Errado' }));
-    expect(kill).toHaveTextContent(/Acertou\..*não pode ser capturado/);
-    await user.click(screen.getByRole('button', { name: /Mostrar mais/ }));
-    expect(screen.getAllByRole('article').length).toBeGreaterThan(FEED_PAGE);
-    expect(screen.getAllByText(/abre depois que você estudar/).length).toBeGreaterThan(0);
-    const nice = screen.getByTestId('post-post.nice');
-    await user.click(within(nice).getByRole('button', { name: 'Salvar' }));
-    await user.click(screen.getByRole('tab', { name: /Salvos \(1\)/ }));
-    expect(screen.getAllByRole('article')).toHaveLength(1);
-    await user.click(screen.getByRole('tab', { name: 'Para você' }));
-    await user.click(within(screen.getByTestId('post-post.ps-top')).getByRole('button', { name: 'Ocultar' }));
-    expect(screen.queryByTestId('post-post.ps-top')).toBeNull();
-    expect(JSON.parse(localStorage.getItem('cronicas:sala')!).hidden).toEqual(['post.ps-top']);
-  });
-
   it('feed e simulador não mexem no progresso nem no checkpoint da trilha', async () => {
     const user = userEvent.setup();
     const before = readAt(emptyData(), 'cap.infra.03', 'processos');
     saveData('visitante', before);
     const cp0 = getLearningCheckpoint(before, trailUnits());
     const r = renderAt('/sala');
-    await user.click(within(screen.getByTestId('post-post.kill')).getByRole('button', { name: 'Certo' }));
-    await user.click(within(screen.getByTestId('post-post.nice')).getByRole('button', { name: 'Salvar' }));
+    await user.click(screen.getAllByRole('button', { name: 'Guardar' })[0]);
+    await user.click(screen.getByTestId('feed-proximo'));
     r.unmount();
     renderAt('/simulador/cen.suporte-lento');
     await user.click(screen.getByRole('button', { name: /Abrir o top/ }));

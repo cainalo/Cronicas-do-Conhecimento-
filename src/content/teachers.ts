@@ -32,6 +32,14 @@ export interface TeacherPost {
 
 export const teachers: FictionalTeacher[] = [
   {
+    id: 'prof.clara',
+    name: 'Professora Clara',
+    expertiseLabel: 'Matemática e raciocínio lógico',
+    biography: 'Personagem fictícia. Começa sempre por um exemplo de dinheiro, fila ou pizza antes da regra.',
+    tone: 'ember',
+    fictional: true,
+  },
+  {
     id: 'prof.lia',
     name: 'Professora Lia',
     expertiseLabel: 'Sistemas operacionais e linha de comando',
@@ -278,3 +286,9 @@ export const teacherPosts: TeacherPost[] = [
     estimatedMinutes: 1,
   }),
 ];
+
+/** Quem assina os posts de cada capítulo no feed didático. */
+export function teacherForChapter(chapterId: string): FictionalTeacher {
+  const id = chapterId.startsWith('cap.mat') ? 'prof.clara' : chapterId === 'cap.infra.01' ? 'prof.davi' : chapterId.startsWith('cap.seg') || chapterId === 'cap.infra.02' ? 'prof.iara' : 'prof.lia';
+  return teachers.find((t) => t.id === id)!;
+}

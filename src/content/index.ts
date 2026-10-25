@@ -180,7 +180,7 @@ import { cenarioSuporteLento } from './scenarios/suporte-lento';
 import type { Scenario } from '@/lib/scenario';
 export const scenarios: Scenario[] = [cenarioSuporteLento];
 export const getScenario = (id: string) => scenarios.find((s) => s.id === id);
-export { teachers, teacherPosts } from './teachers';
+export { teachers, teacherPosts, teacherForChapter } from './teachers';
 export type { FictionalTeacher, TeacherPost } from './teachers';
 
 // Aulas visuais narradas (pacote v4, etapa 3): alternativa à aula em texto, com voz e cenas.
@@ -189,3 +189,29 @@ import type { NarratedLesson } from './narrated/types';
 export const narratedLessons: NarratedLesson[] = [narradaSomarInteiros];
 export const getNarrated = (id: string) => narratedLessons.find((n) => n.id === id);
 export const narratedFor = (lessonId: string) => narratedLessons.find((n) => n.lessonId === lessonId);
+
+// Feed didático (pacote v4, etapa 4): as aulas em texto, na ordem da trilha, viram posts.
+import { postsOfLesson, type FeedPost } from '@/lib/feed';
+import { teacherPosts as _tips } from './teachers';
+import { curatedVideos as _videos } from './estudos/materiais';
+/** Aulas do feed, na ordem da trilha (capítulos, trechos e aulas da série). */
+export const feedLessons: MicroLesson[] = journey.flatMap((c) => c.sections.flatMap((s) => microSeries(c.id, s.id)));
+const feedCache = new Map<string, FeedPost[]>();
+export function feedPostsOf(lessonId: string): FeedPost[] {
+  const m = feedLessons.find((x) => x.id === lessonId);
+  if (!m) return [];
+  if (!feedCache.has(lessonId)) {
+    const series = microSeries(m.chapterId, m.sectionId);
+    const last = series[series.length - 1]?.id === m.id;
+    feedCache.set(
+      lessonId,
+      postsOfLesson(m, {
+        videos: _videos.filter((v) => v.lessonId === m.id),
+        narrated: narratedFor(m.id),
+        // Dicas do trecho entram no fim da última aula dele (tudo o que citam já foi ensinado).
+        tips: last ? _tips.filter((t) => t.chapterId === m.chapterId && t.sectionId === m.sectionId) : [],
+      }),
+    );
+  }
+  return feedCache.get(lessonId)!;
+}
