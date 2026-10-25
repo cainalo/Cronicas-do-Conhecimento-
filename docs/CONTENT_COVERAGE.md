@@ -47,3 +47,7 @@ Uma ideia por etapa, checagem imediata, recuperação com outro exemplo, prátic
 Grimório de Infraestrutura inteiro em microaulas: cap.infra.01 (Redes, 41 etapas), cap.infra.02 (Nuvem, 20 etapas) e cap.infra.03 (Sistemas Operacionais, 62 etapas). Total: 10 microaulas, 123 etapas.
 
 | Fundamentos e objetivos da criptografia | cap.seg.01 / fundamentos | 10 | q.seg.01.001, q.seg.01.002 |
+
+## Simulador e Sala dos Professores (25/10/2026)
+- Cenário `cen.suporte-lento` (SO: memória, swap, thrashing, sinais, nice). Fonte: microaula `micro.infra.processos`. Não revisado por humano.
+- 16 posts de professores fictícios. Assuntos: processos, arquivos, shell, diretório, TCP/IP, endereços, serviços, perímetro, nuvem e fundamentos de criptografia. Todos reescrevem fatos das microaulas. Não revisados por humano.

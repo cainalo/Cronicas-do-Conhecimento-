@@ -155,3 +155,11 @@ export const concepts: Concept[] = [...conceitosProcessos];
 export const learningUnits: LearningUnit[] = [unitFromMicro(microInfraProcessos, mapaProcessos, DEFAULT_CONTEST_ID)];
 export const getLearningUnit = (chapterId: string, sectionId: string) => learningUnits.find((u) => u.chapterId === chapterId && u.sectionId === sectionId);
 export type { Concept, LearningUnit, LearningStep, ContentBlock } from './learning';
+
+// Fase 6: simulador de situações profissionais e Sala dos Professores (opcionais, não mexem na trilha).
+import { cenarioSuporteLento } from './scenarios/suporte-lento';
+import type { Scenario } from '@/lib/scenario';
+export const scenarios: Scenario[] = [cenarioSuporteLento];
+export const getScenario = (id: string) => scenarios.find((s) => s.id === id);
+export { teachers, teacherPosts } from './teachers';
+export type { FictionalTeacher, TeacherPost } from './teachers';

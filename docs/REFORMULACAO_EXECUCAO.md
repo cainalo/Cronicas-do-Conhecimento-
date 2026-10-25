@@ -174,8 +174,30 @@ O identificador de mudança já existe e se chama `id`. Cada tentativa e cada si
 - Nenhuma migração foi necessária; o banco remoto não foi tocado.
 - Service worker do site: segue pendente em OPEN_QUESTIONS, porque a decisão de 17/10 foi "app nativo, não PWA". O espelho em IndexedDB já protege os dados no navegador.
 
+## Fase 6: simulador 2D e Sala dos Professores
+
+Simulador (spec 21):
+- Motor em `src/lib/scenario.ts`. O cenário é um grafo finito declarado no conteúdo, sem código dinâmico. `validateScenario` acusa destino inexistente, nó inalcançável, nó sem decisão nem fechamento e beco sem saída (todo nó alcançável precisa chegar a um fechamento).
+- A escolha ruim mostra a consequência e volta à mesma etapa; não existe tela de fracasso.
+- O fechamento mostra o princípio técnico, os acertos de primeira e os conceitos a revisar.
+- Cenário "Primeiro dia no suporte: o servidor lento" (`content/scenarios/suporte-lento.ts`): top, vmstat, thrashing, kill/SIGTERM × kill -9, nice. Ele só aplica o que a aula de Processos ensina. Fica bloqueado até o trecho `cap.infra.03/processos` ser estudado, e o teste exige que cada decisão só cobre conceitos pré-requisitos.
+- O estado fica no aparelho (`cronicas:cenario:<id>`) e só é retomado na mesma versão. Não mexe no checkpoint da trilha e não é sincronizado.
+
+Sala dos Professores (spec 22):
+- Três professores fictícios, marcados como tal, sem credenciais reais.
+- 16 posts versionados (`content/teachers.ts`), cada um ligado a um trecho e a tópicos do capítulo. O texto foi tirado das microaulas.
+- `buildFeed`: primeiro o assunto atual da trilha, depois o reforço (trecho com última resposta errada), depois o já estudado, por fim as prévias.
+- O mini-desafio só abre no trecho estudado e não vira tentativa.
+- O feed mostra 5 posts por vez com "Mostrar mais", sem rolagem infinita. Salvar e ocultar ficam em `cronicas:sala`.
+
+Telas novas: `/simulador`, `/simulador/:id` e `/sala`, com atalhos em Explorar.
+
+Testes: `src/test/phase6.test.tsx` (8 testes).
+
+Fora desta rodada:
+- aula visual narrada (spec 20), que é opcional;
+- áudio licenciado offline.
+
 ## Próxima ação exata
 
-Depois:
-- Fase 6: Sala dos Professores, simulador 2D e aula visual opcional.
-- Fase 7: auditoria de RLS, release e checklist.
+- Fase 7: auditoria de RLS e Auth (só leitura no banco), checklist de release (spec 36).

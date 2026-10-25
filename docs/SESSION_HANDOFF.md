@@ -1,9 +1,18 @@
 # Handoff de sessão
 
-**Última atualização:** 2026-10-23
+**Última atualização:** 2026-10-25
 **Fase:** reformulação "Arquivo Real" (kit em `docs/kit/`, auditoria em `docs/AUDITORIA_REFORMULACAO.md`): fases 0 a 5 do kit feitas para o piloto; expansão pendente.
 
 ## Situação atual
+- **Reformulação do pacote técnico (25/10/2026), registro completo em `docs/REFORMULACAO_EXECUCAO.md`:** fases 0 a 6 feitas.
+  - **Navegação:** 5 áreas (Hoje, Trilha, Explorar, Revisar, Progresso).
+  - **Unidade interativa:** o piloto é Processos.
+  - **Plano:** viabilidade em minutos e plano dos próximos 7 dias.
+  - **Domínio:** estimado por trecho, com os motivos.
+  - **Dados no aparelho:** espelho em IndexedDB e cópia de segurança antes de qualquer descarte.
+  - **Personalização:** painel em `/personalizar` (8 paletas, 21 cores por tema, estilos).
+  - **Simulador 2D:** em `/simulador` (`lib/scenario.ts`, cenário `content/scenarios/suporte-lento.ts`).
+  - **Sala dos Professores:** em `/sala` (`content/teachers.ts`, `lib/teachers.ts`).
 - **Auditoria de 24/10/2026** (pacote em `docs/auditoria/`, baseline em `docs/BASELINE_2026-10-24.md`). Feitas as fases 0, 1, 2 e 4:
   - **Fase 1:** fonte única da trilha (`lib/checkpoint.ts`, `app/useCheckpoint.ts`): Torre, cabeçalho e botão do menu levam ao mesmo passo. Retomada exata (`StudyData.progress`, `app/useSession.ts`) em Aprender, Prática, Desafio, Missão e Microaula.
   - **Fase 2:** microaula-piloto `cap.infra.03/processos` (`content/micro/infra-processos.ts`, `pages/MicroLesson.tsx`) com 15 etapas, cada uma com explicação, exemplo, checagem imediata e recuperação. **Aguarda aprovação do usuário antes de migrar outras seções.**
@@ -25,7 +34,8 @@
 - Fases D e E completas; Supabase com RLS verificado; login/sync pelo navegador ainda **não confirmados pelo usuário**.
 
 ## Testes
-`npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
+25/10: `npm test` 840/840; tsc OK; build OK; /simulador, /sala e /explorar sem estouro nem rolagem interna em 360×640 e 1280×800.
+Antes: `npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escuro) e 1280×800 sem overflow nem erros.
 
 ## Pendências com o usuário
 - Pedir retorno sobre a clareza da explicação simples (o usuário disse que não entendia nada) e sobre o livro de couro; e sobre login/sincronização.
@@ -35,6 +45,8 @@
 - **PDFs das provas** (rede bloqueia FGV/eticaconcursos/TCE): prova TCE-GO 2014 FCC TI + gabarito; prova 2024 TI Tipo 1 + gabarito definitivo, para questões OFICIAIS rotuladas.
 
 ## Próxima tarefa exata
+- Fase 7 do pacote técnico: auditoria de RLS e fluxos de Auth (só leitura no banco), checklist de release (spec 36) com evidência real e riscos declarados.
+- Depois: mais cenários no simulador (Redes, Banco de Dados) e mais posts; aula visual narrada opcional (spec 20); microaulas de cap.seg.01 (simetrica, assimetrica, hash, assinatura, hibrida); remover as telas medievais restantes (Reino, Diário, Personagem).
 0000. Fase 3 em andamento: grimório de Infraestrutura inteiro em microaulas (cap.infra.01, .02, .03; `src/content/micro/infra-*.ts`, 10 aulas, 123 etapas). Segurança iniciada: `seg-fundamentos` (cap.seg.01/fundamentos, 10 etapas). Próximo: cap.seg.01 simetrica, assimetrica, hash, assinatura, hibrida; depois cap.seg.02 e Dados. Varredura sem rolagem: `scratchpad/pw/runall.sh <tela>` (usa mscroll4.cjs). Regras novas: sem listas aninhadas nas explicações (teste), correção do 'ordenar' em blocos por item.
 000. Microaula de Processos **aprovada** pelo usuário (24/10). Ela agora não tem rolagem vertical (SwipePages; `ActivityView fit`; `StepGuide compact`). Próximo: fase 3 da auditoria, migrar as demais seções para microaulas, começando pelas outras seções de SO, já no formato sem rolagem. Avaliar levar o mesmo formato à Prática, ao Aprender simples e à Missão.
 00. Rodada de 24/10 (tarde) feita: ordem do dia segue a trilha única (itens `trail`, chave do plano `cronicas:plano:v2`), página `/estudos` (Continuar, biblioteca, relâmpago, flashcards, revisão, videoaulas sob demanda, materiais oficiais), página "não encontrada" dentro do app, Conta sem servidor em modo local, volumes separados de música e lareira, recuperação adaptativa na Prática (`recoveryFor`/`nextQueue`). Videoaulas curadas: lista vazia de propósito até conferência humana.

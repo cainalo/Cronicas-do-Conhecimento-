@@ -109,6 +109,8 @@ const paths = {
   ),
   estrela: <path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" />,
   grafico: <path d="M4 20V10M10 20V4M16 20v-7M21 20H3" />,
+  tela: <path d="M3 5h18v11H3zM9 20h6M12 16v4" />,
+  balao: <path d="M4 5h16v11H10l-4 4v-4H4z" />,
 } as const;
 
 export type IconName = keyof typeof paths;
