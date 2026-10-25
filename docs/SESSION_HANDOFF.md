@@ -52,11 +52,11 @@ Antes: `npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escur
 1. **Com o usuário:**
    - Validar no Galaxy A14 5G o modo imersivo (checklist em `docs/V4_EXECUCAO.md`) e o reinício com a conta real.
    - Ouvir o retorno sobre o visual editorial e sobre os sons.
-2. **Telas que ainda usam peças antigas:**
+2. **Telas que ainda usam peças antigas (Biblioteca, disciplina, cartões e 404 já foram refeitos):**
    - Ainda usam `SceneBanner` / `Mascot`: Training, Library, Book, Review, Exam, Practice, Lesson, Blitz, Plan, NotFound, Trail e Learn.
    - Trocar essas peças por notas editoriais e ilustrações em traço.
    - Revisar o `PaceCard` (texto longo).
-3. **Conteúdo:** microaulas de cap.seg.01 (simétrica, assimétrica, hash, assinatura, híbrida) e mais aulas de Matemática.
+3. **Conteúdo:** cap.seg.01 (Criptografia) está completo em microaulas desde 25/10. Próximo: cap.seg.02 (Defesa: princípios, acesso, OWASP, ameaças, continuidade, ISO) e mais aulas de Matemática.
 4. **Vídeos:** os 3 vídeos "a conferir" precisam de conferência humana (YouTube bloqueado nesta rede).
 - Fase 7 do pacote técnico: auditoria de RLS e fluxos de Auth (só leitura no banco), checklist de release (spec 36) com evidência real e riscos declarados.
 - Depois: mais cenários no simulador (Redes, Banco de Dados) e mais posts; aula visual narrada opcional (spec 20); microaulas de cap.seg.01 (simetrica, assimetrica, hash, assinatura, hibrida); remover as telas medievais restantes (Reino, Diário, Personagem).

@@ -51,6 +51,9 @@ Grimório de Infraestrutura inteiro em microaulas: cap.infra.01 (Redes, 41 etapa
 | Criptografia assimétrica | cap.seg.01 / assimetrica | 9 | q.seg.01.007, q.seg.01.008, q.seg.01.009, q.seg.01.010 |
 | Funções hash, MAC e senhas | cap.seg.01 / hash | 8 | q.seg.01.011, q.seg.01.012, q.seg.01.013, q.seg.01.014 |
 | Assinatura digital e certificados | cap.seg.01 / assinatura | 8 | q.seg.01.015, q.seg.01.016, q.seg.01.017, q.seg.01.018 |
+| Criptografia híbrida e TLS | cap.seg.01 / hibrida | 6 | q.seg.01.019, q.seg.01.020 |
+
+Capítulo de Criptografia (cap.seg.01) inteiro em microaulas: 6 aulas, 51 etapas, 20 questões autorais na prova das aulas. Revisão editorial humana pendente.
 
 ## Simulador e Sala dos Professores (25/10/2026)
 - Cenário `cen.suporte-lento` (SO: memória, swap, thrashing, sinais, nice). Fonte: microaula `micro.infra.processos`. Não revisado por humano.
