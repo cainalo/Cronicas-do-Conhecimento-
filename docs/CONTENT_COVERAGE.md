@@ -60,6 +60,9 @@ Capítulo de Criptografia (cap.seg.01) inteiro em microaulas: 6 aulas, 51 etapas
 | OWASP Top 10:2025 e DevSecOps | cap.seg.02 / owasp | 9 | q.seg.02.008 a q.seg.02.012 |
 | Ameaças, detecção e testes | cap.seg.02 / ameacas | 8 | q.seg.02.013 a q.seg.02.016 |
 | Backup e continuidade | cap.seg.02 / continuidade | 6 | q.seg.02.017, q.seg.02.018 |
+| Família ISO/IEC 27000 | cap.seg.02 / iso | 6 | q.seg.02.019, q.seg.02.020 |
+
+Grimório de Segurança inteiro em microaulas: cap.seg.01 (Criptografia, 6 aulas, 51 etapas) e cap.seg.02 (Defesa, 6 aulas, 45 etapas). Revisão editorial humana pendente.
 
 ## Simulador e Sala dos Professores (25/10/2026)
 - Cenário `cen.suporte-lento` (SO: memória, swap, thrashing, sinais, nice). Fonte: microaula `micro.infra.processos`. Não revisado por humano.
