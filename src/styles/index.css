@@ -445,3 +445,7 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 .person .torso { animation: breathe 3.2s ease-in-out infinite; }
 .person.walking .leg-a { animation: leg-step 0.3s ease-in-out infinite; }
 .person.walking .leg-b { animation: leg-step 0.3s ease-in-out 0.15s infinite; }
+@keyframes arm-swing { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(1.8px); } }
+.person.walking .arm-a { animation: arm-swing 0.3s ease-in-out 0.15s infinite; }
+.person.walking .arm-b { animation: arm-swing 0.3s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .person .torso, .person.walking .leg-a, .person.walking .leg-b, .person.walking .arm-a, .person.walking .arm-b { animation: none; } }

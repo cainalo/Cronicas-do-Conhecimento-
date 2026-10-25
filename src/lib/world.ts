@@ -23,6 +23,8 @@ export interface WorldActor {
 export interface WorldObject {
   id: string;
   label: string;
+  /** O que se vê ao examinar, quando o objeto não traz evidência do cenário (ambiente do escritório). */
+  info?: string;
   /** Casas ocupadas pelo objeto (não se anda sobre elas). */
   tiles: Tile[];
   /** Evidências do cenário que o objeto mostra. */
@@ -42,12 +44,30 @@ export interface WorldRoom {
   label?: Tile;
 }
 
+/** Móvel ou enfeite desenhado no mapa, ocupando um retângulo de casas. */
+export interface Decor {
+  kind:
+    | 'balcao' | 'sofa' | 'planta' | 'bebedouro' | 'tapete' | 'rack' | 'console' | 'arcond' | 'nobreak'
+    | 'mesa' | 'mesaGrande' | 'cadeira' | 'quadro' | 'tv' | 'impressora' | 'armario' | 'geladeira'
+    | 'bancada' | 'mesaCafe' | 'janela';
+  x: number;
+  y: number;
+  w?: number;
+  h?: number;
+  /** Bloqueia a passagem (padrão: sim; tapete, cadeira e janela não bloqueiam). */
+  solid?: boolean;
+  /** Variação de desenho (cor, orientação). */
+  v?: number;
+}
+
 export interface World {
   id: string;
   version: number;
   title: string;
   /** Grade: '#' parede, '.' piso; outros caracteres são móveis (não se anda sobre eles). */
   grid: string[];
+  /** Móveis e enfeites (os sólidos bloqueiam as casas que ocupam). */
+  decor?: Decor[];
   rooms: WorldRoom[];
   start: Tile;
   actors: WorldActor[];
@@ -65,7 +85,7 @@ export interface WorldState {
   worldId: string;
   version: number;
   pos: Tile;
-  facing: 'esquerda' | 'direita';
+  facing: Facing;
   /** Objetos já examinados. */
   examined: string[];
   scenario: ScenarioState;
@@ -74,12 +94,36 @@ export interface WorldState {
   updatedAt: string;
 }
 
+export type Facing = 'esquerda' | 'direita' | 'cima' | 'baixo';
+
+/** Para onde olha quem anda de `from` para `to` (mantém a direção se não andou). */
+export function facingOf(from: Tile, to: Tile, cur: Facing): Facing {
+  if (to.x < from.x) return 'esquerda';
+  if (to.x > from.x) return 'direita';
+  if (to.y < from.y) return 'cima';
+  if (to.y > from.y) return 'baixo';
+  return cur;
+}
+
 export const same = (a: Tile, b: Tile) => a.x === b.x && a.y === b.y;
+
+/** Casas de um móvel. */
+export const decorTiles = (d: Decor): Tile[] => {
+  const out: Tile[] = [];
+  for (let y = d.y; y < d.y + (d.h ?? 1); y++) for (let x = d.x; x < d.x + (d.w ?? 1); x++) out.push({ x, y });
+  return out;
+};
+const SOFT = new Set(['tapete', 'cadeira', 'janela']);
+export const isSolid = (d: Decor) => d.solid ?? !SOFT.has(d.kind);
 const key = (t: Tile) => `${t.x},${t.y}`;
 
 /** Casas ocupadas por pessoas e objetos. */
 export function occupied(w: World): Set<string> {
-  return new Set([...w.actors.map((a) => key(a.at)), ...w.objects.flatMap((o) => o.tiles.map(key))]);
+  return new Set([
+    ...w.actors.map((a) => key(a.at)),
+    ...w.objects.flatMap((o) => o.tiles.map(key)),
+    ...(w.decor ?? []).filter(isSolid).flatMap((d) => decorTiles(d).map(key)),
+  ]);
 }
 
 export function walkable(w: World, t: Tile, occ = occupied(w)): boolean {
@@ -192,7 +236,9 @@ export function validateWorld(w: World, s: Scenario): string[] {
   for (const n of s.nodes) if (!w.nodeActor[n.id]) errs.push(`nó ${n.id} sem personagem`);
   for (const id of Object.values(w.nodeActor)) if (!w.actors.some((a) => a.id === id)) errs.push(`personagem ${id} não existe`);
   const evs = new Set(s.evidence.map((e) => e.id));
+  for (const d of w.decor ?? []) for (const t of decorTiles(d)) if (w.grid[t.y]?.[t.x] !== '.') errs.push(`${d.kind} em ${t.x},${t.y} fora do piso`);
   for (const o of w.objects) {
+    if (!o.evidenceIds.length && !o.info) errs.push(`${o.id}: sem evidência nem descrição`);
     for (const e of o.evidenceIds) if (!evs.has(e)) errs.push(`${o.id}: evidência ${e} não existe`);
     if (!pathNextTo(w, w.start, o.tiles)) errs.push(`${o.id} inalcançável`);
   }
