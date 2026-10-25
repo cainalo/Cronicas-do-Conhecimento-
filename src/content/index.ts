@@ -35,6 +35,7 @@ import { microSegPrincipios } from './micro/seg-principios';
 import { microSegAcesso } from './micro/seg-acesso';
 import { microSegOwasp } from './micro/seg-owasp';
 import { microSegAmeacas } from './micro/seg-ameacas';
+import { microSegContinuidade } from './micro/seg-continuidade';
 import { estudosDeCaso } from './discursivas/tce-go-2026';
 import { capDevApis, capDevIdentidade, grimorioDev, licoesDev } from './grimoires/dev';
 import { questoesDev } from './grimoires/dev/questions';
@@ -154,7 +155,7 @@ export const microLessons: MicroLesson[] = [
   matSomarFracoes,
   matMultiplicarFracoes,
   matRacionaisRestante,
-  microInfraProcessos, microInfraArquivos, microInfraShell, microInfraDiretorio, microInfraTcpip, microInfraEnderecos, microInfraServicos, microInfraPerimetro, microInfraNuvemModelos, microInfraNuvemEscala, microSegFundamentos, microSegSimetrica, microSegAssimetrica, microSegHash, microSegAssinatura, microSegHibrida, microSegPrincipios, microSegAcesso, microSegOwasp, microSegAmeacas];
+  microInfraProcessos, microInfraArquivos, microInfraShell, microInfraDiretorio, microInfraTcpip, microInfraEnderecos, microInfraServicos, microInfraPerimetro, microInfraNuvemModelos, microInfraNuvemEscala, microSegFundamentos, microSegSimetrica, microSegAssimetrica, microSegHash, microSegAssinatura, microSegHibrida, microSegPrincipios, microSegAcesso, microSegOwasp, microSegAmeacas, microSegContinuidade];
 export const getMicroLesson = (chapterId: string, sectionId: string) => microSeries(chapterId, sectionId)[0];
 /** Títulos das aulas em série de um trecho (para montar a trilha). */
 export const seriesOf = (chapterId: string, sectionId: string) => microSeries(chapterId, sectionId).map((m) => ({ id: m.id, title: m.title }));
