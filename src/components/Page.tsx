@@ -141,9 +141,10 @@ export function Tile({ to, icon, color, title, text, badge, wide, illustration, 
         <Illustration
           name={art}
           accent={dark ? '#ffffff' : 'rgb(27 26 23)'}
-          className={`tile-art tile-on pointer-events-none absolute right-2 opacity-95 ${wide ? 'top-6 h-28 w-36 sm:top-4' : 'top-8 h-20 w-24'}`}
+          // Ilustração no fluxo do cartão (não sobreposta): o título nunca passa por cima do desenho.
+          className={`tile-art tile-on pointer-events-none -mr-1 mt-1 self-end opacity-95 ${wide ? 'h-20 w-28' : 'h-16 w-20'}`}
         />
-        <span className={`relative mt-auto font-title text-[1.32rem] font-semibold leading-[1.05] tracking-[-0.02em] ${wide ? 'max-w-[58%]' : ''}`}>{title}</span>
+        <span className="relative mt-auto break-words pt-2 font-title text-[1.25rem] font-semibold leading-[1.05] tracking-[-0.02em] [hyphens:auto]">{title}</span>
         <span className="tile-sub relative mt-1.5 line-clamp-2 text-[0.8rem] leading-snug opacity-85">{text}</span>
         {badge && (
           <span className="relative mt-2 rounded-[3px] px-1.5 py-0.5 text-[11px] font-semibold" style={{ background: fg, color }}>
