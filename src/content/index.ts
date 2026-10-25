@@ -151,6 +151,9 @@ import { primBits, primTamanhos } from './micro/prim-computador-b';
 import { primHwHistoria, primHwPecas, primHwTipos } from './micro/prim-hardware';
 import { primSoHistoria, primSoGerente, primSoArquivos } from './micro/prim-sistema';
 import { primProgHistoria, primProgVariavel, primProgDecisao } from './micro/prim-programacao';
+import { primRedeHistoria, primRedeEndereco, primRedeServidor } from './micro/prim-redes';
+import { primDadosHistoria, primDadosSgbd, primDadosTabelas } from './micro/prim-dados';
+import { primSegHistoria, primSegPilares, primSegDefesas } from './micro/prim-seguranca';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -165,6 +168,15 @@ export const microLessons: MicroLesson[] = [
   primProgHistoria,
   primProgVariavel,
   primProgDecisao,
+  primRedeHistoria,
+  primRedeEndereco,
+  primRedeServidor,
+  primDadosHistoria,
+  primDadosSgbd,
+  primDadosTabelas,
+  primSegHistoria,
+  primSegPilares,
+  primSegDefesas,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,

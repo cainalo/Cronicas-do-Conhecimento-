@@ -1,5 +1,14 @@
 Um Tribunal de Contas vive de informação: contratos, pagamentos, fornecedores, processos. Essa informação precisa ficar organizada para ser achada e conferida. É para isso que existem os **bancos de dados**.
 
+### Como os bancos de dados surgiram
+
+- **Antes do computador: fichas e arquivos.** Por séculos, cartórios, bibliotecas e repartições guardaram a informação em livros de registro, fichas e pastas em arquivos de aço. Achar um dado era procurar à mão.
+- **1890: cartões perfurados no censo.** Nos Estados Unidos, o censo de 1890 foi apurado com as máquinas de **Herman Hollerith**, que liam cartões perfurados com os dados de cada pessoa. A empresa dele deu origem, mais tarde, à **IBM**.
+- **Anos 1960: os primeiros sistemas de banco de dados.** Com os computadores nas empresas, surgiram programas para guardar e procurar dados, como o **IDS**, de **Charles Bachman**, na General Electric.
+- **1970: o modelo relacional.** **Edgar F. Codd**, pesquisador da IBM, publicou a ideia de guardar os dados em **tabelas** ligadas entre si: o **modelo relacional**, o mais usado até hoje.
+- **1974 a 1979: nasce o SQL.** Na IBM, **Donald Chamberlin** e **Raymond Boyce** criaram uma linguagem para consultar essas tabelas, que viria a se chamar **SQL**. Em 1979, a empresa que depois se chamaria **Oracle** lançou um dos primeiros bancos relacionais comerciais com SQL.
+- **Anos 1990: bancos para todos.** Surgiram o **MySQL** (1995) e o **PostgreSQL** (com esse nome desde 1996), gratuitos e de código aberto.
+
 ### Dado e informação
 
 Um **dado** é um registro solto: "1500", "Maria", "10/03/2026". A **informação** surge quando o dado ganha sentido: "Maria recebeu R$ 1.500 em 10/03/2026".

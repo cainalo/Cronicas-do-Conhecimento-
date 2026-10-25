@@ -1,5 +1,13 @@
 Proteger a informação é uma das tarefas mais sérias da TI em um órgão público. Um vazamento expõe pessoas. Um dado alterado pode esconder uma fraude. Um sistema fora do ar paralisa o atendimento.
 
+### Como a segurança da informação surgiu
+
+- **Antiguidade: mensagens em código.** O historiador romano Suetônio conta que **Júlio César** escrevia mensagens trocando cada letra pela que vem **três posições adiante** no alfabeto: o A virava D, o B virava E. Quem pegasse a carta sem saber a regra não entendia nada. É a **cifra de César**.
+- **Segunda Guerra Mundial: a Enigma.** O exército alemão cifrava mensagens com a máquina **Enigma**. Matemáticos poloneses fizeram os primeiros avanços para decifrá-la e, na Inglaterra, em Bletchley Park, a equipe de **Alan Turing** construiu máquinas que ajudaram a ler essas mensagens.
+- **1961: a senha no computador.** No MIT, o sistema **CTSS**, que permitia várias pessoas usarem o mesmo computador, passou a pedir uma **senha** para cada usuário, para que um não mexesse nos arquivos do outro.
+- **1988: o primeiro grande ataque na internet.** O **verme de Morris**, um programa que se copiava sozinho de máquina em máquina, deixou lentos ou parados milhares de computadores ligados à internet. O caso mostrou que a rede precisava de proteção.
+- **Anos 1990: nasce o phishing.** Com o e-mail e a internet comercial, criminosos passaram a mandar mensagens falsas pedindo senhas. O nome **phishing** vem do inglês "fishing", pescar.
+
 ### Os três pilares: C, I e D
 
 A segurança da informação se apoia em três ideias, que formam a sigla **CID**.

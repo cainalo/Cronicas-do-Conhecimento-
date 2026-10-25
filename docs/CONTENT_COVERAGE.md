@@ -84,6 +84,15 @@ Grimório de Segurança inteiro em microaulas: cap.seg.01 (Criptografia, 6 aulas
 - **Trecho 4, programação:** série `prim.programacao` (3 aulas, 14 etapas).
   - **Aulas:** "Da receita à linguagem de programação" (al-Khwarizmi, Ada Lovelace, linguagem de máquina, a mariposa de 1947, Grace Hopper e o A-0, FORTRAN, Python, Java e JavaScript), "Algoritmo e variável" e "Condição e repetição" (se/senão, para cada, enquanto, laço infinito).
   - **Questões e fonte:** prova com q.prim.01.007 e 008. O texto 04-programacao.md ganhou "Como a programação surgiu".
-- **Revisão:** as três séries novas ainda sem revisão humana.
+- **cap.prim.02, trecho redes:** série `prim.redes` (3 aulas, 14 etapas).
+  - **Aulas:** "Da ARPANET à internet" (ARPANET e o "LO" de 1969, TCP/IP de Cerf e Kahn, DNS de Mockapetris, a Web de Tim Berners-Lee, internet comercial no Brasil em 1995, nuvem em 2006), "Endereço, roteador e pacote" e "Cliente, servidor, DNS e nuvem".
+  - **Questões e fonte:** prova com q.prim.02.001 a 003. O texto 01-redes-internet.md ganhou "Como a internet surgiu".
+- **cap.prim.02, trecho dados:** série `prim.dados` (3 aulas, 13 etapas).
+  - **Aulas:** "Das fichas de papel ao banco relacional" (fichas e arquivos de aço, Hollerith e o censo de 1890, IDS de Bachman, modelo relacional de Codd em 1970, SQL na IBM, Oracle em 1979, MySQL e PostgreSQL), "Dado, informação e o SGBD" e "Tabelas, linhas, colunas e chaves".
+  - **Questões e fonte:** prova com q.prim.02.004 e 005. O texto 02-dados-bancos.md ganhou "Como os bancos de dados surgiram".
+- **cap.prim.02, trecho seguranca:** série `prim.seguranca` (3 aulas, 13 etapas).
+  - **Aulas:** "Da cifra de César ao golpe por e-mail" (cifra de César, Enigma e Bletchley Park, senha no CTSS em 1961, verme de Morris em 1988, phishing nos anos 1990), "Os três pilares: C, I e D" e "Senha, dois fatores, backup e phishing".
+  - **Questões e fonte:** prova com q.prim.02.006 a 008. O texto 03-seguranca.md ganhou "Como a segurança da informação surgiu".
+- **Revisão:** as séries novas de cap.prim.01 e cap.prim.02 ainda sem revisão humana.
 - **Aulas narradas novas:** "Do ábaco ao celular", com o novo tipo de cena linha do tempo, e "As quatro tarefas do computador".
 - **Sequência única:** a aula narrada e as videoaulas conferidas entram na própria aula, numa fase "Veja de outro jeito" antes da prática. As bibliotecas de aulas narradas e de vídeos mostram "Na trilha" com o link para a aula.
