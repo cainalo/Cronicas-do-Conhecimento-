@@ -1,5 +1,15 @@
 Todo computador tem duas partes que trabalham juntas. Uma você pode tocar. A outra você só vê funcionando.
 
+### Como hardware e software se separaram
+
+Nos primeiros computadores eletrônicos, não havia essa separação tão clara.
+
+- **ENIAC, 1946**: para fazer o ENIAC resolver outro problema, era preciso **mudar cabos e chaves à mão**. Trocar de tarefa podia levar dias. As instruções estavam, literalmente, nas conexões da máquina.
+- **1945, programa armazenado**: um relatório de **John von Neumann** sobre o projeto EDVAC descreveu a ideia de guardar as **instruções na memória**, junto com os dados. Assim, trocar de tarefa passa a ser trocar o programa, sem mexer nos fios. Nasce a separação entre a **máquina** (hardware) e as **instruções** (software).
+- **Cada vez mais lugar para guardar**: os dados passaram de **cartões perfurados** a **fitas magnéticas**; em **1956**, a IBM lançou o **RAMAC**, primeiro computador com **disco rígido**, que guardava cerca de 5 milhões de caracteres num móvel do tamanho de duas geladeiras. Depois vieram o **disquete** (a partir de 1971), o **CD**, o **pendrive** (por volta de 2000) e o **SSD**, sem partes móveis.
+
+Hoje, um único SSD do tamanho de um chiclete guarda milhares de vezes mais que o RAMAC.
+
 ### Hardware: a parte física
 
 **Hardware** é tudo o que é físico: a placa, o processador, os cabos, a tela, o teclado. Se cai no chão e quebra, é hardware.

@@ -148,11 +148,15 @@ import { matOrdemOperacoes, matPotencias, matFracaoIdeia } from './micro/mat-int
 import { matSomarFracoes, matMultiplicarFracoes, matRacionaisRestante } from './micro/mat-inteiros-c';
 import { primHistoria, primQuatroTarefas } from './micro/prim-computador-a';
 import { primBits, primTamanhos } from './micro/prim-computador-b';
+import { primHwHistoria, primHwPecas, primHwTipos } from './micro/prim-hardware';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
   primBits,
   primTamanhos,
+  primHwHistoria,
+  primHwPecas,
+  primHwTipos,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,

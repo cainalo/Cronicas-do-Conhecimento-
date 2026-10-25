@@ -86,17 +86,17 @@ it('livro: vira páginas, marca o trecho como lido e busca no sumário', async (
 
 it('aprender: livro simples do trecho, palavras novas e convite para praticar', async () => {
   const user = userEvent.setup();
-  // O trecho 1 virou série de microaulas (25/10/2026); o livro simples segue nos trechos sem série.
-  renderAt('/aprender/cap.prim.01/hardware');
-  expect(screen.getAllByText(/Trecho 2/).length).toBeGreaterThan(0);
-  for (let i = 0; i < 12 && !screen.queryByTestId('praticar-hardware'); i++) {
+  // Primeiros Passos virou séries de microaulas (25/10/2026); o livro simples segue nos trechos sem série.
+  renderAt('/aprender/cap.dev.01/rest');
+  expect(screen.getAllByText(/Trecho 1/).length).toBeGreaterThan(0);
+  for (let i = 0; i < 12 && !screen.queryByTestId('praticar-rest'); i++) {
     await user.click(screen.getByRole('button', { name: 'Próxima página' }));
     if (i === 0) expect(screen.getByText(/^1 de \d$/)).toBeInTheDocument();
-    expect(screen.getByRole("region", { name: "Onde você está" })).toHaveTextContent("Trecho 2 de");
+    expect(screen.getByRole("region", { name: "Onde você está" })).toHaveTextContent("Trecho 1 de");
   }
   expect(screen.getByText('Trecho aprendido!')).toBeInTheDocument();
-  expect(loadData('visitante').reading['cap.prim.01'].sectionsRead).toEqual(['hardware']);
-  expect(screen.getByRole('link', { name: /texto completo/ })).toHaveAttribute('href', '/capitulo/cap.prim.01#hardware');
+  expect(loadData('visitante').reading['cap.dev.01'].sectionsRead).toEqual(['rest']);
+  expect(screen.getByRole('link', { name: /texto completo/ })).toHaveAttribute('href', '/capitulo/cap.dev.01#rest');
 });
 
 it('prática: abre a rodada do trecho e mostra a primeira atividade', async () => {
@@ -191,7 +191,7 @@ it('um só destino: Torre, cabeçalho e menu levam ao mesmo passo', () => {
 
 it('retomada exata: Aprender e Missão voltam ao mesmo ponto depois de sair', async () => {
   const user = userEvent.setup();
-  const first = renderAt('/aprender/cap.prim.01/hardware');
+  const first = renderAt('/aprender/cap.dev.01/rest');
   for (let i = 0; i < 3; i++) await user.click(screen.getByRole('button', { name: 'Próxima página' }));
   expect(screen.getByText(/^4\/\d+$/)).toBeInTheDocument();
   first.unmount();
@@ -200,7 +200,7 @@ it('retomada exata: Aprender e Missão voltam ao mesmo ponto depois de sair', as
   expect(screen.getByTestId('continuar-torre')).toHaveTextContent('Continuar');
   expect(screen.getByText(/Aprender: página 4/)).toBeInTheDocument();
   home.unmount();
-  const again = renderAt('/aprender/cap.prim.01/hardware');
+  const again = renderAt('/aprender/cap.dev.01/rest');
   expect(screen.getByText(/^4\/\d+$/)).toBeInTheDocument();
   again.unmount();
 
