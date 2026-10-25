@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
-import { AREAS, areaColor, areaOf, isAreaHome, tint, type AreaKey } from '@/app/areas';
+import { AREAS, areaOf, isAreaHome, type AreaKey } from '@/app/areas';
 import { useCheckpoint } from '@/app/useCheckpoint';
 import { levelInfo, totalXp } from '@/lib/study';
 import { achievements, cluesRevealed } from '@/lib/game';
@@ -8,7 +8,7 @@ import { DEFAULT_CONTEST_ID, chapters, questionsForContest, totalUnits } from '@
 import { useCelebrations, useRegionCelebration } from '@/app/fx';
 import { useRegions } from '@/pages/Realm';
 import { Icon } from '@/components/Icon';
-import { useIsDark } from '@/components/Page';
+import { Logo } from '@/components/Logo';
 import { useState } from 'react';
 import { Prologue, prologueSeen } from '@/components/Prologue';
 import { clues } from '@/content/game/story';
@@ -36,20 +36,17 @@ export function SyncBadge() {
 
 function Tab({ area, variant }: { area: AreaKey; variant: 'bottom' | 'top' }) {
   const { pathname } = useLocation();
-  const dark = useIsDark();
   const a = AREAS[area];
-  const color = areaColor(area, dark);
   const active = areaOf(pathname) === area;
   if (variant === 'top') {
     return (
       <Link
         to={a.to}
         aria-current={active ? 'page' : undefined}
-        className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm transition ${active ? 'font-bold' : 'font-medium text-muted hover:bg-raised hover:text-ink'}`}
-        style={active ? { color, backgroundColor: tint(color) } : undefined}
+        className={`relative flex h-14 items-center px-3 text-[0.92rem] transition-colors ${active ? 'font-semibold text-ink' : 'text-muted hover:text-ink'}`}
       >
-        <Icon name={a.icon} size={18} strokeWidth={active ? 2.2 : 1.8} />
         {a.label}
+        {active && <span className="nav-mark bottom-0" aria-hidden="true" />}
       </Link>
     );
   }
@@ -57,13 +54,11 @@ function Tab({ area, variant }: { area: AreaKey; variant: 'bottom' | 'top' }) {
     <Link
       to={a.to}
       aria-current={active ? 'page' : undefined}
-      className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[11px] font-medium text-muted transition"
-      style={active ? { color } : undefined}
+      className={`relative flex flex-1 flex-col items-center justify-center gap-1 pb-2 pt-2.5 text-[11px] transition-colors ${active ? 'font-semibold text-ink' : 'text-muted'}`}
     >
-      <span className="grid h-8 w-14 place-items-center rounded-full transition" style={active ? { backgroundColor: tint(color) } : undefined}>
-        <Icon name={a.icon} size={22} strokeWidth={active ? 2.2 : 1.8} />
-      </span>
-      <span className={active ? 'font-bold' : ''}>{a.label}</span>
+      {active && <span className="nav-mark top-0" aria-hidden="true" />}
+      <Icon name={a.icon} size={22} strokeWidth={active ? 1.8 : 1.5} />
+      <span>{a.label}</span>
     </Link>
   );
 }
@@ -79,7 +74,7 @@ function ContinueButton({ variant }: { variant: 'compact' | 'pill' }) {
       aria-label={`${next.action}: ${next.title}`}
       data-testid={variant === 'pill' ? 'continuar-topo' : 'continuar-menu'}
     >
-      <Icon name="play" size={16} fill="currentColor" /> {next.action}
+      {next.action} <Icon name="avancar" size={16} />
     </Link>
   );
 }
@@ -88,7 +83,6 @@ export function Layout() {
   const { data } = useStudy();
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const dark = useIsDark();
   const xp = totalXp(data);
   const lv = levelInfo(xp);
   useCelebrations(xp, lv.level, achievements(data, chapters, questionsForContest(DEFAULT_CONTEST_ID)), cluesRevealed(Object.keys(data.lessons).length, totalUnits, clues.length), clues.length);
@@ -97,7 +91,6 @@ export function Layout() {
   const inner = !isAreaHome(pathname);
   // Leitura e prática ocupam a tela toda, como as lições do Duolingo (sem a barra inferior).
   const immersive = /^\/(capitulo|aprender|pratica|licao|missao)\//.test(pathname);
-  const accountColor = areaColor('conta', dark);
   const onAccount = areaOf(pathname) === 'conta';
   // Prólogo na primeira visita (fora dos testes automatizados).
   // Reformulação: o prólogo medieval não abre mais sozinho (o componente fica, sem uso, até a limpeza).
@@ -106,28 +99,28 @@ export function Layout() {
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="wood-bar wood-bar-top safe-top sticky top-0 z-30">
-        <div className="relative mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 px-3 sm:px-5">
+        <div className="relative mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
           <div className="flex min-w-[2.5rem] items-center gap-1">
             {inner ? (
               <button
                 type="button"
                 onClick={() => (window.history.length > 1 ? navigate(-1) : navigate(AREAS[areaOf(pathname)].to))}
-                className="grid h-10 w-10 place-items-center rounded-full text-ink transition hover:bg-raised"
+                className="-ml-2 grid h-10 w-10 place-items-center rounded-full text-ink transition hover:bg-ink/5"
                 aria-label="Voltar"
               >
-                <Icon name="voltar" size={22} strokeWidth={2} />
+                <Icon name="voltar" size={22} />
               </button>
             ) : (
               <Logo />
             )}
-            <nav aria-label="Navegação principal" className="ml-2 hidden items-center gap-1 lg:flex">
+            <nav aria-label="Navegação principal" className="ml-6 hidden items-center lg:flex">
               {TABS.map((t) => (
                 <Tab key={t} area={t} variant="top" />
               ))}
             </nav>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <span className="hidden sm:inline-flex">
               <SyncBadge />
             </span>
@@ -145,11 +138,10 @@ export function Layout() {
               to="/conta"
               aria-label={`Conta · nível ${lv.level}`}
               title={`Conta · nível ${lv.level} (${lv.into}/${lv.span} XP)`}
-              className="relative grid h-10 w-10 place-items-center rounded-full text-sm font-bold transition hover:opacity-85"
-              style={{ color: accountColor, backgroundColor: tint(accountColor, onAccount ? 22 : 14), boxShadow: onAccount ? `0 0 0 2px ${accountColor}` : undefined }}
+              className={`relative grid h-10 w-10 place-items-center rounded-full border text-ink transition hover:border-ink ${onAccount ? 'border-ink' : 'border-ink/20'}`}
             >
-              <Icon name="pessoa" size={20} strokeWidth={2} />
-              <span className="absolute -bottom-1 -right-1 grid h-5 min-w-[1.25rem] place-items-center rounded-full border-2 border-bg px-1 text-[10px] font-bold text-white" style={{ background: accountColor }}>
+              <Icon name="pessoa" size={19} />
+              <span className="absolute -bottom-1 -right-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ink px-1 text-[10px] font-semibold tabular-nums text-bg">
                 {lv.level}
               </span>
             </Link>
@@ -176,13 +168,3 @@ export function Layout() {
   );
 }
 
-function Logo() {
-  return (
-    <Link to="/" className="flex items-center gap-2" aria-label="Crônicas do Conhecimento, início">
-      <img src={`${import.meta.env.BASE_URL}pwa-192.png`} alt="" className="h-7 w-7 rounded-lg shadow-sm" />
-      <span className="whitespace-nowrap font-logo text-[1.05rem] leading-none text-ink">
-        Crônicas<span className="hidden text-gold sm:inline lg:hidden"> do Conhecimento</span>
-      </span>
-    </Link>
-  );
-}

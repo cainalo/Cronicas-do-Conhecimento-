@@ -20,12 +20,12 @@ export interface Area {
 // (as páginas as usam), mas o rótulo, o destino e a cor seguem o novo design system.
 export const AREAS: Record<AreaKey, Area> = {
   // Cores vindas das variáveis CSS: o painel de personalização troca todas de uma vez.
-  torre: { key: 'torre', label: 'Hoje', to: '/', icon: 'calendario', color: ['rgb(var(--area-hoje))', 'rgb(var(--area-hoje))'], paths: ['/plano'] },
+  torre: { key: 'torre', label: 'Hoje', to: '/', icon: 'hoje', color: ['rgb(var(--area-hoje))', 'rgb(var(--area-hoje))'], paths: ['/plano'] },
   grimorios: {
     key: 'grimorios',
     label: 'Trilha',
     to: '/trilha',
-    icon: 'mapa',
+    icon: 'trilha',
     color: ['rgb(var(--area-trilha))', 'rgb(var(--area-trilha))'],
     paths: ['/trilha', '/aprender', '/pratica', '/licao', '/missao'],
   },
@@ -33,7 +33,7 @@ export const AREAS: Record<AreaKey, Area> = {
     key: 'explorar',
     label: 'Explorar',
     to: '/explorar',
-    icon: 'grimorio',
+    icon: 'livro',
     color: ['rgb(var(--area-explorar))', 'rgb(var(--area-explorar))'],
     paths: ['/explorar', '/estudos', '/biblioteca', '/grimorio', '/capitulo', '/edital', '/simulador', '/sala'],
   },
@@ -41,7 +41,7 @@ export const AREAS: Record<AreaKey, Area> = {
     key: 'treino',
     label: 'Revisar',
     to: '/revisar',
-    icon: 'ampulheta',
+    icon: 'revisar',
     color: ['rgb(var(--area-revisar))', 'rgb(var(--area-revisar))'],
     paths: ['/revisar', '/treino', '/relampago', '/revisao', '/flashcards', '/simulado', '/discursiva', '/historico'],
   },
@@ -49,7 +49,7 @@ export const AREAS: Record<AreaKey, Area> = {
     key: 'reino',
     label: 'Progresso',
     to: '/progresso',
-    icon: 'grafico',
+    icon: 'progresso',
     color: ['rgb(var(--area-progresso))', 'rgb(var(--area-progresso))'],
     paths: ['/progresso', '/reino', '/diario', '/personagem'],
   },

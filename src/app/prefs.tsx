@@ -2,17 +2,21 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 import { loadPrefs, savePrefs, type Prefs } from '@/lib/storage';
 import { applyStatusBar } from '@/app/native';
 import { ambience } from '@/app/ambience';
-import { applyLook, normalizeLook } from '@/lib/theme';
+import { LOOK_VERSION, applyLook, migrateLook, normalizeLook } from '@/lib/theme';
 
 const PrefsCtx = createContext<{ prefs: Prefs; setPrefs: (p: Partial<Prefs>) => void } | null>(null);
 
 export function PrefsProvider({ children }: { children: ReactNode }) {
-  const [prefs, set] = useState<Prefs>(loadPrefs);
+  // Aparência salva antes da identidade editorial: vale a nova, e a antiga fica guardada para voltar.
+  const [prefs, set] = useState<Prefs>(() => {
+    const p = loadPrefs();
+    return p.look && p.look.v !== LOOK_VERSION ? { ...p, look: migrateLook(p.look) } : p;
+  });
   useEffect(() => {
     document.documentElement.dataset.theme = prefs.theme;
-    // Paleta e estilos escolhidos no painel de personalização (o padrão é a paleta Aurora).
+    // Paleta e estilos escolhidos no painel de personalização (o padrão é a paleta Editorial).
     applyLook(normalizeLook(prefs.look), prefs.theme);
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', prefs.theme === 'dark' ? '#171e2c' : '#ffffff');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', prefs.theme === 'dark' ? '#151412' : '#f4f0e8');
     void applyStatusBar(prefs.theme);
     savePrefs(prefs);
   }, [prefs]);

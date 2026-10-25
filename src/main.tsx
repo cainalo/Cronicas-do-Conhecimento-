@@ -4,13 +4,13 @@ import './styles/index.css';
 import './styles/look.css';
 import { setupNative } from './app/native';
 import { loadPrefs } from './lib/storage';
-import { applyLook, normalizeLook } from './lib/theme';
+import { applyLook, migrateLook } from './lib/theme';
 
 // Aplica a aparência escolhida antes da primeira pintura (sem piscar a paleta padrão).
 {
   const p = loadPrefs();
   document.documentElement.dataset.theme = p.theme;
-  applyLook(normalizeLook(p.look), p.theme);
+  applyLook(migrateLook(p.look), p.theme);
 }
 
 // O site deixou de ser PWA: remove service workers e caches de versões anteriores.

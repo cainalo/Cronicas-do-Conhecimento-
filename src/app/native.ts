@@ -13,7 +13,7 @@ export async function applyStatusBar(theme: 'light' | 'dark') {
   try {
     // Style.Light = texto escuro (fundo claro); Style.Dark = texto claro (fundo escuro).
     await StatusBar.setStyle({ style: theme === 'dark' ? Style.Dark : Style.Light });
-    await StatusBar.setBackgroundColor({ color: theme === 'dark' ? '#171e2c' : '#ffffff' });
+    await StatusBar.setBackgroundColor({ color: theme === 'dark' ? '#151412' : '#f4f0e8' });
   } catch {
     /* indisponível em algumas versões do Android */
   }

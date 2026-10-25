@@ -8,6 +8,7 @@ import {
   COLOR_GROUPS,
   COLOR_LABEL,
   DEFAULT_LOOK,
+  LOOK_VERSION,
   PALETTES,
   contrastWarnings,
   exportLook,
@@ -93,12 +94,16 @@ export function CustomizePage() {
           <span className="btn-primary pointer-events-none">Botão principal</span>
           <span className="btn-ghost pointer-events-none">Secundário</span>
         </div>
-        <div className="mt-3 h-3 overflow-hidden rounded-full bg-raised">
-          <div className="progress-shine h-full w-2/3 rounded-full bg-gold" />
-        </div>
-        <p className="mt-2 flex flex-wrap gap-2 text-sm">
-          <span className="rounded-full bg-ok/15 px-2.5 py-1 font-semibold text-ok">✓ Correto</span>
-          <span className="rounded-full bg-bad/15 px-2.5 py-1 font-semibold text-bad">✗ Ainda não</span>
+        <span className="meter mt-4">
+          <span style={{ width: '66%' }} />
+        </span>
+        <p className="mt-3 flex flex-wrap items-center gap-3 text-sm">
+          <span className="inline-flex items-center gap-1 font-semibold text-ok">
+            <Icon name="certo" size={16} strokeWidth={2.2} /> Correto
+          </span>
+          <span className="inline-flex items-center gap-1 font-semibold text-bad">
+            <Icon name="errado" size={16} strokeWidth={2.2} /> Ainda não
+          </span>
           <span className="term-link">termo do glossário</span>
         </p>
       </section>
@@ -125,7 +130,7 @@ export function CustomizePage() {
                 type="button"
                 aria-pressed={on}
                 onClick={() => set({ palette: p.id, colors: { light: {}, dark: {} } })}
-                className={`rounded-2xl border-2 p-3 text-left transition hover:-translate-y-0.5 ${on ? 'border-gold' : 'border-line'}`}
+                className={`rounded-lg border p-3 text-left transition duration-300 hover:-translate-y-0.5 ${on ? 'border-ink ring-1 ring-ink' : 'border-line'}`}
                 style={{ background: c.bg }}
               >
                 <span className="flex gap-1">
@@ -134,7 +139,7 @@ export function CustomizePage() {
                   ))}
                 </span>
                 <span className="mt-2 block text-sm font-bold" style={{ color: c.ink }}>
-                  {p.name} {on && '✓'}
+                  {p.name}
                 </span>
               </button>
             );
@@ -144,7 +149,7 @@ export function CustomizePage() {
 
       <Section title="Cores" hint={`Toque numa cor para trocar. Vale para o tema ${theme === 'dark' ? 'escuro' : 'claro'}; troque o tema acima para ajustar o outro.`}>
         {warnings.length > 0 && (
-          <div className="mt-3 rounded-2xl border border-bad/40 bg-bad/10 p-3 text-sm" role="status">
+          <div className="mt-3 rounded-lg border border-bad/40 bg-bad/10 p-3 text-sm" role="status">
             <p className="font-semibold">Atenção à leitura:</p>
             <ul className="mt-1 list-disc pl-5">
               {warnings.map((w) => (
@@ -158,7 +163,7 @@ export function CustomizePage() {
             <h3 className="text-sm font-semibold text-muted">{g.title}</h3>
             <ul className="mt-2 grid gap-2 sm:grid-cols-2">
               {g.keys.map((k) => (
-                <li key={k} className="flex items-center gap-3 rounded-2xl border border-line px-3 py-2">
+                <li key={k} className="flex items-center gap-3 rounded-lg border border-line px-3 py-2">
                   <input type="color" className="color-input shrink-0" value={colors[k]} onChange={(e) => setColor(k, e.target.value)} aria-label={COLOR_LABEL[k]} />
                   <span className="min-w-0 flex-1 text-sm leading-snug">
                     {COLOR_LABEL[k]}
@@ -177,13 +182,13 @@ export function CustomizePage() {
       </Section>
 
       <Section title="Estilos">
-        <Choice label="Fundo da página" value={look.bg} onChange={(bg) => set({ bg })} options={[['manchas', 'Manchas de cor'], ['degrade', 'Degradê'], ['pontos', 'Pontinhos'], ['listras', 'Listras'], ['liso', 'Liso']]} />
-        <Choice label="Cartões" value={look.cards} onChange={(cards) => set({ cards })} options={[['tingido', 'Coloridos'], ['solido', 'Brancos'], ['contorno', 'Só contorno'], ['vidro', 'Vidro']]} />
-        <Choice label="Cartões de atalho" value={look.tiles} onChange={(tiles) => set({ tiles })} options={[['degrade', 'Degradê vivo'], ['solido', 'Cor sólida'], ['claro', 'Claros']]} />
-        <Choice label="Botões" value={look.buttons} onChange={(buttons) => set({ buttons })} options={[['arredondado', 'Arredondados'], ['pilula', 'Pílula'], ['reto', 'Retos']]} />
-        <Choice label="Sombras" value={look.shadow} onChange={(shadow) => set({ shadow })} options={[['suave', 'Suaves'], ['forte', 'Fortes'], ['nenhuma', 'Sem sombra']]} />
+        <Choice label="Fundo da página" value={look.bg} onChange={(bg) => set({ bg })} options={[['papel', 'Papel (padrão)'], ['liso', 'Liso'], ['pontos', 'Pontilhado'], ['listras', 'Pautado'], ['degrade', 'Degradê leve']]} />
+        <Choice label="Cartões" value={look.cards} onChange={(cards) => set({ cards })} options={[['editorial', 'Fio fino (padrão)'], ['solido', 'Chapados'], ['contorno', 'Contorno forte'], ['vidro', 'Vidro']]} />
+        <Choice label="Cartões de atalho" value={look.tiles} onChange={(tiles) => set({ tiles })} options={[['solido', 'Pôster (padrão)'], ['contorno', 'Contorno'], ['claro', 'Claros'], ['degrade', 'Degradê']]} />
+        <Choice label="Botões" value={look.buttons} onChange={(buttons) => set({ buttons })} options={[['suave', 'Cantos suaves (padrão)'], ['reto', 'Retos'], ['arredondado', 'Arredondados'], ['pilula', 'Pílula']]} />
+        <Choice label="Sombras" value={look.shadow} onChange={(shadow) => set({ shadow })} options={[['nenhuma', 'Sem sombra (padrão)'], ['suave', 'Suaves'], ['forte', 'Fortes']]} />
         <Choice label="Espaçamento" value={look.density} onChange={(density) => set({ density })} options={[['compacto', 'Compacto'], ['normal', 'Normal'], ['amplo', 'Amplo']]} />
-        <Choice label="Fonte" value={look.font} onChange={(font) => set({ font })} options={[['plex', 'Plex (padrão)'], ['sistema', 'Do aparelho'], ['arredondada', 'Arredondada'], ['serifada', 'Serifada'], ['mono', 'Monoespaçada']]} />
+        <Choice label="Fonte" value={look.font} onChange={(font) => set({ font })} options={[['editorial', 'Editorial (padrão)'], ['plex', 'Plex'], ['sistema', 'Do aparelho'], ['arredondada', 'Arredondada'], ['serifada', 'Toda em serifa'], ['mono', 'Monoespaçada']]} />
         <Choice label="Animações" value={look.motion} onChange={(motion) => set({ motion })} options={[['completo', 'Todas'], ['reduzido', 'Poucas'], ['nenhum', 'Nenhuma']]} />
         <Slider label="Arredondamento dos cartões" value={look.radius} min={4} max={32} step={2} unit=" px" onChange={(radius) => set({ radius })} />
         <Slider label="Espaço entre linhas do texto" value={look.leading} min={1.3} max={2} step={0.05} unit="" onChange={(leading) => set({ leading })} />
@@ -225,9 +230,19 @@ export function CustomizePage() {
             {ioMsg}
           </p>
         )}
-        <button type="button" className="btn-ghost mt-3 w-full text-bad" onClick={() => setPrefs({ look: DEFAULT_LOOK })}>
+        <button type="button" className="btn-ghost mt-3 w-full text-bad" onClick={() => setPrefs({ look: { ...DEFAULT_LOOK, previous: look.previous } })}>
           Restaurar a aparência padrão
         </button>
+        {look.previous && (
+          <button
+            type="button"
+            className="btn-ghost mt-2 w-full"
+            onClick={() => setPrefs({ look: { ...normalizeLook(look.previous), v: LOOK_VERSION } })}
+            data-testid="voltar-aparencia-anterior"
+          >
+            Voltar à aparência que eu usava antes
+          </button>
+        )}
       </Section>
     </div>
   );

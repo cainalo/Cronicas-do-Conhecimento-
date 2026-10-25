@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Crônicas do Conhecimento',
   webDir: 'dist',
   android: {
-    backgroundColor: '#f6f8fc',
+    backgroundColor: '#f4f0e8',
   },
 };
 

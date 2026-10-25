@@ -53,13 +53,13 @@ export const COLOR_VAR: Record<ColorKey, string> = {
 };
 
 export const COLOR_LABEL: Record<ColorKey, string> = {
-  primary: 'Cor principal (botões, progresso, links)',
+  primary: 'Cor principal (destaques, links, foco)',
   primaryDeep: 'Principal escura (destaques de texto)',
-  secondary: 'Secundária (conceitos, degradês)',
-  teal: 'Verde-água (termos do glossário)',
-  pink: 'Rosa (cartões alternados)',
-  accent: 'Laranja (atenção, exemplos)',
-  sun: 'Amarelo (manchas do fundo)',
+  secondary: 'Secundária (conceitos)',
+  teal: 'Petróleo (termos do glossário)',
+  pink: 'Framboesa (detalhes)',
+  accent: 'Ocre (atenção, exemplos)',
+  sun: 'Mostarda (marca-texto)',
   ok: 'Acerto',
   bad: 'Erro',
   bg: 'Fundo da página',
@@ -83,10 +83,13 @@ export const COLOR_GROUPS: { title: string; keys: ColorKey[] }[] = [
   { title: 'Cores das áreas (abas e cartões)', keys: ['areaHoje', 'areaTrilha', 'areaExplorar', 'areaRevisar', 'areaProgresso', 'areaConta'] },
 ];
 
+type Neutral = 'bg' | 'surface' | 'raised' | 'line' | 'ink' | 'muted';
+type AreaKey = 'areaHoje' | 'areaTrilha' | 'areaExplorar' | 'areaRevisar' | 'areaProgresso' | 'areaConta';
+
 export interface PaletteSeed {
   id: string;
   name: string;
-  /** Matiz (0–360) dos fundos e textos neutros. */
+  /** Matiz (0–360) dos fundos e textos neutros, quando a paleta não define os seus. */
   hue: number;
   primary: string;
   secondary: string;
@@ -96,9 +99,63 @@ export interface PaletteSeed {
   sun: string;
   ok: string;
   bad: string;
+  /** Neutros próprios (papel e tinta) em vez dos calculados pela matiz. */
+  neutrals?: { light: Record<Neutral, string>; dark: Record<Neutral, string> };
+  /** Cores das áreas, quando diferem das cores de destaque. */
+  areas?: Record<AreaKey, string>;
 }
 
+const PAPEL = {
+  light: { bg: '#f4f0e8', surface: '#fbf9f4', raised: '#ece6da', line: '#d9d1c2', ink: '#1b1a17', muted: '#5f5a50' },
+  dark: { bg: '#151412', surface: '#1e1c19', raised: '#2a2723', line: '#3a3631', ink: '#efeae0', muted: '#aba395' },
+};
+
 export const PALETTES: PaletteSeed[] = [
+  {
+    id: 'editorial',
+    name: 'Editorial',
+    hue: 40,
+    primary: '#c8402a',
+    secondary: '#6e3b5c',
+    teal: '#1f5c7a',
+    pink: '#a8365e',
+    accent: '#9e6a14',
+    sun: '#c4921e',
+    ok: '#346834',
+    bad: '#b02822',
+    neutrals: PAPEL,
+    areas: { areaHoje: '#c8402a', areaTrilha: '#1f5c7a', areaExplorar: '#6e3b5c', areaRevisar: '#9e6a14', areaProgresso: '#346834', areaConta: '#3a3631' },
+  },
+  {
+    id: 'jornal',
+    name: 'Jornal',
+    hue: 40,
+    primary: '#1b1a17',
+    secondary: '#3a3631',
+    teal: '#1b1a17',
+    pink: '#c8402a',
+    accent: '#c8402a',
+    sun: '#c4921e',
+    ok: '#2f5f2f',
+    bad: '#b02822',
+    neutrals: { light: { ...PAPEL.light, bg: '#f7f6f2', surface: '#ffffff' }, dark: PAPEL.dark },
+    areas: { areaHoje: '#c8402a', areaTrilha: '#1b1a17', areaExplorar: '#3a3631', areaRevisar: '#1b1a17', areaProgresso: '#3a3631', areaConta: '#5f5a50' },
+  },
+  {
+    id: 'bauhaus',
+    name: 'Bauhaus',
+    hue: 45,
+    primary: '#d33a1f',
+    secondary: '#1d3f8f',
+    teal: '#1d3f8f',
+    pink: '#d33a1f',
+    accent: '#a87400',
+    sun: '#e3b11a',
+    ok: '#2f6b3a',
+    bad: '#b3261e',
+    neutrals: { light: { ...PAPEL.light, bg: '#f1ede4' }, dark: PAPEL.dark },
+    areas: { areaHoje: '#d33a1f', areaTrilha: '#1d3f8f', areaExplorar: '#1b1a17', areaRevisar: '#a87400', areaProgresso: '#2f6b3a', areaConta: '#3a3631' },
+  },
   { id: 'aurora', name: 'Aurora', hue: 230, primary: '#4258cd', secondary: '#704eb6', teal: '#127672', pink: '#c2357a', accent: '#c4621a', sun: '#d99a10', ok: '#1e704a', bad: '#ac3544' },
   { id: 'oceano', name: 'Oceano', hue: 200, primary: '#0b6fb3', secondary: '#0f8a9c', teal: '#0d7a6a', pink: '#3d5bd9', accent: '#d9652b', sun: '#e0b020', ok: '#17785a', bad: '#b8323f' },
   { id: 'por-do-sol', name: 'Pôr do sol', hue: 20, primary: '#c2410c', secondary: '#be185d', teal: '#0f766e', pink: '#db2777', accent: '#b45309', sun: '#eab308', ok: '#15803d', bad: '#b91c1c' },
@@ -109,16 +166,18 @@ export const PALETTES: PaletteSeed[] = [
   { id: 'arco-iris', name: 'Arco-íris', hue: 45, primary: '#2563eb', secondary: '#9333ea', teal: '#059669', pink: '#e11d48', accent: '#ea580c', sun: '#eab308', ok: '#16a34a', bad: '#dc2626' },
 ];
 
-export type BgStyle = 'manchas' | 'degrade' | 'liso' | 'pontos' | 'listras';
-export type CardStyle = 'tingido' | 'solido' | 'contorno' | 'vidro';
-export type TileStyle = 'degrade' | 'solido' | 'claro';
-export type ButtonShape = 'arredondado' | 'pilula' | 'reto';
+export type BgStyle = 'papel' | 'liso' | 'degrade' | 'pontos' | 'listras';
+export type CardStyle = 'editorial' | 'solido' | 'contorno' | 'vidro';
+export type TileStyle = 'solido' | 'contorno' | 'claro' | 'degrade';
+export type ButtonShape = 'suave' | 'reto' | 'arredondado' | 'pilula';
 export type Motion = 'completo' | 'reduzido' | 'nenhum';
 export type Density = 'compacto' | 'normal' | 'amplo';
-export type FontFamily = 'plex' | 'sistema' | 'arredondada' | 'serifada' | 'mono';
-export type Shadow = 'suave' | 'forte' | 'nenhuma';
+export type FontFamily = 'editorial' | 'plex' | 'sistema' | 'arredondada' | 'serifada' | 'mono';
+export type Shadow = 'nenhuma' | 'suave' | 'forte';
 
 export interface Look {
+  /** Versão da identidade (2 = editorial). Aparências salvas antes dela são guardadas em `previous`. */
+  v?: number;
   palette: string;
   /** Cores trocadas à mão, por tema (hex). */
   colors: { light: Partial<Record<ColorKey, string>>; dark: Partial<Record<ColorKey, string>> };
@@ -134,27 +193,53 @@ export interface Look {
   radius: number;
   /** Altura de linha do texto. */
   leading: number;
+  /** Aparência anterior à identidade editorial, para quem quiser voltar a ela. */
+  previous?: Omit<Look, 'previous'>;
 }
 
+export const LOOK_VERSION = 2;
+
 export const DEFAULT_LOOK: Look = {
-  palette: 'aurora',
+  v: LOOK_VERSION,
+  palette: 'editorial',
   colors: { light: {}, dark: {} },
-  bg: 'manchas',
-  cards: 'tingido',
-  tiles: 'degrade',
-  buttons: 'arredondado',
+  bg: 'papel',
+  cards: 'editorial',
+  tiles: 'solido',
+  buttons: 'suave',
   motion: 'completo',
   density: 'normal',
-  font: 'plex',
-  shadow: 'suave',
-  radius: 18,
-  leading: 1.6,
+  font: 'editorial',
+  shadow: 'nenhuma',
+  radius: 10,
+  leading: 1.65,
+};
+
+// Valores de estilo que deixaram de existir viram o equivalente atual.
+const RENAMED: Partial<Record<keyof Look, Record<string, string>>> = {
+  bg: { manchas: 'papel' },
+  cards: { tingido: 'editorial' },
 };
 
 /** Junta o que foi salvo com o padrão (campos novos ganham valor padrão; nada quebra). */
 export function normalizeLook(l?: Partial<Look> | null): Look {
-  const base = { ...DEFAULT_LOOK, ...(l ?? {}) };
+  const base = { ...DEFAULT_LOOK, ...(l ?? {}) } as Look;
+  for (const [k, map] of Object.entries(RENAMED) as [keyof Look, Record<string, string>][]) {
+    const v = base[k] as unknown as string;
+    if (map[v]) (base as unknown as Record<string, unknown>)[k] = map[v];
+  }
   return { ...base, colors: { light: { ...(l?.colors?.light ?? {}) }, dark: { ...(l?.colors?.dark ?? {}) } } };
+}
+
+/**
+ * Aparência salva antes da identidade editorial: passa a valer a editorial, e a antiga fica guardada
+ * em `previous` (nada é apagado; o painel oferece voltar a ela).
+ */
+export function migrateLook(l?: Partial<Look> | null): Look {
+  if (!l || l.v === LOOK_VERSION) return normalizeLook(l);
+  const { previous: _ignored, ...old } = normalizeLook({ ...l, v: undefined });
+  void _ignored;
+  return { ...DEFAULT_LOOK, previous: old };
 }
 
 // ---------- cores ----------
@@ -227,6 +312,8 @@ export function resolveColors(look: Look, theme: 'light' | 'dark'): Record<Color
     areaProgresso: lift(p.ok),
     areaConta: dark ? hslToHex(p.hue, 12, 68) : hslToHex(p.hue, 14, 38),
   };
+  if (p.neutrals) Object.assign(base, dark ? p.neutrals.dark : p.neutrals.light);
+  if (p.areas) for (const [k, v] of Object.entries(p.areas) as [AreaKey, string][]) base[k] = lift(v);
   return { ...base, ...(dark ? look.colors.dark : look.colors.light) };
 }
 

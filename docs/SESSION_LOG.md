@@ -44,3 +44,8 @@
 - Fase 3 (escala das microaulas) iniciada após a aprovação: microaulas de Arquivos e permissões (15 etapas), Shell e PowerShell (16) e Active Directory/LDAP/virtualização/containers (16), todas autorais e não revisadas, fatos só do texto do capítulo. Lista do chmod achatada para caber em 360×640. 753 testes.
 - Redes (cap.infra.01) em microaulas: TCP/IP (10 etapas), Endereçamento (10), DNS/DHCP/aplicação (12), Perímetro (9). Correção do 'ordenar' passou a ir em blocos por item (cortava em 360×640); teste novo proíbe listas aninhadas nas explicações. 777 testes.
 - Nuvem (cap.infra.02) em microaulas: Modelos (10 etapas) e Escala/disponibilidade/serverless (10). Grimório de Infraestrutura completo no formato aprovado. 787 testes.
+
+## 25/10/2026: fases 6 e 7 e início do redesenho editorial
+- **Fase 6:** simulador 2D e Sala dos Professores.
+- **Fase 7:** auditoria de segurança somente leitura e `docs/RELEASE_CHECKLIST.md`.
+- **Redesenho editorial (parcial):** escolhido pelo usuário via perguntas. Base visual, marca, ícones, ilustrações, shell e cartões prontos; as telas ainda usam a estrutura antiga com o novo estilo. 841 testes, tsc e build OK.

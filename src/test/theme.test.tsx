@@ -77,9 +77,9 @@ describe('painel de personalização', () => {
     await user.click(screen.getByRole('button', { name: 'Vidro' }));
     expect(document.documentElement.dataset.cards).toBe('vidro');
     await user.click(screen.getByRole('button', { name: 'Restaurar a aparência padrão' }));
-    expect(loadPrefs().look?.palette).toBe('aurora');
-    expect(document.documentElement.dataset.cards).toBe('tingido');
+    expect(loadPrefs().look?.palette).toBe('editorial');
+    expect(document.documentElement.dataset.cards).toBe('editorial');
   });
 });
 
-const COLOR_PRIMARY = 'Cor principal (botões, progresso, links)';
+const COLOR_PRIMARY = 'Cor principal (destaques, links, foco)';

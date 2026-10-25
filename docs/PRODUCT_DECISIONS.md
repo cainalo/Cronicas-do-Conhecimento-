@@ -48,3 +48,12 @@
 - Nome: Crônicas do Conhecimento.
 - **25/10/2026 (usuário):** site e app **bem coloridos**, cheios de **cards coloridos**, com **animações e movimento**, **páginas não brancas** e **sem rolagem interna** nos componentes. A página pode rolar normalmente; nenhum quadro ou caixa tem barra de rolagem própria (tabelas e código quebram linha, diálogos ocupam a tela). Isso resolve a questão aberta sobre rolagem: no texto interativo vale a rolagem natural da página.
 
+
+## 25/10/2026: identidade visual editorial (respostas do usuário)
+- **Direção:** editorial. Papel quente (#F4F0E8) e tinta (#1B1A17), sem cara de projeto gerado por IA.
+- **Imagens:** ilustração própria em traço fino, que se desenha ao aparecer, com um detalhe chapado na cor de destaque (`src/components/Illustration.tsx`).
+- **Tipografia:** Fraunces nos títulos e Inter Tight no texto, ambas locais (funcionam offline).
+- **Cor:** colorido mas sem degradê. Atalhos em cartão-pôster de cor chapada; cada área tem sua cor (vermelhão, petróleo, ameixa, ocre, musgo).
+- **Proibido daqui em diante:** degradês decorativos, manchas desfocadas, bolhas, brilho passando, faixa de arco-íris, ícone em placa colorida, rótulos em pílula.
+- **Marca:** "C" em arco com ponto final em vermelhão (`src/components/Logo.tsx`). Novos ícones do app, do site e telas de abertura.
+- **Aparência anterior:** quem tinha uma aparência salva passa à editorial, e a antiga fica guardada (Personalizar → "Voltar à aparência que eu usava antes").
