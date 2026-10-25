@@ -48,7 +48,11 @@ export function VideoEmbed({ url, title, meta }: { url: string; title: string; m
               <Icon name="play" size={26} fill="currentColor" />
             </span>
             <span className="text-sm font-semibold">Carregar o vídeo</span>
-            <span className="text-xs text-muted">Só carrega ao tocar e não começa sozinho.</span>
+            <span className="text-xs text-muted">
+              {typeof navigator !== 'undefined' && navigator.onLine === false
+                ? 'Sem internet agora: o vídeo precisa de conexão. As aulas em texto funcionam sem rede.'
+                : 'Só carrega ao tocar e não começa sozinho.'}
+            </span>
           </span>
         </button>
       ) : null}

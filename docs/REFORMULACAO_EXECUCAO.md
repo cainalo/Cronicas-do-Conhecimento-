@@ -198,6 +198,19 @@ Fora desta rodada:
 - aula visual narrada (spec 20), que é opcional;
 - áudio licenciado offline.
 
+## Fase 7: auditoria e release
+
+Feito:
+- Auditoria de segurança, somente leitura: 10 tabelas com RLS, políticas só para `authenticated` com `auth.uid()`, sem segredo no bundle. Os avisos do Supabase trazem apenas a proteção contra senhas vazadas (ajuste do painel) e um índice nunca usado (informativo).
+- O `version.json` do APK agora traz `sha256` e `signing`.
+- O vídeo avisa quando o aparelho está sem internet.
+- Novo teste comprova que o feed e o simulador não alteram o checkpoint.
+- Checklist completo com evidências, riscos, reversão e changelog: `docs/RELEASE_CHECKLIST.md`.
+
+Pendente:
+- Nova rodada A×B cobrindo as 10 tabelas, com SQL no próprio checklist e transação revertida. O servidor pediu confirmação ao usuário e ela não veio a tempo.
+
 ## Próxima ação exata
 
-- Fase 7: auditoria de RLS e Auth (só leitura no banco), checklist de release (spec 36).
+- Rodar de novo a verificação A×B (com confirmação do usuário) e atualizar o checklist.
+- Mais cenários e posts; microaulas de cap.seg.01; remover as telas medievais restantes.

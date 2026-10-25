@@ -83,8 +83,10 @@ jobs:
           mkdir -p dist/download
           cp "$RUNNER_TEMP/cronicas-do-conhecimento.apk" dist/download/
           SIZE=$(stat -c%s dist/download/cronicas-do-conhecimento.apk)
-          printf '{"versionName":"%s","versionCode":%s,"size":%s,"builtAt":"%s","commit":"%s"}\n' \
-            "$APP_VERSION_NAME" "$APP_VERSION_CODE" "$SIZE" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "${GITHUB_SHA::7}" > dist/download/version.json
+          SHA=$(sha256sum dist/download/cronicas-do-conhecimento.apk | cut -d' ' -f1)
+          SIGNING=$([ -n "${ANDROID_KEYSTORE_PATH:-}" ] && echo release || echo debug)
+          printf '{"versionName":"%s","versionCode":%s,"size":%s,"sha256":"%s","signing":"%s","builtAt":"%s","commit":"%s"}\n' \
+            "$APP_VERSION_NAME" "$APP_VERSION_CODE" "$SIZE" "$SHA" "$SIGNING" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "${GITHUB_SHA::7}" > dist/download/version.json
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

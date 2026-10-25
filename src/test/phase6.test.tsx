@@ -8,7 +8,9 @@ import { DEFAULT_CONTEST_ID, chapters, concepts, questionsForContest, scenarios,
 import { advance, choose, restoreScenario, scenarioReport, startScenario, validateScenario, type Scenario } from '@/lib/scenario';
 import { FEED_PAGE, buildFeed, emptySala } from '@/lib/teachers';
 import { emptyData, type StudyData } from '@/lib/model';
-import { saveData } from '@/lib/storage';
+import { loadData, saveData } from '@/lib/storage';
+import { getLearningCheckpoint } from '@/lib/checkpoint';
+import { trailUnits } from '@/app/useCheckpoint';
 
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
 beforeEach(() => localStorage.clear());
@@ -163,6 +165,26 @@ describe('telas da fase 6', () => {
     await user.click(within(screen.getByTestId('post-post.ps-top')).getByRole('button', { name: 'Ocultar' }));
     expect(screen.queryByTestId('post-post.ps-top')).toBeNull();
     expect(JSON.parse(localStorage.getItem('cronicas:sala')!).hidden).toEqual(['post.ps-top']);
+  });
+
+  it('feed e simulador não mexem no progresso nem no checkpoint da trilha', async () => {
+    const user = userEvent.setup();
+    const before = readAt(emptyData(), 'cap.infra.03', 'processos');
+    saveData('visitante', before);
+    const cp0 = getLearningCheckpoint(before, trailUnits());
+    const r = renderAt('/sala');
+    await user.click(within(screen.getByTestId('post-post.kill')).getByRole('button', { name: 'Certo' }));
+    await user.click(within(screen.getByTestId('post-post.nice')).getByRole('button', { name: 'Salvar' }));
+    r.unmount();
+    renderAt('/simulador/cen.suporte-lento');
+    await user.click(screen.getByRole('button', { name: /Abrir o top/ }));
+    await user.click(screen.getByRole('button', { name: 'Continuar' }));
+    const after = loadData('visitante');
+    expect(after.attempts).toEqual([]);
+    expect(after.reading).toEqual(before.reading);
+    expect(after.progress ?? {}).toEqual({});
+    expect(after.xp).toEqual([]);
+    expect(getLearningCheckpoint(after, trailUnits())).toEqual(cp0);
   });
 });
 
