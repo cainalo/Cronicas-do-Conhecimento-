@@ -103,3 +103,8 @@
 - Testes: `trail-extras.test.ts` (5), 2115 no total; test:e2e com as novas páginas; capturas da trilha conferidas em 390×844.
 - **Fase 2:** a primeira aula de cada trecho (a da história) ganhou uma aula narrada gerada do próprio texto da aula (`lib/narrate.ts`): fala sem marcação, cartões para listas, linha do tempo para os marcos datados e o resumo no fim. Entram na trilha logo depois da aula. Testes em `narrate.test.ts` (inclusive: só frases que estão na aula). 2234 testes.
 
+## 26/10/2026: início das microaulas de Plataforma e Observabilidade
+- Criada a série `devops.iac-containers` para `cap.devops.02/iac-containers`: história de IaC, Docker e Kubernetes; estado declarativo, idempotência e deriva; imagens/Compose/segurança; Pods, Deployments, Services e probes.
+- Criada a série `devops.observabilidade` para `cap.devops.02/observabilidade`: monitoramento e OpenTelemetry; métricas/logs/traces; SLI/SLO/SLA, sinais dourados e orçamento de erro; alertas, correlação e indicadores DORA. A história foi acrescentada também aos textos completos, com ligações a fontes técnicas.
+- Adicionado `src/test/devops-platform.test.ts` para verificar cobertura dos dois trechos, estrutura das etapas, diversidade das consolidações e vínculo das questões existentes.
+- **Estado de validação:** a revisão editorial humana ainda está pendente. O CI deve ser conferido em Actions; não há evidência disponível nesta sessão para declarar os testes, o E2E ou o build do APK aprovados. A conferência visual no Android ainda depende de um teste em aparelho.
