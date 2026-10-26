@@ -1,5 +1,12 @@
 **Engenharia de prompts** é a prática de redigir as instruções dadas ao modelo para obter respostas úteis e previsíveis. Não há mágica: valem as mesmas regras de um bom pedido feito a um colega competente que não conhece o seu projeto.
 
+### Como a engenharia de prompts surgiu
+
+- **2020: exemplos no próprio pedido.** O artigo do GPT-3, *Language Models are Few-Shot Learners*, mostrou que bastava pôr alguns exemplos no prompt para o modelo aprender o padrão.
+- **2022: pensar passo a passo.** Pesquisadores do Google publicaram o estudo sobre **cadeia de pensamento** (*chain-of-thought*): pedir o raciocínio em etapas melhora problemas de várias etapas.
+- **2022: o primeiro alerta de segurança.** O termo **injeção de prompt** (*prompt injection*) ganhou nome em textos do programador **Simon Willison**, comparando o ataque à injeção de SQL.
+- **2023: a lista de riscos.** A OWASP publicou o *Top 10 for LLM Applications*, com a injeção de prompt em primeiro lugar.
+
 ### Partes de um prompt
 
 - **Prompt de sistema**: instruções gerais que definem papel, regras e tom para toda a conversa. Costuma ser fixado pela aplicação.

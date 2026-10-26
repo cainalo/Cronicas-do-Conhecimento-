@@ -1,5 +1,11 @@
 Se o prompt é o pedido, o **contexto** é tudo o que o modelo enxerga ao responder. A **engenharia de contexto** trata de escolher, organizar e manter essas informações dentro da janela de contexto, que é limitada. O edital usa os dois termos lado a lado: "engenharia de contexto e engenharia de prompts aplicadas ao desenvolvimento de software".
 
+### Como a gestão de contexto surgiu
+
+- **2020: janelas pequenas.** O GPT-3 considerava cerca de **2 mil tokens** de uma vez, algumas páginas de texto. Era preciso escolher com muito cuidado o que entrava.
+- **2023: janelas enormes.** Modelos passaram a aceitar **100 mil tokens** ou mais. Surgiu a tentação de colocar tudo, e o estudo ***Lost in the Middle*** mostrou que o meio de contextos longos é pior aproveitado.
+- **Hoje: memória construída pela aplicação.** Agentes de programação usam arquivos de instruções lidos a cada sessão, compactação do histórico e subagentes, porque o modelo, sozinho, não lembra de nada entre chamadas.
+
 ### O que ocupa a janela
 
 Em um assistente de programação, a janela costuma conter:

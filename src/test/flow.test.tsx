@@ -10,6 +10,16 @@ import { getChapter } from '@/content';
 import { markSectionRead } from '@/lib/study';
 import { getLearningCheckpoint } from '@/lib/checkpoint';
 import { trailUnits } from '@/app/useCheckpoint';
+import { journey, microSeries, getLearningUnit } from '@/content';
+
+/** Primeiro trecho de um capítulo ainda sem microaula: só nesses o livro simples aparece. */
+const SIMPLE = (() => {
+  for (const ch of [...journey].reverse()) {
+    const s = ch.sections[0];
+    if (!microSeries(ch.id, s.id).length && !getLearningUnit(ch.id, s.id)) return { c: ch.id, s: s.id };
+  }
+  throw new Error('nenhum trecho sem microaula');
+})();
 
 /** A Prática só abre depois do Aprender do trecho (gate da trilha). */
 function readSection(chapterId: string, sectionId: string) {
@@ -86,17 +96,17 @@ it('livro: vira páginas, marca o trecho como lido e busca no sumário', async (
 
 it('aprender: livro simples do trecho, palavras novas e convite para praticar', async () => {
   const user = userEvent.setup();
-  // Primeiros Passos virou séries de microaulas (25/10/2026); o livro simples segue nos trechos sem série.
-  renderAt('/aprender/cap.dev.01/rest');
+  // Os trechos vão virando séries de microaulas; o livro simples segue nos que ainda não têm série.
+  renderAt(`/aprender/${SIMPLE.c}/${SIMPLE.s}`);
   expect(screen.getAllByText(/Trecho 1/).length).toBeGreaterThan(0);
-  for (let i = 0; i < 12 && !screen.queryByTestId('praticar-rest'); i++) {
+  for (let i = 0; i < 12 && !screen.queryByTestId(`praticar-${SIMPLE.s}`); i++) {
     await user.click(screen.getByRole('button', { name: 'Próxima página' }));
     if (i === 0) expect(screen.getByText(/^1 de \d$/)).toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Onde você está" })).toHaveTextContent("Trecho 1 de");
   }
   expect(screen.getByText('Trecho aprendido!')).toBeInTheDocument();
-  expect(loadData('visitante').reading['cap.dev.01'].sectionsRead).toEqual(['rest']);
-  expect(screen.getByRole('link', { name: /texto completo/ })).toHaveAttribute('href', '/capitulo/cap.dev.01#rest');
+  expect(loadData('visitante').reading[SIMPLE.c].sectionsRead).toEqual([SIMPLE.s]);
+  expect(screen.getByRole('link', { name: /texto completo/ })).toHaveAttribute('href', `/capitulo/${SIMPLE.c}#${SIMPLE.s}`);
 });
 
 it('prática: abre a rodada do trecho e mostra a primeira atividade', async () => {
@@ -191,7 +201,7 @@ it('um só destino: Torre, cabeçalho e menu levam ao mesmo passo', () => {
 
 it('retomada exata: Aprender e Missão voltam ao mesmo ponto depois de sair', async () => {
   const user = userEvent.setup();
-  const first = renderAt('/aprender/cap.dev.01/rest');
+  const first = renderAt(`/aprender/${SIMPLE.c}/${SIMPLE.s}`);
   for (let i = 0; i < 3; i++) await user.click(screen.getByRole('button', { name: 'Próxima página' }));
   expect(screen.getByText(/^4\/\d+$/)).toBeInTheDocument();
   first.unmount();
@@ -200,7 +210,7 @@ it('retomada exata: Aprender e Missão voltam ao mesmo ponto depois de sair', as
   expect(screen.getByTestId('continuar-torre')).toHaveTextContent('Continuar');
   expect(screen.getByText(/Aprender: página 4/)).toBeInTheDocument();
   home.unmount();
-  const again = renderAt('/aprender/cap.dev.01/rest');
+  const again = renderAt(`/aprender/${SIMPLE.c}/${SIMPLE.s}`);
   expect(screen.getByText(/^4\/\d+$/)).toBeInTheDocument();
   again.unmount();
 

@@ -1,5 +1,12 @@
 O edital menciona bancos vetoriais duas vezes: em "RAG e bancos vetoriais" (bloco de IA) e em "noções de bancos de dados vetoriais aplicados à IA (embeddings)" (Banco de Dados).
 
+### Como a busca vetorial surgiu
+
+- **1975: textos como vetores.** **Gerard Salton**, criador do sistema de busca **SMART**, publicou o **modelo de espaço vetorial**: cada documento vira um vetor, e a proximidade entre vetores mede a semelhança.
+- **2013: vetores pelo sentido.** O **word2vec** mostrou que vetores aprendidos pelo contexto aproximam palavras de significado parecido.
+- **2016 e 2017: buscar rápido entre milhões.** O índice **HNSW**, de Malkov e Yashunin (2016), e a biblioteca **FAISS**, do Facebook (2017), tornaram rápida a busca do vizinho mais próximo.
+- **2021: vetores no PostgreSQL.** A extensão **pgvector** foi lançada, permitindo guardar embeddings no mesmo banco dos dados relacionais.
+
 ### Embeddings
 
 Um **embedding** é um vetor de números (centenas ou milhares de dimensões) gerado por um modelo, de forma que conteúdos com significado parecido fiquem próximos no espaço vetorial. "Tribunal de Contas" e "órgão de controle externo" terão vetores mais próximos entre si do que de "receita de bolo".

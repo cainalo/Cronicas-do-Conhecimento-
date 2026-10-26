@@ -105,6 +105,14 @@ Grimório de Segurança inteiro em microaulas: cap.seg.01 (Criptografia, 6 aulas
 - **cap.port.01 (Leitura, ortografia, pontuação e morfologia):** séries `port.interpretacao`, `port.ortografia`, `port.pontuacao` e `port.morfologia`, 3 aulas cada.
   - **História:** Aristóteles, Quintiliano, Canção do Exílio e a paródia de Oswald, Vidas Secas; crase (krâsis), reformas de 1911 e 1943, Acordo de 1990 e decretos de 2008 e 2012; Aristófanes de Bizâncio, vírgula (varinha), Aldo Manúcio, Vossa Mercê a você; Dionísio Trácio, Fernão de Oliveira e João de Barros, NGB (1959). Seções históricas acrescentadas aos quatro textos.
   - **Questões:** prova com q.port.01.001 a 012.
-- **Revisão:** as séries novas de Primeiros Passos, cap.dados.01, cap.dev.03, cap.mat.01 e cap.port.01 ainda sem revisão humana.
+- **cap.ia.03 (Fundamentos de IA):** séries `ia.aprendizado`, `ia.redes` e `ia.pln`, 3 aulas cada.
+  - **História:** Turing (1950), Dartmouth (1956), Samuel (1959), sistemas especialistas e invernos, AlphaGo (2016); McCulloch e Pitts (1943), Rosenblatt (1958), Minsky e Papert (1969), retropropagação (1986), AlexNet (2012), transformer (2017); Georgetown-IBM (1954), ELIZA (1966), IDF de Spärck Jones (1972), Porter (1980), word2vec (2013).
+  - **Questões:** prova com q.ia.03.001 a 012.
+- **cap.ia.01 (LLM, prompts, contexto, RAG e vetores):** séries `ia.llm`, `ia.prompts`, `ia.contexto`, `ia.rag`, `ia.vetores` (3 aulas cada) e `ia.resumo` (2 aulas: linha do tempo e quadro-resumo).
+- **cap.dev.01 (APIs):** séries `dev.rest`, `dev.formatos`, `dev.graphql` e `dev.openapi` (3 aulas cada), com história do HTTP, do JSON e XML, do polling ao GraphQL e do WSDL ao OpenAPI.
+- **cap.dados.02 (SGBDs):** séries `dados.relacionais` (3 aulas: origem do Oracle e do PostgreSQL, PostgreSQL por dentro, Oracle e rotina) e `dados.nosql` (4 aulas: Bigtable, Dynamo e CAP; os quatro modelos; BASE e CAP; replicação, backup e governança).
+  - **História:** Shannon (1948), transformer, BERT e GPT, GPT-3, RLHF e ChatGPT; few-shot (2020), cadeia de pensamento e "injeção de prompt" (2022), OWASP Top 10 para LLM (2023); janelas de 2020 e 2023, Lost in the Middle; BM25 e o artigo do RAG (2020); Salton (1975), word2vec, HNSW, FAISS, pgvector (2021).
+  - **Questões:** prova com q.ia.01.001 a 020.
+- **Revisão:** as séries novas de Primeiros Passos, cap.dados.01, cap.dev.03, cap.mat.01, cap.port.01, cap.ia.03, cap.ia.01, cap.dev.01 e cap.dados.02 ainda sem revisão humana.
 - **Aulas narradas novas:** "Do ábaco ao celular", com o novo tipo de cena linha do tempo, e "As quatro tarefas do computador".
 - **Sequência única:** a aula narrada e as videoaulas conferidas entram na própria aula, numa fase "Veja de outro jeito" antes da prática. As bibliotecas de aulas narradas e de vídeos mostram "Na trilha" com o link para a aula.

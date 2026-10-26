@@ -1,5 +1,12 @@
 Uma API só é útil se quem a consome souber usá-la. O edital pede **documentação de APIs (OpenAPI/Swagger)**.
 
+### Como a documentação de APIs surgiu
+
+- **2001: o WSDL.** Para os serviços SOAP, o **WSDL** descrevia em XML as operações de um serviço. Era completo, mas difícil de ler.
+- **2010 e 2011: o Swagger.** **Tony Tam**, na empresa **Wordnik**, criou o **Swagger** para descrever APIs REST de forma simples e gerar uma documentação interativa.
+- **2015 e 2016: OpenAPI.** O Swagger foi doado à **OpenAPI Initiative**, sob a Linux Foundation (2015), e a especificação foi renomeada **OpenAPI** (2016).
+- **2017: OpenAPI 3.0.** Saiu a primeira versão lançada já com o novo nome.
+
 ### OpenAPI e Swagger
 
 A **Especificação OpenAPI** é um formato padronizado, em YAML ou JSON, para descrever APIs HTTP: caminhos, operações, parâmetros, corpos de requisição e resposta, códigos de status e esquemas de segurança. Ela nasceu como **Swagger** e foi doada à OpenAPI Initiative, sob a Linux Foundation, em 2015; no ano seguinte foi renomeada para OpenAPI. A versão 2.0 ainda é conhecida como "Swagger 2.0", e a 3.0 foi a primeira lançada com o novo nome. Hoje, "Swagger" designa principalmente o conjunto de ferramentas em torno da especificação, como o **Swagger UI** (documentação interativa) e o **Swagger Editor**.

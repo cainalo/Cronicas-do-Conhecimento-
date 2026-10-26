@@ -1,3 +1,9 @@
+### Como o NoSQL surgiu
+
+- **2000 e 2002: o limite.** Eric Brewer apresentou a conjectura de que um sistema distribuído não garante ao mesmo tempo consistência, disponibilidade e tolerância a partição; Seth Gilbert e Nancy Lynch a provaram em 2002, e ela virou o teorema CAP.
+- **2006 e 2007: a escala da web.** O Google publicou o Bigtable (2006) e a Amazon, o Dynamo (2007): sistemas espalhados por muitos servidores, que abriam mão de parte das garantias relacionais para escalar horizontalmente.
+- **2009: o nome.** O termo NoSQL se popularizou com um encontro de desenvolvedores sobre bancos distribuídos e não relacionais. No mesmo ano surgiram o MongoDB e o Redis.
+
 ### Por que NoSQL
 
 Bancos **NoSQL** ("não apenas SQL") abrem mão de parte das garantias e da estrutura rígida do modelo relacional para ganhar **flexibilidade de esquema** e **escala horizontal** com facilidade. Não substituem os relacionais: cada um serve melhor a certos problemas.

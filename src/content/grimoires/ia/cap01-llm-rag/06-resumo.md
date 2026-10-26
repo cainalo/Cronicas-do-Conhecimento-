@@ -1,3 +1,15 @@
+### A linha do tempo do capítulo
+
+| Ano | Marco |
+|---|---|
+| 1948 | Shannon: prever o próximo símbolo de um texto |
+| 1975 | Salton: modelo de espaço vetorial |
+| 2013 | word2vec: palavras como vetores densos |
+| 2017 | Transformer, "Attention Is All You Need" |
+| 2020 | GPT-3 e o *few-shot*; artigo do RAG (Lewis e colegas) |
+| 2022 | Cadeia de pensamento; termo "injeção de prompt"; ChatGPT |
+| 2023 | *Lost in the Middle*; OWASP Top 10 para LLM |
+
 ### Quadro-resumo
 
 | Se a questão fala em... | Pense em... |

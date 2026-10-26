@@ -1,5 +1,12 @@
 O edital cobra IA em dois blocos: "Engenharia de Software Assistida por IA e Sistemas Agentivos" (4 questões) e "Inteligência Artificial, Ciência de Dados e Automação" (5 questões). Este capítulo trata da base comum aos dois: o que é um modelo de linguagem, como conversar com ele e como dar a ele o conhecimento certo.
 
+### Como os modelos de linguagem surgiram
+
+- **1948: prever a próxima letra.** Em "A Mathematical Theory of Communication", **Claude Shannon** mostrou que é possível estimar o próximo caractere ou palavra de um texto em inglês a partir dos anteriores. É a ideia de base de todo modelo de linguagem.
+- **2017: o transformer.** O artigo "Attention Is All You Need" apresentou a arquitetura que tornou possível treinar modelos enormes.
+- **2018 a 2020: os grandes modelos.** O Google lançou o **BERT** e a OpenAI, o **GPT** (2018); o **GPT-3** (2020) mostrou que um modelo muito grande aprende tarefas só com exemplos no prompt.
+- **2022: o assistente conversacional.** Com o ajuste por preferências humanas (**RLHF**), os modelos passaram a seguir instruções melhor, e o **ChatGPT** levou os LLMs ao grande público no fim de 2022.
+
 ### Onde os LLMs se encaixam
 
 Os termos aparecem em prova como conjuntos dentro de conjuntos:

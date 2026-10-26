@@ -1,5 +1,13 @@
 O **processamento de linguagem natural** (PLN) trata de fazer computadores lidarem com texto e fala humanos. Para um Tribunal de Contas, é o que permite classificar denúncias, extrair dados de editais e analisar milhares de pareceres. Esta seção cobre o pipeline clássico; os grandes modelos de linguagem estão no capítulo 1.
 
+### Como o processamento de linguagem surgiu
+
+- **1954: a primeira tradução automática pública.** O experimento **Georgetown-IBM** traduziu cerca de sessenta frases do russo para o inglês, com regras escritas à mão.
+- **1966: ELIZA.** No MIT, **Joseph Weizenbaum** criou a **ELIZA**, um programa que conversava imitando uma terapeuta, apenas reorganizando as palavras do usuário.
+- **1972: o IDF.** A cientista britânica **Karen Spärck Jones** propôs dar mais peso aos termos que aparecem em poucos documentos: a ideia do **IDF**, base do TF-IDF.
+- **1980: o stemmer de Porter.** **Martin Porter** publicou um algoritmo de **stemming** para o inglês que se tornou referência.
+- **2013: palavras como vetores.** O **word2vec** mostrou que vetores aprendidos pelo contexto aproximam palavras de sentido parecido.
+
 ### Etapas de pré-processamento
 
 | Etapa | O que faz | Exemplo |

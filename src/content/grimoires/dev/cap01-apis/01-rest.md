@@ -1,5 +1,12 @@
 Uma **API** (*Application Programming Interface*) é o contrato pelo qual um sistema oferece funções a outro. Na web, a forma mais comum é a API **REST** sobre HTTP: o aplicativo do celular pede dados ao servidor, o servidor responde em JSON.
 
+### Como as APIs web surgiram
+
+- **1991: o HTTP.** **Tim Berners-Lee** criou o **HTTP** para a World Wide Web: o navegador pede uma página, o servidor responde. A primeira versão só tinha o método GET.
+- **1996 e 1999: o HTTP cresce.** O **HTTP/1.0** (RFC 1945, 1996) trouxe cabeçalhos, códigos de status e outros métodos; o **HTTP/1.1** (RFC 2616, 1999), escrito com a participação de **Roy Fielding**, tornou-se a base da web por mais de uma década.
+- **Por volta de 2000: o SOAP.** Para que sistemas conversassem entre si, surgiram os serviços web com **SOAP**, mensagens em XML com contratos rígidos.
+- **2000: a tese de Fielding.** Na sua tese de doutorado, **Roy Fielding** descreveu o **REST**: um jeito mais simples de fazer sistemas conversarem, usando o próprio HTTP como foi pensado.
+
 ### O estilo REST
 
 REST (*Representational State Transfer*) foi descrito por Roy Fielding em sua tese de doutorado, em 2000. Não é um protocolo nem um padrão formal: é um **estilo arquitetural** definido por restrições.

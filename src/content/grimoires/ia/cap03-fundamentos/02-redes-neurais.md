@@ -1,5 +1,13 @@
 O edital pede "redes neurais artificiais e noções de deep learning". O foco da FCC costuma ser o vocabulário: neurônio, pesos, função de ativação, camadas, retropropagação e os tipos de rede mais conhecidos.
 
+### Como as redes neurais surgiram
+
+- **1943: o neurônio no papel.** **Warren McCulloch** e **Walter Pitts** descreveram um modelo matemático simples de neurônio, que liga ou desliga conforme as entradas.
+- **1958: o perceptron.** **Frank Rosenblatt** construiu o **perceptron**, uma rede que aprendia a ajustar seus pesos com exemplos.
+- **1969: o limite.** No livro *Perceptrons*, **Marvin Minsky** e **Seymour Papert** mostraram que uma camada só não resolve problemas como o **XOR**. O interesse pelas redes caiu por anos.
+- **1986: a retropropagação.** **Rumelhart**, **Hinton** e **Williams** popularizaram a **retropropagação**, que permitiu treinar redes com camadas ocultas.
+- **2012 e 2017: a virada.** Em 2012, a rede convolucional **AlexNet** venceu com folga a competição de imagens ImageNet. Em 2017, o artigo "Attention Is All You Need" apresentou o **transformer**.
+
 ### O neurônio artificial
 
 Um neurônio artificial recebe entradas *x₁, x₂, ..., xₙ*, multiplica cada uma por um **peso** *wᵢ*, soma tudo com um **viés** (*bias*) *b* e aplica uma **função de ativação** *f*:

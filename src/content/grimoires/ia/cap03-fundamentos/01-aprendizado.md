@@ -1,5 +1,13 @@
 O edital abre o bloco com "fundamentos da inteligência artificial" e "aprendizado de máquina: aprendizado supervisionado, não supervisionado e por reforço". Esta seção organiza esses conceitos e os erros mais cobrados.
 
+### Como a inteligência artificial surgiu
+
+- **1950: a pergunta de Turing.** No artigo "Computing Machinery and Intelligence", **Alan Turing** perguntou se máquinas podem pensar e propôs o "jogo da imitação", hoje chamado de **teste de Turing**.
+- **1956: o nome.** Num encontro de pesquisa na Universidade de **Dartmouth**, nos Estados Unidos, **John McCarthy** e colegas adotaram o termo **inteligência artificial**.
+- **1959: máquinas que aprendem.** **Arthur Samuel**, da IBM, criou um programa de damas que melhorava jogando e popularizou a expressão **aprendizado de máquina**.
+- **Anos 1970 e 1980: regras e invernos.** Os **sistemas especialistas**, feitos de regras escritas à mão, tiveram grande sucesso, mas eram caros de manter. Períodos de desânimo e corte de verbas ficaram conhecidos como **"invernos da IA"**.
+- **2016: aprender jogando.** O programa **AlphaGo** venceu o campeão **Lee Sedol** no jogo Go, combinando redes neurais com **aprendizado por reforço**.
+
 ### O que é inteligência artificial
 
 Na definição clássica de Russell e Norvig, a IA estuda **agentes** que percebem o ambiente e agem para alcançar objetivos. Há duas grandes linhas históricas:

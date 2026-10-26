@@ -1,5 +1,11 @@
 **RAG** (*Retrieval-Augmented Generation*, geração aumentada por recuperação) combina uma etapa de **busca** com a **geração** do LLM. Antes de responder, o sistema recupera trechos relevantes de uma base de conhecimento e os coloca no contexto. O termo vem do artigo de Lewis e colegas, de 2020.
 
+### Como o RAG surgiu
+
+- **Anos 1990: buscar por palavras.** O algoritmo **BM25**, desenvolvido por **Stephen Robertson** e colegas no projeto Okapi, em Londres, tornou-se padrão em mecanismos de busca por palavras-chave.
+- **2020: o nome RAG.** **Patrick Lewis** e colegas publicaram o artigo que juntou **busca** e **geração** e deu nome à técnica.
+- **A partir de 2023: RAG em toda parte.** Com os assistentes conversacionais, empresas e órgãos passaram a conectar LLMs às suas próprias bases de documentos, para responder com fonte.
+
 ### Por que usar
 
 - O modelo passa a responder com base em documentos atualizados ou privados (normas internas, manuais, processos) que não estavam no treinamento.

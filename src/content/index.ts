@@ -167,6 +167,21 @@ import { portIntHistoria, portIntLeitura, portIntFiguras } from './micro/port-in
 import { portOrtHistoria, portOrtAcentos, portOrtCrase } from './micro/port-ortografia';
 import { portPonHistoria, portPonVirgula, portPonPronomes } from './micro/port-pontuacao';
 import { portMorHistoria, portMorClasses, portMorFormacao } from './micro/port-morfologia';
+import { iaAprHistoria, iaAprTipos, iaAprReforco } from './micro/ia-aprendizado';
+import { iaRedHistoria, iaRedNeuronio, iaRedTreino } from './micro/ia-redes';
+import { iaPlnHistoria, iaPlnPre, iaPlnRepresentacao } from './micro/ia-pln';
+import { iaLlmHistoria, iaLlmFunciona, iaLlmTreino } from './micro/ia-llm';
+import { iaPrpHistoria, iaPrpTecnicas, iaPrpPraticas } from './micro/ia-prompts';
+import { iaCtxHistoria, iaCtxJanela, iaCtxTecnicas } from './micro/ia-contexto';
+import { iaRagHistoria, iaRagFluxo, iaRagMelhorias } from './micro/ia-rag';
+import { iaVetHistoria, iaVetMedidas, iaVetBanco } from './micro/ia-vetores';
+import { iaResLinha, iaResQuadro } from './micro/ia-resumo';
+import { devRestHistoria, devRestMetodos, devRestStatus } from './micro/dev-rest';
+import { devFmtHistoria, devFmtJson, devFmtXml } from './micro/dev-formatos';
+import { devGqlHistoria, devGqlConsulta, devGqlWebsocket } from './micro/dev-graphql';
+import { devOapHistoria, devOapDocumento, devOapUsos } from './micro/dev-openapi';
+import { dadosRelHistoria, dadosRelPostgres, dadosRelOracle } from './micro/dados-relacionais';
+import { dadosNosHistoria, dadosNosModelos, dadosNosConsistencia, dadosNosReplicacao } from './micro/dados-nosql';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -229,6 +244,51 @@ export const microLessons: MicroLesson[] = [
   portMorHistoria,
   portMorClasses,
   portMorFormacao,
+  iaAprHistoria,
+  iaAprTipos,
+  iaAprReforco,
+  iaRedHistoria,
+  iaRedNeuronio,
+  iaRedTreino,
+  iaPlnHistoria,
+  iaPlnPre,
+  iaPlnRepresentacao,
+  iaLlmHistoria,
+  iaLlmFunciona,
+  iaLlmTreino,
+  iaPrpHistoria,
+  iaPrpTecnicas,
+  iaPrpPraticas,
+  iaCtxHistoria,
+  iaCtxJanela,
+  iaCtxTecnicas,
+  iaRagHistoria,
+  iaRagFluxo,
+  iaRagMelhorias,
+  iaVetHistoria,
+  iaVetMedidas,
+  iaVetBanco,
+  iaResLinha,
+  iaResQuadro,
+  devRestHistoria,
+  devRestMetodos,
+  devRestStatus,
+  devFmtHistoria,
+  devFmtJson,
+  devFmtXml,
+  devGqlHistoria,
+  devGqlConsulta,
+  devGqlWebsocket,
+  devOapHistoria,
+  devOapDocumento,
+  devOapUsos,
+  dadosRelHistoria,
+  dadosRelPostgres,
+  dadosRelOracle,
+  dadosNosHistoria,
+  dadosNosModelos,
+  dadosNosConsistencia,
+  dadosNosReplicacao,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,

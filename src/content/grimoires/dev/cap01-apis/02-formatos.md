@@ -1,5 +1,12 @@
 As APIs trocam dados em formatos de texto estruturado. O edital cita **JSON** e **XML**.
 
+### Como esses formatos surgiram
+
+- **1986: o SGML.** A ISO padronizou o **SGML**, uma linguagem para marcar documentos com etiquetas. O HTML da web nasceu dele.
+- **1998: o XML.** O **W3C** publicou o **XML 1.0**, uma versão mais simples do SGML para trocar dados estruturados entre sistemas.
+- **Início dos anos 2000: o JSON.** **Douglas Crockford** popularizou o **JSON**, que aproveita a forma como o JavaScript escreve objetos. Muito mais curto que o XML, logo dominou as APIs web.
+- **2006 a 2017: o JSON vira norma.** O formato ganhou a RFC 4627 (2006), a norma ECMA-404 (2013) e a RFC 8259 (2017), a referência atual.
+
 ### JSON
 
 O JSON (*JavaScript Object Notation*, RFC 8259) representa dados com seis tipos:

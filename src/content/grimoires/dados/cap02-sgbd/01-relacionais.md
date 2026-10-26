@@ -1,5 +1,12 @@
 O edital cita a "administração e otimização de PostgreSQL e Oracle Database". Para o nível técnico, o importante são os conceitos de cada um e as tarefas rotineiras.
 
+### De onde vieram os dois
+
+- **1970: o modelo relacional.** Edgar Codd, na IBM, propôs organizar os dados em relações (tabelas).
+- **1977 a 1979: o Oracle.** Larry Ellison, Bob Miner e Ed Oates fundaram uma pequena empresa que, em 1979, lançou o Oracle, um dos primeiros bancos relacionais com SQL vendidos comercialmente. A empresa depois adotou o nome do produto.
+- **Anos 1970 e 1986: Ingres e Postgres.** Na Universidade da Califórnia em Berkeley, Michael Stonebraker liderou o Ingres e, em 1986, começou o sucessor, o Postgres ("depois do Ingres").
+- **1994 a 1996: PostgreSQL.** Com o SQL acrescentado, o sistema virou Postgres95 e, em 1996, ganhou o nome PostgreSQL, mantido por uma comunidade, com código aberto.
+
 ### PostgreSQL
 
 | Conceito | O que é |

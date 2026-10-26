@@ -1,5 +1,12 @@
 REST não é a única forma de oferecer uma API. O edital pede "conceitos de GraphQL e WebSockets".
 
+### Como essas tecnologias surgiram
+
+- **Anos 2000: perguntar sem parar.** Para mostrar novidades em tempo real, as páginas faziam **polling** (perguntar de tempos em tempos) e **long polling** (o servidor segura a resposta até haver novidade). Funcionava, mas desperdiçava conexões.
+- **2011: o WebSocket.** A **RFC 6455** padronizou o **WebSocket**, um canal de ida e volta que fica aberto entre navegador e servidor.
+- **2012 e 2015: o GraphQL.** O **Facebook** criou o **GraphQL** em 2012 para o seu aplicativo móvel, que precisava de muitos dados em poucas chamadas, e o publicou em 2015.
+- **2018: governança aberta.** O GraphQL passou para a **GraphQL Foundation**, ligada à Linux Foundation.
+
 ### GraphQL
 
 GraphQL é uma linguagem de consulta para APIs, criada no Facebook e publicada em 2015. Suas características centrais:
