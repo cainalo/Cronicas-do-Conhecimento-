@@ -120,3 +120,9 @@
 - A randomização de questões de prova agora preserva a identidade da alternativa correta pelo identificador original, em vez de comparar apenas o texto. Isso evita erro de gabarito se duas opções tiverem texto igual ou muito parecido.
 - Commits: `136d7db3f52639d584769f4c70710d6cf6ee84a6` e `041a91b2f3d4dd4d3aaddb29380c05d21c66e620`.
 - **Validação pendente:** a integração de GitHub Actions disponível nesta sessão não retornou execuções/status para esses commits. Não foi possível executar a suíte local, validar screenshots nem conferir o comportamento num Galaxy A14 físico; não declarar essa etapa como 100%.
+
+## 26/10/2026: correção do fluxo de publicação
+- Investigação da versão pública: o branch `gh-pages` ainda servia a versão `0.1.129` do commit `b1f0ddd` (build de 20:22 UTC), por isso os commits recentes na `main` não apareciam no site.
+- Causa: `.github/workflows/pages.yml` só permite publicar a partir da `main` quando o segredo de keystore de release existe; sem esse segredo, apenas `claude/cronicas-conhecimento-estudos-jgbofo` publica para manter a assinatura estável do APK.
+- Integrei a versão atual da `main` na branch de publicação pelo PR #5, merge `783725a6e61f018fe115d93c50b89a5cf20f1c49`, preservando a branch que mantém a assinatura do Android.
+- O próximo build precisa passar por testes, build e E2E antes de atualizar `gh-pages`. Não considerar a publicação concluída até verificar o novo `download/version.json` e o bundle do site.
