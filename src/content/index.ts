@@ -189,6 +189,10 @@ import { devIdrLinha, devIdrQuadro } from './micro/dev-idresumo';
 import { matLogHistoria, matLogTabela, matLogOrdem, matLogDeducao } from './micro/mat-logica';
 import { matSeqHistoria, matSeqNumeros, matSeqLetras, matSeqConceitos } from './micro/mat-sequencias';
 import { matEspHistoria, matEspCalendario, matEspRelogio, matEspOrientacao } from './micro/mat-espaco';
+import { portConHistoria, portConVerbal, portConSe, portConNominal } from './micro/port-concordancia';
+import { portRegHistoria, portRegVerbal, portRegVozes, portRegTempos } from './micro/port-regencia';
+import { portPerHistoria, portPerOracoes, portPerConectivos, portPerReescrita } from './micro/port-periodo';
+import { portRedHistoria, portRedAtributos, portRedTratamento, portRedOficio } from './micro/port-redacao';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -321,6 +325,22 @@ export const microLessons: MicroLesson[] = [
   matEspCalendario,
   matEspRelogio,
   matEspOrientacao,
+  portConHistoria,
+  portConVerbal,
+  portConSe,
+  portConNominal,
+  portRegHistoria,
+  portRegVerbal,
+  portRegVozes,
+  portRegTempos,
+  portPerHistoria,
+  portPerOracoes,
+  portPerConectivos,
+  portPerReescrita,
+  portRedHistoria,
+  portRedAtributos,
+  portRedTratamento,
+  portRedOficio,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,

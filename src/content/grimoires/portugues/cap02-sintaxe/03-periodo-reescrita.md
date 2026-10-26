@@ -1,5 +1,10 @@
 O edital agrupa "coordenação e subordinação", "conectivos" e "redação (confronto e reconhecimento de frases corretas e incorretas; organização e reorganização de orações e períodos; equivalência e transformação de estruturas)". Na prática, são as questões que pedem para **substituir um conectivo sem alterar o sentido**, **reescrever um trecho mantendo a correção** ou **identificar a relação** que uma oração estabelece com outra.
 
+### De onde vêm os nomes das orações
+
+- **1959: a Nomenclatura Gramatical Brasileira.** Uma portaria do Ministério da Educação adotou a NGB, preparada por uma comissão de professores, para unificar os nomes usados no ensino: oração coordenada, subordinada, adverbial, concessiva.
+- **"Embora" vem de "em boa hora".** A palavra servia para desejar sorte ("vá embora", vá em boa hora) e ganhou depois o valor concessivo. Os conectivos mudam de valor com o tempo e com o contexto.
+
 ### Coordenação × subordinação
 
 | | Coordenação | Subordinação |

@@ -1,5 +1,9 @@
 Regência é a relação entre um termo (verbo ou nome) e o complemento que ele exige, com ou sem preposição. Muitas questões de crase e de pronome relativo dependem dela. Nesta seção também estão vozes verbais, correlação de tempos e modos e flexões, que o edital lista em sequência.
 
+### Dos casos do latim às preposições
+
+No latim, a função de cada palavra era marcada pela terminação (os casos): o acusativo indicava o que recebia a ação; o dativo, a quem algo era dado ou dito. Na passagem para o português, essas terminações caíram, e a ordem da frase e as preposições assumiram o papel. Restaram marcas nos pronomes: "o" (objeto direto) vem do acusativo, e "lhe" (objeto indireto), do dativo.
+
 ### Verbos com regência que muda o sentido
 
 | Verbo | Sentido | Regência | Exemplo |

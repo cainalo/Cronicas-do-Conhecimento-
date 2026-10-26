@@ -8,7 +8,7 @@
   - **Ritmo lento com história (piloto):** cap.prim.01 / computador virou a série `prim.computador`, com 4 aulas: história, quatro tarefas, bit e tamanhos. O texto do capítulo ganhou "Como o computador surgiu".
   - **Ritmo lento nos trechos 2 a 4 de cap.prim.01:** séries `prim.hardware`, `prim.sistema` e `prim.programacao`, 3 aulas cada, todas começando pela história. Os textos dos capítulos ganharam as seções históricas que servem de fonte. Sem rolagem a 360×640 e 390×844.
   - **Ritmo lento em cap.prim.02:** séries `prim.redes`, `prim.dados` e `prim.seguranca`, 3 aulas cada, com história. O grimório Primeiros Passos está inteiro no novo formato.
-  - **Ritmo lento em cap.dados.01, cap.dev.03, cap.mat.01, cap.port.01, cap.ia.03, cap.ia.01, cap.dev.01, cap.dados.02, cap.dev.02 e cap.mat.02:** 38 séries, com história.
+  - **Ritmo lento em cap.dados.01, cap.dev.03, cap.mat.01, cap.port.01, cap.ia.03, cap.ia.01, cap.dev.01, cap.dados.02, cap.dev.02, cap.mat.02 e cap.port.02:** 42 séries, com história.
   - **Sequência única:** aula narrada e videoaula conferida entram dentro da aula ("Veja de outro jeito", fase `midia` em `MicroLesson.tsx`). As bibliotecas mostram "Na trilha" (`components/TrailPlace.tsx`, `trailPlaceOf`).
   - **Aulas narradas novas:** "Do ábaco ao celular", com a cena nova de linha do tempo, e "As quatro tarefas".
   - **Feed:** retratos ilustrados (`components/TeacherAvatar.tsx`), perfis, revisões rápidas, posts com desenho, hashtags, curtir, comentário fixado e anotações como comentários. O espaço para fotos reais (`content/estudos/imagens.ts`) está vazio enquanto a Wikimedia segue bloqueada na rede.
@@ -60,8 +60,8 @@ Antes: `npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escur
 
 ## Próxima tarefa exata
 1. **Aplicar o novo ritmo com história aos trechos seguintes, um por vez.** O grimório Primeiros Passos está completo (cap.prim.01 e cap.prim.02, 7 séries):
-   - **Feitos fora de Primeiros Passos:** cap.dados.01, cap.dev.03, cap.mat.01, cap.port.01, cap.ia.03, cap.ia.01, cap.dev.01, cap.dados.02, cap.dev.02 e cap.mat.02.
-   - **Próximo, na ordem da trilha (`JOURNEY` em `src/content/index.ts`):** cap.infra.02 e cap.seg.01 já têm microaulas; o próximo é cap.port.02, depois cap.dev.04, cap.es.01, cap.es.02 e assim por diante. Hoje 44 trechos ainda usam só a camada Aprender simples.
+   - **Feitos fora de Primeiros Passos:** cap.dados.01, cap.dev.03, cap.mat.01, cap.port.01, cap.ia.03, cap.ia.01, cap.dev.01, cap.dados.02, cap.dev.02, cap.mat.02 e cap.port.02.
+   - **Próximo, na ordem da trilha (`JOURNEY` em `src/content/index.ts`):** cap.infra.02 e cap.seg.01 já têm microaulas; o próximo é cap.dev.04, depois cap.es.01, cap.es.02, cap.devops.01 e assim por diante. Hoje 40 trechos ainda usam só a camada Aprender simples.
    - **Depois:** os demais capítulos.
    - **Regra:** cada trecho começa contando como aquilo surgiu, usando só fatos verificáveis, acrescentados também ao texto do capítulo.
 2. **Fotos reais no feed:** quando a Wikimedia (`commons.wikimedia.org` e `upload.wikimedia.org`) estiver liberada na rede do ambiente, preencher `content/estudos/imagens.ts`. Usar só domínio público ou licença livre, com autor, licença e link conferidos na página do arquivo.
