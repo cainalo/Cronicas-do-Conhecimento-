@@ -38,6 +38,18 @@ function shuffle<T>(a: T[], rand: () => number): T[] {
   return b;
 }
 
+/** Reordena as alternativas e renumera as letras; a resposta correta continua ligada ao mesmo texto. */
+function shuffleQuestionAnswers(q: Question, rand: () => number): Question {
+  const letters = ['A', 'B', 'C', 'D', 'E'] as const;
+  const options = shuffle(q.options, rand);
+  const correctIndex = options.findIndex((option) => option.key === q.answer);
+  return {
+    ...q,
+    options: options.map((option, index) => ({ ...option, key: letters[index] })),
+    answer: letters[Math.max(0, correctIndex)],
+  };
+}
+
 /** Monta a rodada de prática de uma seção (cerca de 8 a 12 atividades, tipos intercalados). */
 export function buildPractice(
   chapter: Chapter,
@@ -87,7 +99,7 @@ export function buildPractice(
     rand,
   )
     .slice(0, 3)
-    .map((q) => ({ kind: 'mcq' as const, id: q.id, question: q }));
+    .map((q) => ({ kind: 'mcq' as const, id: q.id, question: shuffleQuestionAnswers(q, rand) }));
 
   // Aquecimento bem fácil, tirado da explicação simples: verdadeiro ou falso e palavras novas.
   const warm: Activity[] = [];
