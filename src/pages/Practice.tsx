@@ -181,6 +181,7 @@ function PracticeRun() {
   const setPhase = (p: Saved['phase']) => session.setState((s) => ({ ...s, phase: p }));
   const setFirstTry = (f: (x: Record<string, boolean>) => Record<string, boolean>) => session.setState((s) => ({ ...s, firstTry: f(s.firstTry) }));
   const [value, setValue] = useState<string>();
+  const [sentenceIndexes, setSentenceIndexes] = useState<number[]>([]);
   const [verdict, setVerdict] = useState<Verdict>();
   const [combo, setCombo] = useState(0);
   const [help, setHelp] = useState(false);
@@ -204,7 +205,14 @@ function PracticeRun() {
   };
 
   const check = () => {
-    if (!act || value === undefined) return;
+    if (!act) return;
+    if (act.kind === 'build') {
+      const built = sentenceIndexes.map((i) => act.words[i]);
+      const ok = built.length === act.answer.length && built.every((word, i) => word === act.answer[i]);
+      judge(ok, ok ? 'Frase montada corretamente!' : 'Ainda não. Revise a ordem das palavras.', act.why);
+      return;
+    }
+    if (value === undefined) return;
     if (act.kind === 'tf') {
       const ok = (value === 'v') === act.answer;
       judge(ok, ok ? 'Correto!' : `É ${act.answer ? 'verdadeiro' : 'falso'}.`, act.why);
@@ -226,6 +234,7 @@ function PracticeRun() {
     const recovery = verdict?.recovery;
     setVerdict(undefined);
     setValue(undefined);
+    setSentenceIndexes([]);
     // Errou: vem logo adiante um item equivalente com outros dados; sem equivalente, a mesma volta no fim.
     const q = nextQueue(queue, ok, recovery);
     if (q.length === 0) {
@@ -350,6 +359,52 @@ function PracticeRun() {
                 <Pairs a={act} onDone={(ok) => judge(ok, ok ? 'Pares perfeitos!' : 'Pares completos', ok ? undefined : 'Houve tropeços no caminho; a rodada volta a esta atividade no fim.')} />
               </>
             )}
+            {act.kind === 'build' && (
+              <>
+                <p className="text-sm font-semibold text-muted">Montagem de frase</p>
+                <p className="mb-4 mt-2 font-display text-xl leading-snug">{act.prompt}</p>
+                <div className="min-h-20 rounded-2xl border-2 border-dashed border-[#2e7182]/50 bg-[#d6e7e6]/60 p-3" role="group" aria-label="Frase montada">
+                  {sentenceIndexes.length ? (
+                    <div className="flex flex-wrap gap-2">
+                      {sentenceIndexes.map((wordIndex, slot) => (
+                        <button
+                          key={`${wordIndex}-${slot}`}
+                          type="button"
+                          disabled={!!verdict}
+                          onClick={() => setSentenceIndexes((current) => current.filter((_, i) => i !== slot))}
+                          className="rounded-lg bg-[#2e7182] px-2.5 py-2 text-sm font-semibold text-white shadow-sm"
+                          aria-label={`Remover palavra ${act.words[wordIndex]}`}
+                        >
+                          {act.words[wordIndex]} <span aria-hidden="true" className="ml-1 opacity-70">×</span>
+                        </button>
+                      ))}
+                    </div>
+                  ) : <p className="text-sm text-muted">Toque nas palavras abaixo para montar a frase.</p>}
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {act.words.map((word, i) => {
+                    const selected = sentenceIndexes.includes(i);
+                    return (
+                      <button
+                        key={`${word}-${i}`}
+                        type="button"
+                        disabled={selected || !!verdict}
+                        onClick={() => setSentenceIndexes((current) => [...current, i])}
+                        className={`min-h-11 rounded-xl border-2 px-2 py-2 text-left text-sm font-medium transition ${selected ? 'border-line bg-raised/50 opacity-35' : 'border-line bg-surface hover:border-[#c8402a] hover:bg-[#f3d7ca]/50'}`}
+                      >
+                        {word}
+                      </button>
+                    );
+                  })}
+                </div>
+                {sentenceIndexes.length > 0 && !verdict && (
+                  <button type="button" className="mt-3 text-sm font-semibold text-[#c8402a] underline" onClick={() => setSentenceIndexes([])}>
+                    Recomeçar frase
+                  </button>
+                )}
+              </>
+            )}
+
             {act.kind === 'mcq' && (
               <>
                 <p className="text-sm font-semibold text-muted">Questão no estilo da prova</p>
@@ -369,7 +424,7 @@ function PracticeRun() {
           {/* Painel de resposta */}
           {act.kind !== 'pairs' && !verdict && (
             <div className="mt-4 shrink-0 bg-bg pb-2 pt-2">
-              <button className="btn-primary w-full" disabled={value === undefined} onClick={check}>
+              <button className="btn-primary w-full" disabled={act.kind === 'build' ? sentenceIndexes.length === 0 : value === undefined} onClick={check}>
                 Verificar
               </button>
             </div>
