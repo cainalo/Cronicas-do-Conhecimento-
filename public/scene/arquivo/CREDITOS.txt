@@ -1,0 +1,12 @@
+Cena 3D "Sala dos Livros de Empenho" (missão SQL), Crônicas do Arquivo Real.
+
+Modelos 3D:
+- isolda.glb (Mage), valerio.glb (Knight), brites.glb (Rogue): KayKit Adventurers Character Pack 1.0,
+  Kay Lousberg (www.kaylousberg.com), licença CC0 1.0. Fonte oficial:
+  https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0
+- sala.glb (parede, estantes, mesa, velas, tocha, cadeiras, coluna, estandarte, piso, caixas):
+  KayKit Dungeon Remastered 1.0, Kay Lousberg, licença CC0 1.0. Fonte oficial:
+  https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0
+Obtidos em 23/10/2026. Modificações: mantidas só 8 animações, textura reduzida para WebP
+256 px (personagens) e 512 px (sala), malhas quantizadas, objetos da sala unidos num arquivo.
+A coruja Bubo e a folha de pergaminho são geometria própria do projeto.

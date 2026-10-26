@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+.env.local
+*.log
+coverage
+android/app/build
+*.tsbuildinfo
+
+# Capturas de tela de verificação (ficam no scratchpad, não no repositório)
+shots/

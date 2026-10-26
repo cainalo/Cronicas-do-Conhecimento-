@@ -1,0 +1,95 @@
+name: Publicar site e app Android
+
+on:
+  push:
+    branches: [main, claude/cronicas-conhecimento-estudos-jgbofo]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    env:
+      APP_VERSION_CODE: ${{ github.run_number }}
+      APP_VERSION_NAME: 0.1.${{ github.run_number }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+      # ---------- App Android (Capacitor) ----------
+      - name: Build web para o app
+        run: npm run build
+      - run: npx cap sync android
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      # Assinatura: usa os segredos ANDROID_KEYSTORE_* se existirem; senão, uma chave de
+      # depuração mantida no cache do Actions (nunca no repositório), para que as
+      # atualizações instalem por cima da versão anterior.
+      - name: Restaurar chave de assinatura
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: android-signing-v1
+      - name: Preparar chave de assinatura
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.jks"
+            {
+              echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/release.jks"
+              echo "ANDROID_KEYSTORE_PASSWORD=$KS_PASS"
+              echo "ANDROID_KEY_ALIAS=$KEY_ALIAS"
+              echo "ANDROID_KEY_PASSWORD=$KEY_PASS"
+            } >> "$GITHUB_ENV"
+          elif [ ! -f ~/.android/debug.keystore ]; then
+            mkdir -p ~/.android
+            keytool -genkeypair -v -keystore ~/.android/debug.keystore -storepass android \
+              -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 \
+              -dname "CN=Cronicas do Conhecimento,O=Cronicas,C=BR"
+          fi
+      - name: Compilar APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
+      - run: cp android/app/build/outputs/apk/release/app-release.apk "$RUNNER_TEMP/cronicas-do-conhecimento.apk"
+
+      # ---------- Site (GitHub Pages) ----------
+      - run: npm run build
+        env:
+          GITHUB_PAGES: 'true'
+      # Fallback de SPA: rotas como /capitulo/... abrem o app em vez de 404
+      - run: cp dist/index.html dist/404.html
+      - name: Incluir o APK no site
+        run: |
+          mkdir -p dist/download
+          cp "$RUNNER_TEMP/cronicas-do-conhecimento.apk" dist/download/
+          SIZE=$(stat -c%s dist/download/cronicas-do-conhecimento.apk)
+          SHA=$(sha256sum dist/download/cronicas-do-conhecimento.apk | cut -d' ' -f1)
+          SIGNING=$([ -n "${ANDROID_KEYSTORE_PATH:-}" ] && echo release || echo debug)
+          printf '{"versionName":"%s","versionCode":%s,"size":%s,"sha256":"%s","signing":"%s","builtAt":"%s","commit":"%s"}\n' \
+            "$APP_VERSION_NAME" "$APP_VERSION_CODE" "$SIZE" "$SHA" "$SIGNING" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "${GITHUB_SHA::7}" > dist/download/version.json
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          force_orphan: true
