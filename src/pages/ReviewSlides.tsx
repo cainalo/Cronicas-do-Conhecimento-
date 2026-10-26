@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { chapters, getChapter } from '@/content';
 import type { Chapter } from '@/content/types';
@@ -133,7 +134,7 @@ export function ReviewSlidesPage() {
   const next = () => setIndex((i) => Math.min(slides.length - 1, i + 1));
   const changeChapter = (id: string) => { setChapterId(id); setIndex(0); };
 
-  return (
+  return createPortal((
     <div
       className="review-slides-fullscreen fixed inset-0 z-[90] h-[100dvh] max-h-[100dvh] w-screen overflow-hidden bg-bg p-3 text-ink sm:p-5"
       data-testid="review-slides-fullscreen"
@@ -210,5 +211,5 @@ export function ReviewSlidesPage() {
         {slides.map((slide, i) => <SlideCard key={slide.id} slide={slide} index={i} total={slides.length} />)}
       </div>
     </div>
-  );
+  ), document.body);
 }
