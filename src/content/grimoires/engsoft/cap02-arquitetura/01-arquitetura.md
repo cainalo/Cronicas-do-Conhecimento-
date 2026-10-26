@@ -1,5 +1,11 @@
 **Arquitetura de software** é a organização fundamental de um sistema: seus componentes, as relações entre eles e com o ambiente, e os princípios que guiam o desenho e a evolução.
 
+### Das camadas aos microsserviços
+
+- **1968 e 1972: camadas e módulos.** Edsger Dijkstra descreveu o sistema THE, organizado em camadas; David Parnas mostrou como dividir sistemas em módulos que escondem decisões de projeto. Nos anos 1970, Larry Constantine deu nome a coesão e acoplamento.
+- **1987 a 2004: Liskov e SOLID.** Barbara Liskov apresentou o princípio de substituição (1987); por volta de 2000, Robert C. Martin reuniu os princípios cujas iniciais Michael Feathers notou formarem SOLID.
+- **2014: microsserviços.** Depois da SOA dos anos 2000, James Lewis e Martin Fowler popularizaram o termo microsserviços.
+
 ### Estilos arquiteturais
 
 | Estilo | Como é | Vantagens | Cuidados |

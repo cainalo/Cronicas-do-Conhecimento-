@@ -90,3 +90,4 @@
 - **Sintaxe e redação oficial:** cap.port.02 completo (concordância, regência e verbos, período e reescrita, redação oficial). 1853 testes; rolagem de cap.dados.02 e cap.dev.02 (40) conferida; CI 98 verde.
 - **Linguagens e pacotes:** cap.dev.04 completo (Java e Python, JavaScript e TypeScript, HTML/CSS/React, dependências e pacotes). 1945 testes.
 - **Processo de software:** cap.es.01 completo (ciclo de vida e métodos, requisitos). 1991 testes.
+- **Arquitetura e qualidade:** cap.es.02 completo. 2060 testes; rolagem de cap.mat.02, cap.port.02 e cap.dev.04 conferida (88 telas sem problema) a 360×640 e 390×844.

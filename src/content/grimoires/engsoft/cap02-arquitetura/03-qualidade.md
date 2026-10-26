@@ -1,3 +1,9 @@
+### Como se aprendeu a medir qualidade
+
+- **1991 a 2023: normas.** A ISO/IEC 9126 (1991) organizou a qualidade em características; a ISO/IEC 25010 a substituiu em 2011 e foi revista em 2023.
+- **1992 e 1999: dívida e refatoração.** Ward Cunningham criou a metáfora da dívida técnica; Martin Fowler publicou *Refactoring*.
+- **2009: pirâmide de testes.** Mike Cohn popularizou a pirâmide: muitos testes unitários, poucos de ponta a ponta.
+
 ### Atributos de qualidade
 
 O edital cita **desempenho, escalabilidade, disponibilidade, confiabilidade e manutenibilidade**.

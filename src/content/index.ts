@@ -199,6 +199,9 @@ import { devWebHistoria, devWebHtml, devWebCss, devWebReact } from './micro/dev-
 import { devPacHistoria, devPacSemver, devPacLock, devPacBuild } from './micro/dev-pacotes';
 import { esCicHistoria, esCicAbordagens, esCicKanban, esCicXp } from './micro/es-ciclo';
 import { esReqHistoria, esReqTipos, esReqEngenharia, esReqHistorias } from './micro/es-requisitos';
+import { esArqHistoria, esArqEstilos, esArqSolid, esArqPrincipios } from './micro/es-arquitetura';
+import { esModHistoria, esModUml, esModBpmn, esModPadroes } from './micro/es-modelagem';
+import { esQuaHistoria, esQuaAtributos, esQuaTestes, esQuaRefatoracao } from './micro/es-qualidade';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -371,6 +374,18 @@ export const microLessons: MicroLesson[] = [
   esReqTipos,
   esReqEngenharia,
   esReqHistorias,
+  esArqHistoria,
+  esArqEstilos,
+  esArqSolid,
+  esArqPrincipios,
+  esModHistoria,
+  esModUml,
+  esModBpmn,
+  esModPadroes,
+  esQuaHistoria,
+  esQuaAtributos,
+  esQuaTestes,
+  esQuaRefatoracao,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,
