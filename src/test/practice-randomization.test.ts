@@ -53,11 +53,13 @@ describe('variação das atividades de prática', () => {
     const correct = mcq.question.options.find((option) => option.text === 'Resposta conceitual correta');
     expect(correct).toBeDefined();
     expect(correct?.key).toBe(mcq.question.answer);
+    expect(mcq.question.answer).toBe('A');
+    expect(mcq.question.options[0].text).toBe('Resposta conceitual correta');
     expect(mcq.question.options.map((option) => option.key)).toEqual(['A', 'B', 'C', 'D', 'E']);
   });
 
   it('gera montagem de frase com palavras da definição e palavras extras', () => {
-    const activities = buildPractice(chapter, 'fundamentos', [], undefined, () => 0, undefined);
+    const activities = buildPractice(chapter, 'fundamentos', [], undefined, () => 0.9999999, undefined);
     const build = activities.find((activity) => activity.kind === 'build');
     expect(build).toBeDefined();
     if (!build || build.kind !== 'build') throw new Error('Atividade de montar frase não foi criada');
