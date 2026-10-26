@@ -19,7 +19,7 @@ const formatTime = (ms: number) => {
 };
 
 function wordIndexAtChar(text: string, charIndex: number): number {
-  const words = Array.from(text.matchAll(/\\S+/g));
+  const words = Array.from(text.matchAll(/\S+/g));
   if (!words.length) return 0;
   for (let i = 0; i < words.length; i++) {
     const start = words[i].index ?? 0;
@@ -433,8 +433,8 @@ export function NarratedPlayer({
 function SceneMotionStrip({ scene, say }: { scene: Scene; say: string }) {
   const stopWords = new Set(['para', 'pela', 'pelo', 'como', 'isso', 'essa', 'esse', 'estas', 'estes', 'quando', 'onde', 'entre', 'sobre', 'muito', 'mais', 'menos', 'também', 'porque', 'então', 'depois', 'antes', 'ainda', 'cada', 'que', 'com', 'sem', 'uma', 'uns', 'umas', 'dos', 'das', 'por', 'não', 'são', 'ser', 'tem', 'ter', 'foi', 'vai', 'aos', 'nas', 'nos']);
   const keywords = Array.from(new Set((say + ' ' + scene.heading)
-    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase()
-    .replace(/[^a-z0-9\\s-]/g, ' ').split(/\\s+/)
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, ' ').split(/\s+/)
     .filter((word) => word.length >= 4 && !stopWords.has(word))))
     .slice(0, 3);
   const palettes = [
