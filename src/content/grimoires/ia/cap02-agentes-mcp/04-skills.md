@@ -1,3 +1,9 @@
+### De instruções repetidas a extensões sob demanda
+
+Equipes passaram de prompts repetidos para convenções persistentes, procedimentos especializados e automações acionadas por eventos. Na documentação atual da Anthropic, *skills* carregam instruções e recursos quando são relevantes; *hooks* disparam ações em eventos definidos. A diferença prática é importante: um procedimento orienta uma tarefa, enquanto uma automação pode fazer uma verificação rodar no ponto configurado.
+
+Fontes: [Agent Skills (Anthropic)](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) e [skills, hooks, regras e subagentes no Claude Code](https://claude.com/blog/steering-claude-code-skills-hooks-rules-subagents-and-more).
+
 O edital cita "extensibilidade e automação de fluxos de trabalho especializados (*skills* e *tool use*)". Já vimos o *tool use*. Esta seção trata das formas de ensinar ao agente procedimentos próprios da equipe.
 
 ### Por que estender o agente
