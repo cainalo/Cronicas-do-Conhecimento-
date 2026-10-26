@@ -186,6 +186,9 @@ import { devIdHistoria, devIdTres, devIdSessoes } from './micro/dev-identidade';
 import { devOauHistoria, devOauPapeis, devOauTokens, devOauFluxos } from './micro/dev-oauth';
 import { devOidHistoria, devOidConnect, devOidJwt, devOidValidacao } from './micro/dev-oidc';
 import { devIdrLinha, devIdrQuadro } from './micro/dev-idresumo';
+import { matLogHistoria, matLogTabela, matLogOrdem, matLogDeducao } from './micro/mat-logica';
+import { matSeqHistoria, matSeqNumeros, matSeqLetras, matSeqConceitos } from './micro/mat-sequencias';
+import { matEspHistoria, matEspCalendario, matEspRelogio, matEspOrientacao } from './micro/mat-espaco';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -306,6 +309,18 @@ export const microLessons: MicroLesson[] = [
   devOidValidacao,
   devIdrLinha,
   devIdrQuadro,
+  matLogHistoria,
+  matLogTabela,
+  matLogOrdem,
+  matLogDeducao,
+  matSeqHistoria,
+  matSeqNumeros,
+  matSeqLetras,
+  matSeqConceitos,
+  matEspHistoria,
+  matEspCalendario,
+  matEspRelogio,
+  matEspOrientacao,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,

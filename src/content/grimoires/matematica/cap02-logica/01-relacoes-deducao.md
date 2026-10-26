@@ -1,5 +1,12 @@
 O edital descreve o raciocínio lógico como **estrutura lógica de relações arbitrárias entre pessoas, lugares, objetos ou eventos fictícios**, a **dedução de novas informações** a partir das relações fornecidas e a **avaliação das condições** usadas para montar essa estrutura. Termina com a compreensão do processo que, a partir de um conjunto de **hipóteses**, conduz **de forma válida** a conclusões. Em termos de prova, são três famílias de questão: problemas de associação (quem fez o quê, onde), problemas de ordenação e problemas de dedução (verdade e mentira, argumentos com "todo", "algum", "nenhum" e "se... então").
 
+### De Aristóteles aos enigmas de lógica
+
+- **Século IV a.C.: os silogismos.** Aristóteles estudou conclusões que decorrem de premissas com "todo", "algum" e "nenhum".
+- **Século III a.C.: os estoicos.** Filósofos como Crisipo estudaram frases do tipo "se... então", de onde vêm formas como o *modus ponens*.
+- **1768 e 1880: os círculos.** Leonhard Euler explicou os silogismos com círculos em cartas a uma princesa alemã, publicadas em 1768; John Venn propôs, em 1880, os diagramas com círculos sempre cruzados.
+- **1978: cavaleiros e valetes.** Raymond Smullyan publicou enigmas com cavaleiros, que sempre dizem a verdade, e valetes, que sempre mentem.
+
 ### Problemas de associação: a tabela de dupla entrada
 
 Quando há pessoas e atributos (setor, cidade, cor, cargo) em correspondência um para um, monte uma tabela com as pessoas nas linhas e os atributos nas colunas.

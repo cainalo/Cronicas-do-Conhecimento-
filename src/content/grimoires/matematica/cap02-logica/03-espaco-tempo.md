@@ -1,5 +1,11 @@
 A **orientação espacial e temporal** citada no edital aparece em questões de calendário (que dia da semana cai uma data, contagem de prazos), relógios (horários, ponteiros, relógios que adiantam ou atrasam) e posição no espaço (pontos cardeais, giros, lugares à mesa). Quase tudo se resolve com o **resto da divisão**, que foi apresentado no capítulo 1.
 
+### De Júlio César ao relógio de pêndulo
+
+- **46 a.C.: o calendário juliano.** Júlio César reformou o calendário romano: 365 dias, com um ano bissexto a cada 4 anos.
+- **1582: o calendário gregoriano.** O quarto de dia era um pouco maior que o real, e o erro acumulado chegou a cerca de dez dias. O papa Gregório XIII promulgou a reforma: depois da quinta-feira, 4 de outubro, veio a sexta-feira, 15 de outubro, e os anos terminados em 00 passaram a ser bissextos só quando divisíveis por 400.
+- **1656: o relógio de pêndulo.** Christiaan Huygens construiu o relógio de pêndulo, que reduziu o erro dos relógios de muitos minutos para poucos segundos por dia.
+
 ### Aritmética do calendário
 
 A semana tem 7 dias, então avançar n dias muda o dia da semana conforme o **resto de n ÷ 7**.

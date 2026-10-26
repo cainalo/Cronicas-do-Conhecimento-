@@ -1,5 +1,11 @@
 O edital lista, entre as formas de compreender a lógica das situações, o **raciocínio verbal**, o **raciocínio matemático**, o **raciocínio sequencial**, a **formação de conceitos** e a **discriminação de elementos**. Na prova, isso vira sequências de números, letras ou figuras para completar, analogias, identificação do elemento que não pertence ao grupo e pequenos problemas de contagem. O segredo é ter um repertório de padrões e testá-los em ordem.
 
+### De Euclides aos coelhos de Fibonacci
+
+- **Cerca de 300 a.C.: Euclides.** Os *Elementos* já tratam de números em proporção contínua, o que hoje chamamos de progressão geométrica.
+- **1202: Fibonacci.** No *Liber Abaci*, que ajudou a espalhar pela Europa os algarismos indo-arábicos, Leonardo de Pisa propôs o problema dos coelhos: 1, 1, 2, 3, 5, 8..., cada termo a soma dos dois anteriores.
+- **1834: Dirichlet.** Peter Dirichlet usou o princípio das gavetas (ou da casa dos pombos): com mais objetos do que gavetas, alguma gaveta recebe dois ou mais.
+
 ### Roteiro para sequências numéricas
 
 1. **Diferenças** entre termos consecutivos. Se forem constantes, é progressão aritmética (PA).
