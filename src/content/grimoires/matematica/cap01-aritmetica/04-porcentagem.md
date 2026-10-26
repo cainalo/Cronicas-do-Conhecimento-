@@ -1,5 +1,11 @@
 O edital pede **porcentagem e problemas envolvendo regra de três simples, cálculos de porcentagem, acréscimos e descontos**. Em controle externo, porcentagem aparece em tudo: reajuste de contrato, execução orçamentária, taxa de processos julgados no prazo, glosa de pagamento. A ferramenta que resolve quase todos os problemas é o **fator multiplicativo**.
 
+### Como a porcentagem surgiu
+
+- **Roma antiga: impostos por cem.** No tempo do imperador **Augusto**, Roma cobrava a *centesima rerum venalium*, um imposto de **um centésimo** sobre as vendas. Contar "por cem" facilitava o cálculo.
+- **Século XV: o símbolo %.** Nos manuscritos comerciais italianos, a expressão *per cento* ("por cento") foi sendo abreviada até virar o símbolo **%**.
+- **Hoje: o fator multiplicativo.** Com a calculadora, o jeito mais seguro de lidar com reajustes, descontos e juros passou a ser multiplicar por um único número, o **fator**.
+
 ### Porcentagem como fração
 
 p% = p/100. Então 25% = 0,25 = 1/4; 12,5% = 0,125 = 1/8; 150% = 1,5.

@@ -1,5 +1,12 @@
 Na prova da FCC, a interpretação de texto costuma abrir o caderno de Língua Portuguesa: um texto de jornal, ensaio, crônica ou trecho literário, seguido de questões que pedem a ideia central, o sentido de uma expressão no contexto, a intenção do autor ou o efeito de um recurso expressivo. Boa parte das questões de gramática também parte de frases desse mesmo texto, por isso ler bem é a habilidade que mais rende pontos.
 
+### Como essas ideias surgiram
+
+- **Século IV a.C.: a metáfora de Aristóteles.** Na *Poética*, o filósofo grego **Aristóteles** definiu a metáfora como levar o nome de uma coisa para outra. Na *Retórica*, estudou como os discursos convencem.
+- **Século I: o catálogo de Quintiliano.** O professor romano **Quintiliano**, na *Instituição Oratória*, organizou as figuras de linguagem que os oradores usavam. Muitos nomes que estudamos até hoje vêm dessa tradição.
+- **1843 e 1925: um poema e sua paródia.** **Gonçalves Dias** escreveu a "Canção do Exílio" ("Minha terra tem palmeiras", 1843). Em 1925, **Oswald de Andrade** a retomou com outro sentido ("Minha terra tem palmares"): um exemplo clássico de **intertextualidade** por paródia.
+- **1938: a voz do personagem dentro da voz do narrador.** Em *Vidas Secas*, **Graciliano Ramos** usou muito o **discurso indireto livre**, deixando os pensamentos de Fabiano aparecerem misturados à narração.
+
 ### Compreender × interpretar
 
 | Operação | O que se pede | Exemplo de comando |

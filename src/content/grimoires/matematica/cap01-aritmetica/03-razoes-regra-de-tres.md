@@ -1,5 +1,12 @@
 O edital agrupa em **números e grandezas proporcionais**: razões e proporções, divisão em partes proporcionais e regra de três. É o bloco com mais problemas contextualizados na prova: rateio de recursos entre setores, prazos de equipes de auditoria, produtividade de servidores.
 
+### Como essas ideias surgiram
+
+- **Antiguidade: a sombra da pirâmide.** Conta a tradição que o grego **Tales de Mileto** mediu a altura de uma pirâmide comparando a sombra dela com a sombra de uma vara: as duas razões, altura por sombra, são iguais. É uma **proporção**.
+- **Por volta de 300 a.C.: a teoria das proporções.** O livro V dos *Elementos*, de **Euclides**, organiza a teoria das proporções atribuída a **Eudoxo**.
+- **Século VII: a regra de três na Índia.** O matemático indiano **Brahmagupta** descreveu, em 628, a regra que chamava de *trairāśika*, "a das três quantidades": conhecendo três valores, acha-se o quarto.
+- **1202: a regra chega ao comércio europeu.** No *Liber Abaci*, **Fibonacci** ensinou a regra de três para problemas de câmbio, preços e pesos dos mercadores.
+
 ### Razão e proporção
 
 **Razão** entre a e b (b ≠ 0) é o quociente a/b. Exemplos: 30 processos julgados em 6 sessões dão razão 30/6 = 5 processos por sessão; uma planta na escala 1:500 indica que 1 cm no papel vale 500 cm reais.

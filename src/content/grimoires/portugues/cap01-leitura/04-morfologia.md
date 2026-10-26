@@ -1,5 +1,11 @@
 "Morfossintaxe" é o estudo conjunto da **classe** de uma palavra (morfologia) e da **função** que ela exerce na frase (sintaxe). A mesma palavra pode mudar de classe conforme o uso, e a FCC explora isso: "o termo 'que' tem o mesmo valor em...", "a palavra 'como' introduz ideia de...".
 
+### Como a gramática surgiu
+
+- **Século II a.C.: a primeira gramática grega.** **Dionísio Trácio** escreveu a *Arte da Gramática*, que dividia as palavras em **oito classes**. A ideia de classificar palavras pelo que elas são começa aí.
+- **1536 e 1540: as primeiras gramáticas do português.** **Fernão de Oliveira** publicou a *Gramática da Linguagem Portuguesa* (1536), e **João de Barros**, a sua *Gramática* (1540).
+- **1959: os nomes padronizados.** No Brasil, a **Nomenclatura Gramatical Brasileira (NGB)** fixou os nomes usados nas escolas e nos concursos, como "derivação parassintética" e "conjunção integrante".
+
 ### Classes × funções
 
 | Classe (o que é) | Funções típicas (o que faz) |

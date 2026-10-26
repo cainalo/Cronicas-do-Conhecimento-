@@ -1,5 +1,12 @@
 O edital determina, para a redação, as "normas ortográficas em vigor, implementadas pelo Decreto Presidencial nº 6.583, de 29 de setembro de 2008, e alterado pelo Decreto Federal nº 7.875, de 27 de dezembro de 2012", que tratam do Acordo Ortográfico de 1990. As mesmas regras valem para a prova objetiva.
 
+### Como essas regras surgiram
+
+- **Antiguidade: o nome "crase".** A palavra vem do grego *krâsis*, "**mistura**": é a fusão de duas vogais iguais em uma só.
+- **1911 e 1943: as primeiras reformas.** Portugal fez uma grande reforma da ortografia em 1911; o Brasil adotou o seu Formulário Ortográfico em 1943. Por décadas, os dois países escreveram de jeitos diferentes.
+- **1990: o Acordo.** Os países de língua portuguesa assinaram o **Acordo Ortográfico de 1990**, para aproximar a escrita.
+- **2008 a 2016: a vigência no Brasil.** O Decreto nº 6.583/2008 pôs o Acordo em vigor a partir de 2009, e o Decreto nº 7.875/2012 estendeu a transição até o fim de 2015. Desde 2016, as regras novas são as únicas aceitas.
+
 ### Regras gerais de acentuação
 
 | Tipo de palavra | Regra | Exemplos |

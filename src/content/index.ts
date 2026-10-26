@@ -161,6 +161,12 @@ import { devLogHistoria, devLogControle, devLogComplexidade } from './micro/dev-
 import { devEstHistoria, devEstLineares, devEstOrdenacao } from './micro/dev-estruturas';
 import { devParHistoria, devParPoo, devParFuncional } from './micro/dev-paradigmas';
 import { matDivHistoria, matDivCriterios, matDivMmcMdc } from './micro/mat-divisores';
+import { matRazHistoria, matRazProporcao, matRazRegraTres } from './micro/mat-razoes';
+import { matPctHistoria, matPctFator, matPctSucessivos } from './micro/mat-porcentagem';
+import { portIntHistoria, portIntLeitura, portIntFiguras } from './micro/port-interpretacao';
+import { portOrtHistoria, portOrtAcentos, portOrtCrase } from './micro/port-ortografia';
+import { portPonHistoria, portPonVirgula, portPonPronomes } from './micro/port-pontuacao';
+import { portMorHistoria, portMorClasses, portMorFormacao } from './micro/port-morfologia';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -205,6 +211,24 @@ export const microLessons: MicroLesson[] = [
   matDivHistoria,
   matDivCriterios,
   matDivMmcMdc,
+  matRazHistoria,
+  matRazProporcao,
+  matRazRegraTres,
+  matPctHistoria,
+  matPctFator,
+  matPctSucessivos,
+  portIntHistoria,
+  portIntLeitura,
+  portIntFiguras,
+  portOrtHistoria,
+  portOrtAcentos,
+  portOrtCrase,
+  portPonHistoria,
+  portPonVirgula,
+  portPonPronomes,
+  portMorHistoria,
+  portMorClasses,
+  portMorFormacao,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,

@@ -81,3 +81,4 @@
 ## 26/10/2026: ritmo com história em cap.dados.01 e cap.dev.03
 - **Aulas:** 6 séries (18 aulas), com história verificável nos textos dos capítulos.
 - **Validação:** 1219 testes, tsc e build OK; rolagem conferida a 360×640 e 390×844.
+- **Matemática e Português:** cap.mat.01 completo (divisores, razões, porcentagem) e cap.port.01 completo (interpretação, ortografia, pontuação, morfologia). 1345 testes; rolagem conferida.

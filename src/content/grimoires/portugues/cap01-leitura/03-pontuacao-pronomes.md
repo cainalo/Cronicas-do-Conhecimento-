@@ -1,5 +1,12 @@
 Pontuação e pronomes aparecem na FCC quase sempre em frases tiradas do texto-base: "a vírgula poderia ser retirada sem prejuízo", "o pronome 'cujo' retoma...", "a colocação do pronome está de acordo com a norma-padrão em...".
 
+### Como esses sinais e pronomes surgiram
+
+- **Cerca de 200 a.C.: os pontos de Aristófanes.** Os textos gregos eram escritos sem espaços nem sinais. O bibliotecário **Aristófanes de Bizâncio**, em Alexandria, propôs pontos em alturas diferentes para indicar as pausas na leitura em voz alta.
+- **Idade Média: a varinha.** A palavra **vírgula** vem do latim *virgula*, "**varinha**": um traço fino usado nos manuscritos para marcar uma pausa curta.
+- **Fim do século XV: o ponto e vírgula impresso.** O impressor veneziano **Aldo Manúcio** foi um dos primeiros a imprimir o **ponto e vírgula**, que se espalhou pela Europa com os livros.
+- **Do "Vossa Mercê" ao "você".** O tratamento respeitoso **Vossa Mercê** foi encurtando na fala, virou "vosmecê" e chegou a **você**. Por isso "você", como "Vossa Excelência", leva o verbo à **3ª pessoa**.
+
 ### Vírgula: os usos que mais caem
 
 **Nunca se separa com vírgula:**
