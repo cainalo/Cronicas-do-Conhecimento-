@@ -93,4 +93,5 @@ let cached: Voice | undefined;
 export function getVoice(): Voice { return (cached ??= nativeVoice() ?? browserVoice() ?? none); }
 // Estimativa mais conservadora para manter as legendas acompanhando a voz nativa; nos
 // navegadores, os eventos onboundary prevalecem sobre essa aproximação.
-export const readingMs = (text: string, rate = 1) => Math.max(1800, (text.split(/\s+/).filter(Boolean).length / 2.2) * 1000) / rate;
+// Tempo conservador para a legenda não chegar ao fim antes da voz, sobretudo no TTS Android.
+export const readingMs = (text: string, rate = 1) => Math.max(2200, (text.split(/\s+/).filter(Boolean).length / 2) * 1000) / rate;
