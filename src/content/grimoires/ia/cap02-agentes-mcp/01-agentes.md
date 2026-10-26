@@ -1,3 +1,9 @@
+### Como o agente passou de responder a agir
+
+A pesquisa **ReAct**, publicada em 2022, explorou o uso intercalado de raciocínio com ações externas e observações. Em junho de 2023, a OpenAI anunciou *function calling* para pedidos estruturados de ferramentas; em maio de 2024, o uso de ferramentas do Claude tornou-se geralmente disponível na API da Anthropic. Esses marcos mostram a passagem de respostas em texto para sistemas que podem pedir ações e observar resultados — sempre mediados pela aplicação.
+
+Fontes: [ReAct (2022)](https://arxiv.org/abs/2210.03629), [function calling (OpenAI, 2023)](https://openai.com/index/function-calling-and-other-api-updates/) e [tool use no Claude (Anthropic, 2024)](https://claude.com/blog/tool-use-ga).
+
 Um assistente de conversa responde. Um **agente** age: recebe um objetivo, decide os passos, usa ferramentas, observa o resultado e continua até concluir ou precisar de ajuda. O edital chama isso de **sistemas agentivos de desenvolvimento**.
 
 ### O que faz de um LLM um agente
