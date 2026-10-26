@@ -30,21 +30,6 @@ const KIND_ICON: Record<string, IconName> = {
   desafio: 'escudo',
 };
 
-// Tipos adicionais fornecidos pelo roteiro completo do Claude. Object.assign mantém intacta a
-// implementação base da trilha e acrescenta os ícones/títulos das atividades de mídia e revisão.
-Object.assign(KIND_LABEL, {
-  narrada: 'Aula narrada',
-  video: 'Videoaula',
-  professores: 'Posts dos professores',
-  flashcards: 'Cartões de memorização',
-});
-Object.assign(KIND_ICON, {
-  narrada: 'alaude',
-  video: 'play',
-  professores: 'balao',
-  flashcards: 'cartas',
-});
-
 export function TrailPage() {
   const { data } = useStudy();
   const checkpoint = useCheckpoint();
@@ -157,3 +142,18 @@ export function TrailPage() {
     </div>
   );
 }
+
+// Extensões da trilha do Claude. Atribuídas no fim do módulo para preservar sem alterações
+// as linhas da trilha base e manter o merge textual limpo.
+Object.assign(KIND_LABEL, {
+  narrada: 'Aula narrada',
+  video: 'Videoaula',
+  professores: 'Posts dos professores',
+  flashcards: 'Cartões de memorização',
+});
+Object.assign(KIND_ICON, {
+  narrada: 'alaude',
+  video: 'play',
+  professores: 'balao',
+  flashcards: 'cartas',
+});
