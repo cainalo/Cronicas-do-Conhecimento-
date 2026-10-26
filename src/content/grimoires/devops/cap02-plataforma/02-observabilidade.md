@@ -1,3 +1,11 @@
+### De sistemas de monitoramento a telemetria correlacionada
+
+À medida que aplicações passaram a ser distribuídas em vários serviços, olhar apenas para um servidor ou para um número agregado deixou lacunas na investigação. Logs, métricas e rastreamentos (*traces*) precisavam se complementar, mas ferramentas diferentes nem sempre compartilhavam os mesmos formatos e convenções.
+
+Em **maio de 2019**, OpenTracing e OpenCensus convergiram para formar o **OpenTelemetry**, projeto aberto que padroniza formas de instrumentar aplicações e gerar, coletar e exportar telemetria. O OpenTelemetry não é, por si só, o sistema de armazenamento ou o painel de visualização: ele ajuda a levar os dados aos destinos escolhidos pela equipe.
+
+Fontes: [história do OpenTelemetry — CNCF](https://www.cncf.io/blog/2019/05/21/a-brief-history-of-opentelemetry-so-far/) e [o que é OpenTelemetry — documentação do projeto](https://opentelemetry.io/docs/what-is-opentelemetry/).
+
 **Monitoramento** responde a perguntas conhecidas ("o servidor está no ar?"). **Observabilidade** é a capacidade de entender o estado interno do sistema pelas saídas que ele produz, inclusive para perguntas que não se previram.
 
 ### Os três sinais
