@@ -344,8 +344,10 @@ export function NarratedPlayer({
         <span className="sr-only">Legenda: </span>
         <span data-testid="narrada-legenda-texto">
           {(say.match(/\S+\s*/g) ?? [say]).map((word, i, words) => {
+            // No Android nativo não há evento de palavra; estimamos pela posição em
+            // caracteres para que palavras longas não avancem tão depressa quanto as curtas.
             const estimatedWord = voiceStarted
-              ? Math.min(words.length - 1, Math.floor((beatElapsed / Math.max(1, durations[beatIndex] ?? 1800)) * words.length))
+              ? wordIndexAtChar(say, Math.floor((beatElapsed / Math.max(1, durations[beatIndex] ?? 2200)) * say.length))
               : -1;
             const activeWord = playing && voiceStarted ? (speechWordIndex ?? estimatedWord) : -1;
             return <span key={`${i}-${word}`} className={i === activeWord ? 'rounded bg-[#f0bf69]/25 px-0.5 font-bold text-[#ffd38a] transition-colors duration-150' : i < activeWord ? 'text-white/65 transition-colors duration-150' : 'text-white transition-colors duration-150'}>{word}</span>;
