@@ -261,10 +261,10 @@ export function NarratedPlayer({
         )}
       </div>
       {done && l.check && (
-        <details className="shrink-0 rounded-lg border border-line p-2 text-sm">
-          <summary className="cursor-pointer font-semibold">Conferir o que viu (opcional)</summary>
+        <section className="max-h-32 shrink-0 overflow-y-auto rounded-lg border border-line p-2 text-sm" role="region" aria-label="Checagem">
+          <p className="font-semibold">Confira o que viu (opcional)</p>
           <div className="mt-2"><ActivityView a={l.check} onNext={() => undefined} /></div>
-        </details>
+        </section>
       )}
     </div>
   );
