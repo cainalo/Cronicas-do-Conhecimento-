@@ -50,9 +50,14 @@ function randomShuffle<T>(items: T[]): T[] {
 
 function randomizeQuestionOptions(question: Question): Question {
   const letters = ['A', 'B', 'C', 'D', 'E'] as const;
-  const correctText = question.options.find((option) => option.key === question.answer)?.text;
-  const options = randomShuffle(question.options).map((option, index) => ({ ...option, key: letters[index] }));
-  const correctIndex = options.findIndex((option) => option.text === correctText);
+  // Preserve the identity of the correct option, not just its text: two distractors
+  // can legitimately share similar wording, and text matching could move the key.
+  const tagged = randomShuffle(question.options.map((option) => ({
+    option,
+    correct: option.key === question.answer,
+  })));
+  const options = tagged.map(({ option }, index) => ({ ...option, key: letters[index] }));
+  const correctIndex = tagged.findIndex((item) => item.correct);
   return { ...question, options, answer: letters[Math.max(0, correctIndex)] };
 }
 
