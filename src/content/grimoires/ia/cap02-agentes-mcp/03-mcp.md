@@ -1,3 +1,9 @@
+### Como surgiu o Model Context Protocol
+
+Em **25 de novembro de 2024**, a Anthropic anunciou o **Model Context Protocol (MCP)** como padrão aberto para conectar aplicações de IA a fontes de dados, ferramentas e ambientes de desenvolvimento. A motivação era reduzir integrações específicas que isolavam aplicações e serviços. A especificação evolui; transportes, autorização e capacidades devem ser conferidos na documentação atual ao implementar um servidor.
+
+Fontes: [anúncio do MCP (Anthropic, 25/11/2024)](https://www.anthropic.com/news/model-context-protocol) e [documentação oficial](https://modelcontextprotocol.io/).
+
 O **Model Context Protocol (MCP)** é um protocolo aberto, lançado pela Anthropic em novembro de 2024, que padroniza como aplicações de IA se conectam a fontes de dados e ferramentas externas. A documentação oficial o compara a uma porta USB-C: em vez de cada aplicação criar uma integração própria para cada sistema, todos falam o mesmo protocolo.
 
 ### O problema que ele resolve
