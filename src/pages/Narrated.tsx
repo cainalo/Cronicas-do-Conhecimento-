@@ -63,18 +63,22 @@ export function NarratedPlayer({
   }, [voice]);
 
   useEffect(() => () => stop(), [stop]);
+  // Como em um player de vídeo, a interface desaparece por inatividade tanto
+  // durante a reprodução quanto quando a aula está pausada. Um toque a revela.
   const revealControls = useCallback(() => {
     setControlsVisible(true);
     if (hideControlsTimer.current !== undefined) window.clearTimeout(hideControlsTimer.current);
-    if (playing) hideControlsTimer.current = window.setTimeout(() => setControlsVisible(false), 3800);
-  }, [playing]);
+    hideControlsTimer.current = window.setTimeout(() => {
+      hideControlsTimer.current = undefined;
+      setControlsVisible(false);
+    }, 3800);
+  }, []);
 
   useEffect(() => {
     if (hideControlsTimer.current !== undefined) {
       window.clearTimeout(hideControlsTimer.current);
       hideControlsTimer.current = undefined;
     }
-    if (!playing) { setControlsVisible(true); return; }
     if (!controlsVisible) return;
     hideControlsTimer.current = window.setTimeout(() => {
       hideControlsTimer.current = undefined;
@@ -86,7 +90,7 @@ export function NarratedPlayer({
         hideControlsTimer.current = undefined;
       }
     };
-  }, [playing, controlsVisible, pos]);
+  }, [controlsVisible, pos]);
 
   useEffect(() => {
     soundscape.duck(playing && voice.kind !== 'nenhuma');
