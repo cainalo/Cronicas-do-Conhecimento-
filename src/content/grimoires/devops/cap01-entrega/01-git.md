@@ -1,5 +1,11 @@
 O **Git** é um sistema de **controle de versão distribuído**: cada clone tem o histórico completo do repositório, e é possível trabalhar e fazer *commits* sem conexão com um servidor central.
 
+### Do SCCS ao Git
+
+- **1972 a 2000: sistemas centralizados.** O SCCS, nos laboratórios Bell (1972), e depois RCS (1982), CVS (1990) e Subversion (2000) guardavam o histórico num servidor central.
+- **2005: o Git.** Quando o núcleo do Linux perdeu a licença gratuita do BitKeeper, Linus Torvalds escreveu o Git, distribuído: cada clone tem o histórico completo.
+- **2008 e 2010: GitHub e Git Flow.** O GitHub popularizou o pull request; Vincent Driessen descreveu o Git Flow.
+
 ### Três áreas e o ciclo básico
 
 | Área | O que contém |

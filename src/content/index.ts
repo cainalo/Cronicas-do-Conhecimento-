@@ -202,6 +202,8 @@ import { esReqHistoria, esReqTipos, esReqEngenharia, esReqHistorias } from './mi
 import { esArqHistoria, esArqEstilos, esArqSolid, esArqPrincipios } from './micro/es-arquitetura';
 import { esModHistoria, esModUml, esModBpmn, esModPadroes } from './micro/es-modelagem';
 import { esQuaHistoria, esQuaAtributos, esQuaTestes, esQuaRefatoracao } from './micro/es-qualidade';
+import { dvGitHistoria, dvGitComandos, dvGitBranches, dvGitPr } from './micro/devops-git';
+import { dvCiHistoria, dvCiPipeline, dvCiAmbientes, dvCiFerramentas } from './micro/devops-cicd';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -386,6 +388,14 @@ export const microLessons: MicroLesson[] = [
   esQuaAtributos,
   esQuaTestes,
   esQuaRefatoracao,
+  dvGitHistoria,
+  dvGitComandos,
+  dvGitBranches,
+  dvGitPr,
+  dvCiHistoria,
+  dvCiPipeline,
+  dvCiAmbientes,
+  dvCiFerramentas,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,
