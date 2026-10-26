@@ -114,3 +114,9 @@
 - As aulas incluem contexto histórico, explicações graduais, checagens, recuperação, classificação, depuração, comparação e questões autorais já existentes.
 - Adicionadas fontes aos cinco textos completos e testes de cobertura, ordem, estrutura, diversidade e ligação das 20 questões.
 - **Validação pendente:** revisão editorial humana e resultado do CI desta rodada; o conteúdo não deve ser marcado como validado antes dessas verificações.
+
+## 26/10/2026: refinamentos do player narrado e integridade do embaralhamento
+- O player agora oculta os controles flutuantes após 3,8 segundos de inatividade mesmo quando a aula está pausada; um toque os revela novamente. A cena continua ocupando a camada de reprodução e o cabeçalho/controles seguem como overlays com margens seguras.
+- A randomização de questões de prova agora preserva a identidade da alternativa correta pelo identificador original, em vez de comparar apenas o texto. Isso evita erro de gabarito se duas opções tiverem texto igual ou muito parecido.
+- Commits: `136d7db3f52639d584769f4c70710d6cf6ee84a6` e `041a91b2f3d4dd4d3aaddb29380c05d21c66e620`.
+- **Validação pendente:** a integração de GitHub Actions disponível nesta sessão não retornou execuções/status para esses commits. Não foi possível executar a suíte local, validar screenshots nem conferir o comportamento num Galaxy A14 físico; não declarar essa etapa como 100%.
