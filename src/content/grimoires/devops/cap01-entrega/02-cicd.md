@@ -1,3 +1,9 @@
+### Da integração contínua ao DevOps
+
+- **Anos 1990 a 2001: integração contínua.** O XP adotou a prática de integrar várias vezes ao dia; Martin Fowler a difundiu num artigo (2000); surgiu o CruiseControl (2001).
+- **2005 a 2011: Hudson e Jenkins.** Kohsuke Kawaguchi criou o Hudson (2005), renomeado Jenkins pela comunidade (2011). Em 2010, Jez Humble e David Farley publicaram *Continuous Delivery*.
+- **2009 e 2019: DevOps e Actions.** Patrick Debois organizou os primeiros DevOpsDays (2009); o GitHub Actions ganhou CI/CD em 2019.
+
 ### CI, entrega contínua e implantação contínua
 
 | Prática | Significa | Até onde vai |

@@ -415,7 +415,12 @@ export function ActivityView({
             </button>
           </div>
         ) : (
-          <div className={`anim-toast-in absolute inset-x-0 bottom-0 z-10 -mx-4 rounded-t-[1.6rem] px-4 pb-3 pt-3 shadow-[0_-12px_30px_-12px_rgba(0,0,0,0.6)] sm:-mx-6 sm:px-6 ${sheetCls}`} role="status">
+          <div
+            className={`anim-toast-in fixed inset-x-0 bottom-0 z-40 rounded-t-[1.6rem] px-4 pt-3 shadow-[0_-12px_30px_-12px_rgba(0,0,0,0.45)] sm:px-6 ${sheetCls}`}
+            style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+            role="status"
+          >
+            <div className="mx-auto max-w-3xl">
             {verdictTitle}
             <div className="mt-1 text-sm leading-snug">
               <SwipePages
@@ -429,6 +434,7 @@ export function ActivityView({
               />
             </div>
             {verdictButtons}
+            </div>
           </div>
         )}
       </div>

@@ -189,6 +189,21 @@ import { devIdrLinha, devIdrQuadro } from './micro/dev-idresumo';
 import { matLogHistoria, matLogTabela, matLogOrdem, matLogDeducao } from './micro/mat-logica';
 import { matSeqHistoria, matSeqNumeros, matSeqLetras, matSeqConceitos } from './micro/mat-sequencias';
 import { matEspHistoria, matEspCalendario, matEspRelogio, matEspOrientacao } from './micro/mat-espaco';
+import { portConHistoria, portConVerbal, portConSe, portConNominal } from './micro/port-concordancia';
+import { portRegHistoria, portRegVerbal, portRegVozes, portRegTempos } from './micro/port-regencia';
+import { portPerHistoria, portPerOracoes, portPerConectivos, portPerReescrita } from './micro/port-periodo';
+import { portRedHistoria, portRedAtributos, portRedTratamento, portRedOficio } from './micro/port-redacao';
+import { devJpHistoria, devJpJava, devJpExcecoes, devJpPython } from './micro/dev-javapy';
+import { devJsHistoria, devJsTipos, devJsAssincrono, devJsNodeTs } from './micro/dev-jsts';
+import { devWebHistoria, devWebHtml, devWebCss, devWebReact } from './micro/dev-web';
+import { devPacHistoria, devPacSemver, devPacLock, devPacBuild } from './micro/dev-pacotes';
+import { esCicHistoria, esCicAbordagens, esCicKanban, esCicXp } from './micro/es-ciclo';
+import { esReqHistoria, esReqTipos, esReqEngenharia, esReqHistorias } from './micro/es-requisitos';
+import { esArqHistoria, esArqEstilos, esArqSolid, esArqPrincipios } from './micro/es-arquitetura';
+import { esModHistoria, esModUml, esModBpmn, esModPadroes } from './micro/es-modelagem';
+import { esQuaHistoria, esQuaAtributos, esQuaTestes, esQuaRefatoracao } from './micro/es-qualidade';
+import { dvGitHistoria, dvGitComandos, dvGitBranches, dvGitPr } from './micro/devops-git';
+import { dvCiHistoria, dvCiPipeline, dvCiAmbientes, dvCiFerramentas } from './micro/devops-cicd';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -321,6 +336,66 @@ export const microLessons: MicroLesson[] = [
   matEspCalendario,
   matEspRelogio,
   matEspOrientacao,
+  portConHistoria,
+  portConVerbal,
+  portConSe,
+  portConNominal,
+  portRegHistoria,
+  portRegVerbal,
+  portRegVozes,
+  portRegTempos,
+  portPerHistoria,
+  portPerOracoes,
+  portPerConectivos,
+  portPerReescrita,
+  portRedHistoria,
+  portRedAtributos,
+  portRedTratamento,
+  portRedOficio,
+  devJpHistoria,
+  devJpJava,
+  devJpExcecoes,
+  devJpPython,
+  devJsHistoria,
+  devJsTipos,
+  devJsAssincrono,
+  devJsNodeTs,
+  devWebHistoria,
+  devWebHtml,
+  devWebCss,
+  devWebReact,
+  devPacHistoria,
+  devPacSemver,
+  devPacLock,
+  devPacBuild,
+  esCicHistoria,
+  esCicAbordagens,
+  esCicKanban,
+  esCicXp,
+  esReqHistoria,
+  esReqTipos,
+  esReqEngenharia,
+  esReqHistorias,
+  esArqHistoria,
+  esArqEstilos,
+  esArqSolid,
+  esArqPrincipios,
+  esModHistoria,
+  esModUml,
+  esModBpmn,
+  esModPadroes,
+  esQuaHistoria,
+  esQuaAtributos,
+  esQuaTestes,
+  esQuaRefatoracao,
+  dvGitHistoria,
+  dvGitComandos,
+  dvGitBranches,
+  dvGitPr,
+  dvCiHistoria,
+  dvCiPipeline,
+  dvCiAmbientes,
+  dvCiFerramentas,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,
@@ -372,12 +447,25 @@ export type { FictionalTeacher, TeacherPost } from './teachers';
 import { narradaHistoriaComputador, narradaQuatroTarefas } from './narrated/prim-computador';
 import { narradaSomarInteiros } from './narrated/mat-somar-inteiros';
 import type { NarratedLesson } from './narrated/types';
-export const narratedLessons: NarratedLesson[] = [narradaHistoriaComputador, narradaQuatroTarefas, narradaSomarInteiros];
+import { narratedFromMicro } from '@/lib/narrate';
+const handmadeNarrated: NarratedLesson[] = [narradaHistoriaComputador, narradaQuatroTarefas, narradaSomarInteiros];
+/**
+ * Trilha integrada (26/10/2026): a primeira aula de cada trecho (a da história) ganha uma versão
+ * narrada gerada do próprio texto da aula (lib/narrate.ts), quando ainda não há uma feita à mão.
+ */
+const autoNarrated: NarratedLesson[] = journey.flatMap((c) =>
+  c.sections
+    .map((s) => microSeries(c.id, s.id)[0])
+    .filter((m): m is MicroLesson => !!m && m.series?.order === 1 && !handmadeNarrated.some((h) => h.lessonId === m.id))
+    .map(narratedFromMicro),
+);
+export const narratedLessons: NarratedLesson[] = [...handmadeNarrated, ...autoNarrated];
 export const getNarrated = (id: string) => narratedLessons.find((n) => n.id === id);
 export const narratedFor = (lessonId: string) => narratedLessons.find((n) => n.lessonId === lessonId);
 
 // Feed didático (pacote v4, etapa 4): as aulas em texto, na ordem da trilha, viram posts.
 import { postsOfLesson, type FeedPost } from '@/lib/feed';
+import type { TrailExtras } from '@/lib/pace';
 import { teacherPosts as _tips } from './teachers';
 import { curatedVideos as _videos } from './estudos/materiais';
 import { feedImages } from './estudos/imagens';
@@ -417,3 +505,14 @@ export function trailPlaceOf(lessonId: string): { to: string; label: string } | 
   const where = series.length > 1 ? `Aula ${i + 1} de ${series.length}: ${m.title}` : m.title;
   return { to: `/aprender/${m.chapterId}/${m.sectionId}${series.length > 1 ? `/${m.id}` : ''}`, label: `${c?.title ?? ''} · ${where}` };
 }
+
+/** Materiais encaixados na trilha, na ordem lógica de cada trecho (ver courseUnits). */
+export const trailExtras: TrailExtras = {
+  narratedFor: (lessonId) => narratedFor(lessonId),
+  videosFor: (chapterId, sectionId) => _videos.filter((v) => v.chapterId === chapterId && (v.sectionId ?? sectionId) === sectionId),
+  postsLessonFor: (chapterId, sectionId) => {
+    const first = microSeries(chapterId, sectionId)[0];
+    return first && feedPostsOf(first.id).length ? first.id : undefined;
+  },
+  hasCards: (chapterId) => flashcards.some((f) => f.chapterId === chapterId),
+};

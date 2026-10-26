@@ -1,5 +1,6 @@
 // Leitor em forma de livro: páginas que viram (sem rolagem vertical). A página é montada a partir da
 // altura real da tela; arrastar para o lado, tocar nas bordas ou usar as setas vira a página.
+import { Portal } from '@/components/Portal';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
@@ -414,6 +415,7 @@ export function BookPage() {
 
       {/* Sumário */}
       {toc && (
+        <Portal>
         <div className="fixed inset-0 z-50 flex justify-center overflow-y-auto bg-black/40 p-3" onClick={() => setToc(false)}>
           <nav className="anim-toast-in my-auto h-fit w-full max-w-md rounded-[1.8rem] bg-bg p-4 shadow-2xl" aria-label="Sumário do capítulo" onClick={(e) => e.stopPropagation()}>
             <div className="mb-3 flex items-center justify-between">
@@ -482,6 +484,7 @@ export function BookPage() {
             </ol>
           </nav>
         </div>
+        </Portal>
       )}
     </div>
   );

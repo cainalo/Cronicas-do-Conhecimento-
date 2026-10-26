@@ -1,5 +1,10 @@
 Concordância é o capítulo de gramática mais frequente nas provas da FCC. O formato clássico apresenta cinco frases e pede aquela em que "o verbo flexionado está corretamente empregado" ou em que "a concordância está de acordo com a norma-padrão". A técnica é sempre a mesma: **ache o verbo, ache o sujeito, coloque o sujeito antes do verbo e confira**.
 
+### De onde vêm as regras
+
+- **A herança do latim.** O português nasceu do latim, em que o verbo já combinava com o sujeito e o adjetivo com o substantivo.
+- **1536 e 1540: as primeiras gramáticas.** Fernão de Oliveira publicou em Lisboa a primeira gramática impressa do português (1536); João de Barros publicou outra em 1540. Desde então, as gramáticas registram a norma-padrão que as provas cobram.
+
 ### Regra geral da concordância verbal
 
 O verbo concorda em número e pessoa com o núcleo do sujeito, esteja ele antes ou depois.

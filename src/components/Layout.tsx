@@ -1,5 +1,7 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useStudy } from '@/app/StudyProvider';
+import { logUnit } from '@/lib/pace';
 import { AREAS, areaOf, isAreaHome, type AreaKey } from '@/app/areas';
 import { useCheckpoint } from '@/app/useCheckpoint';
 import { Icon } from '@/components/Icon';
@@ -71,9 +73,21 @@ function ContinueButton({ variant }: { variant: 'compact' | 'pill' }) {
   );
 }
 
+// Materiais abertos pela trilha (aula narrada, vídeo, posts, cartões) chegam com ?u=chave: abrir já
+// conta como concluído, para a trilha seguir para a próxima atividade.
+function useTrailVisit() {
+  const { search } = useLocation();
+  const { update } = useStudy();
+  useEffect(() => {
+    const key = new URLSearchParams(search).get('u');
+    if (key) update((d) => logUnit(d, key));
+  }, [search, update]);
+}
+
 export function Layout() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  useTrailVisit();
   const inner = !isAreaHome(pathname);
   // Leitura/prática ocultam a navegação inferior; aula narrada standalone ocupa a viewport inteira.
   const standaloneNarration = /^\/aula-narrada\//.test(pathname);

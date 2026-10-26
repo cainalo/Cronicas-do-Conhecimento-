@@ -1,5 +1,11 @@
 JavaScript nasceu para dar comportamento às páginas web e hoje roda também no servidor, com **Node.js**. **TypeScript** acrescenta tipos estáticos ao JavaScript e é compilado para ele. As três coisas aparecem juntas no edital e na prática: um sistema de protocolo eletrônico pode ter front-end em React com TypeScript e uma API em Node.js.
 
+### Do navegador ao servidor
+
+- **1995: o JavaScript.** Brendan Eich criou a linguagem na Netscape para dar comportamento às páginas; em 1997 ela foi padronizada pela Ecma International como ECMAScript. Apesar do nome, não é o Java.
+- **2009: o Node.js.** Ryan Dahl levou o JavaScript para fora do navegador, sobre o motor V8 do Google Chrome.
+- **2012: o TypeScript.** A Microsoft, com a equipe de Anders Hejlsberg, lançou o TypeScript, que acrescenta tipos estáticos ao JavaScript.
+
 ### Tipos, variáveis e comparação
 
 JavaScript tem tipagem **dinâmica e fraca** (faz coerção implícita). Os tipos **primitivos** são sete: `string`, `number`, `bigint`, `boolean`, `undefined`, `null` e `symbol`. Todo o resto é `object` (incluindo vetores e funções). Duas curiosidades históricas: `typeof null` retorna `"object"`, e `NaN === NaN` é `false` (use `Number.isNaN`).

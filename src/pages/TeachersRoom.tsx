@@ -3,7 +3,7 @@
 // Ações com função real e privadas: Entendi, Preciso rever, Guardar, anotação e dúvida guardada.
 // Responder posts não conclui a aula; só "Concluir esta aula", depois de todas as checagens.
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { feedLessons, feedPostsOf, getChapter, microSeries, teacherForChapter, teachers } from '@/content';
@@ -61,7 +61,9 @@ export function TeachersRoomPage() {
   const unlocked = (id: string) => lessonUnlocked(order, (x) => lessonDone(data, feedLessons.find((m) => m.id === x)!), id);
   // Aula aberta: a escolhida, senão a primeira não concluída (a mesma lógica da trilha).
   const firstOpen = feedLessons.find((m) => !lessonDone(data, m)) ?? feedLessons[0];
-  const [lessonId, setLessonId] = useState(firstOpen.id);
+  // Vindo da trilha (?aula=), abre os posts daquela aula.
+  const asked = new URLSearchParams(useLocation().search).get('aula');
+  const [lessonId, setLessonId] = useState(asked && feedLessons.some((m) => m.id === asked) ? asked : firstOpen.id);
   const lesson = feedLessons.find((m) => m.id === lessonId)!;
   const posts = useMemo(() => feedPostsOf(lesson.id), [lesson.id]);
   const shown = Math.min(posts.length, (prefs.cursor[lesson.id] ?? 0) + 1);

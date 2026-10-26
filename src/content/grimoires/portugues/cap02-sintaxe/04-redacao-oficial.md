@@ -1,5 +1,11 @@
 Redação oficial é a maneira pela qual o poder público redige comunicações e atos normativos. A referência usada pelas bancas é o **Manual de Redação da Presidência da República**, cuja **3ª edição, revista, atualizada e ampliada, foi publicada em 2018**. O edital não cita o manual pelo nome, mas é o documento que as bancas usam como base para o tema.
 
+### A história do Manual
+
+- **1991: a primeira edição.** A Presidência da República publicou o Manual para padronizar as comunicações do poder público; os fechos "Respeitosamente" e "Atenciosamente" vêm dessa tradição.
+- **2018: a 3ª edição.** Revista, atualizada e ampliada, unificou ofício, aviso e memorando no padrão ofício e adotou as fontes Calibri ou Carlito.
+- **2019: o Decreto nº 9.758.** Fixou "senhor" como tratamento na comunicação com agentes públicos federais do Poder Executivo (detalhes e exceções abaixo).
+
 ### Atributos da redação oficial
 
 O Manual lista como atributos: **clareza e precisão; objetividade; concisão; coesão e coerência; impessoalidade; formalidade e padronização; e uso da norma padrão da língua portuguesa**. Eles derivam dos princípios da administração pública do art. 37 da Constituição, especialmente impessoalidade e publicidade.

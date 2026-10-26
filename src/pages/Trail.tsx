@@ -142,3 +142,18 @@ export function TrailPage() {
     </div>
   );
 }
+
+// Extensões da trilha do Claude. Atribuídas no fim do módulo para preservar sem alterações
+// as linhas da trilha base e manter o merge textual limpo.
+Object.assign(KIND_LABEL, {
+  narrada: 'Aula narrada',
+  video: 'Videoaula',
+  professores: 'Posts dos professores',
+  flashcards: 'Cartões de memorização',
+});
+Object.assign(KIND_ICON, {
+  narrada: 'alaude',
+  video: 'play',
+  professores: 'balao',
+  flashcards: 'cartas',
+});

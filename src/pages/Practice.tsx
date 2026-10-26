@@ -1,5 +1,6 @@
 // Prática de um trecho, no estilo Duolingo: atividades curtas e variadas, painel de resposta embaixo,
 // erros voltam para o fim da fila e o Bubo abre e fecha a rodada com a cena da história.
+import { Portal } from '@/components/Portal';
 import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
@@ -260,6 +261,7 @@ function PracticeRun() {
       </div>
 
       {help && simple && (
+        <Portal>
         <div className="fixed inset-0 z-50 flex justify-center overflow-y-auto bg-black/40 p-3" onClick={() => setHelp(false)}>
           <div className="anim-toast-in my-auto h-fit w-full max-w-md rounded-[1.8rem] bg-bg p-4 shadow-2xl" role="dialog" aria-label="Palavras do trecho" onClick={(e) => e.stopPropagation()}>
             <div className="mb-2 flex items-center justify-between">
@@ -278,6 +280,7 @@ function PracticeRun() {
             </dl>
           </div>
         </div>
+        </Portal>
       )}
 
       {phase === 'intro' && (

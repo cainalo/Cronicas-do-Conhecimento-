@@ -1,5 +1,10 @@
 O edital pede **Java (conceitos básicos)** e **Python para automação e desenvolvimento back-end**. As duas linguagens são orientadas a objetos e muito usadas em órgãos públicos, mas diferem na tipagem, na forma de execução e na sintaxe.
 
+### Como nasceram as duas linguagens
+
+- **1991: o Python.** Guido van Rossum começou o Python no fim de 1989 e publicou a primeira versão em 1991; o nome vem do grupo humorístico Monty Python.
+- **1995: o Java.** Na Sun Microsystems, a equipe de James Gosling começou em 1991 o projeto que deu origem ao Java, lançado em 1995 com a promessa "escreva uma vez, execute em qualquer lugar". Em 2010, a Oracle comprou a Sun.
+
 ### Java: compilação, bytecode e JVM
 
 O código-fonte `.java` é compilado pelo `javac` para **bytecode** (arquivos `.class`), um código intermediário independente de sistema operacional. Quem executa o bytecode é a **JVM** (*Java Virtual Machine*), que interpreta e, com o compilador **JIT** (*just-in-time*), traduz trechos frequentes para código de máquina. Daí o lema "escreva uma vez, execute em qualquer lugar": o mesmo `.class` roda em qualquer sistema com JVM.

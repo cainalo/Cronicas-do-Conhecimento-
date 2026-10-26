@@ -87,3 +87,19 @@
 - **SGBDs:** cap.dados.02 completo (PostgreSQL e Oracle; NoSQL, CAP, replicação e governança). 1615 testes.
 - **Identidade:** cap.dev.02 completo (conceitos, OAuth 2.0, OIDC e JWT, resumo com a linha do tempo de APIs e identidade). 1692 testes; rolagem de cap.ia.01 (34) e cap.dev.01 (24) conferida a 360×640 e 390×844.
 - **Raciocínio lógico:** cap.mat.02 completo (associação e dedução, sequências e conceitos, espaço e tempo). 1761 testes.
+- **Sintaxe e redação oficial:** cap.port.02 completo (concordância, regência e verbos, período e reescrita, redação oficial). 1853 testes; rolagem de cap.dados.02 e cap.dev.02 (40) conferida; CI 98 verde.
+- **Linguagens e pacotes:** cap.dev.04 completo (Java e Python, JavaScript e TypeScript, HTML/CSS/React, dependências e pacotes). 1945 testes.
+- **Processo de software:** cap.es.01 completo (ciclo de vida e métodos, requisitos). 1991 testes.
+- **Arquitetura e qualidade:** cap.es.02 completo. 2060 testes; rolagem de cap.mat.02, cap.port.02 e cap.dev.04 conferida (88 telas sem problema) a 360×640 e 390×844.
+
+## 26/10/2026: trilha no modelo do livro e correção da instalação do APK
+- **Trilha:** a página /trilha passou a usar o mesmo modelo da página do livro (cabeçalho do capítulo com Continuar e Texto completo e a lista de atividades com ícones), mantendo o bloqueio dentro do capítulo e o "Você está aqui". Conferida em 390×844, sem rolagem horizontal.
+- **APK:** o merge do PR #1 no `main` disparou uma publicação assinada com outra chave (o cache da chave de depuração é separado por branch), e o Android recusou a atualização ("conflito com pacote existente"). Agora, sem a chave de release nos segredos, só o branch de trabalho publica o site e o APK; com `ANDROID_KEYSTORE_BASE64` e afins configurados, qualquer branch publica com a mesma chave.
+- **Git e CI/CD:** cap.devops.01 completo (8 aulas). 2106 testes. APK publicado pelo branch de trabalho conferido: certificado SHA-256 F7:DD:A2:D4..., a chave original (o do main era 84:07:B7...).
+- **Modais e correção:** a animação `.page-enter` (fill `both`) deixava um transform no contêiner da página, e o estilo de cartões "vidro" usa backdrop-filter; os dois prendiam os overlays `position: fixed` à coluna, deixando margem clara. Agora a animação usa `backwards`, os modais vão para o body por `Portal`, e o cartão de certo ou errado fica fixo na base, de borda a borda, com a área segura do Android. Conferido em 390×844 e 360×640.
+
+## 26/10/2026: trilha integrada (fase 1)
+- A trilha passou a incluir, em ordem lógica, todo o material existente: a aula narrada logo depois da aula em texto que ela acompanha; as videoaulas curadas depois da aula (ou do trecho); os posts dos professores depois das aulas do trecho, antes do Praticar; os cartões de memorização no fim do capítulo, antes do Desafio. Abrir pela trilha (`?u=chave`) conta como feito. Nova página /video/:id; /sala?aula= e /flashcards?capitulo= abrem direto no lugar certo.
+- Testes: `trail-extras.test.ts` (5), 2115 no total; test:e2e com as novas páginas; capturas da trilha conferidas em 390×844.
+- **Fase 2:** a primeira aula de cada trecho (a da história) ganhou uma aula narrada gerada do próprio texto da aula (`lib/narrate.ts`): fala sem marcação, cartões para listas, linha do tempo para os marcos datados e o resumo no fim. Entram na trilha logo depois da aula. Testes em `narrate.test.ts` (inclusive: só frases que estão na aula). 2234 testes.
+

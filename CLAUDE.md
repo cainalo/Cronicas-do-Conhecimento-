@@ -28,6 +28,9 @@ Trabalhe em fluxos completos e testados, um de cada vez. Estética nunca atrasa 
 - Nunca reset destrutivo; nunca service role key no cliente ou no repositório.
 - O projeto `NutriConnect` na mesma organização é de OUTRO produto: não tocar no banco dele. O repositório `cainalo/nutriconnect-simple-site` serve só de referência visual (leitura).
 
+## Testes de layout (obrigatório)
+Toda mudança em tela, modal, cartão, animação ou estilo segue a "Regra de testes de layout" de `docs/TESTING.md`. Ela exige `npm test` (com `src/test/layout-guard.test.ts`), `npm run build && npm run test:e2e` e uma captura conferida em 360×640 e 390×844, com e sem cartões "vidro", antes do commit. Overlays de tela cheia sempre por `Portal`; animações de contêiner com `backwards`. Nunca declarar visual corrigido sem a captura.
+
 ## Ao final de cada etapa
 Atualize `docs/SESSION_HANDOFF.md`, `PROJECT_STATUS.md`, `ROADMAP.md`, `SESSION_LOG.md`, `TESTING.md` e demais afetados. Nunca declare concluído o que não foi testado. Commit com mensagem descritiva e push no branch de trabalho.
 

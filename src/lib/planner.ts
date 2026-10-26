@@ -60,6 +60,10 @@ const TRAIL_WHY: Record<Unit['kind'], string> = {
   praticar: 'Praticar logo após aprender fixa o conteúdo.',
   missao: 'Usar o que aprendeu num caso do Arquivo Real.',
   desafio: 'Fechar o capítulo com questões no estilo da prova.',
+  narrada: 'Ver o mesmo assunto contado em voz e cenas.',
+  video: 'Uma videoaula sobre o mesmo assunto.',
+  professores: 'Os posts dos professores sobre o trecho.',
+  flashcards: 'Cartões para memorizar os termos do capítulo.',
 };
 
 const sectionMinutes = (c: Chapter) => Math.max(5, Math.round(c.estimatedMinutes / c.sections.length));

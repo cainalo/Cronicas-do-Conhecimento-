@@ -3,6 +3,7 @@
 // representam conceitos já apresentados abrem a definição numa folha (sem mudar o checkpoint). Errou a
 // checagem? Vem outra explicação e uma atividade equivalente; depois, volta-se exatamente ao ponto.
 // O ponto salvo é a etapa (stepId), na mesma chave do Aprender, então o Continuar volta aqui.
+import { Portal } from '@/components/Portal';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { Concept, LearningUnit } from '@/content/learning';
@@ -76,6 +77,7 @@ function TermSheet({ concept, onClose }: { concept: Concept; onClose: () => void
     };
   }, [onClose]);
   return (
+    <Portal>
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-3 sm:items-center" onClick={onClose}>
       <div role="dialog" aria-modal="true" aria-label={`Conceito: ${concept.term}`} className="anim-toast-in w-full max-w-md rounded-[1.4rem] bg-surface p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start justify-between gap-3">
@@ -91,6 +93,7 @@ function TermSheet({ concept, onClose }: { concept: Concept; onClose: () => void
         <p className="mt-3 text-xs text-muted">Abrir um conceito não muda o seu ponto na trilha.</p>
       </div>
     </div>
+    </Portal>
   );
 }
 

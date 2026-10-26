@@ -8,7 +8,7 @@
   - **Ritmo lento com história (piloto):** cap.prim.01 / computador virou a série `prim.computador`, com 4 aulas: história, quatro tarefas, bit e tamanhos. O texto do capítulo ganhou "Como o computador surgiu".
   - **Ritmo lento nos trechos 2 a 4 de cap.prim.01:** séries `prim.hardware`, `prim.sistema` e `prim.programacao`, 3 aulas cada, todas começando pela história. Os textos dos capítulos ganharam as seções históricas que servem de fonte. Sem rolagem a 360×640 e 390×844.
   - **Ritmo lento em cap.prim.02:** séries `prim.redes`, `prim.dados` e `prim.seguranca`, 3 aulas cada, com história. O grimório Primeiros Passos está inteiro no novo formato.
-  - **Ritmo lento em cap.dados.01, cap.dev.03, cap.mat.01, cap.port.01, cap.ia.03, cap.ia.01, cap.dev.01, cap.dados.02, cap.dev.02 e cap.mat.02:** 38 séries, com história.
+  - **Ritmo lento em cap.dados.01, cap.dev.03, cap.mat.01, cap.port.01, cap.ia.03, cap.ia.01, cap.dev.01, cap.dados.02, cap.dev.02, cap.mat.02, cap.port.02, cap.dev.04, cap.es.01, cap.es.02 e cap.devops.01:** 53 séries, com história.
   - **Sequência única:** aula narrada e videoaula conferida entram dentro da aula ("Veja de outro jeito", fase `midia` em `MicroLesson.tsx`). As bibliotecas mostram "Na trilha" (`components/TrailPlace.tsx`, `trailPlaceOf`).
   - **Aulas narradas novas:** "Do ábaco ao celular", com a cena nova de linha do tempo, e "As quatro tarefas".
   - **Feed:** retratos ilustrados (`components/TeacherAvatar.tsx`), perfis, revisões rápidas, posts com desenho, hashtags, curtir, comentário fixado e anotações como comentários. O espaço para fotos reais (`content/estudos/imagens.ts`) está vazio enquanto a Wikimedia segue bloqueada na rede.
@@ -58,10 +58,18 @@ Antes: `npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escur
 - Nome definitivo: "Crônicas do Arquivo Real" (provisório do kit, aprovado).
 - **PDFs das provas** (rede bloqueia FGV/eticaconcursos/TCE): prova TCE-GO 2014 FCC TI + gabarito; prova 2024 TI Tipo 1 + gabarito definitivo, para questões OFICIAIS rotuladas.
 
+## Assinatura do APK (importante)
+- Sem os segredos `ANDROID_KEYSTORE_*`, só o branch `claude/cronicas-conhecimento-estudos-jgbofo` publica (o cache da chave é por branch). Merges no `main` compilam e testam, mas não publicam. Solução definitiva: guardar uma chave fixa nos segredos do repositório (exige uma reinstalação única se a chave mudar).
+
+## Trilha integrada (pedido de 26/10/2026)
+- Fase 1 feita: material existente encaixado na trilha (ver SESSION_LOG).
+- Fase 2 feita: aulas narradas geradas para a primeira aula de cada trecho (lib/narrate.ts).
+- Fase 3, por último: aulas narradas em tela cheia, com botões por cima sem cobrir o conteúdo, e cenas mais vivas (imagens e movimento enquanto a voz narra).
+
 ## Próxima tarefa exata
 1. **Aplicar o novo ritmo com história aos trechos seguintes, um por vez.** O grimório Primeiros Passos está completo (cap.prim.01 e cap.prim.02, 7 séries):
-   - **Feitos fora de Primeiros Passos:** cap.dados.01, cap.dev.03, cap.mat.01, cap.port.01, cap.ia.03, cap.ia.01, cap.dev.01, cap.dados.02, cap.dev.02 e cap.mat.02.
-   - **Próximo, na ordem da trilha (`JOURNEY` em `src/content/index.ts`):** cap.infra.02 e cap.seg.01 já têm microaulas; o próximo é cap.port.02, depois cap.dev.04, cap.es.01, cap.es.02 e assim por diante. Hoje 44 trechos ainda usam só a camada Aprender simples.
+   - **Feitos fora de Primeiros Passos:** cap.dados.01, cap.dev.03, cap.mat.01, cap.port.01, cap.ia.03, cap.ia.01, cap.dev.01, cap.dados.02, cap.dev.02, cap.mat.02, cap.port.02, cap.dev.04, cap.es.01, cap.es.02 e cap.devops.01.
+   - **Próximo, na ordem da trilha (`JOURNEY` em `src/content/index.ts`):** cap.infra.02 e cap.seg.01 já têm microaulas; o próximo é cap.devops.02, depois cap.ia.02, cap.ia.04, cap.ingles.01 e assim por diante. Hoje 29 trechos ainda usam só a camada Aprender simples.
    - **Depois:** os demais capítulos.
    - **Regra:** cada trecho começa contando como aquilo surgiu, usando só fatos verificáveis, acrescentados também ao texto do capítulo.
 2. **Fotos reais no feed:** quando a Wikimedia (`commons.wikimedia.org` e `upload.wikimedia.org`) estiver liberada na rede do ambiente, preencher `content/estudos/imagens.ts`. Usar só domínio público ou licença livre, com autor, licença e link conferidos na página do arquivo.

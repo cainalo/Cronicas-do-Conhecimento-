@@ -1,5 +1,11 @@
 **Engenharia de software** é a aplicação de uma abordagem sistemática, disciplinada e quantificável ao desenvolvimento, à operação e à manutenção de software. O **ciclo de vida** descreve as etapas pelas quais o software passa, da concepção à aposentadoria.
 
+### Da crise do software ao Manifesto Ágil
+
+- **1968: a engenharia de software.** Diante da "crise do software" (projetos atrasados, caros e falhos), uma conferência da OTAN na Alemanha popularizou o termo.
+- **1970 e 1986: cascata e espiral.** O artigo de Winston Royce (1970) descreveu fases em sequência, base do que se chamou cascata, embora o autor já alertasse para os riscos de não voltar atrás; Barry Boehm propôs o modelo espiral, orientado a riscos (1986).
+- **Anos 1990 a 2003: o ágil.** Kent Beck organizou o XP; em 2001, dezessete desenvolvedores reunidos em Snowbird escreveram o Manifesto Ágil; em 2003, Mary e Tom Poppendieck levaram o pensamento enxuto da Toyota ao software.
+
 ### Abordagens de ciclo de vida
 
 | Abordagem | Ideia | Quando funciona bem |

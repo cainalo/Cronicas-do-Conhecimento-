@@ -1,3 +1,9 @@
+### De um livro de arquitetura aos padrões de software
+
+- **1977 e 1994: padrões.** O arquiteto Christopher Alexander publicou *A Pattern Language*; Gamma, Helm, Johnson e Vlissides levaram a ideia ao software no livro *Design Patterns*, com 23 padrões.
+- **1997: UML.** A OMG adotou a UML, unificada por Booch, Rumbaugh e Jacobson.
+- **2004 e 2011: BPMN.** A primeira versão saiu pela BPMI (2004); a OMG publicou a BPMN 2.0 (2011).
+
 ### UML
 
 A **UML** (*Unified Modeling Language*), mantida pela OMG, é uma linguagem de modelagem, não um processo. A versão 2.5 tem **14 diagramas**, em dois grupos:
