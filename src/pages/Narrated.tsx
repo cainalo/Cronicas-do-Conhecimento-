@@ -303,9 +303,9 @@ export function NarratedPlayer({
           className={`absolute inset-0 grid place-items-center transition-[padding] duration-300 ${controlsVisible ? 'px-4 pb-[14.5rem] pt-28 sm:px-10 sm:pb-[15rem] sm:pt-32' : 'px-4 pb-8 pt-8 sm:px-10'}`}
           data-testid="narrada-cena"
         >
-          <div className="anim-tile-in relative flex h-full max-h-full w-full flex-col items-center justify-center gap-3" key={scene.id + ':' + pos.beat}>
+          <div className="anim-tile-in relative flex h-full max-h-full w-full flex-col items-center justify-center gap-3" key={scene.id}>
             <SceneView scene={scene} reveal={revealOf(scene, pos.beat)} />
-            {scene.visual.kind !== 'cards' && <SceneMotionStrip scene={scene} say={say} />}
+            {scene.visual.kind !== 'cards' && <SceneMotionStrip key={scene.id + ':' + pos.beat} scene={scene} say={say} />}
           </div>
         </div>
       </section>
@@ -471,7 +471,7 @@ function SceneMotionStrip({ scene, say }: { scene: Scene; say: string }) {
           className={`anim-tile-in flex min-w-0 max-w-[45%] items-center gap-1.5 rounded-xl border px-2 py-1.5 shadow-sm transition-all duration-300 sm:gap-2 sm:px-3 sm:py-2 ${palettes[i % palettes.length]} `}
           style={{ animationDelay: `${i * 90}ms` }}
         >
-          <Illustration name={artFor(word)} animate className="h-7 w-8 shrink-0 sm:h-9 sm:w-10" />
+          <span className="anim-bob grid h-7 w-8 shrink-0 place-items-center sm:h-9 sm:w-10"><Illustration name={artFor(word)} animate className="h-7 w-8 sm:h-9 sm:w-10" /></span>
           <span className="min-w-0 truncate text-xs font-bold sm:text-sm">{word}</span>
           <span className="hidden text-[0.58rem] font-bold uppercase tracking-wider opacity-65 sm:inline">{['IDEIA', 'LIGAÇÃO', 'EXEMPLO'][i]}</span>
         </div>
@@ -485,7 +485,7 @@ function SceneView({ scene, reveal }: { scene: Scene; reveal: number }) {
   if (v.kind === 'title')
     return (
       <div className="flex w-full max-w-lg flex-col items-center text-center">
-        {v.art && <Illustration name={v.art} className="h-28 w-36 text-ink" />}
+        {v.art && <Illustration name={v.art} animate className="h-28 w-36 text-ink" />}
         <h2 className="anim-tile-in mt-2 text-[1.9rem] leading-tight sm:text-[2.3rem]">{v.title}</h2>
         {v.subtitle && reveal >= 2 && <p className="anim-tile-in mt-2 font-title text-lg italic text-muted">{v.subtitle}</p>}
       </div>
@@ -496,7 +496,7 @@ function SceneView({ scene, reveal }: { scene: Scene; reveal: number }) {
         {v.items.map((it, i) => (
           <li
             key={it.year + it.title}
-            className={`relative pb-3 transition-all duration-500 last:pb-0 ${i < reveal ? 'translate-x-0 opacity-100' : 'translate-x-2 opacity-20'}`}
+            className={`relative pb-3 transition-all duration-500 last:pb-0 ${i === reveal - 1 ? 'anim-tile-in' : ''} ${i < reveal ? 'translate-x-0 opacity-100' : 'translate-x-2 opacity-20'}`}
           >
             <span className={`absolute -left-[1.72rem] top-1.5 h-3 w-3 rounded-full border-2 ${i < reveal ? 'border-gold bg-gold' : 'border-line bg-bg'}`} aria-hidden="true" />
             <p className="font-title text-sm tabular-nums text-gold">{it.year}</p>
@@ -524,7 +524,7 @@ function SceneView({ scene, reveal }: { scene: Scene; reveal: number }) {
           return (
             <div
               key={c.title}
-              className={`rounded-2xl border p-4 transition-all duration-500 sm:p-5 ${['border-[#2e7182]/35 bg-[#d6e7e6] text-[#172e34]','border-[#c8402a]/30 bg-[#f3d7ca] text-[#3a211c]','border-[#9e6a14]/30 bg-[#f0e3bd] text-[#3b2c12]','border-[#a8365e]/30 bg-[#edd6e0] text-[#3c2030]'][i % 4]} ${i < reveal ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-25'} ${i === reveal - 1 ? 'scale-[1.02] shadow-lg ring-2 ring-[#c8402a]/35' : ''}`}
+              className={`rounded-2xl border p-4 transition-all duration-500 sm:p-5 ${i === reveal - 1 ? 'anim-tile-in' : ''} ${['border-[#2e7182]/35 bg-[#d6e7e6] text-[#172e34]','border-[#c8402a]/30 bg-[#f3d7ca] text-[#3a211c]','border-[#9e6a14]/30 bg-[#f0e3bd] text-[#3b2c12]','border-[#a8365e]/30 bg-[#edd6e0] text-[#3c2030]'][i % 4]} ${i < reveal ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-25'} ${i === reveal - 1 ? 'scale-[1.02] shadow-lg ring-2 ring-[#c8402a]/35' : ''}`}
             >
               <div className="mb-2 flex items-center gap-2">
                 <Illustration name={art} animate className="h-10 w-12 shrink-0" />
