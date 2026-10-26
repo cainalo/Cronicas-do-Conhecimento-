@@ -75,6 +75,17 @@ export function NarratedPlayer({
   }, [voice]);
 
   useEffect(() => () => stop(), [stop]);
+  // A composição cobre a viewport, então a página por trás não deve continuar rolando no toque.
+  useEffect(() => {
+    const bodyOverflow = document.body.style.overflow;
+    const rootOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = bodyOverflow;
+      document.documentElement.style.overflow = rootOverflow;
+    };
+  }, []);
   // Como em um player de vídeo, a interface desaparece por inatividade tanto
   // durante a reprodução quanto quando a aula está pausada. Um toque a revela.
   const revealControls = useCallback(() => {
