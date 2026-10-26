@@ -23,6 +23,10 @@ describe('engine de atividades', () => {
     expect(diag.assessesConceptIds).toEqual([]);
     const p = fromPractice({ kind: 'term', id: 'x', definition: 'd', options: ['a', 'b'], answer: 'a' });
     expect([p.kind, p.errorCode]).toEqual(['single_choice', 'term_confusion']);
+    const build = fromPractice({ kind: 'build', id: 'build', prompt: 'Monte a definição', words: ['um', 'processador'], answer: ['um', 'processador'], why: 'Definição correta.' });
+    expect([build.kind, build.family]).toEqual(['sentence_build', 'montar']);
+    const multiBlank = fromPractice({ kind: 'multiBlank', id: 'mb', prompt: 'Complete', sentence: '___ coordena ___', options: ['processador', 'operações', 'teclado'], answers: ['processador', 'operações'], why: 'Definição completa.' });
+    expect([multiBlank.kind, multiBlank.family]).toEqual(['multi_blank', 'lacuna']);
   });
 
   it('conceitos ensinados seguem a etapa salva; diagnóstico e etapas futuras não contam', () => {
