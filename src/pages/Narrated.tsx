@@ -43,6 +43,7 @@ export function NarratedPlayer({
   const [done, setDone] = useState(false);
   const [beatElapsed, setBeatElapsed] = useState(0);
   const [controlsVisible, setControlsVisible] = useState(true);
+  const hideControlsTimer = useRef<number | undefined>(undefined);
   const elapsedRef = useRef(0);
   const resumeAfterSeek = useRef(false);
   const token = useRef(0);
@@ -62,11 +63,29 @@ export function NarratedPlayer({
   }, [voice]);
 
   useEffect(() => () => stop(), [stop]);
+  const revealControls = useCallback(() => {
+    setControlsVisible(true);
+    if (hideControlsTimer.current !== undefined) window.clearTimeout(hideControlsTimer.current);
+    if (playing) hideControlsTimer.current = window.setTimeout(() => setControlsVisible(false), 3800);
+  }, [playing]);
+
   useEffect(() => {
+    if (hideControlsTimer.current !== undefined) {
+      window.clearTimeout(hideControlsTimer.current);
+      hideControlsTimer.current = undefined;
+    }
     if (!playing) { setControlsVisible(true); return; }
     if (!controlsVisible) return;
-    const timer = window.setTimeout(() => setControlsVisible(false), 3800);
-    return () => window.clearTimeout(timer);
+    hideControlsTimer.current = window.setTimeout(() => {
+      hideControlsTimer.current = undefined;
+      setControlsVisible(false);
+    }, 3800);
+    return () => {
+      if (hideControlsTimer.current !== undefined) {
+        window.clearTimeout(hideControlsTimer.current);
+        hideControlsTimer.current = undefined;
+      }
+    };
   }, [playing, controlsVisible, pos]);
 
   useEffect(() => {
@@ -203,9 +222,9 @@ export function NarratedPlayer({
     <div
       className={shell}
       data-testid="narrada-player"
-      onClick={() => setControlsVisible(true)}
-      onPointerMove={() => setControlsVisible(true)}
-      onKeyDown={() => setControlsVisible(true)}
+      onClick={revealControls}
+      onPointerMove={revealControls}
+      onKeyDown={revealControls}
     >
       <section className="absolute inset-0 overflow-hidden bg-bg" aria-label="Aula em vídeo narrado" data-testid="narrada-stage">
         <div className="absolute inset-0" aria-hidden="true">
@@ -334,7 +353,7 @@ export function NarratedPlayer({
           type="button"
           className="absolute inset-0 z-10 cursor-pointer"
           aria-label="Mostrar controles da aula"
-          onClick={() => setControlsVisible(true)}
+          onClick={revealControls}
           data-testid="narrada-mostrar-controles"
         />
       )}
