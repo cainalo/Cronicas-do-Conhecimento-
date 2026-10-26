@@ -92,7 +92,7 @@ export function ActivityView({
   }, [fit]);
   const [pick, setPick] = useState<number>();
   const [picks, setPicks] = useState<Set<number>>(new Set());
-  const initialOrder = useMemo(() => (displayA.kind === 'order' ? randomShuffle(displayA.items) : []), [a]);
+  const initialOrder = useMemo(() => (displayA.kind === 'order' ? randomShuffle(displayA.items) : []), [displayA]);
   const [order, setOrder] = useState<string[]>(initialOrder);
   const [assign, setAssign] = useState<(number | undefined)[]>(displayA.kind === 'sort' ? displayA.items.map(() => undefined) : []);
   const [result, setResult] = useState<{ ok: boolean; parts?: boolean[] }>();
@@ -226,7 +226,7 @@ export function ActivityView({
 
   // Cabeçalho, enunciado e contexto.
   const head: PageItem[] = [];
-  if (displayA.kind === 'exam' && question) {
+  if (displayA.kind === 'exam' && displayQuestion) {
     head.push({
       key: 'label',
       node: (
