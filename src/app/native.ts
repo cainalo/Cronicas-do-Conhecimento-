@@ -27,6 +27,9 @@ export async function setupNative() {
     if (canGoBack) window.history.back();
     else void App.exitApp();
   });
+  // O app Android deve abrir em modo imersivo: barras do sistema só reaparecem
+  // temporariamente quando a pessoa faz o gesto a partir da borda.
+  await setImmersive(true);
 }
 
 /** Plugin nativo do próprio app (MainActivity/ImmersivePlugin): barras do sistema ocultas por padrão. */
