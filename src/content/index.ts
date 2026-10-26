@@ -154,6 +154,13 @@ import { primProgHistoria, primProgVariavel, primProgDecisao } from './micro/pri
 import { primRedeHistoria, primRedeEndereco, primRedeServidor } from './micro/prim-redes';
 import { primDadosHistoria, primDadosSgbd, primDadosTabelas } from './micro/prim-dados';
 import { primSegHistoria, primSegPilares, primSegDefesas } from './micro/prim-seguranca';
+import { dadosModHistoria, dadosModMer, dadosModNormal } from './micro/dados-modelagem';
+import { dadosSqlHistoria, dadosSqlConsultas, dadosSqlJuncoes } from './micro/dados-sql';
+import { dadosTxHistoria, dadosTxAcid, dadosTxIsolamento } from './micro/dados-transacoes';
+import { devLogHistoria, devLogControle, devLogComplexidade } from './micro/dev-logica';
+import { devEstHistoria, devEstLineares, devEstOrdenacao } from './micro/dev-estruturas';
+import { devParHistoria, devParPoo, devParFuncional } from './micro/dev-paradigmas';
+import { matDivHistoria, matDivCriterios, matDivMmcMdc } from './micro/mat-divisores';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -177,6 +184,27 @@ export const microLessons: MicroLesson[] = [
   primSegHistoria,
   primSegPilares,
   primSegDefesas,
+  dadosModHistoria,
+  dadosModMer,
+  dadosModNormal,
+  dadosSqlHistoria,
+  dadosSqlConsultas,
+  dadosSqlJuncoes,
+  dadosTxHistoria,
+  dadosTxAcid,
+  dadosTxIsolamento,
+  devLogHistoria,
+  devLogControle,
+  devLogComplexidade,
+  devEstHistoria,
+  devEstLineares,
+  devEstOrdenacao,
+  devParHistoria,
+  devParPoo,
+  devParFuncional,
+  matDivHistoria,
+  matDivCriterios,
+  matDivMmcMdc,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,

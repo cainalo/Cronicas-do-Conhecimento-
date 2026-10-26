@@ -1,5 +1,12 @@
 Um **algoritmo** é uma sequência finita de passos bem definidos que transforma uma entrada em uma saída. Donald Knuth, em *The Art of Computer Programming*, lista cinco propriedades: **finitude** (termina após um número finito de passos), **definição** (cada passo é preciso, sem ambiguidade), **entrada** (zero ou mais), **saída** (uma ou mais) e **efetividade** (cada passo pode ser executado de fato). Uma receita que diz "tempere a gosto" falha na definição; um laço que nunca termina falha na finitude.
 
+### Como a lógica de programação surgiu
+
+- **1202: uma recursão famosa.** No *Liber Abaci*, **Leonardo de Pisa (Fibonacci)** propôs o problema dos coelhos: cada mês, o número de casais é a soma dos dois meses anteriores. É a sequência de Fibonacci, que até hoje serve de exemplo de recursão.
+- **1894: a notação O.** O matemático alemão **Paul Bachmann** usou o símbolo **O** para descrever como uma função cresce; **Edmund Landau** popularizou a notação. Em **1976**, **Donald Knuth** propôs o uso de **Ω** e **Θ** na computação.
+- **1966 e 1968: a programação estruturada.** **Böhm e Jacopini** mostraram (1966) que sequência, seleção e repetição bastam. Em **1968**, **Edsger Dijkstra** publicou a carta "Go To Statement Considered Harmful", contra o uso do `goto`.
+- **1968: o tratado.** **Donald Knuth** lançou o primeiro volume de *The Art of Computer Programming*, onde estão as cinco propriedades do algoritmo.
+
 ### Estruturas de controle
 
 Todo programa imperativo combina três formas de controle. O teorema de Böhm e Jacopini (1966) mostra que elas bastam para expressar qualquer algoritmo computável, o que fundamenta a **programação estruturada** (sem `goto`).

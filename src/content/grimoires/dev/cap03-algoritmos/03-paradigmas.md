@@ -1,5 +1,13 @@
 Um **paradigma** é um estilo de organizar programas. O edital cobra dois: a **programação orientada a objetos** (POO), dominante em Java, C# e boa parte do Python e do TypeScript, e a **programação funcional**, presente em JavaScript, Python, Java (desde as expressões lambda do Java 8) e em linguagens como Haskell e Scala. As linguagens modernas misturam os dois.
 
+### Como os paradigmas surgiram
+
+- **Anos 1930: funções como base.** O matemático **Alonzo Church** criou o **cálculo lambda**, em que tudo é função. É a raiz da programação funcional e do nome "lambda" usado até hoje.
+- **1958: Lisp.** **John McCarthy** criou o **Lisp**, uma das primeiras linguagens funcionais, com recursão e funções como valores.
+- **1967: Simula.** Na Noruega, **Ole-Johan Dahl** e **Kristen Nygaard** criaram o **Simula**, a primeira linguagem com **classes** e **objetos**, para simular filas e sistemas reais.
+- **Anos 1970: Smalltalk.** No centro de pesquisa da Xerox, **Alan Kay** e sua equipe criaram o **Smalltalk** e popularizaram o termo **orientação a objetos**.
+- **1994 e 2014: padrões e lambdas.** O livro *Design Patterns*, da "Gangue dos Quatro", saiu em 1994. Em 2014, o **Java 8** trouxe as expressões lambda, aproximando a POO da programação funcional.
+
 ### Classes e objetos
 
 - **Classe**: o molde. Define **atributos** (estado) e **métodos** (comportamento).

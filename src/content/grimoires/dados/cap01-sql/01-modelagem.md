@@ -1,5 +1,11 @@
 Modelar dados é decidir **o que** o sistema vai guardar e **como** as informações se relacionam, antes de criar qualquer tabela.
 
+### Como a modelagem de dados surgiu
+
+- **1970: tabelas.** **Edgar F. Codd**, da IBM, propôs o **modelo relacional**: dados guardados em tabelas (relações) ligadas por valores em comum.
+- **1971 a 1974: as formas normais.** O próprio Codd definiu a **primeira forma normal** junto com o modelo e, em 1971, a **segunda** e a **terceira**. Em 1974, com **Raymond Boyce**, veio a **forma normal de Boyce-Codd (FNBC)**.
+- **1976: o desenho.** **Peter Chen** publicou o **modelo entidade-relacionamento**, com o diagrama de retângulos (entidades), losangos (relacionamentos) e elipses (atributos), para conversar sobre os dados antes de criar as tabelas.
+
 ### Modelo entidade-relacionamento (MER)
 
 | Elemento | Significado | Exemplo |

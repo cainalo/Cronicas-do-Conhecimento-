@@ -1,5 +1,13 @@
 Uma **estrutura de dados** é uma forma de organizar dados na memória para que certas operações sejam eficientes. A escolha certa depende da operação mais frequente: acessar por posição, inserir no meio, buscar por chave, sempre pegar o mais urgente.
 
+### Como as estruturas de dados surgiram
+
+- **1736: o primeiro grafo.** **Leonhard Euler** resolveu o problema das **sete pontes de Königsberg**, provando que não havia como atravessar todas uma única vez. Foi o início da teoria dos grafos.
+- **1945 e 1946: ordenar e buscar.** **John von Neumann** descreveu o **merge sort** em 1945. Em 1946, **John Mauchly**, um dos criadores do ENIAC, citou a **busca binária** numa série de palestras.
+- **1953: o hash.** **Hans Peter Luhn**, da IBM, descreveu a ideia de espalhar as chaves em "baldes" por uma função: a origem da **tabela hash**.
+- **Anos 1950: a pilha.** Os alemães **Friedrich Bauer** e **Klaus Samelson** descreveram o princípio da **pilha** para traduzir fórmulas em programas.
+- **1959 a 1962: quick sort e árvore AVL.** **Tony Hoare** criou o **quick sort** em 1959 (publicado em 1961), e **Adelson-Velsky e Landis** publicaram em 1962 a **árvore AVL**, a primeira árvore de busca que se rebalanceia sozinha.
+
 ### Estruturas lineares
 
 | Estrutura | Ideia | Acesso por posição | Busca | Inserção/remoção |

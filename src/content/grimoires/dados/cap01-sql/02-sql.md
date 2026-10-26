@@ -1,3 +1,10 @@
+### Como o SQL surgiu
+
+- **1970: a álgebra.** Junto com o modelo relacional, **Codd** descreveu operações matemáticas sobre tabelas, como selecionar linhas e escolher colunas: a **álgebra relacional**.
+- **1974: o SEQUEL.** Na IBM, **Donald Chamberlin** e **Raymond Boyce** criaram uma linguagem em inglês simples para consultar tabelas, o **SEQUEL**, usada no protótipo **System R**. Mais tarde o nome foi encurtado para **SQL**.
+- **1979: o primeiro produto.** A empresa que depois se chamaria **Oracle** lançou um dos primeiros bancos relacionais comerciais com SQL.
+- **1986 e 1987: o padrão.** O SQL virou norma do **ANSI** (1986) e da **ISO** (1987). Por isso o mesmo comando funciona, com pequenas diferenças, em PostgreSQL, Oracle, MySQL e SQL Server.
+
 ### Categorias de comandos SQL
 
 | Categoria | Comandos | Para quê |

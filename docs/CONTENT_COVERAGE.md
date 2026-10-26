@@ -93,6 +93,14 @@ Grimório de Segurança inteiro em microaulas: cap.seg.01 (Criptografia, 6 aulas
 - **cap.prim.02, trecho seguranca:** série `prim.seguranca` (3 aulas, 13 etapas).
   - **Aulas:** "Da cifra de César ao golpe por e-mail" (cifra de César, Enigma e Bletchley Park, senha no CTSS em 1961, verme de Morris em 1988, phishing nos anos 1990), "Os três pilares: C, I e D" e "Senha, dois fatores, backup e phishing".
   - **Questões e fonte:** prova com q.prim.02.006 a 008. O texto 03-seguranca.md ganhou "Como a segurança da informação surgiu".
-- **Revisão:** as séries novas de cap.prim.01 e cap.prim.02 ainda sem revisão humana.
+- **cap.dados.01 (Modelagem, SQL e transações):** séries `dados.modelagem`, `dados.sql` e `dados.transacoes`, 3 aulas cada.
+  - **História:** Codd (1970), formas normais (1971 a 1974), Peter Chen (1976), SEQUEL e System R, norma ANSI e ISO, Jim Gray e a transação, árvore B (1972), sigla ACID (1983), níveis do SQL-92. Seções históricas acrescentadas aos três textos.
+  - **Aulas:** MER e mapeamento, chaves e formas normais, desnormalização, categorias de comandos, ordem lógica, WHERE e HAVING, NULL, junções, subconsultas, álgebra, views e triggers, ACID, anomalias, níveis de isolamento e índices.
+  - **Questões:** prova com q.dados.01.001 a 012.
+- **cap.dev.03 (Lógica, estruturas e paradigmas):** séries `dev.logica`, `dev.estruturas` e `dev.paradigmas`, 3 aulas cada.
+  - **História:** Fibonacci (1202), notação O (Bachmann, 1894; Knuth, 1976), Böhm e Jacopini (1966), Dijkstra (1968), Knuth (1968), Euler (1736), merge sort de von Neumann, busca binária de Mauchly, hash de Luhn, pilha de Bauer e Samelson, quick sort de Hoare, AVL, cálculo lambda, Lisp, Simula, Smalltalk, Design Patterns e Java 8. Seções históricas acrescentadas aos três textos.
+  - **Questões:** prova com q.dev.03.001 a 012.
+- **cap.mat.01, trecho divisores:** série `mat.divisores` (3 aulas, 15 etapas). História de Euclides (Elementos), do crivo de Eratóstenes e de Gauss (1801); múltiplos, divisores, primos, decomposição, quantidade de divisores, critérios de 2 a 11, MMC, MDC, lotes e problemas com resto. Prova com q.mat.01.004 a 006.
+- **Revisão:** as séries novas de Primeiros Passos, cap.dados.01, cap.dev.03 e cap.mat.01 ainda sem revisão humana.
 - **Aulas narradas novas:** "Do ábaco ao celular", com o novo tipo de cena linha do tempo, e "As quatro tarefas do computador".
 - **Sequência única:** a aula narrada e as videoaulas conferidas entram na própria aula, numa fase "Veja de outro jeito" antes da prática. As bibliotecas de aulas narradas e de vídeos mostram "Na trilha" com o link para a aula.

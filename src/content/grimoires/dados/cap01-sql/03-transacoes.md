@@ -1,3 +1,10 @@
+### Como as transações e os índices surgiram
+
+- **Anos 1970: a transação.** Com bancos usados por muitas pessoas ao mesmo tempo, como os de reservas e de bancos, **Jim Gray**, que trabalhou na IBM, ajudou a definir a **transação**: um conjunto de operações que acontece por inteiro ou não acontece. Em 1998 ele recebeu o Prêmio Turing por esse trabalho.
+- **1972: a árvore B.** **Rudolf Bayer** e **Edward McCreight** publicaram a **árvore B** (*B-tree*), a estrutura que até hoje é o índice padrão da maioria dos bancos.
+- **1983: a sigla ACID.** **Theo Härder** e **Andreas Reuter** cunharam a sigla **ACID** para as quatro garantias de uma transação.
+- **1992: os níveis de isolamento.** O padrão **SQL-92** descreveu os quatro níveis de isolamento, do READ UNCOMMITTED ao SERIALIZABLE.
+
 ### Transações e ACID
 
 Uma **transação** é um conjunto de operações tratado como unidade: ou tudo acontece, ou nada acontece. As propriedades **ACID**:

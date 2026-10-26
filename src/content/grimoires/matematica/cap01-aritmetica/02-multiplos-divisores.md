@@ -1,5 +1,11 @@
 O edital cita **múltiplos e divisores de números naturais** e problemas. Na prática da FCC isso significa: critérios de divisibilidade, decomposição em fatores primos, **MMC** (eventos que se repetem e voltam a coincidir) e **MDC** (dividir coisas diferentes em grupos iguais, do maior tamanho possível).
 
+### Como essas ideias surgiram
+
+- **Por volta de 300 a.C.: Euclides.** No livro *Elementos*, o matemático grego **Euclides** provou que **os números primos são infinitos** e descreveu um método para achar o **maior divisor comum** de dois números, usado até hoje (o **algoritmo de Euclides**).
+- **Século III a.C.: o crivo de Eratóstenes.** **Eratóstenes**, que viveu em Alexandria, propôs um jeito simples de achar os primos: escrever os números em ordem e ir riscando os múltiplos de 2, de 3, de 5... O que sobra sem riscar é primo.
+- **1801: a decomposição única.** Em *Disquisitiones Arithmeticae*, o alemão **Carl Friedrich Gauss** demonstrou com rigor que todo número natural maior que 1 se decompõe em primos **de um único jeito**: o **teorema fundamental da aritmética**.
+
 ### Conceitos básicos
 
 - **Múltiplo**: 36 é múltiplo de 9 porque 36 = 9 × 4. Todo número tem infinitos múltiplos, e o zero é múltiplo de todos.

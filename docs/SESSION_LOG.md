@@ -77,3 +77,7 @@
 ## 25/10/2026 (madrugada, parte 2): ritmo com história em cap.prim.02
 - **Aulas:** séries `prim.redes`, `prim.dados` e `prim.seguranca` (3 aulas cada), com história verificável acrescentada aos textos.
 - **Validação:** 1111 testes, tsc e build OK; sem rolagem nas 18 combinações de aula e tela.
+
+## 26/10/2026: ritmo com história em cap.dados.01 e cap.dev.03
+- **Aulas:** 6 séries (18 aulas), com história verificável nos textos dos capítulos.
+- **Validação:** 1219 testes, tsc e build OK; rolagem conferida a 360×640 e 390×844.
