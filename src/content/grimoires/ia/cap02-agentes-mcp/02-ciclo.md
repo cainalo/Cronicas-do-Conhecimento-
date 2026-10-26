@@ -1,3 +1,9 @@
+### Da pesquisa em ciclos ao fluxo de desenvolvimento
+
+Em 2022, o artigo ReAct estudou a alternância entre raciocínio, ações e observações de fontes externas. O ciclo de desenvolvimento agentivo deste capítulo usa uma ideia semelhante, organizada em quatro fases práticas: contexto, planejamento, execução e verificação. Não se deve atribuir essas quatro fases ao artigo; ele é uma referência histórica para a combinação de raciocínio e ação, enquanto o ciclo do edital é um procedimento de trabalho.
+
+Fonte: [ReAct: Synergizing Reasoning and Acting in Language Models (2022)](https://arxiv.org/abs/2210.03629).
+
 O edital descreve o **ciclo agentivo de desenvolvimento** em quatro fases. Elas se repetem até a tarefa ficar pronta.
 
 ```
