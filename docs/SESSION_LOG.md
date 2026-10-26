@@ -108,3 +108,9 @@
 - Criada a série `devops.observabilidade` para `cap.devops.02/observabilidade`: monitoramento e OpenTelemetry; métricas/logs/traces; SLI/SLO/SLA, sinais dourados e orçamento de erro; alertas, correlação e indicadores DORA. A história foi acrescentada também aos textos completos, com ligações a fontes técnicas.
 - Adicionado `src/test/devops-platform.test.ts` para verificar cobertura dos dois trechos, estrutura das etapas, diversidade das consolidações e vínculo das questões existentes.
 - **Estado de validação:** a revisão editorial humana ainda está pendente. O CI deve ser conferido em Actions; não há evidência disponível nesta sessão para declarar os testes, o E2E ou o build do APK aprovados. A conferência visual no Android ainda depende de um teste em aparelho.
+
+## 26/10/2026: microaulas para Agentes de Programação e MCP
+- Criadas 15 microaulas em \`src/content/micro/ia-agentes-mcp.ts\`, organizadas nos cinco trechos de \`cap.ia.02\`.
+- As aulas incluem contexto histórico, explicações graduais, checagens, recuperação, classificação, depuração, comparação e questões autorais já existentes.
+- Adicionadas fontes aos cinco textos completos e testes de cobertura, ordem, estrutura, diversidade e ligação das 20 questões.
+- **Validação pendente:** revisão editorial humana e resultado do CI desta rodada; o conteúdo não deve ser marcado como validado antes dessas verificações.
