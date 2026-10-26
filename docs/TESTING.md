@@ -3,7 +3,8 @@
 ## Comandos
 - `npm test` — Vitest (jsdom) + Testing Library.
 - `npm run build` — typecheck (`tsc -b`) + build.
-- `npm run test:e2e` — verificação de layout no Chromium (depois do `npm run build`); roda também no CI e bloqueia a publicação.
+- `npm run test:e2e` — verificação de layout no Chromium (depois do `npm run build`); checa overlays, cartão de correção e rolagem lateral.
+- `npm run test:visual` — matriz ampliada com screenshots por rota em 360×640, 390×844 e 1280×800, tema claro/escuro, fim da rolagem quando aplicável e candidatos a conteúdo cortado. Abre o relatório em `artifacts/visual-audit/report.md` e as imagens no mesmo diretório.
 - RLS: executar `supabase/tests/rls_check.sql` (transação revertida) via SQL Editor ou MCP.
 
 ## Regra de testes de layout (obrigatória)
@@ -11,6 +12,7 @@ Criada em 26/10/2026, depois de o cartão de certo ou errado e os fundos dos mod
 
 1. **Nada é dado como pronto só pelo teste em jsdom.** Toda mudança visual passa por `npm run build && npm run test:e2e` e por uma captura de tela conferida a olho em 360×640 e 390×844, também no estilo de cartões "vidro".
 2. **O que o `test:e2e` confere** (`scripts/e2e-layout.mjs`): nenhuma página rola para os lados; todo elemento `position: fixed` com `inset: 0` cobre a tela inteira; o cartão de correção vai de borda a borda, encosta na base e mostra o botão Continuar inteiro; os modais Entender e Sumário cobrem a tela. Tudo em 360×640 e 390×844, com e sem cartões "vidro".
+3. **O que o `test:visual` acrescenta** (`scripts/e2e-visual-audit.mjs`): entra nas rotas principais, nas subpáginas de Conta e nos 33 capítulos; tira screenshots por viewport/tema; grava página inteira e vista do fim para conteúdo rolável; mede overflow horizontal, erros de JavaScript e candidatos a clipping em containers com overflow oculto. Candidatos são heurísticos e precisam de inspeção humana; nem toda rolagem é desnecessária.
 3. **O que o `npm test` barra antes** (`src/test/layout-guard.test.ts`): overlay `fixed inset-0` fora de `Portal`/`createPortal`; `.page-enter` ou `.stagger` com `animation-fill-mode` `both` ou `forwards` (deixam transform no contêiner e prendem o `fixed`); cartão de correção que não seja fixo na base com área segura.
 4. **Padrões obrigatórios:** overlay de tela cheia sempre por `Portal` (`src/components/Portal.tsx`); animação de entrada de contêiner com `backwards`; barras e cartões presos à base com `env(safe-area-inset-bottom)`.
 5. **Tela nova com modal, folha ou barra fixa:** acrescentar a rota e a interação em `scripts/e2e-layout.mjs` no mesmo commit.
@@ -27,6 +29,10 @@ Criada em 26/10/2026, depois de o cartão de certo ou errado e os fundos dos mod
 | `src/test/study.test.ts` (prática e livro) | pegadinhas, montagem da prática, XP único, divisão em blocos, paginação, pistas proporcionais |
 | `src/test/flow.test.tsx` | fluxo real de telas: lição com erro → resultado 90% → nova sessão → revisão → recuperação; leitor (marcar lida, busca); Aprender (páginas, trecho estudado, link do texto completo); prática; simulado |
 | `src/test/content.test.ts` (camada simples) | toda seção tem explicação simples; 4–7 páginas; até 70 palavras por página; última "Resumindo"; 4–8 palavras novas; 3 verificações com V e F |
+
+## Nota de cobertura reproduzível (26/10/2026)
+
+A leitura estática identificou que `scripts/e2e-layout.mjs` mantinha uma matriz fixa com 18 entradas de rota e dois viewports, embora documentos de estado registrassem varreduras mais amplas feitas anteriormente. Para que essa cobertura possa ser repetida e inspecionada, esta branch acrescenta `test:visual`, gera screenshots/relatório e conecta o teste ao workflow de QA e ao pipeline de publicação. A cobertura só será confirmada depois que o workflow executar e o artefato for revisado.
 
 ## Últimos resultados (2026-10-24, auditoria)
 - `npm test`: **787/787** (10 microaulas; regra contra listas aninhadas). Antes: **753/753** (micro.test.ts roda as regras para as 4 microaulas do cap.infra.03). Antes: **741/741** (+ `packPages` em `micro.test.ts`; varredura Playwright das fases da microaula sem rolagem em 390×844, 360×640, 1280×800). Antes: **740/740** (rodada Estudos: `studies.test.tsx` com página Estudos, vídeo só ao tocar, página não encontrada, Conta sem servidor e volumes, recuperação adaptativa; `planner.test.ts` com a ordem do dia seguindo a trilha). Antes: 731 (novos: `checkpoint.test.ts`, `micro.test.ts`, divisão de blocos do livro, fluxos de retomada em Aprender/Missão/Desafio/Prática/Microaula, destino único dos botões, leitura contínua).
