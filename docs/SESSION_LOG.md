@@ -88,3 +88,4 @@
 - **Identidade:** cap.dev.02 completo (conceitos, OAuth 2.0, OIDC e JWT, resumo com a linha do tempo de APIs e identidade). 1692 testes; rolagem de cap.ia.01 (34) e cap.dev.01 (24) conferida a 360×640 e 390×844.
 - **Raciocínio lógico:** cap.mat.02 completo (associação e dedução, sequências e conceitos, espaço e tempo). 1761 testes.
 - **Sintaxe e redação oficial:** cap.port.02 completo (concordância, regência e verbos, período e reescrita, redação oficial). 1853 testes; rolagem de cap.dados.02 e cap.dev.02 (40) conferida; CI 98 verde.
+- **Linguagens e pacotes:** cap.dev.04 completo (Java e Python, JavaScript e TypeScript, HTML/CSS/React, dependências e pacotes). 1945 testes.

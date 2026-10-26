@@ -1,5 +1,12 @@
 Uma página web combina três camadas: **HTML** para a estrutura e o significado, **CSS** para a apresentação e **JavaScript** para o comportamento. O **React** organiza a camada de comportamento e interface em componentes reutilizáveis.
 
+### Do HTML de 1991 ao React
+
+- **1991: o HTML.** Tim Berners-Lee, no CERN, publicou a World Wide Web e o HTML.
+- **1994 e 1996: o CSS.** Håkon Wium Lie propôs as folhas de estilo em cascata em 1994; o W3C publicou o CSS1 em 1996, separando a aparência da estrutura.
+- **2013: o React.** O Facebook abriu o código do React, que organiza a interface em componentes; os hooks chegaram em 2019.
+- **2014: o HTML5.** O W3C publicou a recomendação do HTML5.
+
 ### HTML5: semântica e formulários
 
 O HTML5 começa com a declaração `<!DOCTYPE html>` e introduziu **elementos semânticos**, que descrevem o papel do conteúdo em vez da aparência:

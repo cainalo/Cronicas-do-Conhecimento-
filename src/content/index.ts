@@ -193,6 +193,10 @@ import { portConHistoria, portConVerbal, portConSe, portConNominal } from './mic
 import { portRegHistoria, portRegVerbal, portRegVozes, portRegTempos } from './micro/port-regencia';
 import { portPerHistoria, portPerOracoes, portPerConectivos, portPerReescrita } from './micro/port-periodo';
 import { portRedHistoria, portRedAtributos, portRedTratamento, portRedOficio } from './micro/port-redacao';
+import { devJpHistoria, devJpJava, devJpExcecoes, devJpPython } from './micro/dev-javapy';
+import { devJsHistoria, devJsTipos, devJsAssincrono, devJsNodeTs } from './micro/dev-jsts';
+import { devWebHistoria, devWebHtml, devWebCss, devWebReact } from './micro/dev-web';
+import { devPacHistoria, devPacSemver, devPacLock, devPacBuild } from './micro/dev-pacotes';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -341,6 +345,22 @@ export const microLessons: MicroLesson[] = [
   portRedAtributos,
   portRedTratamento,
   portRedOficio,
+  devJpHistoria,
+  devJpJava,
+  devJpExcecoes,
+  devJpPython,
+  devJsHistoria,
+  devJsTipos,
+  devJsAssincrono,
+  devJsNodeTs,
+  devWebHistoria,
+  devWebHtml,
+  devWebCss,
+  devWebReact,
+  devPacHistoria,
+  devPacSemver,
+  devPacLock,
+  devPacBuild,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,

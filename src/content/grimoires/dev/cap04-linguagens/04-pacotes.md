@@ -1,5 +1,12 @@
 Quase nenhum sistema é escrito do zero: ele depende de bibliotecas de terceiros, que dependem de outras. O edital cobra o **gerenciamento de dependências** (declarar, instalar e travar versões), o **empacotamento** (gerar um artefato distribuível) e a **publicação** (disponibilizar o artefato em um registro ou ambiente).
 
+### Dos primeiros repositórios ao lockfile
+
+- **1995: o CPAN.** A comunidade Perl criou um dos primeiros grandes repositórios de pacotes.
+- **2004 e 2010: Maven e npm.** Saiu o Maven 1.0, da Apache, para Java (2004); Isaac Schlueter lançou o npm (2010).
+- **Por volta de 2010: o SemVer.** Tom Preston-Werner, cofundador do GitHub, publicou o Versionamento Semântico.
+- **2016 e 2017: left-pad e lockfile.** A retirada do minúsculo pacote left-pad do npm quebrou milhares de builds (2016); o npm 5 passou a gerar o package-lock.json (2017).
+
 ### Versionamento semântico
 
 O **SemVer** (semver.org) usa o formato **MAJOR.MINOR.PATCH**:
