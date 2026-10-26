@@ -242,6 +242,18 @@ export function NarratedPlayer({
             {showTranscript ? 'Ocultar a transcrição' : 'Mostrar a transcrição'}
           </button>
         </div>
+        <div className="flex flex-wrap gap-1.5" aria-label="Cenas">
+          {l.scenes.map((item, i) => (
+            <button
+              key={item.id}
+              type="button"
+              className={`h-2.5 w-4 rounded-sm ${i < pos.scene ? 'bg-ink' : i === pos.scene ? 'bg-gold' : 'bg-ink/15'}`}
+              aria-label={'Ir para a cena ' + (i + 1) + ': ' + item.heading}
+              aria-current={i === pos.scene ? 'step' : undefined}
+              onClick={() => jump({ scene: i, beat: 0 })}
+            />
+          ))}
+        </div>
         {showTranscript && (
           <section className="max-h-24 overflow-y-auto rounded-lg border border-line bg-surface p-2 text-xs" aria-label="Transcrição">
             {transcript(l).map((t) => <div key={t.heading} className="mb-2 last:mb-0"><h2 className="font-semibold">{t.heading}</h2><p>{t.lines.join(' ')}</p></div>)}
