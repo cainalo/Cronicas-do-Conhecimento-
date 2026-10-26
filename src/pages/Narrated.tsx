@@ -246,11 +246,19 @@ export function NarratedPlayer({
       </header>
 
       <p
-        className={`absolute left-5 right-5 z-10 mx-auto max-w-3xl rounded-xl bg-[#171b1b]/90 px-4 py-3 text-center text-sm font-medium leading-relaxed text-white shadow-lg backdrop-blur-sm transition-[bottom] duration-300 sm:left-10 sm:right-10 sm:px-6 sm:py-3.5 sm:text-base ${controlsVisible ? 'bottom-[13rem] sm:bottom-[14rem]' : 'bottom-8'}`}
+        className={`absolute left-5 right-5 z-10 mx-auto max-w-3xl rounded-xl bg-[#171b1b]/90 px-4 py-3 text-center text-sm font-medium leading-relaxed text-white shadow-lg backdrop-blur-sm transition-[bottom] duration-300 sm:left-10 sm:right-10 sm:px-6 sm:py-3.5 sm:text-base ${controlsVisible ? 'bottom-[calc(14rem+env(safe-area-inset-bottom))] sm:bottom-[calc(15rem+env(safe-area-inset-bottom))]' : 'bottom-8'}`}
         aria-live="polite"
         data-testid="narrada-legenda"
       >
-        <span className="sr-only">Legenda: </span>{say}
+        <span className="sr-only">Legenda: </span>
+        <span data-testid="narrada-legenda-texto">
+          {(say.match(/\\S+\\s*/g) ?? [say]).map((word, i, words) => {
+            const activeWord = playing
+              ? Math.min(words.length - 1, Math.floor((beatElapsed / Math.max(1, durations[beatIndex] ?? 1800)) * words.length))
+              : -1;
+            return <span key={`${i}-${word}`} className={i === activeWord ? 'rounded bg-[#f0bf69]/25 px-0.5 font-bold text-[#ffd38a] transition-colors duration-150' : i < activeWord ? 'text-white/65 transition-colors duration-150' : 'text-white transition-colors duration-150'}>{word}</span>;
+          })}
+        </span>
       </p>
 
       <div
