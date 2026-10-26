@@ -1,6 +1,7 @@
 # Testes
 
 ## Comandos
+- Gate por mudança (28 critérios): `docs/QUALITY_GATE.md`. Nota 100% só com todos os critérios aplicáveis verificados e evidência automatizada e visual; não verificado não conta como aprovado.
 - `npm test` — Vitest (jsdom) + Testing Library.
 - `npm run build` — typecheck (`tsc -b`) + build.
 - `npm run test:e2e` — verificação de layout no Chromium (depois do `npm run build`); roda também no CI e bloqueia a publicação.
