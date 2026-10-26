@@ -32,6 +32,7 @@ import { BlitzPage } from '@/pages/Blitz';
 import { StudiesPage } from '@/pages/Studies';
 import { NotFoundPage } from '@/pages/NotFound';
 import { TrailPage } from '@/pages/Trail';
+import { TrailVideoPage } from '@/pages/TrailVideo';
 import { CustomizePage } from '@/pages/Customize';
 import { ScenarioListPage, ScenarioPage } from '@/pages/Scenarios';
 import { TeachersRoomPage } from '@/pages/TeachersRoom';
@@ -46,6 +47,7 @@ export function AppRoutes() {
         <Route path="biblioteca" element={<LibraryPage />} />
         <Route path="estudos" element={<StudiesPage />} />
         <Route path="trilha" element={<TrailPage />} />
+        <Route path="video/:id" element={<TrailVideoPage />} />
         <Route path="explorar" element={<StudiesPage />} />
         <Route path="revisar" element={<TrainingPage />} />
         <Route path="grimorio/:id" element={<GrimoirePage />} />

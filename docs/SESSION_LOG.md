@@ -97,3 +97,8 @@
 - **APK:** o merge do PR #1 no `main` disparou uma publicação assinada com outra chave (o cache da chave de depuração é separado por branch), e o Android recusou a atualização ("conflito com pacote existente"). Agora, sem a chave de release nos segredos, só o branch de trabalho publica o site e o APK; com `ANDROID_KEYSTORE_BASE64` e afins configurados, qualquer branch publica com a mesma chave.
 - **Git e CI/CD:** cap.devops.01 completo (8 aulas). 2106 testes. APK publicado pelo branch de trabalho conferido: certificado SHA-256 F7:DD:A2:D4..., a chave original (o do main era 84:07:B7...).
 - **Modais e correção:** a animação `.page-enter` (fill `both`) deixava um transform no contêiner da página, e o estilo de cartões "vidro" usa backdrop-filter; os dois prendiam os overlays `position: fixed` à coluna, deixando margem clara. Agora a animação usa `backwards`, os modais vão para o body por `Portal`, e o cartão de certo ou errado fica fixo na base, de borda a borda, com a área segura do Android. Conferido em 390×844 e 360×640.
+
+## 26/10/2026: trilha integrada (fase 1)
+- A trilha passou a incluir, em ordem lógica, todo o material existente: a aula narrada logo depois da aula em texto que ela acompanha; as videoaulas curadas depois da aula (ou do trecho); os posts dos professores depois das aulas do trecho, antes do Praticar; os cartões de memorização no fim do capítulo, antes do Desafio. Abrir pela trilha (`?u=chave`) conta como feito. Nova página /video/:id; /sala?aula= e /flashcards?capitulo= abrem direto no lugar certo.
+- Testes: `trail-extras.test.ts` (5), 2115 no total; test:e2e com as novas páginas; capturas da trilha conferidas em 390×844.
+

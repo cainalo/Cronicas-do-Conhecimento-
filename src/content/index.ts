@@ -453,6 +453,7 @@ export const narratedFor = (lessonId: string) => narratedLessons.find((n) => n.l
 
 // Feed didático (pacote v4, etapa 4): as aulas em texto, na ordem da trilha, viram posts.
 import { postsOfLesson, type FeedPost } from '@/lib/feed';
+import type { TrailExtras } from '@/lib/pace';
 import { teacherPosts as _tips } from './teachers';
 import { curatedVideos as _videos } from './estudos/materiais';
 import { realImages } from './estudos/imagens';
@@ -492,3 +493,14 @@ export function trailPlaceOf(lessonId: string): { to: string; label: string } | 
   const where = series.length > 1 ? `Aula ${i + 1} de ${series.length}: ${m.title}` : m.title;
   return { to: `/aprender/${m.chapterId}/${m.sectionId}${series.length > 1 ? `/${m.id}` : ''}`, label: `${c?.title ?? ''} · ${where}` };
 }
+
+/** Materiais encaixados na trilha, na ordem lógica de cada trecho (ver courseUnits). */
+export const trailExtras: TrailExtras = {
+  narratedFor: (lessonId) => narratedFor(lessonId),
+  videosFor: (chapterId, sectionId) => _videos.filter((v) => v.chapterId === chapterId && (v.sectionId ?? sectionId) === sectionId),
+  postsLessonFor: (chapterId, sectionId) => {
+    const first = microSeries(chapterId, sectionId)[0];
+    return first && feedPostsOf(first.id).length ? first.id : undefined;
+  },
+  hasCards: (chapterId) => flashcards.some((f) => f.chapterId === chapterId),
+};

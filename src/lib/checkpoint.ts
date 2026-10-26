@@ -39,7 +39,7 @@ export interface Checkpoint {
   total: number;
 }
 
-const KIND_LABEL: Record<Unit['kind'], string> = { aprender: 'Aprender', praticar: 'Praticar', missao: 'Missão', desafio: 'Desafio' };
+const KIND_LABEL: Record<Unit['kind'], string> = { aprender: 'Aprender', narrada: 'Aula narrada', video: 'Videoaula', professores: 'Professores', praticar: 'Praticar', missao: 'Missão', flashcards: 'Cartões', desafio: 'Desafio' };
 
 export function getLearningCheckpoint(data: StudyData, units: Unit[]): Checkpoint {
   // 1) Uma atividade em andamento (com ponto salvo e ainda não concluída) tem prioridade: a mais recente.

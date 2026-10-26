@@ -1,11 +1,11 @@
 // Hook da fonte única da trilha: todos os botões de Continuar usam este resultado.
 import { useMemo } from 'react';
 import { useStudy } from '@/app/StudyProvider';
-import { journey, lessons, missions, seriesOf } from '@/content';
+import { journey, lessons, missions, seriesOf, trailExtras } from '@/content';
 import { courseUnits } from '@/lib/pace';
 import { getLearningCheckpoint } from '@/lib/checkpoint';
 
-export const trailUnits = () => courseUnits(journey, lessons, missions, seriesOf);
+export const trailUnits = () => courseUnits(journey, lessons, missions, seriesOf, trailExtras);
 
 export function useCheckpoint() {
   const { data } = useStudy();

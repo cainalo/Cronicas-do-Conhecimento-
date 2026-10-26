@@ -32,7 +32,8 @@ describe('fonte única da trilha (checkpoint)', () => {
     expect(getLearningCheckpoint(d, units).to).toBe(units[H].to);
     d = clearProgress(d, units[H].key);
     const c = getLearningCheckpoint(d, units);
-    expect(c.to).toBe(units[P].to);
+    // A próxima é a atividade seguinte da trilha (a aula narrada ou outro material, quando houver).
+    expect(c.to).toBe(units[1].to);
     expect(c.action).toBe('Continuar');
   });
   it('o ponto salvo sobrevive à fusão entre aparelhos (o mais recente vence)', () => {

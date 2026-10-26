@@ -28,6 +28,8 @@ export function unitMinutes(u: Unit, ctx: { chapters: Chapter[]; learningUnits: 
     const ch = ctx.chapters.find((c) => c.id === u.chapterId);
     typical = lu ? (lu.estimatedMinutes[0] + lu.estimatedMinutes[1]) / 2 : ch ? Math.max(5, ch.estimatedMinutes / ch.sections.length) : 10;
   } else if (u.kind === 'praticar') typical = MIN.praticar;
+  else if (u.kind === 'narrada' || u.kind === 'professores' || u.kind === 'flashcards') typical = 5;
+  else if (u.kind === 'video') typical = 10;
   else if (u.kind === 'desafio') typical = MIN.desafio;
   else typical = ctx.missions.find((m) => `/missao/${m.id}` === u.to)?.minutes ?? MIN.missaoPadrao;
   return { min: typical * 0.75, typical, max: typical * 1.4 };

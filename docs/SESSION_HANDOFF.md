@@ -61,6 +61,11 @@ Antes: `npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escur
 ## Assinatura do APK (importante)
 - Sem os segredos `ANDROID_KEYSTORE_*`, só o branch `claude/cronicas-conhecimento-estudos-jgbofo` publica (o cache da chave é por branch). Merges no `main` compilam e testam, mas não publicam. Solução definitiva: guardar uma chave fixa nos segredos do repositório (exige uma reinstalação única se a chave mudar).
 
+## Trilha integrada (pedido de 26/10/2026)
+- Fase 1 feita: material existente encaixado na trilha (ver SESSION_LOG).
+- Fase 2: adaptar e criar o que faltar (mais aulas narradas e materiais por trecho).
+- Fase 3, por último: aulas narradas em tela cheia, com botões por cima sem cobrir o conteúdo, e cenas mais vivas (imagens e movimento enquanto a voz narra).
+
 ## Próxima tarefa exata
 1. **Aplicar o novo ritmo com história aos trechos seguintes, um por vez.** O grimório Primeiros Passos está completo (cap.prim.01 e cap.prim.02, 7 séries):
    - **Feitos fora de Primeiros Passos:** cap.dados.01, cap.dev.03, cap.mat.01, cap.port.01, cap.ia.03, cap.ia.01, cap.dev.01, cap.dados.02, cap.dev.02, cap.mat.02, cap.port.02, cap.dev.04, cap.es.01, cap.es.02 e cap.devops.01.

@@ -15,8 +15,8 @@ import { roman } from '@/lib/roman';
 import { areaColor } from '@/app/areas';
 
 const STATE_LABEL: Record<UnitState, string> = { feita: 'Concluída', atual: 'Você está aqui', disponivel: 'Disponível', bloqueada: 'Bloqueada' };
-const KIND_LABEL = { aprender: 'Aprender', praticar: 'Praticar', missao: 'Caso prático', desafio: 'Desafio' } as const;
-const KIND_ICON: Record<keyof typeof KIND_LABEL, IconName> = { aprender: 'grimorio', praticar: 'chama', missao: 'mapa', desafio: 'escudo' };
+const KIND_LABEL = { aprender: 'Aprender', narrada: 'Aula narrada', video: 'Videoaula', professores: 'Posts dos professores', praticar: 'Praticar', missao: 'Caso prático', flashcards: 'Cartões de memorização', desafio: 'Desafio' } as const;
+const KIND_ICON: Record<keyof typeof KIND_LABEL, IconName> = { aprender: 'grimorio', narrada: 'alaude', video: 'play', professores: 'balao', praticar: 'chama', missao: 'mapa', flashcards: 'cartas', desafio: 'escudo' };
 
 export function TrailPage() {
   const { data } = useStudy();

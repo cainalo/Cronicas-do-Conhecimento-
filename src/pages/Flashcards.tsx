@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { flashcards, getChapter, getFlashcard } from '@/content';
 import { dueCards, reviewCard, unlockedCardIds, type Grade } from '@/lib/training';
@@ -21,7 +21,15 @@ function when(days: number) {
 export function FlashcardsPage() {
   const { data, update } = useStudy();
   // A fila da sessão é congelada ao abrir; cartões errados voltam ao fim da fila.
-  const [queue, setQueue] = useState<string[]>(() => dueCards(data, unlockedCardIds(data, flashcards)));
+  // Vindo da trilha (?capitulo=), a sessão usa só os cartões daquele capítulo: os que estão para
+  // revisar ou, se nenhum estiver, todos os liberados.
+  const chapterId = new URLSearchParams(useLocation().search).get('capitulo');
+  const [queue, setQueue] = useState<string[]>(() => {
+    const pool = chapterId ? flashcards.filter((f) => f.chapterId === chapterId) : flashcards;
+    const unlocked = chapterId ? pool.map((f) => f.id) : unlockedCardIds(data, pool);
+    const due = dueCards(data, unlocked);
+    return chapterId && !due.length ? unlocked : due;
+  });
   const [shown, setShown] = useState(false);
   const [done, setDone] = useState(0);
   const [last, setLast] = useState<string>();
