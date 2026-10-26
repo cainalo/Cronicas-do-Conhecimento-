@@ -26,8 +26,18 @@ const TOL = 1.5;
 const failures = [];
 const fail = (msg) => failures.push(msg);
 
+function stopServer(proc) {
+  try {
+    process.kill(-proc.pid, 'SIGTERM');
+  } catch {
+    /* já encerrado */
+  }
+}
+
 async function startServer() {
-  const proc = spawn('npx', ['vite', 'preview', '--port', String(PORT), '--strictPort'], { stdio: 'pipe' });
+  // detached: o servidor ganha um grupo de processos próprio, encerrado inteiro no fim (o npx deixaria
+  // o vite vivo e o processo não terminaria).
+  const proc = spawn('npx', ['vite', 'preview', '--port', String(PORT), '--strictPort'], { stdio: 'ignore', detached: true });
   for (let i = 0; i < 60; i++) {
     try {
       const r = await fetch(BASE);
@@ -37,7 +47,7 @@ async function startServer() {
     }
     await new Promise((r) => setTimeout(r, 500));
   }
-  proc.kill();
+  stopServer(proc);
   throw new Error('vite preview não respondeu');
 }
 
@@ -139,7 +149,7 @@ async function run() {
     }
   } finally {
     await browser.close();
-    server.kill();
+    stopServer(server);
   }
   if (failures.length) {
     console.error(`Layout: ${failures.length} problema(s)`);
@@ -147,6 +157,7 @@ async function run() {
     process.exit(1);
   }
   console.log('Layout: tudo certo (overlays, cartão de correção, modais e rolagem lateral).');
+  process.exit(0);
 }
 
 run().catch((e) => {
