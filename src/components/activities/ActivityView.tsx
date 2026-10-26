@@ -3,7 +3,7 @@
 // erro, se a atividade tiver uma variante, o aluno pode tentar uma parecida com outros dados.
 import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { Question } from '@/content/types';
-import { ERROR_LABEL, gradeChoice, gradeMulti, gradeOrder, gradeSort, shuffled, type MissionActivity } from '@/lib/activities';
+import { ERROR_LABEL, gradeChoice, gradeMulti, gradeOrder, gradeSort, type MissionActivity } from '@/lib/activities';
 import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
 import { useFx } from '@/app/fx';
@@ -38,6 +38,31 @@ function Opt({ children, state, onClick, disabled, pressed }: { children: ReactN
   );
 }
 
+
+function randomShuffle<T>(items: T[]): T[] {
+  const out = [...items];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+/** Randomiza as alternativas sem perder o vínculo entre a resposta e a opção correta. */
+function randomizeActivityOptions(activity: MissionActivity): MissionActivity {
+  if (activity.kind === 'choice') {
+    const tagged = randomShuffle(activity.options.map((value, index) => ({ value, index })));
+    return { ...activity, options: tagged.map((x) => x.value), answer: tagged.findIndex((x) => x.index === activity.answer) };
+  }
+  if (activity.kind === 'compare') {
+    const tagged = randomShuffle(activity.scenarios.map((value, index) => ({ value, index })));
+    return { ...activity, scenarios: tagged.map((x) => x.value), answer: tagged.findIndex((x) => x.index === activity.answer) };
+  }
+  if (activity.kind === 'multi') return { ...activity, options: randomShuffle(activity.options) };
+  if (activity.kind === 'sort') return { ...activity, items: randomShuffle(activity.items) };
+  return activity;
+}
+
 export function ActivityView({
   a,
   question,
@@ -55,31 +80,38 @@ export function ActivityView({
   const { sfx } = useFx();
   const box = useRef<HTMLDivElement>(null);
   const [boxH, setBoxH] = useState(0);
+  // A ordem é sorteada uma vez por montagem da atividade, sem mudar durante a resposta.
+  const displayA = useMemo(() => randomizeActivityOptions(a), [a]);
+  const displayQuestion = useMemo(
+    () => question ? { ...question, options: randomShuffle(question.options) } : undefined,
+    [question],
+  );
+  const tfOptions = useMemo(() => randomShuffle(['f', 'v']), [displayA]);
   useLayoutEffect(() => {
     if (fit && box.current) setBoxH(box.current.clientHeight);
   }, [fit]);
   const [pick, setPick] = useState<number>();
   const [picks, setPicks] = useState<Set<number>>(new Set());
-  const initialOrder = useMemo(() => (a.kind === 'order' ? shuffled(a.items, a.id.length * 7 + a.items.length) : []), [a]);
+  const initialOrder = useMemo(() => (displayA.kind === 'order' ? randomShuffle(displayA.items) : []), [a]);
   const [order, setOrder] = useState<string[]>(initialOrder);
-  const [assign, setAssign] = useState<(number | undefined)[]>(a.kind === 'sort' ? a.items.map(() => undefined) : []);
+  const [assign, setAssign] = useState<(number | undefined)[]>(displayA.kind === 'sort' ? displayA.items.map(() => undefined) : []);
   const [result, setResult] = useState<{ ok: boolean; parts?: boolean[] }>();
 
   const ready =
-    a.kind === 'multi' ? picks.size > 0 : a.kind === 'order' ? true : a.kind === 'sort' ? assign.every((x) => x !== undefined) : pick !== undefined;
+    displayA.kind === 'multi' ? picks.size > 0 : displayA.kind === 'order' ? true : displayA.kind === 'sort' ? assign.every((x) => x !== undefined) : pick !== undefined;
 
   const check = () => {
     let g: { ok: boolean; parts?: boolean[] };
-    switch (a.kind) {
+    switch (displayA.kind) {
       case 'choice':
       case 'compare':
         g = gradeChoice(a, pick!);
         break;
       case 'fix':
-        g = { ok: pick === a.bug };
+        g = { ok: pick === displayA.bug };
         break;
       case 'tf':
-        g = { ok: (pick === 1) === a.answer };
+        g = { ok: (tfOptions[pick!] === 'v') === displayA.answer };
         break;
       case 'multi':
         g = gradeMulti(a, picks);
@@ -91,9 +123,9 @@ export function ActivityView({
         g = gradeSort(a, assign);
         break;
       case 'exam': {
-        const key = question!.options[pick!].key;
-        g = { ok: key === question!.answer };
-        onExamAnswer?.(question!, key);
+        const key = displayQuestion!.options[pick!].key;
+        g = { ok: key === displayQuestion!.answer };
+        onExamAnswer?.(displayQuestion!, key);
         break;
       }
     }
@@ -113,38 +145,38 @@ export function ActivityView({
   // Explicação específica do resultado, em blocos (no modo sem rolagem, cada bloco pode ir para uma parte).
   const feedback = (): ReactNode[] => {
     if (!result) return [];
-    switch (a.kind) {
+    switch (displayA.kind) {
       case 'choice':
         return [
-          <p key="w">{a.options[pick!].why}</p>,
+          <p key="w">{displayA.options[pick!].why}</p>,
           !result.ok && (
             <p key="c">
-              Resposta certa: <b>{a.options[a.answer].text}</b>. {a.options[a.answer].why}
+              Resposta certa: <b>{displayA.options[displayA.answer].text}</b>. {displayA.options[displayA.answer].why}
             </p>
           ),
         ].filter(Boolean) as ReactNode[];
       case 'compare':
         return [
           <p key="w">
-            {result.ok ? '' : `A certa é a ${a.scenarios[a.answer].title}. `}
-            {a.why}
+            {result.ok ? '' : `A certa é a ${displayA.scenarios[displayA.answer].title}. `}
+            {displayA.why}
           </p>,
         ];
       case 'fix':
         return [
           <p key="w">
-            {result.ok ? '' : `O erro está na linha ${a.bug + 1}. `}
-            {a.why} Correção: <code className="rounded bg-black/5 px-1">{a.fixed}</code>
+            {result.ok ? '' : `O erro está na linha ${displayA.bug + 1}. `}
+            {displayA.why} Correção: <code className="rounded bg-black/5 px-1">{displayA.fixed}</code>
           </p>,
         ];
       case 'tf':
         return [
           <p key="w">
-            É {a.answer ? 'verdadeiro' : 'falso'}. {a.why}
+            É {displayA.answer ? 'verdadeiro' : 'falso'}. {displayA.why}
           </p>,
         ];
       case 'multi':
-        return a.options
+        return displayA.options
           .map((o, i) =>
             !result.parts![i] || o.correct ? (
               <p key={i}>
@@ -154,16 +186,16 @@ export function ActivityView({
           )
           .filter(Boolean) as ReactNode[];
       case 'order':
-        // Cada item da ordem certa é um bloco: a correção pode ir para outra parte sem cortar a lista.
+        // Cada item da ordem certa é um bloco: a correção pode ir para outra parte sem cortar a listdisplayA.
         return [
-          <p key="w">{a.why}</p>,
+          <p key="w">{displayA.why}</p>,
           ...(result.ok
             ? []
             : [
                 <p key="h" className="font-semibold">
                   Ordem certa:
                 </p>,
-                ...a.items.map((it, i) => (
+                ...displayA.items.map((it, i) => (
                   <p key={`o${i}`}>
                     {i + 1}. <code>{it}</code>
                   </p>
@@ -173,17 +205,17 @@ export function ActivityView({
       case 'sort':
         return result.ok
           ? [<p key="ok">Todos no lugar certo.</p>]
-          : (a.items
+          : (displayA.items
               .map((it, i) =>
                 !result.parts![i] ? (
                   <p key={i}>
-                    <b>{it.text}</b>: {a.categories[it.cat]}. {it.why}
+                    <b>{it.text}</b>: {displayA.categories[it.cat]}. {it.why}
                   </p>
                 ) : null,
               )
               .filter(Boolean) as ReactNode[]);
       case 'exam': {
-        const q = question!;
+        const q = displayQuestion!;
         const chosen = q.options[pick!];
         return [<p key="c">{chosen.comment}</p>, <p key="e">{q.explanation}</p>];
       }
@@ -194,34 +226,34 @@ export function ActivityView({
 
   // Cabeçalho, enunciado e contexto.
   const head: PageItem[] = [];
-  if (a.kind === 'exam' && question) {
+  if (displayA.kind === 'exam' && question) {
     head.push({
       key: 'label',
       node: (
         <div>
-          <p className="text-sm font-semibold text-muted">{LABEL[a.kind]}</p>
+          <p className="text-sm font-semibold text-muted">{LABEL[displayA.kind]}</p>
           <p className="mt-1 inline-block rounded-full border border-line px-2 py-0.5 text-xs text-muted">
-            Questão autoral no estilo da FCC, não aplicada em prova · {question.review === 'nao-revisado' ? 'não revisada por especialista' : 'revisada'}
+            Questão autoral no estilo da FCC, não aplicada em prova · {displayQuestion.review === 'nao-revisado' ? 'não revisada por especialista' : 'revisada'}
           </p>
         </div>
       ),
     });
-    head.push({ key: 'stem', md: question.stem, wrap: (c) => <div className="prose-manuscript !font-sans !text-[1rem] [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0">{c}</div> });
+    head.push({ key: 'stem', md: displayQuestion.stem, wrap: (c) => <div className="prose-manuscript !font-sans !text-[1rem] [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0">{c}</div> });
   } else {
     head.push({
       key: 'label',
       node: (
         <div>
-          <p className="text-sm font-semibold text-muted">{LABEL[a.kind]}</p>
-          <p className="mt-1 font-display text-lg leading-snug">{a.prompt}</p>
+          <p className="text-sm font-semibold text-muted">{LABEL[displayA.kind]}</p>
+          <p className="mt-1 font-display text-lg leading-snug">{displayA.prompt}</p>
         </div>
       ),
     });
   }
-  if (a.context) {
+  if (displayA.context) {
     head.push({
       key: 'ctx',
-      md: a.context,
+      md: displayA.context,
       wrap: (c, cont) => (
         <div className="rounded-2xl border border-line bg-raised/50 p-3 text-sm [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0">
           {cont && <p className="mb-1 text-xs text-muted">(continuação)</p>}
@@ -233,9 +265,9 @@ export function ActivityView({
 
   // Alternativas: cada uma é um item inteiro (nunca cortado ao meio).
   const opts: PageItem[] = [];
-  if (a.kind === 'choice' || a.kind === 'exam') {
-    (a.kind === 'choice' ? a.options.map((o) => o.text) : question!.options.map((o) => `${o.key}) ${o.text}`)).forEach((t, i) => {
-      const right = a.kind === 'choice' ? i === a.answer : question!.options[i].key === question!.answer;
+  if (displayA.kind === 'choice' || displayA.kind === 'exam') {
+    (displayA.kind === 'choice' ? displayA.options.map((o) => o.text) : displayQuestion!.options.map((o) => `${o.key}) ${o.text}`)).forEach((t, i) => {
+      const right = displayA.kind === 'choice' ? i === displayA.answer : displayQuestion!.options[i].key === displayQuestion!.answer;
       opts.push({
         key: `o${i}`,
         node: (
@@ -246,22 +278,22 @@ export function ActivityView({
       });
     });
   }
-  if (a.kind === 'tf') {
+  if (displayA.kind === 'tf') {
     opts.push({
       key: 'tf',
       node: (
         <div className="grid grid-cols-2 gap-2">
-          {['Falso', 'Verdadeiro'].map((t, i) => (
-            <Opt key={t} disabled={locked} pressed={pick === i} onClick={() => setPick(i)} state={st((i === 1) === a.answer, pick === i)}>
-              {t}
+          {tfOptions.map((v, i) => (
+            <Opt key={v} disabled={locked} pressed={pick === i} onClick={() => setPick(i)} state={st((v === 'v') === displayA.answer, pick === i)}>
+              {v === 'v' ? 'Verdadeiro' : 'Falso'}
             </Opt>
           ))}
         </div>
       ),
     });
   }
-  if (a.kind === 'multi') {
-    a.options.forEach((o, i) => {
+  if (displayA.kind === 'multi') {
+    displayA.options.forEach((o, i) => {
       const on = picks.has(i);
       opts.push({
         key: `m${i}`,
@@ -284,12 +316,12 @@ export function ActivityView({
       });
     });
   }
-  if (a.kind === 'compare') {
-    a.scenarios.forEach((sc, i) =>
+  if (displayA.kind === 'compare') {
+    displayA.scenarios.forEach((sc, i) =>
       opts.push({
         key: `c${i}`,
         node: (
-          <Opt disabled={locked} pressed={pick === i} onClick={() => setPick(i)} state={st(i === a.answer, pick === i)}>
+          <Opt disabled={locked} pressed={pick === i} onClick={() => setPick(i)} state={st(i === displayA.answer, pick === i)}>
             <b className="block">{sc.title}</b>
             <div className="text-sm [&_pre]:!my-1 [&_pre]:!p-2">
               <Markdown>{sc.body}</Markdown>
@@ -299,30 +331,30 @@ export function ActivityView({
       }),
     );
   }
-  if (a.kind === 'fix') {
+  if (displayA.kind === 'fix') {
     opts.push({
       key: 'fix',
       node: (
         <div className="overflow-hidden rounded-2xl border-2 border-line bg-[#1b2120] font-mono text-sm text-[#e6e1d3]">
-          {a.lines.map((l, i) => (
+          {displayA.lines.map((l, i) => (
             <button
               key={i}
               type="button"
               disabled={locked}
               aria-pressed={pick === i}
               onClick={() => setPick(i)}
-              className={`flex w-full gap-3 px-3 py-2 text-left ${result && i === a.bug ? 'bg-bad/40' : pick === i ? 'bg-[#2c5f6e]/70' : 'hover:bg-white/5'}`}
+              className={`flex w-full gap-3 px-3 py-2 text-left ${result && i === displayA.bug ? 'bg-bad/40' : pick === i ? 'bg-[#2c5f6e]/70' : 'hover:bg-white/5'}`}
             >
               <span className="w-4 text-right opacity-50">{i + 1}</span>
               <span className="flex-1">{l}</span>
-              {result && i === a.bug && <span className="text-xs">erro</span>}
+              {result && i === displayA.bug && <span className="text-xs">erro</span>}
             </button>
           ))}
         </div>
       ),
     });
   }
-  if (a.kind === 'order') {
+  if (displayA.kind === 'order') {
     order.forEach((it, i) =>
       opts.push({
         key: `r${i}`,
@@ -351,15 +383,15 @@ export function ActivityView({
       }),
     );
   }
-  if (a.kind === 'sort') {
-    a.items.forEach((it, i) =>
+  if (displayA.kind === 'sort') {
+    displayA.items.forEach((it, i) =>
       opts.push({
         key: `s${i}`,
         node: (
           <div className={`rounded-2xl border-2 bg-surface p-2 ${result ? (result.parts![i] ? 'border-ok' : 'border-bad') : 'border-line'}`}>
             <code className="block px-1 text-sm">{it.text}</code>
             <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label={`Categoria de ${it.text}`}>
-              {a.categories.map((c, k) => (
+              {displayA.categories.map((c, k) => (
                 <button
                   key={c}
                   type="button"
@@ -384,13 +416,13 @@ export function ActivityView({
       <p className="flex items-center gap-2 text-lg font-bold">
         <Icon name={result?.ok ? 'certo' : 'errado'} size={22} strokeWidth={2.6} /> {result?.ok ? 'Correto' : 'Ainda não'}
       </p>
-      {result && !result.ok && a.errorKind && <p className="text-xs font-semibold opacity-80">Tipo de erro provável: {ERROR_LABEL[a.errorKind]}</p>}
+      {result && !result.ok && displayA.errorKind && <p className="text-xs font-semibold opacity-80">Tipo de erro provável: {ERROR_LABEL[displayA.errorKind]}</p>}
     </>
   );
   const verdictButtons = result && (
     <div className="mt-3 flex gap-2">
-      {!result.ok && a.variant && (
-        <button className="flex-1 rounded-full border-2 border-current px-4 py-2.5 text-sm font-bold" onClick={() => onNext({ ok: false, retry: a.variant })}>
+      {!result.ok && displayA.variant && (
+        <button className="flex-1 rounded-full border-2 border-current px-4 py-2.5 text-sm font-bold" onClick={() => onNext({ ok: false, retry: displayA.variant })}>
           Tentar uma parecida
         </button>
       )}
@@ -403,11 +435,11 @@ export function ActivityView({
 
   if (fit) {
     // Sem rolagem vertical: enunciado e alternativas em partes lado a lado; a correção abre por cima,
-    // também em partes quando é longa.
+    // também em partes quando é longdisplayA.
     const fb = feedback().map((n, i) => ({ key: `f${i}`, node: n }));
     return (
       <div ref={box} className="relative flex min-h-0 flex-1 flex-col">
-        <SwipePages items={[...head, ...opts]} layoutKey={`${a.id}:${result ? 'r' : 'q'}`} renderMd={renderMd} gap={8} label="Atividade" footer={(s) => <PageDots {...s} />} />
+        <SwipePages items={[...head, ...opts]} layoutKey={`${displayA.id}:${result ? 'r' : 'q'}`} renderMd={renderMd} gap={8} label="Atividade" footer={(s) => <PageDots {...s} />} />
         {!result ? (
           <div className="pt-2">
             <button className="btn-primary w-full" disabled={!ready} onClick={check}>
@@ -425,7 +457,7 @@ export function ActivityView({
             <div className="mt-1 text-sm leading-snug">
               <SwipePages
                 items={fb}
-                layoutKey={`${a.id}:fb`}
+                layoutKey={`${displayA.id}:fb`}
                 renderMd={renderMd}
                 maxHeight={Math.max(120, Math.round(boxH * 0.42))}
                 gap={6}
@@ -443,7 +475,7 @@ export function ActivityView({
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="flex flex-1 flex-col gap-2" role={a.kind === 'order' ? 'list' : undefined}>
+      <div className="flex flex-1 flex-col gap-2" role={displayA.kind === 'order' ? 'list' : undefined}>
         {[...head, ...opts].map((it) => (
           <div key={it.key}>{it.md !== undefined ? (it.wrap ? it.wrap(renderMd(it.md), false) : renderMd(it.md)) : it.node}</div>
         ))}
