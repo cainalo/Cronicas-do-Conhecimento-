@@ -204,6 +204,7 @@ import { esModHistoria, esModUml, esModBpmn, esModPadroes } from './micro/es-mod
 import { esQuaHistoria, esQuaAtributos, esQuaTestes, esQuaRefatoracao } from './micro/es-qualidade';
 import { dvGitHistoria, dvGitComandos, dvGitBranches, dvGitPr } from './micro/devops-git';
 import { dvCiHistoria, dvCiPipeline, dvCiAmbientes, dvCiFerramentas } from './micro/devops-cicd';
+import { dvIacHistoria, dvIacDeclarativa, dvIacContainers, dvIacKubernetes, dvObsHistoria, dvObsSlo, dvObsAlertas } from './micro/devops-plataforma';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -396,6 +397,13 @@ export const microLessons: MicroLesson[] = [
   dvCiPipeline,
   dvCiAmbientes,
   dvCiFerramentas,
+  dvIacHistoria,
+  dvIacDeclarativa,
+  dvIacContainers,
+  dvIacKubernetes,
+  dvObsHistoria,
+  dvObsSlo,
+  dvObsAlertas,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,
