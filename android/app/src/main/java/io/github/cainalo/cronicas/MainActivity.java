@@ -20,6 +20,9 @@ public class MainActivity extends BridgeActivity {
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(ImmersivePlugin.class);
         super.onCreate(savedInstanceState);
+        // Faz o WebView desenhar de borda a borda; com o modo imersivo ativo,
+        // o conteúdo ocupa o espaço das barras do sistema, que reaparecem só por gesto.
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         applyImmersive();
     }
 

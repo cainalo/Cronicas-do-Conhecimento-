@@ -2,7 +2,7 @@
 // na sequência, em ordem lógica, e contam como feitos ao abrir pela trilha (?u=chave).
 import { describe, expect, it } from 'vitest';
 import { trailUnits } from '@/app/useCheckpoint';
-import { curatedVideos, flashcards, narratedLessons } from '@/content';
+import { chapters, curatedVideos, flashcards, narratedLessons } from '@/content';
 import { emptyData } from '@/lib/model';
 import { logUnit, unitDone } from '@/lib/pace';
 
@@ -19,11 +19,17 @@ describe('trilha com todos os materiais', () => {
     }
   });
 
-  it('toda videoaula curada está na trilha, antes do Praticar do seu trecho', () => {
+  it('toda videoaula curada aparece uma única vez, antes do Praticar do seu trecho', () => {
     for (const v of curatedVideos) {
-      const i = idx((u) => u.key === `video:${v.id}`);
+      const matches = units.filter((u) => u.key === `video:${v.id}`);
+      expect(matches, v.id).toHaveLength(1);
+      const i = units.indexOf(matches[0]);
       expect(i, v.id).toBeGreaterThan(0);
-      const pr = idx((u) => u.kind === 'praticar' && u.chapterId === v.chapterId && u.sectionId === (v.sectionId ?? units[i].sectionId));
+      if (!v.sectionId) {
+        const firstSection = chapters.find((c) => c.id === v.chapterId)?.sections[0]?.id;
+        expect(matches[0].sectionId, v.id).toBe(firstSection);
+      }
+      const pr = idx((u) => u.kind === 'praticar' && u.chapterId === v.chapterId && u.sectionId === (v.sectionId ?? matches[0].sectionId));
       expect(i, v.id).toBeLessThan(pr);
     }
   });

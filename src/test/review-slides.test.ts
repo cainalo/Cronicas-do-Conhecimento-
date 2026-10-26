@@ -1,6 +1,9 @@
+import { fireEvent, render, screen } from '@testing-library/react';
+import { createElement } from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { chapters } from '@/content';
-import { buildReviewSlides, plainReviewText } from '@/pages/ReviewSlides';
+import { buildReviewSlides, plainReviewText, ReviewSlidesPage } from '@/pages/ReviewSlides';
 
 describe('caderno de slides para revisão', () => {
   it('constrói capa, lâminas por seção, conceitos e checagem final', () => {
@@ -23,4 +26,23 @@ describe('caderno de slides para revisão', () => {
     expect(plain).toContain('primeiro exemplo');
     expect(plain).not.toContain('**');
   });
+});
+
+
+it('slides ocupam a viewport e permitem navegar por gesto horizontal', () => {
+  const total = buildReviewSlides(chapters[0]).length;
+  render(createElement(MemoryRouter, null, createElement(ReviewSlidesPage)));
+  const root = screen.getByTestId('review-slides-fullscreen');
+  const area = screen.getByTestId('review-slide-swipe-area');
+  expect(root).toHaveClass('fixed', 'inset-0', 'h-[100dvh]', 'overflow-hidden');
+  expect(area).toBeInTheDocument();
+  expect(root.querySelector('header')?.textContent).toContain('1 / ' + total);
+
+  fireEvent.pointerDown(area, { pointerId: 1, clientX: 280, clientY: 220 });
+  fireEvent.pointerUp(area, { pointerId: 1, clientX: 170, clientY: 222 });
+  expect(root.querySelector('header')?.textContent).toContain('2 / ' + total);
+
+  fireEvent.pointerDown(area, { pointerId: 1, clientX: 90, clientY: 220 });
+  fireEvent.pointerUp(area, { pointerId: 1, clientX: 210, clientY: 221 });
+  expect(root.querySelector('header')?.textContent).toContain('1 / ' + total);
 });

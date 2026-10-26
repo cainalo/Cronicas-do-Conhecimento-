@@ -4,7 +4,8 @@
 import { Capacitor } from '@capacitor/core';
 
 export type VoiceKind = 'nativa' | 'navegador' | 'nenhuma';
-export interface Voice { kind: VoiceKind; speak(text: string, rate: number): Promise<void>; stop(): void; }
+export interface VoiceCallbacks { onStart?: () => void; onBoundary?: (charIndex: number, charLength: number) => void; }
+export interface Voice { kind: VoiceKind; speak(text: string, rate: number, callbacks?: VoiceCallbacks): Promise<void>; stop(): void; }
 export interface VoiceCandidate { name?: string; lang?: string; default?: boolean; localService?: boolean; }
 
 export function portugueseVoiceScore(v: VoiceCandidate): number {
@@ -40,11 +41,13 @@ function browserVoice(): Voice | undefined {
   };
   return {
     kind: 'navegador',
-    speak: (text, rate) => new Promise((resolve) => {
+    speak: (text, rate, callbacks) => new Promise((resolve) => {
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'pt-BR'; u.rate = rate;
       const v = pick();
       if (v) u.voice = v;
+      u.onstart = () => callbacks?.onStart?.();
+      u.onboundary = (event) => callbacks?.onBoundary?.(event.charIndex, event.charLength);
       u.onend = () => resolve();
       u.onerror = () => resolve();
       synth.speak(u);
@@ -64,10 +67,13 @@ function nativeVoice(): Voice | undefined {
   };
   return {
     kind: 'nativa',
-    speak: async (text, rate) => {
+    speak: async (text, rate, callbacks) => {
       const { TextToSpeech } = await load();
       let voice: number | undefined;
       try { voice = bestPortugueseVoiceIndex((await supported()).voices); } catch { voice = undefined; }
+      // O plugin nativo não expõe eventos de palavra. Começamos o relógio somente depois de
+      // carregar o plugin/voz; a legenda usa temporização estimada no Android e eventos reais no web.
+      callbacks?.onStart?.();
       try {
         await TextToSpeech.speak({
           text, lang: 'pt-BR', rate, pitch: 1, volume: 1, category: 'playback', queueStrategy: 0,
@@ -85,4 +91,6 @@ function nativeVoice(): Voice | undefined {
 
 let cached: Voice | undefined;
 export function getVoice(): Voice { return (cached ??= nativeVoice() ?? browserVoice() ?? none); }
-export const readingMs = (text: string, rate = 1) => Math.max(1800, (text.split(/\s+/).length / 2.6) * 1000) / rate;
+// Estimativa mais conservadora para manter as legendas acompanhando a voz nativa; nos
+// navegadores, os eventos onboundary prevalecem sobre essa aproximação.
+export const readingMs = (text: string, rate = 1) => Math.max(1800, (text.split(/\s+/).filter(Boolean).length / 2.2) * 1000) / rate;

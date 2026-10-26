@@ -53,6 +53,8 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
     </PrefsProvider>,
   );
   expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(l.scenes[0].beats[0].say);
+  expect(screen.getByTestId('narrada-player')).toHaveClass('fixed', 'inset-0', 'h-[100dvh]', 'overflow-hidden');
+  expect(screen.getByTestId('narrada-elementos-visuais')).toBeInTheDocument();
   expect(screen.getByText(/sem voz neste aparelho/)).toBeInTheDocument();
   // Não toca sozinha.
   await act(async () => void vi.advanceTimersByTime(20000));
@@ -63,6 +65,11 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
   expect(captionWords[0]).toHaveClass('text-[#ffd38a]');
   await act(async () => void vi.advanceTimersByTime(8000));
   expect(screen.getByTestId('narrada-legenda')).not.toHaveTextContent(l.scenes[0].beats[0].say);
+  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-0');
+  await user.click(screen.getByTestId('narrada-mostrar-controles'));
+  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-100');
+  // Um toque na área do vídeo também esconde os controles; um novo toque revela-os.
+  await user.click(screen.getByTestId('narrada-stage'));
   expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-0');
   await user.click(screen.getByTestId('narrada-mostrar-controles'));
   expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-100');
