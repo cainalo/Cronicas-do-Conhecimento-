@@ -1,3 +1,9 @@
+### A validação de IA como parte da engenharia de software
+
+O NIST publicou o AI Risk Management Framework 1.0 em janeiro de 2023, organizando práticas voluntárias para mapear, medir e gerir riscos de IA. Em sistemas assistidos por agentes, a preocupação inclui não só a saída do modelo, mas também ferramentas, dependências, dados enviados e ações realizadas. O quadro de risco complementa testes e revisão de código; não substitui controles técnicos nem a responsabilidade de quem aprova.
+
+Fontes: [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework) e [MCP Security Cheat Sheet (OWASP)](https://cheatsheetseries.owasp.org/cheatsheets/MCP_Security_Cheat_Sheet.html).
+
 O último item do bloco agentivo no edital é "avaliação da qualidade do código produzido por IA; alucinações e validação de resultados; segurança, privacidade, propriedade intelectual e ética no desenvolvimento assistido por IA".
 
 ### Usos no ciclo de desenvolvimento
