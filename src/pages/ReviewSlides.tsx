@@ -29,7 +29,6 @@ export function plainReviewText(markdown: string): string {
     .replace(/\*(.*?)\*/g, '$1')
     .replace(/^\s*\|.*\|\s*$/gm, '')
     .replace(/^\s*[-:| ]{3,}\s*$/gm, '')
-    .replace(/ + String.raw/g, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
@@ -123,7 +122,7 @@ export function ReviewSlidesPage() {
             </select>
           </label>
           <button type="button" className="btn-ghost w-full sm:w-auto" onClick={() => window.print()}>
-            <Icon name="download" size={17} /> Imprimir / Salvar como PDF
+            <Icon name="pergaminho" size={17} /> Imprimir / Salvar como PDF
           </button>
         </div>
         <div className="flex items-center justify-between gap-3">
