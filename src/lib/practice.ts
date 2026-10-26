@@ -8,6 +8,7 @@ import { grantXp } from './study';
 export type Activity =
   | { kind: 'tf'; id: string; statement: string; answer: boolean; why: string }
   | { kind: 'blank'; id: string; sentence: string; options: string[]; answer: string; why: string }
+  | { kind: 'multiBlank'; id: string; prompt: string; sentence: string; options: string[]; answers: string[]; why: string }
   | { kind: 'term'; id: string; definition: string; options: string[]; answer: string }
   | { kind: 'pairs'; id: string; pairs: { term: string; definition: string }[] }
   | { kind: 'build'; id: string; prompt: string; words: string[]; answer: string[]; why: string }
@@ -120,6 +121,36 @@ export function buildPractice(
     });
   }
 
+  // Frase de revisão com duas lacunas independentes, construída a partir de uma definição do trecho.
+  const stopWords = new Set(['aquilo', 'aquele', 'aquela', 'durante', 'porque', 'quando', 'também', 'entre', 'sobre', 'para', 'como', 'mais', 'menos', 'muito', 'muitas', 'muitos', 'pode', 'podem', 'deve', 'devem', 'este', 'esta', 'esse', 'essa', 'uma', 'uns', 'umas', 'dos', 'das', 'que', 'com', 'sem', 'por', 'ser', 'são', 'tem', 'ter']);
+  const multiSource = gloss.find((g) => {
+    const text = g.definition.replace(/\*\*/g, '').replace(/`/g, '');
+    const words = [...new Set((text.match(/\p{L}{5,}/gu) ?? []).filter((word) => !stopWords.has(word.toLocaleLowerCase('pt-BR'))))];
+    return words.length >= 2 && text.trim().split(/\s+/).length >= 6;
+  });
+  const multiBlanks: Activity[] = [];
+  if (multiSource) {
+    const sentence = multiSource.definition.replace(/\*\*/g, '').replace(/`/g, '');
+    const targets = [...new Set((sentence.match(/\p{L}{5,}/gu) ?? []).filter((word) => !stopWords.has(word.toLocaleLowerCase('pt-BR'))))].slice(0, 2);
+    const masked = targets.reduce((text, word) => text.replace(new RegExp('\\\\b' + word.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\  const mcqs: Activity[] = shuffle(') + '\\\\b', 'u'), '___'), sentence);
+    const distractors = shuffle(
+      glossary
+        .filter((g) => g.term !== multiSource.term)
+        .flatMap((g) => g.definition.replace(/\*\*/g, '').match(/\p{L}{5,}/gu) ?? [])
+        .filter((word) => !targets.some((x) => x.toLocaleLowerCase('pt-BR') === word.toLocaleLowerCase('pt-BR')) && !stopWords.has(word.toLocaleLowerCase('pt-BR'))),
+      rand,
+    ).filter((word, index, all) => all.findIndex((x) => x.toLocaleLowerCase('pt-BR') === word.toLocaleLowerCase('pt-BR')) === index).slice(0, 3);
+    multiBlanks.push({
+      kind: 'multiBlank',
+      id: `${key}:lacunas-duplas`,
+      prompt: `Complete a definição de “${multiSource.term}”. Escolha uma palavra para cada lacuna.`,
+      sentence: masked,
+      options: shuffle([...targets, ...distractors], rand),
+      answers: targets,
+      why: `${multiSource.term}: ${sentence}`,
+    });
+  }
+
   const mcqs: Activity[] = shuffle(
     bank.filter((q) => q.chapterId === chapter.id && q.sectionId === sectionId),
     rand,
@@ -142,7 +173,7 @@ export function buildPractice(
 
   // Intercala: começa leve (V/F, termo), mistura lacunas e pares no meio, questões no fim.
   const order: Activity[] = [];
-  const queues = [tfs, terms, blanks, builds, pairs];
+  const queues = [tfs, terms, blanks, multiBlanks, builds, pairs];
   while (queues.some((q) => q.length)) {
     for (const q of queues) {
       const x = q.shift();
