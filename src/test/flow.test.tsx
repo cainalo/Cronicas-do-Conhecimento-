@@ -11,6 +11,7 @@ import { markSectionRead } from '@/lib/study';
 import { getLearningCheckpoint } from '@/lib/checkpoint';
 import { trailUnits } from '@/app/useCheckpoint';
 import { journey, microSeries, getLearningUnit } from '@/content';
+import { missaoSql01 } from '@/content/missions/sql-01';
 
 /** Primeiro trecho de um capítulo ainda sem microaula: só nesses o livro simples aparece. */
 const SIMPLE = (() => {
@@ -157,10 +158,14 @@ it('caso prático de SQL: objetivos (sem cena de jogo), descoberta e laboratóri
   expect(screen.queryByRole('list', { name: 'Transcrição da cena' })).toBeNull();
   expect(screen.getByText(/Por que a lista de empenhos/)).toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: 'Vamos lá' }));
-  // Descoberta: a primeira alternativa é a certa nas quatro verificações.
-  for (let k = 0; k < 4; k++) {
+  // A alternativa correta deve ser selecionada pelo conteúdo, não por uma posição fixa.
+  // O player embaralha opções para cada tentativa, inclusive nas atividades da missão.
+  for (let k = 0; k < missaoSql01.discovery.length; k++) {
     const sec = screen.getByRole('region', { name: 'Descoberta guiada' });
-    await user.click(within(sec).getAllByRole('button', { pressed: false })[0]);
+    const check = missaoSql01.discovery[k].check;
+    if (check.kind !== 'choice') throw new Error('Checagem de descoberta inesperada');
+    const correctText = check.options[check.answer].text;
+    await user.click(within(sec).getByRole('button', { name: correctText }));
     await user.click(screen.getByRole('button', { name: 'Verificar' }));
     expect(screen.getByRole('status')).toHaveTextContent('Correto');
     await user.click(screen.getByRole('button', { name: 'Continuar' }));
