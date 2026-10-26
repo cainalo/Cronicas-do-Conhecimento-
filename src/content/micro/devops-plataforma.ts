@@ -145,6 +145,18 @@ export const dvIacHistoria: MicroLesson = {
         { text: 'Manter réplicas e substituir instâncias com falha', cat: 2, why: 'Essa é uma tarefa de orquestração.' },
       ],
     },
+    {
+      kind: 'compare',
+      id: 'cons-3',
+      prompt: 'Uma equipe quer recriar um ambiente de forma consistente após uma falha. Qual opção ajuda mais?',
+      scenarios: [
+        { title: 'Opção A', body: 'Guardar os passos apenas na memória de quem configurou.' },
+        { title: 'Opção B', body: 'Versionar a descrição da infraestrutura e aplicá-la por ferramenta.' },
+      ],
+      answer: 1,
+      why: 'A IaC torna a configuração revisável, repetível e rastreável.',
+      errorKind: 'conceito',
+    },
   ],
   exam: [],
   summary: [
@@ -296,6 +308,18 @@ export const dvIacDeclarativa: MicroLesson = {
       bug: 2,
       why: 'Plan mostra as mudanças; apply é que aplica.',
       fixed: 'Terraform plan mostra as mudanças previstas',
+      errorKind: 'conceito',
+    },
+    {
+      kind: 'compare',
+      id: 'cons-3',
+      prompt: 'O mesmo ajuste de configuração é executado duas vezes. Qual resultado indica idempotência?',
+      scenarios: [
+        { title: 'Opção A', body: 'A configuração converge para o estado desejado sem criar efeitos duplicados.' },
+        { title: 'Opção B', body: 'Cada execução cria novos recursos, mesmo quando já estão corretos.' },
+      ],
+      answer: 0,
+      why: 'Idempotência evita que a repetição gere efeitos duplicados.',
       errorKind: 'conceito',
     },
   ],
@@ -455,6 +479,18 @@ export const dvIacContainers: MicroLesson = {
       fixed: 'Dados importantes do banco ficam em volume persistente',
       errorKind: 'conceito',
     },
+    {
+      kind: 'compare',
+      id: 'cons-3',
+      prompt: 'O banco precisa manter dados após recriar o contêiner. Qual opção é mais adequada?',
+      scenarios: [
+        { title: 'Opção A', body: 'Guardar os dados apenas na camada gravável do contêiner.' },
+        { title: 'Opção B', body: 'Usar armazenamento persistente, como um volume.' },
+      ],
+      answer: 1,
+      why: 'O volume tem ciclo de vida separado do contêiner.',
+      errorKind: 'procedimento',
+    },
   ],
   exam: [
     { kind: 'exam', id: 'prova-1', prompt: 'Questão de fixação', questionId: 'q.devops.02.003' },
@@ -537,7 +573,7 @@ export const dvIacKubernetes: MicroLesson = {
           { text: 'Substitui a gestão de acesso', why: 'Permissões continuam essenciais.' },
         ],
         answer: 0,
-        errorKind: 'seguranca',
+        errorKind: 'procedimento',
       },
       recovery: {
         explain: 'O nome Secret não significa que o dado esteja automaticamente protegido em qualquer ambiente. Controle quem pode ler o objeto, limite o acesso e verifique a configuração de criptografia em repouso.',
@@ -611,7 +647,19 @@ export const dvIacKubernetes: MicroLesson = {
       bug: 2,
       why: 'A criptografia em repouso depende da configuração do cluster.',
       fixed: 'Secret exige controle de acesso e configuração segura do cluster',
-      errorKind: 'seguranca',
+      errorKind: 'procedimento',
+    },
+    {
+      kind: 'compare',
+      id: 'cons-3',
+      prompt: 'Um Pod está vivo, mas ainda não pode atender requisições. Qual verificação representa melhor essa condição?',
+      scenarios: [
+        { title: 'Opção A', body: 'Readiness: o Pod ainda não está pronto para receber tráfego.' },
+        { title: 'Opção B', body: 'Liveness: o Pod está travado e deve ser reiniciado.' },
+      ],
+      answer: 0,
+      why: 'Readiness controla a prontidão; liveness ajuda a detectar travamento.',
+      errorKind: 'conceito',
     },
   ],
   exam: [
@@ -768,6 +816,18 @@ export const dvObsHistoria: MicroLesson = {
       why: 'A média é uma métrica; o trace descreve o caminho de uma requisição.',
       fixed: 'Um trace acompanha o caminho de uma requisição',
       errorKind: 'conceito',
+    },
+    {
+      kind: 'compare',
+      id: 'cons-3',
+      prompt: 'O painel mostra aumento da taxa de erros, mas não mostra onde cada requisição falhou. O que usar junto?',
+      scenarios: [
+        { title: 'Opção A', body: 'Logs estruturados e traces correlacionados para investigar requisições.' },
+        { title: 'Opção B', body: 'Apenas um contador agregado, sem contexto.' },
+      ],
+      answer: 0,
+      why: 'Métricas indicam o padrão; logs e traces ajudam a localizar eventos e etapas.',
+      errorKind: 'procedimento',
     },
   ],
   exam: [
@@ -926,6 +986,18 @@ export const dvObsSlo: MicroLesson = {
       fixed: 'Orçamento de erro é a margem de falhas permitida pelo SLO',
       errorKind: 'conceito',
     },
+    {
+      kind: 'compare',
+      id: 'cons-3',
+      prompt: 'A equipe mede o percentual de sucesso e define uma meta interna. Qual relação está correta?',
+      scenarios: [
+        { title: 'Opção A', body: 'SLI é a medida; SLO é a meta interna para essa medida.' },
+        { title: 'Opção B', body: 'SLI é o contrato; SLO é o painel que mostra os traces.' },
+      ],
+      answer: 0,
+      why: 'O SLA é o acordo com o cliente; SLI mede e SLO define uma meta.',
+      errorKind: 'conceito',
+    },
   ],
   exam: [
     { kind: 'exam', id: 'prova-1', prompt: 'Questão de fixação', questionId: 'q.devops.02.009' },
@@ -1082,6 +1154,18 @@ export const dvObsAlertas: MicroLesson = {
       why: 'Alertas excessivos podem gerar fadiga e fazer a equipe ignorar o que importa.',
       fixed: 'Alertas devem ser relevantes, acionáveis e priorizados',
       errorKind: 'conceito',
+    },
+    {
+      kind: 'compare',
+      id: 'cons-3',
+      prompt: 'Um alerta dispara por uma oscilação pequena, sem impacto e sem ação clara. O que é melhor?',
+      scenarios: [
+        { title: 'Opção A', body: 'Priorizar alertas ligados a sintomas relevantes e fornecer um runbook.' },
+        { title: 'Opção B', body: 'Criar alertas duplicados em mais canais.' },
+      ],
+      answer: 0,
+      why: 'Alertas acionáveis reduzem ruído e a fadiga de alertas.',
+      errorKind: 'procedimento',
     },
   ],
   exam: [
