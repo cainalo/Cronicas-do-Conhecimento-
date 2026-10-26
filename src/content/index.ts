@@ -447,7 +447,19 @@ export type { FictionalTeacher, TeacherPost } from './teachers';
 import { narradaHistoriaComputador, narradaQuatroTarefas } from './narrated/prim-computador';
 import { narradaSomarInteiros } from './narrated/mat-somar-inteiros';
 import type { NarratedLesson } from './narrated/types';
-export const narratedLessons: NarratedLesson[] = [narradaHistoriaComputador, narradaQuatroTarefas, narradaSomarInteiros];
+import { narratedFromMicro } from '@/lib/narrate';
+const handmadeNarrated: NarratedLesson[] = [narradaHistoriaComputador, narradaQuatroTarefas, narradaSomarInteiros];
+/**
+ * Trilha integrada (26/10/2026): a primeira aula de cada trecho (a da história) ganha uma versão
+ * narrada gerada do próprio texto da aula (lib/narrate.ts), quando ainda não há uma feita à mão.
+ */
+const autoNarrated: NarratedLesson[] = journey.flatMap((c) =>
+  c.sections
+    .map((s) => microSeries(c.id, s.id)[0])
+    .filter((m): m is MicroLesson => !!m && m.series?.order === 1 && !handmadeNarrated.some((h) => h.lessonId === m.id))
+    .map(narratedFromMicro),
+);
+export const narratedLessons: NarratedLesson[] = [...handmadeNarrated, ...autoNarrated];
 export const getNarrated = (id: string) => narratedLessons.find((n) => n.id === id);
 export const narratedFor = (lessonId: string) => narratedLessons.find((n) => n.lessonId === lessonId);
 

@@ -101,4 +101,5 @@
 ## 26/10/2026: trilha integrada (fase 1)
 - A trilha passou a incluir, em ordem lógica, todo o material existente: a aula narrada logo depois da aula em texto que ela acompanha; as videoaulas curadas depois da aula (ou do trecho); os posts dos professores depois das aulas do trecho, antes do Praticar; os cartões de memorização no fim do capítulo, antes do Desafio. Abrir pela trilha (`?u=chave`) conta como feito. Nova página /video/:id; /sala?aula= e /flashcards?capitulo= abrem direto no lugar certo.
 - Testes: `trail-extras.test.ts` (5), 2115 no total; test:e2e com as novas páginas; capturas da trilha conferidas em 390×844.
+- **Fase 2:** a primeira aula de cada trecho (a da história) ganhou uma aula narrada gerada do próprio texto da aula (`lib/narrate.ts`): fala sem marcação, cartões para listas, linha do tempo para os marcos datados e o resumo no fim. Entram na trilha logo depois da aula. Testes em `narrate.test.ts` (inclusive: só frases que estão na aula). 2234 testes.
 

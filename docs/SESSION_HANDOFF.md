@@ -63,7 +63,7 @@ Antes: `npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escur
 
 ## Trilha integrada (pedido de 26/10/2026)
 - Fase 1 feita: material existente encaixado na trilha (ver SESSION_LOG).
-- Fase 2: adaptar e criar o que faltar (mais aulas narradas e materiais por trecho).
+- Fase 2 feita: aulas narradas geradas para a primeira aula de cada trecho (lib/narrate.ts).
 - Fase 3, por último: aulas narradas em tela cheia, com botões por cima sem cobrir o conteúdo, e cenas mais vivas (imagens e movimento enquanto a voz narra).
 
 ## Próxima tarefa exata
