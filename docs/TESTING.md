@@ -22,6 +22,7 @@ Criada em 26/10/2026, depois de o cartão de certo ou errado e os fundos dos mod
 | `src/test/reset.test.tsx` | reinício do progresso: regra pura, fusão com estado antigo, espelho do IndexedDB, chaves locais, sync com Supabase simulado, diálogo (cancelar, confirmar, recarregar, Continuar no início, preferências mantidas) |
 | `src/test/content.test.ts` | ids únicos; 5 alternativas; gabarito válido; comentários; nunca `oficial`; seção/tópico existentes; lições válidas |
 | `src/test/devops-platform.test.ts` | cobertura e ordem das 7 microaulas de `cap.devops.02`, estrutura das etapas, diversidade da consolidação e vínculo das questões com a seção correta |
+| `src/test/ia-agents-mcp.test.ts` | cinco trechos de `cap.ia.02`, ordem das 15 microaulas, checagem/recuperação, diversidade e cobertura das 20 questões autorais |
 | `src/test/study.test.ts` | XP único, revisão/recuperação, lição (melhor nota), capítulo lido, níveis, domínio, recomendação, marcadores |
 | `src/test/merge.test.ts` | fusão entre aparelhos, XP sem duplicar, migração do visitante |
 | `src/test/game.test.ts` | títulos, sequência, domínio, selos, missões, Rodada relâmpago (escolha das questões) |
