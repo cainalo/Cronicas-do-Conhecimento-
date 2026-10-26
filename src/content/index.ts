@@ -519,7 +519,15 @@ export function trailPlaceOf(lessonId: string): { to: string; label: string } | 
 /** Materiais encaixados na trilha, na ordem lógica de cada trecho (ver courseUnits). */
 export const trailExtras: TrailExtras = {
   narratedFor: (lessonId) => narratedFor(lessonId),
-  videosFor: (chapterId, sectionId) => _videos.filter((v) => v.chapterId === chapterId && (v.sectionId ?? sectionId) === sectionId),
+  videosFor: (chapterId, sectionId) => {
+    // Vídeo sem sectionId é material de apoio do capítulo inteiro: aparece uma vez,
+    // no primeiro trecho, e não se replica em todas as seções do mesmo capítulo.
+    const firstSectionId = chapterMap.get(chapterId)?.sections[0]?.id;
+    return _videos.filter((v) =>
+      v.chapterId === chapterId &&
+      (v.sectionId ? v.sectionId === sectionId : sectionId === firstSectionId),
+    );
+  },
   postsLessonFor: (chapterId, sectionId) => {
     const first = microSeries(chapterId, sectionId)[0];
     return first && feedPostsOf(first.id).length ? first.id : undefined;
