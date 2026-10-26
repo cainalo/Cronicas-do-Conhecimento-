@@ -58,6 +58,9 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
   await act(async () => void vi.advanceTimersByTime(20000));
   expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(l.scenes[0].beats[0].say);
   await user.click(screen.getByTestId('narrada-tocar'));
+  const captionWords = screen.getByTestId('narrada-legenda-texto').querySelectorAll(':scope > span');
+  expect(captionWords.length).toBeGreaterThan(1);
+  expect(captionWords[0]).toHaveClass('text-[#ffd38a]');
   await act(async () => void vi.advanceTimersByTime(8000));
   expect(screen.getByTestId('narrada-legenda')).not.toHaveTextContent(l.scenes[0].beats[0].say);
   expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-0');
