@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { createElement } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { chapters } from '@/content';
@@ -30,7 +31,7 @@ describe('caderno de slides para revisão', () => {
 
 it('slides ocupam a viewport e permitem navegar por gesto horizontal', () => {
   const total = buildReviewSlides(chapters[0]).length;
-  render(<MemoryRouter><ReviewSlidesPage /></MemoryRouter>);
+  render(createElement(MemoryRouter, null, createElement(ReviewSlidesPage)));
   const root = screen.getByTestId('review-slides-fullscreen');
   const area = screen.getByTestId('review-slide-swipe-area');
   expect(root).toHaveClass('fixed', 'inset-0', 'h-[100dvh]', 'overflow-hidden');
