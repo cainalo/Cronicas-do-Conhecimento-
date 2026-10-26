@@ -60,10 +60,13 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
   await user.click(screen.getByTestId('narrada-tocar'));
   await act(async () => void vi.advanceTimersByTime(8000));
   expect(screen.getByTestId('narrada-legenda')).not.toHaveTextContent(l.scenes[0].beats[0].say);
+  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-0');
+  await user.click(screen.getByTestId('narrada-mostrar-controles'));
+  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-100');
   await user.click(screen.getByTestId('narrada-tocar')); // pausa
   await user.click(screen.getByRole('button', { name: 'Ir para a cena 6: Subtrair é somar o oposto' }));
   expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/cinco menos oito/);
-  await user.click(screen.getByRole('button', { name: 'Mostrar a transcrição' }));
+  await user.click(screen.getByRole('button', { name: 'Transcrição' }));
   expect(screen.getByRole('region', { name: 'Transcrição' })).toHaveTextContent(/tirar menos dois/i);
   // Vai à última cena e deixa terminar: aparece a checagem opcional.
   await user.click(screen.getByRole('button', { name: /Ir para a cena 8/ }));
