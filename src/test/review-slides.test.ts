@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { chapters } from '@/content';
-import { buildReviewSlides, plainReviewText } from '@/pages/ReviewSlides';
+import { buildReviewSlides, plainReviewText, ReviewSlidesPage } from '@/pages/ReviewSlides';
 
 describe('caderno de slides para revisão', () => {
   it('constrói capa, lâminas por seção, conceitos e checagem final', () => {
