@@ -18,6 +18,8 @@ export type ActivityKind =
   | 'multi_select'
   | 'true_false'
   | 'fill_blank'
+  | 'multi_blank'
+  | 'sentence_build'
   | 'matching_pairs'
   | 'order_sequence'
   | 'categorize'
@@ -26,7 +28,7 @@ export type ActivityKind =
   | 'exam_item'
   | 'sql_lab';
 
-export type Family = 'escolha' | 'selecao' | 'vf' | 'lacuna' | 'pares' | 'ordenar' | 'classificar' | 'depurar' | 'comparar' | 'prova' | 'laboratorio';
+export type Family = 'escolha' | 'selecao' | 'vf' | 'lacuna' | 'montar' | 'pares' | 'ordenar' | 'classificar' | 'depurar' | 'comparar' | 'prova' | 'laboratorio';
 export type AssessmentMode = 'diagnostic' | 'instructional' | 'practice' | 'review' | 'exam';
 /** Códigos de erro provável (spec 12 §5): hipótese, nunca certeza. */
 export type ErrorCode = 'term_confusion' | 'sequence_error' | 'missed_condition' | 'calculation_error' | 'reading_misinterpretation' | 'careless_selection' | 'unknown';
@@ -48,6 +50,8 @@ const FAMILY_OF: Record<ActivityKind, Family> = {
   multi_select: 'selecao',
   true_false: 'vf',
   fill_blank: 'lacuna',
+  multi_blank: 'lacuna',
+  sentence_build: 'montar',
   matching_pairs: 'pares',
   order_sequence: 'ordenar',
   categorize: 'classificar',
@@ -70,6 +74,8 @@ const MISSION_KIND: Record<MissionActivity['kind'], ActivityKind> = {
 const PRACTICE_KIND: Record<PracticeActivity['kind'], ActivityKind> = {
   tf: 'true_false',
   blank: 'fill_blank',
+  multiBlank: 'multi_blank',
+  build: 'sentence_build',
   term: 'single_choice',
   pairs: 'matching_pairs',
   mcq: 'exam_item',

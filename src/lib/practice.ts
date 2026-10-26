@@ -8,8 +8,10 @@ import { grantXp } from './study';
 export type Activity =
   | { kind: 'tf'; id: string; statement: string; answer: boolean; why: string }
   | { kind: 'blank'; id: string; sentence: string; options: string[]; answer: string; why: string }
+  | { kind: 'multiBlank'; id: string; prompt: string; sentence: string; options: string[]; answers: string[]; why: string }
   | { kind: 'term'; id: string; definition: string; options: string[]; answer: string }
   | { kind: 'pairs'; id: string; pairs: { term: string; definition: string }[] }
+  | { kind: 'build'; id: string; prompt: string; words: string[]; answer: string[]; why: string }
   | { kind: 'mcq'; id: string; question: Question };
 
 export const PRACTICE_PREFIX = 'pratica:';
@@ -36,6 +38,18 @@ function shuffle<T>(a: T[], rand: () => number): T[] {
     [b[i], b[j]] = [b[j], b[i]];
   }
   return b;
+}
+
+/** Reordena as alternativas e renumera as letras; a resposta correta continua ligada ao mesmo texto. */
+function shuffleQuestionAnswers(q: Question, rand: () => number): Question {
+  const letters = ['A', 'B', 'C', 'D', 'E'] as const;
+  const options = shuffle(q.options, rand);
+  const correctIndex = options.findIndex((option) => option.key === q.answer);
+  return {
+    ...q,
+    options: options.map((option, index) => ({ ...option, key: letters[index] })),
+    answer: letters[Math.max(0, correctIndex)],
+  };
 }
 
 /** Monta a rodada de prática de uma seção (cerca de 8 a 12 atividades, tipos intercalados). */
@@ -82,12 +96,67 @@ export function buildPractice(
   const pairs: Activity[] =
     glossary.length >= 4 ? [{ kind: 'pairs', id: `${key}:pares`, pairs: gloss.slice(2, 6).length === 4 ? gloss.slice(2, 6) : gloss.slice(0, 4) }] : [];
 
+  // Montagem de frase: palavras corretas embaralhadas com distratores plausíveis do mesmo glossário.
+  const sentenceSource = gloss.find((g) => {
+    const count = g.definition.trim().split(/\s+/).length;
+    return count >= 5 && count <= 12;
+  });
+  const builds: Activity[] = [];
+  if (sentenceSource) {
+    const answer = sentenceSource.definition.trim().split(/\s+/);
+    const decoys = shuffle(
+      glossary
+        .filter((g) => g.term !== sentenceSource.term)
+        .flatMap((g) => g.definition.split(/\s+/))
+        .filter((word) => word.length > 3 && !answer.includes(word)),
+      rand,
+    ).slice(0, 2);
+    builds.push({
+      kind: 'build',
+      id: `${key}:montar-frase`,
+      prompt: `Monte uma definição coerente para “${sentenceSource.term}”. Use as palavras na ordem correta; há palavras extras.`,
+      words: shuffle([...answer, ...decoys], rand),
+      answer,
+      why: `${sentenceSource.term}: ${sentenceSource.definition}`,
+    });
+  }
+
+  // Frase de revisão com duas lacunas independentes, construída a partir de uma definição do trecho.
+  const stopWords = new Set(['aquilo', 'aquele', 'aquela', 'durante', 'porque', 'quando', 'também', 'entre', 'sobre', 'para', 'como', 'mais', 'menos', 'muito', 'muitas', 'muitos', 'pode', 'podem', 'deve', 'devem', 'este', 'esta', 'esse', 'essa', 'uma', 'uns', 'umas', 'dos', 'das', 'que', 'com', 'sem', 'por', 'ser', 'são', 'tem', 'ter']);
+  const multiSource = gloss.find((g) => {
+    const text = g.definition.replace(/\*\*/g, '').replace(/`/g, '');
+    const words = [...new Set((text.match(/\p{L}{5,}/gu) ?? []).filter((word) => !stopWords.has(word.toLocaleLowerCase('pt-BR'))))];
+    return words.length >= 2 && text.trim().split(/\s+/).length >= 6;
+  });
+  const multiBlanks: Activity[] = [];
+  if (multiSource) {
+    const sentence = multiSource.definition.replace(/\*\*/g, '').replace(/`/g, '');
+    const targets = [...new Set((sentence.match(/\p{L}{5,}/gu) ?? []).filter((word) => !stopWords.has(word.toLocaleLowerCase('pt-BR'))))].slice(0, 2);
+    const masked = targets.reduce((text, word) => text.replace(new RegExp('\\b' + word + '\\b', 'u'), '___'), sentence);
+    const distractors = shuffle(
+      glossary
+        .filter((g) => g.term !== multiSource.term)
+        .flatMap((g) => g.definition.replace(/\*\*/g, '').match(/\p{L}{5,}/gu) ?? [])
+        .filter((word) => !targets.some((x) => x.toLocaleLowerCase('pt-BR') === word.toLocaleLowerCase('pt-BR')) && !stopWords.has(word.toLocaleLowerCase('pt-BR'))),
+      rand,
+    ).filter((word, index, all) => all.findIndex((x) => x.toLocaleLowerCase('pt-BR') === word.toLocaleLowerCase('pt-BR')) === index).slice(0, 3);
+    multiBlanks.push({
+      kind: 'multiBlank',
+      id: `${key}:lacunas-duplas`,
+      prompt: `Complete a definição de “${multiSource.term}”. Escolha uma palavra para cada lacuna.`,
+      sentence: masked,
+      options: shuffle([...targets, ...distractors], rand),
+      answers: targets,
+      why: `${multiSource.term}: ${sentence}`,
+    });
+  }
+
   const mcqs: Activity[] = shuffle(
     bank.filter((q) => q.chapterId === chapter.id && q.sectionId === sectionId),
     rand,
   )
     .slice(0, 3)
-    .map((q) => ({ kind: 'mcq' as const, id: q.id, question: q }));
+    .map((q) => ({ kind: 'mcq' as const, id: q.id, question: shuffleQuestionAnswers(q, rand) }));
 
   // Aquecimento bem fácil, tirado da explicação simples: verdadeiro ou falso e palavras novas.
   const warm: Activity[] = [];
@@ -104,7 +173,7 @@ export function buildPractice(
 
   // Intercala: começa leve (V/F, termo), mistura lacunas e pares no meio, questões no fim.
   const order: Activity[] = [];
-  const queues = [tfs, terms, blanks, pairs];
+  const queues = [tfs, terms, blanks, multiBlanks, builds, pairs];
   while (queues.some((q) => q.length)) {
     for (const q of queues) {
       const x = q.shift();

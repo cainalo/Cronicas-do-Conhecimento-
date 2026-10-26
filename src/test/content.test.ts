@@ -103,11 +103,31 @@ describe('explicação simples por trecho', () => {
 });
 
 import { journey } from '@/content';
+import { curatedVideos } from '@/content/estudos/materiais';
 describe('caminho recomendado', () => {
   it('contém todos os capítulos uma vez e começa pelo Primeiro Pergaminho', () => {
     expect(journey).toHaveLength(chapters.length);
     expect(new Set(journey.map((c) => c.id)).size).toBe(chapters.length);
     expect(journey[0].id).toBe('cap.prim.01');
     expect(journey.findIndex((c) => c.id === 'cap.seg.01')).toBeGreaterThan(journey.findIndex((c) => c.id === 'cap.seg.02'));
+  });
+});
+
+describe('videoaulas externas por capítulo', () => {
+  it('oferece ao menos uma sugestão associada a cada capítulo da trilha', () => {
+    const withVideo = new Set(curatedVideos.map((video) => video.chapterId));
+    const missing = journey.map((chapter) => chapter.id).filter((id) => !withVideo.has(id));
+    expect(missing).toEqual([]);
+  });
+
+  it('usa URLs de vídeo do YouTube e só associa vídeos a capítulos existentes', () => {
+    for (const video of curatedVideos) {
+      expect(video.url).toMatch(/^https:\/\/www\.youtube\.com\/watch\?v=[\w-]+$/);
+      expect(getChapter(video.chapterId), video.chapterId).toBeTruthy();
+      expect(video.title.trim().length).toBeGreaterThan(8);
+      expect(video.objective.trim().length).toBeGreaterThan(10);
+      // Candidato não revisado manualmente nunca pode se apresentar como verificado.
+      if (video.status === 'a-conferir') expect(video.source).toBeTruthy();
+    }
   });
 });

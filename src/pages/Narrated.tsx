@@ -1,6 +1,6 @@
 // Aula visual narrada com player de tela inteira, cena animada e linha do tempo arrastável.
 // A busca é estimada por fala: a voz do aparelho não fornece uma duração exata de vídeo.
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getNarrated } from '@/content';
 import type { NarratedLesson, NumberLineState, Scene } from '@/content/narrated/types';
@@ -42,6 +42,8 @@ export function NarratedPlayer({
   const [showTranscript, setShowTranscript] = useState(false);
   const [done, setDone] = useState(false);
   const [beatElapsed, setBeatElapsed] = useState(0);
+  const [controlsVisible, setControlsVisible] = useState(true);
+  const hideControlsTimer = useRef<number | undefined>(undefined);
   const elapsedRef = useRef(0);
   const resumeAfterSeek = useRef(false);
   const token = useRef(0);
@@ -61,6 +63,35 @@ export function NarratedPlayer({
   }, [voice]);
 
   useEffect(() => () => stop(), [stop]);
+  // Como em um player de vídeo, a interface desaparece por inatividade tanto
+  // durante a reprodução quanto quando a aula está pausada. Um toque a revela.
+  const revealControls = useCallback(() => {
+    setControlsVisible(true);
+    if (hideControlsTimer.current !== undefined) window.clearTimeout(hideControlsTimer.current);
+    hideControlsTimer.current = window.setTimeout(() => {
+      hideControlsTimer.current = undefined;
+      setControlsVisible(false);
+    }, 3800);
+  }, []);
+
+  useEffect(() => {
+    if (hideControlsTimer.current !== undefined) {
+      window.clearTimeout(hideControlsTimer.current);
+      hideControlsTimer.current = undefined;
+    }
+    if (!controlsVisible) return;
+    hideControlsTimer.current = window.setTimeout(() => {
+      hideControlsTimer.current = undefined;
+      setControlsVisible(false);
+    }, 3800);
+    return () => {
+      if (hideControlsTimer.current !== undefined) {
+        window.clearTimeout(hideControlsTimer.current);
+        hideControlsTimer.current = undefined;
+      }
+    };
+  }, [controlsVisible, pos]);
+
   useEffect(() => {
     soundscape.duck(playing && voice.kind !== 'nenhuma');
     return () => soundscape.duck(false);
@@ -185,86 +216,157 @@ export function NarratedPlayer({
     }
   };
 
-  const shell = embedded ? 'flex h-full min-h-0 flex-col gap-2 overflow-hidden' : 'mx-auto flex min-h-[70dvh] w-full max-w-4xl flex-col gap-4';
-  const stage = embedded ? 'flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-line bg-surface' : 'card flex flex-col overflow-hidden p-0';
-  const visual = embedded ? 'grid min-h-0 flex-1 place-items-center overflow-hidden px-3 py-2 sm:px-6' : 'grid min-h-[15rem] place-items-center px-4 py-6 sm:min-h-[19rem] sm:px-8';
+  // O palco visual ocupa a viewport inteira. Cabeçalho, legenda e controles são camadas
+  // flutuantes com margens seguras; nunca empurram o vídeo nem ficam colados às bordas.
+  const shell = embedded ? 'relative isolate h-full min-h-0 w-full overflow-hidden bg-bg text-ink' : 'relative isolate mx-auto min-h-[70dvh] w-full max-w-4xl overflow-hidden rounded-2xl bg-bg text-ink';
+  const visibleClass = controlsVisible ? 'opacity-100 translate-y-0 pointer-events-auto' : 'pointer-events-none translate-y-2 opacity-0';
+  const stopOverlayClick = (event: MouseEvent) => event.stopPropagation();
 
   return (
-    <div className={shell} data-testid="narrada-player">
-      <header className="flex shrink-0 items-center gap-2">
-        <div className="min-w-0 flex-1">
-          <p className="kicker">{embedded ? 'Aula visual narrada' : 'Aula narrada · cerca de ' + l.minutes + ' min'}</p>
-          <h1 className={embedded ? 'truncate text-lg leading-tight' : 'text-2xl leading-tight'}>{l.title}</h1>
+    <div
+      className={shell}
+      data-testid="narrada-player"
+      onClick={revealControls}
+      onPointerMove={revealControls}
+      onKeyDown={revealControls}
+    >
+      <section className="absolute inset-0 overflow-hidden bg-bg" aria-label="Aula em vídeo narrado" data-testid="narrada-stage">
+        <div className="absolute inset-0" aria-hidden="true">
+          <div className="absolute -left-20 top-[18%] h-48 w-48 rounded-full bg-[#2e7182]/10 blur-3xl" />
+          <div className="absolute -right-16 bottom-[26%] h-52 w-52 rounded-full bg-[#c8402a]/10 blur-3xl" />
         </div>
-        <button type="button" className="btn-primary shrink-0 !min-h-[40px] !px-3 text-xs sm:text-sm" onClick={() => { stop(); setPlaying(false); if (onClose) onClose(); }} data-testid="narrada-sair">{exitLabel}</button>
-      </header>
-
-      <section className={stage} aria-label="Aula em vídeo narrado">
-        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-line px-3 py-2 text-sm">
-          <span className="kicker truncate">{scene.heading}</span>
-          <span className="shrink-0 tabular-nums text-muted">{pos.scene + 1}/{l.scenes.length}</span>
-        </div>
-        <div className={visual} data-testid="narrada-cena">
-          <div className="anim-tile-in grid h-full w-full place-items-center" key={scene.id + ':' + pos.beat}>
+        <div className="absolute inset-0 grid place-items-center px-5 pb-44 pt-28 sm:px-10 sm:pb-40 sm:pt-32" data-testid="narrada-cena">
+          <div className="anim-tile-in grid h-full max-h-full w-full place-items-center" key={scene.id + ':' + pos.beat}>
             <SceneView scene={scene} reveal={revealOf(scene, pos.beat)} />
           </div>
         </div>
-        <p className="max-h-24 shrink-0 overflow-y-auto border-t border-line bg-raised/50 px-3 py-3 text-sm leading-snug sm:px-4 sm:text-base" aria-live="polite" data-testid="narrada-legenda">{say}</p>
       </section>
 
-      <div className="shrink-0 space-y-1.5">
-        <div className="flex items-center justify-between gap-3 text-xs tabular-nums text-muted">
-          <span>{formatTime(currentMs)}</span>
-          <span>{formatTime(totalMs)} · tempo estimado</span>
+      <header
+        className={`absolute left-4 right-4 top-[max(0.85rem,env(safe-area-inset-top))] z-20 mx-auto flex max-w-5xl items-start gap-3 rounded-2xl border border-line/70 bg-bg/85 p-3 shadow-[0_8px_28px_rgb(27_26_23_/_0.08)] backdrop-blur-md transition-all duration-300 sm:left-7 sm:right-7 sm:p-4 ${visibleClass}`}
+        onClick={stopOverlayClick}
+        aria-hidden={!controlsVisible}
+        data-testid="narrada-cabecalho-flutuante"
+      >
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#2e7182] text-white sm:h-11 sm:w-11">
+          <Icon name="livro" size={22} />
         </div>
-        <input
-          type="range" min={0} max={Math.max(1, totalMs)} step={250} value={Math.min(totalMs, currentMs)}
-          onPointerDown={startSeek} onPointerUp={finishSeek} onPointerCancel={finishSeek}
-          onChange={(e) => seekTo(Number(e.target.value))}
-          aria-label="Barra de progresso da aula"
-          aria-valuetext={'Fala ' + (beatIndex + 1) + ' de ' + positions.length + ' · tempo estimado'}
-          className="w-full cursor-pointer accent-gold" data-testid="narrada-seek"
-        />
-        <div className="flex items-center gap-2">
-          <button type="button" className="btn-ghost !min-h-[40px] !px-2.5" onClick={() => jump(positionAtBeat(l, Math.max(0, beatIndex - 1)))} aria-label="Voltar uma fala"><Icon name="voltar" size={18} /></button>
-          <button type="button" className="btn-primary min-w-0 flex-1 !min-h-[42px]" onClick={togglePlayback} data-testid="narrada-tocar">{playing ? 'Pausar' : done ? 'Ouvir de novo' : beatIndex === 0 ? 'Ouvir a aula' : 'Continuar'}</button>
-          <button type="button" className="btn-ghost !min-h-[40px] !px-2.5" onClick={() => jump(positionAtBeat(l, Math.min(positions.length - 1, beatIndex + 1)))} aria-label="Avançar uma fala"><Icon name="seta" size={18} /></button>
-          <label className="flex shrink-0 items-center gap-1 text-xs">
-            <span className="sr-only">Velocidade</span>
-            <select className="input !w-auto !min-w-[4.4rem] !py-1.5" value={rate} onChange={(e) => setRate(Number(e.target.value) as (typeof RATES)[number])} aria-label="Velocidade da voz">
-              {RATES.map((r) => <option key={r} value={r}>{r.toLocaleString('pt-BR')}×</option>)}
-            </select>
-          </label>
+        <div className="min-w-0 flex-1">
+          <p className="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-muted">{embedded ? 'Aula visual narrada' : 'Aula narrada · cerca de ' + l.minutes + ' min'}</p>
+          <h1 className="mt-0.5 text-base font-semibold leading-tight sm:text-xl">{l.title}</h1>
+          <p className="mt-1 truncate text-xs text-muted sm:text-sm">{scene.heading} <span className="mx-1 opacity-50">·</span> Cena {pos.scene + 1} de {l.scenes.length}</p>
         </div>
-        <div className="flex items-center justify-between gap-2">
-          <span className="min-w-0 truncate text-[0.68rem] text-muted">Voz: {VOICE_LABEL[voice.kind]}.</span>
-          <button type="button" className="shrink-0 text-xs font-semibold text-gold underline" aria-expanded={showTranscript} onClick={() => setShowTranscript((v) => !v)}>
-            {showTranscript ? 'Ocultar a transcrição' : 'Mostrar a transcrição'}
-          </button>
-        </div>
-        <div className="flex flex-wrap gap-1.5" aria-label="Cenas">
-          {l.scenes.map((item, i) => (
+        <button
+          type="button"
+          className="grid min-h-10 min-w-10 shrink-0 place-items-center rounded-full border border-line bg-surface text-ink transition hover:bg-raised sm:min-h-11 sm:min-w-11"
+          onClick={() => { stop(); setPlaying(false); if (onClose) onClose(); }}
+          aria-label={exitLabel}
+          title={exitLabel}
+          data-testid="narrada-sair"
+        >
+          <Icon name="sair" size={19} />
+        </button>
+      </header>
+
+      <p
+        className={`absolute left-5 right-5 z-10 mx-auto max-w-3xl rounded-xl bg-[#171b1b]/90 px-4 py-3 text-center text-sm font-medium leading-relaxed text-white shadow-lg backdrop-blur-sm transition-[bottom] duration-300 sm:left-10 sm:right-10 sm:px-6 sm:py-3.5 sm:text-base ${controlsVisible ? 'bottom-[calc(14rem+env(safe-area-inset-bottom))] sm:bottom-[calc(15rem+env(safe-area-inset-bottom))]' : 'bottom-8'}`}
+        aria-live="polite"
+        data-testid="narrada-legenda"
+      >
+        <span className="sr-only">Legenda: </span>
+        <span data-testid="narrada-legenda-texto">
+          {(say.match(/\S+\s*/g) ?? [say]).map((word, i, words) => {
+            const activeWord = playing
+              ? Math.min(words.length - 1, Math.floor((beatElapsed / Math.max(1, durations[beatIndex] ?? 1800)) * words.length))
+              : -1;
+            return <span key={`${i}-${word}`} className={i === activeWord ? 'rounded bg-[#f0bf69]/25 px-0.5 font-bold text-[#ffd38a] transition-colors duration-150' : i < activeWord ? 'text-white/65 transition-colors duration-150' : 'text-white transition-colors duration-150'}>{word}</span>;
+          })}
+        </span>
+      </p>
+
+      <div
+        className={`absolute bottom-[max(0.85rem,env(safe-area-inset-bottom))] left-4 right-4 z-20 mx-auto max-w-3xl transition-all duration-300 sm:bottom-[max(1.25rem,env(safe-area-inset-bottom))] sm:left-8 sm:right-8 ${visibleClass}`}
+        onClick={stopOverlayClick}
+        aria-hidden={!controlsVisible}
+        data-testid="narrada-controles-flutuantes"
+      >
+        <div className="rounded-2xl border border-line/80 bg-bg/90 p-3 shadow-[0_14px_36px_rgb(27_26_23_/_0.16)] backdrop-blur-xl sm:p-4">
+          <div className="mb-2 flex items-center justify-between gap-3 text-[0.68rem] font-medium tabular-nums text-muted sm:text-xs">
+            <span>{formatTime(currentMs)}</span>
+            <span>{formatTime(totalMs)} · tempo estimado</span>
+          </div>
+          <input
+            type="range" min={0} max={Math.max(1, totalMs)} step={250} value={Math.min(totalMs, currentMs)}
+            onPointerDown={startSeek} onPointerUp={finishSeek} onPointerCancel={finishSeek}
+            onChange={(e) => seekTo(Number(e.target.value))}
+            aria-label="Barra de progresso da aula"
+            aria-valuetext={'Fala ' + (beatIndex + 1) + ' de ' + positions.length + ' · tempo estimado'}
+            className="mb-3 block h-5 w-full cursor-pointer accent-[#c8402a]" data-testid="narrada-seek"
+          />
+          <div className="flex items-center justify-center gap-2 sm:gap-3">
+            <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line bg-surface transition hover:bg-raised sm:h-11 sm:w-11" onClick={() => jump(positionAtBeat(l, Math.max(0, beatIndex - 1)))} aria-label="Voltar uma fala">
+              <Icon name="voltar" size={18} />
+            </button>
             <button
-              key={item.id}
               type="button"
-              className={`h-2.5 w-4 rounded-sm ${i < pos.scene ? 'bg-ink' : i === pos.scene ? 'bg-gold' : 'bg-ink/15'}`}
-              aria-label={'Ir para a cena ' + (i + 1) + ': ' + item.heading}
-              aria-current={i === pos.scene ? 'step' : undefined}
-              onClick={() => jump({ scene: i, beat: 0 })}
-            />
-          ))}
+              className="flex min-h-11 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-[#c8402a] px-4 font-semibold text-white transition hover:bg-[#a0301c] sm:max-w-xs sm:text-base"
+              onClick={togglePlayback}
+              data-testid="narrada-tocar"
+            >
+              {playing ? <span aria-hidden="true" className="text-lg leading-none">Ⅱ</span> : <Icon name="play" size={19} />}
+              {playing ? 'Pausar aula' : done ? 'Assistir novamente' : beatIndex === 0 ? 'Começar aula' : 'Continuar aula'}
+            </button>
+            <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line bg-surface transition hover:bg-raised sm:h-11 sm:w-11" onClick={() => jump(positionAtBeat(l, Math.min(positions.length - 1, beatIndex + 1)))} aria-label="Avançar uma fala">
+              <Icon name="seta" size={18} />
+            </button>
+            <label className="shrink-0">
+              <span className="sr-only">Velocidade da voz</span>
+              <select className="h-10 max-w-[4.8rem] rounded-full border border-line bg-surface px-2 text-xs font-semibold sm:h-11" value={rate} onChange={(e) => setRate(Number(e.target.value) as (typeof RATES)[number])} aria-label="Velocidade da voz">
+                {RATES.map((r) => <option key={r} value={r}>{r.toLocaleString('pt-BR')}×</option>)}
+              </select>
+            </label>
+          </div>
+          <div className="mt-3 flex items-center justify-between gap-2 border-t border-line/70 pt-2">
+            <span className="min-w-0 truncate text-[0.67rem] text-muted">Narração: {VOICE_LABEL[voice.kind]}.</span>
+            <button type="button" className="shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-[#c8402a] hover:bg-[#c8402a]/10" aria-expanded={showTranscript} onClick={() => setShowTranscript((v) => !v)}>
+              {showTranscript ? 'Ocultar transcrição' : 'Transcrição'}
+            </button>
+          </div>
+          <div className="mt-2 flex flex-wrap justify-center gap-2" aria-label="Cenas">
+            {l.scenes.map((item, i) => (
+              <button
+                key={item.id}
+                type="button"
+                className={`h-1.5 w-5 rounded-full transition-all ${i < pos.scene ? 'bg-[#2e7182]' : i === pos.scene ? 'w-8 bg-[#c8402a]' : 'bg-line'}`}
+                aria-label={'Ir para a cena ' + (i + 1) + ': ' + item.heading}
+                aria-current={i === pos.scene ? 'step' : undefined}
+                onClick={() => jump({ scene: i, beat: 0 })}
+              />
+            ))}
+          </div>
+          {showTranscript && (
+            <section className="mt-3 max-h-40 overflow-y-auto rounded-xl border border-line bg-surface p-3 text-xs leading-relaxed sm:text-sm" aria-label="Transcrição">
+              {transcript(l).map((t) => <div key={t.heading} className="mb-3 last:mb-0"><h2 className="font-semibold text-[#2e7182]">{t.heading}</h2><p className="mt-1">{t.lines.join(' ')}</p></div>)}
+            </section>
+          )}
         </div>
-        {showTranscript && (
-          <section className="max-h-24 overflow-y-auto rounded-lg border border-line bg-surface p-2 text-xs" aria-label="Transcrição">
-            {transcript(l).map((t) => <div key={t.heading} className="mb-2 last:mb-0"><h2 className="font-semibold">{t.heading}</h2><p>{t.lines.join(' ')}</p></div>)}
-          </section>
-        )}
       </div>
+
+      {!controlsVisible && (
+        <button
+          type="button"
+          className="absolute inset-0 z-10 cursor-pointer"
+          aria-label="Mostrar controles da aula"
+          onClick={revealControls}
+          data-testid="narrada-mostrar-controles"
+        />
+      )}
+
       {done && l.check && (
-        <section className="max-h-32 shrink-0 overflow-y-auto rounded-lg border border-line p-2 text-sm" role="region" aria-label="Checagem">
+        <div className="absolute inset-x-4 bottom-28 z-30 mx-auto max-w-xl rounded-2xl border border-line bg-bg/95 p-4 shadow-xl backdrop-blur-xl sm:bottom-32" role="region" aria-label="Checagem">
           <p className="font-semibold">Confira o que viu (opcional)</p>
-          <div className="mt-2"><ActivityView a={l.check} onNext={() => undefined} /></div>
-        </section>
+          <div className="mt-2 max-h-48 overflow-y-auto"><ActivityView a={l.check} onNext={() => undefined} /></div>
+        </div>
       )}
     </div>
   );
@@ -300,15 +402,30 @@ function SceneView({ scene, reveal }: { scene: Scene; reveal: number }) {
   if (v.kind === 'cards')
     return (
       <div className={`grid w-full gap-3 ${v.cards.length > 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2'}`}>
-        {v.cards.map((c, i) => (
-          <div
-            key={c.title}
-            className={`rounded-md border p-4 transition-all duration-500 ${i < reveal ? 'translate-y-0 border-line bg-surface opacity-100' : 'translate-y-2 border-dashed border-line/60 opacity-25'} ${i === reveal - 1 ? 'ring-1 ring-ink' : ''}`}
-          >
-            <p className="font-title text-lg leading-tight">{c.title}</p>
-            <p className="mt-1 text-sm">{c.text}</p>
-          </div>
-        ))}
+        {v.cards.map((c, i) => {
+          const subject = (c.title + ' ' + c.text).toLowerCase();
+          const art = /computador|processador|\\bcpu\\b|hardware|máquina/.test(subject)
+            ? 'computador'
+            : /rede|servidor|roteador|\\bip\\b/.test(subject)
+              ? 'rede'
+              : /dado|memória|arquivo|banco|guardar/.test(subject)
+                ? 'dados'
+                : /nuvem|internet/.test(subject)
+                  ? 'nuvem'
+                  : (['livro', 'teclado', 'computador', 'dados'] as const)[i % 4];
+          return (
+            <div
+              key={c.title}
+              className={`rounded-2xl border p-4 transition-all duration-500 sm:p-5 ${['border-[#2e7182]/35 bg-[#d6e7e6] text-[#172e34]','border-[#c8402a]/30 bg-[#f3d7ca] text-[#3a211c]','border-[#9e6a14]/30 bg-[#f0e3bd] text-[#3b2c12]','border-[#a8365e]/30 bg-[#edd6e0] text-[#3c2030]'][i % 4]} ${i < reveal ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-25'} ${i === reveal - 1 ? 'scale-[1.02] shadow-lg ring-2 ring-[#c8402a]/35' : ''}`}
+            >
+              <div className="mb-2 flex items-center gap-2">
+                <Illustration name={art} animate className="h-10 w-12 shrink-0" />
+                <p className="font-title text-lg leading-tight">{c.title}</p>
+              </div>
+              <p className="text-sm leading-relaxed">{c.text}</p>
+            </div>
+          );
+        })}
       </div>
     );
   return (

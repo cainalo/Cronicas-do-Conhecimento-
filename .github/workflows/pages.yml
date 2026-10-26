@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -37,8 +37,15 @@ jobs:
         run: npm run build
       # Regra de testes de layout (docs/TESTING.md): overlays, cartão de correção e rolagem lateral
       # conferidos no Chromium. Se falhar, nada é publicado.
+      - name: Cache do navegador Playwright
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
       - name: Instalar Chromium para a verificação de layout
-        run: npx playwright install --with-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install chromium
       - name: Verificação de layout no navegador
         run: npm run test:e2e
       - run: npx cap sync android

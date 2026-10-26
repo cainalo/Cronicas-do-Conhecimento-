@@ -37,6 +37,28 @@ describe('componentes de atividade', () => {
     await user.click(screen.getByRole('button', { name: 'Verificar' }));
     expect(screen.getByRole('status')).toHaveTextContent('é Y');
   });
+  it('continua corrigindo a alternativa certa mesmo quando as opções são embaralhadas', async () => {
+    const user = userEvent.setup();
+    const next = vi.fn();
+    const choice: MissionActivity = {
+      kind: 'choice',
+      id: 'choice-random',
+      prompt: 'Escolha a definição correta.',
+      options: [
+        { text: 'Conceito correto', why: 'A definição descreve o conceito com precisão.' },
+        { text: 'Distrator plausível', why: 'Este conceito é próximo, mas não corresponde ao enunciado.' },
+        { text: 'Outro conceito relacionado', why: 'A relação existe, mas a definição não é equivalente.' },
+      ],
+      answer: 0,
+    };
+    render(<ActivityView a={choice} onNext={next} />);
+    await user.click(screen.getByRole('button', { name: /Conceito correto/ }));
+    await user.click(screen.getByRole('button', { name: 'Verificar' }));
+    expect(screen.getByRole('status')).toHaveTextContent('Correto');
+    await user.click(screen.getByRole('button', { name: 'Continuar' }));
+    expect(next).toHaveBeenCalledWith({ ok: true });
+  });
+
   it('depois de um erro oferece uma atividade parecida', async () => {
     const user = userEvent.setup();
     const next = vi.fn();

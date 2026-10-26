@@ -57,3 +57,8 @@
 ## Conhecido
 - Bundle JS ~660 kB (sem code-splitting) — aceitável por ora.
 - Ao publicar em hospedagem estática é preciso fallback de SPA.
+
+### Atualização de validação — 26/10/2026
+- A publicação anterior do cap.devops.02 passou pelo Actions run [40394408966](https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40394408966) e gerou o site/APK versão 0.1.129; assinatura Android segue em debug para preservar a identidade de atualização.
+- Depois dessa publicação, foram adicionadas 15 microaulas de cap.ia.02 e testes de regressão. Essa nova rodada ainda precisa passar por CI antes de ser publicada.
+- A revisão editorial humana e o teste em aparelho Android continuam pendentes.

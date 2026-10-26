@@ -181,14 +181,17 @@ function PracticeRun() {
   const setPhase = (p: Saved['phase']) => session.setState((s) => ({ ...s, phase: p }));
   const setFirstTry = (f: (x: Record<string, boolean>) => Record<string, boolean>) => session.setState((s) => ({ ...s, firstTry: f(s.firstTry) }));
   const [value, setValue] = useState<string>();
+  const [sentenceIndexes, setSentenceIndexes] = useState<number[]>([]);
+  const [multiBlankValues, setMultiBlankValues] = useState<string[]>([]);
   const [verdict, setVerdict] = useState<Verdict>();
   const [combo, setCombo] = useState(0);
   const [help, setHelp] = useState(false);
+  const act = queue[0];
+  const booleanChoices = useMemo(() => shuffle(['v', 'f']), [act?.id]);
 
   if (!chapter || !section) return <p>Trecho não encontrado.</p>;
   const total = session.state.total;
   const progress = phase === 'done' ? 1 : Math.min(1, Math.max(0, (total - queue.length) / Math.max(1, total)));
-  const act = queue[0];
   const correctFirst = Object.values(firstTry).filter(Boolean).length;
   const score = total ? Math.round((correctFirst / total) * 100) : 100;
 
@@ -203,7 +206,19 @@ function PracticeRun() {
   };
 
   const check = () => {
-    if (!act || value === undefined) return;
+    if (!act) return;
+    if (act.kind === 'multiBlank') {
+      const ok = multiBlankValues.length === act.answers.length && act.answers.every((answer, i) => multiBlankValues[i] === answer);
+      judge(ok, ok ? 'Definição completada!' : 'Revise as lacunas.', act.why);
+      return;
+    }
+    if (act.kind === 'build') {
+      const built = sentenceIndexes.map((i) => act.words[i]);
+      const ok = built.length === act.answer.length && built.every((word, i) => word === act.answer[i]);
+      judge(ok, ok ? 'Frase montada corretamente!' : 'Ainda não. Revise a ordem das palavras.', act.why);
+      return;
+    }
+    if (value === undefined) return;
     if (act.kind === 'tf') {
       const ok = (value === 'v') === act.answer;
       judge(ok, ok ? 'Correto!' : `É ${act.answer ? 'verdadeiro' : 'falso'}.`, act.why);
@@ -225,6 +240,8 @@ function PracticeRun() {
     const recovery = verdict?.recovery;
     setVerdict(undefined);
     setValue(undefined);
+    setSentenceIndexes([]);
+    setMultiBlankValues([]);
     // Errou: vem logo adiante um item equivalente com outros dados; sem equivalente, a mesma volta no fim.
     const q = nextQueue(queue, ok, recovery);
     if (q.length === 0) {
@@ -238,7 +255,9 @@ function PracticeRun() {
     setQueue(q);
   };
 
-  const exit = () => navigate('/trilha');
+  // Sair explicitamente encerra só a sessão incompleta; a próxima abertura sorteia outra rodada.
+  // As conclusões e o histórico de respostas já registrados continuam salvos.
+  const exit = () => { session.finish(); navigate('/trilha'); };
 
   return (
     <div className="-mt-2 flex min-h-0 flex-col overflow-hidden" style={{ height: "calc(100dvh - 5.5rem - env(safe-area-inset-top, 0px))" }}>
@@ -317,7 +336,7 @@ function PracticeRun() {
               <>
                 <p className="text-sm font-semibold text-muted">Verdadeiro ou falso?</p>
                 <p className="mb-5 mt-2 font-display text-xl leading-snug">{act.statement}</p>
-                <Choices options={['v', 'f']} labels={{ v: 'Verdadeiro', f: 'Falso' }} answer={act.answer ? 'v' : 'f'} locked={!!verdict} value={value} onPick={setValue} />
+                <Choices options={booleanChoices} labels={{ v: 'Verdadeiro', f: 'Falso' }} answer={act.answer ? 'v' : 'f'} locked={!!verdict} value={value} onPick={setValue} />
               </>
             )}
             {act.kind === 'blank' && (
@@ -336,6 +355,42 @@ function PracticeRun() {
                 <Choices options={act.options} answer={act.answer} locked={!!verdict} value={value} onPick={setValue} />
               </>
             )}
+            {act.kind === 'multiBlank' && (
+              <>
+                <p className="text-sm font-semibold text-muted">Complete mais de uma lacuna</p>
+                <p className="mb-4 mt-2 text-base leading-relaxed">{act.prompt}</p>
+                <div className="rounded-2xl border border-line bg-surface p-4 font-serif text-lg leading-[2.4]" aria-label="Frase com lacunas">
+                  {act.sentence.split('___').map((part, i, parts) => (
+                    <span key={`${i}-${part}`}>
+                      {part}
+                      {i < parts.length - 1 && (
+                        <label className="mx-1 inline-flex align-middle">
+                          <span className="sr-only">{'Palavra ausente ' + (i + 1)}</span>
+                          <select
+                            aria-label={'Palavra ausente ' + (i + 1)}
+                            disabled={!!verdict}
+                            value={multiBlankValues[i] ?? ''}
+                            onChange={(e) => setMultiBlankValues((current) => {
+                              const next = [...current];
+                              next[i] = e.target.value;
+                              return next;
+                            })}
+                            className="max-w-[8rem] rounded-lg border-2 border-[#2e7182]/50 bg-[#d6e7e6] px-2 py-1 font-sans text-sm font-semibold text-[#172e34] focus:outline-none focus:ring-2 focus:ring-[#c8402a]"
+                          >
+                            <option value="">Escolher</option>
+                            {act.options.map((option) => (
+                              <option key={option} value={option} disabled={multiBlankValues.some((selected, slot) => slot !== i && selected === option)}>{option}</option>
+                            ))}
+                          </select>
+                        </label>
+                      )}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-3 text-sm text-muted">Use cada palavra uma vez. As opções incluem termos parecidos de outras definições.</p>
+              </>
+            )}
+
             {act.kind === 'term' && (
               <>
                 <p className="text-sm font-semibold text-muted">Qual é o termo?</p>
@@ -349,6 +404,52 @@ function PracticeRun() {
                 <Pairs a={act} onDone={(ok) => judge(ok, ok ? 'Pares perfeitos!' : 'Pares completos', ok ? undefined : 'Houve tropeços no caminho; a rodada volta a esta atividade no fim.')} />
               </>
             )}
+            {act.kind === 'build' && (
+              <>
+                <p className="text-sm font-semibold text-muted">Montagem de frase</p>
+                <p className="mb-4 mt-2 font-display text-xl leading-snug">{act.prompt}</p>
+                <div className="min-h-20 rounded-2xl border-2 border-dashed border-[#2e7182]/50 bg-[#d6e7e6]/60 p-3" role="group" aria-label="Frase montada">
+                  {sentenceIndexes.length ? (
+                    <div className="flex flex-wrap gap-2">
+                      {sentenceIndexes.map((wordIndex, slot) => (
+                        <button
+                          key={`${wordIndex}-${slot}`}
+                          type="button"
+                          disabled={!!verdict}
+                          onClick={() => setSentenceIndexes((current) => current.filter((_, i) => i !== slot))}
+                          className="rounded-lg bg-[#2e7182] px-2.5 py-2 text-sm font-semibold text-white shadow-sm"
+                          aria-label={`Remover palavra ${act.words[wordIndex]}`}
+                        >
+                          {act.words[wordIndex]} <span aria-hidden="true" className="ml-1 opacity-70">×</span>
+                        </button>
+                      ))}
+                    </div>
+                  ) : <p className="text-sm text-muted">Toque nas palavras abaixo para montar a frase.</p>}
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {act.words.map((word, i) => {
+                    const selected = sentenceIndexes.includes(i);
+                    return (
+                      <button
+                        key={`${word}-${i}`}
+                        type="button"
+                        disabled={selected || !!verdict}
+                        onClick={() => setSentenceIndexes((current) => [...current, i])}
+                        className={`min-h-11 rounded-xl border-2 px-2 py-2 text-left text-sm font-medium transition ${selected ? 'border-line bg-raised/50 opacity-35' : 'border-line bg-surface hover:border-[#c8402a] hover:bg-[#f3d7ca]/50'}`}
+                      >
+                        {word}
+                      </button>
+                    );
+                  })}
+                </div>
+                {sentenceIndexes.length > 0 && !verdict && (
+                  <button type="button" className="mt-3 text-sm font-semibold text-[#c8402a] underline" onClick={() => setSentenceIndexes([])}>
+                    Recomeçar frase
+                  </button>
+                )}
+              </>
+            )}
+
             {act.kind === 'mcq' && (
               <>
                 <p className="text-sm font-semibold text-muted">Questão no estilo da prova</p>
@@ -368,7 +469,7 @@ function PracticeRun() {
           {/* Painel de resposta */}
           {act.kind !== 'pairs' && !verdict && (
             <div className="mt-4 shrink-0 bg-bg pb-2 pt-2">
-              <button className="btn-primary w-full" disabled={value === undefined} onClick={check}>
+              <button className="btn-primary w-full" disabled={act.kind === 'build' ? sentenceIndexes.length === 0 : act.kind === 'multiBlank' ? act.answers.some((_, i) => !multiBlankValues[i]) : value === undefined} onClick={check}>
                 Verificar
               </button>
             </div>

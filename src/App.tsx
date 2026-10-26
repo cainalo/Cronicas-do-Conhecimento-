@@ -12,6 +12,7 @@ import { PracticePage } from '@/pages/Practice';
 import { LearnPage } from '@/pages/Learn';
 import { LessonPage } from '@/pages/Lesson';
 import { ReviewPage } from '@/pages/Review';
+import { ReviewSlidesPage } from '@/pages/ReviewSlides';
 import { HistoryPage } from '@/pages/History';
 import { ProgressPage } from '@/pages/Progress';
 import { EditalPage } from '@/pages/Edital';
@@ -65,6 +66,7 @@ export function AppRoutes() {
         <Route path="pratica/:chapterId/:sectionId" element={<PracticePage />} />
         <Route path="licao/:id" element={<LessonPage />} />
         <Route path="revisao" element={<ReviewPage />} />
+        <Route path="slides" element={<ReviewSlidesPage />} />
         <Route path="historico" element={<HistoryPage />} />
         <Route path="progresso" element={<ProgressPage />} />
         <Route path="edital" element={<EditalPage />} />
