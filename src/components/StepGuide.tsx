@@ -1,6 +1,7 @@
 // "Onde estou": mostra em que parte do estudo a pessoa está (livro, capítulo, trecho), os passos do
 // trecho (Aprender, Praticar, Missão e o Desafio do capítulo), o que acontece agora e o que vem
 // depois. Compacto por padrão; tocar em "Entender esta etapa" abre a explicação.
+import { Portal } from '@/components/Portal';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getChapter, getGrimoire } from '@/content';
@@ -117,6 +118,7 @@ export function StepGuide({
           Entender
         </button>
         {open && (
+          <Portal>
           <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-3 sm:items-center" onClick={() => setOpen(false)}>
             <div className="anim-toast-in w-full max-w-md space-y-2 rounded-[1.6rem] bg-bg p-4 shadow-2xl" role="dialog" aria-label="Entender esta etapa" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-start justify-between gap-2">
@@ -128,6 +130,7 @@ export function StepGuide({
               {details}
             </div>
           </div>
+          </Portal>
         )}
       </div>
     );
