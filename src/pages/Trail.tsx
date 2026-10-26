@@ -83,7 +83,7 @@ export function TrailPage() {
                           {state === 'feita' ? <Icon name="certo" size={15} /> : state === 'bloqueada' ? <Icon name="chave" size={13} /> : index + 1}
                         </span>
                         <span className="min-w-0 flex-1">
-                          <span className="block text-xs text-muted">{KIND_LABEL[unit.kind]}</span>
+                          <span className="block text-xs text-muted">{KIND_LABEL[unit.kind] ?? unit.kind}</span>
                           <span className="block leading-snug">{unit.title.replace(/^[^:]+:\s*/, '')}</span>
                         </span>
                         {state === 'atual' ? (
