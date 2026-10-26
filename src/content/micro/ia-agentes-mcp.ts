@@ -23,15 +23,31 @@ function activity(q:Q,id:string):MissionActivity{
  options[spare[1]]=q.wrong[1]; reasons[spare[1]]='Essa alternativa não corresponde ao conceito apresentado.';
  return {kind:'choice',id,prompt:q.prompt,options:options.map((text,i)=>({text,why:reasons[i]})),answer:q.answer,errorKind:'conceito'};
 }
+function variant(q:Q,prefix:string):Q{
+ return {...q,prompt:prefix+q.prompt,wrong:[q.wrong[1],q.wrong[0]+' — sem verificar o resultado']};
+}
 function build(l:L):MicroLesson{
  const first={id:'base',part:l.order===1?'A história':'Fundamentos',title:l.order===1?'Como surgiu '+l.title:l.title,
   goal:'Compreender a ideia principal de '+l.title+'.',explain:l.history+'\n\n'+l.core,art:l.section==='mcp'?'rede' as const:'livro' as const,
-  check:activity(l.q1,l.id+'-base-check'),recovery:{explain:'Retome a ideia central: '+l.core,check:activity({...l.q1,prompt:'Tente de novo: '+l.q1.prompt},l.id+'-base-recovery')}};
+  check:activity(l.q1,l.id+'-base-check'),recovery:{explain:'Retome a ideia central: '+l.core,check:activity(variant(l.q1,'Em outro caso: '),l.id+'-base-recovery')}};
  const second={id:'aplicar',part:'Aplicação prática',title:'Aplicar '+l.title,goal:'Usar o conceito em uma situação concreta.',
   explain:l.application,art:l.section==='qualidade'?'cadeado' as const:'engrenagem' as const,
-  check:activity(l.q2,l.id+'-apply-check'),recovery:{explain:'Compare a situação com o princípio: '+l.application,check:activity({...l.q2,prompt:'Confira novamente: '+l.q2.prompt},l.id+'-apply-recovery')}};
+  check:activity(l.q2,l.id+'-apply-check'),recovery:{explain:'Compare a situação com o princípio: '+l.application,check:activity(variant(l.q2,'Em uma nova situação: '),l.id+'-apply-recovery')}};
+ const transferQ:Record<L['section'],Q>={
+  agentes:{prompt:'Ao transferir essa tarefa para outro arquivo, o que mantém o agente seguro?',correct:'Conferir escopo, permissão e retorno da ferramenta antes de concluir.',wrong:['Aceitar o resumo sem verificar.','Executar qualquer comando que pareça útil.'],answer:0,why:'A ação precisa respeitar o escopo e a evidência do resultado.'},
+  ciclo:{prompt:'O teste falha após a mudança. Qual próximo passo respeita o ciclo?',correct:'Analisar o resultado, rever a hipótese e ajustar o plano.',wrong:['Publicar sem nova verificação.','Apagar o teste para terminar.'],answer:0,why:'A evidência indica se é preciso voltar à investigação ou ao planejamento.'},
+  mcp:{prompt:'Antes de conectar um novo servidor, qual controle é adequado?',correct:'Conferir a origem, o escopo de acesso e as permissões.',wrong:['Confiar no servidor só porque usa MCP.','Compartilhar credenciais administrativas.'],answer:0,why:'O protocolo padroniza a comunicação, mas não atesta confiança.'},
+  skills:{prompt:'Uma regra precisa ser aplicada em toda execução. Qual desenho é mais confiável?',correct:'Usar permissão ou hook automático, além de explicar a regra na instrução.',wrong:['Depender apenas de texto num prompt.','Copiar uma instrução diferente para cada conversa.'],answer:0,why:'Um controle executado pela aplicação reduz dependência da memória.'},
+  qualidade:{prompt:'O código gerado compila, mas precisa ir para produção. O que ainda é necessário?',correct:'Conferir testes, dependências, dados e aprovação humana.',wrong:['Publicar apenas porque o build passou.','Tratar o modelo como responsável final.'],answer:0,why:'Build é uma evidência, não comprova sozinho todos os requisitos.'},
+ };
+ const tq=transferQ[l.section];
+ const third={id:'transferir',part:'Síntese',title:'Transferir para um cenário novo',goal:'Aplicar o conceito em uma nova situação e conferir evidências.',
+  explain:'Use o mesmo princípio em outro cenário: '+l.application+' A conclusão precisa indicar qual evidência confirma que o comportamento atende ao objetivo. Se o resultado divergir, revise a hipótese ou peça esclarecimento antes de declarar a tarefa concluída.',
+  art:'revisao' as const,check:activity(tq,l.id+'-transfer-check'),
+  recovery:{explain:'Na recuperação, retorne ao critério de aceite e identifique qual observação comprova a conclusão; não aceite uma afirmação sem evidência.',
+   check:activity(variant(tq,'Em outro cenário, qual decisão é mais segura? '),l.id+'-transfer-recovery')}};
  return {...base[l.section],id:l.id,series:{id:l.group,order:l.order},title:l.title,
-  opening:activity({...l.q1,prompt:'Antes da explicação: '+l.q1.prompt},l.id+'-abertura'),steps:[first,second],
+  opening:activity({...l.q1,prompt:'Antes da explicação: '+l.q1.prompt},l.id+'-abertura'),steps:[first,second,third],
   consolidation:[
    {kind:'sort',id:'classificar',prompt:'Classifique as afirmações sobre '+l.title+'.',categories:['Correta','Erro comum'],items:[
     {text:l.q1.correct,cat:0,why:l.q1.why},{text:l.q1.wrong[0],cat:1,why:'Essa alternativa contraria a ideia central.'},{text:l.q2.wrong[1],cat:1,why:'Essa alternativa ignora um controle ou uso correto.'}]},
