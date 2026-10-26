@@ -3,7 +3,18 @@
 ## Comandos
 - `npm test` — Vitest (jsdom) + Testing Library.
 - `npm run build` — typecheck (`tsc -b`) + build.
+- `npm run test:e2e` — verificação de layout no Chromium (depois do `npm run build`); roda também no CI e bloqueia a publicação.
 - RLS: executar `supabase/tests/rls_check.sql` (transação revertida) via SQL Editor ou MCP.
+
+## Regra de testes de layout (obrigatória)
+Criada em 26/10/2026, depois de o cartão de certo ou errado e os fundos dos modais aparecerem cortados, com margem clara, no celular. Vale para qualquer mudança em tela, modal, cartão, animação ou estilo.
+
+1. **Nada é dado como pronto só pelo teste em jsdom.** Toda mudança visual passa por `npm run build && npm run test:e2e` e por uma captura de tela conferida a olho em 360×640 e 390×844, também no estilo de cartões "vidro".
+2. **O que o `test:e2e` confere** (`scripts/e2e-layout.mjs`): nenhuma página rola para os lados; todo elemento `position: fixed` com `inset: 0` cobre a tela inteira; o cartão de correção vai de borda a borda, encosta na base e mostra o botão Continuar inteiro; os modais Entender e Sumário cobrem a tela. Tudo em 360×640 e 390×844, com e sem cartões "vidro".
+3. **O que o `npm test` barra antes** (`src/test/layout-guard.test.ts`): overlay `fixed inset-0` fora de `Portal`/`createPortal`; `.page-enter` ou `.stagger` com `animation-fill-mode` `both` ou `forwards` (deixam transform no contêiner e prendem o `fixed`); cartão de correção que não seja fixo na base com área segura.
+4. **Padrões obrigatórios:** overlay de tela cheia sempre por `Portal` (`src/components/Portal.tsx`); animação de entrada de contêiner com `backwards`; barras e cartões presos à base com `env(safe-area-inset-bottom)`.
+5. **Tela nova com modal, folha ou barra fixa:** acrescentar a rota e a interação em `scripts/e2e-layout.mjs` no mesmo commit.
+6. **No CI** (`.github/workflows/pages.yml`), o `test:e2e` roda antes de publicar; se falhar, nada é publicado (site nem APK).
 
 ## Suítes
 | Arquivo | Cobre |

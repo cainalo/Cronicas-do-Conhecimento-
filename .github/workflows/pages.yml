@@ -35,6 +35,12 @@ jobs:
       # ---------- App Android (Capacitor) ----------
       - name: Build web para o app
         run: npm run build
+      # Regra de testes de layout (docs/TESTING.md): overlays, cartão de correção e rolagem lateral
+      # conferidos no Chromium. Se falhar, nada é publicado.
+      - name: Instalar Chromium para a verificação de layout
+        run: npx playwright install --with-deps chromium
+      - name: Verificação de layout no navegador
+        run: npm run test:e2e
       - run: npx cap sync android
       - uses: actions/setup-java@v4
         with:
