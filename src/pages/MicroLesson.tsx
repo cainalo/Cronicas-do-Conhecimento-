@@ -6,7 +6,8 @@ import { useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import type { MicroLesson } from '@/content/types';
-import { curatedVideos, getChapter, getQuestion, narratedFor } from '@/content';
+import type { FeedPost } from '@/lib/feed';
+import { curatedVideos, feedPostsOf, getChapter, getQuestion, narratedFor, teacherForChapter } from '@/content';
 import { NarratedPlayer } from './Narrated';
 import { VideoEmbed } from '@/components/VideoEmbed';
 import { useStudy } from '@/app/StudyProvider';
@@ -67,6 +68,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   const narrated = narratedFor(lesson.id);
   // Só videoaulas conferidas entram na sequência; as "a conferir" ficam na biblioteca de vídeos.
   const videos = curatedVideos.filter((v) => v.lessonId === lesson.id && v.status === 'conferido');
+  const relatedTips = useMemo(() => feedPostsOf(lesson.id).filter((post) => post.kind === 'dica'), [lesson.id]);
   const hasMedia = !!narrated || videos.length > 0;
   const n = lesson.steps.length;
   // Em série, cada aula tem o seu ponto salvo; sozinha, usa a chave do trecho (como antes).
@@ -264,6 +266,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
                 onClose={() => set(lesson.consolidation.length ? { k: 'praticar', i: 0 } : lesson.exam.length ? { k: 'prova', i: 0 } : { k: 'sintese' })}
               />
             </div>
+            <RelatedProfessionalPosts posts={relatedTips} />
             {videos.length > 0 && (
               <details className="max-h-20 shrink-0 overflow-y-auto rounded-lg border border-line bg-surface px-3 py-2 text-sm">
                 <summary className="cursor-pointer font-semibold">Videoaulas complementares</summary>
@@ -286,6 +289,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
           <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain">
             {videos.map((v) => <VideoEmbed key={v.id} url={v.url} title={v.title} meta={[v.channel, v.duration].filter(Boolean).join(' · ')} />)}
           </div>
+          <RelatedProfessionalPosts posts={relatedTips} />
           <button className="btn-primary mt-2 w-full shrink-0" onClick={() => set(lesson.consolidation.length ? { k: 'praticar', i: 0 } : lesson.exam.length ? { k: 'prova', i: 0 } : { k: 'sintese' })} data-testid="midia-continuar">
             Continuar para a prática <Icon name="avancar" size={16} />
           </button>
@@ -362,5 +366,52 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
         </section>
       )}
     </div>
+  );
+}
+
+/** Posts profissionais de apoio aparecem na mesma etapa da trilha e expandem no próprio lugar. */
+function RelatedProfessionalPosts({ posts }: { posts: FeedPost[] }) {
+  const tips = posts.filter((post) => post.kind === 'dica' && post.tip);
+  if (!tips.length) return null;
+  return (
+    <section className="shrink-0 border-t border-line pt-1.5" aria-label="Perspectivas profissionais">
+      <p className="mb-1 text-[0.65rem] font-semibold uppercase tracking-wide text-muted">Perspectiva profissional · {tips.length}</p>
+      <div className="max-h-24 space-y-1 overflow-y-auto overscroll-contain">
+        {tips.map((post) => {
+          const tip = post.tip!;
+          const teacher = teacherForChapter(tip.chapterId);
+          return (
+            <details key={post.id} className="rounded-lg border border-line bg-surface">
+              <summary className="flex cursor-pointer list-none items-center gap-2 px-2 py-1.5">
+                {post.image && (
+                  <img
+                    src={post.image.src}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="h-9 w-9 shrink-0 rounded object-cover"
+                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                  />
+                )}
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-xs font-semibold">{post.title}</span>
+                  <span className="block truncate text-[0.65rem] text-muted">{teacher.name} · dica profissional</span>
+                </span>
+                <Icon name="seta" size={14} className="shrink-0 text-muted" />
+              </summary>
+              <div className="space-y-1.5 px-2 pb-2 text-xs leading-snug">
+                <Markdown>{tip.body}</Markdown>
+                {post.image && (
+                  <p className="text-[0.65rem] text-muted">
+                    {post.image.credit} · <a href={post.image.sourceUrl} target="_blank" rel="noreferrer" className="underline">Fonte</a>
+                    {post.image.licenseUrl && <> · <a href={post.image.licenseUrl} target="_blank" rel="noreferrer" className="underline">{post.image.license}</a></>}
+                  </p>
+                )}
+              </div>
+            </details>
+          );
+        })}
+      </div>
+    </section>
   );
 }
