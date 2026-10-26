@@ -443,11 +443,13 @@ export function NarratedPlayer({
 
 function SceneMotionStrip({ scene, say }: { scene: Scene; say: string }) {
   const stopWords = new Set(['para', 'pela', 'pelo', 'como', 'isso', 'essa', 'esse', 'estas', 'estes', 'quando', 'onde', 'entre', 'sobre', 'muito', 'mais', 'menos', 'também', 'porque', 'então', 'depois', 'antes', 'ainda', 'cada', 'que', 'com', 'sem', 'uma', 'uns', 'umas', 'dos', 'das', 'por', 'não', 'são', 'ser', 'tem', 'ter', 'foi', 'vai', 'aos', 'nas', 'nos']);
-  const keywords = Array.from(new Set((say + ' ' + scene.heading)
+  // Palavras-chave entram em sequência curta para dar movimento ao quadro sem
+  // alongar a narração nem transformar a aula em uma pilha de slides.
+  const keywords = Array.from(new Set((say + ' ' + say + ' ' + scene.heading)
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
     .replace(/[^a-z0-9\s-]/g, ' ').split(/\s+/)
     .filter((word) => word.length >= 4 && !stopWords.has(word))))
-    .slice(0, 3);
+    .slice(0, 5);
   const palettes = [
     'border-[#2e7182]/30 bg-[#d6e7e6] text-[#172e34]',
     'border-[#c8402a]/30 bg-[#f3d7ca] text-[#3a211c]',
@@ -464,15 +466,15 @@ function SceneMotionStrip({ scene, say }: { scene: Scene; say: string }) {
           : (['livro', 'teclado', 'dados'] as const)[word.length % 3];
   if (!keywords.length) return null;
   return (
-    <div className="flex w-full max-w-lg flex-wrap items-center justify-center gap-2 px-1" aria-hidden="true" data-testid="narrada-elementos-visuais">
+    <div className="relative flex w-full max-w-2xl flex-wrap items-center justify-center gap-2 px-1 sm:gap-2.5" aria-hidden="true" data-testid="narrada-elementos-visuais">
       {keywords.map((word, i) => (
         <div
           key={scene.id + ':' + word}
-          className={`anim-tile-in flex min-w-0 max-w-[45%] items-center gap-1.5 rounded-xl border px-2 py-1.5 shadow-sm transition-all duration-300 sm:gap-2 sm:px-3 sm:py-2 ${palettes[i % palettes.length]} `}
-          style={{ animationDelay: `${i * 90}ms` }}
+          className={`anim-tile-in flex min-w-0 max-w-[48%] items-center gap-1.5 rounded-xl border px-2 py-1.5 shadow-sm transition-all duration-500 sm:gap-2 sm:px-3 sm:py-2 ${palettes[i % palettes.length]} `}
+          style={{ animationDelay: `${i * 130}ms` }}
         >
-          <span className="anim-bob grid h-7 w-8 shrink-0 place-items-center sm:h-9 sm:w-10"><Illustration name={artFor(word)} animate className="h-7 w-8 sm:h-9 sm:w-10" /></span>
-          <span className="min-w-0 truncate text-xs font-bold sm:text-sm">{word}</span>
+          <span className="anim-bob grid h-8 w-9 shrink-0 place-items-center sm:h-10 sm:w-11"><Illustration name={artFor(word)} animate className="h-8 w-9 sm:h-10 sm:w-11" /></span>
+          <span className="min-w-0 truncate text-xs font-bold capitalize sm:text-sm">{word}</span>
           <span className="hidden text-[0.58rem] font-bold uppercase tracking-wider opacity-65 sm:inline">{['IDEIA', 'LIGAÇÃO', 'EXEMPLO'][i]}</span>
         </div>
       ))}
