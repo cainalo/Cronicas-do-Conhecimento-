@@ -132,8 +132,7 @@ export function buildPractice(
   if (multiSource) {
     const sentence = multiSource.definition.replace(/\*\*/g, '').replace(/`/g, '');
     const targets = [...new Set((sentence.match(/\p{L}{5,}/gu) ?? []).filter((word) => !stopWords.has(word.toLocaleLowerCase('pt-BR'))))].slice(0, 2);
-    const masked = targets.reduce((text, word) => text.replace(new RegExp('\\\\b' + word.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\  const mcqs: Activity[] = shuffle(') + '\\\\b', 'u'), '___'), sentence);
-    const distractors = shuffle(
+    const masked = targets.reduce((text, word) => text.replace(new RegExp('\\\\b' + word + '\\\\b', 'u'), '___'), sentence);\n    const distractors = shuffle(
       glossary
         .filter((g) => g.term !== multiSource.term)
         .flatMap((g) => g.definition.replace(/\*\*/g, '').match(/\p{L}{5,}/gu) ?? [])
