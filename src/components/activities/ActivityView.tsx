@@ -105,7 +105,7 @@ export function ActivityView({
     switch (displayA.kind) {
       case 'choice':
       case 'compare':
-        g = gradeChoice(a, pick!);
+        g = gradeChoice(displayA, pick!);
         break;
       case 'fix':
         g = { ok: pick === displayA.bug };
@@ -114,13 +114,13 @@ export function ActivityView({
         g = { ok: (tfOptions[pick!] === 'v') === displayA.answer };
         break;
       case 'multi':
-        g = gradeMulti(a, picks);
+        g = gradeMulti(displayA, picks);
         break;
       case 'order':
-        g = gradeOrder(a, order);
+        g = gradeOrder(displayA, order);
         break;
       case 'sort':
-        g = gradeSort(a, assign);
+        g = gradeSort(displayA, assign);
         break;
       case 'exam': {
         const key = displayQuestion!.options[pick!].key;
