@@ -10,6 +10,7 @@ export type Activity =
   | { kind: 'blank'; id: string; sentence: string; options: string[]; answer: string; why: string }
   | { kind: 'term'; id: string; definition: string; options: string[]; answer: string }
   | { kind: 'pairs'; id: string; pairs: { term: string; definition: string }[] }
+  | { kind: 'build'; id: string; prompt: string; words: string[]; answer: string[]; why: string }
   | { kind: 'mcq'; id: string; question: Question };
 
 export const PRACTICE_PREFIX = 'pratica:';
@@ -94,6 +95,31 @@ export function buildPractice(
   const pairs: Activity[] =
     glossary.length >= 4 ? [{ kind: 'pairs', id: `${key}:pares`, pairs: gloss.slice(2, 6).length === 4 ? gloss.slice(2, 6) : gloss.slice(0, 4) }] : [];
 
+  // Montagem de frase: palavras corretas embaralhadas com distratores plausíveis do mesmo glossário.
+  const sentenceSource = gloss.find((g) => {
+    const count = g.definition.trim().split(/\s+/).length;
+    return count >= 5 && count <= 12;
+  });
+  const builds: Activity[] = [];
+  if (sentenceSource) {
+    const answer = sentenceSource.definition.trim().split(/\s+/);
+    const decoys = shuffle(
+      glossary
+        .filter((g) => g.term !== sentenceSource.term)
+        .flatMap((g) => g.definition.split(/\s+/))
+        .filter((word) => word.length > 3 && !answer.includes(word)),
+      rand,
+    ).slice(0, 2);
+    builds.push({
+      kind: 'build',
+      id: `${key}:montar-frase`,
+      prompt: `Monte uma definição coerente para “${sentenceSource.term}”. Use as palavras na ordem correta; há palavras extras.`,
+      words: shuffle([...answer, ...decoys], rand),
+      answer,
+      why: `${sentenceSource.term}: ${sentenceSource.definition}`,
+    });
+  }
+
   const mcqs: Activity[] = shuffle(
     bank.filter((q) => q.chapterId === chapter.id && q.sectionId === sectionId),
     rand,
@@ -116,7 +142,7 @@ export function buildPractice(
 
   // Intercala: começa leve (V/F, termo), mistura lacunas e pares no meio, questões no fim.
   const order: Activity[] = [];
-  const queues = [tfs, terms, blanks, pairs];
+  const queues = [tfs, terms, blanks, builds, pairs];
   while (queues.some((q) => q.length)) {
     for (const q of queues) {
       const x = q.shift();
