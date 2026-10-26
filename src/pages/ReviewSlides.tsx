@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { chapters, getChapter } from '@/content';
 import type { Chapter } from '@/content/types';
 import { Icon } from '@/components/Icon';
-import { PageHeader } from '@/components/Page';
 
 export interface ReviewSlide {
   id: string;
