@@ -58,6 +58,9 @@ Antes: `npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escur
 - Nome definitivo: "Crônicas do Arquivo Real" (provisório do kit, aprovado).
 - **PDFs das provas** (rede bloqueia FGV/eticaconcursos/TCE): prova TCE-GO 2014 FCC TI + gabarito; prova 2024 TI Tipo 1 + gabarito definitivo, para questões OFICIAIS rotuladas.
 
+## Assinatura do APK (importante)
+- Sem os segredos `ANDROID_KEYSTORE_*`, só o branch `claude/cronicas-conhecimento-estudos-jgbofo` publica (o cache da chave é por branch). Merges no `main` compilam e testam, mas não publicam. Solução definitiva: guardar uma chave fixa nos segredos do repositório (exige uma reinstalação única se a chave mudar).
+
 ## Próxima tarefa exata
 1. **Aplicar o novo ritmo com história aos trechos seguintes, um por vez.** O grimório Primeiros Passos está completo (cap.prim.01 e cap.prim.02, 7 séries):
    - **Feitos fora de Primeiros Passos:** cap.dados.01, cap.dev.03, cap.mat.01, cap.port.01, cap.ia.03, cap.ia.01, cap.dev.01, cap.dados.02, cap.dev.02, cap.mat.02, cap.port.02, cap.dev.04, cap.es.01 e cap.es.02.

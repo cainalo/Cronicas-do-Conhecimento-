@@ -1,17 +1,22 @@
-// Trilha: o programa inteiro em ordem, capítulo por capítulo, com o estado de cada atividade.
+// Trilha: o programa inteiro em ordem, capítulo por capítulo, no mesmo modelo da página do livro
+// (título, Continuar, Texto completo e a lista de atividades), com o estado de cada uma.
 // A atividade atual é a mesma do Continuar (fonte única). Atividades bloqueadas aparecem, mas não
 // abrem: a do mesmo capítulo precisa ser concluída antes (lib/trail.ts).
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { trailUnits, useCheckpoint } from '@/app/useCheckpoint';
 import { getChapter, getGrimoire } from '@/content';
 import { trailByChapter, type UnitState } from '@/lib/trail';
 import { Icon } from '@/components/Icon';
-import { PageHeader } from '@/components/Page';
+import { PageHeader, useIsDark } from '@/components/Page';
+import type { IconName } from '@/components/Icon';
+import { roman } from '@/lib/roman';
+import { areaColor } from '@/app/areas';
 
 const STATE_LABEL: Record<UnitState, string> = { feita: 'Concluída', atual: 'Você está aqui', disponivel: 'Disponível', bloqueada: 'Bloqueada' };
 const KIND_LABEL = { aprender: 'Aprender', praticar: 'Praticar', missao: 'Caso prático', desafio: 'Desafio' } as const;
+const KIND_ICON: Record<keyof typeof KIND_LABEL, IconName> = { aprender: 'grimorio', praticar: 'chama', missao: 'mapa', desafio: 'escudo' };
 
 export function TrailPage() {
   const { data } = useStudy();
@@ -20,9 +25,7 @@ export function TrailPage() {
   const chapters = useMemo(() => trailByChapter(data, units, checkpoint), [data, units, checkpoint]);
   const total = units.length;
   const done = chapters.reduce((n, c) => n + c.done, 0);
-  const currentChapter = checkpoint.unit?.chapterId;
-  const [open, setOpen] = useState<Record<string, boolean>>({});
-  const isOpen = (id: string) => open[id] ?? id === currentChapter;
+  const color = areaColor('grimorios', useIsDark());
 
   return (
     <div className="space-y-5">
@@ -40,62 +43,69 @@ export function TrailPage() {
         <span className="btn-primary hidden !min-h-[40px] sm:inline-flex">{checkpoint.action}</span>
       </Link>
 
-      <ol className="space-y-3" aria-label="Capítulos da trilha">
+      <ol className="space-y-10" aria-label="Capítulos da trilha">
         {chapters.map((ch) => {
           const chapter = getChapter(ch.chapterId)!;
           const grimoire = getGrimoire(chapter.grimoireId);
-          const pct = Math.round((ch.done / ch.units.length) * 100);
-          const expanded = isOpen(ch.chapterId);
+          const next = ch.units.find((u) => u.state === 'atual') ?? ch.units.find((u) => u.state === 'disponivel') ?? ch.units[0];
+          const rp = data.reading[chapter.id];
           return (
-            <li key={ch.chapterId} className="card overflow-hidden">
-              <button
-                type="button"
-                className="flex w-full items-center gap-3 p-4 text-left"
-                aria-expanded={expanded}
-                onClick={() => setOpen((o) => ({ ...o, [ch.chapterId]: !expanded }))}
-              >
-                <span className="min-w-0 flex-1">
-                  <span className="block text-xs font-semibold text-muted">{grimoire?.title}</span>
-                  <span className="block font-semibold leading-snug">{chapter.title}</span>
-                  <span className="mt-2 flex items-center gap-2">
-                    <span className="h-2 flex-1 overflow-hidden rounded-full bg-raised" aria-hidden="true">
-                      <span className="block h-full rounded-full bg-ok" style={{ width: `${pct}%` }} />
-                    </span>
-                    <span className="text-xs text-muted">
-                      {ch.done}/{ch.units.length}
-                    </span>
-                  </span>
-                </span>
-                <Icon name="seta" size={18} className={`shrink-0 text-muted transition ${expanded ? 'rotate-90' : ''}`} />
-              </button>
-              {expanded && (
-                <ol className="border-t border-line">
-                  {ch.units.map(({ unit, state, index }) => {
+            <li key={ch.chapterId}>
+              <section aria-label={chapter.title}>
+                <p className="kicker">
+                  {grimoire?.title} · Capítulo {roman(chapter.number).toUpperCase()} · {ch.done}/{ch.units.length} atividades · cerca de {chapter.estimatedMinutes} min
+                </p>
+                <h2 className="mt-1 text-[1.45rem] leading-snug">{chapter.title}</h2>
+                <p className="text-sm text-muted">{chapter.subtitle}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Link to={next.unit.to} className="btn-primary !min-h-[42px] text-sm">
+                    {ch.done === ch.units.length ? 'Rever' : ch.done > 0 ? 'Continuar' : 'Começar'} <Icon name="avancar" size={16} />
+                  </Link>
+                  <Link to={`/capitulo/${chapter.id}${rp?.lastSectionId ? `#${rp.lastSectionId}` : ''}`} className="btn-ghost !min-h-[42px] text-sm">
+                    <Icon name="livro" size={16} /> Texto completo
+                  </Link>
+                </div>
+                <ol className="ledger mt-4">
+                  {ch.units.map(({ unit, state }, index) => {
                     const body = (
                       <>
                         <span
-                          className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-bold ${
-                            state === 'feita' ? 'bg-ok text-white' : state === 'atual' ? 'bg-gold text-white' : state === 'disponivel' ? 'border-2 border-gold text-gold' : 'bg-raised text-muted'
-                          }`}
+                          className="grid h-8 w-8 shrink-0 place-items-center rounded-full border text-xs tabular-nums"
+                          style={
+                            state === 'feita'
+                              ? { background: color, borderColor: color, color: '#fff' }
+                              : state === 'atual' || state === 'disponivel'
+                                ? { borderColor: 'rgb(var(--gold))', color: 'rgb(var(--gold))' }
+                                : { borderColor: 'rgb(var(--line))', color: 'rgb(var(--muted))' }
+                          }
                           aria-hidden="true"
                         >
-                          {state === 'feita' ? <Icon name="certo" size={14} strokeWidth={2.6} /> : state === 'bloqueada' ? <Icon name="chave" size={13} /> : index + 1}
+                          {state === 'feita' ? <Icon name="certo" size={15} /> : state === 'bloqueada' ? <Icon name="chave" size={13} /> : index + 1}
                         </span>
                         <span className="min-w-0 flex-1">
                           <span className="block text-xs text-muted">{KIND_LABEL[unit.kind]}</span>
                           <span className="block leading-snug">{unit.title.replace(/^[^:]+:\s*/, '')}</span>
                         </span>
-                        <span className={`shrink-0 text-xs font-semibold ${state === 'atual' ? 'text-gold' : state === 'feita' ? 'text-ok' : 'text-muted'}`}>{STATE_LABEL[state]}</span>
+                        {state === 'atual' ? (
+                          <span className="shrink-0 text-xs font-semibold text-gold">Você está aqui</span>
+                        ) : (
+                          <Icon name={KIND_ICON[unit.kind]} size={16} className="shrink-0 text-muted" />
+                        )}
                       </>
                     );
                     return (
-                      <li key={unit.key} className="border-b border-line last:border-b-0">
+                      <li key={unit.key}>
                         {state === 'bloqueada' ? (
-                          <div className="flex items-center gap-3 px-4 py-3 opacity-70" aria-disabled="true" title="Conclua a atividade anterior deste capítulo">
+                          <div className="ledger-row opacity-70" aria-disabled="true" title="Conclua a atividade anterior deste capítulo" aria-label={`${unit.title} (${STATE_LABEL[state]})`}>
                             {body}
                           </div>
                         ) : (
-                          <Link to={unit.to} className="flex items-center gap-3 px-4 py-3 transition hover:bg-raised" aria-current={state === 'atual' ? 'step' : undefined}>
+                          <Link
+                            to={unit.to}
+                            className={`ledger-row ${state === 'atual' ? 'bg-gold/5' : ''}`}
+                            aria-current={state === 'atual' ? 'step' : undefined}
+                            aria-label={`${unit.title} (${STATE_LABEL[state]})`}
+                          >
                             {body}
                           </Link>
                         )}
@@ -103,7 +113,7 @@ export function TrailPage() {
                     );
                   })}
                 </ol>
-              )}
+              </section>
             </li>
           );
         })}

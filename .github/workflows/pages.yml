@@ -16,6 +16,11 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     env:
+      # Com a chave de release nos segredos, qualquer branch pode publicar. Sem ela, a chave de
+      # assinatura vem do cache do Actions, que é separado por branch: publicar de dois branches
+      # alternaria a chave e o Android recusaria a atualização ("conflito com pacote existente").
+      # Por isso, sem a chave de release, só o branch de trabalho publica.
+      CAN_PUBLISH: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' || github.ref_name == 'claude/cronicas-conhecimento-estudos-jgbofo' }}
       APP_VERSION_CODE: ${{ github.run_number }}
       APP_VERSION_NAME: 0.1.${{ github.run_number }}
     steps:
@@ -88,6 +93,7 @@ jobs:
           printf '{"versionName":"%s","versionCode":%s,"size":%s,"sha256":"%s","signing":"%s","builtAt":"%s","commit":"%s"}\n' \
             "$APP_VERSION_NAME" "$APP_VERSION_CODE" "$SIZE" "$SHA" "$SIGNING" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "${GITHUB_SHA::7}" > dist/download/version.json
       - uses: peaceiris/actions-gh-pages@v4
+        if: env.CAN_PUBLISH == 'true'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist

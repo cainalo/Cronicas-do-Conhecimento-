@@ -91,3 +91,8 @@
 - **Linguagens e pacotes:** cap.dev.04 completo (Java e Python, JavaScript e TypeScript, HTML/CSS/React, dependências e pacotes). 1945 testes.
 - **Processo de software:** cap.es.01 completo (ciclo de vida e métodos, requisitos). 1991 testes.
 - **Arquitetura e qualidade:** cap.es.02 completo. 2060 testes; rolagem de cap.mat.02, cap.port.02 e cap.dev.04 conferida (88 telas sem problema) a 360×640 e 390×844.
+
+## 26/10/2026: trilha no modelo do livro e correção da instalação do APK
+- **Trilha:** a página /trilha passou a usar o mesmo modelo da página do livro (cabeçalho do capítulo com Continuar e Texto completo e a lista de atividades com ícones), mantendo o bloqueio dentro do capítulo e o "Você está aqui". Conferida em 390×844, sem rolagem horizontal.
+- **APK:** o merge do PR #1 no `main` disparou uma publicação assinada com outra chave (o cache da chave de depuração é separado por branch), e o Android recusou a atualização ("conflito com pacote existente"). Agora, sem a chave de release nos segredos, só o branch de trabalho publica o site e o APK; com `ANDROID_KEYSTORE_BASE64` e afins configurados, qualquer branch publica com a mesma chave.
+
