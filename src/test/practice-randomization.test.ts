@@ -58,6 +58,19 @@ describe('variação das atividades de prática', () => {
     expect(mcq.question.options.map((option) => option.key)).toEqual(['A', 'B', 'C', 'D', 'E']);
   });
 
+  it('gera duas lacunas distintas e oferece cada resposta correta no banco de opções', () => {
+    const activities = buildPractice(chapter, 'fundamentos', [], undefined, () => 0, undefined);
+    const exercise = activities.find((activity) => activity.kind === 'multiBlank');
+    expect(exercise).toBeDefined();
+    if (!exercise || exercise.kind !== 'multiBlank') throw new Error('Exercício de lacunas múltiplas não foi criado');
+
+    expect(exercise.answers).toHaveLength(2);
+    expect(exercise.sentence.split('___')).toHaveLength(3);
+    expect(exercise.answers[0]).not.toBe(exercise.answers[1]);
+    expect(exercise.answers.every((answer) => exercise.options.includes(answer))).toBe(true);
+    expect(exercise.options.length).toBeGreaterThan(exercise.answers.length);
+  });
+
   it('gera montagem de frase com palavras da definição e palavras extras', () => {
     const activities = buildPractice(chapter, 'fundamentos', [], undefined, () => 0.9999999, undefined);
     const build = activities.find((activity) => activity.kind === 'build');
