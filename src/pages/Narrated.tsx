@@ -1,6 +1,6 @@
 // Aula visual narrada com player de tela inteira, cena animada e linha do tempo arrastável.
 // A busca é estimada por fala: a voz do aparelho não fornece uma duração exata de vídeo.
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getNarrated } from '@/content';
 import type { NarratedLesson, NumberLineState, Scene } from '@/content/narrated/types';
@@ -197,7 +197,7 @@ export function NarratedPlayer({
   // flutuantes com margens seguras; nunca empurram o vídeo nem ficam colados às bordas.
   const shell = embedded ? 'relative isolate h-full min-h-0 w-full overflow-hidden bg-bg text-ink' : 'relative isolate mx-auto min-h-[70dvh] w-full max-w-4xl overflow-hidden rounded-2xl bg-bg text-ink';
   const visibleClass = controlsVisible ? 'opacity-100 translate-y-0 pointer-events-auto' : 'pointer-events-none translate-y-2 opacity-0';
-  const stopOverlayClick = (event: React.MouseEvent) => event.stopPropagation();
+  const stopOverlayClick = (event: MouseEvent) => event.stopPropagation();
 
   return (
     <div
@@ -241,12 +241,12 @@ export function NarratedPlayer({
           title={exitLabel}
           data-testid="narrada-sair"
         >
-          <Icon name="fechar" size={19} />
+          <Icon name="sair" size={19} />
         </button>
       </header>
 
       <p
-        className={`absolute left-5 right-5 z-10 mx-auto max-w-3xl rounded-xl bg-[#171b1b]/90 px-4 py-3 text-center text-sm font-medium leading-relaxed text-white shadow-lg backdrop-blur-sm transition-[bottom] duration-300 sm:left-10 sm:right-10 sm:px-6 sm:py-3.5 sm:text-base ${controlsVisible ? 'bottom-[calc(9.4rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(2rem+env(safe-area-inset-bottom))]'}`}
+        className={`absolute left-5 right-5 z-10 mx-auto max-w-3xl rounded-xl bg-[#171b1b]/90 px-4 py-3 text-center text-sm font-medium leading-relaxed text-white shadow-lg backdrop-blur-sm transition-[bottom] duration-300 sm:left-10 sm:right-10 sm:px-6 sm:py-3.5 sm:text-base ${controlsVisible ? 'bottom-[13rem] sm:bottom-[14rem]' : 'bottom-8'}`}
         aria-live="polite"
         data-testid="narrada-legenda"
       >
@@ -282,7 +282,7 @@ export function NarratedPlayer({
               onClick={togglePlayback}
               data-testid="narrada-tocar"
             >
-              <Icon name={playing ? 'pausar' : 'tocar'} size={19} />
+              {playing ? <span aria-hidden="true" className="text-lg leading-none">Ⅱ</span> : <Icon name="play" size={19} />}
               {playing ? 'Pausar aula' : done ? 'Assistir novamente' : beatIndex === 0 ? 'Começar aula' : 'Continuar aula'}
             </button>
             <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line bg-surface transition hover:bg-raised sm:h-11 sm:w-11" onClick={() => jump(positionAtBeat(l, Math.min(positions.length - 1, beatIndex + 1)))} aria-label="Avançar uma fala">
