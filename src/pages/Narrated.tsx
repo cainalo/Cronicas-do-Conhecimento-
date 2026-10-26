@@ -252,7 +252,7 @@ export function NarratedPlayer({
       >
         <span className="sr-only">Legenda: </span>
         <span data-testid="narrada-legenda-texto">
-          {(say.match(/\\S+\\s*/g) ?? [say]).map((word, i, words) => {
+          {(say.match(/\S+\s*/g) ?? [say]).map((word, i, words) => {
             const activeWord = playing
               ? Math.min(words.length - 1, Math.floor((beatElapsed / Math.max(1, durations[beatIndex] ?? 1800)) * words.length))
               : -1;
@@ -379,15 +379,30 @@ function SceneView({ scene, reveal }: { scene: Scene; reveal: number }) {
   if (v.kind === 'cards')
     return (
       <div className={`grid w-full gap-3 ${v.cards.length > 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2'}`}>
-        {v.cards.map((c, i) => (
-          <div
-            key={c.title}
-            className={`rounded-2xl border p-4 transition-all duration-500 sm:p-5 ${['border-[#2e7182]/35 bg-[#d6e7e6] text-[#172e34]','border-[#c8402a]/30 bg-[#f3d7ca] text-[#3a211c]','border-[#9e6a14]/30 bg-[#f0e3bd] text-[#3b2c12]','border-[#a8365e]/30 bg-[#edd6e0] text-[#3c2030]'][i % 4]} ${i < reveal ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-25'} ${i === reveal - 1 ? 'scale-[1.02] shadow-lg ring-2 ring-[#c8402a]/35' : ''}`}
-          >
-            <p className="font-title text-lg leading-tight">{c.title}</p>
-            <p className="mt-1 text-sm">{c.text}</p>
-          </div>
-        ))}
+        {v.cards.map((c, i) => {
+          const subject = (c.title + ' ' + c.text).toLowerCase();
+          const art = /computador|processador|\\bcpu\\b|hardware|máquina/.test(subject)
+            ? 'computador'
+            : /rede|servidor|roteador|\\bip\\b/.test(subject)
+              ? 'rede'
+              : /dado|memória|arquivo|banco|guardar/.test(subject)
+                ? 'dados'
+                : /nuvem|internet/.test(subject)
+                  ? 'nuvem'
+                  : (['livro', 'teclado', 'computador', 'dados'] as const)[i % 4];
+          return (
+            <div
+              key={c.title}
+              className={`rounded-2xl border p-4 transition-all duration-500 sm:p-5 ${['border-[#2e7182]/35 bg-[#d6e7e6] text-[#172e34]','border-[#c8402a]/30 bg-[#f3d7ca] text-[#3a211c]','border-[#9e6a14]/30 bg-[#f0e3bd] text-[#3b2c12]','border-[#a8365e]/30 bg-[#edd6e0] text-[#3c2030]'][i % 4]} ${i < reveal ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-25'} ${i === reveal - 1 ? 'scale-[1.02] shadow-lg ring-2 ring-[#c8402a]/35' : ''}`}
+            >
+              <div className="mb-2 flex items-center gap-2">
+                <Illustration name={art} animate className="h-10 w-12 shrink-0" />
+                <p className="font-title text-lg leading-tight">{c.title}</p>
+              </div>
+              <p className="text-sm leading-relaxed">{c.text}</p>
+            </div>
+          );
+        })}
       </div>
     );
   return (
