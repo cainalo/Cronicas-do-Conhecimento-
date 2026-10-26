@@ -2,7 +2,7 @@
 // vem outra explicação e um item equivalente com outros dados. Depois: prática cumulativa, questão
 // no estilo da prova e síntese. O ponto exato fica salvo (useSession), e o Continuar volta aqui.
 // Nenhuma tela rola para baixo: o que não cabe vira outra parte, ao lado (SwipePages).
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import type { MicroLesson } from '@/content/types';
@@ -68,7 +68,6 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   // Só videoaulas conferidas entram na sequência; as "a conferir" ficam na biblioteca de vídeos.
   const videos = curatedVideos.filter((v) => v.lessonId === lesson.id && v.status === 'conferido');
   const hasMedia = !!narrated || videos.length > 0;
-  const [playerOpen, setPlayerOpen] = useState(false);
   const n = lesson.steps.length;
   // Em série, cada aula tem o seu ponto salvo; sozinha, usa a chave do trecho (como antes).
   const key = series ? seriesKey(lesson.chapterId, lesson.sectionId, lesson.id) : learnKey(lesson.chapterId, lesson.sectionId);
@@ -245,41 +244,53 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
         </section>
       )}
 
-      {phase.k === 'midia' && (
-        <section className="flex min-h-0 flex-1 flex-col gap-3" aria-label="Veja de outro jeito">
-          <div>
+      {phase.k === 'midia' && narrated && createPortal(
+        <div
+          className="fixed inset-0 z-[80] overflow-hidden bg-bg px-3 sm:px-6"
+          role="dialog"
+          aria-modal="true"
+          aria-label={'Aula narrada: ' + narrated.title}
+          style={{
+            paddingTop: 'max(0.5rem, env(safe-area-inset-top, 0px))',
+            paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom, 0px))',
+          }}
+        >
+          <div className="mx-auto flex h-full min-h-0 w-full max-w-4xl flex-col">
+            <div className="min-h-0 flex-1">
+              <NarratedPlayer
+                l={narrated}
+                embedded
+                exitLabel="Ir para a prática"
+                onClose={() => set(lesson.consolidation.length ? { k: 'praticar', i: 0 } : lesson.exam.length ? { k: 'prova', i: 0 } : { k: 'sintese' })}
+              />
+            </div>
+            {videos.length > 0 && (
+              <details className="max-h-20 shrink-0 overflow-y-auto rounded-lg border border-line bg-surface px-3 py-2 text-sm">
+                <summary className="cursor-pointer font-semibold">Videoaulas complementares</summary>
+                <div className="mt-2 space-y-2">
+                  {videos.map((v) => <VideoEmbed key={v.id} url={v.url} title={v.title} meta={[v.channel, v.duration].filter(Boolean).join(' · ')} />)}
+                </div>
+              </details>
+            )}
+          </div>
+        </div>,
+        document.body,
+      )}
+      {phase.k === 'midia' && !narrated && (
+        <section className="flex min-h-0 flex-1 flex-col overflow-hidden" aria-label="Veja de outro jeito">
+          <div className="mb-3 shrink-0">
             <p className="kicker">Antes de praticar</p>
             <h1 className="mt-0.5 text-2xl leading-tight">Veja de outro jeito</h1>
-            <p className="mt-1 text-sm text-muted">O mesmo assunto, explicado em voz e imagem. Ajuda a fixar.</p>
+            <p className="mt-1 text-sm text-muted">Videoaulas complementares do assunto; carregam só quando você tocar.</p>
           </div>
-          {narrated && (
-            <button className="card flex items-center gap-3 p-4 text-left" onClick={() => setPlayerOpen(true)} data-testid="midia-narrada">
-              <Icon name="play" size={22} className="shrink-0 text-gold" />
-              <span className="min-w-0 flex-1">
-                <span className="block font-semibold">Aula narrada: {narrated.title}</span>
-                <span className="block text-sm text-muted">Cerca de {narrated.minutes} min, com legendas e transcrição.</span>
-              </span>
-            </button>
-          )}
-          {videos.map((v) => (
-            <VideoEmbed key={v.id} url={v.url} title={v.title} meta={[v.channel, v.duration].filter(Boolean).join(' · ')} />
-          ))}
-          <button className="btn-primary mt-auto w-full" onClick={() => set(lesson.consolidation.length ? { k: 'praticar', i: 0 } : lesson.exam.length ? { k: 'prova', i: 0 } : { k: 'sintese' })} data-testid="midia-continuar">
+          <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain">
+            {videos.map((v) => <VideoEmbed key={v.id} url={v.url} title={v.title} meta={[v.channel, v.duration].filter(Boolean).join(' · ')} />)}
+          </div>
+          <button className="btn-primary mt-2 w-full shrink-0" onClick={() => set(lesson.consolidation.length ? { k: 'praticar', i: 0 } : lesson.exam.length ? { k: 'prova', i: 0 } : { k: 'sintese' })} data-testid="midia-continuar">
             Continuar para a prática <Icon name="avancar" size={16} />
           </button>
         </section>
       )}
-      {playerOpen &&
-        narrated &&
-        createPortal(
-          <div className="fixed inset-0 z-[80] overflow-y-auto bg-bg px-4 py-4" role="dialog" aria-modal="true" aria-label={`Aula narrada: ${narrated.title}`} style={{ paddingTop: 'max(1rem, env(safe-area-inset-top))' }}>
-            <div className="mx-auto max-w-3xl">
-              <NarratedPlayer l={narrated} onClose={() => setPlayerOpen(false)} />
-            </div>
-          </div>,
-          document.body,
-        )}
-
       {phase.k === 'praticar' && (
         <section className="flex min-h-0 flex-1 flex-col" aria-label="Prática final">
           <p className="mb-1 text-xs font-semibold text-gold">

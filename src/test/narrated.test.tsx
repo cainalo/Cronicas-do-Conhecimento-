@@ -73,7 +73,7 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
   vi.useRealTimers();
 });
 
-it('sequência única: a aula narrada abre dentro da aula, volta à aula e segue para a prática', async () => {
+it('sequência única: a aula narrada abre automaticamente em tela inteira e segue para a prática', async () => {
   const user = userEvent.setup();
   const key = 'aprender:cap.prim.01:computador#prim.computador.1';
   localStorage.setItem(
@@ -89,12 +89,11 @@ it('sequência única: a aula narrada abre dentro da aula, volta à aula e segue
       </StudyProvider>
     </PrefsProvider>,
   );
-  expect(screen.getByRole('heading', { name: 'Veja de outro jeito' })).toBeInTheDocument();
-  await user.click(screen.getByTestId('midia-narrada'));
   expect(screen.getByRole('dialog', { name: /Aula narrada: Do ábaco ao celular/ })).toBeInTheDocument();
+  expect(screen.getByTestId('narrada-seek')).toBeInTheDocument();
+  expect(screen.queryByTestId('midia-narrada')).toBeNull();
   expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/não foi inventado de uma vez/);
-  await user.click(screen.getByTestId('narrada-voltar'));
-  expect(screen.queryByRole('dialog')).toBeNull();
-  await user.click(screen.getByTestId('midia-continuar'));
+  await user.click(screen.getByRole('button', { name: 'Ir para a prática' }));
+  expect(screen.queryByRole('dialog', { name: /Aula narrada/ })).toBeNull();
   expect(screen.getByText(/Organize a linha do tempo/)).toBeInTheDocument();
 });
