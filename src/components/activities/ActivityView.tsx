@@ -48,6 +48,14 @@ function randomShuffle<T>(items: T[]): T[] {
   return out;
 }
 
+function randomizeQuestionOptions(question: Question): Question {
+  const letters = ['A', 'B', 'C', 'D', 'E'] as const;
+  const correctText = question.options.find((option) => option.key === question.answer)?.text;
+  const options = randomShuffle(question.options).map((option, index) => ({ ...option, key: letters[index] }));
+  const correctIndex = options.findIndex((option) => option.text === correctText);
+  return { ...question, options, answer: letters[Math.max(0, correctIndex)] };
+}
+
 /** Randomiza as alternativas sem perder o vínculo entre a resposta e a opção correta. */
 function randomizeActivityOptions(activity: MissionActivity): MissionActivity {
   if (activity.kind === 'choice') {
@@ -83,7 +91,7 @@ export function ActivityView({
   // A ordem é sorteada uma vez por montagem da atividade, sem mudar durante a resposta.
   const displayA = useMemo(() => randomizeActivityOptions(a), [a]);
   const displayQuestion = useMemo(
-    () => question ? { ...question, options: randomShuffle(question.options) } : undefined,
+    () => question ? randomizeQuestionOptions(question) : undefined,
     [question],
   );
   const tfOptions = useMemo(() => randomShuffle(['f', 'v']), [displayA]);
