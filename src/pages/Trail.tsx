@@ -1,22 +1,49 @@
-// Trilha: o programa inteiro em ordem, capítulo por capítulo, no mesmo modelo da página do livro
-// (título, Continuar, Texto completo e a lista de atividades), com o estado de cada uma.
-// A atividade atual é a mesma do Continuar (fonte única). Atividades bloqueadas aparecem, mas não
-// abrem: a do mesmo capítulo precisa ser concluída antes (lib/trail.ts).
+// Trilha: a sequência completa do programa, apresentada no mesmo modelo editorial da trilha dentro
+// dos livros. Cada capítulo mostra o próximo passo, acesso ao texto completo e a lista cronológica.
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { trailUnits, useCheckpoint } from '@/app/useCheckpoint';
 import { getChapter, getGrimoire } from '@/content';
 import { trailByChapter, type UnitState } from '@/lib/trail';
-import { Icon } from '@/components/Icon';
+import { Icon, type IconName } from '@/components/Icon';
 import { PageHeader, useIsDark } from '@/components/Page';
-import type { IconName } from '@/components/Icon';
 import { roman } from '@/lib/roman';
 import { areaColor } from '@/app/areas';
 
-const STATE_LABEL: Record<UnitState, string> = { feita: 'Concluída', atual: 'Você está aqui', disponivel: 'Disponível', bloqueada: 'Bloqueada' };
-const KIND_LABEL = { aprender: 'Aprender', narrada: 'Aula narrada', video: 'Videoaula', professores: 'Posts dos professores', praticar: 'Praticar', missao: 'Caso prático', flashcards: 'Cartões de memorização', desafio: 'Desafio' } as const;
-const KIND_ICON: Record<keyof typeof KIND_LABEL, IconName> = { aprender: 'grimorio', narrada: 'alaude', video: 'play', professores: 'balao', praticar: 'chama', missao: 'mapa', flashcards: 'cartas', desafio: 'escudo' };
+const STATE_LABEL: Record<UnitState, string> = {
+  feita: 'Concluída',
+  atual: 'Você está aqui',
+  disponivel: 'Disponível',
+  bloqueada: 'Bloqueada',
+};
+const KIND_LABEL: Record<string, string> = {
+  aprender: 'Aprender',
+  praticar: 'Praticar',
+  missao: 'Caso prático',
+  desafio: 'Desafio',
+};
+const KIND_ICON: Record<string, IconName> = {
+  aprender: 'grimorio',
+  praticar: 'chama',
+  missao: 'mapa',
+  desafio: 'escudo',
+};
+
+// Tipos adicionais fornecidos pelo roteiro completo do Claude. Object.assign mantém intacta a
+// implementação base da trilha e acrescenta os ícones/títulos das atividades de mídia e revisão.
+Object.assign(KIND_LABEL, {
+  narrada: 'Aula narrada',
+  video: 'Videoaula',
+  professores: 'Posts dos professores',
+  flashcards: 'Cartões de memorização',
+});
+Object.assign(KIND_ICON, {
+  narrada: 'alaude',
+  video: 'play',
+  professores: 'balao',
+  flashcards: 'cartas',
+});
 
 export function TrailPage() {
   const { data } = useStudy();
@@ -24,7 +51,7 @@ export function TrailPage() {
   const units = useMemo(trailUnits, []);
   const chapters = useMemo(() => trailByChapter(data, units, checkpoint), [data, units, checkpoint]);
   const total = units.length;
-  const done = chapters.reduce((n, c) => n + c.done, 0);
+  const done = chapters.reduce((n, chapter) => n + chapter.done, 0);
   const color = areaColor('grimorios', useIsDark());
 
   return (
@@ -47,25 +74,33 @@ export function TrailPage() {
         {chapters.map((ch) => {
           const chapter = getChapter(ch.chapterId)!;
           const grimoire = getGrimoire(chapter.grimoireId);
-          const next = ch.units.find((u) => u.state === 'atual') ?? ch.units.find((u) => u.state === 'disponivel') ?? ch.units[0];
-          const rp = data.reading[chapter.id];
+          const next = ch.units.find((unit) => unit.state === 'atual')
+            ?? ch.units.find((unit) => unit.state === 'disponivel')
+            ?? ch.units[0];
+          const reading = data.reading[chapter.id];
+          const pct = ch.units.length ? Math.round((ch.done / ch.units.length) * 100) : 0;
+
           return (
             <li key={ch.chapterId}>
-              <section aria-label={chapter.title}>
+              <section aria-label={chapter.title} data-testid={`trilha-capitulo-${chapter.id}`}>
                 <p className="kicker">
                   {grimoire?.title} · Capítulo {roman(chapter.number).toUpperCase()} · {ch.done}/{ch.units.length} atividades · cerca de {chapter.estimatedMinutes} min
                 </p>
                 <h2 className="mt-1 text-[1.45rem] leading-snug">{chapter.title}</h2>
                 <p className="text-sm text-muted">{chapter.subtitle}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="mt-3 flex flex-wrap items-center gap-2">
                   <Link to={next.unit.to} className="btn-primary !min-h-[42px] text-sm">
                     {ch.done === ch.units.length ? 'Rever' : ch.done > 0 ? 'Continuar' : 'Começar'} <Icon name="avancar" size={16} />
                   </Link>
-                  <Link to={`/capitulo/${chapter.id}${rp?.lastSectionId ? `#${rp.lastSectionId}` : ''}`} className="btn-ghost !min-h-[42px] text-sm">
+                  <Link to={`/capitulo/${chapter.id}${reading?.lastSectionId ? `#${reading.lastSectionId}` : ''}`} className="btn-ghost !min-h-[42px] text-sm">
                     <Icon name="livro" size={16} /> Texto completo
                   </Link>
                 </div>
-                <ol className="ledger mt-4">
+                <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-raised" aria-label={`Progresso: ${pct}%`}>
+                  <div className="h-full rounded-full transition-[width]" style={{ width: `${pct}%`, background: color }} />
+                </div>
+
+                <ol className="ledger mt-4" aria-label={`Atividades de ${chapter.title}`}>
                   {ch.units.map(({ unit, state }, index) => {
                     const body = (
                       <>
@@ -89,10 +124,11 @@ export function TrailPage() {
                         {state === 'atual' ? (
                           <span className="shrink-0 text-xs font-semibold text-gold">Você está aqui</span>
                         ) : (
-                          <Icon name={KIND_ICON[unit.kind]} size={16} className="shrink-0 text-muted" />
+                          <Icon name={KIND_ICON[unit.kind] ?? 'grimorio'} size={16} className="shrink-0 text-muted" />
                         )}
                       </>
                     );
+
                     return (
                       <li key={unit.key}>
                         {state === 'bloqueada' ? (
