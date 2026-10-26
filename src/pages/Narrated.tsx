@@ -18,6 +18,16 @@ const formatTime = (ms: number) => {
   return String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
 };
 
+function wordIndexAtChar(text: string, charIndex: number): number {
+  const words = Array.from(text.matchAll(/\\S+/g));
+  if (!words.length) return 0;
+  for (let i = 0; i < words.length; i++) {
+    const start = words[i].index ?? 0;
+    if (charIndex < start + words[i][0].length) return i;
+  }
+  return words.length - 1;
+}
+
 export function NarratedPage() {
   const { id = '' } = useParams();
   const navigate = useNavigate();
@@ -42,6 +52,8 @@ export function NarratedPlayer({
   const [showTranscript, setShowTranscript] = useState(false);
   const [done, setDone] = useState(false);
   const [beatElapsed, setBeatElapsed] = useState(0);
+  const [voiceStarted, setVoiceStarted] = useState(false);
+  const [speechWordIndex, setSpeechWordIndex] = useState<number>();
   const [controlsVisible, setControlsVisible] = useState(true);
   const hideControlsTimer = useRef<number | undefined>(undefined);
   const elapsedRef = useRef(0);
@@ -73,6 +85,15 @@ export function NarratedPlayer({
       setControlsVisible(false);
     }, 3800);
   }, []);
+  const togglePlayerControls = useCallback(() => {
+    if (controlsVisible) {
+      if (hideControlsTimer.current !== undefined) window.clearTimeout(hideControlsTimer.current);
+      hideControlsTimer.current = undefined;
+      setControlsVisible(false);
+    } else {
+      revealControls();
+    }
+  }, [controlsVisible, revealControls]);
 
   useEffect(() => {
     if (hideControlsTimer.current !== undefined) {
@@ -110,6 +131,8 @@ export function NarratedPlayer({
       if (next) {
         elapsedRef.current = 0;
         setBeatElapsed(0);
+        setVoiceStarted(false);
+        setSpeechWordIndex(undefined);
         setPos(next);
       } else {
         elapsedRef.current = duration;
@@ -118,15 +141,34 @@ export function NarratedPlayer({
         setDone(true);
       }
     };
+    setVoiceStarted(false);
+    setSpeechWordIndex(undefined);
     if (voice.kind === 'nenhuma') {
+      setVoiceStarted(true);
       watchdog = window.setTimeout(advance, Math.max(0, duration - elapsedRef.current));
     } else {
-      watchdog = window.setTimeout(() => {
-        if (token.current !== ticket) return;
-        voice.stop();
-        advance();
-      }, Math.max(duration * 2.3, 5000));
-      void voice.speak(text, rate).then(() => {
+      const armWatchdog = () => {
+        if (watchdog !== undefined) window.clearTimeout(watchdog);
+        watchdog = window.setTimeout(() => {
+          if (token.current !== ticket) return;
+          voice.stop();
+          advance();
+        }, Math.max(duration * 2.3, 5000));
+      };
+      armWatchdog();
+      void voice.speak(text, rate, {
+        onStart: () => {
+          if (token.current !== ticket) return;
+          elapsedRef.current = 0;
+          setBeatElapsed(0);
+          setVoiceStarted(true);
+          armWatchdog();
+        },
+        onBoundary: (charIndex) => {
+          if (token.current !== ticket) return;
+          setSpeechWordIndex(wordIndexAtChar(text, charIndex));
+        },
+      }).then(() => {
         if (token.current !== ticket) return;
         if (watchdog !== undefined) window.clearTimeout(watchdog);
         advanceTimer = window.setTimeout(advance, Math.max(300, Math.min(900, duration * 0.16)));
@@ -147,7 +189,7 @@ export function NarratedPlayer({
   }, [playing, pos, rate, l, voice, positions.length, durations, beatIndex]);
 
   useEffect(() => {
-    if (!playing) return;
+    if (!playing || !voiceStarted) return;
     const started = Date.now();
     const initial = elapsedRef.current;
     const duration = durations[beatIndex] ?? 1800;
@@ -157,12 +199,14 @@ export function NarratedPlayer({
       setBeatElapsed(value);
     }, 100);
     return () => window.clearInterval(timer);
-  }, [playing, beatIndex, durations]);
+  }, [playing, voiceStarted, beatIndex, durations]);
 
   const jump = (p: NarrationPos) => {
     stop();
     elapsedRef.current = 0;
     setBeatElapsed(0);
+    setVoiceStarted(false);
+    setSpeechWordIndex(undefined);
     setDone(false);
     setPos(p);
   };
@@ -172,6 +216,8 @@ export function NarratedPlayer({
     if (playing) {
       stop();
       setPlaying(false);
+      setVoiceStarted(false);
+      setSpeechWordIndex(undefined);
     }
   };
 
@@ -189,6 +235,8 @@ export function NarratedPlayer({
     setPos(positionAtBeat(l, targetIndex));
     elapsedRef.current = 0;
     setBeatElapsed(0);
+    setVoiceStarted(false);
+    setSpeechWordIndex(undefined);
     setDone(false);
   };
 
@@ -205,11 +253,15 @@ export function NarratedPlayer({
       setPlaying(false);
       elapsedRef.current = 0;
       setBeatElapsed(0);
+      setVoiceStarted(false);
+      setSpeechWordIndex(undefined);
     } else {
       if (done) {
         setPos({ scene: 0, beat: 0 });
         elapsedRef.current = 0;
         setBeatElapsed(0);
+        setVoiceStarted(false);
+        setSpeechWordIndex(undefined);
       }
       setDone(false);
       setPlaying(true);
@@ -218,16 +270,17 @@ export function NarratedPlayer({
 
   // O palco visual ocupa a viewport inteira. Cabeçalho, legenda e controles são camadas
   // flutuantes com margens seguras; nunca empurram o vídeo nem ficam colados às bordas.
-  const shell = embedded ? 'relative isolate h-full min-h-0 w-full overflow-hidden bg-bg text-ink' : 'relative isolate mx-auto min-h-[70dvh] w-full max-w-4xl overflow-hidden rounded-2xl bg-bg text-ink';
+  const shell = 'fixed inset-0 z-[100] isolate h-[100dvh] max-h-[100dvh] w-screen max-w-none overflow-hidden rounded-none bg-bg text-ink';
   const visibleClass = controlsVisible ? 'opacity-100 translate-y-0 pointer-events-auto' : 'pointer-events-none translate-y-2 opacity-0';
   const stopOverlayClick = (event: MouseEvent) => event.stopPropagation();
 
   return (
     <div
       className={shell}
+      data-embedded={embedded ? 'true' : undefined}
       data-testid="narrada-player"
-      onClick={revealControls}
-      onPointerMove={revealControls}
+      onClick={togglePlayerControls}
+      onPointerMove={(event) => { if (event.pointerType === 'mouse') revealControls(); }}
       onKeyDown={revealControls}
     >
       <section className="absolute inset-0 overflow-hidden bg-bg" aria-label="Aula em vídeo narrado" data-testid="narrada-stage">
@@ -235,9 +288,13 @@ export function NarratedPlayer({
           <div className="absolute -left-20 top-[18%] h-48 w-48 rounded-full bg-[#2e7182]/10 blur-3xl" />
           <div className="absolute -right-16 bottom-[26%] h-52 w-52 rounded-full bg-[#c8402a]/10 blur-3xl" />
         </div>
-        <div className="absolute inset-0 grid place-items-center px-5 pb-44 pt-28 sm:px-10 sm:pb-40 sm:pt-32" data-testid="narrada-cena">
-          <div className="anim-tile-in grid h-full max-h-full w-full place-items-center" key={scene.id + ':' + pos.beat}>
+        <div
+          className={`absolute inset-0 grid place-items-center transition-[padding] duration-300 ${controlsVisible ? 'px-4 pb-[14.5rem] pt-28 sm:px-10 sm:pb-[15rem] sm:pt-32' : 'px-4 pb-8 pt-8 sm:px-10'}`}
+          data-testid="narrada-cena"
+        >
+          <div className="anim-tile-in relative flex h-full max-h-full w-full flex-col items-center justify-center gap-3" key={scene.id + ':' + pos.beat}>
             <SceneView scene={scene} reveal={revealOf(scene, pos.beat)} />
+            {scene.visual.kind !== 'cards' && <SceneMotionStrip scene={scene} say={say} />}
           </div>
         </div>
       </section>
@@ -276,9 +333,10 @@ export function NarratedPlayer({
         <span className="sr-only">Legenda: </span>
         <span data-testid="narrada-legenda-texto">
           {(say.match(/\S+\s*/g) ?? [say]).map((word, i, words) => {
-            const activeWord = playing
+            const estimatedWord = voiceStarted
               ? Math.min(words.length - 1, Math.floor((beatElapsed / Math.max(1, durations[beatIndex] ?? 1800)) * words.length))
               : -1;
+            const activeWord = playing && voiceStarted ? (speechWordIndex ?? estimatedWord) : -1;
             return <span key={`${i}-${word}`} className={i === activeWord ? 'rounded bg-[#f0bf69]/25 px-0.5 font-bold text-[#ffd38a] transition-colors duration-150' : i < activeWord ? 'text-white/65 transition-colors duration-150' : 'text-white transition-colors duration-150'}>{word}</span>;
           })}
         </span>
@@ -357,7 +415,7 @@ export function NarratedPlayer({
           type="button"
           className="absolute inset-0 z-10 cursor-pointer"
           aria-label="Mostrar controles da aula"
-          onClick={revealControls}
+          onClick={(event) => { event.stopPropagation(); togglePlayerControls(); }}
           data-testid="narrada-mostrar-controles"
         />
       )}
@@ -368,6 +426,45 @@ export function NarratedPlayer({
           <div className="mt-2 max-h-48 overflow-y-auto"><ActivityView a={l.check} onNext={() => undefined} /></div>
         </div>
       )}
+    </div>
+  );
+}
+
+function SceneMotionStrip({ scene, say }: { scene: Scene; say: string }) {
+  const stopWords = new Set(['para', 'pela', 'pelo', 'como', 'isso', 'essa', 'esse', 'estas', 'estes', 'quando', 'onde', 'entre', 'sobre', 'muito', 'mais', 'menos', 'também', 'porque', 'então', 'depois', 'antes', 'ainda', 'cada', 'que', 'com', 'sem', 'uma', 'uns', 'umas', 'dos', 'das', 'por', 'não', 'são', 'ser', 'tem', 'ter', 'foi', 'vai', 'aos', 'nas', 'nos']);
+  const keywords = Array.from(new Set((say + ' ' + scene.heading)
+    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase()
+    .replace(/[^a-z0-9\\s-]/g, ' ').split(/\\s+/)
+    .filter((word) => word.length >= 4 && !stopWords.has(word))))
+    .slice(0, 3);
+  const palettes = [
+    'border-[#2e7182]/30 bg-[#d6e7e6] text-[#172e34]',
+    'border-[#c8402a]/30 bg-[#f3d7ca] text-[#3a211c]',
+    'border-[#9e6a14]/30 bg-[#f0e3bd] text-[#3b2c12]',
+  ];
+  const artFor = (word: string) => /dado|memoria|arquivo|valor|guardar|variavel/.test(word)
+    ? 'dados'
+    : /rede|internet|servidor|protocolo|pacote/.test(word)
+      ? 'rede'
+      : /nuvem|cloud|online/.test(word)
+        ? 'nuvem'
+        : /computador|processador|hardware|maquina/.test(word)
+          ? 'computador'
+          : (['livro', 'teclado', 'dados'] as const)[word.length % 3];
+  if (!keywords.length) return null;
+  return (
+    <div className="flex w-full max-w-lg flex-wrap items-center justify-center gap-2 px-1" aria-hidden="true" data-testid="narrada-elementos-visuais">
+      {keywords.map((word, i) => (
+        <div
+          key={scene.id + ':' + word}
+          className={`anim-tile-in flex min-w-0 max-w-[45%] items-center gap-1.5 rounded-xl border px-2 py-1.5 shadow-sm transition-all duration-300 sm:gap-2 sm:px-3 sm:py-2 ${palettes[i % palettes.length]} `}
+          style={{ animationDelay: `${i * 90}ms` }}
+        >
+          <Illustration name={artFor(word)} animate className="h-7 w-8 shrink-0 sm:h-9 sm:w-10" />
+          <span className="min-w-0 truncate text-xs font-bold sm:text-sm">{word}</span>
+          <span className="hidden text-[0.58rem] font-bold uppercase tracking-wider opacity-65 sm:inline">{['IDEIA', 'LIGAÇÃO', 'EXEMPLO'][i]}</span>
+        </div>
+      ))}
     </div>
   );
 }
