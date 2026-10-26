@@ -248,7 +248,9 @@ function PracticeRun() {
     setQueue(q);
   };
 
-  const exit = () => navigate('/trilha');
+  // Sair explicitamente encerra só a sessão incompleta; a próxima abertura sorteia outra rodada.
+  // As conclusões e o histórico de respostas já registrados continuam salvos.
+  const exit = () => { session.finish(); navigate('/trilha'); };
 
   return (
     <div className="-mt-2 flex min-h-0 flex-col overflow-hidden" style={{ height: "calc(100dvh - 5.5rem - env(safe-area-inset-top, 0px))" }}>
