@@ -1,5 +1,11 @@
 Um **requisito** é uma condição ou capacidade que o sistema deve ter para resolver um problema ou atender a um contrato ou norma.
 
+### Como se aprendeu a escrever requisitos
+
+- **1987 e 1997: casos de uso e UML.** Ivar Jacobson apresentou os casos de uso (1987); o OMG adotou a UML, unificada por Grady Booch, James Rumbaugh e Jacobson (1997).
+- **Anos 1990 e 2003: histórias e INVEST.** As histórias de usuário ganharam força com o XP; Bill Wake propôs o acrônimo INVEST (2003).
+- **Anos 2000: Given/When/Then.** Dan North, com o BDD, popularizou o formato usado em critérios de aceite.
+
 ### Funcionais e não funcionais
 
 | Tipo | Descreve | Exemplo |

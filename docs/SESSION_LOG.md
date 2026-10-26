@@ -89,3 +89,4 @@
 - **Raciocínio lógico:** cap.mat.02 completo (associação e dedução, sequências e conceitos, espaço e tempo). 1761 testes.
 - **Sintaxe e redação oficial:** cap.port.02 completo (concordância, regência e verbos, período e reescrita, redação oficial). 1853 testes; rolagem de cap.dados.02 e cap.dev.02 (40) conferida; CI 98 verde.
 - **Linguagens e pacotes:** cap.dev.04 completo (Java e Python, JavaScript e TypeScript, HTML/CSS/React, dependências e pacotes). 1945 testes.
+- **Processo de software:** cap.es.01 completo (ciclo de vida e métodos, requisitos). 1991 testes.

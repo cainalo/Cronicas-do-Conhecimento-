@@ -197,6 +197,8 @@ import { devJpHistoria, devJpJava, devJpExcecoes, devJpPython } from './micro/de
 import { devJsHistoria, devJsTipos, devJsAssincrono, devJsNodeTs } from './micro/dev-jsts';
 import { devWebHistoria, devWebHtml, devWebCss, devWebReact } from './micro/dev-web';
 import { devPacHistoria, devPacSemver, devPacLock, devPacBuild } from './micro/dev-pacotes';
+import { esCicHistoria, esCicAbordagens, esCicKanban, esCicXp } from './micro/es-ciclo';
+import { esReqHistoria, esReqTipos, esReqEngenharia, esReqHistorias } from './micro/es-requisitos';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -361,6 +363,14 @@ export const microLessons: MicroLesson[] = [
   devPacSemver,
   devPacLock,
   devPacBuild,
+  esCicHistoria,
+  esCicAbordagens,
+  esCicKanban,
+  esCicXp,
+  esReqHistoria,
+  esReqTipos,
+  esReqEngenharia,
+  esReqHistorias,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,
