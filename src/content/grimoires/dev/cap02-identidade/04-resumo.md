@@ -1,3 +1,21 @@
+### A linha do tempo dos dois capítulos
+
+| Ano | APIs | Identidade |
+|---|---|---|
+| Anos 1960 | | Senhas no CTSS (MIT) |
+| 1991 | HTTP (Tim Berners-Lee) | |
+| 1998 | XML 1.0 (W3C) | |
+| 2000 | Tese de Roy Fielding sobre o REST | |
+| 2001 | WSDL | |
+| 2002 | | SAML (OASIS) |
+| 2005 | | OpenID (Brad Fitzpatrick) |
+| 2007 | | OAuth 1.0 |
+| 2011 | WebSocket (RFC 6455) | |
+| 2012 | | OAuth 2.0 (RFC 6749) e bearer (RFC 6750) |
+| 2014 | | OpenID Connect 1.0 |
+| 2015 | GraphQL publicado | JWT (RFC 7519) e PKCE (RFC 7636) |
+| 2016 | Swagger renomeado OpenAPI | |
+
 ### Quadro-resumo dos dois capítulos
 
 | Se a questão fala em... | Pense em... |

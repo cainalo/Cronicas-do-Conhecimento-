@@ -234,7 +234,7 @@ export const devOapDocumento: MicroLesson = {
       check: {
         kind: 'choice',
         id: 'pa-c',
-        prompt: 'Em qual bloco ficam os caminhos como `/processos/{numero}`?',
+        prompt: 'Em qual bloco ficam os caminhos como /processos/{numero}?',
         options: [
           { text: 'paths', why: 'Isso.' },
           { text: 'info', why: 'info traz título e versão.' },
@@ -248,7 +248,7 @@ export const devOapDocumento: MicroLesson = {
         check: {
           kind: 'choice',
           id: 'pa-r',
-          prompt: 'Um esquema `Processo` usado em várias respostas fica em:',
+          prompt: 'Um esquema Processo usado em várias respostas fica em:',
           options: [
             { text: 'components', why: 'Isso: é peça reutilizável.' },
             { text: 'info', why: 'info só tem título e versão.' },

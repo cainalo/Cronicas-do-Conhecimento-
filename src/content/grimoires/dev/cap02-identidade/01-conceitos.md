@@ -1,5 +1,11 @@
 O edital agrupa "autenticação, identidade e autorização: OAuth 2.0, OpenID Connect (OIDC) 1.0; tokens e claims; JSON Web Token (JWT)". Antes dos protocolos, é preciso separar três ideias que as questões gostam de misturar.
 
+### Da primeira senha ao login único
+
+- **Anos 1960: a senha.** No MIT, a equipe de Fernando Corbató criou o CTSS, em que vários usuários dividiam o mesmo computador. Para separar os arquivos de cada um, passou-se a pedir senha: o CTSS é lembrado como um dos primeiros sistemas com senhas.
+- **2002: o SAML.** O consórcio OASIS publicou o SAML, padrão em XML para um sistema confiar no login feito em outro, base do login único (SSO) nas empresas.
+- **Hoje: provedores de identidade.** Contas e autenticação ficam centralizadas num provedor, e os sistemas confiam nele. Na web, o protocolo mais usado é o OpenID Connect.
+
 | Conceito | Pergunta que responde | Exemplo |
 |---|---|---|
 | **Identificação** | Quem você diz ser? | Informar o CPF ou o e-mail. |

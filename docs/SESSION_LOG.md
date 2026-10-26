@@ -85,3 +85,4 @@
 - **IA:** cap.ia.03 completo (aprendizado, redes, PLN) e cap.ia.01 completo (LLM, prompts, contexto, RAG, vetores, resumo). 1502 testes.
 - **APIs:** cap.dev.01 completo (REST, formatos, GraphQL e WebSocket, OpenAPI). 1574 testes, tsc OK.
 - **SGBDs:** cap.dados.02 completo (PostgreSQL e Oracle; NoSQL, CAP, replicação e governança). 1615 testes.
+- **Identidade:** cap.dev.02 completo (conceitos, OAuth 2.0, OIDC e JWT, resumo com a linha do tempo de APIs e identidade). 1692 testes; rolagem de cap.ia.01 (34) e cap.dev.01 (24) conferida a 360×640 e 390×844.

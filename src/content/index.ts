@@ -182,6 +182,10 @@ import { devGqlHistoria, devGqlConsulta, devGqlWebsocket } from './micro/dev-gra
 import { devOapHistoria, devOapDocumento, devOapUsos } from './micro/dev-openapi';
 import { dadosRelHistoria, dadosRelPostgres, dadosRelOracle } from './micro/dados-relacionais';
 import { dadosNosHistoria, dadosNosModelos, dadosNosConsistencia, dadosNosReplicacao } from './micro/dados-nosql';
+import { devIdHistoria, devIdTres, devIdSessoes } from './micro/dev-identidade';
+import { devOauHistoria, devOauPapeis, devOauTokens, devOauFluxos } from './micro/dev-oauth';
+import { devOidHistoria, devOidConnect, devOidJwt, devOidValidacao } from './micro/dev-oidc';
+import { devIdrLinha, devIdrQuadro } from './micro/dev-idresumo';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -289,6 +293,19 @@ export const microLessons: MicroLesson[] = [
   dadosNosModelos,
   dadosNosConsistencia,
   dadosNosReplicacao,
+  devIdHistoria,
+  devIdTres,
+  devIdSessoes,
+  devOauHistoria,
+  devOauPapeis,
+  devOauTokens,
+  devOauFluxos,
+  devOidHistoria,
+  devOidConnect,
+  devOidJwt,
+  devOidValidacao,
+  devIdrLinha,
+  devIdrQuadro,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,

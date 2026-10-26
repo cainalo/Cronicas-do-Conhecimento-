@@ -1,5 +1,12 @@
 O **OAuth 2.0** (RFC 6749) é um *framework* de **autorização delegada**: permite que um aplicativo acesse recursos de um usuário em outro serviço **sem receber a senha desse usuário**, apenas um **token de acesso** com permissões limitadas.
 
+### Por que o OAuth foi criado
+
+- **Meados dos anos 2000: entregar a senha.** Para importar contatos ou publicar em outro serviço, muitos sites pediam a senha do usuário nesse serviço, ganhando acesso total à conta.
+- **2006 e 2007: o OAuth 1.0.** Blaine Cook, que trabalhava no Twitter, e outros desenvolvedores buscaram um jeito de dar acesso sem a senha. Em 2007 saiu a primeira versão do OAuth, publicada como RFC 5849 em 2010.
+- **2012: o OAuth 2.0.** A RFC 6749 definiu o OAuth 2.0, e a RFC 6750, o token portador (*bearer*).
+- **2015: o PKCE.** A RFC 7636 protegeu o fluxo de código em aplicativos que não guardam segredo, como os de celular.
+
 Exemplo cotidiano: um aplicativo de agenda pede acesso ao seu calendário em outro serviço. Você entra no serviço do calendário, autoriza o escopo "ler eventos" e o aplicativo recebe um token que só serve para isso.
 
 > **Ponto de prova:** OAuth 2.0 trata de **autorização**, não de autenticação. Saber "quem é o usuário" é papel do OpenID Connect, construído por cima do OAuth.

@@ -1,3 +1,9 @@
+### Do OpenID ao JWT
+
+- **2005: o OpenID.** Brad Fitzpatrick, criador do LiveJournal, propôs usar uma identidade só para entrar em vários sites.
+- **2014: o OpenID Connect 1.0.** A OpenID Foundation publicou uma camada de identidade construída sobre o OAuth 2.0.
+- **2015: o JWT.** O formato usado no ID Token foi padronizado na RFC 7519, junto com a família JWS (assinatura) e JWE (cifragem).
+
 ### OpenID Connect 1.0
 
 O **OpenID Connect** (OIDC) é uma **camada de identidade sobre o OAuth 2.0**. Ele reaproveita os fluxos do OAuth e acrescenta o que faltava: um jeito padronizado de o cliente saber **quem é o usuário** que se autenticou.
