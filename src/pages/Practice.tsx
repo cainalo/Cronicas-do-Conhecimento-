@@ -189,6 +189,7 @@ function PracticeRun() {
   const total = session.state.total;
   const progress = phase === 'done' ? 1 : Math.min(1, Math.max(0, (total - queue.length) / Math.max(1, total)));
   const act = queue[0];
+  const booleanChoices = useMemo(() => shuffle(['v', 'f']), [act?.id]);
   const correctFirst = Object.values(firstTry).filter(Boolean).length;
   const score = total ? Math.round((correctFirst / total) * 100) : 100;
 
@@ -317,7 +318,7 @@ function PracticeRun() {
               <>
                 <p className="text-sm font-semibold text-muted">Verdadeiro ou falso?</p>
                 <p className="mb-5 mt-2 font-display text-xl leading-snug">{act.statement}</p>
-                <Choices options={['v', 'f']} labels={{ v: 'Verdadeiro', f: 'Falso' }} answer={act.answer ? 'v' : 'f'} locked={!!verdict} value={value} onPick={setValue} />
+                <Choices options={booleanChoices} labels={{ v: 'Verdadeiro', f: 'Falso' }} answer={act.answer ? 'v' : 'f'} locked={!!verdict} value={value} onPick={setValue} />
               </>
             )}
             {act.kind === 'blank' && (
