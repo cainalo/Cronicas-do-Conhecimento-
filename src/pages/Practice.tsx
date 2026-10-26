@@ -182,6 +182,7 @@ function PracticeRun() {
   const setFirstTry = (f: (x: Record<string, boolean>) => Record<string, boolean>) => session.setState((s) => ({ ...s, firstTry: f(s.firstTry) }));
   const [value, setValue] = useState<string>();
   const [sentenceIndexes, setSentenceIndexes] = useState<number[]>([]);
+  const [multiBlankValues, setMultiBlankValues] = useState<string[]>([]);
   const [verdict, setVerdict] = useState<Verdict>();
   const [combo, setCombo] = useState(0);
   const [help, setHelp] = useState(false);
@@ -206,6 +207,11 @@ function PracticeRun() {
 
   const check = () => {
     if (!act) return;
+    if (act.kind === 'multiBlank') {
+      const ok = multiBlankValues.length === act.answers.length && act.answers.every((answer, i) => multiBlankValues[i] === answer);
+      judge(ok, ok ? 'Definição completada!' : 'Revise as lacunas.', act.why);
+      return;
+    }
     if (act.kind === 'build') {
       const built = sentenceIndexes.map((i) => act.words[i]);
       const ok = built.length === act.answer.length && built.every((word, i) => word === act.answer[i]);
@@ -235,6 +241,7 @@ function PracticeRun() {
     setVerdict(undefined);
     setValue(undefined);
     setSentenceIndexes([]);
+    setMultiBlankValues([]);
     // Errou: vem logo adiante um item equivalente com outros dados; sem equivalente, a mesma volta no fim.
     const q = nextQueue(queue, ok, recovery);
     if (q.length === 0) {
@@ -348,6 +355,42 @@ function PracticeRun() {
                 <Choices options={act.options} answer={act.answer} locked={!!verdict} value={value} onPick={setValue} />
               </>
             )}
+            {act.kind === 'multiBlank' && (
+              <>
+                <p className="text-sm font-semibold text-muted">Complete mais de uma lacuna</p>
+                <p className="mb-4 mt-2 text-base leading-relaxed">{act.prompt}</p>
+                <div className="rounded-2xl border border-line bg-surface p-4 font-serif text-lg leading-[2.4]" aria-label="Frase com lacunas">
+                  {act.sentence.split('___').map((part, i, parts) => (
+                    <span key={`${i}-${part}`}>
+                      {part}
+                      {i < parts.length - 1 && (
+                        <label className="mx-1 inline-flex align-middle">
+                          <span className="sr-only">{'Palavra ausente ' + (i + 1)}</span>
+                          <select
+                            aria-label={'Palavra ausente ' + (i + 1)}
+                            disabled={!!verdict}
+                            value={multiBlankValues[i] ?? ''}
+                            onChange={(e) => setMultiBlankValues((current) => {
+                              const next = [...current];
+                              next[i] = e.target.value;
+                              return next;
+                            })}
+                            className="max-w-[8rem] rounded-lg border-2 border-[#2e7182]/50 bg-[#d6e7e6] px-2 py-1 font-sans text-sm font-semibold text-[#172e34] focus:outline-none focus:ring-2 focus:ring-[#c8402a]"
+                          >
+                            <option value="">Escolher</option>
+                            {act.options.map((option) => (
+                              <option key={option} value={option} disabled={multiBlankValues.some((selected, slot) => slot !== i && selected === option)}>{option}</option>
+                            ))}
+                          </select>
+                        </label>
+                      )}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-3 text-sm text-muted">Use cada palavra uma vez. As opções incluem termos parecidos de outras definições.</p>
+              </>
+            )}
+
             {act.kind === 'term' && (
               <>
                 <p className="text-sm font-semibold text-muted">Qual é o termo?</p>
@@ -426,7 +469,7 @@ function PracticeRun() {
           {/* Painel de resposta */}
           {act.kind !== 'pairs' && !verdict && (
             <div className="mt-4 shrink-0 bg-bg pb-2 pt-2">
-              <button className="btn-primary w-full" disabled={act.kind === 'build' ? sentenceIndexes.length === 0 : value === undefined} onClick={check}>
+              <button className="btn-primary w-full" disabled={act.kind === 'build' ? sentenceIndexes.length === 0 : act.kind === 'multiBlank' ? act.answers.some((_, i) => !multiBlankValues[i]) : value === undefined} onClick={check}>
                 Verificar
               </button>
             </div>
