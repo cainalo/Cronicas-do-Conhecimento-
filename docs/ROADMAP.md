@@ -11,13 +11,14 @@
 | G | App nativo e offline | ✅ Android (Capacitor) com APK no site e modo imersivo (a validar no aparelho); PWA removido a pedido; iOS pendente | Abrir offline e sincronizar após reconexão, testado |
 | H | Testes amplos, expansão para outros concursos | ⬜ | — |
 
-## Próximas entregas, em ordem
-1. ~~Conferir edital oficial~~ ✅ feito em 17/10/2026.
-2. Testar login/sincronização no navegador real.
-3. ~~Grimório de IA, caps. 1 e 2~~ ✅ (falta cap. 3: fundamentos de ML, ética, ciência de dados).
-4. Grimório de Desenvolvimento de Sistemas (5 questões).
-4. Flashcards com repetição espaçada ligados aos capítulos.
-5. Service worker (vite-plugin-pwa) para leitura offline.
+## Próximas entregas, em ordem (atualizado em 26/10/2026)
+1. **Validar a integração recente:** confirmar em GitHub Actions `npm test`, `npm run build`, `npm run test:e2e` e a compilação Gradle do APK. O resultado da execução mais recente ainda não está confirmado nesta sessão.
+2. **Validar em aparelho real:** abrir a versão publicada no Galaxy A14; conferir modo imersivo, barras do Android, botões inferiores, trilha, aula narrada, videoaula, posts dos professores, flashcards e retomada do progresso.
+3. **Fechar DevOps 02:** revisão editorial humana das 7 microaulas de IaC/contêineres/Kubernetes e observabilidade; corrigir os pontos levantados e só então marcar o conteúdo como validado.
+4. **Continuar a trilha com cap.ia.02**, depois cap.ia.04 e cap.ingles.01, um trecho por vez, incluindo história verificável, explicação progressiva, checagens, recuperação, prática variada e validação mobile.
+5. **Validar Auth/sincronização reais** no navegador ou aparelho, incluindo redirecionamentos do Supabase e recuperação de dados; manter cópia de segurança antes de testar reinício do progresso.
+6. **Curadoria e provas oficiais:** confirmar manualmente os vídeos antes de marcá-los como recomendados e obter PDFs/gabaritos oficiais TCE-GO e normativos ainda pendentes.
+7. **Release Android:** configurar/confirmar uma chave de assinatura estável antes de publicar APKs a partir da `main`; não alternar para uma chave diferente sem planejar a transição para quem já instalou o app.
 
 ## Feito em 17/10 (pedido "do zero")
 - Explicação simples por trecho, tela Aprender, grimório introdutório, livro de couro com virada por dobra. Próximo: ouvir o usuário sobre a clareza das explicações e ajustar o tom; revisar a camada simples com olhar humano.
