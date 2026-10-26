@@ -1,3 +1,13 @@
+### Como surgiram a IaC, os contêineres e a orquestração
+
+No fim dos anos 2000, a expressão **Infrastructure as Code (IaC)** ganhou espaço junto às práticas DevOps: em vez de depender de passos manuais, a infraestrutura passou a ser descrita, versionada e aplicada por ferramentas. A ideia é poder revisar mudanças e recriar ambientes de forma mais consistente.
+
+Em **março de 2013**, Solomon Hykes apresentou o Docker na PyCon, ajudando a tornar a criação e a execução de contêineres Linux mais acessíveis. Ainda faltava coordenar muitas instâncias de aplicações em conjunto.
+
+O projeto Kubernetes teve seu marco inicial em **6 de junho de 2014**, foi anunciado publicamente naquele mês e chegou à versão **1.0 em 21 de julho de 2015**. Ele automatiza tarefas como implantação, escala e recuperação de aplicações contêinerizadas.
+
+Fontes de história: [Infrastructure as Code — O’Reilly](https://www.oreilly.com/library/view/infrastructure-as-code/9781098150341/preface01.html) e [10 anos de Kubernetes — documentação oficial](https://kubernetes.io/blog/2024/06/06/10-years-of-kubernetes/).
+
 ### Infraestrutura como código (IaC)
 
 Descrever servidores, redes, bancos e permissões em **arquivos versionados**, aplicados por ferramentas, em vez de configurar à mão. Benefícios: **reprodutibilidade** (o mesmo código cria ambientes idênticos), revisão por *pull request*, histórico, menos erros manuais e recuperação rápida.

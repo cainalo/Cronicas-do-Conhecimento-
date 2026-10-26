@@ -1,8 +1,16 @@
-# Estado do projeto (atualizado em 2026-10-17)
+# Estado do projeto (atualizado em 2026-10-26)
 
 ## Funciona e foi testado
 - **25/10 (noite):** série piloto com história em cap.prim.01 / computador; aula narrada e vídeo dentro da aula; feed com perfis, revisões rápidas e comentários; Escritório 2D em tela cheia (mapa novo, 4 direções). Testes automáticos e capturas em 390 e 1280 px.
 - **Pacote v4 (25/10/2026):** Conta em áreas, sons para estudar, reinício seguro do progresso (testado com servidor simulado), Hoje editorial, sem telas de RPG, escritório 2D, aula narrada, feed curricular. Detalhes em `docs/V4_EXECUCAO.md`.
+
+## Mudanças de 26/10 na main — validação pendente
+- A implementação do Claude foi integrada por PR #3 no commit [4517633](https://github.com/cainalo/Cronicas-do-Conhecimento-/commit/4517633ea243189b754fe494382004c23fe65a25), preservando as correções recentes de narração, feed e layout da trilha.
+- **Cap. DevOps 02 — Plataforma e Observabilidade:** foram adicionadas 7 microaulas em `src/content/micro/devops-plataforma.ts` (4 de IaC/contêineres/Kubernetes e 3 de observabilidade), registradas na trilha por `src/content/index.ts`. Os textos completos agora têm introduções históricas e referências técnicas.
+- Adicionado `src/test/devops-platform.test.ts` para conferir a ordem das sete aulas, existência de capítulos/seções, estrutura das etapas, diversidade das consolidações e coerência das questões.
+- **Ainda não declarar pronto:** a revisão editorial humana, o resultado do CI dessa rodada, a verificação E2E e a compilação/publicação do APK ainda precisam de confirmação. A conectividade desta sessão não forneceu o resultado dos Actions para o commit mais recente.
+- A publicação pela `main` depende da assinatura Android fixa (`ANDROID_KEYSTORE_BASE64` e segredos associados). Sem ela, o workflow pode testar e compilar, mas a etapa de publicação é deliberadamente ignorada para evitar incompatibilidade de assinatura em instalações existentes.
+
 | Fonte única do próximo passo e retomada exata (Aprender, Prática, Desafio, Missão, Microaula) | `checkpoint.test.ts`, `flow.test.tsx` |
 | Microaula-piloto Processos, memória e serviços (15 etapas com checagem e recuperação) | `micro.test.ts`, `flow.test.tsx`, captura 390×844 |
 | Ordem do dia seguindo a trilha única (mesmo destino do Continuar, nada concluído como próximo) | `planner.test.ts` |

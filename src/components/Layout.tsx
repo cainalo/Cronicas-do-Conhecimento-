@@ -89,12 +89,13 @@ export function Layout() {
   const navigate = useNavigate();
   useTrailVisit();
   const inner = !isAreaHome(pathname);
-  // Leitura e prática ocupam a tela toda, como as lições do Duolingo (sem a barra inferior).
-  const immersive = /^\/(capitulo|aprender|pratica|licao|missao)\//.test(pathname);
+  // Leitura/prática ocultam a navegação inferior; aula narrada standalone ocupa a viewport inteira.
+  const standaloneNarration = /^\/aula-narrada\//.test(pathname);
+  const immersive = standaloneNarration || /^\/(capitulo|aprender|pratica|licao|missao)\//.test(pathname);
   const onAccount = areaOf(pathname) === 'conta';
   return (
-    <div className="flex min-h-dvh flex-col">
-      <header className="wood-bar wood-bar-top safe-top sticky top-0 z-30">
+    <div className={standaloneNarration ? "h-dvh overflow-hidden" : "flex min-h-dvh flex-col"}>
+      {!standaloneNarration && <header className="wood-bar wood-bar-top safe-top sticky top-0 z-30">
         <div className="relative mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
           <div className="flex min-w-[2.5rem] items-center gap-1">
             {inner ? (
@@ -140,10 +141,10 @@ export function Layout() {
             </Link>
           </div>
         </div>
-      </header>
+      </header>}
 
-      <main className={`mx-auto w-full flex-1 px-4 sm:px-6 ${/^\/(capitulo|aprender)\//.test(pathname) ? 'max-w-3xl lg:max-w-6xl' : 'max-w-3xl'} ${immersive ? 'pb-3 pt-4' : 'pb-32 pt-5 lg:pb-12'}`}>
-        <div key={pathname} className="page-enter">
+      <main className={standaloneNarration ? 'h-dvh min-h-0 w-full overflow-hidden p-0' : `mx-auto w-full flex-1 px-4 sm:px-6 ${/^\/(capitulo|aprender)\//.test(pathname) ? 'max-w-3xl lg:max-w-6xl' : 'max-w-3xl'} ${immersive ? 'pb-3 pt-4' : 'pb-32 pt-5 lg:pb-12'}`}>
+        <div key={pathname} className={standaloneNarration ? 'h-full min-h-0 w-full' : 'page-enter'}>
           <Outlet />
         </div>
       </main>

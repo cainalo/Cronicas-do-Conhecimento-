@@ -204,6 +204,7 @@ import { esModHistoria, esModUml, esModBpmn, esModPadroes } from './micro/es-mod
 import { esQuaHistoria, esQuaAtributos, esQuaTestes, esQuaRefatoracao } from './micro/es-qualidade';
 import { dvGitHistoria, dvGitComandos, dvGitBranches, dvGitPr } from './micro/devops-git';
 import { dvCiHistoria, dvCiPipeline, dvCiAmbientes, dvCiFerramentas } from './micro/devops-cicd';
+import { dvIacHistoria, dvIacDeclarativa, dvIacContainers, dvIacKubernetes, dvObsHistoria, dvObsSlo, dvObsAlertas } from './micro/devops-plataforma';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -396,6 +397,13 @@ export const microLessons: MicroLesson[] = [
   dvCiPipeline,
   dvCiAmbientes,
   dvCiFerramentas,
+  dvIacHistoria,
+  dvIacDeclarativa,
+  dvIacContainers,
+  dvIacKubernetes,
+  dvObsHistoria,
+  dvObsSlo,
+  dvObsAlertas,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,
@@ -468,7 +476,7 @@ import { postsOfLesson, type FeedPost } from '@/lib/feed';
 import type { TrailExtras } from '@/lib/pace';
 import { teacherPosts as _tips } from './teachers';
 import { curatedVideos as _videos } from './estudos/materiais';
-import { realImages } from './estudos/imagens';
+import { feedImages } from './estudos/imagens';
 /** Aulas do feed, na ordem da trilha (capítulos, trechos e aulas da série). */
 export const feedLessons: MicroLesson[] = journey.flatMap((c) => c.sections.flatMap((s) => microSeries(c.id, s.id)));
 const feedCache = new Map<string, FeedPost[]>();
@@ -485,7 +493,7 @@ export function feedPostsOf(lessonId: string): FeedPost[] {
         narrated: narratedFor(m.id),
         // Dicas do trecho entram no fim da última aula dele (tudo o que citam já foi ensinado).
         tips: last ? _tips.filter((t) => t.chapterId === m.chapterId && t.sectionId === m.sectionId) : [],
-        images: realImages,
+        images: feedImages,
       }),
     );
   }

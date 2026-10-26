@@ -238,10 +238,10 @@ function PracticeRun() {
     setQueue(q);
   };
 
-  const exit = () => navigate(`/grimorio/${chapter.grimoireId}`);
+  const exit = () => navigate('/trilha');
 
   return (
-    <div className="-mt-2 flex min-h-[calc(100dvh-5.5rem)] flex-col">
+    <div className="-mt-2 flex min-h-0 flex-col overflow-hidden" style={{ height: "calc(100dvh - 5.5rem - env(safe-area-inset-top, 0px))" }}>
       {/* Topo: sair, progresso e sequência */}
       <div className="mb-4 flex items-center gap-3">
         <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={exit} aria-label="Sair da prática">
@@ -284,9 +284,9 @@ function PracticeRun() {
       )}
 
       {phase === 'intro' && (
-        <div className="flex flex-1 flex-col">
+        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain">
           <div className="mb-3">
-            <StepGuide chapterId={chapterId} sectionId={sectionId} current="praticar" open />
+            <StepGuide chapterId={chapterId} sectionId={sectionId} current="praticar" compact />
           </div>
           <p className="rubric text-sm font-semibold">{chapter.title}</p>
           <h1 className="text-2xl leading-tight">Prática: {section.title.replace(/^\d+\.\s*/, '')}</h1>
@@ -311,8 +311,8 @@ function PracticeRun() {
       )}
 
       {phase === 'play' && act && (
-        <div className="flex flex-1 flex-col">
-          <div key={act.id + queue.length} className="anim-tile-in flex-1">
+        <div className="flex min-h-0 flex-1 flex-col">
+          <div key={act.id + queue.length} className="anim-tile-in min-h-0 flex-1 overflow-y-auto overscroll-contain pb-2">
             {act.kind === 'tf' && (
               <>
                 <p className="text-sm font-semibold text-muted">Verdadeiro ou falso?</p>
@@ -367,14 +367,14 @@ function PracticeRun() {
 
           {/* Painel de resposta */}
           {act.kind !== 'pairs' && !verdict && (
-            <div className="sticky bottom-0 mt-4 bg-bg pb-2 pt-2">
+            <div className="mt-4 shrink-0 bg-bg pb-2 pt-2">
               <button className="btn-primary w-full" disabled={value === undefined} onClick={check}>
                 Verificar
               </button>
             </div>
           )}
           {verdict && (
-            <div className={`anim-toast-in sticky bottom-0 -mx-4 mt-4 rounded-t-[1.6rem] px-4 pb-4 pt-4 sm:-mx-6 sm:px-6 ${verdict.ok ? 'bg-[#dcefd8] text-[#1f4d1c]' : 'bg-[#f6d9d2] text-[#6b1f12]'}`} role="status">
+            <div className={`anim-toast-in -mx-4 mt-4 shrink-0 rounded-t-[1.6rem] px-4 pb-4 pt-4 sm:-mx-6 sm:px-6 ${verdict.ok ? 'bg-[#dcefd8] text-[#1f4d1c]' : 'bg-[#f6d9d2] text-[#6b1f12]'}`} role="status">
               <p className="flex items-center gap-2 text-lg font-bold">
                 <Icon name={verdict.ok ? 'certo' : 'errado'} size={22} strokeWidth={2.6} /> {verdict.title}
               </p>
@@ -393,7 +393,7 @@ function PracticeRun() {
       )}
 
       {phase === 'done' && (
-        <div className="flex flex-1 flex-col items-center text-center">
+        <div className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto overscroll-contain text-center">
           <div className="flex items-end gap-2">
             <Mascot mood={score >= 70 ? 'cheer' : 'talk'} size={104} />
             <SpeechBubble className="anim-toast-in mb-10 max-w-[15rem] text-left">

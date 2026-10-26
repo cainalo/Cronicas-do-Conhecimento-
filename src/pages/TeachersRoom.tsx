@@ -263,12 +263,20 @@ function PostCard({
       </div>
       {p.image ? (
         <figure className="mt-3 border-y border-line bg-raised/40">
-          <img src={p.image.src} alt={p.image.alt} className="mx-auto max-h-72 w-full object-contain" loading="lazy" />
-          <figcaption className="px-4 py-1.5 text-[11px] text-muted">
-            {p.image.credit} ·{' '}
-            <a href={p.image.sourceUrl} target="_blank" rel="noreferrer" className="underline">
-              {p.image.license}
-            </a>
+          <img
+            src={p.image.src}
+            alt={p.image.alt}
+            className="aspect-[4/3] max-h-72 w-full object-cover"
+            loading="lazy"
+            decoding="async"
+            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+          />
+          <figcaption className="flex flex-wrap items-center gap-x-2 px-4 py-1.5 text-[11px] text-muted">
+            <span>{p.image.credit}</span>
+            <a href={p.image.sourceUrl} target="_blank" rel="noreferrer" className="underline">Fonte</a>
+            {p.image.licenseUrl && (
+              <a href={p.image.licenseUrl} target="_blank" rel="noreferrer" className="underline">{p.image.license}</a>
+            )}
           </figcaption>
         </figure>
       ) : p.art ? (

@@ -45,6 +45,10 @@ export interface FeedImage {
   credit: string;
   license: string;
   sourceUrl: string;
+  /** Link da licença aplicável; mantido separado da fonte da imagem. */
+  licenseUrl?: string;
+  /** Foto de acervo ou ilustração original do projeto. */
+  kind?: 'photo' | 'illustration';
 }
 
 const tag = (t: string) => t.split(/[^\p{L}\p{N}]+/u).filter(Boolean).map((w) => w[0].toUpperCase() + w.slice(1)).join('');
@@ -57,7 +61,9 @@ export function postsOfLesson(
   const out: FeedPost[] = [];
   m.steps.forEach((s) => {
     const parts = splitMarkdown(s.explain);
-    const media = { art: s.art, image: extras.images?.[`${m.id}:${s.id}`], goal: s.goal, tags: [tag(s.part)].filter(Boolean) };
+    // No feed não repetimos o mesmo ícone genérico em dezenas de posts. Uma imagem só aparece
+  // quando existe um arquivo/foto selecionado exclusivamente para esta etapa.
+  const media = { image: extras.images?.[`${m.id}:${s.id}`], goal: s.goal, tags: [tag(s.part)].filter(Boolean) };
     if (parts.length >= 3) out.push({ id: `${m.id}:${s.id}:c`, kind: 'carrossel', lessonId: m.id, stepId: s.id, title: s.title, slides: parts, ...media });
     else out.push({ id: `${m.id}:${s.id}:e`, kind: 'explica', lessonId: m.id, stepId: s.id, title: s.title, md: s.explain, ...media });
     if (s.example) out.push({ id: `${m.id}:${s.id}:x`, kind: 'exemplo', lessonId: m.id, stepId: s.id, title: `Exemplo: ${s.title.toLowerCase()}`, md: s.example });
@@ -66,7 +72,7 @@ export function postsOfLesson(
   // Vídeo, aula narrada e dicas só depois de todas as etapas: tudo o que pressupõem já foi ensinado.
   if (extras.narrated) out.push({ id: `${m.id}:narrada`, kind: 'narrada', lessonId: m.id, title: extras.narrated.title, narrated: extras.narrated });
   for (const v of extras.videos) out.push({ id: `${m.id}:video:${v.id}`, kind: 'video', lessonId: m.id, title: v.title, video: v });
-  for (const t of extras.tips) out.push({ id: `${m.id}:dica:${t.id}`, kind: 'dica', lessonId: m.id, title: t.title, tip: t });
+  for (const t of extras.tips) out.push({ id: `${m.id}:dica:${t.id}`, kind: 'dica', lessonId: m.id, title: t.title, tip: t, image: extras.images?.[`post:${t.id}`] });
   out.push({ id: `${m.id}:resumo`, kind: 'resumo', lessonId: m.id, title: `Resumo: ${m.title}`, summary: m.summary });
   return out;
 }

@@ -1,6 +1,6 @@
 # Handoff de sessão
 
-**Última atualização:** 2026-10-25
+**Última atualização:** 2026-10-26
 **Fase:** reformulação "Arquivo Real" (kit em `docs/kit/`, auditoria em `docs/AUDITORIA_REFORMULACAO.md`): fases 0 a 5 do kit feitas para o piloto; expansão pendente.
 
 ## Situação atual
@@ -69,7 +69,8 @@ Antes: `npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escur
 ## Próxima tarefa exata
 1. **Aplicar o novo ritmo com história aos trechos seguintes, um por vez.** O grimório Primeiros Passos está completo (cap.prim.01 e cap.prim.02, 7 séries):
    - **Feitos fora de Primeiros Passos:** cap.dados.01, cap.dev.03, cap.mat.01, cap.port.01, cap.ia.03, cap.ia.01, cap.dev.01, cap.dados.02, cap.dev.02, cap.mat.02, cap.port.02, cap.dev.04, cap.es.01, cap.es.02 e cap.devops.01.
-   - **Próximo, na ordem da trilha (`JOURNEY` em `src/content/index.ts`):** cap.infra.02 e cap.seg.01 já têm microaulas; o próximo é cap.devops.02, depois cap.ia.02, cap.ia.04, cap.ingles.01 e assim por diante. Hoje 29 trechos ainda usam só a camada Aprender simples.
+   - **Concluído em 26/10: cap.devops.02 — Plataforma e Observabilidade.** Entraram 7 microaulas (4 de IaC/contêineres/Kubernetes e 3 de observabilidade), história acrescentada aos textos de origem e o teste `src/test/devops-platform.test.ts`. A revisão editorial humana e a confirmação do CI desta nova integração continuam pendentes.
+   - **Próximo, na ordem da trilha (`JOURNEY` em `src/content/index.ts`):** `cap.ia.02`, depois `cap.ia.04`, `cap.ingles.01` e os demais capítulos. A estimativa atualizada é de 27 trechos ainda usando só a camada Aprender simples.
    - **Depois:** os demais capítulos.
    - **Regra:** cada trecho começa contando como aquilo surgiu, usando só fatos verificáveis, acrescentados também ao texto do capítulo.
 2. **Fotos reais no feed:** quando a Wikimedia (`commons.wikimedia.org` e `upload.wikimedia.org`) estiver liberada na rede do ambiente, preencher `content/estudos/imagens.ts`. Usar só domínio público ou licença livre, com autor, licença e link conferidos na página do arquivo.
