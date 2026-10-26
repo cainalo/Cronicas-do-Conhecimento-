@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { chapters, getChapter } from '@/content';
 import type { Chapter } from '@/content/types';
@@ -117,6 +117,17 @@ export function ReviewSlidesPage() {
   const current = slides[Math.min(index, Math.max(0, slides.length - 1))];
   const windowStart = Math.max(0, Math.min(index - 2, slides.length - 5));
   const visibleDots = slides.slice(windowStart, windowStart + 5);
+
+  useEffect(() => {
+    const bodyOverflow = document.body.style.overflow;
+    const rootOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = bodyOverflow;
+      document.documentElement.style.overflow = rootOverflow;
+    };
+  }, []);
 
   if (!chapter || !current) return <p>Não foi possível carregar as lâminas de revisão deste capítulo.</p>;
   const previous = () => setIndex((i) => Math.max(0, i - 1));
