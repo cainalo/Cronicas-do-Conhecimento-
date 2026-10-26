@@ -5,6 +5,8 @@
 import type { FeedImage } from '@/lib/feed';
 
 const LICENSE = 'https://unsplash.com/license';
+// Respeita a base do Vite em GitHub Pages (subcaminho) e no app nativo.
+const BASE_URL = import.meta.env.BASE_URL;
 const image = (
   src: string,
   alt: string,
@@ -18,7 +20,7 @@ const image = (
 export const feedImages: Record<string, FeedImage> = {
   // Ilustrações originais criadas para o projeto, guardadas localmente para funcionar sem internet.
   'prim.computador.1:abaco': image(
-    '/images/feed/estudo-em-equipe.webp',
+    `${BASE_URL}images/feed/estudo-em-equipe.webp`,
     'Ilustração editorial de pessoas estudando e trabalhando juntas',
     'Ilustração original do Crônicas do Conhecimento',
     'illustration',
@@ -27,7 +29,7 @@ export const feedImages: Record<string, FeedImage> = {
     'Arte original do projeto',
   ),
   'mat.inteiros.1:reta': image(
-    '/images/feed/planejamento-visual.webp',
+    `${BASE_URL}images/feed/planejamento-visual.webp`,
     'Ilustração editorial de uma pessoa organizando anotações de estudo',
     'Ilustração original do Crônicas do Conhecimento',
     'illustration',
