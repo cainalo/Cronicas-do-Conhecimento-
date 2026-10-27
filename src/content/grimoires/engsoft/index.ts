@@ -91,7 +91,7 @@ export const licoesEngSoft: Lesson[] = [
   {
     id: 'lic.es.01',
     chapterId: 'cap.es.01',
-    title: 'O Ofício dos Construtores',
+    title: 'Processos de Engenharia de Software',
     goal: 'Ciclos de vida, Kanban, Lean, XP e TDD; requisitos, histórias INVEST, critérios de aceite e casos de uso.',
     cards: [
       { title: 'Ciclos e métodos', body: '**Iterativo** refina; **incremental** acrescenta. Espiral = riscos.\n\nKanban: **limite de WIP**, fluxo. Lean: eliminar desperdício. XP: par, **TDD**, integração contínua, refatoração.' },
