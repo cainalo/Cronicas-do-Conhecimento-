@@ -100,7 +100,7 @@ export const licoesGovernanca: Lesson[] = [
   {
     id: 'lic.gov.02',
     chapterId: 'cap.gov.02',
-    title: 'O Tesouro e a Praça',
+    title: 'Governança e Serviços Públicos',
     goal: 'Fases da contratação de TIC, ETP e TR, modalidades, pagamento por resultado, Lei do Governo Digital e ENGD.',
     cards: [
       { title: 'Contratar TIC', body: '**ETP** (problema e solução) → **TR** (objeto e medição) → seleção → gestão.\n\nBens comuns: **pregão**. Inovação: **diálogo competitivo**. Pague por **resultado**, não por hora.' },
