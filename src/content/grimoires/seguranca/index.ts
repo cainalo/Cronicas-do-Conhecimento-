@@ -134,7 +134,7 @@ export const licoesCap02: Lesson[] = [
   {
     id: 'lic.seg.02.b',
     chapterId: 'cap.seg.02',
-    title: 'Muralhas, Cópias e Normas',
+    title: 'Controles, Continuidade e Normas',
     goal: 'Malware, engenharia social, IDS/IPS, pentest, backup, continuidade e ISO 27000.',
     cards: [
       { title: 'Ameaças', body: 'Vírus precisa de hospedeiro; **worm** anda sozinho. Spear phishing é direcionado.\n\n**IDS** detecta; **IPS** bloqueia. Caixa preta, cinza e branca.' },
