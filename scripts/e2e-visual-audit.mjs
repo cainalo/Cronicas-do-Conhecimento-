@@ -17,6 +17,13 @@ const VIEWPORTS = [
   { width: 1280, height: 800, id: '1280x800' },
 ];
 const THEMES = ['light', 'dark'];
+const CHAPTERS = [
+  'cap.prim.01', 'cap.prim.02', 'cap.seg.01', 'cap.seg.02', 'cap.ia.01', 'cap.ia.02', 'cap.ia.03', 'cap.ia.04',
+  'cap.dev.01', 'cap.dev.02', 'cap.dev.03', 'cap.dev.04', 'cap.infra.01', 'cap.infra.02', 'cap.infra.03',
+  'cap.dados.01', 'cap.dados.02', 'cap.gov.01', 'cap.gov.02', 'cap.leg.01', 'cap.leg.02', 'cap.es.01', 'cap.es.02',
+  'cap.devops.01', 'cap.devops.02', 'cap.ingles.01', 'cap.ingles.02', 'cap.port.01', 'cap.port.02',
+  'cap.inst.01', 'cap.inst.02', 'cap.mat.01', 'cap.mat.02',
+];
 const ROUTES = [
   '/', '/trilha', '/explorar', '/biblioteca', '/estudos', '/revisar', '/progresso', '/edital',
   '/conta', '/conta/acesso', '/conta/sincronizacao', '/conta/aparencia', '/conta/sons', '/conta/dados', '/conta/sobre', '/conta/tela',
@@ -26,6 +33,7 @@ const ROUTES = [
   '/escritorio', '/simulador', '/simulador/suporte-lento', '/aula-narrada/narrada.prim.historia',
   '/video/yt-YJyY6A_MOQc', '/download',
   '/conta/dados?qa=1',
+  ...CHAPTERS.map((id) => '/capitulo/' + id),
 ];
 
 const slug = (s) => s.replace(/[^a-zA-Z0-9-]+/g, '-').replace(/^-|-$/g, '').slice(0, 110) || 'home';
