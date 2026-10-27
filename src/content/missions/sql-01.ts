@@ -134,7 +134,7 @@ export const missaoSql01: Mission = {
         start: { select: ['id', 'valor'], from: 'empenho', where: [{ col: 'status', op: '=', value: null }] },
         expected: { select: ['id', 'valor'], from: 'empenho', where: [{ col: 'status', op: 'IS NULL' }] },
         hints: ['Rode a consulta como está. O que vem?', 'Comparar com "= NULL" nunca é verdadeiro. Troque o operador.', 'Use o operador IS NULL.'],
-        explain: 'Achado: dois empenhos de 2026, R$ 95.000 e R$ 87.000, estão sem conferência. A lista do Tesoureiro veio vazia por causa do "= NULL".',
+        explain: 'Achado: dois empenhos de 2026, R$ 95.000 e R$ 87.000, estão sem conferência. A lista do solicitante do relatório veio vazia por causa do "= NULL".',
       },
       {
         id: 'l3',
