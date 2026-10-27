@@ -260,7 +260,7 @@ function PracticeRun() {
   const exit = () => { session.finish(); navigate('/trilha'); };
 
   return (
-    <div className="-mt-2 flex min-h-0 flex-col overflow-hidden" style={{ height: "calc(100dvh - 5.5rem - env(safe-area-inset-top, 0px))" }}>
+    <div className="flex min-h-0 flex-col overflow-hidden" style={{ height: "calc(100dvh - 1.75rem - env(safe-area-inset-top, 0px))" }}>
       {/* Topo: sair, progresso e sequência */}
       <div className="mb-4 flex items-center gap-3">
         <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={exit} aria-label="Sair da prática">
