@@ -1,7 +1,6 @@
-// Leitor de texto interativo (reformulação, Fase 2; spec 09). A unidade é lida como página, com
-// rolagem natural: cada etapa aparece abaixo da anterior depois da checagem. Termos em negrito que
-// representam conceitos já apresentados abrem a definição numa folha (sem mudar o checkpoint). Errou a
-// checagem? Vem outra explicação e uma atividade equivalente; depois, volta-se exatamente ao ponto.
+// Unidade de estudo interativa, em fluxo vertical contínuo: cada etapa aparece depois da checagem.
+// Termos em negrito abrem um cartão explicativo sem alterar o ponto salvo. Em caso de erro, vem uma
+// explicação alternativa e uma atividade equivalente antes de retomar a etapa.
 // O ponto salvo é a etapa (stepId), na mesma chave do Aprender, então o Continuar volta aqui.
 import { Portal } from '@/components/Portal';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';

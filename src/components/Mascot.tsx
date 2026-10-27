@@ -6,7 +6,7 @@ import { Illustration, type IllustrationName } from '@/components/Illustration';
 
 export type MascotMood = 'idle' | 'talk' | 'cheer' | 'sad' | 'think';
 
-const MOOD_ART: Record<MascotMood, IllustrationName> = { idle: 'livro', talk: 'professores', cheer: 'alvo', sad: 'revisao', think: 'revisao' };
+const MOOD_ART: Record<MascotMood, IllustrationName> = { idle: 'computador', talk: 'professores', cheer: 'alvo', sad: 'revisao', think: 'revisao' };
 
 export function Mascot({ mood = 'idle', size = 96, className = '' }: { mood?: MascotMood; size?: number; className?: string }) {
   // Ilustração proporcional ao espaço que o mascote ocupava (altura ~ 3/4 do tamanho antigo).

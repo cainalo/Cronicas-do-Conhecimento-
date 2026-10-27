@@ -1,6 +1,6 @@
-// Aprender: a porta de entrada de cada trecho, para quem está começando do zero. Um livrinho de
-// poucas páginas curtas (uma ideia por página), as palavras novas, três verificações fáceis e,
-// no fim, o convite para praticar. O texto completo fica para depois, como aprofundamento.
+// Aprender: porta de entrada de cada trecho, em etapas curtas e contínuas. Uma ideia por etapa,
+// vocabulário essencial, verificações de compreensão e convite para praticar. O conteúdo completo
+// fica disponível em leitura contínua para aprofundamento.
 import { useEffect, useRef } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';

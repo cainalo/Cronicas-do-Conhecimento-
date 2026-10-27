@@ -23,8 +23,8 @@ const paths = {
   ),
   livro: (
     <>
-      <path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5zM12 6.5v13" />
-      {dot(7.5, 10)}
+      <path d="M6 3.5h9l4 4v13H6zM15 3.5v4h4M9 12h7M9 15.5h7" />
+      {dot(9, 8.5)}
     </>
   ),
   revisar: (
@@ -64,15 +64,17 @@ const paths = {
   // ---- Conteúdo ----
   torre: (
     <>
-      <path d="M4 20.5h16M6 20.5V9h12v11.5M6 9l6-5 6 5M10 20.5v-4h4v4" />
-      {dot(12, 12.5)}
+      <path d="M4 20.5h16M5.5 16h13M8 11h8M10 5.5h4M12 5.5v15" />
+      {dot(8, 8.5)}
+      {dot(16, 8.5)}
     </>
   ),
   grimorio: (
     <>
-      <path d="M5.5 4h11a2 2 0 0 1 2 2v14.5h-11a2 2 0 0 1-2-2zM5.5 18.5a2 2 0 0 1 2-2h11" />
-      <path d="M9 8h6" />
-      {dot(9, 11.2)}
+      <path d="M5 6h14M5 12h14M5 18h14" />
+      <circle cx="3" cy="6" r=".8" fill="currentColor" />
+      <circle cx="3" cy="12" r=".8" fill="currentColor" />
+      <circle cx="3" cy="18" r=".8" fill="currentColor" />
     </>
   ),
   ampulheta: (
@@ -164,9 +166,7 @@ const paths = {
   ),
   pergaminho: (
     <>
-      <path d="M6 3.5h9l4 4v13H6zM15 3.5v4h4" />
-      <path d="M9 12h7M9 15.5h5" />
-      {dot(9, 8.5)}
+      <path d="M6 3.5h9l4 4v13H6zM15 3.5v4h4M9 12h7M9 15.5h5" />
     </>
   ),
   pessoa: (

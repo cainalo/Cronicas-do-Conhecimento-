@@ -1,5 +1,4 @@
-// Peças de página da identidade editorial: cabeçalho com título em serifa e fio que corre, títulos
-// de seção com fio fino, e o cartão-pôster (cor chapada, ilustração em traço, seta que avança).
+// Componentes de interface: cabeçalhos, títulos de seção e cartões coloridos com ilustrações funcionais.
 import { type CSSProperties, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { usePrefs } from '@/app/prefs';
@@ -121,7 +120,7 @@ export function Tile({ to, icon, color, title, text, badge, wide, illustration, 
   // No claro, texto branco sobre a cor; no escuro as cores clareiam e o texto fica escuro.
   const fg = dark ? 'rgb(var(--bg))' : '#ffffff';
   const style: CSSProperties = { background: color, color: fg, ['--tile' as string]: color };
-  const art = illustration ?? ICON_ART[icon] ?? 'livro';
+  const art = illustration ?? ICON_ART[icon] ?? 'computador';
   return (
     <div className={`anim-tile-in ${wide ? 'col-span-2' : ''}`} style={{ animationDelay: `${Math.min(index ?? 0, 12) * 70}ms` }}>
       <Link to={to} className="tile-color group relative flex h-full min-h-[11.75rem] flex-col items-start overflow-hidden rounded-[10px] p-4 text-left" style={style}>

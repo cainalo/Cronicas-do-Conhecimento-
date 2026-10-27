@@ -71,16 +71,6 @@ const ART = {
     ),
     accent: <rect x="124" y="60" width="20" height="15" />,
   },
-  livro: {
-    draw: (
-      <>
-        <path {...L} d="M80 34c-12-8-30-10-50-8v64c20-2 38 0 50 8 12-8 30-10 50-8V26c-20-2-38 0-50 8z" />
-        <path {...L} d="M80 34v64" />
-        <path {...L} d="M40 44h28M40 53h24M40 62h28M40 71h18M92 44h24M92 53h28M92 62h20" />
-      </>
-    ),
-    accent: <path d="M106 24v20l5-3.5 5 3.5V24z" />,
-  },
   balanca: {
     draw: (
       <>
@@ -313,7 +303,7 @@ const ART = {
   },
 } satisfies Record<string, Art>;
 
-export type IllustrationName = keyof typeof ART;
+export type IllustrationName = keyof typeof ART | 'livro';
 
 /** Ilustração de assunto: escolhe pelo id da disciplina, do capítulo ou do tópico. */
 export function illustrationFor(id: string): IllustrationName {
@@ -326,7 +316,7 @@ export function illustrationFor(id: string): IllustrationName {
   if (/infra|so\b|sistema|diretorio|processo/.test(s)) return 'computador';
   if (/dev|program|algorit|engenharia|software/.test(s)) return 'suporte';
   if (/gest|govern|aquisic|projeto|itil|cobit/.test(s)) return 'calendario';
-  return 'livro';
+  return 'computador';
 }
 
 export function Illustration({
@@ -345,7 +335,7 @@ export function Illustration({
   label?: string;
   animate?: boolean;
 }) {
-  const a = ART[name];
+  const a = name === 'livro' ? ART.computador : ART[name];
   return (
     <svg
       viewBox="0 0 160 124"
