@@ -1,6 +1,6 @@
-// Aulas narradas da série "O que é um computador" (cap.prim.01): o mesmo conteúdo das aulas em
-// texto prim.computador.1 (história) e prim.computador.2 (quatro tarefas), em cenas com voz. Entram
-// na própria aula, antes da prática (sequência única, 25/10/2026). Revisão editorial humana: pendente.
+// Aulas narradas da série "O que é um computador" (cap.prim.01).
+// Roteiro revisado para separar contexto histórico, contribuição e consequência técnica.
+// Revisão editorial humana: pendente até validação no player e leitura por especialista.
 import type { NarratedLesson } from './types';
 
 const S = { chapterId: 'cap.prim.01', sectionId: 'computador', review: 'nao-revisado' } as const;
@@ -10,104 +10,149 @@ export const narradaHistoriaComputador: NarratedLesson = {
   id: 'narrada.prim.historia',
   title: 'Do ábaco ao celular',
   lessonId: 'prim.computador.1',
-  minutes: 7,
+  minutes: 8,
   scenes: [
     {
       id: 'abertura',
-      heading: 'Nesta aula',
-      visual: { kind: 'title', title: 'Do ábaco ao celular', subtitle: 'como o computador surgiu e foi melhorando', art: 'computador' },
+      heading: 'Uma história feita de muitas ideias',
+      visual: { kind: 'title', title: 'Do ábaco ao celular', subtitle: 'como a computação passou de contas manuais a máquinas programáveis', art: 'computador' },
       beats: [
-        { say: 'O computador não foi inventado de uma vez. Ele é o resultado de séculos de tentativas de fazer contas mais depressa e sem erro.' },
-        { say: 'Vamos percorrer essa história, do ábaco até o celular no seu bolso.' },
+        { say: 'Quando você toca na tela de um celular, parece que a resposta aparece quase por mágica. Mas cada toque depende de ideias que foram sendo desenvolvidas durante séculos: representar números, automatizar tarefas, guardar instruções e processar sinais elétricos.' },
+        { say: 'Nesta viagem, vamos observar o que mudou em cada etapa e, principalmente, que ideia ela acrescentou. O computador moderno não nasceu de uma única invenção nem de uma única pessoa.' },
       ],
     },
     {
-      id: 'contas',
-      heading: 'Primeiro, as contas',
+      id: 'abaco-pascal',
+      heading: 'Antes da eletricidade: ajudar as pessoas a calcular',
       visual: {
         kind: 'timeline',
         items: [
-          { year: 'Há milhares de anos', title: 'Ábaco', text: 'Contas que deslizam em varetas. Quem pensa é a pessoa.' },
-          { year: '1642', title: 'Máquina de Pascal', text: 'Engrenagens que somam sozinhas. Só sabia somar.' },
-          { year: '1804', title: 'Tear de Jacquard', text: 'Cartões perfurados dizem o que tecer. Nasce a ideia de instrução.' },
+          { year: 'Há milhares de anos', title: 'Ábaco', text: 'Contas móveis ajudam a representar quantidades e a fazer cálculos.' },
+          { year: '1642', title: 'Pascalina', text: 'Engrenagens executam operações aritméticas.' },
+          { year: 'A mudança', title: 'Automatizar', text: 'Uma parte do trabalho passa da mão da pessoa para um mecanismo.' },
         ],
       },
       beats: [
-        { say: 'Há milhares de anos, vários povos usavam o ábaco. As contas ajudavam a não esquecer os números, mas quem pensava era a pessoa.' },
-        { say: 'Em 1642, Blaise Pascal construiu uma máquina de engrenagens que somava sozinha. Era mecânica e só sabia somar.' },
-        { say: 'Em 1804, Joseph-Marie Jacquard criou um tear que seguia cartões perfurados. Trocando os cartões, o mesmo tear tecia outro desenho.' },
+        { say: 'Muito antes dos computadores, diferentes povos usavam instrumentos de cálculo, entre eles o ábaco. Mover as contas ajudava a representar quantidades e a acompanhar uma operação; a pessoa ainda precisava decidir quais passos executar.', show: 1 },
+        { say: 'Em 1642, o matemático francês Blaise Pascal começou a construir a Pascalina, uma calculadora mecânica de engrenagens, para ajudar seu pai no trabalho de cálculo. O mecanismo podia automatizar somas e subtrações, incluindo o transporte de uma casa decimal para a seguinte.', show: 2 },
+        { say: 'O ponto importante não é dizer que o ábaco já era um computador. É perceber uma mudança gradual: primeiro criamos ferramentas para apoiar o cálculo; depois, mecanismos passam a executar algumas operações sem que a pessoa faça cada passo à mão.', show: 3 },
       ],
     },
     {
-      id: 'instrucoes',
-      heading: 'Depois, as instruções',
+      id: 'jacquard',
+      heading: 'Cartões que davam instruções a uma máquina',
       visual: {
         kind: 'timeline',
         items: [
-          { year: 'Década de 1830', title: 'Máquina analítica de Babbage', text: 'Uma parte para fazer contas, outra para guardar números. Nunca terminada.' },
-          { year: '1843', title: 'Ada Lovelace', text: 'Publica o que é considerado o primeiro programa de computador.' },
-          { year: '1890', title: 'Censo de Hollerith', text: 'Máquinas elétricas leem cartões e contam a população. A empresa vira a IBM.' },
+          { year: '1804', title: 'Tear de Jacquard', text: 'Cartões perfurados selecionam o padrão que o tear deve tecer.' },
+          { year: 'A ideia', title: 'Instruções separadas', text: 'Trocar os cartões muda o trabalho sem trocar toda a máquina.' },
         ],
       },
       beats: [
-        { say: 'Charles Babbage imaginou a Máquina Analítica: um projeto mecânico que receberia instruções em cartões perfurados. Ele separava o cálculo, chamado de moinho, do espaço para guardar números, chamado de armazém. A máquina completa nunca foi construída em sua época, mas a arquitetura antecipou ideias usadas nos computadores.', show: 1 },
-        { say: 'Ada Lovelace era uma matemática britânica que estudou o projeto de Babbage. Em 1843, traduziu um texto sobre a máquina e acrescentou notas muito maiores que o original.', show: 2 },
-        { say: 'Em suas notas, descreveu passo a passo como calcular números de Bernoulli com a máquina. Por isso, Ada é frequentemente considerada a primeira programadora, embora a máquina nunca tenha sido construída por completo naquela época.', show: 2 },
-        { say: 'Em 1890, Herman Hollerith usou máquinas elétricas e cartões perfurados para contar a população dos Estados Unidos. A empresa que cresceu a partir do seu trabalho viria a ser conhecida como IBM.', show: 3 },
+        { say: 'Em 1804, o tear associado a Joseph-Marie Jacquard usava cartões perfurados para controlar quais fios seriam levantados durante a tecelagem. Os furos não eram enfeite: cada sequência de cartões ajudava a determinar o padrão produzido no tecido.', show: 1 },
+        { say: 'Ao trocar a sequência de cartões, era possível produzir outro desenho com a mesma máquina. Um tear não era um computador de uso geral, mas mostrou uma ideia importante para a computação: instruções registradas em um meio físico podem controlar uma máquina.', show: 2 },
       ],
     },
     {
-      id: 'eletronico',
-      heading: 'Eletrônico e cada vez menor',
+      id: 'babbage-ada',
+      heading: 'Babbage projetou a máquina; Ada explorou o que ela poderia fazer',
       visual: {
         kind: 'timeline',
         items: [
-          { year: '1946', title: 'ENIAC', text: 'Cerca de 18 mil válvulas, quase 30 toneladas, uma sala inteira.' },
-          { year: '1947', title: 'Transistor', text: 'Um interruptor minúsculo substitui as válvulas.' },
-          { year: '1971', title: 'Microprocessador 4004', text: 'Um processador inteiro num único chip.' },
+          { year: 'Década de 1830', title: 'Máquina Analítica', text: 'Projeto de uma máquina programável com cálculo, armazenamento e cartões.' },
+          { year: '1843', title: 'Notas de Ada Lovelace', text: 'Uma tradução acompanhada de notas extensas sobre a máquina.' },
+          { year: 'O algoritmo', title: 'Números de Bernoulli', text: 'Instruções ordenadas mostram como resolver um problema passo a passo.' },
         ],
       },
       beats: [
-        { say: 'Em 1946, o ENIAC foi apresentado ao público como um computador digital eletrônico de uso geral. Não parecia um computador de mesa: era uma fileira de enormes painéis metálicos que ocupavam uma sala inteira.', show: 1 },
-        { say: 'O ENIAC reunia cerca de dezoito mil válvulas eletrônicas e pesava dezenas de toneladas. Para mudar o programa, a equipe conectava cabos e ajustava interruptores nos painéis; não bastava abrir um arquivo como fazemos hoje.', show: 1 },
-        { say: 'Um grupo de seis mulheres, entre elas Jean Jennings Bartik e Betty Snyder Holberton, aprendeu a programar a máquina e a calcular trajetórias e outros problemas. Por muito tempo, o trabalho dessas programadoras recebeu menos reconhecimento do que merecia.', show: 1 },
-        { say: 'Em 1947 surgiu o transistor, um interruptor elétrico muito menor que uma válvula. Ele consumia menos energia, gerava menos calor e ajudou a tornar os computadores mais compactos e confiáveis.', show: 2 },
-        { say: 'Em 1971, a Intel lançou o 4004, um microprocessador que reunia a unidade central de processamento em um único chip. Esse passo abriu caminho para dispositivos cada vez menores.', show: 3 },
+        { say: 'Charles Babbage, matemático e inventor britânico, projetou a Máquina Analítica na década de 1830. O plano previa cartões perfurados para indicar operações, um “moinho” para fazer cálculos e um “armazém” para guardar números. A máquina completa não chegou a ser construída durante a vida dele.', show: 1 },
+        { say: 'Ada Lovelace era uma matemática britânica que estudou o projeto. Em 1843, ela traduziu um artigo de Luigi Menabrea sobre a Máquina Analítica e acrescentou notas muito mais extensas que o texto original. Essas notas explicavam não apenas a máquina, mas também possibilidades de usar sequências de instruções.', show: 2 },
+        { say: 'Em uma das notas, Ada descreveu um procedimento para calcular números de Bernoulli. Por isso, ela é frequentemente lembrada como a primeira programadora: escreveu um algoritmo pensado para uma máquina de propósito geral, mesmo sem ter uma Máquina Analítica completa para executar o programa.', show: 3 },
       ],
     },
     {
-      id: 'hoje',
-      heading: 'Na mesa e no bolso',
+      id: 'hollerith',
+      heading: 'Cartões perfurados para organizar grandes quantidades de dados',
       visual: {
         kind: 'timeline',
         items: [
-          { year: '1977 e 1981', title: 'Computador pessoal', text: 'Apple II e IBM PC chegam a casas e escritórios.' },
-          { year: 'A partir de 2007', title: 'Smartphone', text: 'Um computador de bolso, com processador, memória, tela e internet.' },
+          { year: '1890', title: 'Censo dos Estados Unidos', text: 'Máquinas tabuladoras leem cartões com dados codificados em furos.' },
+          { year: 'Como funcionava', title: 'Ler e contar', text: 'Pinos fazem contato elétrico através dos furos e avançam contadores.' },
+          { year: 'Décadas depois', title: 'Origem da IBM', text: 'A empresa de Hollerith participou de uma cadeia de fusões empresariais.' },
         ],
       },
       beats: [
-        { say: 'No fim dos anos setenta e nos anos oitenta, máquinas como o Apple II e o IBM PC levaram o computador para casas e escritórios.' },
-        { say: 'A partir de 2007, o celular virou um computador de bolso.' },
+        { say: 'No censo dos Estados Unidos de 1890, Herman Hollerith usou cartões perfurados para representar dados de cada pessoa. A máquina detectava os furos por meio de contatos elétricos e avançava contadores, permitindo tabular informações em muito menos tempo do que a contagem manual.', show: 1 },
+        { say: 'É um bom exemplo de processamento de dados: os cartões representavam as informações, a máquina contava ocorrências e os operadores conferiam os resultados. O sistema não era igual a um computador atual, mas automatizou uma tarefa importante em grande escala.', show: 2 },
+        { say: 'A empresa fundada por Hollerith entrou depois em uma sequência de fusões e mudanças corporativas. Ela foi parte da origem da companhia que, em 1924, adotou o nome IBM. Portanto, não foi uma transformação direta e imediata de uma única empresa para a IBM.', show: 3 },
+      ],
+    },
+    {
+      id: 'eniac',
+      heading: 'O computador eletrônico ocupa uma sala inteira',
+      visual: {
+        kind: 'timeline',
+        items: [
+          { year: '1945', title: 'ENIAC concluído', text: 'Um computador eletrônico digital de propósito geral.' },
+          { year: '1946', title: 'Apresentação pública', text: 'Painéis e circuitos ocupam uma grande sala.' },
+          { year: 'Programação', title: 'Configurar a máquina', text: 'Cabos e interruptores definiam a sequência de operações.' },
+        ],
+      },
+      beats: [
+        { say: 'O ENIAC foi concluído em 1945 e apresentado publicamente em 1946. Era um computador eletrônico digital de propósito geral: usava sinais elétricos e podia realizar diferentes tipos de cálculo. Em vez de uma caixa sobre a mesa, eram painéis enormes instalados em uma sala.', show: 1 },
+        { say: 'O ENIAC usava cerca de 17.468 válvulas eletrônicas, além de muitos outros componentes. Para reconfigurar programas, era necessário ajustar interruptores e conectar cabos; não bastava abrir um arquivo. A máquina consumia muita energia, ocupava espaço e precisava de manutenção cuidadosa.', show: 2 },
+        { say: 'Mulheres treinadas para programar o ENIAC, incluindo Jean Jennings Bartik e Betty Snyder Holberton, ajudaram a transformar os esquemas da máquina em sequências de operações. Por muitos anos, esse trabalho ficou menos conhecido do que o dos engenheiros que construíram o equipamento.', show: 3 },
+      ],
+    },
+    {
+      id: 'transistor-circuito',
+      heading: 'Componentes menores mudam o tamanho das máquinas',
+      visual: {
+        kind: 'timeline',
+        items: [
+          { year: '1947', title: 'Transistor', text: 'Um componente semicondutor pode controlar sinais elétricos.' },
+          { year: '1958–1959', title: 'Circuito integrado', text: 'Vários componentes passam a ser fabricados juntos em um chip.' },
+          { year: 'O efeito', title: 'Menor e mais confiável', text: 'A miniaturização reduz tamanho e consumo em muitas aplicações.' },
+        ],
+      },
+      beats: [
+        { say: 'Em 1947, pesquisadores dos Laboratórios Bell demonstraram o transistor. Assim como uma válvula, ele podia controlar um sinal elétrico, mas era muito menor e podia exigir menos energia. A mudança não aconteceu de um dia para o outro: durante anos, tecnologias antigas e novas coexistiram.', show: 1 },
+        { say: 'No fim da década de 1950, Jack Kilby e Robert Noyce desenvolveram, por caminhos diferentes, circuitos integrados. Em vez de montar cada componente separadamente, partes de um circuito podiam ser fabricadas juntas em uma pequena peça de material semicondutor.', show: 2 },
+        { say: 'A integração tornou possível colocar cada vez mais componentes em menos espaço. Essa miniaturização ajudou a reduzir custo e consumo e preparou o caminho para reunir a unidade central de processamento em um único chip.', show: 3 },
+      ],
+    },
+    {
+      id: 'microprocessador',
+      heading: 'O processador cabe em um chip',
+      visual: {
+        kind: 'timeline',
+        items: [
+          { year: '15 de novembro de 1971', title: 'Intel 4004', text: 'Primeiro microprocessador comercialmente disponível, de 4 bits.' },
+          { year: '1977', title: 'Apple II', text: 'Computadores pessoais chegam a mais casas, escolas e empresas.' },
+          { year: '1981', title: 'IBM PC', text: 'Uma plataforma de computador pessoal ganha grande influência no mercado.' },
+        ],
+      },
+      beats: [
+        { say: 'Em novembro de 1971, a Intel anunciou a disponibilidade do 4004, um microprocessador de 4 bits desenvolvido inicialmente para uma calculadora da Busicom. Ele reunia em um único chip as funções de uma unidade central de processamento; isso facilitou a produção em escala de sistemas programáveis menores.', show: 1 },
+        { say: 'Nos anos seguintes, computadores pessoais como o Apple II, lançado em 1977, e o IBM PC, lançado em 1981, ajudaram a levar a computação para casas e escritórios. A experiência deixou de ser exclusiva de grandes instituições e passou a fazer parte do cotidiano de mais pessoas.', show: 2 },
+        { say: 'Os celulares inteligentes também têm uma história anterior a 2007. O lançamento do iPhone naquele ano ajudou a popularizar uma experiência baseada em tela multitoque, aplicativos e navegação pela internet. Ele foi um marco importante, não o primeiro aparelho que combinava telefone e funções de computador.', show: 3 },
       ],
     },
     {
       id: 'fecho',
-      heading: 'O que não mudou',
+      heading: 'O que mudou — e o que continua',
       visual: {
         kind: 'cards',
         cards: [
-          { title: 'Receber', text: 'A informação chega.' },
-          { title: 'Trabalhar', text: 'As contas e as decisões.' },
-          { title: 'Guardar', text: 'Por pouco ou por muito tempo.' },
-          { title: 'Mostrar', text: 'O resultado sai.' },
+          { title: 'Entrada', text: 'Receber dados, como um toque ou uma tecla.' },
+          { title: 'Processamento', text: 'Executar instruções e transformar dados.' },
+          { title: 'Memória e armazenamento', text: 'Manter informações durante o trabalho ou por mais tempo.' },
+          { title: 'Saída', text: 'Mostrar ou transmitir o resultado.' },
         ],
       },
       beats: [
-        { say: 'De uma sala inteira a um chip menor que uma unha, a ideia básica não mudou.', show: 0 },
-        { say: 'Todo computador recebe informação,', show: 1 },
-        { say: 'trabalha com ela,', show: 2 },
-        { say: 'guarda o que precisa', show: 3 },
-        { say: 'e mostra o resultado. É o assunto da próxima aula.', show: 4 },
+        { say: 'A história não é uma linha reta em que uma invenção apaga todas as anteriores. Ferramentas, máquinas mecânicas, cartões, componentes eletrônicos e programas contribuíram de maneiras diferentes para a computação atual.', show: 1 },
+        { say: 'Hoje, um computador recebe dados, processa instruções, usa memória, guarda informações e produz resultados. O celular faz isso em um aparelho pequeno; o ENIAC precisava de uma sala. Na próxima aula, vamos olhar com mais atenção para essas quatro funções.', show: 4 },
       ],
     },
   ],
@@ -115,8 +160,8 @@ export const narradaHistoriaComputador: NarratedLesson = {
     kind: 'order',
     id: 'narrada-check',
     prompt: 'Coloque em ordem, do mais antigo ao mais recente.',
-    items: ['Máquina de Pascal', 'Tear de Jacquard', 'ENIAC', 'Microprocessador 4004', 'Smartphone'],
-    why: '1642, 1804, 1946, 1971 e a partir de 2007.',
+    items: ['Máquina de Pascal', 'Tear de Jacquard', 'ENIAC', 'Microprocessador 4004', 'Smartphone moderno multitoque'],
+    why: 'A Pascalina data de 1642; o tear de Jacquard, de 1804; o ENIAC foi concluído em 1945 e apresentado em 1946; o Intel 4004 foi anunciado em novembro de 1971; e o iPhone ajudou a popularizar a experiência moderna de smartphone em 2007.',
   },
 };
 
