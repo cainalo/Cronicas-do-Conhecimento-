@@ -55,3 +55,26 @@ describe('animações de contêiner', () => {
     expect(rule).not.toMatch(/\b(both|forwards)\b/);
   });
 });
+
+describe('experiência imersiva de aula e revisão', () => {
+  it('a aula narrada mantém o palco preso à viewport e bloqueia rolagem vertical', () => {
+    const src = readFileSync(join(ROOT, 'pages/Narrated.tsx'), 'utf8');
+    expect(src).toMatch(/fixed inset-0[^\n]*h-\[100dvh\]/);
+    expect(src).toMatch(/document\.body\.style\.overflow = 'hidden'/);
+    expect(src).toMatch(/narrada-elementos-visuais/);
+    expect(src).toMatch(/wordIndexAtChar\(say, Math\.floor/);
+  });
+
+  it('os slides de revisão cabem na viewport e aceitam gesto horizontal', () => {
+    const src = readFileSync(join(ROOT, 'pages/ReviewSlides.tsx'), 'utf8');
+    expect(src).toMatch(/fixed inset-0[^\n]*h-\[100dvh\][^\n]*overflow-hidden/);
+    expect(src).toMatch(/review-slide-swipe-area/);
+    expect(src).toMatch(/if \(dx < 0\) next\(\); else previous\(\)/);
+    expect(src).toMatch(/document\.documentElement\.style\.overflow = 'hidden'/);
+  });
+
+  it('o app Android reativa o modo imersivo ao iniciar', () => {
+    const src = readFileSync(join(ROOT, 'app/native.ts'), 'utf8');
+    expect(src).toMatch(/await setImmersive\(true\)/);
+  });
+});
