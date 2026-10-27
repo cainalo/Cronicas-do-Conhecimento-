@@ -69,6 +69,8 @@ export function NarratedPlayer({
   const currentMs = Math.min(totalMs, beforeMs + beatElapsed);
   const scene = l.scenes[pos.scene];
   const say = scene.beats[pos.beat].say;
+  // Mudanças de enquadramento graduais a cada ~2,8 s; a cena e os componentes não são remontados.
+  const visualPhase = Math.min(2, Math.floor(beatElapsed / 2800));
 
   const stop = useCallback(() => {
     token.current += 1;
@@ -320,7 +322,7 @@ export function NarratedPlayer({
           data-testid="narrada-cena"
         >
           <div className="relative flex h-full max-h-full w-full items-center justify-center" data-testid="narrada-elementos-visuais">
-            <CinematicScene key={scene.id} scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} beatIndex={pos.beat} />
+            <CinematicScene key={scene.id} scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} beatIndex={pos.beat} phase={visualPhase} />
           </div>
         </div>
       </section>
@@ -491,8 +493,8 @@ function illustrationForText(value: string): IllustrationName {
 }
 
 function CinematicScene({
-  scene, reveal, sceneIndex, beatIndex,
-}: { scene: Scene; reveal: number; sceneIndex: number; beatIndex: number }) {
+  scene, reveal, sceneIndex, beatIndex, phase,
+}: { scene: Scene; reveal: number; sceneIndex: number; beatIndex: number; phase: number }) {
   const visual = scene.visual;
   const palette = CINEMA_PALETTES[sceneIndex % CINEMA_PALETTES.length];
   const activeIndex = (length: number) => Math.max(0, Math.min(length - 1, reveal - 1));
@@ -532,6 +534,7 @@ function CinematicScene({
       style={{ '--ccv-background': palette.background, '--ccv-accent': palette.accent, '--ccv-secondary': palette.secondary } as CSSProperties}
       aria-label={scene.heading}
       data-testid="narrada-cena-cinematica"
+      data-phase={phase}
     >
       <div className="ccv-scene__orbit ccv-scene__orbit--one" aria-hidden="true" />
       <div className="ccv-scene__orbit ccv-scene__orbit--two" aria-hidden="true" />
@@ -540,7 +543,7 @@ function CinematicScene({
         <span className="ccv-scene__counter">{String(sceneIndex + 1).padStart(2, '0')} <i /> {String(sceneIndex + 1).padStart(2, '0')}</span>
       </div>
 
-      <div className="ccv-scene__layout">
+      <div className={'ccv-scene__layout ccv-scene__layout--phase-' + phase}>
         <div className="ccv-scene__copy">
           <p className="ccv-scene__eyebrow"><span />{eyebrow}</p>
           <h2 key={scene.id + ':' + beatIndex + ':' + headline} className="ccv-scene__headline ccv-scene__change">{headline}</h2>
