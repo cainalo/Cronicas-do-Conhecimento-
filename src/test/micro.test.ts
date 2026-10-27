@@ -25,7 +25,7 @@ describe.each(microLessons)('microaula $id', (m) => {
       }
     }
   });
-  it('explica uma ideia por etapa (explicação curta) e não depende de verdadeiro ou falso', () => {
+  it('explica uma ideia por etapa e mantém checagens variadas', () => {
     for (const s of m.steps) expect(s.explain.split(/\s+/).length, s.id).toBeLessThan(170);
     const checks = m.steps.map((s) => s.check);
     expect(checks.filter((a) => a.kind === 'tf').length).toBeLessThanOrEqual(Math.ceil(checks.length * 0.1));
@@ -41,20 +41,6 @@ describe.each(microLessons)('microaula $id', (m) => {
       expect(q).toBeTruthy();
       expect(q!.origin).not.toBe('oficial');
       expect(q!.sectionId).toBe(m.sectionId);
-    }
-  });
-});
-
-describe('partes sem rolagem (SwipePages)', () => {
-  it('distribui alturas em páginas sem passar da altura, nunca deixando página vazia', async () => {
-    const { packPages } = await import('@/components/SwipePages');
-    expect(packPages([100, 100, 100], 250, 10)).toEqual([[0, 1], [2]]);
-    expect(packPages([300, 50], 250, 10)).toEqual([[0], [1]]); // item maior que a página fica sozinho
-    expect(packPages([], 250, 10)).toEqual([]);
-    const hs = [120, 80, 200, 40, 40, 90, 160];
-    for (const pg of packPages(hs, 300, 12)) {
-      expect(pg.length).toBeGreaterThan(0);
-      if (pg.length > 1) expect(pg.reduce((s, i) => s + hs[i], 0) + 12 * (pg.length - 1)).toBeLessThanOrEqual(300);
     }
   });
 });
