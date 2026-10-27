@@ -45,10 +45,6 @@ function BlockView({ b, chapterId }: { b: BookBlock; chapterId: string }) {
   const chapter = getChapter(chapterId)!;
   const { data } = useStudy();
   switch (b.kind) {
-    case 'cover':
-    case 'scene':
-      // A capa e os diálogos narrativos foram removidos; o assunto fica no cabeçalho da página.
-      return null;
     case 'title':
       return (
         <header className="border-l-4 border-azure pl-4 py-1">
