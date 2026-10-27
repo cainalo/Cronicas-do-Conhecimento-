@@ -100,7 +100,7 @@ export function MissionPage() {
   const examQ = m.exam.kind === 'exam' ? getQuestion(m.exam.questionId) : undefined;
 
   return (
-    <div className="-mt-2 flex min-h-[calc(100dvh-5.5rem)] flex-col">
+    <div className="flex min-h-[calc(100dvh-1.75rem)] flex-col">
       {/* Topo: sair e etapas */}
       <div className="mb-4 flex items-center gap-3">
         <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => navigate(-1)} aria-label="Sair do caso prático">
