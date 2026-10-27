@@ -96,7 +96,7 @@ O script `scripts/e2e-layout.mjs` visita as rotas adiadas principais e as subpá
 ### Método para otimizar
 1. Guardar o SHA e a referência do build de base.
 2. Alterar uma camada por vez.
-3. Rodar `npm test`, `npm run build` e `npm run test:e2e`.
+3. Rodar `npm test`, `npm run build`, `npm run report:bundle` e `npm run test:e2e`.
 4. Comparar tamanho dos chunks e erros/rotas visitadas.
 5. Inspecionar screenshots em 360×640 e 390×844; testar Android real quando a mudança envolve áudio, tela cheia, teclado, barras do sistema ou persistência.
 6. Reverter a otimização se exigir mudanças visíveis não solicitadas ou piorar confiabilidade.
