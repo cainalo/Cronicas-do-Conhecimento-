@@ -5,7 +5,7 @@ import { FxProvider } from '@/app/fx';
 import { Layout } from '@/components/Layout';
 import { Dashboard } from '@/pages/Dashboard';
 import { GrimoirePage, LibraryPage } from '@/pages/Library';
-import { BookPage } from '@/pages/Book';
+import { ReadingPage } from '@/pages/Reading';
 import { MissionPage } from '@/pages/Mission';
 import { DownloadPage } from '@/pages/Download';
 import { PracticePage } from '@/pages/Practice';
@@ -52,7 +52,7 @@ export function AppRoutes() {
         <Route path="explorar" element={<StudiesPage />} />
         <Route path="revisar" element={<TrainingPage />} />
         <Route path="grimorio/:id" element={<GrimoirePage />} />
-        <Route path="capitulo/:id" element={<BookPage />} />
+        <Route path="capitulo/:id" element={<ReadingPage />} />
         <Route path="aprender/:chapterId/:sectionId" element={<LearnPage />} />
         <Route path="aprender/:chapterId/:sectionId/:aula" element={<LearnPage />} />
         <Route path="missao/:id" element={<MissionPage />} />
