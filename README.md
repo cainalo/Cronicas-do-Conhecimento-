@@ -30,3 +30,5 @@ Para os links de confirmação/recuperação de senha funcionarem fora do `local
 
 ## Documentação
 Comece por `CLAUDE.md` e `docs/SESSION_HANDOFF.md`.
+
+Para a estrutura das camadas, regras de conteúdo, desempenho e critérios de limpeza segura, consulte [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Antes de remover arquivos ou alterar rotas, siga também os gates em [docs/TESTING.md](docs/TESTING.md).
