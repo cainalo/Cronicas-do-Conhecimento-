@@ -32,7 +32,7 @@ describe('página Estudos', () => {
     const cont = screen.getByTestId('continuar-estudos');
     expect(cont).toHaveTextContent('Começar');
     expect(cont.getAttribute('href')).toBe(screen.getByTestId('continuar-topo').getAttribute('href'));
-    for (const name of [/Biblioteca/, /Rodada relâmpago/, /Flashcards/, /Revisão de erros/]) expect(screen.getByRole('link', { name })).toBeInTheDocument();
+    for (const name of [/Matérias e materiais/, /Rodada relâmpago/, /Flashcards/, /Revisão de erros/]) expect(screen.getByRole('link', { name })).toBeInTheDocument();
     // Biblioteca: sugestões não conferidas aparecem com aviso, e nenhum vídeo carrega sozinho.
     expect(screen.getAllByTestId('video-a-conferir').length).toBe(curatedVideos.filter((v) => v.status === 'a-conferir').length);
     expect(document.querySelector('iframe')).toBeNull();
