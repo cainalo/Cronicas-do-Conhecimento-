@@ -63,8 +63,17 @@ describe('experiência imersiva de aula e revisão', () => {
     expect(narrated).toMatch(/fixed left-0 right-0 top-0 bottom-0[^\n]*w-screen/);
     expect(narrated).toContain("width: '100vw'");
     const filmStyles = readFileSync(join(ROOT, 'styles/index.css'), 'utf8');
-    expect(filmStyles).toMatch(/\.ccv-film-scene\s*\{[^}]*width: 100vw/s);
-    expect(filmStyles).toMatch(/margin-left: calc\(50% - 50vw\)/);
+    const sceneStart = filmStyles.indexOf('.ccv-film-scene {');
+    const sceneEnd = filmStyles.indexOf('\n}', sceneStart);
+    const sceneRule = filmStyles.slice(sceneStart, sceneEnd);
+    expect(sceneRule).toContain('position: absolute');
+    expect(sceneRule).toContain('left: 50%');
+    expect(sceneRule).toContain('transform: translateX(-50%)');
+    expect(sceneRule).toContain('width: calc(100vw + 2px)');
+    expect(sceneRule).toContain('box-sizing: border-box');
+    expect(sceneRule).not.toContain('margin-left: calc(50% - 50vw)');
+    expect((sceneRule.match(/^  width:/gm) ?? []).length).toBe(1);
+    expect((sceneRule.match(/^  min-width:/gm) ?? []).length).toBe(1);
     expect(narrated).toMatch(/document\.body\.style\.overflow = 'hidden'/);
     // Portal para body evita que transforms/backdrop-filter de ancestrais encolham o player.
     expect(narrated).toContain('return createPortal((');
