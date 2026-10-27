@@ -107,6 +107,7 @@ npm ci
 npm test
 npm run build
 npm run test:e2e
+npm run test:visual
 npx cap sync android
 ```
 
@@ -135,7 +136,7 @@ A limpeza é baseada em evidência:
 
 ## 8. Estado desta rodada — 27/10/2026
 
-- A divisão de rotas pesadas por importação sob demanda foi implementada em `src/App.tsx`, commit `404ad10`.
+- A divisão de rotas secundárias por importação sob demanda foi implementada em `src/App.tsx`, com fronteira `Suspense` acessível; o gate de layout foi ampliado para 34 rotas e o audit visual por screenshots foi consolidado em `scripts/e2e-visual-audit.mjs`. A medição de chunks e a aprovação do CI seguem pendentes.
 - O baseline do workflow `40444629202` passou no commit `d2f6e93` e publicou a versão `0.1.351`; isso não valida automaticamente mudanças posteriores.
 - O código novo precisa passar pelo workflow de validação isolada antes de ser incorporado a uma branch de publicação.
 - Ainda não foi feita uma remoção automática de arquivos ou branches: o inventário identificou trabalho exclusivo e PRs abertos que precisam de revisão individual.
