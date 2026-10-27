@@ -102,7 +102,7 @@ export const licoesDados: Lesson[] = [
   {
     id: 'lic.dados.02',
     chapterId: 'cap.dados.02',
-    title: 'Os Cofres Espalhados',
+    title: 'Bancos de Dados Distribuídos',
     goal: 'PostgreSQL e Oracle, backup e replicação, modelos NoSQL, CAP e governança de dados.',
     cards: [
       { title: 'PostgreSQL e Oracle', body: '**MVCC** + **VACUUM** + **ANALYZE**. Backup lógico `pg_dump`; físico `pg_basebackup` + WAL = **PITR**.\n\nOracle: **RMAN** (backup), **Data Guard** (standby), **RAC** (várias instâncias, um banco), Data Pump (`expdp`).' },
