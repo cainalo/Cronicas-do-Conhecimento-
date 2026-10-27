@@ -333,7 +333,7 @@ export function NarratedPlayer({
           data-testid="narrada-cena"
         >
           <div className="relative flex h-full max-h-full w-full items-center justify-center" data-testid="narrada-elementos-visuais">
-            <CinematicScene scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} beatIndex={pos.beat} />
+            <CinematicScene scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} beatIndex={pos.beat} controlsVisible={controlsVisible} />
           </div>
         </div>
       </section>
@@ -513,8 +513,8 @@ function HistoricalPhoto({ photo, variant = 'scene' }: { photo: HistoricalVisual
  * quando a fala/etapa muda. Não existem pulsos, flashes ou animações repetidas por render.
  */
 function CinematicScene({
-  scene, reveal, sceneIndex, sceneCount, beatIndex,
-}: { scene: Scene; reveal: number; sceneIndex: number; sceneCount: number; beatIndex: number }) {
+  scene, reveal, sceneIndex, sceneCount, beatIndex, controlsVisible,
+}: { scene: Scene; reveal: number; sceneIndex: number; sceneCount: number; beatIndex: number; controlsVisible: boolean }) {
   const visual = scene.visual;
   const palette = CINEMA_PALETTES[sceneIndex % CINEMA_PALETTES.length];
   const activeIndex = (length: number) => Math.max(0, Math.min(length - 1, reveal - 1));
@@ -586,7 +586,7 @@ function CinematicScene({
 
   return (
     <article
-      className="ccv-film-scene"
+      className={'ccv-film-scene ' + (controlsVisible ? 'has-controls' : 'controls-hidden')}
       style={{ '--ccv-background': palette.background, '--ccv-accent': palette.accent, '--ccv-secondary': palette.secondary } as CSSProperties}
       aria-label={scene.heading}
       data-testid="narrada-cena-cinematica"
