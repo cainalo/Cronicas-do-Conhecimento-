@@ -251,7 +251,7 @@ export function ActivityView({
         </div>
       ),
     });
-    head.push({ key: 'stem', md: displayQuestion.stem, wrap: (c) => <div className="prose-manuscript !font-sans !text-[1rem] [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0">{c}</div> });
+    head.push({ key: 'stem', md: displayQuestion.stem, wrap: (c) => <div className="prose-content !font-sans !text-[1rem] [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0">{c}</div> });
   } else {
     head.push({
       key: 'label',
