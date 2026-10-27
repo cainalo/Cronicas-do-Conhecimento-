@@ -1,3 +1,4 @@
+import { lazy, Suspense, type ReactNode } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
@@ -6,13 +7,13 @@ import { Layout } from '@/components/Layout';
 import { Dashboard } from '@/pages/Dashboard';
 import { GrimoirePage, LibraryPage } from '@/pages/Library';
 import { BookPage } from '@/pages/Book';
-import { MissionPage } from '@/pages/Mission';
+const MissionPage = lazy(() => import('@/pages/Mission').then((m) => ({ default: m.MissionPage })));
 import { DownloadPage } from '@/pages/Download';
 import { PracticePage } from '@/pages/Practice';
 import { LearnPage } from '@/pages/Learn';
 import { LessonPage } from '@/pages/Lesson';
 import { ReviewPage } from '@/pages/Review';
-import { ReviewSlidesPage } from '@/pages/ReviewSlides';
+const ReviewSlidesPage = lazy(() => import('@/pages/ReviewSlides').then((m) => ({ default: m.ReviewSlidesPage })));
 import { HistoryPage } from '@/pages/History';
 import { ProgressPage } from '@/pages/Progress';
 import { EditalPage } from '@/pages/Edital';
@@ -35,10 +36,21 @@ import { NotFoundPage } from '@/pages/NotFound';
 import { TrailPage } from '@/pages/Trail';
 import { TrailVideoPage } from '@/pages/TrailVideo';
 import { CustomizePage } from '@/pages/Customize';
-import { ScenarioListPage, ScenarioPage } from '@/pages/Scenarios';
-import { TeachersRoomPage } from '@/pages/TeachersRoom';
-import { WorldPage } from '@/pages/World';
-import { NarratedPage } from '@/pages/Narrated';
+const ScenarioListPage = lazy(() => import('@/pages/Scenarios').then((m) => ({ default: m.ScenarioListPage })));
+const ScenarioPage = lazy(() => import('@/pages/Scenarios').then((m) => ({ default: m.ScenarioPage })));
+const TeachersRoomPage = lazy(() => import('@/pages/TeachersRoom').then((m) => ({ default: m.TeachersRoomPage })));
+const WorldPage = lazy(() => import('@/pages/World').then((m) => ({ default: m.WorldPage })));
+const NarratedPage = lazy(() => import('@/pages/Narrated').then((m) => ({ default: m.NarratedPage })));
+
+
+/**
+ * Carregamento sob demanda para telas pesadas e secundárias.
+ * Mantém rotas, estado global e layout intactos; só adia o download do código
+ * até a rota ser aberta. O layout externo continua visível durante a carga.
+ */
+function DeferredPage({ children }: { children: ReactNode }) {
+  return <Suspense fallback={null}>{children}</Suspense>;
+}
 
 export function AppRoutes() {
   return (
@@ -55,18 +67,18 @@ export function AppRoutes() {
         <Route path="capitulo/:id" element={<BookPage />} />
         <Route path="aprender/:chapterId/:sectionId" element={<LearnPage />} />
         <Route path="aprender/:chapterId/:sectionId/:aula" element={<LearnPage />} />
-        <Route path="missao/:id" element={<MissionPage />} />
+        <Route path="missao/:id" element={<DeferredPage><MissionPage /></DeferredPage>} />
         <Route path="download" element={<DownloadPage />} />
         <Route path="personalizar" element={<CustomizePage />} />
-        <Route path="simulador" element={<ScenarioListPage />} />
-        <Route path="simulador/:id" element={<ScenarioPage />} />
-        <Route path="sala" element={<TeachersRoomPage />} />
-        <Route path="escritorio" element={<WorldPage />} />
-        <Route path="aula-narrada/:id" element={<NarratedPage />} />
+        <Route path="simulador" element={<DeferredPage><ScenarioListPage /></DeferredPage>} />
+        <Route path="simulador/:id" element={<DeferredPage><ScenarioPage /></DeferredPage>} />
+        <Route path="sala" element={<DeferredPage><TeachersRoomPage /></DeferredPage>} />
+        <Route path="escritorio" element={<DeferredPage><WorldPage /></DeferredPage>} />
+        <Route path="aula-narrada/:id" element={<DeferredPage><NarratedPage /></DeferredPage>} />
         <Route path="pratica/:chapterId/:sectionId" element={<PracticePage />} />
         <Route path="licao/:id" element={<LessonPage />} />
         <Route path="revisao" element={<ReviewPage />} />
-        <Route path="slides" element={<ReviewSlidesPage />} />
+        <Route path="slides" element={<DeferredPage><ReviewSlidesPage /></DeferredPage>} />
         <Route path="historico" element={<HistoryPage />} />
         <Route path="progresso" element={<ProgressPage />} />
         <Route path="edital" element={<EditalPage />} />
