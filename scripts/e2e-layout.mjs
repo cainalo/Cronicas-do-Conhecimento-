@@ -119,10 +119,10 @@ async function waitForDeferredRoute(page) {
   // React.lazy resolves. Wait for the loading message to disappear AND for the
   // routed page to provide content; this handles both cached and first-time chunks.
   await page.waitForFunction(() => {
-    const main = document.querySelector('main');
-    if (!main) return false;
-    if (main.textContent?.includes('Carregando esta área')) return false;
-    return Boolean(main.textContent?.trim());
+    const loading = Array.from(document.querySelectorAll('[role="status"]'))
+      .some((element) => element.textContent?.includes('Carregando esta área'));
+    // Some full-screen routes render through a portal outside <main>.
+    return !loading && Boolean(document.body);
   }, undefined, { timeout: 15000 });
 }
 
