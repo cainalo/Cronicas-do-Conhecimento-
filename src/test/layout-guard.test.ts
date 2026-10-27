@@ -87,7 +87,7 @@ describe('experiência imersiva de aula e revisão', () => {
     const voice = readFileSync(join(ROOT, 'app/voice.ts'), 'utf8');
     expect(voice).toMatch(/id: 'Sulafat', label: 'Sulafat · acolhedora e quente'/);
     expect(voice).toMatch(/id: 'Callirrhoe'/);
-    expect(voice).toMatch(/gemini-3\\.8-flash-tts/);
+    expect(voice).toMatch(/gemini-3\.8-flash-tts/);
     expect(voice).toMatch(/cadência uniforme/);
   });
 

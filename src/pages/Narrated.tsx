@@ -395,7 +395,7 @@ export function NarratedPlayer({
         <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => { setShowVoiceSettings(false); setShowTranscript((v) => !v); }} aria-label={showTranscript ? 'Ocultar transcrição' : 'Transcrição'} aria-expanded={showTranscript} data-testid="narrada-transcricao"><Icon name="livro" size={17} /></button>
       </div>
       <div
-        className={\`absolute bottom-[calc(7.1rem+env(safe-area-inset-bottom))] left-1/2 z-30 flex -translate-x-1/2 items-center justify-center gap-2 transition-all duration-300 \${visibleClass}\`}
+        className={`absolute bottom-[calc(7.1rem+env(safe-area-inset-bottom))] left-1/2 z-30 flex -translate-x-1/2 items-center justify-center gap-2 transition-all duration-300 ${visibleClass}`}
         onClick={stopOverlayClick}
         aria-hidden={!controlsVisible}
         aria-label="Ir para uma cena da aula"
@@ -405,7 +405,7 @@ export function NarratedPlayer({
           <button
             key={item.id}
             type="button"
-            className={\`h-2 rounded-full transition-all duration-500 \${i === pos.scene ? 'w-7 bg-[#f0bf69]' : i < pos.scene ? 'w-2 bg-white/65' : 'w-2 bg-white/25 hover:bg-white/65'}\`}
+            className={`h-2 rounded-full transition-all duration-500 ${i === pos.scene ? 'w-7 bg-[#f0bf69]' : i < pos.scene ? 'w-2 bg-white/65' : 'w-2 bg-white/25 hover:bg-white/65'}`}
             aria-label={'Ir para a cena ' + (i + 1) + ': ' + item.heading}
             aria-current={i === pos.scene ? 'step' : undefined}
             onClick={() => jump({ scene: i, beat: 0 })}
