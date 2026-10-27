@@ -99,11 +99,11 @@ export const matLogHistoria: MicroLesson = {
     {
       id: 'enigmas',
       part: 'A história',
-      title: '1978: pessoas verídicas e mentirosas',
+      title: '1978: enigmas de verdade e mentira',
       art: 'professores',
       goal: 'Conhecer a origem dos enigmas de verdade e mentira.',
       explain:
-        'Em **1978**, o matemático e lógico americano **Raymond Smullyan** publicou um livro de enigmas com uma grupo de **verídicos**, que **sempre dizem a verdade**, e **pessoas mentirosas**, que **sempre mentem**.\n\nOs enigmas de "quem fala a verdade" se espalharam pelos concursos. A técnica para resolvê-los é a mesma dos gregos: **supor** uma possibilidade e ver se ela leva a uma **contradição**.',
+        'Em **1978**, o matemático e lógico americano **Raymond Smullyan** publicou um livro de enigmas com um grupo de pessoas **verídicas**, que **sempre dizem a verdade**, e **pessoas mentirosas**, que **sempre mentem**.\n\nOs enigmas de "quem fala a verdade" se espalharam pelos concursos. A técnica para resolvê-los é a mesma dos gregos: **supor** uma possibilidade e ver se ela leva a uma **contradição**.',
       check: {
         kind: 'choice',
         id: 'en-c',
@@ -117,7 +117,7 @@ export const matLogHistoria: MicroLesson = {
         errorKind: 'confusao',
       },
       recovery: {
-        explain: 'No grupo, ninguém muda de lado: o **verídico** é como um relógio certo, **sempre** acerta; o **mentiroso** é como um relógio que sempre marca a hora errada. Se você souber qual é qual, toda frase vira pista.',
+        explain: 'No exemplo, cada pessoa mantém o mesmo comportamento: a pessoa **verídica** sempre diz a verdade; a pessoa **mentirosa** sempre mente. Saber qual tipo se aplica a cada uma ajuda a resolver o enigma.',
         check: {
           kind: 'choice',
           id: 'en-r',
@@ -429,7 +429,7 @@ export const matLogOrdem: MicroLesson = {
     {
       id: 'contradicao',
       part: 'Verdade e mentira',
-      title: 'Pessoas verídicas e mentirosas e contradição',
+      title: 'Verdades, mentiras e contradição',
       art: 'interruptor',
       goal: 'Resolver um enigma de pessoas verídicas e mentirosas por contradição.',
       explain:

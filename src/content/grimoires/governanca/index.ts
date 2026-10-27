@@ -10,7 +10,7 @@ export const grimorioGovernanca: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.governanca',
   title: 'Governança de TI',
-  description: 'Como o reino decide o que fazer com a sua tecnologia: ISO/IEC 38500, COBIT 2019, ITIL 4, PMBOK 8 e métodos ágeis, contratações de TIC na Lei 14.133 e a estratégia de governo digital.',
+  description: 'Como uma organização pública decide o que fazer com sua tecnologia: ISO/IEC 38500, COBIT 2019, ITIL 4, PMBOK 8 e métodos ágeis, contratações de TIC na Lei 14.133 e a estratégia de governo digital.',
   chapterIds: ['cap.gov.01', 'cap.gov.02'],
 };
 

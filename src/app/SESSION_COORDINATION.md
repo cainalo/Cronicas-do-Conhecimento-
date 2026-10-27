@@ -173,3 +173,12 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 - O E2E foi atualizado para validar o contrato novo da tela de referência: artigo rolável visível, limites dentro da viewport, ausência de botões de sumário/página e ausência de rolagem horizontal.
 - Removida a exigência antiga de abrir um botão “Sumário”, que pertence ao leitor paginado removido e era o único motivo reportado para os quatro casos E2E falharem (360x640, 360x640 vidro, 390x844, 390x844 vidro).
 - Os checks do modal “Entender”, cena narrada em largura total e cartões de correção continuam mantidos.
+
+
+### ChatGPT — limpeza final de tema, leitura e conteúdo
+**Data:** 2026-10-27
+**Estado:** alterações na branch de publicação; workflow de publicação está em execução.
+- Commit `0e318f2af58757afb1f10333080e714dc582e2cf`: retirado o modo de escritório e seus arquivos/testes; `/escritorio` agora redireciona para `/simulador`; catálogo usa `/materia/:id` e mantém `/grimorio/:id` como redirecionamento legado.
+- Commit `6a075876c2d3fe9150ead5dd5f5f7155381870e1`: fonte Fraunces removida, tema padrão migra para Aurora, fundo liso e fonte sem serifa, CSS do livro físico removido, preferências antigas normalizadas.
+- Commit `683a692339ae9d74a2da3db482bea5560ccefd82`: ilustrações e ícones que antes mostravam livros foram neutralizados; comentários de Aprender e Unidade Interativa agora descrevem etapas contínuas.
+- Commit `c85fbeac5096222c511287a00f38392ece2dab90`: os exemplos de lógica passaram de cavaleiros/valetes/ilha para pessoas verídicas e mentirosas; revisão editorial final ainda precisa eliminar erros gramaticais remanescentes.
