@@ -726,6 +726,57 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
   background: rgba(255,255,255,.035);
 }
 .ccv-cutaway__photo { display: block; width: 100%; height: 100%; max-height: 62vh; object-fit: contain; filter: saturate(1.08) contrast(1.06); }
+
+/* O B-roll usa o próprio quadro: fotos e ilustrações preenchem o plano, sem parecer thumbnails. */
+.ccv-cutaway__media .ccv-historical-photo {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  justify-content: center;
+  gap: clamp(.35rem, 1vh, .8rem);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.ccv-cutaway__media .ccv-historical-photo img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: 67vh;
+  flex: 1 1 auto;
+  aspect-ratio: 16 / 10;
+  object-fit: contain;
+  filter: saturate(1.08) contrast(1.06);
+}
+.ccv-historical-photo__fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: white;
+  opacity: .9;
+  pointer-events: none;
+}
+@keyframes ccv-cutaway-ken-burns {
+  from { transform: scale(1.015) translate3d(0, .3%, 0); }
+  to { transform: scale(1.085) translate3d(-.7%, -.35%, 0); }
+}
+.ccv-cutaway.is-visible .ccv-cutaway__photo,
+.ccv-cutaway.is-visible .ccv-historical-photo img,
+.ccv-cutaway.is-visible .ccv-cutaway__illustration {
+  transform-origin: center center;
+  animation: ccv-cutaway-ken-burns 7s cubic-bezier(.16,1,.3,1) both;
+  will-change: transform;
+}
+
 .ccv-cutaway__illustration { display: block; width: min(100%, 58vh); max-height: 62vh; color: #fff; overflow: visible; }
 .ccv-cutaway__frame { position: absolute; inset: 0; border: 0; border-left: 2px solid rgba(255,255,255,.25); pointer-events: none; }
 .ccv-cutaway__copy { display: flex; min-width: 0; min-height: 0; flex-direction: column; justify-content: center; padding: clamp(.3rem, 1.5vw, 1.25rem) 0; }
@@ -756,6 +807,9 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
   }
   .ccv-cutaway.is-visible { clip-path: inset(0); }
   .ccv-cutaway__media { padding: .15rem; }
+  .ccv-cutaway__media .ccv-historical-photo img { max-height: 31vh; aspect-ratio: 16 / 10; }
+  .ccv-historical-photo__fallback svg { width: min(68%, 25vh); max-height: 28vh; }
+
   .ccv-cutaway__photo { max-height: 31vh; }
   .ccv-cutaway__illustration { width: min(100%, 28vh); max-height: 29vh; }
   .ccv-cutaway__frame { inset: .1rem; border-left: 0; border-top: 1px solid rgba(255,255,255,.25); }
@@ -774,6 +828,7 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
   .ccv-film-scene *, .ccv-film-scene *::before, .ccv-film-scene *::after { transition: none !important; }
   .ccv-cutaway { clip-path: none !important; }
   .ccv-cutaway:not(.is-visible) { display: none; }
+  .ccv-cutaway.is-visible .ccv-cutaway__photo, .ccv-cutaway.is-visible .ccv-historical-photo img, .ccv-cutaway.is-visible .ccv-cutaway__illustration { animation: none !important; }
 }
 .review-slide-cover { background: #c8402a; color: white; }
 .review-slide-cover__ring { position: absolute; top: -14%; right: -5%; width: min(55vh,38rem); aspect-ratio: 1; border: clamp(12px,2.7vh,28px) solid rgba(255,255,255,.13); border-radius: 50%; pointer-events: none; transform: rotate(-18deg); }
