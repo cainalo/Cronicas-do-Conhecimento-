@@ -87,30 +87,37 @@ export function buildNarrationCues(
     sourceWords.forEach((token) => sourceTokens.push({ token, cueIndex }));
   });
 
-  if (alignedWords.length !== sourceTokens.length) {
-    throw new Error(
-      'O alinhamento retornou ' + alignedWords.length + ' palavras, mas a transcrição contém '
-      + sourceTokens.length + '. Não é seguro inventar os tempos ausentes.',
-    );
-  }
-
+  const expandedWords: Array<{ token: string; startMs: number; endMs: number }> = [];
   let previousStart = -1;
   alignedWords.forEach((word, index) => {
-    const alignedTokens = tokens(word.text);
-    if (alignedTokens.length !== 1 || alignedTokens[0] !== sourceTokens[index].token) {
-      throw new Error(
-        'A palavra alinhada na posição ' + (index + 1) + ' não corresponde à transcrição: esperado "'
-        + sourceTokens[index].token + '", recebido "' + word.text + '".',
-      );
-    }
     if (!Number.isFinite(word.startMs) || !Number.isFinite(word.endMs)
       || word.startMs < 0 || word.endMs <= word.startMs || word.endMs > durationMs) {
-      throw new Error('Timestamp inválido para a palavra na posição ' + (index + 1) + '.');
+      throw new Error('Timestamp inválido para a palavra alinhada na posição ' + (index + 1) + '.');
     }
     if (word.startMs < previousStart) {
       throw new Error('Os timestamps das palavras estão fora de ordem na posição ' + (index + 1) + '.');
     }
     previousStart = word.startMs;
+    tokens(word.text).forEach((token) => expandedWords.push({
+      token,
+      startMs: word.startMs,
+      endMs: word.endMs,
+    }));
+  });
+
+  if (expandedWords.length !== sourceTokens.length) {
+    throw new Error(
+      'O alinhamento cobre ' + expandedWords.length + ' palavras normalizadas, mas a transcrição contém '
+      + sourceTokens.length + '. Não é seguro inventar os tempos ausentes.',
+    );
+  }
+  expandedWords.forEach((word, index) => {
+    if (word.token !== sourceTokens[index].token) {
+      throw new Error(
+        'A palavra alinhada na posição ' + (index + 1) + ' não corresponde à transcrição: esperado "'
+        + sourceTokens[index].token + '", recebido "' + word.token + '".',
+      );
+    }
   });
 
   const cues: NarrationCue[] = [];
@@ -118,8 +125,8 @@ export function buildNarrationCues(
   for (let cueIndex = 0; cueIndex < sources.length; cueIndex++) {
     const source = sources[cueIndex];
     const wordCount = tokens(source.text).length;
-    const first = alignedWords[tokenCursor];
-    const last = alignedWords[tokenCursor + wordCount - 1];
+    const first = expandedWords[tokenCursor];
+    const last = expandedWords[tokenCursor + wordCount - 1];
     if (!first || !last || last.endMs <= first.startMs) {
       throw new Error('Não foi possível determinar a janela temporal da fala: ' + source.id);
     }
