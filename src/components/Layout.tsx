@@ -91,11 +91,13 @@ export function Layout() {
   const inner = !isAreaHome(pathname);
   // Leitura/prática ocultam a navegação inferior; aula narrada standalone ocupa a viewport inteira.
   const standaloneNarration = /^\/aula-narrada\//.test(pathname);
+  // As rotas de atividade usam o próprio X/progresso; não duplicar o cabeçalho global.
+  const activityRoute = /^\/(aprender|pratica|licao|missao)\//.test(pathname);
   const immersive = standaloneNarration || /^\/(capitulo|aprender|pratica|licao|missao)\//.test(pathname);
   const onAccount = areaOf(pathname) === 'conta';
   return (
     <div className={standaloneNarration ? "h-dvh overflow-hidden" : "flex min-h-dvh flex-col"}>
-      {!standaloneNarration && <header className="wood-bar wood-bar-top safe-top sticky top-0 z-30">
+      {!standaloneNarration && !activityRoute && <header className="wood-bar wood-bar-top safe-top sticky top-0 z-30">
         <div className="relative mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
           <div className="flex min-w-[2.5rem] items-center gap-1">
             {inner ? (
