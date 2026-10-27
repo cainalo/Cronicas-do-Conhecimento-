@@ -321,7 +321,7 @@ export function NarratedPlayer({
           className={`absolute inset-0 grid place-items-center transition-[padding] duration-300 ${controlsVisible ? 'px-4 pb-[14.5rem] pt-28 sm:px-10 sm:pb-[15rem] sm:pt-32' : 'px-4 pb-8 pt-8 sm:px-10'}`}
           data-testid="narrada-cena"
         >
-          <div className="relative flex h-full max-h-full w-full flex-col items-center justify-center gap-3" key={scene.id + ':' + pos.beat + ':' + visualPhase} data-testid="narrada-corte-editorial">
+          <div className="relative flex h-full max-h-full w-full flex-col items-center justify-center gap-3" key={scene.id + ':' + pos.beat + ':' + visualPhase} data-testid="narrada-elementos-visuais">
             {visualPhase === 1 || visualPhase === 3
               ? <EditorialVideoCut scene={scene} reveal={revealOf(scene, pos.beat)} phase={visualPhase} say={say} />
               : <div className="anim-tile-in flex h-full max-h-full w-full items-center justify-center" key={'plano-principal:' + scene.id + ':' + pos.beat + ':' + visualPhase}>
