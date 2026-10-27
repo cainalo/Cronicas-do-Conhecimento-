@@ -113,7 +113,7 @@ function SimpleLearnPage() {
           <div className="space-y-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted">Parte {p.i + 1} de {textTotal}</p>
             <h2 className="text-[1.4rem] leading-snug">{pg.title}</h2>
-            <div className="prose-manuscript learn-text">
+            <div className="prose-content learn-text">
               <Markdown>{pg.text}</Markdown>
             </div>
           </div>
