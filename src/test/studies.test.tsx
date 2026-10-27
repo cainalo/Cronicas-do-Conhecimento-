@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
+import { waitForRouteReady } from './route-ready';
 import { chapters, curatedVideos, externalMaterials, questionsForContest, DEFAULT_CONTEST_ID } from '@/content';
 import { youTubeId } from '@/components/VideoEmbed';
 import { buildPractice, isRecovery, nextQueue, recoveryFor, type Activity } from '@/lib/practice';
@@ -71,15 +72,17 @@ describe('página Estudos', () => {
   });
 });
 
-it('endereço inexistente fica dentro do app, com saída para a trilha e para Estudos', () => {
+it('endereço inexistente fica dentro do app, com saída para a trilha e para Estudos', async () => {
   renderAt('/nao-existe/mesmo');
+  await waitForRouteReady();
   expect(screen.getByRole('heading', { name: 'Página não encontrada' })).toBeInTheDocument();
   expect(screen.getByTestId('nao-encontrada-trilha').getAttribute('href')).toBe(screen.getByTestId('continuar-topo').getAttribute('href'));
   expect(screen.getByRole('link', { name: 'Abrir Estudos' })).toHaveAttribute('href', '/estudos');
 });
 
-it('conta sem servidor explica o modo local e organiza os ajustes em áreas', () => {
+it('conta sem servidor explica o modo local e organiza os ajustes em áreas', async () => {
   renderAt('/conta');
+  await waitForRouteReady();
   expect(screen.getByText('Estudando só neste aparelho', { selector: 'h2' })).toBeInTheDocument();
   // A página de entrada não expõe senha nem botões sensíveis; cada área tem destino real.
   expect(document.querySelector('input[type="password"]')).toBeNull();
@@ -98,6 +101,7 @@ it('conta sem servidor explica o modo local e organiza os ajustes em áreas', ()
 it('aparência: tema e tamanho do texto salvos, e o painel de personalização continua', async () => {
   const user = userEvent.setup();
   renderAt('/conta/aparencia');
+  await waitForRouteReady();
   expect(screen.getByTestId('abrir-personalizar')).toHaveAttribute('href', '/personalizar');
   await user.click(screen.getByRole('button', { name: /Escuro/ }));
   await user.click(screen.getByRole('button', { name: 'Aumentar texto' }));
@@ -108,6 +112,7 @@ it('aparência: tema e tamanho do texto salvos, e o painel de personalização c
 it('sons: tudo começa desligado; ligar um ambiente e mudar o volume não mexe nos outros', async () => {
   const user = userEvent.setup();
   renderAt('/conta/sons');
+  await waitForRouteReady();
   for (const s of screen.getAllByRole('switch').slice(0, 6)) expect(s).toHaveAttribute('aria-checked', 'false');
   await user.click(screen.getByRole('switch', { name: 'Chuva suave' }));
   const slider = screen.getByLabelText('Volume: Chuva suave');
