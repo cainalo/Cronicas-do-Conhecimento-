@@ -29,8 +29,6 @@ export function LibraryPage() {
   const subjects = grimoiresForContest(contest.id);
   const coveredTopics = new Set(chapters.flatMap((chapter) => chapter.topicIds));
   const hasMaterial = (topicIds: string[]) => topicIds.some((topicId) => coveredTopics.has(topicId));
-  const dark = useIsDark();
-  const color = areaColor('explorar', dark);
   const { data } = useStudy();
 
   const metrics = (chapterIds: string[]) => {
