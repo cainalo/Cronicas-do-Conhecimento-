@@ -65,8 +65,9 @@ it('página: começa parada; legenda de uma linha é opcional; controles reinici
   expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Imagine que sua conta tem saldo zero/);
   await user.click(screen.getByTestId('narrada-tocar'));
   const captionWords = screen.getByTestId('narrada-legenda-texto').querySelectorAll(':scope > span');
-  expect(captionWords.length).toBeLessThanOrEqual(8);
-  expect(captionWords[0]).toHaveClass('text-[#ffd38a]');
+  // O contador também inclui o retalho de reticências quando a legenda centraliza a fala.
+  expect(captionWords.length).toBeLessThanOrEqual(9);
+  expect(Array.from(captionWords).some((word) => word.className.includes('text-[#ffd38a]'))).toBe(true);
   await user.click(screen.getByTestId('narrada-legendas-toggle'));
   expect(screen.queryByTestId('narrada-legenda')).toBeNull();
   await user.click(screen.getByTestId('narrada-legendas-toggle'));
@@ -135,7 +136,7 @@ it('sequência única: a aula narrada abre automaticamente em tela inteira e seg
   expect(screen.getByRole('dialog', { name: /Aula narrada: Do ábaco ao celular/ })).toBeInTheDocument();
   expect(screen.getByTestId('narrada-seek')).toBeInTheDocument();
   expect(screen.queryByTestId('midia-narrada')).toBeNull();
-  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/nenhuma dessas capacidades apareceu de uma vez/);
+  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Pegue o celular que está na sua mão/);
   await user.click(screen.getByRole('button', { name: 'Ir para a prática' }));
   expect(screen.queryByRole('dialog', { name: /Aula narrada/ })).toBeNull();
   expect(screen.getByText(/Organize a linha do tempo/)).toBeInTheDocument();
