@@ -646,7 +646,12 @@ export function NarratedPlayer({
 
       {showVoiceSettings && controlsVisible && (
         <section className="absolute bottom-[calc(9.5rem+env(safe-area-inset-bottom))] left-3 right-3 z-40 mx-auto max-h-[calc(100dvh-12rem)] max-w-xl overflow-y-auto rounded-2xl border border-white/20 bg-[#171b1b]/96 p-4 text-white shadow-2xl backdrop-blur-xl" onClick={stopOverlayClick} onPointerDown={beginControlsInteraction} onPointerUp={endControlsInteraction} onPointerCancel={endControlsInteraction} aria-label="Configurações da voz" data-testid="narrada-painel-voz">
-          <div className="flex items-start justify-between gap-3"><div><h2 className="font-display text-xl font-semibold">Voz da narração</h2><p className="mt-1 text-xs leading-relaxed text-white/70">A voz neural soa mais humana, mas precisa de chave pessoal e internet. Sem ela, o app usa a voz instalada no aparelho.</p></div>
+          <div className="flex items-start justify-between gap-3"><div><h2 className="font-display text-xl font-semibold">Voz da narração</h2><p className="mt-1 text-xs leading-relaxed text-white/70">Para uma narração mais natural, use a voz neural Gemini. Ela gera uma faixa de áudio contínua para a aula inteira; precisa de internet e de uma chave pessoal.</p>
+            <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs font-bold">
+              <a className="text-[#ffbb8c] underline underline-offset-2" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">Criar ou copiar chave no AI Studio ↗</a>
+              <a className="text-white/70 underline underline-offset-2" href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener noreferrer">Ver cotas e preços ↗</a>
+            </div>
+            <p className="mt-2 text-[0.65rem] leading-relaxed text-white/55">A chave fica salva neste navegador/aparelho e é enviada diretamente à API do Google quando o áudio é gerado. Confira as cotas antes de usar.</p></div>
             <button type="button" onClick={() => setShowVoiceSettings(false)} aria-label="Fechar preferências de voz" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/10">×</button>
           </div>
           <label className="mt-3 block text-sm font-semibold">Voz neural Gemini
