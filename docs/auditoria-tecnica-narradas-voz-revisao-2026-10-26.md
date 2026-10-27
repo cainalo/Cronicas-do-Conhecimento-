@@ -47,7 +47,7 @@ Arquivos novos nesta contribuição:
 
 Não alterei a implementação temporal compartilhada, o player, a camada de voz, os roteiros nem os slides.
 
-**Testes não executados nesta sessão.** O clone local não funcionou devido a falha de resolução de rede para GitHub; as consultas ao GitHub não retornaram status ou execuções de CI para o head desta contribuição. Não afirmo que Vitest, typecheck, build, E2E ou validação física no Android passaram.
+**Testes do PR #9 não executados nesta sessão.** O clone local não funcionou devido a falha de resolução de rede para GitHub, e não há verificações de CI associadas ao head deste PR; portanto, não afirmo que os testes adicionais passem. Como evidência separada da branch-base, o CI do commit aca7985 executou 39 arquivos e 2.425 testes com sucesso, mas o build falhou em src/test/narrated-editorial.test.ts:85 por narrowing do tipo Visual. O commit ebc8947 corrigiu esse erro guardando o discriminante em const visual = scene.visual. A nova execução de publicação #40440159102, no commit a384e47, está em andamento neste momento: https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40440159102. Ainda não há resultado final dessa execução; isso não valida o build nem os testes adicionais deste PR.
 
 ## 4. Coordenação entre sessões
 
