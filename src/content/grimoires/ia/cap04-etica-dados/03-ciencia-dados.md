@@ -1,5 +1,9 @@
 O edital pede "fundamentos de ciência de dados: coleta, preparação, limpeza, transformação, exploração e análise de dados; noções de estatística aplicada e avaliação de modelos". Esta seção segue o caminho dos dados até a métrica final.
 
+### Contexto histórico
+
+No fim do século XX, equipes que aplicavam mineração de dados procuraram uma metodologia compartilhada para organizar projetos e evitar erros recorrentes. Com apoio da União Europeia, um grupo de profissionais desenvolveu uma abordagem geral; a primeira versão do CRISP-DM foi apresentada em 1999. A revisão histórica publicada na revista IEEE *Transactions on Knowledge and Data Engineering* explica como o método se tornou referência para projetos de mineração e análise de dados ([artigo e DOI](https://doi.org/10.1109/TKDE.2019.2962680)).
+
 ### O processo de ciência de dados
 
 Um modelo de referência muito citado é o **CRISP-DM**, com seis fases: entendimento do negócio, entendimento dos dados, preparação dos dados, modelagem, avaliação e implantação. O processo é **iterativo**: a avaliação pode mandar de volta à preparação ou ao entendimento do negócio.
