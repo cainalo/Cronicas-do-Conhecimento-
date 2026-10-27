@@ -152,6 +152,7 @@ it('sequência única: a aula narrada abre automaticamente em tela inteira e seg
     </PrefsProvider>,
   );
   expect(screen.getByRole('dialog', { name: /Aula narrada: Do ábaco ao celular/ })).toBeInTheDocument();
+  expect(screen.queryByRole('link', { name: 'Conta e configurações' })).toBeNull();
   expect(screen.getByTestId('narrada-seek')).toBeInTheDocument();
   expect(screen.queryByTestId('midia-narrada')).toBeNull();
   expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Pegue o celular que está na sua mão/);
