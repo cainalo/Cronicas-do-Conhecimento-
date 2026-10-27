@@ -9,7 +9,6 @@ import { soundscape } from '@/app/soundscape';
 import { beatIndexOf, narrationPositions, nextBeat, positionAtBeat, revealOf, transcript, type NarrationPos } from '@/lib/narration';
 import { Icon } from '@/components/Icon';
 import { Illustration, type IllustrationName } from '@/components/Illustration';
-import { ActivityView } from '@/components/activities/ActivityView';
 
 const RATES = [0.8, 1, 1.2] as const;
 const VOICE_LABEL = { gemini: 'voz neural Gemini · áudio gerado por IA', nativa: 'voz pt-BR priorizada do aparelho (neural/natural quando instalada)', navegador: 'voz pt-BR priorizada do navegador (neural/natural quando disponível)', nenhuma: 'sem voz neste aparelho: legendas no tempo de leitura' } as const;
@@ -59,6 +58,7 @@ export function NarratedPlayer({
   const [playing, setPlaying] = useState(false);
   const [rate, setRate] = useState<(typeof RATES)[number]>(1);
   const [showTranscript, setShowTranscript] = useState(false);
+  const [showCaptions, setShowCaptions] = useState(true);
   const [done, setDone] = useState(false);
   const [beatElapsed, setBeatElapsed] = useState(0);
   const [voiceStarted, setVoiceStarted] = useState(false);
@@ -74,6 +74,7 @@ export function NarratedPlayer({
   const [trackDurationMs, setTrackDurationMs] = useState(0);
   const [mediaElapsedMs, setMediaElapsedMs] = useState(0);
   const hideControlsTimer = useRef<number | undefined>(undefined);
+  const controlsInteractionActive = useRef(false);
   const trackRef = useRef<VoiceAudioTrack | null>(null);
   const trackRequest = useRef(0);
   const activeCueRef = useRef(0);
@@ -98,6 +99,8 @@ export function NarratedPlayer({
   const currentMs = Math.min(totalMs, hasGeneratedTrack ? mediaElapsedMs : beforeMs + beatElapsed);
   const scene = l.scenes[pos.scene];
   const say = scene.beats[pos.beat].say;
+  const captionEstimatedWord = wordIndexAtChar(say, Math.floor((beatElapsed / Math.max(1, durations[beatIndex] ?? 2200)) * say.length));
+  const captionWordIndex = Math.max(0, Math.min((say.match(/\S+\s*/g) ?? [say]).length - 1, speechWordIndex ?? captionEstimatedWord));
   const beatVisualDuration = (hasGeneratedTrack ? trackDurations[beatIndex] : durations[beatIndex]) ?? 2200;
   const beatVisualProgress = Math.min(1, beatElapsed / Math.max(1, beatVisualDuration));
   // Um plano de apoio entra durante a fala (não apenas entre frases) quando existe tempo
@@ -128,43 +131,57 @@ export function NarratedPlayer({
       document.documentElement.style.overflow = rootOverflow;
     };
   }, []);
-  // Como em um player de vídeo, a interface desaparece por inatividade tanto
-  // durante a reprodução quanto quando a aula está pausada. Um toque a revela.
+  const clearControlsHideTimer = useCallback(() => {
+    if (hideControlsTimer.current !== undefined) window.clearTimeout(hideControlsTimer.current);
+    hideControlsTimer.current = undefined;
+  }, []);
+
+  // O prazo conta a partir da última interação; uma cena mudar não reinicia o contador.
+  // Enquanto o dedo ou o mouse estiver pressionado sobre um controle, a interface não some.
   const revealControls = useCallback(() => {
     setControlsVisible(true);
-    if (hideControlsTimer.current !== undefined) window.clearTimeout(hideControlsTimer.current);
+    clearControlsHideTimer();
+    if (controlsInteractionActive.current) return;
     hideControlsTimer.current = window.setTimeout(() => {
       hideControlsTimer.current = undefined;
-      setControlsVisible(false);
+      if (!controlsInteractionActive.current) setControlsVisible(false);
     }, 3800);
-  }, []);
+  }, [clearControlsHideTimer]);
+
+  const beginControlsInteraction = useCallback(() => {
+    controlsInteractionActive.current = true;
+    clearControlsHideTimer();
+    setControlsVisible(true);
+  }, [clearControlsHideTimer]);
+
+  const endControlsInteraction = useCallback(() => {
+    if (!controlsInteractionActive.current) return;
+    controlsInteractionActive.current = false;
+    revealControls();
+  }, [revealControls]);
+
   const togglePlayerControls = useCallback(() => {
     if (controlsVisible) {
-      if (hideControlsTimer.current !== undefined) window.clearTimeout(hideControlsTimer.current);
-      hideControlsTimer.current = undefined;
+      clearControlsHideTimer();
       setControlsVisible(false);
     } else {
       revealControls();
     }
-  }, [controlsVisible, revealControls]);
+  }, [controlsVisible, revealControls, clearControlsHideTimer]);
 
   useEffect(() => {
-    if (hideControlsTimer.current !== undefined) {
-      window.clearTimeout(hideControlsTimer.current);
-      hideControlsTimer.current = undefined;
+    if (controlsVisible) {
+      if (!controlsInteractionActive.current) revealControls();
+    } else {
+      clearControlsHideTimer();
     }
-    if (!controlsVisible) return;
-    hideControlsTimer.current = window.setTimeout(() => {
-      hideControlsTimer.current = undefined;
-      setControlsVisible(false);
-    }, 3800);
-    return () => {
-      if (hideControlsTimer.current !== undefined) {
-        window.clearTimeout(hideControlsTimer.current);
-        hideControlsTimer.current = undefined;
-      }
-    };
-  }, [controlsVisible, pos]);
+    return clearControlsHideTimer;
+  }, [controlsVisible, revealControls, clearControlsHideTimer]);
+
+  useEffect(() => () => {
+    controlsInteractionActive.current = false;
+    clearControlsHideTimer();
+  }, [clearControlsHideTimer]);
 
   useEffect(() => {
     soundscape.duck(playing && voice.kind !== 'nenhuma');
@@ -510,7 +527,7 @@ export function NarratedPlayer({
 
   // O palco visual ocupa a viewport inteira. Cabeçalho, legenda e controles são camadas
   // flutuantes com margens seguras; nunca empurram o vídeo nem ficam colados às bordas.
-  const shell = 'fixed inset-0 z-[100] isolate h-[100dvh] max-h-[100dvh] w-screen max-w-none overflow-hidden rounded-none bg-bg text-ink';
+  const shell = 'fixed inset-0 z-[100] isolate h-[100dvh] max-h-[100dvh] w-auto max-w-none overflow-hidden rounded-none bg-bg text-ink';
   const visibleClass = controlsVisible ? 'opacity-100 translate-y-0 pointer-events-auto' : 'pointer-events-none translate-y-2 opacity-0';
   const stopOverlayClick = (event: MouseEvent) => event.stopPropagation();
 
@@ -520,20 +537,28 @@ export function NarratedPlayer({
       data-embedded={embedded ? 'true' : undefined}
       data-testid="narrada-player"
       onClick={togglePlayerControls}
-      onPointerMove={(event) => { if (event.pointerType === 'mouse') revealControls(); }}
+      onPointerMove={revealControls}
       onKeyDown={revealControls}
     >
       <section className="absolute inset-0 overflow-hidden bg-bg" aria-label="Aula em vídeo narrado" data-testid="narrada-stage">
-        <div className="absolute inset-0" aria-hidden="true">
-          <div className="absolute -left-20 top-[18%] h-48 w-48 rounded-full bg-[#2e7182]/10 blur-3xl" />
-          <div className="absolute -right-16 bottom-[26%] h-52 w-52 rounded-full bg-[#c8402a]/10 blur-3xl" />
-        </div>
         <div
-          className="absolute inset-0 grid place-items-center px-3 sm:px-6"
+          className="absolute inset-0 grid place-items-center"
           data-testid="narrada-cena"
         >
           <div className="relative flex h-full max-h-full w-full items-center justify-center" data-testid="narrada-elementos-visuais">
-            <CinematicSceneMemo scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} beatIndex={pos.beat} controlsVisible={controlsVisible} cutawayVisible={cutawayVisible} />
+            <CinematicSceneMemo
+              scene={scene}
+              reveal={revealOf(scene, pos.beat)}
+              sceneIndex={pos.scene}
+              sceneCount={l.scenes.length}
+              beatIndex={pos.beat}
+              controlsVisible={controlsVisible}
+              cutawayVisible={cutawayVisible}
+              showCaptions={showCaptions}
+              captionText={say}
+              captionWordIndex={captionWordIndex}
+              highlightCaptionWord={playing && voiceStarted}
+            />
           </div>
         </div>
       </section>
@@ -553,19 +578,12 @@ export function NarratedPlayer({
         aria-label={exitLabel} title={exitLabel} data-testid="narrada-sair">
         <Icon name="sair" size={19} />
       </button>
-      <p className={`absolute left-4 right-4 z-10 mx-auto max-w-3xl rounded-2xl border border-white/15 bg-[#171b1b]/82 px-4 py-3 text-center text-sm font-medium leading-relaxed text-white shadow-xl backdrop-blur-md transition-all duration-500 sm:left-10 sm:right-10 sm:px-6 sm:text-base ${controlsVisible ? 'bottom-[calc(9.8rem+env(safe-area-inset-bottom))]' : 'bottom-[max(1.15rem,env(safe-area-inset-bottom))]'}`}
-        aria-live="polite" data-testid="narrada-legenda" onClick={stopOverlayClick}>
-        <span className="sr-only">Legenda: </span>
-        <span data-testid="narrada-legenda-texto">
-          {(say.match(/\S+\s*/g) ?? [say]).map((word, i) => {
-            const estimatedWord = voiceStarted ? wordIndexAtChar(say, Math.floor((beatElapsed / Math.max(1, durations[beatIndex] ?? 2200)) * say.length)) : -1;
-            const activeWord = playing && voiceStarted ? (speechWordIndex ?? estimatedWord) : -1;
-            return <span key={`${i}-${word}`} className={i === activeWord ? 'rounded bg-[#f0bf69]/25 px-0.5 font-bold text-[#ffd38a] transition-colors duration-200' : i < activeWord ? 'text-white/65 transition-colors duration-200' : 'text-white transition-colors duration-200'}>{word}</span>;
-          })}
-        </span>
-      </p>
       <div className={`absolute bottom-[calc(4.7rem+env(safe-area-inset-bottom))] left-4 right-4 z-30 mx-auto max-w-2xl transition-all duration-300 ${visibleClass}`}
-        onClick={stopOverlayClick} aria-hidden={!controlsVisible} data-testid="narrada-seek-panel">
+        onClick={stopOverlayClick}
+        onPointerDown={beginControlsInteraction}
+        onPointerUp={endControlsInteraction}
+        onPointerCancel={endControlsInteraction}
+        aria-hidden={!controlsVisible} data-testid="narrada-seek-panel">
         <div className="rounded-xl border border-white/20 bg-[#171b1b]/82 px-3 py-2 text-white shadow-lg backdrop-blur-lg">
           <div className="mb-1 flex items-center justify-between gap-3 text-[0.62rem] font-semibold tabular-nums text-white/75">
             <span>{formatTime(currentMs)}</span><span>{formatTime(totalMs)} · {hasGeneratedTrack ? 'faixa de áudio' : 'tempo estimado'}</span>
@@ -578,7 +596,11 @@ export function NarratedPlayer({
         </div>
       </div>
       <div className={`absolute bottom-[max(0.35rem,env(safe-area-inset-bottom))] left-2 right-2 z-30 mx-auto flex max-w-xl items-center justify-center gap-1.5 px-1 transition-all duration-300 sm:bottom-[max(0.85rem,env(safe-area-inset-bottom))] sm:gap-3 ${visibleClass}`}
-        onClick={stopOverlayClick} aria-hidden={!controlsVisible} data-testid="narrada-controles-flutuantes">
+        onClick={stopOverlayClick}
+        onPointerDown={beginControlsInteraction}
+        onPointerUp={endControlsInteraction}
+        onPointerCancel={endControlsInteraction}
+        aria-hidden={!controlsVisible} data-testid="narrada-controles-flutuantes">
         <span className="sr-only">{VOICE_LABEL[voice.kind]}</span>
         <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => jump(positionAtBeat(l, Math.max(0, beatIndex - 1)))} aria-label="Voltar uma fala"><Icon name="voltar" size={17} /></button>
         <button type="button" className="grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-white/25 bg-[#c8402a] text-white shadow-xl transition hover:bg-[#a0301c]" onClick={togglePlayback} disabled={preparingTrack} aria-label={preparingTrack ? 'Preparando a narração' : playing ? 'Pausar aula' : done ? 'Assistir novamente' : 'Reproduzir aula'} data-testid="narrada-tocar">{preparingTrack ? <Icon name="ampulheta" size={19} /> : playing ? <span aria-hidden="true" className="text-xl leading-none">Ⅱ</span> : <Icon name="play" size={19} />}</button>
@@ -589,11 +611,23 @@ export function NarratedPlayer({
           </select>
         </label>
         <button type="button" className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 text-white shadow-lg backdrop-blur-md transition ${voice.kind === 'gemini' ? 'bg-[#6e3b5c]' : 'bg-[#171b1b]/82 hover:bg-[#6e3b5c]'}`} onClick={() => { setShowTranscript(false); setShowVoiceSettings((v) => !v); setVoiceStatus(''); }} aria-label="Preferências de voz" aria-expanded={showVoiceSettings} data-testid="narrada-preferencias-voz"><Icon name="alaude" size={17} /></button>
+        <button
+          type="button"
+          className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border text-xs font-black tracking-tight text-white shadow-lg transition ${showCaptions ? 'border-white/45 bg-[#1f5c7a]' : 'border-white/20 bg-[#171b1b]/82 hover:bg-[#1f5c7a]'}`}
+          onClick={() => setShowCaptions((value) => !value)}
+          aria-label={showCaptions ? 'Desativar legendas' : 'Ativar legendas'}
+          aria-pressed={showCaptions}
+          title={showCaptions ? 'Desativar legendas' : 'Ativar legendas'}
+          data-testid="narrada-legendas-toggle"
+        >CC</button>
         <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => { setShowVoiceSettings(false); setShowTranscript((v) => !v); }} aria-label={showTranscript ? 'Ocultar transcrição' : 'Transcrição'} aria-expanded={showTranscript} data-testid="narrada-transcricao"><Icon name="livro" size={17} /></button>
       </div>
       <div
         className={`absolute bottom-[calc(7.1rem+env(safe-area-inset-bottom))] left-1/2 z-30 flex -translate-x-1/2 items-center justify-center gap-2 transition-all duration-300 ${visibleClass}`}
         onClick={stopOverlayClick}
+        onPointerDown={beginControlsInteraction}
+        onPointerUp={endControlsInteraction}
+        onPointerCancel={endControlsInteraction}
         aria-hidden={!controlsVisible}
         aria-label="Ir para uma cena da aula"
         data-testid="narrada-marcadores-cena"
@@ -611,7 +645,7 @@ export function NarratedPlayer({
       </div>
 
       {showVoiceSettings && controlsVisible && (
-        <section className="absolute bottom-[calc(9.5rem+env(safe-area-inset-bottom))] left-3 right-3 z-40 mx-auto max-h-[calc(100dvh-12rem)] max-w-xl overflow-y-auto rounded-2xl border border-white/20 bg-[#171b1b]/96 p-4 text-white shadow-2xl backdrop-blur-xl" onClick={stopOverlayClick} aria-label="Configurações da voz" data-testid="narrada-painel-voz">
+        <section className="absolute bottom-[calc(9.5rem+env(safe-area-inset-bottom))] left-3 right-3 z-40 mx-auto max-h-[calc(100dvh-12rem)] max-w-xl overflow-y-auto rounded-2xl border border-white/20 bg-[#171b1b]/96 p-4 text-white shadow-2xl backdrop-blur-xl" onClick={stopOverlayClick} onPointerDown={beginControlsInteraction} onPointerUp={endControlsInteraction} onPointerCancel={endControlsInteraction} aria-label="Configurações da voz" data-testid="narrada-painel-voz">
           <div className="flex items-start justify-between gap-3"><div><h2 className="font-display text-xl font-semibold">Voz da narração</h2><p className="mt-1 text-xs leading-relaxed text-white/70">A voz neural soa mais humana, mas precisa de chave pessoal e internet. Sem ela, o app usa a voz instalada no aparelho.</p></div>
             <button type="button" onClick={() => setShowVoiceSettings(false)} aria-label="Fechar preferências de voz" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/10">×</button>
           </div>
@@ -636,19 +670,13 @@ export function NarratedPlayer({
         </section>
       )}
       {showTranscript && controlsVisible && (
-        <section className="absolute bottom-[calc(9.5rem+env(safe-area-inset-bottom))] left-3 right-3 z-40 mx-auto max-h-[calc(100dvh-12rem)] max-w-xl overflow-y-auto rounded-2xl border border-white/20 bg-[#171b1b]/96 p-4 text-white shadow-2xl backdrop-blur-xl" onClick={stopOverlayClick} aria-label="Transcrição" data-testid="narrada-transcricao-painel">
+        <section className="absolute bottom-[calc(9.5rem+env(safe-area-inset-bottom))] left-3 right-3 z-40 mx-auto max-h-[calc(100dvh-12rem)] max-w-xl overflow-y-auto rounded-2xl border border-white/20 bg-[#171b1b]/96 p-4 text-white shadow-2xl backdrop-blur-xl" onClick={stopOverlayClick} onPointerDown={beginControlsInteraction} onPointerUp={endControlsInteraction} onPointerCancel={endControlsInteraction} aria-label="Transcrição" data-testid="narrada-transcricao-painel">
           <h2 className="font-display text-xl font-semibold">Transcrição completa</h2>
           {transcript(l).map((t) => <div key={t.heading} className="mb-3 last:mb-0"><h3 className="font-semibold text-[#ffbb8c]">{t.heading}</h3><p className="mt-1 text-sm leading-relaxed text-white/85">{t.lines.join(' ')}</p></div>)}
         </section>
       )}
       {!controlsVisible && <button type="button" className="absolute inset-0 z-10 cursor-pointer" aria-label="Mostrar controles da aula" onClick={(event) => { event.stopPropagation(); togglePlayerControls(); }} data-testid="narrada-mostrar-controles" />}
 
-      {done && l.check && (
-        <div className="absolute inset-x-4 bottom-28 z-30 mx-auto max-w-xl rounded-2xl border border-line bg-bg/95 p-4 shadow-xl backdrop-blur-xl sm:bottom-32" role="region" aria-label="Checagem">
-          <p className="font-semibold">Confira o que viu (opcional)</p>
-          <div className="mt-2 max-h-48 overflow-y-auto"><ActivityView a={l.check} onNext={() => undefined} /></div>
-        </div>
-      )}
     </div>
   );
 }
@@ -756,7 +784,20 @@ function HistoricalPhoto({ photo, variant = 'scene' }: { photo: HistoricalVisual
  */
 function CinematicScene({
   scene, reveal, sceneIndex, sceneCount, beatIndex, controlsVisible, cutawayVisible,
-}: { scene: Scene; reveal: number; sceneIndex: number; sceneCount: number; beatIndex: number; controlsVisible: boolean; cutawayVisible: boolean }) {
+  showCaptions, captionText, captionWordIndex, highlightCaptionWord,
+}: {
+  scene: Scene;
+  reveal: number;
+  sceneIndex: number;
+  sceneCount: number;
+  beatIndex: number;
+  controlsVisible: boolean;
+  cutawayVisible: boolean;
+  showCaptions: boolean;
+  captionText: string;
+  captionWordIndex: number;
+  highlightCaptionWord: boolean;
+}) {
   const visual = scene.visual;
   const palette = CINEMA_PALETTES[sceneIndex % CINEMA_PALETTES.length];
   const activeIndex = (length: number) => Math.max(0, Math.min(length - 1, reveal - 1));
@@ -844,6 +885,8 @@ function CinematicScene({
         <span className="ccv-film-brand">CRÔNICAS <i /> DO CONHECIMENTO</span>
         <span className="ccv-film-counter">{String(sceneIndex + 1).padStart(2, '0')} / {String(sceneCount).padStart(2, '0')}</span>
       </header>
+
+      {showCaptions && <CaptionLine text={captionText} activeWordIndex={captionWordIndex} highlightWord={highlightCaptionWord} />}
 
       <div className={"ccv-film-content" + (cutawayVisible ? " has-cutaway" : "")}>
         <section className={'ccv-film-copy' + (cueMotion ? ' is-cue-change' : '')}>
@@ -1001,6 +1044,31 @@ function CinematicCutaway({
         <p className="ccv-cutaway__source">CRÔNICAS DO CONHECIMENTO</p>
       </div>
     </aside>
+  );
+}
+
+function CaptionLine({ text, activeWordIndex, highlightWord }: { text: string; activeWordIndex: number; highlightWord: boolean }) {
+  const tokens = text.match(/\S+\s*/g) ?? [text];
+  const visibleCount = Math.min(8, tokens.length);
+  const start = Math.min(Math.max(0, activeWordIndex - 3), Math.max(0, tokens.length - visibleCount));
+  const end = Math.min(tokens.length, start + visibleCount);
+
+  return (
+    <div className="mb-[clamp(.35rem,1vh,.7rem)] flex min-h-[1.8rem] w-full shrink-0 items-center justify-center px-1"
+      role="status" aria-label="Legenda da fala atual" aria-live="polite" aria-atomic="true" data-testid="narrada-legenda">
+      <p className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap rounded-md bg-[#171b1b]/88 px-2 py-1 text-center text-[0.68rem] font-medium leading-5 text-white shadow-sm sm:px-3 sm:text-sm">
+        <span className="sr-only">Legenda: </span>
+        <span data-testid="narrada-legenda-texto">
+          {start > 0 && <span aria-hidden="true">… </span>}
+          {tokens.slice(start, end).map((word, offset) => {
+            const i = start + offset;
+            const active = highlightWord && i === activeWordIndex;
+            return <span key={`${i}-${word}`} className={active ? 'rounded bg-[#f0bf69]/25 px-0.5 font-bold text-[#ffd38a]' : 'text-white'}>{word}</span>;
+          })}
+          {end < tokens.length && <span aria-hidden="true">…</span>}
+        </span>
+      </p>
+    </div>
   );
 }
 
