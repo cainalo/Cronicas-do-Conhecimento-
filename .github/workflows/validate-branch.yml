@@ -35,6 +35,9 @@ jobs:
       - name: Typecheck e build web
         run: npm run build
 
+      - name: Medir bundle JavaScript bruto e gzip
+        run: npm run report:bundle
+
       - name: Cache do Chromium
         uses: actions/cache@v4
         id: playwright-cache
