@@ -87,7 +87,7 @@ export const licoesDevops: Lesson[] = [
   {
     id: 'lic.devops.01',
     chapterId: 'cap.devops.01',
-    title: 'Do Cais ao Mar',
+    title: 'Entrega Contínua e Plataforma',
     goal: 'Comandos e conceitos do Git, Git Flow × trunk-based, pull requests, CI/CD, ambientes, estratégias de implantação e ferramentas.',
     cards: [
       { title: 'Git', body: '`fetch` só baixa; `pull` = fetch + merge. **`revert`** desfaz com novo commit; **`rebase`** reescreve histórico.\n\nGit Flow: main, develop, feature, release, hotfix. **Trunk-based**: integração diária + feature flags.' },
@@ -98,7 +98,7 @@ export const licoesDevops: Lesson[] = [
   {
     id: 'lic.devops.02',
     chapterId: 'cap.devops.02',
-    title: 'Navios em Frota',
+    title: 'Contêineres e Orquestração',
     goal: 'IaC declarativa e idempotente, Docker e Compose, objetos do Kubernetes, métricas, logs, traces, SLI/SLO/SLA e alertas.',
     cards: [
       { title: 'Plataforma', body: 'IaC **declarativa** = estado desejado; idempotente.\n\nContêiner **compartilha o kernel**; VM tem SO próprio. Kubernetes: **Pod**, Deployment, Service, Ingress, ConfigMap/Secret.' },
