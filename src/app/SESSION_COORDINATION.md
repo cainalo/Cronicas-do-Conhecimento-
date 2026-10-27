@@ -224,3 +224,12 @@ Este é o único arquivo de coordenação do projeto. Os registros antigos abaix
 **Complemento de revisão visual (mesma etapa):** a explicação da cena foi separada do cabeçalho e reposicionada após o visual, formando a sequência título → imagem/diagrama → explicação. Removido o selo flutuante que repetia o título. Commits complementares: `f67d88572f3fc8082f9f0024a324ad2ce56fe13e` e `fb34ba0376c42ad4e47cade8aa806d6a1caaa463`. Teste adicional confirma que a rota de Aprender não renderiza o link global de Conta/perfil. Commit do teste esperado após esta gravação; validação executada até aqui foi estática e do algoritmo puro, não `npm test`/build.
 
 - Complemento de regressão registrado em `src/test/narrated.test.tsx`: commit `8c205bd213b9c540628fbf2f830d79d716fa688b`. Esta coordenação foi atualizada em `c456ac91e946f9f81393a7412eea3b9f28d2062f`; nenhum status de CI foi retornado para esses commits.
+
+
+### ChatGPT — Product cleanup e dashboard
+**Data:** 2026-10-27
+**Estado:** alterações registradas na branch de manutenção; publicação pendente de integração e workflow.
+- Dashboard ganhou cartão de evolução compacto com barra de progresso e link para detalhes, evitando que a home seja dominada por números e texto longo.
+- README e matriz de cobertura foram atualizados para descrever a plataforma sem RPG medieval. Títulos temáticos em índices de conteúdo e conquistas foram substituídos por nomes descritivos, preservando IDs das disciplinas e tópicos.
+- Criado docs/PRODUCT_AUDIT_2026-10-27.md com estado do produto, lacunas de conteúdo e prioridades.
+- Próximos passos: remover artefatos de fantasia sem consumidores após auditoria de referências; conferir dependências; integrar na branch que publica; acompanhar testes, APK e GitHub Pages antes de declarar publicação concluída.
