@@ -17,7 +17,7 @@ import { learnKey, logUnit, seriesKey } from '@/lib/pace';
 import { markSectionRead, recordAnswer } from '@/lib/study';
 import { Markdown } from '@/components/Markdown';
 import { ContentFlow, PageDots, type ContentItem } from '@/components/ContentFlow';
-import { splitMarkdown } from '@/lib/book';
+import { splitMarkdown } from '@/lib/reading-content';
 import { Icon } from '@/components/Icon';
 import { Illustration } from '@/components/Illustration';
 import { StepGuide } from '@/components/StepGuide';
