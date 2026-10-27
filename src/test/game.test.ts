@@ -12,9 +12,9 @@ const answerAt = (d: StudyData, i: number, iso: string, right = true) => {
 
 describe('gamificação', () => {
   it('títulos por nível', () => {
-    expect(titleFor(1)).toBe('Aprendiz');
-    expect(titleFor(4)).toBe('Copista');
-    expect(titleFor(20)).toBe('Mestre da Torre');
+    expect(titleFor(1)).toBe('Iniciante');
+    expect(titleFor(4)).toBe('Praticante');
+    expect(titleFor(20)).toBe('Referência');
   });
 
   it('sequência de dias conta só dias com estudo e tolera hoje ainda sem estudo', () => {
