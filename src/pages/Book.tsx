@@ -42,7 +42,6 @@ export function Pegadinha({ item }: { item: { statement: string; answer: boolean
 }
 
 function BlockView({ b, chapterId }: { b: BookBlock; chapterId: string }) {
-  const chapter = getChapter(chapterId)!;
   const { data } = useStudy();
   switch (b.kind) {
     case 'title':
@@ -54,7 +53,7 @@ function BlockView({ b, chapterId }: { b: BookBlock; chapterId: string }) {
       );
     case 'md':
       return (
-        <div className="prose-manuscript learn-text max-w-none">
+        <div className="prose-content learn-text max-w-none">
           <Markdown>{b.md}</Markdown>
         </div>
       );
@@ -76,7 +75,7 @@ function BlockView({ b, chapterId }: { b: BookBlock; chapterId: string }) {
             <p className="mt-1 text-sm text-muted">Faça exercícios para consolidar o conteúdo.</p>
           </div>
           <Link to={`/pratica/${chapterId}/${b.sectionId}`} className="btn-primary min-h-[42px]">
-            <Icon name="alvo" size={17} /> {done ? 'Praticar novamente' : 'Praticar agora'}
+            <Icon name="play" size={17} /> {done ? 'Praticar novamente' : 'Praticar agora'}
           </Link>
         </section>
       );
