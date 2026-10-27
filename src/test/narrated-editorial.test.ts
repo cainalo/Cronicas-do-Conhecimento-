@@ -78,11 +78,14 @@ describe('conteúdo editorial das aulas narradas prioritárias', () => {
 
     for (const scene of lesson.scenes) {
       if (scene.visual.kind !== 'numberline') continue;
-      expect(scene.visual.states.length).toBe(scene.beats.length);
+      // Guarde o membro discriminado numa variável: o TypeScript perde o narrowing
+      // de scene.visual dentro do callback de forEach.
+      const visual = scene.visual;
+      expect(visual.states.length).toBe(scene.beats.length);
       scene.beats.forEach((beat, beatIndex) => {
         expect(beat.show, `${scene.id}, fala ${beatIndex + 1}: associe a fala a um estado explícito da reta.`).toBeDefined();
         const stateIndex = revealOf(scene, beatIndex);
-        expect(scene.visual.states[stateIndex], `${scene.id}, fala ${beatIndex + 1}: estado visual existente.`).toBeDefined();
+        expect(visual.states[stateIndex], `${scene.id}, fala ${beatIndex + 1}: estado visual existente.`).toBeDefined();
       });
     }
 
