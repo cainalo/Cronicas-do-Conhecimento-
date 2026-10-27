@@ -480,6 +480,12 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 }
 
 .ccv-film-scene {
+  /* Sangria total, sem margens herdadas pelo player dentro do WebView. */
+  width: 100vw;
+  min-width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  border-radius: 0;
   --ccv-background: #c8402a;
   --ccv-accent: #f0bf69;
   --ccv-secondary: #1b1a17;
