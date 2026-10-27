@@ -11,11 +11,8 @@ export const grimorioInfra: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.infra',
   title: 'Sistemas Operacionais, Redes e Nuvem',
-  epithet: 'Sistemas Operacionais, Redes e Nuvem',
-  description: 'As estradas por onde correm os pacotes (TCP/IP, endereços, DNS, HTTP/3, firewalls, VPN), os castelos alugados nas nuvens (IaaS, PaaS, SaaS, escala) e as engrenagens de cada máquina (Windows, Linux, shell, PowerShell, Active Directory, virtualização).',
+  description: 'Protocolos de rede (TCP/IP, endereços, DNS, HTTP/3, firewalls, VPN), serviços de nuvem (IaaS, PaaS, SaaS, escala) e administração de sistemas (Windows, Linux, shell, PowerShell, Active Directory e virtualização).',
   chapterIds: ['cap.infra.01', 'cap.infra.02', 'cap.infra.03'],
-  sigil: 'selo',
-  binding: 'castanho',
 };
 
 export const capInfraRedes: Chapter = {
@@ -99,7 +96,7 @@ export const licoesInfra: Lesson[] = [
   {
     id: 'lic.infra.02',
     chapterId: 'cap.infra.02',
-    title: 'Castelos nas Nuvens',
+    title: 'Serviços de Computação em Nuvem',
     goal: 'Modelos de serviço e implantação, responsabilidade compartilhada, serverless, escala e disponibilidade.',
     cards: [
       { title: 'Quem gerencia o quê', body: '**IaaS**: você cuida do SO para cima. **PaaS**: só aplicação e dados. **SaaS**: aplicação pronta.\n\nDados, contas e permissões são **sempre** do cliente.' },
