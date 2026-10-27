@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
-import { getChapter, getSectionExtras } from '@/content';
+import { getChapter } from '@/content';
 import { chapterBlocks, type BookBlock } from '@/lib/book';
 import { markSectionRead } from '@/lib/study';
 import { practiceDone } from '@/lib/practice';
@@ -154,7 +154,7 @@ export function BookPage() {
   const chapter = getChapter(id);
   const { data, update } = useStudy();
   const { sfx, confetti, toast } = useFx();
-  const blocks = useMemo(() => chapter ? chapterBlocks(chapter, (sectionId) => getSectionExtras(chapter.id, sectionId)) : [], [chapter]);
+  const blocks = useMemo(() => chapter ? chapterBlocks(chapter) : [], [chapter]);
 
   useEffect(() => {
     if (!hash) return;
