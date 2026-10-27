@@ -1,5 +1,9 @@
 O edital pede "ética em inteligência artificial: IA responsável, explicabilidade e governança de IA". Para um auditor de TI, o tema é prático: o Tribunal pode usar IA e também fiscalizar sistemas de IA usados pelos jurisdicionados.
 
+### Contexto histórico
+
+Em 22 de maio de 2019, o Conselho da OCDE adotou uma recomendação intergovernamental sobre IA; em 23 de novembro de 2021, a UNESCO aprovou sua Recomendação sobre a Ética da IA. Esses marcos mostram que a avaliação de sistemas passou a incluir explicitamente direitos, justiça, transparência e responsabilidade, além do desempenho técnico. Fontes primárias: [instrumento oficial da OCDE](https://legalinstruments.oecd.org/en/instruments/OECD-LEGAL-0449) e [recomendação oficial da UNESCO](https://www.unesco.org/en/legal-affairs/recommendation-ethics-artificial-intelligence).
+
 ### IA responsável
 
 **IA responsável** é o conjunto de princípios e práticas para que sistemas de IA sejam desenvolvidos e usados de forma segura, justa e passível de controle. Os princípios aparecem com nomes parecidos em vários documentos internacionais, como os Princípios de IA da OCDE (2019) e a Recomendação sobre a Ética da IA da UNESCO (2021).
