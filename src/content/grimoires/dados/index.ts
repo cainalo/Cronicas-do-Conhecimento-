@@ -10,11 +10,8 @@ export const grimorioDados: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.dados',
   title: 'Banco de Dados',
-  epithet: 'Banco de Dados',
-  description: 'Os registros guardados sob o castelo: modelagem e normalização, SQL e álgebra relacional, transações e índices, PostgreSQL e Oracle, NoSQL, replicação e governança dos dados.',
+  description: 'Modelagem, armazenamento e consulta de dados: modelagem e normalização, SQL e álgebra relacional, transações e índices, PostgreSQL e Oracle, NoSQL, replicação e governança dos dados.',
   chapterIds: ['cap.dados.01', 'cap.dados.02'],
-  sigil: 'grimorio',
-  binding: 'castanho',
 };
 
 export const capDadosSql: Chapter = {
@@ -93,7 +90,7 @@ export const licoesDados: Lesson[] = [
   {
     id: 'lic.dados.01',
     chapterId: 'cap.dados.01',
-    title: 'Os Livros de Registro',
+    title: 'Relatórios e consistência de registros',
     goal: 'Modelo ER, chaves, formas normais, SQL, junções, álgebra relacional, ACID, isolamento e índices.',
     cards: [
       { title: 'Modelar e normalizar', body: 'N:M vira **tabela associativa**; 1:N leva a chave do lado 1 como **estrangeira** no lado N.\n\n**2FN**: sem dependência parcial. **3FN**: sem dependência transitiva. **FNBC**: todo determinante é chave candidata.' },
