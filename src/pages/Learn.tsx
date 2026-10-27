@@ -6,7 +6,7 @@ import { usePrefs } from '@/app/prefs';
 import { useFx } from '@/app/fx';
 import { useSession } from '@/app/useSession';
 import { learnKey, seriesKey } from '@/lib/pace';
-import { getChapter, getLearningUnit, getSectionExtras, getSimpleSection, microSeries } from '@/content';
+import { getChapter, getLearningUnit, getSimpleSection, microSeries } from '@/content';
 import { InteractiveUnitPage } from '@/pages/InteractiveUnit';
 import { MicroLessonPage } from './MicroLesson';
 import { markSectionRead, setLastSection } from '@/lib/study';
@@ -46,7 +46,6 @@ function SimpleLearnPage() {
   const idx = chapter?.sections.findIndex((s) => s.id === sectionId) ?? -1;
   const section = chapter?.sections[idx];
   const simple = getSimpleSection(chapterId, sectionId);
-  const extras = getSectionExtras(chapterId, sectionId);
   const { data, update } = useStudy();
   const { prefs } = usePrefs();
   const { sfx, confetti, toast } = useFx();
@@ -161,7 +160,7 @@ function SimpleLearnPage() {
             </span>
             <div>
               <h2 className="text-[1.5rem] leading-tight">Trecho concluído</h2>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{extras?.outro ?? 'Agora pratique para consolidar o que aprendeu.'}</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{'Agora pratique para consolidar o que aprendeu.'}</p>
             </div>
             <Link to={`/pratica/${chapterId}/${sectionId}`} className="btn-primary inline-flex min-h-[46px] w-full max-w-sm items-center justify-center" data-testid={`praticar-${sectionId}`}>
               <Icon name="alvo" size={18} /> {done ? 'Praticar novamente' : 'Começar a prática'}
