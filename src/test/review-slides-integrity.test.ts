@@ -7,6 +7,12 @@ function normalizedMarkdown(value: string): string {
 }
 
 describe('integridade de conteúdo dos slides de revisão', () => {
+  it('preserva pontuação de abreviações e iniciais bibliográficas', () => {
+    const source = 'Ex.: Windows, Linux.\n\nTANENBAUM, A. S.; AUSTIN, T. Organização Estruturada de Computadores. Pearson.';
+    expect(splitReviewChunks(source).join(' ')).toBe(normalizedMarkdown(source));
+  });
+
+
   it('preserva o texto normalizado de cada seção em todos os capítulos', () => {
     expect(chapters.length).toBeGreaterThan(0);
 
