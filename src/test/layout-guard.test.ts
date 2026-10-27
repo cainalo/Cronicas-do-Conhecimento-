@@ -62,6 +62,13 @@ describe('experiência imersiva de aula e revisão', () => {
     const narrated = readFileSync(join(ROOT, 'pages/Narrated.tsx'), 'utf8');
     expect(narrated).toMatch(/fixed inset-0[^\n]*h-\[100dvh\]/);
     expect(narrated).toMatch(/document\.body\.style\.overflow = 'hidden'/);
+    // Portal para body evita que transforms/backdrop-filter de ancestrais encolham o player.
+    expect(narrated).toContain('return createPortal((');
+    expect(narrated).toContain('document.body);');
+    expect(narrated).toContain('data-testid="narrada-legendas-toggle"');
+    expect(narrated).toContain('whitespace-nowrap');
+    expect(narrated).not.toContain('ActivityView');
+    expect(narrated).not.toContain('done && l.check');
     expect(narrated).toMatch(/function CinematicScene/);
     expect(narrated).toMatch(/data-testid="narrada-cena-cinematica"/);
     expect(narrated).toMatch(/wordStarts\.reduce/);
