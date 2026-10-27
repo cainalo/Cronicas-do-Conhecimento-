@@ -1,6 +1,7 @@
 // Aula visual narrada com player de tela inteira, cena animada e linha do tempo arrastável.
 // A busca é estimada por fala: a voz do aparelho não fornece uma duração exata de vídeo.
 import { memo, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getNarrated } from '@/content';
 import type { NarratedLesson, NumberLineState, Scene } from '@/content/narrated/types';
@@ -531,7 +532,7 @@ export function NarratedPlayer({
   const visibleClass = controlsVisible ? 'opacity-100 translate-y-0 pointer-events-auto' : 'pointer-events-none translate-y-2 opacity-0';
   const stopOverlayClick = (event: MouseEvent) => event.stopPropagation();
 
-  return (
+  return createPortal((
     <div
       className={shell}
       data-embedded={embedded ? 'true' : undefined}
@@ -683,7 +684,7 @@ export function NarratedPlayer({
       {!controlsVisible && <button type="button" className="absolute inset-0 z-10 cursor-pointer" aria-label="Mostrar controles da aula" onClick={(event) => { event.stopPropagation(); togglePlayerControls(); }} data-testid="narrada-mostrar-controles" />}
 
     </div>
-  );
+  ), document.body);
 }
 
 /**
