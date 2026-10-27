@@ -127,7 +127,7 @@ describe('recuperação adaptativa na prática', () => {
   const ch = chapters.find((c) => c.glossary.length >= 6)!;
   const sec = ch.sections[0].id;
   it('termo errado traz outro termo do mesmo glossário, logo adiante', () => {
-    const queue = buildPractice(ch, sec, bank, undefined, () => 0.3);
+    const queue = buildPractice(ch, sec, bank, () => 0.3);
     const t = queue.find((a) => a.kind === 'term')! as Extract<Activity, { kind: 'term' }>;
     const q = [t, ...queue.filter((a) => a !== t)];
     const r = recoveryFor(t, { chapter: ch, sectionId: sec, bank, queue: q })! as Extract<Activity, { kind: 'term' }>;

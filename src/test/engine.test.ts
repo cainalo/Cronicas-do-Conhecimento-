@@ -60,7 +60,7 @@ describe('engine de atividades', () => {
     const taught = taughtConcepts(d, learningUnits);
     const glossary = concepts.filter((c) => unit.conceptIds.includes(c.id) && taught.has(c.id)).map((c) => ({ term: c.term, definition: c.definition }));
     const allowed = new Set(glossary.map((g) => g.term));
-    const round = buildPractice(ch, unit.sectionId, questionsForContest(DEFAULT_CONTEST_ID), undefined, () => 0.4, undefined, glossary);
+    const round = buildPractice(ch, unit.sectionId, questionsForContest(DEFAULT_CONTEST_ID), () => 0.4, undefined, glossary);
     for (const a of round) {
       if (a.kind === 'term') expect(allowed.has(a.answer)).toBe(true);
       if (a.kind === 'pairs') for (const p of a.pairs) expect(allowed.has(p.term)).toBe(true);

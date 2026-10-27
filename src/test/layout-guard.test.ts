@@ -61,7 +61,7 @@ describe('experiência imersiva de aula e revisão', () => {
   it('a aula narrada ocupa a viewport e bloqueia rolagem vertical', () => {
     const narrated = readFileSync(join(ROOT, 'pages/Narrated.tsx'), 'utf8');
     expect(narrated).toMatch(/fixed inset-0[^\n]*h-\[100dvh\][^\n]*w-full[^\n]*overflow-hidden/);
-    expect(narrated).toContain("width: '100vw'");
+    expect(narrated).toContain("width: '100%'");
     const filmStyles = readFileSync(join(ROOT, 'styles/index.css'), 'utf8');
     const sceneStart = filmStyles.indexOf('.ccv-film-scene {');
     const sceneEnd = filmStyles.indexOf('\n}', sceneStart);

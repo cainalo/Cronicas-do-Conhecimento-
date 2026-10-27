@@ -70,7 +70,7 @@ it('página: começa parada; legenda de uma linha é opcional; controles reinici
   expect(caption.querySelector('p')!).toHaveClass('whitespace-nowrap', 'overflow-hidden');
   const player = screen.getByTestId('narrada-player');
   expect(player).toHaveClass('fixed', 'inset-0', 'h-[100dvh]', 'overflow-hidden', 'w-full');
-  expect(player.style.width).toBe('100vw');
+  expect(player.style.width).toBe('100%');
   expect(player.style.height).toBe('100dvh');
   expect(screen.getByTestId('narrada-cena')).not.toHaveClass('px-3', 'sm:px-6');
   expect(screen.getByTestId('narrada-elementos-visuais')).toBeInTheDocument();
@@ -151,7 +151,7 @@ it('sequência única: a aula narrada abre automaticamente em tela inteira e seg
   expect(screen.getByRole('dialog', { name: /Aula narrada: Do ábaco ao celular/ })).toBeInTheDocument();
   expect(screen.getByTestId('narrada-seek')).toBeInTheDocument();
   expect(screen.queryByTestId('midia-narrada')).toBeNull();
-  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Pegue o celular que está na sua mão/);
+  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Pegue o celular que está na sua/);
   await user.click(screen.getByRole('button', { name: 'Ir para a prática' }));
   expect(screen.queryByRole('dialog', { name: /Aula narrada/ })).toBeNull();
   expect(screen.getByText(/Organize a linha do tempo/)).toBeInTheDocument();

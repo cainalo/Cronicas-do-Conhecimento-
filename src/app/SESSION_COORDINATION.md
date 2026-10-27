@@ -136,3 +136,13 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 - Atualizados os testes de fluxo que ainda exigiam botões de virar página/sumário físico. Agora verificam material de referência em uma coluna rolável, links para estudar o trecho e ausência de alternância para leitor paginado.
 - Corrigidos os argumentos posicionais no teste de embaralhamento de prática, que passava a função aleatória como se fosse `SimpleSection`, gerando acesso inválido a `simple.checks`.
 - Próximo passo: executar de novo testes, build, E2E, compilação do APK e publicação Pages; não declarar concluído antes de todos os passos.
+
+
+### ChatGPT — correções da suíte depois da retirada de paginação
+**Data:** 2026-10-27
+**Estado:** patch enviado; workflow de validação/publicação pendente.
+- O segundo workflow confirmou que o leitor contínuo está ativo, mas revelou oito testes desatualizados ou com assinatura incorreta. Corrigidos os argumentos de `buildPractice` no teste de conceitos ensinados e no teste de recuperação adaptativa.
+- O painel inicial agora é testado pelo contrato visual atual (continuar, resumo diário e barra de evolução), em vez do antigo cartão de ritmo com contagem de dias.
+- O teste de retomada de Aprender agora grava uma etapa contínua no progresso e verifica a retomada exata, sem botões de virar páginas.
+- Ajustadas as asserções de largura do player (contêiner fixo com `width: 100%`, cena interna com largura de viewport) e de legenda narrada para aceitar o segmento curto corrente, sem exigir palavras da linha seguinte.
+- O próximo gate é confirmar que a suíte inteira, build web, E2E, compilação Android e publicação Pages terminem com sucesso.

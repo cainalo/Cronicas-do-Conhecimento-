@@ -8,8 +8,9 @@ import { getLesson, getQuestion } from '@/content';
 import { loadData, saveData } from '@/lib/storage';
 import { getChapter } from '@/content';
 import { markSectionRead } from '@/lib/study';
-import { getLearningCheckpoint } from '@/lib/checkpoint';
+import { getLearningCheckpoint, saveProgress } from '@/lib/checkpoint';
 import { trailUnits } from '@/app/useCheckpoint';
+import { learnKey } from '@/lib/pace';
 import { journey, microSeries, getLearningUnit } from '@/content';
 import { missaoSql01 } from '@/content/missions/sql-01';
 
@@ -92,7 +93,7 @@ it('material de referência: leitura vertical sem paginação física', () => {
 
 it('aprender: introdução em leitura contínua com vocabulário, verificações e prática', () => {
   renderAt(`/aprender/${SIMPLE.c}/${SIMPLE.s}`);
-  expect(screen.getAllByText(/Etapa \\d+ de/).length).toBeGreaterThan(0);
+  expect(screen.getAllByText(/Etapa \d+ de/).length).toBeGreaterThan(0);
   expect(screen.getByRole('heading', { name: 'Palavras importantes' })).toBeInTheDocument();
   expect(screen.getByRole('heading', { name: 'Você entendeu?' })).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: /Próxima página|virar página/i })).toBeNull();
@@ -178,12 +179,13 @@ it('caso prático de SQL: objetivos (sem cena de jogo), descoberta e laboratóri
   expect(screen.getByText('Consulta certa')).toBeInTheDocument();
 });
 
-it('torre: mostra os dias até a prova e a meta de hoje para terminar o curso a tempo', () => {
+it('painel inicial: oferece continuidade, resumo visual do dia e progresso de conteúdo', () => {
   renderAt('/');
-  const card = screen.getByRole('region', { name: 'Ritmo até a prova' });
-  expect(card).toHaveTextContent(/Faltam \d+ dias para a prova/);
-  expect(card).toHaveTextContent(/Meta de hoje: \d+ atividade/);
-  expect(card).toHaveTextContent(/O curso inteiro tem \d+ atividades/);
+  expect(screen.getByRole('region', { name: 'Continuar estudando' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Seu dia de estudo' })).toBeInTheDocument();
+  expect(screen.getByRole('region', { name: 'Seu avanço nas matérias' })).toBeInTheDocument();
+  expect(screen.getByRole('progressbar', { name: 'Conteúdo lido' })).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: /Plano completo/ })).toHaveAttribute('href', '/plano');
 });
 
 it('um só destino: Torre, cabeçalho e menu levam ao mesmo passo', () => {
@@ -196,15 +198,20 @@ it('um só destino: Torre, cabeçalho e menu levam ao mesmo passo', () => {
 
 it('retomada exata: Aprender e Missão voltam ao mesmo ponto depois de sair', async () => {
   const user = userEvent.setup();
+  const key = learnKey(SIMPLE.c, SIMPLE.s);
+  saveData('visitante', saveProgress(loadData('visitante'), key, 3, 'Aprender: etapa 4'));
+
   const first = renderAt(`/aprender/${SIMPLE.c}/${SIMPLE.s}`);
-  for (let i = 0; i < 3; i++) await user.click(screen.getByRole('button', { name: 'Próxima página' }));
   expect(screen.getByText(/^4\/\d+$/)).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /Próxima página|virar página/i })).toBeNull();
   first.unmount();
-  // A Torre agora oferece Continuar, no mesmo trecho.
+
+  // O painel inicial retoma a mesma etapa, sem apresentar a antiga navegação paginada.
   const home = renderAt('/');
   expect(screen.getByTestId('continuar-torre')).toHaveTextContent('Continuar');
-  expect(screen.getByText(/Aprender: página 4/)).toBeInTheDocument();
+  expect(screen.getByText(/Aprender: etapa 4/)).toBeInTheDocument();
   home.unmount();
+
   const again = renderAt(`/aprender/${SIMPLE.c}/${SIMPLE.s}`);
   expect(screen.getByText(/^4\/\d+$/)).toBeInTheDocument();
   again.unmount();
