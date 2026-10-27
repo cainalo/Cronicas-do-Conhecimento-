@@ -82,7 +82,7 @@ it('página: começa parada; legenda de uma linha é opcional; controles reinici
   fireEvent.pointerDown(controls, { pointerId: 1, pointerType: 'touch' });
   await act(async () => void vi.advanceTimersByTime(5000));
   expect(controls).toHaveClass('opacity-100');
-  fireEvent.pointerUp(controls, { pointerId: 1, pointerType: 'touch' });
+  fireEvent.pointerUp(window, { pointerId: 1, pointerType: 'touch' }); // libera também fora da área dos controles
   await act(async () => void vi.advanceTimersByTime(3000));
   expect(controls).toHaveClass('opacity-100');
 
