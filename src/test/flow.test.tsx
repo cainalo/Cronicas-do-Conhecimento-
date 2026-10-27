@@ -48,6 +48,7 @@ it('fluxo: lição → erro → revisão → recuperação, com persistência lo
   const user = userEvent.setup();
   const lesson = getLesson('lic.seg.01.a')!;
   const { unmount } = renderAt(`/licao/${lesson.id}`);
+  await waitForRouteReady();
 
   for (let i = 0; i < lesson.cards.length; i++) await user.click(screen.getByRole('button', { name: /Próximo|Começar questões/ }));
 
@@ -70,6 +71,7 @@ it('fluxo: lição → erro → revisão → recuperação, com persistência lo
 
   // Nova sessão: a questão errada está na revisão.
   renderAt('/revisao');
+  await waitForRouteReady();
   await user.click(screen.getByRole('button', { name: 'Começar revisão' }));
   const q0 = getQuestion(lesson.questionIds[0])!;
   const opt = screen.getAllByRole('button').find((b) => b.textContent?.startsWith(q0.answer))!;
@@ -84,6 +86,7 @@ it('fluxo: lição → erro → revisão → recuperação, com persistência lo
 it('material completo: leitura contínua e navegação por trechos', async () => {
   renderAt('/capitulo/cap.seg.01');
   await waitForRouteReady();
+  await waitForRouteReady();
   expect(screen.getByRole('heading', { name: 'Criptografia' })).toBeInTheDocument();
   expect(screen.getByRole('link', { name: 'Material completo' })).toBeInTheDocument();
   expect(screen.getByRole('link', { name: 'Estudar este trecho' })).toHaveAttribute('href', '/aprender/cap.seg.01/fundamentos');
@@ -93,6 +96,7 @@ it('material completo: leitura contínua e navegação por trechos', async () =>
 it('Aprender apresenta o conteúdo em etapas contínuas e registra a conclusão', async () => {
   const user = userEvent.setup();
   renderAt(`/aprender/${SIMPLE.c}/${SIMPLE.s}`);
+  await waitForRouteReady();
   expect(screen.getByRole('button', { name: 'Sair do Aprender' })).toBeInTheDocument();
   expect(screen.getByTestId('aprender-etapa')).toBeInTheDocument();
   for (let i = 0; i < 15 && !screen.queryByTestId(`praticar-${SIMPLE.s}`); i++) {
@@ -108,6 +112,7 @@ it('prática: abre a rodada do trecho e mostra a primeira atividade', async () =
   const user = userEvent.setup();
   readSection('cap.seg.01', 'fundamentos');
   renderAt('/pratica/cap.seg.01/fundamentos');
+  await waitForRouteReady();
   expect(screen.getByRole('heading', { name: /Prática:/ })).toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: /Começar/ }));
   expect(screen.getByRole('button', { name: 'Sair da prática' })).toBeInTheDocument();
@@ -119,6 +124,7 @@ it('prática: abre a rodada do trecho e mostra a primeira atividade', async () =
 it('simulado: monta, responde, entrega e mostra o boletim', async () => {
   const user = userEvent.setup();
   renderAt('/simulado');
+  await waitForRouteReady();
   await waitForRouteReady();
   await user.click(screen.getByRole('button', { name: '10' }));
   await user.click(screen.getByRole('button', { name: 'Livre' }));
@@ -138,10 +144,12 @@ it('flashcards: só de capítulos já estudados; revela e avalia um cartão', as
   const user = userEvent.setup();
   const empty = renderAt('/flashcards');
   await waitForRouteReady();
+  await waitForRouteReady();
   expect(screen.queryByRole('button', { name: 'Revelar o verso' })).toBeNull();
   empty.unmount();
   readSection('cap.seg.01', 'fundamentos');
   renderAt('/flashcards');
+  await waitForRouteReady();
   await waitForRouteReady();
   await user.click(screen.getByRole('button', { name: 'Revelar o verso' }));
   await user.click(screen.getByRole('button', { name: /Bom/ }));
@@ -152,6 +160,7 @@ it('flashcards: só de capítulos já estudados; revela e avalia um cartão', as
 it('caso prático de SQL: objetivos (sem cena de jogo), descoberta e laboratório com a consulta montada', async () => {
   const user = userEvent.setup();
   renderAt('/missao/missao.sql.01');
+  await waitForRouteReady();
   await waitForRouteReady();
   expect(screen.queryByRole('list', { name: 'Transcrição da cena' })).toBeNull();
   expect(screen.getByText(/Por que a lista de empenhos/)).toBeInTheDocument();
@@ -186,16 +195,18 @@ it('caso prático de SQL: objetivos (sem cena de jogo), descoberta e laboratóri
   expect(screen.getByText('Consulta certa')).toBeInTheDocument();
 });
 
-it('página inicial apresenta progresso visual e próximos passos sem contador dominante', () => {
+it('página inicial apresenta progresso visual e próximos passos sem contador dominante', async () => {
   renderAt('/');
+  await waitForRouteReady();
   expect(screen.getByRole('region', { name: 'Seu avanço nas matérias' })).toBeInTheDocument();
   expect(screen.getByRole('heading', { name: /Você já avançou em \d+% do conteúdo/ })).toBeInTheDocument();
   expect(screen.getByTestId('continuar-torre')).toBeInTheDocument();
   expect(screen.getByRole('link', { name: /Ver detalhes/ })).toHaveAttribute('href', '/progresso');
 });
 
-it('um só destino: Torre, cabeçalho e menu levam ao mesmo passo', () => {
+it('um só destino: Torre, cabeçalho e menu levam ao mesmo passo', async () => {
   renderAt('/');
+  await waitForRouteReady();
   const torre = screen.getByTestId('continuar-torre').getAttribute('href');
   expect(screen.getByTestId('continuar-topo').getAttribute('href')).toBe(torre);
   expect(screen.getByTestId('continuar-menu').getAttribute('href')).toBe(torre);
@@ -205,19 +216,23 @@ it('um só destino: Torre, cabeçalho e menu levam ao mesmo passo', () => {
 it('retomada exata: Aprender e Missão voltam ao mesmo ponto depois de sair', async () => {
   const user = userEvent.setup();
   const first = renderAt(`/aprender/${SIMPLE.c}/${SIMPLE.s}`);
+  await waitForRouteReady();
   for (let i = 0; i < 3; i++) await user.click(screen.getByRole('button', { name: /Continuar/ }));
   expect(screen.getByText(/^Etapa 4 de \d+$/)).toBeInTheDocument();
   first.unmount();
   // A Torre agora oferece Continuar, no mesmo trecho.
   const home = renderAt('/');
+  await waitForRouteReady();
   expect(screen.getByTestId('continuar-torre')).toHaveTextContent('Continuar');
   expect(screen.getByText(/Aprender: página 4/)).toBeInTheDocument();
   home.unmount();
   const again = renderAt(`/aprender/${SIMPLE.c}/${SIMPLE.s}`);
+  await waitForRouteReady();
   expect(screen.getByText(/^Etapa 4 de \d+$/)).toBeInTheDocument();
   again.unmount();
 
   const m1 = renderAt('/missao/missao.sql.01');
+  await waitForRouteReady();
   await user.click(screen.getByRole('button', { name: 'Vamos lá' }));
   const sec = screen.getByRole('region', { name: 'Descoberta guiada' });
   await user.click(within(sec).getAllByRole('button', { pressed: false })[0]);
@@ -226,6 +241,7 @@ it('retomada exata: Aprender e Missão voltam ao mesmo ponto depois de sair', as
   expect(screen.getByText('Descoberta 2 de 4')).toBeInTheDocument();
   m1.unmount();
   renderAt('/missao/missao.sql.01');
+  await waitForRouteReady();
   expect(screen.getByText('Descoberta 2 de 4')).toBeInTheDocument();
 });
 
@@ -233,6 +249,7 @@ it('retomada exata: Desafio e Prática continuam na mesma questão/atividade', a
   const user = userEvent.setup();
   const lesson = getLesson('lic.seg.01.a')!;
   const a = renderAt(`/licao/${lesson.id}`);
+  await waitForRouteReady();
   for (let i = 0; i < lesson.cards.length; i++) await user.click(screen.getByRole('button', { name: /Próximo|Começar questões/ }));
   for (let i = 0; i < 2; i++) {
     const q = getQuestion(lesson.questionIds[i])!;
@@ -243,15 +260,18 @@ it('retomada exata: Desafio e Prática continuam na mesma questão/atividade', a
   expect(screen.getByText(/Questão 3 de 10/)).toBeInTheDocument();
   a.unmount();
   const b = renderAt(`/licao/${lesson.id}`);
+  await waitForRouteReady();
   expect(screen.getByText(/Questão 3 de 10/)).toBeInTheDocument();
   b.unmount();
 
   readSection('cap.seg.01', 'fundamentos');
   const c = renderAt('/pratica/cap.seg.01/fundamentos');
+  await waitForRouteReady();
   await user.click(screen.getByRole('button', { name: /Começar/ }));
   expect(screen.getByRole('button', { name: 'Sair da prática' })).toBeInTheDocument();
   c.unmount();
   renderAt('/pratica/cap.seg.01/fundamentos');
+  await waitForRouteReady();
   // Volta direto para a atividade, sem a tela de abertura.
   expect(screen.queryByRole('heading', { name: /Prática:/ })).toBeNull();
   expect(screen.getByRole('button', { name: 'Verificar' })).toBeInTheDocument();
@@ -260,6 +280,7 @@ it('retomada exata: Desafio e Prática continuam na mesma questão/atividade', a
 it('microaula: explica, confere na hora, ensina de novo quando erra e retoma na mesma etapa', async () => {
   const user = userEvent.setup();
   const a = renderAt('/aprender/cap.infra.03/arquivos');
+  await waitForRouteReady();
   // Abertura
   await user.click(screen.getByRole('button', { name: /pelas permissões do arquivo/ }));
   await user.click(screen.getByRole('button', { name: 'Verificar' }));
@@ -283,12 +304,14 @@ it('microaula: explica, confere na hora, ensina de novo quando erra e retoma na 
   a.unmount();
   // Sai e volta: mesma etapa.
   renderAt('/aprender/cap.infra.03/arquivos');
+  await waitForRouteReady();
   expect(screen.getByRole('heading', { name: 'NTFS, FAT32, exFAT e ReFS' })).toBeInTheDocument();
 });
 
 it('texto interativo (piloto Processos): termo clicável, recuperação com retorno e retomada na etapa exata', async () => {
   const user = userEvent.setup();
   const a = renderAt('/aprender/cap.infra.03/processos');
+  await waitForRouteReady();
   expect(screen.getByRole('heading', { level: 1, name: 'Processos, memória e serviços' })).toBeInTheDocument();
   // Abertura (diagnóstica, não vale nota)
   await user.click(screen.getByRole('button', { name: /Cada execução em andamento/ }));
@@ -326,17 +349,19 @@ it('texto interativo (piloto Processos): termo clicável, recuperação com reto
   a.unmount();
   // Sai e volta: mesma etapa; o Continuar de Hoje aponta para cá.
   renderAt('/aprender/cap.infra.03/processos');
+  await waitForRouteReady();
   expect(screen.getByText('Etapa 3 de 16')).toBeInTheDocument();
   expect(screen.getByRole('listitem', { current: 'step' })).toHaveTextContent('O número de cada processo: PID');
 });
 
-it('ponto salvo pela microaula antiga continua valendo no texto interativo', () => {
+it('ponto salvo pela microaula antiga continua valendo no texto interativo', async () => {
   const data = loadData('visitante');
   localStorage.setItem(
     'cronicas:v1:visitante',
     JSON.stringify({ ...data, progress: { 'aprender:cap.infra.03:processos': { step: { phase: { k: 'checar', i: 3 }, first: {}, struggled: [] }, updatedAt: new Date().toISOString() } } }),
   );
   renderAt('/aprender/cap.infra.03/processos');
+  await waitForRouteReady();
   // A aula ganhou uma etapa inicial (processador, memória e disco): o ponto antigo abre uma etapa
   // antes, sem perder nada.
   expect(screen.getByText('Etapa 4 de 16')).toBeInTheDocument();
@@ -346,13 +371,15 @@ it('ponto salvo pela microaula antiga continua valendo no texto interativo', () 
 it('material completo não oferece controles de virada de página', async () => {
   renderAt('/capitulo/cap.seg.01');
   await waitForRouteReady();
+  await waitForRouteReady();
   expect(screen.getByRole('heading', { name: 'Criptografia' })).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: /página seguinte|próxima página/i })).toBeNull();
   expect(screen.getByRole('link', { name: 'Estudar este trecho' })).toBeInTheDocument();
 });
 
-it('prática bloqueada antes do Aprender do trecho, com caminho para aprender', () => {
+it('prática bloqueada antes do Aprender do trecho, com caminho para aprender', async () => {
   renderAt('/pratica/cap.infra.03/processos');
+  await waitForRouteReady();
   expect(screen.getByRole('heading', { name: 'Primeiro, aprenda este trecho' })).toBeInTheDocument();
   expect(screen.getByRole('link', { name: /Ir para o Aprender/ })).toHaveAttribute('href', '/aprender/cap.infra.03/processos');
   expect(screen.queryByRole('button', { name: /Começar/ })).toBeNull();
