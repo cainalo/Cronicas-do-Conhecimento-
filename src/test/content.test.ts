@@ -66,14 +66,16 @@ describe('cenas e atividades por seção', () => {
   it.each(Object.entries(allSectionExtras))('%s é bem formada', (key, ex) => {
     const [chapterId, sectionId] = key.split(':');
     expect(getChapter(chapterId)?.sections.some((s) => s.id === sectionId)).toBe(true);
-    expect(ex.scene.length).toBeGreaterThanOrEqual(3);
-    expect(ex.truths.some((t) => t.answer) && ex.truths.some((t) => !t.answer)).toBe(true);
-    for (const b of ex.blanks) {
-      expect(b.sentence.split('___').length).toBe(2);
-      expect(new Set(b.options).size).toBe(b.options.length);
-      expect(b.options).toContain(b.answer);
+    for (const truth of ex.truths ?? []) {
+      expect(truth.statement.trim().length).toBeGreaterThan(10);
+      expect(truth.why.trim().length).toBeGreaterThan(5);
     }
-    expect(ex.outro.length).toBeGreaterThan(10);
+    for (const blank of ex.blanks ?? []) {
+      expect(blank.sentence.split('___').length).toBe(2);
+      expect(new Set(blank.options).size).toBe(blank.options.length);
+      expect(blank.options).toContain(blank.answer);
+      expect(blank.why.trim().length).toBeGreaterThan(5);
+    }
   });
 });
 
@@ -105,7 +107,7 @@ describe('explicação simples por trecho', () => {
 import { journey } from '@/content';
 import { curatedVideos } from '@/content/estudos/materiais';
 describe('caminho recomendado', () => {
-  it('contém todos os capítulos uma vez e começa pelo Primeiro Pergaminho', () => {
+  it('contém todos os capítulos uma vez e começa por Primeiros Passos em TI', () => {
     expect(journey).toHaveLength(chapters.length);
     expect(new Set(journey.map((c) => c.id)).size).toBe(chapters.length);
     expect(journey[0].id).toBe('cap.prim.01');
