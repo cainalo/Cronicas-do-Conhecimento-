@@ -1,6 +1,6 @@
 # Revisão independente — timeline narrada e adaptador TTS
 
-**Atualizada em:** 27/10/2026, 03:06 UTC
+**Atualizada em:** 27/10/2026, 03:07 UTC
 **Branch revisada:** claude/cronicas-conhecimento-estudos-jgbofo
 **Branch desta contribuição:** gpt/narrated-timeline-review-2026-10-27
 **Escopo:** revisão do código real, testes e integração de alinhamento. Não altera Narrated.tsx, ReviewSlides.tsx, voice.ts nem narration-timeline.ts, para evitar conflito com as outras sessões.
@@ -21,7 +21,7 @@ O helper temporal já existente produz cues por beat e palavra a partir de times
 
 ### P1 — formato de resposta do Forced Alignment não é o contrato interno
 
-A documentação oficial da ElevenLabs descreve POST /v1/forced-alignment com arquivo de áudio e transcrição, retornando characters como objetos com text/start/end, uma lista de words e loss. O helper do projeto espera caracteres e timestamps em três arrays paralelos. A implementação adicionada nesta contribuição, src/lib/elevenlabs-alignment-adapter.ts, faz essa conversão sem chamar a API nem armazenar segredo; valida o texto exato, contagem de pontos de código Unicode, timestamps e monotonicidade.
+A ElevenLabs oferece dois caminhos. Para áudio novo gerado por ela, POST /v1/text-to-speech/:voice_id/with-timestamps retorna o áudio e um objeto alignment com arrays de caracteres e timestamps, que corresponde diretamente ao tipo CharacterTimeAlignment. Para alinhar áudio já existente, POST /v1/forced-alignment recebe o arquivo e a transcrição e retorna characters como objetos com text/start/end, uma lista de words e loss; nesse caso, é necessário converter os objetos para arrays paralelos. O adaptador desta contribuição cobre ambos os formatos e não faz chamadas de rede nem armazena segredo.
 
 O teste src/test/elevenlabs-alignment-adapter.test.ts cobre acentos/emoji, espaços/pontuação, payload inválido, mismatch, timestamps e integração entre o adaptador e buildAlignedNarrationTimeline. Fixtures sintéticas validam a transformação dos dados, mas não comprovam a precisão de uma faixa de áudio real.
 
@@ -31,7 +31,7 @@ Não coloque a chave do provedor em código React/Capacitor nem use uma credenci
 
 ## 2. Decisão técnica para voz
 
-**Primeiro teste recomendado:** ElevenLabs TTS com Forced Alignment, comparando Eleven v4 com Multilingual v2. A documentação de alinhamento lista português do Brasil/Portugal e informa que o custo segue a tarifa Speech-to-Text. O endpoint retorna timestamps por caractere e palavra, adequados para alimentar o helper do projeto. A naturalidade e a pronúncia final devem ser avaliadas ouvindo amostras em pt-BR; não foi gerado nem ouvido áudio nesta sessão.
+**Primeiro teste recomendado:** gerar com ElevenLabs TTS, comparando Eleven v4 com Multilingual v2, e preferir o endpoint `/v1/text-to-speech/:voice_id/with-timestamps`. Ele retorna áudio e alinhamento de caracteres na mesma resposta, no formato de arrays que já corresponde ao tipo `CharacterTimeAlignment` do projeto. Isso evita uma segunda chamada de alinhamento quando a fala é gerada pela própria ElevenLabs. A documentação lista português do Brasil/Portugal para Multilingual v2. A naturalidade e a pronúncia final precisam de amostras auditivas em pt-BR; não foi gerado nem ouvido áudio nesta sessão.
 
 **Alternativa incremental:** manter Gemini 3.8 Flash TTS, que já está integrado e permite orientar estilo, sotaque, ritmo e tom via speech_metadata. A documentação TTS descreve entrada textual e saída de áudio; não oferece, nesta resposta, timestamps por palavra. Portanto, combinar Gemini com alinhamento pós-geração ou manter o sincronismo visual explicitamente marcado como estimado.
 
@@ -41,7 +41,7 @@ Não coloque a chave do provedor em código React/Capacitor nem use uma credenci
 
 Arquivos novos nesta contribuição:
 - src/lib/elevenlabs-alignment-adapter.ts — adaptador puro do payload oficial para CharacterTimeAlignment.
-- src/test/elevenlabs-alignment-adapter.test.ts — validação da resposta, timings e integração com o helper temporal.
+- src/test/elevenlabs-alignment-adapter.test.ts — validação de resposta Forced Alignment, TTS com timestamps embutidos, timings e integração com o helper temporal.
 - src/test/narration-timeline-edgecases.test.ts — Unicode, timestamps inválidos, monotonicidade e pausas entre cues.
 - src/test/narrated-content-quality.test.ts — estrutura básica e cobertura de conceitos dos roteiros atuais.
 - src/test/review-slides-integrity.test.ts — verifica reconstrução do texto normalizado das seções e confere existência, ordem e conteúdo das lâminas geradas de seção, glossário e referências.
@@ -65,7 +65,9 @@ Esta revisão complementa o documento mais amplo já presente na branch de traba
 
 ## 5. Fontes oficiais consultadas
 
-- ElevenLabs Forced Alignment — formatos, idiomas, custos relativos e limites: https://elevenlabs.io/docs/pt/overview/capabilities/forced-alignment
+- ElevenLabs TTS com timestamps — retorno de áudio e alinhamento de caracteres na mesma chamada: https://elevenlabs.io/docs/pt/api-reference/text-to-speech/convert-with-timestamps
+- ElevenLabs TTS streaming com timestamps: https://elevenlabs.io/docs/pt/api-reference/text-to-speech/stream-with-timestamps
+- ElevenLabs Forced Alignment — formatos, idiomas, custos relativos e limites para áudio já existente: https://elevenlabs.io/docs/pt/overview/capabilities/forced-alignment
 - ElevenLabs Create Forced Alignment API — formulário de entrada e resposta characters/words/loss: https://elevenlabs.io/docs/api-reference/forced-alignment/create
 - Gemini API — TTS, speech_metadata, formatos de saída e limitações: https://ai.google.dev/gemini-api/docs/speech-generation
 - Google Cloud Chirp 3 HD — idiomas pt-BR e subconjunto SSML suportado: https://docs.cloud.google.com/text-to-speech/docs/chirp3-hd
