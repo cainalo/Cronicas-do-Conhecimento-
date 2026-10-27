@@ -141,3 +141,11 @@
 - Baseline comprovada: Actions [40444629202](https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40444629202) concluiu com sucesso no commit `d2f6e93`, gerando a versão `0.1.351`. Esse sucesso não comprova alterações posteriores em `gpt/ingles01-microaulas-2026-10-27`.
 - Foi criado `.github/workflows/validate-branch.yml` na branch de manutenção; ele roda testes, build, E2E e compilação Android sem deploy. O status final da execução ainda não foi confirmado por esta sessão. Corrigir qualquer falha reproduzida antes de iniciar cap.ingles.02.
 
+## 27/10/2026 — arquitetura, desempenho e higiene do repositório
+- `src/App.tsx`: `React.lazy`/`Suspense` em 29 páginas secundárias. Caminhos e provedores mantidos; fluxos de estudo frequentes seguem carregados diretamente.
+- `scripts/e2e-layout.mjs` ampliado para 34 rotas; adicionado `npm run test:visual` com screenshots de rotas/capítulos em três viewports e dois temas. Artefatos ficam fora do Git e o workflow de manutenção não publica no site.
+- Documentação de arquitetura e handoff atualizados. Baseline de CI continua vinculada ao commit `d2f6e93`; a nova branch requer execução própria.
+- Removido o protótipo de timeline de narração e seu teste isolado, pois não havia consumidor de produção. A documentação registra as condições para uma eventual reintegração.
+- PR #2 foi encerrado como supersedido pela auditoria consolidada; PR #9 foi encerrado sem merge, com a sincronização por timestamps explicitamente adiada. Nenhum merge ou deploy foi feito.
+- Limite de ferramentas: esta conexão permite editar conteúdo e fechar PRs, mas não exclui refs de branches. As branches antigas foram inventariadas, porém não foram declaradas apagadas.
+
