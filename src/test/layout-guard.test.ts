@@ -81,7 +81,9 @@ describe('experiência imersiva de aula e revisão', () => {
     expect(narrated).toContain('audio.currentTime = clamped / 1000');
     expect(narrated).toContain("useCueMotion(scene.id + ':' + beatIndex)");
     expect(narrated).toContain('data-testid="narrada-corte-suave"');
-    expect(narrated).toContain('beatVisualProgress >= 0.3');
+    expect(narrated).toContain('beatVisualDuration >= 8500');
+    expect(narrated).toContain('beatVisualProgress >= 0.26');
+    expect(narrated).toContain('beatVisualProgress < 0.82');
     expect(narrated).toContain('function CinematicCutaway');
     expect(narrated).toContain('data-testid="narrada-insercao-visual"');
     expect(narrated).toContain("visual.kind === 'timeline'");
@@ -90,7 +92,10 @@ describe('experiência imersiva de aula e revisão', () => {
     expect(css).toContain('.ccv-film-copy.is-cue-change');
     expect(css).toContain('.ccv-film-cut.is-cue-change');
     expect(css).toContain('.ccv-cutaway.is-visible');
-    expect(css).toContain('.ccv-film-content.has-cutaway');
+    expect(css).toContain('.ccv-cutaway {');
+    expect(css).toContain('clip-path: inset(0 100% 0 0)');
+    expect(css).toContain('transition: clip-path 850ms');
+    expect(css).not.toContain('transform: translate3d(calc(100% + 2.2rem)');
     expect(css).toContain('.ccv-film-scene');
     expect(css).not.toMatch(/ccv-shot-reveal|ccv-scene__change|ccv-sequence__step|ccv-timeline__event/);
     expect(css).toContain('prefers-reduced-motion: reduce');
