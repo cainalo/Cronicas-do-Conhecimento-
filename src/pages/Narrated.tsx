@@ -139,7 +139,7 @@ export function NarratedPlayer({
     const text = l.scenes[pos.scene].beats[pos.beat].say;
     const requestedOffset = Math.min(duration, Math.max(0, seekOffsetRef.current));
     const requestedChar = requestedOffset > 0 ? Math.min(text.length - 1, Math.floor((requestedOffset / Math.max(1, duration)) * text.length)) : 0;
-    const wordStarts = Array.from(text.matchAll(/\\S+/g)).map((match) => match.index ?? 0);
+    const wordStarts = Array.from(text.matchAll(/\S+/g)).map((match) => match.index ?? 0);
     const startChar = wordStarts.reduce((nearest, candidate) =>
       Math.abs(candidate - requestedChar) < Math.abs(nearest - requestedChar) ? candidate : nearest, 0);
     const startOffset = text.length ? (startChar / text.length) * duration : 0;
@@ -322,7 +322,7 @@ export function NarratedPlayer({
           data-testid="narrada-cena"
         >
           <div className="relative flex h-full max-h-full w-full items-center justify-center" data-testid="narrada-elementos-visuais">
-            <CinematicScene key={scene.id} scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} beatIndex={pos.beat} phase={visualPhase} />
+            <CinematicScene key={scene.id} scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} beatIndex={pos.beat} phase={visualPhase} />
           </div>
         </div>
       </section>
@@ -493,13 +493,13 @@ function illustrationForText(value: string): IllustrationName {
 }
 
 function CinematicScene({
-  scene, reveal, sceneIndex, beatIndex, phase,
-}: { scene: Scene; reveal: number; sceneIndex: number; beatIndex: number; phase: number }) {
+  scene, reveal, sceneIndex, sceneCount, beatIndex, phase,
+}: { scene: Scene; reveal: number; sceneIndex: number; sceneCount: number; beatIndex: number; phase: number }) {
   const visual = scene.visual;
   const palette = CINEMA_PALETTES[sceneIndex % CINEMA_PALETTES.length];
   const activeIndex = (length: number) => Math.max(0, Math.min(length - 1, reveal - 1));
   let headline = scene.heading;
-  let support = scene.beats[beatIndex]?.say ?? '';
+  let support = '';
   let eyebrow = 'IDEIA EM FOCO';
   let art: IllustrationName = illustrationForText(scene.heading + ' ' + support);
 
@@ -517,7 +517,7 @@ function CinematicScene({
     if (item) { headline = item.title; support = item.text; art = illustrationForText(item.title + ' ' + item.text); eyebrow = item.year; }
   } else if (visual.kind === 'equation') {
     headline = visual.lines[activeIndex(visual.lines.length)] ?? visual.lines[0] ?? scene.heading;
-    support = visual.note ?? (scene.beats[beatIndex]?.say ?? '');
+    support = visual.note ?? '';
     art = illustrationForText(headline + ' ' + support);
     eyebrow = 'ETAPA DO RACIOCÍNIO';
   } else if (visual.kind === 'numberline') {
@@ -540,7 +540,7 @@ function CinematicScene({
       <div className="ccv-scene__orbit ccv-scene__orbit--two" aria-hidden="true" />
       <div className="ccv-scene__top">
         <span>CRÔNICAS DO CONHECIMENTO</span>
-        <span className="ccv-scene__counter">{String(sceneIndex + 1).padStart(2, '0')} <i /> {String(sceneIndex + 1).padStart(2, '0')}</span>
+        <span className="ccv-scene__counter">{String(sceneIndex + 1).padStart(2, '0')} <i /> {String(sceneCount).padStart(2, '0')}</span>
       </div>
 
       <div className={'ccv-scene__layout ccv-scene__layout--phase-' + phase}>
