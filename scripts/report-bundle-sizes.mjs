@@ -28,6 +28,10 @@ const referencedNames = new Set(
   [...html.matchAll(/(?:src|href)\s*=\s*["']([^"'#]+\.js(?:\?[^"']*)?)["']/g)]
     .map((match) => basename(new URL(match[1], 'https://local.invalid/').pathname)),
 );
+if (!referencedNames.size) {
+  throw new Error('Não foi possível identificar scripts JS referenciados em dist/index.html; a medição inicial seria incorreta.');
+}
+
 const files = javascriptFiles(DIST)
   .map((path) => {
     const buffer = readFileSync(path);
