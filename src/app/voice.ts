@@ -168,7 +168,7 @@ function stopGeneratedAudio() {
 }
 
 function decodeBase64(value: string): Uint8Array {
-  const clean = value.replace(/^data:audio\\/[a-z0-9.+-]+;base64,/i, '').replace(/\\s/g, '');
+  const clean = value.replace(/^data:audio\/[a-z0-9.+-]+;base64,/i, '').replace(/\s/g, '');
   const raw = atob(clean);
   const bytes = new Uint8Array(raw.length);
   for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
