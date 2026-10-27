@@ -1,8 +1,8 @@
 import type { SimpleSection } from '@/content/types';
 
 /**
- * Porta de entrada "do zero" das seções dos grimórios de Desenvolvimento de
- * Sistemas e de Infraestrutura. O texto completo da seção continua disponível
+ * Porta de entrada "do zero" das seções de Desenvolvimento de
+ * Sistemas e Infraestrutura. O texto completo da seção continua disponível
  * como aprofundamento.
  */
 export const simpleDevInfra: Record<string, SimpleSection> = {
