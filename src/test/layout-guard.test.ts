@@ -79,7 +79,7 @@ describe('experiência imersiva de aula e revisão', () => {
     expect(narrated).toContain('const CinematicSceneMemo = memo(CinematicScene)');
     expect(narrated).toContain('voice.createAudioTrack(script, rate)');
     expect(narrated).toContain('audio.currentTime = clamped / 1000');
-    expect(narrated).toContain('useCueMotion(scene.id + \' :\' + beatIndex)'.replace(' ', ''));
+    expect(narrated).toContain("useCueMotion(scene.id + ':' + beatIndex)");
     expect(narrated).toContain('data-testid="narrada-corte-suave"');
     expect(narrated).toContain("visual.kind === 'timeline'");
     expect(narrated).toContain("visual.kind === 'equation'");
