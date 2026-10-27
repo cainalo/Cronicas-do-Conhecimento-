@@ -81,11 +81,16 @@ describe('experiência imersiva de aula e revisão', () => {
     expect(narrated).toContain('audio.currentTime = clamped / 1000');
     expect(narrated).toContain("useCueMotion(scene.id + ':' + beatIndex)");
     expect(narrated).toContain('data-testid="narrada-corte-suave"');
+    expect(narrated).toContain('beatVisualProgress >= 0.3');
+    expect(narrated).toContain('function CinematicCutaway');
+    expect(narrated).toContain('data-testid="narrada-insercao-visual"');
     expect(narrated).toContain("visual.kind === 'timeline'");
     expect(narrated).toContain("visual.kind === 'equation'");
     expect(css).toContain('@keyframes ccv-film-cut-in');
     expect(css).toContain('.ccv-film-copy.is-cue-change');
     expect(css).toContain('.ccv-film-cut.is-cue-change');
+    expect(css).toContain('.ccv-cutaway.is-visible');
+    expect(css).toContain('.ccv-film-content.has-cutaway');
     expect(css).toContain('.ccv-film-scene');
     expect(css).not.toMatch(/ccv-shot-reveal|ccv-scene__change|ccv-sequence__step|ccv-timeline__event/);
     expect(css).toContain('prefers-reduced-motion: reduce');
