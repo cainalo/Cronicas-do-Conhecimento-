@@ -177,7 +177,7 @@ function decodeBase64(value: string): Uint8Array {
 
 /** Gera uma única faixa para a aula inteira. Isso evita emendar dezenas de sínteses curtas,
  * preserva a entonação entre frases e permite que o player busque em qualquer segundo real. */
-async function createGeminiAudioTrack(apiKey: string, voiceName: string, text: string, rate: number): Promise<VoiceAudioTrack> {
+async function createGeminiAudioTrack(apiKey: string, voiceName: string, text: string, _rate: number): Promise<VoiceAudioTrack> {
   stopGeneratedAudio();
   const controller = new AbortController();
   activeController = controller;
@@ -197,7 +197,7 @@ async function createGeminiAudioTrack(apiKey: string, voiceName: string, text: s
             text,
             annotations: [{
               type: 'speech_metadata',
-              style: `Português brasileiro (pt-BR), sotaque brasileiro natural. Narração educacional de alta qualidade, como uma professora experiente explicando com calma para uma pessoa ao lado: timbre humano, caloroso e natural; articulação clara, sem exagero; ritmo conversacional, entonação expressiva ligada ao sentido; pausas discretas nas vírgulas e pausas naturais entre parágrafos. Evite voz de GPS, leitura mecânica, cadência uniforme e entusiasmo artificial. Velocidade solicitada: ${rate}x. Leia somente o texto fornecido, sem acrescentar palavras.`,
+              style: `Português brasileiro (pt-BR), sotaque brasileiro natural. Narração educacional de alta qualidade, como uma professora experiente explicando com calma para uma pessoa ao lado: timbre humano, caloroso e natural; articulação clara, sem exagero; ritmo conversacional, entonação expressiva ligada ao sentido; pausas discretas nas vírgulas e pausas naturais entre parágrafos. Evite voz de GPS, leitura mecânica, cadência uniforme e entusiasmo artificial. Mantenha o ritmo natural e conversacional; a velocidade final será controlada pelo player. Leia somente o texto fornecido, sem acrescentar palavras.`,
             }],
           }],
         }],
@@ -292,6 +292,7 @@ function geminiVoice(apiKey: string, voiceName: string): Voice {
           if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
           callbacks?.onBoundary?.(Math.min(text.length, Math.floor((audio.currentTime / audio.duration) * text.length)), 1);
         };
+        audio.playbackRate = rate;
         audio.addEventListener('ended', ended);
         audio.addEventListener('error', failed);
         audio.addEventListener('timeupdate', update);
