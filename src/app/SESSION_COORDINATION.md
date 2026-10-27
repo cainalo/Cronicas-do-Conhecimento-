@@ -188,3 +188,13 @@ Este é o único arquivo de coordenação do projeto. Os registros antigos abaix
 - Inventário de branches documentado em `docs/ARCHITECTURE.md`. A branch `gpt/ia04-etica-dados-2026-10-27` não possui commits/arquivos exclusivos frente à branch central. A branch `codex/qa-visual-audit-20261026` tem seus componentes úteis copiados; outras branches de narração contêm versões alternativas e seguem preservadas até revisão.
 - A conexão de ferramentas não expõe uma operação de exclusão de branch. Não foi feita limpeza destrutiva de refs. O CI e revisão editorial continuam pendentes.
 
+### ChatGPT — Maintainer: auditoria estática pós-refatoração
+**Data:** 2026-10-27
+**Estado:** estática conferida; execução integrada aguardando CI.
+
+- Foram encontrados 29 carregamentos `React.lazy`; a declaração de cada componente corresponde a um export existente. Não encontrei mismatch nos nomes examinados.
+- `scripts/e2e-layout.mjs` contém 34 caminhos e inclui Missão, Simulador, Escritório, aula narrada e subrotas de Conta. Ambos scripts E2E esperam o fallback de carregamento sob demanda e a auditoria visual limpa a lista de erros JavaScript por rota.
+- `package.json` é JSON válido, com `test:visual` e `report:bundle`. O workflow de manutenção inclui os dois comandos e a compilação Android, sem passo de publicar site/APK.
+- O medidor de bundle passou por verificação sintática e por execução com um `dist/` sintético. Ainda falta medir o build real após `npm run build`; nenhum número de desempenho foi inferido.
+- A única validação de CI confirmada segue sendo o baseline `d2f6e93` / workflow `40444629202`. O novo gate desta branch não foi confirmado pelos status disponíveis.
+
