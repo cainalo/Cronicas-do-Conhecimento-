@@ -552,7 +552,7 @@ export function NarratedPlayer({
       onPointerMove={revealControls}
       onKeyDown={revealControls}
     >
-      <section className="absolute inset-0 overflow-hidden bg-bg" aria-label="Aula em vídeo narrado" data-testid="narrada-stage">
+      <section className="absolute inset-0 overflow-hidden bg-bg" aria-label="Aula em vídeo narrado" data-testid="narrada-stage" onClick={(event) => { event.stopPropagation(); togglePlayerControls(); }}>
         <div
           className="absolute inset-0 grid place-items-center"
           data-testid="narrada-cena"
