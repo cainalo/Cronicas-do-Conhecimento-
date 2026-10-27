@@ -10,11 +10,8 @@ export const grimorioGovernanca: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.governanca',
   title: 'Governança de TI',
-  epithet: 'Governança de TI',
   description: 'Como o reino decide o que fazer com a sua tecnologia: ISO/IEC 38500, COBIT 2019, ITIL 4, PMBOK 8 e métodos ágeis, contratações de TIC na Lei 14.133 e a estratégia de governo digital.',
   chapterIds: ['cap.gov.01', 'cap.gov.02'],
-  sigil: 'selo',
-  binding: 'sangue',
 };
 
 export const capGovModelos: Chapter = {
@@ -103,7 +100,7 @@ export const licoesGovernanca: Lesson[] = [
   {
     id: 'lic.gov.02',
     chapterId: 'cap.gov.02',
-    title: 'O Tesouro e a Praça',
+    title: 'Governança e Serviços Públicos',
     goal: 'Fases da contratação de TIC, ETP e TR, modalidades, pagamento por resultado, Lei do Governo Digital e ENGD.',
     cards: [
       { title: 'Contratar TIC', body: '**ETP** (problema e solução) → **TR** (objeto e medição) → seleção → gestão.\n\nBens comuns: **pregão**. Inovação: **diálogo competitivo**. Pague por **resultado**, não por hora.' },
