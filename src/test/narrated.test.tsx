@@ -7,6 +7,7 @@ import { AppRoutes } from '@/App';
 import { waitForRouteReady } from './route-ready';
 import { microLessons, narratedLessons } from '@/content';
 import { nextBeat, prevScene, revealOf, transcript, validateNarrated } from '@/lib/narration';
+import { splitCaptionLines } from '@/pages/Narrated';
 import { emptyData } from '@/lib/model';
 
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
@@ -30,6 +31,17 @@ describe.each(narratedLessons.map((n) => [n.id, n] as const))('aula narrada %s',
     expect(prevScene(l, { scene: 2, beat: 0 })).toEqual({ scene: 1, beat: 0 });
     expect(revealOf(l.scenes[0], 0)).toBe(1);
   });
+});
+
+it('legenda divide a fala em linhas estáveis, sem rolagem com reticências', () => {
+  const text = 'Uma primeira frase curta para acompanhar. Depois vem a segunda parte da explicação com mais algumas palavras.';
+  const lines = splitCaptionLines(text);
+  expect(lines.length).toBeGreaterThan(1);
+  expect(lines[0].text).toMatch(/acompanhar\.$/);
+  expect(lines.every((line) => line.end > line.start && line.text.length > 0)).toBe(true);
+  expect(lines.every((line) => line.end - line.start <= 7)).toBe(true);
+  expect(lines.map((line) => line.text).join(' ')).toBe(text);
+  expect(lines.some((line) => line.text.includes('…'))).toBe(false);
 });
 
 it('validador acusa revelação fora do alcance e número fora da reta', () => {
@@ -70,8 +82,9 @@ it('página: começa parada; legenda de uma linha é opcional; controles reinici
   expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Imagine que sua conta tem saldo zero/);
   await user.click(screen.getByTestId('narrada-tocar'));
   const captionWords = screen.getByTestId('narrada-legenda-texto').querySelectorAll(':scope > span');
-  // O contador também inclui o retalho de reticências quando a legenda centraliza a fala.
-  expect(captionWords.length).toBeLessThanOrEqual(9);
+  // A legenda mantém um trecho fixo e não usa reticências para simular rolagem.
+  expect(captionWords.length).toBeLessThanOrEqual(7);
+  expect(screen.getByTestId('narrada-legenda-texto')).not.toHaveTextContent('…');
   expect(Array.from(captionWords).some((word) => word.className.includes('text-[#ffd38a]'))).toBe(true);
   await user.click(screen.getByTestId('narrada-legendas-toggle'));
   expect(screen.queryByTestId('narrada-legenda')).toBeNull();
