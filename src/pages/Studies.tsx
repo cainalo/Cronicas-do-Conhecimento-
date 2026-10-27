@@ -68,7 +68,7 @@ export function StudiesPage() {
       </section>
 
       <section>
-        <SectionTitle icon="grimorio" color={color}>
+        <SectionTitle icon="lista" color={color}>
           Matérias e prática
         </SectionTitle>
         <TileGrid>
@@ -171,7 +171,7 @@ export function StudiesPage() {
       </section>
 
       <section aria-label="Materiais externos">
-        <SectionTitle icon="pergaminho" color={color}>
+        <SectionTitle icon="lista" color={color}>
           Materiais oficiais
         </SectionTitle>
         <ul className="ledger">
