@@ -124,3 +124,13 @@ A função `reviewHistoricalVisual` de `src/pages/ReviewSlides.tsx` usa:
 - **ENIAC.jpg** — fotografia de Laanderman, feita em 6 de novembro de 2015, mostrando uma parte/exemplar do ENIAC em exposição no Bradbury Science Museum; licença **CC BY-SA 4.0**. Fonte: https://commons.wikimedia.org/wiki/File:ENIAC.jpg
 
 Observações para a sessão que está reconstruindo os slides: a legenda atual do ENIAC diz apenas “CC BY-SA 4.0 · Wikimedia Commons”, mas a licença requer atribuição apropriada ao autor e link para a licença; recomenda-se exibir “Foto: Laanderman, CC BY-SA 4.0” com links para a página de origem e para https://creativecommons.org/licenses/by-sa/4.0/. Além disso, convém legendar a imagem como fotografia de um exemplar em exposição, e não como uma fotografia feita na época do ENIAC. A imagem de Ada está indicada como domínio público na página do arquivo, mas a equipe ainda deve guardar a URL da página de origem no registo de ativos.
+
+
+## 9. Alterações factuais mais recentes e atribuição visual no player
+
+A distinção de datas do tear foi gravada nos três arquivos de conteúdo:
+- Narrada: [src/content/narrated/prim-computador.ts](https://github.com/cainalo/Cronicas-do-Conhecimento-/blob/claude/cronicas-conhecimento-estudos-jgbofo/src/content/narrated/prim-computador.ts) — commit d04f294.
+- Texto-base do capítulo, usado também na geração das lâminas: [01-o-que-e.md](https://github.com/cainalo/Cronicas-do-Conhecimento-/blob/claude/cronicas-conhecimento-estudos-jgbofo/src/content/grimoires/primeiros/cap01-computador/01-o-que-e.md) — commit 4d7e2a8.
+- Trilha para iniciantes: [src/content/micro/prim-computador-a.ts](https://github.com/cainalo/Cronicas-do-Conhecimento-/blob/claude/cronicas-conhecimento-estudos-jgbofo/src/content/micro/prim-computador-a.ts) — commit 07f6e84.
+
+Foi examinada também a versão mais recente de `src/pages/Narrated.tsx` (não alterada por esta sessão). Ela utiliza as mesmas duas imagens históricas. Sua legenda do ENIAC também indica apenas “Imagem CC BY-SA 4.0 · Wikimedia Commons”, sem o nome de autor; recomenda-se aplicar a mesma correção indicada para a tela de revisão, mantendo atribuição apropriada e link da licença. A foto mostra um exemplar em exposição no Bradbury Science Museum, não uma fotografia feita em 1946.
