@@ -44,8 +44,10 @@ export const narradaSomarInteiros: NarratedLesson = {
       },
       beats: [
         { say: 'Resolva dois mais três. Primeiro, localize o número dois na reta: esse é o ponto onde começamos. O número que será somado diz quanto e para que lado vamos andar.', show: 0 },
-        { say: 'Como três é positivo, caminhamos para a direita. Um passo leva do dois ao três; outro, do três ao quatro; e o terceiro, do quatro ao cinco.', show: 3 },
-        { say: 'Terminamos no cinco. Portanto, dois mais três é igual a cinco. Repare: começamos no primeiro número e usamos o segundo para definir o deslocamento.', show: 3 },
+        { say: 'Como três é positivo, vamos para a direita. O primeiro passo leva do dois ao três.', show: 1 },
+        { say: 'O segundo passo parte do três e chega ao quatro. Agora avançamos duas das três unidades.', show: 2 },
+        { say: 'O terceiro passo leva do quatro ao cinco. Completamos as três unidades para a direita.', show: 3 },
+        { say: 'Terminamos no cinco. Portanto, dois mais três é igual a cinco. Começamos no primeiro número e usamos o segundo para definir o deslocamento.', show: 3 },
       ],
     },
     {
@@ -56,14 +58,20 @@ export const narradaSomarInteiros: NarratedLesson = {
         states: [
           { points: [3] },
           { points: [3, 2], jumps: [{ from: 3, to: 2 }] },
+          { points: [3, 2, 1], jumps: [{ from: 3, to: 2 }, { from: 2, to: 1 }] },
           { points: [3, 2, 1, 0], jumps: [{ from: 3, to: 2 }, { from: 2, to: 1 }, { from: 1, to: 0 }] },
+          { points: [3, 2, 1, 0, -1], jumps: [{ from: 3, to: 2 }, { from: 2, to: 1 }, { from: 1, to: 0 }, { from: 0, to: -1 }] },
           { points: [3, 2, 1, 0, -1, -2], jumps: [{ from: 3, to: 2 }, { from: 2, to: 1 }, { from: 1, to: 0 }, { from: 0, to: -1 }, { from: -1, to: -2 }] },
         ],
       },
       beats: [
         { say: 'Agora calcule três mais menos cinco. Comece no três. O segundo número é menos cinco, então vamos andar cinco unidades para a esquerda; o sinal negativo indica a direção.', show: 0 },
-        { say: 'Avance visualmente passo a passo: de três para dois, de dois para um e de um para zero. Até aqui, andamos três das cinco unidades e acabamos de chegar ao zero.', show: 2 },
-        { say: 'Ainda faltam duas unidades para a esquerda: de zero para menos um e de menos um para menos dois. O resultado é menos dois, então três mais menos cinco é igual a menos dois.', show: 3 },
+        { say: 'O primeiro passo para a esquerda leva do três ao dois.', show: 1 },
+        { say: 'O segundo passo vai do dois ao um. Andamos duas das cinco unidades.', show: 2 },
+        { say: 'O terceiro passo leva do um ao zero. Cruzar o zero não termina a conta: ainda faltam duas unidades.', show: 3 },
+        { say: 'O quarto passo sai do zero e chega ao menos um.', show: 4 },
+        { say: 'O quinto passo vai de menos um a menos dois. Chegamos ao destino depois de cinco unidades para a esquerda.', show: 5 },
+        { say: 'O resultado é menos dois: três mais menos cinco é igual a menos dois.', show: 5 },
       ],
     },
     {
