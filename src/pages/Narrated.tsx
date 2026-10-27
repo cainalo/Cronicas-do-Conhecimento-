@@ -356,7 +356,7 @@ export function NarratedPlayer({
         aria-label={exitLabel} title={exitLabel} data-testid="narrada-sair">
         <Icon name="sair" size={19} />
       </button>
-      <p className={`absolute left-4 right-4 z-10 mx-auto max-w-3xl rounded-2xl border border-white/15 bg-[#171b1b]/82 px-4 py-3 text-center text-sm font-medium leading-relaxed text-white shadow-xl backdrop-blur-md transition-all duration-500 sm:left-10 sm:right-10 sm:px-6 sm:text-base ${controlsVisible ? 'bottom-[calc(8.55rem+env(safe-area-inset-bottom))]' : 'bottom-[max(1.15rem,env(safe-area-inset-bottom))]'}`}
+      <p className={`absolute left-4 right-4 z-10 mx-auto max-w-3xl rounded-2xl border border-white/15 bg-[#171b1b]/82 px-4 py-3 text-center text-sm font-medium leading-relaxed text-white shadow-xl backdrop-blur-md transition-all duration-500 sm:left-10 sm:right-10 sm:px-6 sm:text-base ${controlsVisible ? 'bottom-[calc(9.8rem+env(safe-area-inset-bottom))]' : 'bottom-[max(1.15rem,env(safe-area-inset-bottom))]'}`}
         aria-live="polite" data-testid="narrada-legenda" onClick={stopOverlayClick}>
         <span className="sr-only">Legenda: </span>
         <span data-testid="narrada-legenda-texto">
@@ -382,6 +382,7 @@ export function NarratedPlayer({
       </div>
       <div className={`absolute bottom-[max(0.35rem,env(safe-area-inset-bottom))] left-2 right-2 z-30 mx-auto flex max-w-xl items-center justify-center gap-1.5 px-1 transition-all duration-300 sm:bottom-[max(0.85rem,env(safe-area-inset-bottom))] sm:gap-3 ${visibleClass}`}
         onClick={stopOverlayClick} aria-hidden={!controlsVisible} data-testid="narrada-controles-flutuantes">
+        <span className="sr-only">{VOICE_LABEL[voice.kind]}</span>
         <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => jump(positionAtBeat(l, Math.max(0, beatIndex - 1)))} aria-label="Voltar uma fala"><Icon name="voltar" size={17} /></button>
         <button type="button" className="grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-white/25 bg-[#c8402a] text-white shadow-xl transition hover:bg-[#a0301c]" onClick={togglePlayback} aria-label={playing ? 'Pausar aula' : done ? 'Assistir novamente' : 'Reproduzir aula'} data-testid="narrada-tocar">{playing ? <span aria-hidden="true" className="text-xl leading-none">Ⅱ</span> : <Icon name="play" size={19} />}</button>
         <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => jump(positionAtBeat(l, Math.min(positions.length - 1, beatIndex + 1)))} aria-label="Avançar uma fala"><Icon name="seta" size={17} /></button>
@@ -391,8 +392,27 @@ export function NarratedPlayer({
           </select>
         </label>
         <button type="button" className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 text-white shadow-lg backdrop-blur-md transition ${voice.kind === 'gemini' ? 'bg-[#6e3b5c]' : 'bg-[#171b1b]/82 hover:bg-[#6e3b5c]'}`} onClick={() => { setShowTranscript(false); setShowVoiceSettings((v) => !v); setVoiceStatus(''); }} aria-label="Preferências de voz" aria-expanded={showVoiceSettings} data-testid="narrada-preferencias-voz"><Icon name="som" size={17} /></button>
-        <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => { setShowVoiceSettings(false); setShowTranscript((v) => !v); }} aria-label={showTranscript ? 'Ocultar transcrição' : 'Mostrar transcrição'} aria-expanded={showTranscript} data-testid="narrada-transcricao"><Icon name="livro" size={17} /></button>
+        <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => { setShowVoiceSettings(false); setShowTranscript((v) => !v); }} aria-label={showTranscript ? 'Ocultar transcrição' : 'Transcrição'} aria-expanded={showTranscript} data-testid="narrada-transcricao"><Icon name="livro" size={17} /></button>
       </div>
+      <div
+        className={\`absolute bottom-[calc(7.1rem+env(safe-area-inset-bottom))] left-1/2 z-30 flex -translate-x-1/2 items-center justify-center gap-2 transition-all duration-300 \${visibleClass}\`}
+        onClick={stopOverlayClick}
+        aria-hidden={!controlsVisible}
+        aria-label="Ir para uma cena da aula"
+        data-testid="narrada-marcadores-cena"
+      >
+        {l.scenes.map((item, i) => (
+          <button
+            key={item.id}
+            type="button"
+            className={\`h-2 rounded-full transition-all duration-500 \${i === pos.scene ? 'w-7 bg-[#f0bf69]' : i < pos.scene ? 'w-2 bg-white/65' : 'w-2 bg-white/25 hover:bg-white/65'}\`}
+            aria-label={'Ir para a cena ' + (i + 1) + ': ' + item.heading}
+            aria-current={i === pos.scene ? 'step' : undefined}
+            onClick={() => jump({ scene: i, beat: 0 })}
+          />
+        ))}
+      </div>
+
       {showVoiceSettings && controlsVisible && (
         <section className="absolute bottom-[calc(9.5rem+env(safe-area-inset-bottom))] left-3 right-3 z-40 mx-auto max-h-[calc(100dvh-12rem)] max-w-xl overflow-y-auto rounded-2xl border border-white/20 bg-[#171b1b]/96 p-4 text-white shadow-2xl backdrop-blur-xl" onClick={stopOverlayClick} aria-label="Configurações da voz" data-testid="narrada-painel-voz">
           <div className="flex items-start justify-between gap-3"><div><h2 className="font-display text-xl font-semibold">Voz da narração</h2><p className="mt-1 text-xs leading-relaxed text-white/70">A voz neural soa mais humana, mas precisa de chave pessoal e internet. Sem ela, o app usa a voz instalada no aparelho.</p></div>
