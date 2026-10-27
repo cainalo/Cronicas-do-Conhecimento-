@@ -161,6 +161,17 @@ export function NarratedPlayer({
     revealControls();
   }, [revealControls]);
 
+  // Also catches pointer releases outside the control row (e.g. dragging the seek bar).
+  useEffect(() => {
+    const finishInteraction = () => endControlsInteraction();
+    window.addEventListener('pointerup', finishInteraction);
+    window.addEventListener('pointercancel', finishInteraction);
+    return () => {
+      window.removeEventListener('pointerup', finishInteraction);
+      window.removeEventListener('pointercancel', finishInteraction);
+    };
+  }, [endControlsInteraction]);
+
   const togglePlayerControls = useCallback(() => {
     if (controlsVisible) {
       clearControlsHideTimer();
