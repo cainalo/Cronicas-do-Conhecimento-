@@ -69,8 +69,8 @@ export function NarratedPlayer({
   const currentMs = Math.min(totalMs, beforeMs + beatElapsed);
   const scene = l.scenes[pos.scene];
   const say = scene.beats[pos.beat].say;
-  // Mudanças de enquadramento graduais a cada ~2,8 s; a cena e os componentes não são remontados.
-  const visualPhase = Math.min(2, Math.floor(beatElapsed / 2800));
+  // Movimento de câmera contínuo ao longo da aula inteira; a mudança de frase não reinicia o enquadramento.
+  const visualPhase = Math.floor(currentMs / 2800) % 3;
 
   const stop = useCallback(() => {
     token.current += 1;
@@ -322,7 +322,7 @@ export function NarratedPlayer({
           data-testid="narrada-cena"
         >
           <div className="relative flex h-full max-h-full w-full items-center justify-center" data-testid="narrada-elementos-visuais">
-            <CinematicScene key={scene.id} scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} beatIndex={pos.beat} phase={visualPhase} />
+            <CinematicScene scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} beatIndex={pos.beat} phase={visualPhase} />
           </div>
         </div>
       </section>
