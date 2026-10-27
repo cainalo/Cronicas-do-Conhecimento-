@@ -4,6 +4,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { plainReviewText, splitReviewChunks } from '../pages/ReviewSlides';
 
 const ROOT = join(__dirname, '..');
 
@@ -84,17 +85,20 @@ describe('experiência imersiva de aula e revisão', () => {
 
     expect(narrated).toContain('audio.currentTime = clamped / 1000');
     expect(narrated).toContain("useCueMotion(scene.id + ':' + beatIndex)");
+    expect(narrated).toContain('const sceneMotion = useCueMotion(scene.id)');
+    expect(narrated).toContain("sceneMotion ? ' is-scene-change' : ''");
     expect(narrated).toContain('data-testid="narrada-corte-suave"');
-    expect(narrated).toContain('beatVisualDuration >= 8500');
-    expect(narrated).toContain('beatVisualProgress >= 0.26');
-    expect(narrated).toContain('beatVisualProgress < 0.82');
+    expect(narrated).toContain('beatVisualDuration >= 6000');
+    expect(narrated).toContain('beatVisualProgress >= 0.24');
+    expect(narrated).toContain('beatVisualProgress < 0.84');
     expect(narrated).toContain('function CinematicCutaway');
     expect(narrated).toContain('data-testid="narrada-insercao-visual"');
     expect(narrated).toContain("visual.kind === 'timeline'");
     expect(narrated).toContain("visual.kind === 'equation'");
     expect(css).toContain('@keyframes ccv-film-cut-in');
+    expect(css).toContain('@keyframes ccv-film-scene-in');
     expect(css).toContain('.ccv-film-copy.is-cue-change');
-    expect(css).toContain('.ccv-film-cut.is-cue-change');
+    expect(css).toContain('.ccv-film-cut.is-scene-change');
     expect(css).toContain('.ccv-cutaway.is-visible');
     expect(css).toContain('.ccv-cutaway {');
     expect(css).toContain('clip-path: inset(0 100% 0 0)');
@@ -141,3 +145,31 @@ describe('experiência imersiva de aula e revisão', () => {
     expect(src).toMatch(/await setImmersive\(true\)/);
   });
 });
+
+
+describe('integridade do texto dos slides', () => {
+  it('preserva todas as células das tabelas Markdown como texto legível', () => {
+    const table = [
+      '| Conceito | Função |',
+      '| --- | --- |',
+      '| CPU | Executa instruções do programa |',
+      '| RAM | Mantém dados temporários em uso |',
+    ].join('\n');
+    const plain = plainReviewText(table);
+    expect(plain).toContain('Conceito');
+    expect(plain).toContain('CPU');
+    expect(plain).toContain('Executa instruções do programa');
+    expect(plain).toContain('RAM');
+    expect(plain).toContain('Mantém dados temporários em uso');
+  });
+
+  it('divide textos longos em blocos curtos sem perder nenhuma palavra ou frase', () => {
+    const original = ('Uma explicação completa preserva o conceito e o exemplo. ').repeat(18).trim();
+    const normalized = plainReviewText(original);
+    const chunks = splitReviewChunks(original, 250);
+    expect(chunks.length).toBeGreaterThan(1);
+    expect(chunks.join(' ')).toBe(normalized);
+    expect(chunks.every((chunk) => chunk.length <= 250)).toBe(true);
+  });
+});
+
