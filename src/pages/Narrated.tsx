@@ -106,8 +106,8 @@ export function NarratedPlayer({
   // Um plano de apoio entra durante a fala (não apenas entre frases) quando existe tempo
   // suficiente para ele ser percebido; sai antes de a próxima fala começar.
   // Um plano de apoio precisa ficar tempo suficiente para o olho entender a imagem; cortes de frases curtas eram rápidos demais e pareciam piscadas.
-  const cutawayVisible = playing && voiceStarted && beatVisualDuration >= 8500
-    && beatVisualProgress >= 0.26 && beatVisualProgress < 0.82;
+  const cutawayVisible = playing && voiceStarted && beatVisualDuration >= 6000
+    && beatVisualProgress >= 0.24 && beatVisualProgress < 0.84;
 
   const stop = useCallback(() => {
     token.current += 1;
@@ -867,7 +867,10 @@ function CinematicScene({
 
   if (!historicalPhoto && visual.kind === 'timeline') historicalPhoto = historicalVisualFor(headline + ' ' + support);
 
+  // Texto acompanha cada fala, mas a arte não reinicia a animação a cada frase.
+  // Só uma troca real de cena faz o plano visual reentrar; isso elimina o efeito de piscada.
   const cueMotion = useCueMotion(scene.id + ':' + beatIndex);
+  const sceneMotion = useCueMotion(scene.id);
 
   return (
     <article
@@ -904,7 +907,7 @@ function CinematicScene({
 
         <section className="ccv-film-art" aria-label="Demonstração visual" data-testid="narrada-cena-visual">
           <div className="ccv-film-art__rings" aria-hidden="true"><span /><span /><span /></div>
-          <div className={'ccv-film-cut' + (cueMotion ? ' is-cue-change' : '')} data-testid="narrada-corte-suave">
+          <div className={'ccv-film-cut' + (sceneMotion ? ' is-scene-change' : '')} data-testid="narrada-corte-suave">
             {numberline ? (
               <div className="ccv-film-numberline">
                 <CinematicNumberLine from={numberline.from} to={numberline.to} state={numberline.state} />
