@@ -1,3 +1,7 @@
+### Contexto histórico
+
+Em março de 1997, a RFC 2119 da Internet Engineering Task Force (IETF) definiu como palavras em maiúsculas — como *MUST*, *MUST NOT*, *SHOULD* e *MAY* — devem ser interpretadas em especificações técnicas que adotam aquela convenção. A RFC 8174, publicada em 2017, atualizou a orientação. Esses documentos não criaram os modais da língua inglesa; padronizaram sua força normativa em determinados textos técnicos. Por isso, antes de interpretar *must* ou *should*, confira se a especificação declara seguir a convenção. Fontes primárias: [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) e [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174).
+
 Manuais e documentação técnica repetem poucas estruturas gramaticais. Reconhecê-las rapidamente ajuda a saber **quem faz o quê**, **o que é obrigatório** e **o que é apenas recomendado**. Esta seção reúne quatro delas: imperativo, voz passiva, verbos modais e afixos.
 
 ### Imperativo: o tom dos manuais
