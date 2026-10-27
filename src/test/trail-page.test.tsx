@@ -28,7 +28,7 @@ describe('apresentação da trilha', () => {
     expect(chapters.length).toBeGreaterThan(0);
     const firstChapter = chapters[0];
     expect(within(firstChapter).getByRole('heading', { level: 2 })).toBeInTheDocument();
-    expect(within(firstChapter).getByRole('link', { name: /Texto completo/ })).toBeInTheDocument();
+    expect(within(firstChapter).getByRole('link', { name: /Material completo/ })).toBeInTheDocument();
     expect(within(firstChapter).getByRole('list', { name: /Atividades de/ })).toBeInTheDocument();
 
     // A lista é aberta diretamente, sem cartões de capítulo que se expandem/recolhem.
