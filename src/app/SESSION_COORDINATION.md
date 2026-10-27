@@ -170,6 +170,14 @@ Este é o único arquivo de coordenação do projeto. Os registros antigos abaix
 - O gate definitivo precisa confirmar Vitest, typecheck/build, E2E, auditoria visual e compilação Android. Não foi possível obter um resultado final de Actions através do status de commit disponível; não declarar aprovação.
 - O inventário confirma que não há PRs abertos. As branches canônicas são `main`, `claude/cronicas-conhecimento-estudos-jgbofo` (entrega/publicação) e `gh-pages`; a branch de manutenção ativa é `gpt/ingles01-microaulas-2026-10-27`. Branches experimentais ainda existem como refs históricas: esta conexão não expõe uma operação para excluí-las fisicamente.
 
+
+
+### ChatGPT — Maintainer: medição objetiva de desempenho
+**Data:** 2026-10-27
+**Estado:** ferramenta de medição adicionada; execução real pendente.
+- `scripts/report-bundle-sizes.mjs` e `npm run report:bundle` imprimem a lista de chunks, seus tamanhos brutos/gzip e os scripts/modulepreloads referenciados pelo HTML inicial.
+- `.github/workflows/validate-branch.yml` executa a medição logo após o build. Os números só podem ser registrados como resultado quando o workflow terminar; nenhuma economia percentual é presumida antes da comparação.
+
 ### ChatGPT — Maintainer: integridade editorial e inventário de branches
 **Data:** 2026-10-27
 **Estado:** testes adicionais escritos; resultado de CI pendente.
