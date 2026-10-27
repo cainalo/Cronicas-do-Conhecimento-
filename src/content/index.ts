@@ -72,7 +72,7 @@ export const lessons: Lesson[] = [...licoesPrimeiros, ...licoesCap01, ...licoesC
 export const questions: Question[] = [...questoesPrimeiros, ...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesIaCap0304, ...questoesDev, ...questoesDevCap0304, ...questoesInfra, ...questoesInfraSo, ...questoesDados, ...questoesGovernanca, ...questoesLegislacao, ...questoesEngSoft, ...questoesDevops, ...questoesIngles, ...questoesPortugues, ...questoesInstitucional, ...questoesMatematica];
 
 /**
- * Caminho recomendado, do mais fácil ao mais difícil: começa pelo básico (Primeiro Pergaminho,
+ * Caminho recomendado, do mais fácil ao mais difícil: começa pelo básico (Primeiros Passos em TI,
  * sistema operacional, redes, dados, lógica), intercala as matérias gerais e deixa para depois
  * os assuntos que dependem dos anteriores (criptografia, identidade, agentes, normas).
  */
