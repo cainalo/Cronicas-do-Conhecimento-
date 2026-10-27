@@ -44,6 +44,7 @@ Arquivos novos nesta contribuição:
 - src/test/elevenlabs-alignment-adapter.test.ts — validação da resposta e teste de integração com o helper temporal.
 - src/test/narration-timeline-edgecases.test.ts — Unicode, timestamps negativos/não finitos/invertidos, monotonicidade e pausas entre cues.
 - src/test/narrated-content-quality.test.ts — estrutura básica e cobertura de conceitos dos roteiros atuais.
+- src/test/review-slides-integrity.test.ts — verifica se o texto normalizado de todas as seções, definições e referências de todos os capítulos pode ser reconstruído a partir dos chunks e das lâminas geradas.
 
 Não alterei a implementação temporal compartilhada, o player, a camada de voz, os roteiros nem os slides.
 
