@@ -10,8 +10,13 @@ export interface VoiceCandidate { name?: string; lang?: string; default?: boolea
 const KEY_STORAGE = 'cronicas:gemini-tts-api-key';
 const VOICE_STORAGE = 'cronicas:gemini-tts-voice';
 export const GEMINI_TTS_VOICES = [
-  { id: 'Kore', label: 'Kore · voz principal' },
-  { id: 'Aoede', label: 'Aoede · alternativa' },
+  { id: 'Sulafat', label: 'Sulafat · acolhedora e quente' },
+  { id: 'Aoede', label: 'Aoede · leve e expressiva' },
+  { id: 'Callirrhoe', label: 'Callirrhoe · descontraída e natural' },
+  { id: 'Despina', label: 'Despina · suave e fluida' },
+  { id: 'Erinome', label: 'Erinome · clara e articulada' },
+  { id: 'Kore', label: 'Kore · firme e segura' },
+  { id: 'Charon', label: 'Charon · informativa' },
 ] as const;
 
 export function getGeminiTtsApiKey(): string {
@@ -23,7 +28,7 @@ export function saveGeminiTtsApiKey(value: string): void {
 export function getGeminiTtsVoice(): string {
   try {
     const value = typeof localStorage === 'undefined' ? '' : localStorage.getItem(VOICE_STORAGE) ?? '';
-    return GEMINI_TTS_VOICES.some((voice) => voice.id === value) ? value : 'Kore';
+    return GEMINI_TTS_VOICES.some((voice) => voice.id === value) ? value : 'Sulafat';
   } catch { return 'Kore'; }
 }
 export function saveGeminiTtsVoice(value: string): void {
@@ -141,7 +146,7 @@ function geminiVoice(apiKey: string, voiceName: string): Voice {
         headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
         body: JSON.stringify({
           model: 'gemini-3.8-flash-tts',
-          input: [{ type: 'user_input', content: [{ type: 'text', text, annotations: [{ type: 'speech_metadata', style: `Português brasileiro natural, pronúncia brasileira, voz de narradora adulta, clara, acolhedora e expressiva, ritmo didático calmo, pausas naturais entre ideias. Velocidade de leitura ${rate}x. Evite entonação robótica e não leia instruções em voz alta.` }] }] }],
+          input: [{ type: 'user_input', content: [{ type: 'text', text, annotations: [{ type: 'speech_metadata', style: `Português brasileiro (pt-BR), sotaque brasileiro natural. Narração educacional de alta qualidade, como uma professora experiente explicando a uma pessoa ao lado: timbre humano e caloroso, articulação clara sem exagero, ritmo conversacional, entonação expressiva ligada ao sentido, pequenas pausas em vírgulas e pausas maiores entre ideias. Evite voz de GPS, leitura mecânica, cadência uniforme e entusiasmo artificial. Velocidade ${rate}x. Leia apenas o texto fornecido.` }] }] }],
           response_format: { type: 'audio' },
           generation_config: { speech_config: [{ voice: voiceName }] },
         }),
