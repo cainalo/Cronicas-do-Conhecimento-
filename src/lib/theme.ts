@@ -197,19 +197,19 @@ export interface Look {
   previous?: Omit<Look, 'previous'>;
 }
 
-export const LOOK_VERSION = 2;
+export const LOOK_VERSION = 3;
 
 export const DEFAULT_LOOK: Look = {
   v: LOOK_VERSION,
-  palette: 'editorial',
+  palette: 'aurora',
   colors: { light: {}, dark: {} },
-  bg: 'papel',
+  bg: 'liso',
   cards: 'editorial',
   tiles: 'solido',
   buttons: 'suave',
   motion: 'completo',
   density: 'normal',
-  font: 'editorial',
+  font: 'plex',
   shadow: 'nenhuma',
   radius: 10,
   leading: 1.65,
@@ -217,7 +217,9 @@ export const DEFAULT_LOOK: Look = {
 
 // Valores de estilo que deixaram de existir viram o equivalente atual.
 const RENAMED: Partial<Record<keyof Look, Record<string, string>>> = {
-  bg: { manchas: 'papel' },
+  bg: { papel: 'liso', manchas: 'liso' },
+  font: { editorial: 'plex', serifada: 'plex' },
+  palette: { editorial: 'aurora', jornal: 'oceano' },
   cards: { tingido: 'editorial' },
 };
 
@@ -236,10 +238,11 @@ export function normalizeLook(l?: Partial<Look> | null): Look {
  * em `previous` (nada é apagado; o painel oferece voltar a ela).
  */
 export function migrateLook(l?: Partial<Look> | null): Look {
-  if (!l || l.v === LOOK_VERSION) return normalizeLook(l);
+  if (!l) return normalizeLook(l);
+  if (l.v === LOOK_VERSION) return normalizeLook(l);
   const { previous: _ignored, ...old } = normalizeLook({ ...l, v: undefined });
   void _ignored;
-  return { ...DEFAULT_LOOK, previous: old };
+  return { ...DEFAULT_LOOK, colors: { light: { ...(old.colors?.light ?? {}) }, dark: { ...(old.colors?.dark ?? {}) } } };
 }
 
 // ---------- cores ----------
