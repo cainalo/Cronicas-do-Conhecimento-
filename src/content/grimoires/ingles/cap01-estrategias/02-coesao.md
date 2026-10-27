@@ -1,3 +1,7 @@
+### Contexto histórico
+
+Em 1976, M. A. K. Halliday e Ruqaiya Hasan publicaram *Cohesion in English*, obra que sistematizou o estudo de relações entre frases, incluindo referência, repetição lexical e conjunções como *but* e *so*. O livro não inventou os conectivos; oferece uma descrição influente de como palavras e estruturas ligam partes de um texto. Essa perspectiva ajuda a ler documentação técnica sem traduzir frases como unidades isoladas: é necessário identificar se uma expressão acrescenta informação, contrasta, explica uma causa ou estabelece uma condição. Fonte bibliográfica: [Routledge — Cohesion in English](https://www.routledge.com/Cohesion-in-English/Hallidayah2-Hasanah2/p/book/9780582550414).
+
 Boa parte das questões de leitura depende de duas peças pequenas: os **marcadores de discurso** (conectivos), que dizem como uma ideia se relaciona com a outra, e as **referências**, que retomam algo já dito. Errar um *however* ou o antecedente de um *it* basta para inverter o sentido de um parágrafo.
 
 ### Marcadores de discurso
