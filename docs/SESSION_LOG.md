@@ -135,3 +135,9 @@
 - Acrescentadas fontes aos textos das três seções: estudos didáticos sobre skimming/scanning; *Cohesion in English* (1976); RFC 2119/8174.
 - Arquivos: `src/content/micro/ingles-estrategias.ts`, `src/content/index.ts`, `src/test/ingles-estrategias.test.ts` e os três Markdown de `src/content/grimoires/ingles/cap01-estrategias/`.
 - **Validação pendente:** não houve execução do Vitest/build/E2E nesta branch. Os testes são especificações escritas, não evidência de aprovação.
+
+## 27/10/2026 — retomada com responsável técnico único
+- Por solicitação do usuário, a manutenção foi centralizada nesta linha de trabalho; os registros anteriores em `src/app/SESSION_COORDINATION.md` permanecem como histórico. Branches paralelas não são apagadas, mescladas ou consideradas aprovadas automaticamente.
+- Baseline comprovada: Actions [40444629202](https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40444629202) concluiu com sucesso no commit `d2f6e93`, gerando a versão `0.1.351`. Esse sucesso não comprova alterações posteriores em `gpt/ingles01-microaulas-2026-10-27`.
+- Próxima ação: instalar CI dedicado sem etapa de publicação para validar testes, build, E2E e Android na branch de manutenção. Depois corrigir falhas reais antes de iniciar cap.ingles.02.
+
