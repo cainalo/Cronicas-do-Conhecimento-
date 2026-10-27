@@ -241,3 +241,13 @@ Este é o único arquivo de coordenação do projeto. Os registros antigos abaix
 - Adicionado a scripts/e2e-layout.mjs o teste checkNarratedSceneWidth, que mede o bounding box real de [data-testid=narrada-cena-cinematica] em 360×640 e 390×844, com tema padrão e estilo de cartões vidro. A cena precisa alcançar o limite esquerdo e direito do viewport; 1 px de sangria é permitido e não deve causar rolagem lateral.
 - Commit do teste: 00ef5eaad8a8ce980fc9f5efaa45e8f2c0e268bf.
 - Esta verificação é deliberadamente separada do teste de overlay externo: ela mede a própria cena, alvo do defeito visual relatado. Executar e conferir o resultado no workflow final. A checagem em Android físico permanece pendente.
+
+
+### ChatGPT — limpeza da identidade, CSS de livro e analogias de lógica
+**Data:** 2026-10-27
+**Estado:** commit registrado na branch de manutenção; validação e publicação pendentes.
+- Removidos do CSS os estilos sem consumidores de capa, lombada, códice, pergaminho e virada de página; o texto didático mantém fluxo vertical contínuo.
+- A aparência padrão usa tipografia sem serifa, fundo limpo e paleta azul/índigo/teal; o painel deixa de oferecer papel e serifas. Preferências salvas antigas migram para as opções modernas, sem botão de restauração do visual antigo.
+- Removida a dependência Fraunces e as cores Tailwind de couro/pergaminho. Preferências antigas de música medieval/lareira são descartadas sem alterar a configuração dos ambientes de estudo atuais.
+- O exemplo histórico de lógica foi reescrito com depoentes que sempre dizem a verdade ou mentem, sem cavaleiros, valetes ou ilha fictícia; a dedução por contradição permanece.
+- O ícone de Explorar e a ilustração inicial contextual deixam de usar o livro aberto. Testes de migração visual e das preferências antigas foram acrescentados; o resultado do CI ainda precisa ser confirmado.

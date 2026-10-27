@@ -99,36 +99,36 @@ export interface PaletteSeed {
   sun: string;
   ok: string;
   bad: string;
-  /** Neutros próprios (papel e tinta) em vez dos calculados pela matiz. */
+  /** Neutros próprios, em vez dos calculados pela matiz. */
   neutrals?: { light: Record<Neutral, string>; dark: Record<Neutral, string> };
   /** Cores das áreas, quando diferem das cores de destaque. */
   areas?: Record<AreaKey, string>;
 }
 
-const PAPEL = {
-  light: { bg: '#f4f0e8', surface: '#fbf9f4', raised: '#ece6da', line: '#d9d1c2', ink: '#1b1a17', muted: '#5f5a50' },
-  dark: { bg: '#151412', surface: '#1e1c19', raised: '#2a2723', line: '#3a3631', ink: '#efeae0', muted: '#aba395' },
+const NEUTROS = {
+  light: { bg: '#f6f8fc', surface: '#ffffff', raised: '#edf1f7', line: '#dce3ec', ink: '#172033', muted: '#59677b' },
+  dark: { bg: '#101722', surface: '#192333', raised: '#243246', line: '#34445c', ink: '#eaf0f7', muted: '#a5b4c6' },
 };
 
 export const PALETTES: PaletteSeed[] = [
   {
     id: 'editorial',
-    name: 'Editorial',
-    hue: 40,
-    primary: '#c8402a',
-    secondary: '#6e3b5c',
-    teal: '#1f5c7a',
-    pink: '#a8365e',
-    accent: '#9e6a14',
-    sun: '#c4921e',
-    ok: '#346834',
-    bad: '#b02822',
-    neutrals: PAPEL,
-    areas: { areaHoje: '#c8402a', areaTrilha: '#1f5c7a', areaExplorar: '#6e3b5c', areaRevisar: '#9e6a14', areaProgresso: '#346834', areaConta: '#3a3631' },
+    name: 'Essencial',
+    hue: 220,
+    primary: '#4f46e5',
+    secondary: '#7c3aed',
+    teal: '#0d9488',
+    pink: '#db2777',
+    accent: '#ea580c',
+    sun: '#facc15',
+    ok: '#15803d',
+    bad: '#b91c1c',
+    neutrals: NEUTROS,
+    areas: { areaHoje: '#4f46e5', areaTrilha: '#0d9488', areaExplorar: '#7c3aed', areaRevisar: '#ea580c', areaProgresso: '#15803d', areaConta: '#334155' },
   },
   {
     id: 'jornal',
-    name: 'Jornal',
+    name: 'Contraste',
     hue: 40,
     primary: '#1b1a17',
     secondary: '#3a3631',
@@ -138,7 +138,7 @@ export const PALETTES: PaletteSeed[] = [
     sun: '#c4921e',
     ok: '#2f5f2f',
     bad: '#b02822',
-    neutrals: { light: { ...PAPEL.light, bg: '#f7f6f2', surface: '#ffffff' }, dark: PAPEL.dark },
+    neutrals: { light: { ...NEUTROS.light, bg: '#ffffff', surface: '#ffffff' }, dark: NEUTROS.dark },
     areas: { areaHoje: '#c8402a', areaTrilha: '#1b1a17', areaExplorar: '#3a3631', areaRevisar: '#1b1a17', areaProgresso: '#3a3631', areaConta: '#5f5a50' },
   },
   {
@@ -153,7 +153,7 @@ export const PALETTES: PaletteSeed[] = [
     sun: '#e3b11a',
     ok: '#2f6b3a',
     bad: '#b3261e',
-    neutrals: { light: { ...PAPEL.light, bg: '#f1ede4' }, dark: PAPEL.dark },
+    neutrals: { light: { ...NEUTROS.light, bg: '#f1f5fb' }, dark: NEUTROS.dark },
     areas: { areaHoje: '#d33a1f', areaTrilha: '#1d3f8f', areaExplorar: '#1b1a17', areaRevisar: '#a87400', areaProgresso: '#2f6b3a', areaConta: '#3a3631' },
   },
   { id: 'aurora', name: 'Aurora', hue: 230, primary: '#4258cd', secondary: '#704eb6', teal: '#127672', pink: '#c2357a', accent: '#c4621a', sun: '#d99a10', ok: '#1e704a', bad: '#ac3544' },
@@ -166,13 +166,13 @@ export const PALETTES: PaletteSeed[] = [
   { id: 'arco-iris', name: 'Arco-íris', hue: 45, primary: '#2563eb', secondary: '#9333ea', teal: '#059669', pink: '#e11d48', accent: '#ea580c', sun: '#eab308', ok: '#16a34a', bad: '#dc2626' },
 ];
 
-export type BgStyle = 'papel' | 'liso' | 'degrade' | 'pontos' | 'listras';
+export type BgStyle = 'liso' | 'degrade' | 'pontos' | 'listras';
 export type CardStyle = 'editorial' | 'solido' | 'contorno' | 'vidro';
 export type TileStyle = 'solido' | 'contorno' | 'claro' | 'degrade';
 export type ButtonShape = 'suave' | 'reto' | 'arredondado' | 'pilula';
 export type Motion = 'completo' | 'reduzido' | 'nenhum';
 export type Density = 'compacto' | 'normal' | 'amplo';
-export type FontFamily = 'editorial' | 'plex' | 'sistema' | 'arredondada' | 'serifada' | 'mono';
+export type FontFamily = 'plex' | 'sistema' | 'arredondada' | 'mono';
 export type Shadow = 'nenhuma' | 'suave' | 'forte';
 
 export interface Look {
@@ -193,23 +193,21 @@ export interface Look {
   radius: number;
   /** Altura de linha do texto. */
   leading: number;
-  /** Aparência anterior à identidade editorial, para quem quiser voltar a ela. */
-  previous?: Omit<Look, 'previous'>;
 }
 
-export const LOOK_VERSION = 2;
+export const LOOK_VERSION = 3;
 
 export const DEFAULT_LOOK: Look = {
   v: LOOK_VERSION,
   palette: 'editorial',
   colors: { light: {}, dark: {} },
-  bg: 'papel',
+  bg: 'liso',
   cards: 'editorial',
   tiles: 'solido',
   buttons: 'suave',
   motion: 'completo',
   density: 'normal',
-  font: 'editorial',
+  font: 'plex',
   shadow: 'nenhuma',
   radius: 10,
   leading: 1.65,
@@ -217,13 +215,16 @@ export const DEFAULT_LOOK: Look = {
 
 // Valores de estilo que deixaram de existir viram o equivalente atual.
 const RENAMED: Partial<Record<keyof Look, Record<string, string>>> = {
-  bg: { manchas: 'papel' },
+  bg: { manchas: 'liso', papel: 'liso' },
+  font: { editorial: 'plex', serifada: 'plex' },
   cards: { tingido: 'editorial' },
 };
 
 /** Junta o que foi salvo com o padrão (campos novos ganham valor padrão; nada quebra). */
 export function normalizeLook(l?: Partial<Look> | null): Look {
-  const base = { ...DEFAULT_LOOK, ...(l ?? {}) } as Look;
+  const { previous: _legacyPrevious, ...saved } = (l ?? {}) as Partial<Look> & { previous?: unknown };
+  void _legacyPrevious;
+  const base = { ...DEFAULT_LOOK, ...saved } as Look;
   for (const [k, map] of Object.entries(RENAMED) as [keyof Look, Record<string, string>][]) {
     const v = base[k] as unknown as string;
     if (map[v]) (base as unknown as Record<string, unknown>)[k] = map[v];
@@ -232,14 +233,12 @@ export function normalizeLook(l?: Partial<Look> | null): Look {
 }
 
 /**
- * Aparência salva antes da identidade editorial: passa a valer a editorial, e a antiga fica guardada
- * em `previous` (nada é apagado; o painel oferece voltar a ela).
+ * Migra preferências anteriores para os estilos atuais. Cores escolhidas e tamanho de texto são
+ * preservados; fundo de papel e fontes serifadas convergem para as opções modernas equivalentes.
  */
 export function migrateLook(l?: Partial<Look> | null): Look {
-  if (!l || l.v === LOOK_VERSION) return normalizeLook(l);
-  const { previous: _ignored, ...old } = normalizeLook({ ...l, v: undefined });
-  void _ignored;
-  return { ...DEFAULT_LOOK, previous: old };
+  if (!l) return normalizeLook(DEFAULT_LOOK);
+  return normalizeLook({ ...l, v: LOOK_VERSION });
 }
 
 // ---------- cores ----------

@@ -6,7 +6,7 @@ import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
 import { waitForRouteReady } from './route-ready';
 import { loadPrefs } from '@/lib/storage';
-import { DEFAULT_LOOK, PALETTES, applyLook, contrast, contrastWarnings, exportLook, importLook, normalizeLook, resolveColors } from '@/lib/theme';
+import { DEFAULT_LOOK, PALETTES, applyLook, contrast, contrastWarnings, exportLook, importLook, migrateLook, normalizeLook, resolveColors } from '@/lib/theme';
 
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
 
@@ -34,6 +34,35 @@ describe('motor de aparência', () => {
     expect(contrastWarnings(resolveColors(look, 'light'), 'light').length).toBeGreaterThan(0);
   });
 
+  it('migra preferências de papel e serifa para a aparência moderna', () => {
+    const legacy = JSON.parse(JSON.stringify({
+      ...DEFAULT_LOOK,
+      bg: 'papel',
+      font: 'serifada',
+      previous: { ...DEFAULT_LOOK, bg: 'papel', font: 'serifada' },
+    }));
+    const normalized = normalizeLook(legacy);
+    expect(normalized.bg).toBe('liso');
+    expect(normalized.font).toBe('plex');
+    expect('previous' in normalized).toBe(false);
+    const migrated = migrateLook(legacy);
+    expect(migrated.bg).toBe('liso');
+    expect(migrated.font).toBe('plex');
+  });
+
+  it('carrega preferências antigas sem reter os sons temáticos removidos', () => {
+    localStorage.setItem('cronicas:prefs:v3', JSON.stringify({
+      fontScale: 1.1, theme: 'dark', music: true, fire: true, musicVolume: 0.5, fireVolume: 0.5,
+    }));
+    const prefs = loadPrefs();
+    expect(prefs.fontScale).toBe(1.1);
+    expect(prefs.theme).toBe('light');
+    expect(prefs).not.toHaveProperty('music');
+    expect(prefs).not.toHaveProperty('fire');
+    expect(prefs).not.toHaveProperty('musicVolume');
+    expect(prefs).not.toHaveProperty('fireVolume');
+  });
+
   it('aplica variáveis e estilos no documento', () => {
     applyLook({ ...DEFAULT_LOOK, palette: 'floresta', cards: 'vidro', radius: 26 }, 'light');
     const root = document.documentElement;
@@ -44,7 +73,7 @@ describe('motor de aparência', () => {
   });
 
   it('exporta e importa a aparência; código inválido é recusado; campos novos ganham padrão', () => {
-    const l = { ...DEFAULT_LOOK, palette: 'doce', font: 'serifada' as const };
+    const l = { ...DEFAULT_LOOK, palette: 'doce', font: 'mono' as const };
     expect(importLook(exportLook(l))).toEqual(l);
     expect(importLook('nada')).toBeNull();
     expect(normalizeLook({ palette: 'oceano' }).cards).toBe(DEFAULT_LOOK.cards);

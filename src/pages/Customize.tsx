@@ -8,7 +8,6 @@ import {
   COLOR_GROUPS,
   COLOR_LABEL,
   DEFAULT_LOOK,
-  LOOK_VERSION,
   PALETTES,
   contrastWarnings,
   exportLook,
@@ -182,13 +181,13 @@ export function CustomizePage() {
       </Section>
 
       <Section title="Estilos">
-        <Choice label="Fundo da página" value={look.bg} onChange={(bg) => set({ bg })} options={[['papel', 'Papel (padrão)'], ['liso', 'Liso'], ['pontos', 'Pontilhado'], ['listras', 'Pautado'], ['degrade', 'Degradê leve']]} />
+        <Choice label="Fundo da página" value={look.bg} onChange={(bg) => set({ bg })} options={[['liso', 'Limpo (padrão)'], ['pontos', 'Pontilhado'], ['listras', 'Pautado'], ['degrade', 'Degradê leve']]} />
         <Choice label="Cartões" value={look.cards} onChange={(cards) => set({ cards })} options={[['editorial', 'Fio fino (padrão)'], ['solido', 'Chapados'], ['contorno', 'Contorno forte'], ['vidro', 'Vidro']]} />
         <Choice label="Cartões de atalho" value={look.tiles} onChange={(tiles) => set({ tiles })} options={[['solido', 'Pôster (padrão)'], ['contorno', 'Contorno'], ['claro', 'Claros'], ['degrade', 'Degradê']]} />
         <Choice label="Botões" value={look.buttons} onChange={(buttons) => set({ buttons })} options={[['suave', 'Cantos suaves (padrão)'], ['reto', 'Retos'], ['arredondado', 'Arredondados'], ['pilula', 'Pílula']]} />
         <Choice label="Sombras" value={look.shadow} onChange={(shadow) => set({ shadow })} options={[['nenhuma', 'Sem sombra (padrão)'], ['suave', 'Suaves'], ['forte', 'Fortes']]} />
         <Choice label="Espaçamento" value={look.density} onChange={(density) => set({ density })} options={[['compacto', 'Compacto'], ['normal', 'Normal'], ['amplo', 'Amplo']]} />
-        <Choice label="Fonte" value={look.font} onChange={(font) => set({ font })} options={[['editorial', 'Editorial (padrão)'], ['plex', 'Plex'], ['sistema', 'Do aparelho'], ['arredondada', 'Arredondada'], ['serifada', 'Toda em serifa'], ['mono', 'Monoespaçada']]} />
+        <Choice label="Fonte" value={look.font} onChange={(font) => set({ font })} options={[['plex', 'Inter Tight (padrão)'], ['sistema', 'Do aparelho'], ['arredondada', 'Arredondada'], ['mono', 'Monoespaçada']]} />
         <Choice label="Animações" value={look.motion} onChange={(motion) => set({ motion })} options={[['completo', 'Todas'], ['reduzido', 'Poucas'], ['nenhum', 'Nenhuma']]} />
         <Slider label="Arredondamento dos cartões" value={look.radius} min={4} max={32} step={2} unit=" px" onChange={(radius) => set({ radius })} />
         <Slider label="Espaço entre linhas do texto" value={look.leading} min={1.3} max={2} step={0.05} unit="" onChange={(leading) => set({ leading })} />
@@ -230,19 +229,9 @@ export function CustomizePage() {
             {ioMsg}
           </p>
         )}
-        <button type="button" className="btn-ghost mt-3 w-full text-bad" onClick={() => setPrefs({ look: { ...DEFAULT_LOOK, previous: look.previous } })}>
+        <button type="button" className="btn-ghost mt-3 w-full text-bad" onClick={() => setPrefs({ look: DEFAULT_LOOK })}>
           Restaurar a aparência padrão
         </button>
-        {look.previous && (
-          <button
-            type="button"
-            className="btn-ghost mt-2 w-full"
-            onClick={() => setPrefs({ look: { ...normalizeLook(look.previous), v: LOOK_VERSION } })}
-            data-testid="voltar-aparencia-anterior"
-          >
-            Voltar à aparência que eu usava antes
-          </button>
-        )}
       </Section>
     </div>
   );

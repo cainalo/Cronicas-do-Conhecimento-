@@ -15,14 +15,11 @@ export default {
         ember: 'rgb(var(--ember) / <alpha-value>)',
         ok: 'rgb(var(--ok) / <alpha-value>)',
         bad: 'rgb(var(--bad) / <alpha-value>)',
-        parchment: 'rgb(var(--parchment) / <alpha-value>)',
-        sepia: 'rgb(var(--sepia) / <alpha-value>)',
         azure: 'rgb(var(--azure) / <alpha-value>)',
         teal: 'rgb(var(--teal) / <alpha-value>)',
         pink: 'rgb(var(--pink) / <alpha-value>)',
         sun: 'rgb(var(--sun) / <alpha-value>)',
         leaf: 'rgb(var(--leaf) / <alpha-value>)',
-        leather: 'rgb(var(--leather) / <alpha-value>)',
       },
       fontFamily: {
         // As famílias vêm das variáveis do tema (o painel de personalização pode trocá-las).
@@ -31,7 +28,7 @@ export default {
         logo: ['var(--font-title)'],
         title: ['var(--font-title)'],
         sans: ['var(--font-text)'],
-        serif: ['"Fraunces Variable"', 'Georgia', 'serif'],
+        serif: ['var(--font-title)'],
       },
     },
   },

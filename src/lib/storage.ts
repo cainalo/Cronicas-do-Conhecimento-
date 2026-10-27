@@ -79,35 +79,45 @@ export function hasData(d: StudyData) {
   );
 }
 
-// Preferências do leitor (por dispositivo).
+// Preferências do estudo, por dispositivo.
 export interface Prefs {
   fontScale: number;
   /** Efeitos sonoros curtos (acerto, erro, conclusão). */
   sound?: boolean;
   theme: 'dark' | 'light';
-  /** Legado (música medieval e lareira, até a v4). Mantidos só para não perder o que estava salvo. */
-  music?: boolean;
-  fire?: boolean;
-  musicVolume?: number;
-  fireVolume?: number;
-  /** Sons para estudar (pacote v4): ligado e volume de cada ambiente. Nada toca sem um toque. */
+  /** Ambientes de estudo atuais, gerados no aparelho e desligados por padrão. */
   sounds?: Partial<Record<import('@/app/soundscape').Channel, { on: boolean; vol: number }>>;
   /** Android: esconder barras do sistema durante o estudo (padrão: ligado). */
   immersive?: boolean;
-  /** Aparência personalizada (paleta, cores e estilos). Ausente = padrão. */
+  /** Aparência personalizada, normalizada para os estilos atuais. */
   look?: import('./theme').Look;
 }
-// v4 (25/10/2026, reformulação): identidade moderna clara. Quem vinha da v3/v2 mantém tamanho de
-// letra, som, música e lareira; o tema passa para o claro uma vez, e a escolha volta a ser livre.
+// Chaves antigas de música/lareira são descartadas; os ambientes atuais ficam em `sounds`.
 const PREFS = 'cronicas:prefs:v4';
 const OLDER = ['cronicas:prefs:v3', 'cronicas:prefs:v2'];
+
+function currentPrefs(raw: unknown, forceLight = false): Prefs {
+  const source: Record<string, unknown> = raw && typeof raw === 'object'
+    ? { ...(raw as Record<string, unknown>) }
+    : {};
+  delete source.music;
+  delete source.fire;
+  delete source.musicVolume;
+  delete source.fireVolume;
+  return {
+    fontScale: 1,
+    theme: 'light',
+    ...source,
+    ...(forceLight ? { theme: 'light' } : {}),
+  } as unknown as Prefs;
+}
 export function loadPrefs(): Prefs {
   try {
     const cur = localStorage.getItem(PREFS);
-    if (cur) return { fontScale: 1, theme: 'light', ...JSON.parse(cur) };
+    if (cur) return currentPrefs(JSON.parse(cur));
     for (const k of OLDER) {
       const old = localStorage.getItem(k);
-      if (old) return { fontScale: 1, ...JSON.parse(old), theme: 'light' };
+      if (old) return currentPrefs(JSON.parse(old), true);
     }
     return { fontScale: 1, theme: 'light' };
   } catch {
