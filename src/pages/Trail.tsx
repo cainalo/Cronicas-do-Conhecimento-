@@ -1,5 +1,4 @@
-// Trilha: a sequência completa do programa, apresentada no mesmo modelo editorial da trilha dentro
-// dos livros. Cada capítulo mostra o próximo passo, acesso ao texto completo e a lista cronológica.
+// Trilha: sequência progressiva do programa, com acesso ao Aprender, à prática e ao material de referência.
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
@@ -8,7 +7,6 @@ import { getChapter, getGrimoire } from '@/content';
 import { trailByChapter, type UnitState } from '@/lib/trail';
 import { Icon, type IconName } from '@/components/Icon';
 import { PageHeader, useIsDark } from '@/components/Page';
-import { roman } from '@/lib/roman';
 import { areaColor } from '@/app/areas';
 
 const STATE_LABEL: Record<UnitState, string> = {
@@ -24,7 +22,7 @@ const KIND_LABEL: Record<string, string> = {
   desafio: 'Desafio',
 };
 const KIND_ICON: Record<string, IconName> = {
-  aprender: 'grimorio',
+  aprender: 'lista',
   praticar: 'chama',
   missao: 'mapa',
   desafio: 'escudo',
@@ -69,7 +67,7 @@ export function TrailPage() {
             <li key={ch.chapterId}>
               <section aria-label={chapter.title} data-testid={`trilha-capitulo-${chapter.id}`}>
                 <p className="kicker">
-                  {grimoire?.title} · Capítulo {roman(chapter.number).toUpperCase()} · {ch.done}/{ch.units.length} atividades · cerca de {chapter.estimatedMinutes} min
+                  {grimoire?.title} · Capítulo {chapter.number} · {ch.done}/{ch.units.length} atividades · cerca de {chapter.estimatedMinutes} min
                 </p>
                 <h2 className="mt-1 text-[1.45rem] leading-snug">{chapter.title}</h2>
                 <p className="text-sm text-muted">{chapter.subtitle}</p>
@@ -78,7 +76,7 @@ export function TrailPage() {
                     {ch.done === ch.units.length ? 'Rever' : ch.done > 0 ? 'Continuar' : 'Começar'} <Icon name="avancar" size={16} />
                   </Link>
                   <Link to={`/capitulo/${chapter.id}${reading?.lastSectionId ? `#${reading.lastSectionId}` : ''}`} className="btn-ghost !min-h-[42px] text-sm">
-                    <Icon name="livro" size={16} /> Texto completo
+                    <Icon name="lista" size={16} /> Material completo
                   </Link>
                 </div>
                 <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-raised" aria-label={`Progresso: ${pct}%`}>
@@ -109,7 +107,7 @@ export function TrailPage() {
                         {state === 'atual' ? (
                           <span className="shrink-0 text-xs font-semibold text-gold">Você está aqui</span>
                         ) : (
-                          <Icon name={KIND_ICON[unit.kind] ?? 'grimorio'} size={16} className="shrink-0 text-muted" />
+                          <Icon name={KIND_ICON[unit.kind] ?? 'lista'} size={16} className="shrink-0 text-muted" />
                         )}
                       </>
                     );
