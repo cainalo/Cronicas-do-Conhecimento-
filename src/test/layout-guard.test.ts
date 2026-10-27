@@ -68,15 +68,17 @@ describe('experiência imersiva de aula e revisão', () => {
     expect(narrated).toMatch(/wordIndexAtChar\(say, Math\.floor/);
   });
 
-  it('a composição audiovisual não remonta a tela por frações do tempo e não usa a faixa antiga de palavras', () => {
+  it('a composição audiovisual usa movimentos suaves sem desmontar o palco', () => {
     const narrated = readFileSync(join(ROOT, 'pages/Narrated.tsx'), 'utf8');
     const css = readFileSync(join(ROOT, 'styles/index.css'), 'utf8');
-    expect(narrated).not.toMatch(/visualPhase|EditorialVideoCut|SceneMotionStrip|function SceneView/);
-    expect(narrated).toMatch(/<CinematicScene key={scene\.id}/);
+    expect(narrated).not.toMatch(/EditorialVideoCut|SceneMotionStrip|function SceneView/);
+    expect(narrated).toMatch(/const visualPhase = Math\.min\(2, Math\.floor\(beatElapsed \/ 2800\)\)/);
+    expect(narrated).toMatch(/<CinematicScene key={scene\.id}[^>]*phase={visualPhase}/);
+    expect(narrated).toMatch(/data-phase={phase}/);
     expect(narrated).toMatch(/visual\.kind === 'timeline'/);
     expect(narrated).toMatch(/visual\.kind === 'equation'/);
-    expect(css).toMatch(/@keyframes ccv-scene-enter/);
-    expect(css).toMatch(/@keyframes ccv-object-float/);
+    expect(css).toMatch(/@keyframes ccv-shot-reveal/);
+    expect(css).toMatch(/transition: transform 2200ms cubic-bezier/);
     expect(css).toMatch(/prefers-reduced-motion: reduce/);
   });
 
