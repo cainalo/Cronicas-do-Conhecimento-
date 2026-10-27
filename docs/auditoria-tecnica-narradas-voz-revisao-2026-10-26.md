@@ -10,7 +10,7 @@
 
 O repositório real foi consultado via integração do GitHub. A aplicação tem player de viewport inteira, faixa Gemini contínua e inserções visuais durante a fala. A duração total e o seek podem usar o relógio real do áudio, mas a seleção do beat/cena ainda é mapeada por projeção proporcional de readingMs; os timestamps de caractere/palavra fornecidos por um alinhador ainda não estão integrados ao player.
 
-A branch-base avançou durante a auditoria. O commit mais recente observado ao atualizar este relatório é 4d7e2a84d502ee08fabd10c7481d7ece62f213b3; as mudanças adicionais observadas depois de fb27625 esclarecem datas históricas, sem alterar o contrato da timeline revisado aqui. Os roteiros, a camada de voz, o player cinematográfico e o helper src/lib/narration-timeline.ts são trabalho já presente na branch compartilhada e foram preservados. Esta entrega acrescenta somente testes de casos-limite e documentação de revisão; não duplica nem modifica o helper, o player ou os slides. O PR #7 anterior foi fechado como supersedido; o PR #8 recebeu uma revisão automática sobre um snapshot anterior e está sendo substituído por esta entrega limpa.
+A branch-base avançou durante a auditoria. O commit mais recente observado ao atualizar este relatório é aca798569ba6d99ec3ec20fd90a39e33778303fa (02:38 UTC). Os commits mais recentes melhoram o peso temporal estimado dos beats, suavizam inserções cinematográficas e adicionam testes de guarda de layout; ainda não conectam o player a buildAlignedNarrationTimeline/cueAtTime. Os roteiros, a camada de voz, o player cinematográfico e o helper src/lib/narration-timeline.ts são trabalho já presente na branch compartilhada e foram preservados. Esta entrega acrescenta somente testes de casos-limite e documentação de revisão; não duplica nem modifica o helper, o player ou os slides. O PR #7 anterior foi fechado como supersedido; o PR #8 recebeu uma revisão automática sobre um snapshot anterior e está sendo substituído por esta entrega limpa.
 
 **Prioridades sugeridas:**
 1. **P0 — segurança:** não expor uma chave de API compartilhada no app React/Capacitor. A implementação atual salva a chave Gemini digitada em localStorage e chama a API diretamente do cliente. Isso é aceitável apenas como opção experimental de chave própria do usuário, claramente identificada (BYOK), não como credencial global de produção.
@@ -51,6 +51,17 @@ O helper é apropriado como contrato de integração, com três pontos que a ses
 
 Esta entrega acrescenta src/test/narration-timeline-edgecases.test.ts para verificar offsets com acentos e emoji fora do plano básico, rejeição de timestamps negativos/não finitos/invertidos e não monotônicos, e seleção de cue antes/durante/depois de uma pausa. O teste usa alinhamento sintético apenas como fixture determinística; não comprova a precisão de um áudio real nem que o player já esteja integrado.
 
+### Adaptador puro para o formato atual da ElevenLabs
+
+A API oficial de Forced Alignment documenta POST /v1/forced-alignment com um arquivo de áudio e a transcrição exata, retornando uma lista characters: [{ text, start, end }], uma lista de palavras e o valor loss. O helper já existente espera as mesmas informações em três arrays paralelos: characters, character_start_times_seconds e character_end_times_seconds.
+
+Para evitar código duplicado dentro do player, esta entrega acrescenta:
+- src/lib/elevenlabs-alignment-adapter.ts: converte o payload da resposta da ElevenLabs ao contrato CharacterTimeAlignment, comparando cada ponto de código Unicode com o texto enviado. Rejeita quantidade diferente de caracteres, normalização/alteração de texto, valores inválidos e tempos fora de ordem.
+- src/test/elevenlabs-alignment-adapter.test.ts: testa caracteres com acentos, emoji, espaços, pontuação, texto divergente, arrays incompletos, timestamps negativos/não monotônicos e payload incompleto.
+
+O adaptador não chama a API e não contém chave de serviço. A requisição multipart e o segredo devem ficar num servidor/ambiente de build protegido. O fluxo de integração é: gerar o WAV/MP3 aprovado → enviar arquivo e texto canônico para Forced Alignment → adaptar a resposta com esse módulo → chamar buildAlignedNarrationTimeline(lesson, result.alignment) → salvar os cues num manifesto versionado junto ao áudio. Como a resposta da API inclui loss, a implementação expõe o valor para que o pipeline possa registrar e revisar alinhamentos de baixa confiança; não cria um limiar universal sem validação empírica.
+
+Fonte oficial do endpoint: https://elevenlabs.io/docs/api-reference/forced-alignment/create
 ## 2. Arquivos reais examinados
 
 - package.json: React 18, TypeScript, Vite, Tailwind 3, Capacitor 7 e @capacitor-community/text-to-speech. Scripts declarados: npm test, npm run typecheck, npm run build e npm run test:e2e.
@@ -64,6 +75,8 @@ Esta entrega acrescenta src/test/narration-timeline-edgecases.test.ts para verif
 
 ### Arquivos desta entrega
 
+- src/lib/elevenlabs-alignment-adapter.ts — adapta a resposta oficial de Forced Alignment ao contrato de alinhamento existente.
+- src/test/elevenlabs-alignment-adapter.test.ts — testes do adaptador com respostas válidas/malformadas.
 - src/test/narration-timeline-edgecases.test.ts — testes adicionais de Unicode, timestamps inválidos, monotonicidade e estabilidade visual em pausas.
 - src/test/narrated-content-quality.test.ts — verifica estrutura básica e cobertura de conceitos dos roteiros atuais.
 - Este documento — auditoria do TTS, da sincronização real, da origem dos slides e das recomendações de integração.
@@ -238,7 +251,8 @@ Em um Galaxy A14 5G ou Android equivalente: viewport inteira; ausência de scrol
 - Google Cloud SSML e timepoints: https://docs.cloud.google.com/text-to-speech/docs/ssml?hl=pt-br
 - ElevenLabs TTS e idiomas: https://elevenlabs.io/docs/overview/capabilities/text-to-speech
 - ElevenLabs modelos: https://elevenlabs.io/docs/pt/overview/models
-- ElevenLabs Forced Alignment: https://elevenlabs.io/docs/pt/overview/capabilities/forced-alignment
+- ElevenLabs Forced Alignment — idiomas, custo relativo e limites: https://elevenlabs.io/docs/pt/overview/capabilities/forced-alignment
+- ElevenLabs Forced Alignment API — estrutura da resposta characters[].text/start/end, arquivo/transcrição de entrada e campo loss: https://elevenlabs.io/docs/api-reference/forced-alignment/create
 - ElevenLabs preço da API: https://elevenlabs.io/pricing/api
 - Microsoft Azure Speech — línguas e vozes: https://learn.microsoft.com/pt-br/azure/ai-services/speech-service/language-support
 - OpenAI Speech API: https://developers.openai.com/api/docs/guides/text-to-speech
