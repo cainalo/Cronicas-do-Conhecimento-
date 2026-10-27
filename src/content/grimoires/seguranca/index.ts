@@ -18,7 +18,7 @@ export const grimorioSeguranca: Grimoire = {
   disciplineId: 'ti.seguranca',
   title: 'Segurança da Informação',
   description:
-    'Criptografia, OWASP Top 10, DevSecOps, Zero Trust e a família ISO/IEC 27000. Começa pelo segredo mais antigo: como guardar e provar a palavra escrita.',
+    'Criptografia, OWASP Top 10, DevSecOps, Zero Trust e família ISO/IEC 27000. Fundamentos de sigilo, integridade, autenticidade e gestão de chaves.',
   chapterIds: ['cap.seg.01', 'cap.seg.02'],
 };
 
@@ -27,7 +27,7 @@ export const capCriptografia: Chapter = {
   grimoireId: 'grim.seguranca',
   number: 1,
   title: 'Criptografia',
-  subtitle: 'Chaves, selos e resumos: a arte de guardar e provar a informação',
+  subtitle: 'Algoritmos, funções hash, assinaturas digitais e integridade da informação',
   topicIds: ['ti.seguranca.criptografia'],
   review: 'nao-revisado',
   estimatedMinutes: 55,
