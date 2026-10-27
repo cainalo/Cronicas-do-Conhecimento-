@@ -27,8 +27,9 @@ function renderAt(path: string) {
 beforeEach(() => localStorage.clear());
 
 describe('página Estudos', () => {
-  it('leva ao mesmo destino do Continuar e mostra atalhos, vídeos e materiais', () => {
+  it('leva ao mesmo destino do Continuar e mostra atalhos, vídeos e materiais', async () => {
     renderAt('/estudos');
+    await waitForRouteReady();
     const cont = screen.getByTestId('continuar-estudos');
     expect(cont).toHaveTextContent('Começar');
     expect(cont.getAttribute('href')).toBe(screen.getByTestId('continuar-topo').getAttribute('href'));
