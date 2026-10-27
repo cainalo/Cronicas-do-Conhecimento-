@@ -885,3 +885,162 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 @media (prefers-reduced-motion: reduce) {
   .ccv-film-copy__take, .ccv-film-cut.is-cue-cut, .ccv-film-illustration, .ccv-film-orbit { animation: none !important; transition: none !important; }
 }
+
+
+/* Revisão visual da aula narrada: composição editorial vertical (título → imagem → ideias),
+   sem divisão esquerda/direita; a legenda permanece fixa no rodapé do vídeo. */
+.ccv-film-content {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  align-items: stretch;
+  align-content: stretch;
+  gap: clamp(.25rem, 1.1vh, .75rem);
+  padding-bottom: clamp(4.8rem, 10vh, 6.2rem);
+}
+.ccv-film-copy {
+  width: 100%;
+  min-width: 0;
+  flex: 0 0 auto;
+  padding-inline: clamp(.15rem, 2vw, 1.2rem);
+  text-align: center;
+}
+.ccv-film-eyebrow { justify-content: center; margin-bottom: clamp(.25rem, .8vh, .6rem); }
+.ccv-film-date { text-align: center; }
+.ccv-film-headline {
+  max-width: 28ch;
+  margin-inline: auto;
+  font-size: clamp(1.55rem, 4.6vh, 3.7rem);
+  line-height: 1.04;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+.ccv-film-support {
+  max-width: 62ch;
+  margin: clamp(.35rem, 1.15vh, .8rem) auto 0;
+  padding: 0;
+  border: 0;
+  font-size: clamp(.82rem, 1.8vh, 1.18rem);
+  line-height: 1.32;
+  text-align: center;
+}
+.ccv-film-progress { justify-content: center; margin-top: clamp(.45rem, 1.2vh, .8rem); }
+.ccv-film-footnote { display: none; }
+.ccv-film-art {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  min-height: 0;
+  flex: 1 1 0;
+  overflow: visible;
+}
+.ccv-film-cut { width: 100%; height: 100%; min-height: 0; }
+.ccv-film-art__rings { inset: 0; }
+.ccv-film-illustration {
+  width: clamp(6rem, 25vh, 17rem);
+  max-height: 31vh;
+}
+.ccv-film-art .ccv-historical-photo {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 31vh;
+  justify-content: center;
+}
+.ccv-film-art .ccv-historical-photo img {
+  width: min(100%, 42rem);
+  height: 100%;
+  max-height: 29vh;
+  object-fit: contain;
+  animation: ccv-film-photo-drift 12s ease-in-out infinite alternate;
+}
+.ccv-film-art .ccv-historical-photo figcaption {
+  max-width: 38rem;
+  font-size: clamp(.55rem, 1.1vh, .72rem);
+}
+.ccv-film-numberline svg { max-height: 28vh; }
+.ccv-film-footer { display: none; }
+
+@keyframes ccv-film-photo-drift {
+  from { transform: scale(1) translate3d(0, 0, 0); }
+  to { transform: scale(1.045) translate3d(-.4%, -.25%, 0); }
+}
+
+/* Plano de apoio também segue uma página contínua: imagem primeiro, explicação logo abaixo. */
+.ccv-cutaway {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-content: stretch;
+  align-items: stretch;
+  gap: clamp(.4rem, 1.2vh, .9rem);
+  padding: clamp(4.6rem, 9vh, 5.7rem) clamp(1rem, 4vw, 3rem) clamp(8.8rem, 15vh, 10.8rem);
+}
+.ccv-cutaway__media {
+  width: 100%;
+  height: 100%;
+  max-height: 40vh;
+  min-height: 0;
+  padding: clamp(.25rem, 1vh, .7rem);
+}
+.ccv-cutaway__photo { max-height: 38vh; }
+.ccv-cutaway__media .ccv-historical-photo img { max-height: 36vh; }
+.ccv-cutaway__illustration { width: min(100%, 34vh); max-height: 36vh; }
+.ccv-cutaway__copy {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  text-align: center;
+}
+.ccv-cutaway__eyebrow { justify-content: center; margin-bottom: .4rem; }
+.ccv-cutaway__copy h3 { max-width: 28ch; margin-inline: auto; font-size: clamp(1.25rem, 3.4vh, 2.5rem); line-height: 1.05; }
+.ccv-cutaway__detail { max-width: 64ch; margin: .45rem auto 0; padding: 0; border: 0; font-size: clamp(.78rem, 1.7vh, 1.08rem); line-height: 1.3; }
+.ccv-cutaway__source { margin-top: .35rem; }
+
+/* A palavra ativa muda a cor de fundo, nunca a métrica tipográfica. */
+.ccv-caption-line {
+  position: absolute;
+  z-index: 20;
+  left: clamp(.5rem, 2.5vw, 1.25rem);
+  right: clamp(.5rem, 2.5vw, 1.25rem);
+  bottom: calc(8.2rem + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  min-height: 1.8rem;
+  width: auto;
+  margin: 0;
+  pointer-events: none;
+}
+.ccv-caption-line > p {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  line-height: 1.45rem;
+  font-size: clamp(.68rem, 1.8vw, .9rem);
+  font-weight: 500;
+}
+.ccv-caption-line [data-testid="narrada-legenda-texto"] > span {
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  padding-inline: 0;
+  vertical-align: baseline;
+}
+.ccv-caption-line [data-testid="narrada-legenda-texto"] > span[class*="bg-"] {
+  background-color: rgb(240 191 105 / .28);
+  color: #ffd38a;
+  box-shadow: none;
+}
+@media (max-height: 640px) {
+  .ccv-film-content { padding-bottom: 4.6rem; gap: .25rem; }
+  .ccv-film-headline { font-size: clamp(1.3rem, 4.2vh, 2.4rem); }
+  .ccv-film-support { font-size: clamp(.72rem, 1.65vh, .95rem); }
+  .ccv-film-art .ccv-historical-photo img { max-height: 25vh; }
+  .ccv-film-illustration { max-height: 25vh; }
+  .ccv-caption-line { bottom: calc(7.8rem + env(safe-area-inset-bottom, 0px)); }
+  .ccv-cutaway { padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ccv-film-art .ccv-historical-photo img { animation: none !important; }
+}
