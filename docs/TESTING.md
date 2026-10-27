@@ -77,5 +77,7 @@ Login/cadastro/recuperação e sincronização HTTP com o Supabase (rede do cont
 
 ## Testes adicionados em 27/10/2026 — sem execução local confirmada
 
-- `src/test/ingles-estrategias.test.ts`: sequência de 11 microaulas de `cap.ingles.01`, vínculo com as 11 questões autorais, seção correspondente, presença do contexto histórico e diversidade das famílias de atividade.
-- O arquivo é parte da branch `gpt/ingles01-microaulas-2026-10-27`. Não há nesta sessão evidência de execução do Vitest, typecheck, build, Playwright E2E ou teste no aparelho para esse branch.
+- `src/test/ingles-estrategias.test.ts`: sequência de 11 microaulas de `cap.ingles.01`, vínculo com 11 questões autorais, contexto histórico e diversidade de atividades.
+- `src/test/narrated-editorial.test.ts`: além da revisão editorial de duas aulas, agora percorre o catálogo completo e valida estrutura, falas e estados da reta numérica.
+- `src/test/review-slides-integrity.test.ts`: novo teste para texto integral/ordem nas lâminas de seção, glossário e referências de todos os capítulos.
+- Nenhum dos novos testes listados acima teve execução confirmada nesta sessão. O workflow isolado precisa concluir `npm test`, typecheck/build, E2E, auditoria visual e Gradle antes de considerar esta branch validada.
