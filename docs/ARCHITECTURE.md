@@ -74,15 +74,16 @@ Toda alteração de banco deve vir em migração versionada e considerar RLS. C�
 ## 4. Carregamento e desempenho
 
 ### Rotas sob demanda
-As rotas abaixo agora usam `React.lazy` e uma fronteira `Suspense`, para retirar telas pesadas do carregamento inicial:
-- `/missao/:id` → `src/pages/Mission.tsx`
-- `/simulador` e `/simulador/:id` → `src/pages/Scenarios.tsx`
-- `/sala` → `src/pages/TeachersRoom.tsx`
-- `/escritorio` → `src/pages/World.tsx`
-- `/aula-narrada/:id` → `src/pages/Narrated.tsx`
-- `/slides` → `src/pages/ReviewSlides.tsx`
+As rotas abaixo usam `React.lazy` dentro de uma fronteira `Suspense`, para evitar que o código de telas secundárias seja necessário no carregamento inicial.
 
-Os caminhos das rotas, os provedores globais e o layout externo não mudam. As demais telas permanecem estáticas por enquanto para limitar o risco de regressão. Na primeira abertura de uma rota adiada, o espaço de conteúdo fica vazio enquanto o módulo é transferido; o cabeçalho e a navegação externa permanecem montados.
+- **Telas pesadas:** `/missao/:id` (`Mission.tsx`), `/simulador` e `/simulador/:id` (`Scenarios.tsx`), `/sala` (`TeachersRoom.tsx`), `/escritorio` (`World.tsx`), `/aula-narrada/:id` (`Narrated.tsx`) e `/slides` (`ReviewSlides.tsx`).
+- **Histórico e ferramentas:** `/historico`, `/progresso`, `/edital`, `/download`, `/personalizar`, `/video/:id`, `/flashcards`, `/relampago`, `/plano`, `/simulado`, `/simulado/:id`, `/discursiva` e `/discursiva/:id`.
+- **Conta:** `/conta` e todas as subrotas de acesso, sincronização, aparência, sons, dados, sobre e tela.
+- **Fallback:** a rota não encontrada também é carregada sob demanda.
+
+Os caminhos das rotas, os provedores globais e o layout externo não mudam. As telas comuns de navegação e estudo (início, trilha, biblioteca, leitor, aprender, prática, lição e revisão) permanecem estáticas para priorizar os fluxos mais usados. Na primeira abertura de uma rota adiada, o espaço de conteúdo fica vazio enquanto o módulo é transferido; o cabeçalho e a navegação externa permanecem montados.
+
+O script `scripts/e2e-layout.mjs` visita as rotas adiadas principais e as subpáginas de Conta em duas dimensões móveis, com e sem cartões de vidro. Uma alteração de rota só pode ser considerada estável depois que esse gate passar no CI.
 
 ### Dívida de desempenho conhecida
 - `src/content/index.ts` agrega muitos módulos de conteúdo por importação estática. Isso preserva consultas síncronas e a integridade do registro, mas pode manter conteúdo de muitas disciplinas no bundle inicial.
