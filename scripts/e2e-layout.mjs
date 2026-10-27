@@ -110,6 +110,18 @@ async function checkFullScreenOverlays(page, where) {
   for (const b of bad) fail(`${where}: overlay fixo não cobre a tela: ${b}`);
 }
 
+/**
+ * Waits for React.lazy routes to resolve instead of guessing with a long fixed delay.
+ * The fallback is visually hidden for accessibility, so this does not change screenshots.
+ */
+async function waitForDeferredRoute(page) {
+  await page.locator('main').first().waitFor({ state: 'attached', timeout: 15000 });
+  const loading = page.locator('[role="status"]').filter({ hasText: 'Carregando esta área' });
+  if (await loading.count()) {
+    await loading.first().waitFor({ state: 'detached', timeout: 15000 });
+  }
+}
+
 async function checkNoHorizontalScroll(page, where) {
   const { sw, vw } = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, vw: window.innerWidth }));
   if (sw > vw + 1) fail(`${where}: rolagem horizontal (${sw}px > ${vw}px)`);
@@ -149,8 +161,9 @@ async function run() {
         console.log(`Conferindo ${tag}...`);
         const go = async (path) => {
           await page.goto(BASE + path, { waitUntil: 'load', timeout: 20000 });
+          await waitForDeferredRoute(page);
           await setLook(page, cards);
-          await page.waitForTimeout(700); // deixa as animações de entrada terminarem
+          await page.waitForTimeout(250); // termina as animações de entrada sem esconder falhas de carga
         };
 
         for (const path of PAGES) {
