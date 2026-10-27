@@ -55,3 +55,9 @@ Login/cadastro/recuperação e sincronização HTTP com o Supabase (rede do cont
 
 ## Execução de 25/10/2026 (noite)
 `npm test`: 1003/1003; `tsc -b` e build OK. Testes novos: fase de mídia da aula (narrada dentro da aula), feed social (perfil, curtir, revisão rápida), tela do Escritório (ir até, objeto, conversa, teclado, Esc), móveis e direção no mapa, retomada da microaula com ponto salvo inválido.
+
+
+## Testes adicionados em 27/10/2026 — sem execução local confirmada
+
+- `src/test/ingles-estrategias.test.ts`: sequência de 11 microaulas de `cap.ingles.01`, vínculo com as 11 questões autorais, seção correspondente, presença do contexto histórico e diversidade das famílias de atividade.
+- O arquivo é parte da branch `gpt/ingles01-microaulas-2026-10-27`. Não há nesta sessão evidência de execução do Vitest, typecheck, build, Playwright E2E ou teste no aparelho para esse branch.
