@@ -1,6 +1,6 @@
 import type { SimpleSection } from '@/content/types';
 
-// Versão "do zero" das seções do grimório O Primeiro Pergaminho (grim.primeiros).
+// Explicações introdutórias das seções de Fundamentos de TI.
 // Usa apenas fatos do texto de cada seção.
 
 export const simplePrimeiros: Record<string, SimpleSection> = {
