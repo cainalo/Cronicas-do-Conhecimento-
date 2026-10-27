@@ -126,3 +126,12 @@
 - Causa: `.github/workflows/pages.yml` só permite publicar a partir da `main` quando o segredo de keystore de release existe; sem esse segredo, apenas `claude/cronicas-conhecimento-estudos-jgbofo` publica para manter a assinatura estável do APK.
 - Integrei a versão atual da `main` na branch de publicação pelo PR #5, merge `783725a6e61f018fe115d93c50b89a5cf20f1c49`, preservando a branch que mantém a assinatura do Android.
 - O próximo build precisa passar por testes, build e E2E antes de atualizar `gh-pages`. Não considerar a publicação concluída até verificar o novo `download/version.json` e o bundle do site.
+
+
+## 27/10/2026 — microaulas de Estratégias de Leitura em Inglês
+
+- Criada a série de `cap.ingles.01` na branch isolada `gpt/ingles01-microaulas-2026-10-27`: 11 microaulas, uma por questão autoral existente, repartidas em 4 aulas de estratégias, 4 de coesão e 3 de gramática técnica.
+- Os exercícios incluem abertura diagnóstica, três etapas com checagem e recuperação, consolidação variada e vínculo à questão de fixação já cadastrada. A primeira aula de cada seção apresenta contexto histórico.
+- Acrescentadas fontes aos textos das três seções: estudos didáticos sobre skimming/scanning; *Cohesion in English* (1976); RFC 2119/8174.
+- Arquivos: `src/content/micro/ingles-estrategias.ts`, `src/content/index.ts`, `src/test/ingles-estrategias.test.ts` e os três Markdown de `src/content/grimoires/ingles/cap01-estrategias/`.
+- **Validação pendente:** não houve execução do Vitest/build/E2E nesta branch. Os testes são especificações escritas, não evidência de aprovação.
