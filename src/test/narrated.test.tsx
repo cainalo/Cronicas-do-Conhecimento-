@@ -97,9 +97,9 @@ it('página: começa parada; legenda de uma linha é opcional; controles reinici
   expect(controls).toHaveClass('opacity-0');
 
   // Um toque no vídeo revela os controles ocultos; um toque seguinte pode escondê-los.
-  await user.click(screen.getByTestId('narrada-stage'));
+  fireEvent.click(screen.getByTestId('narrada-stage')); // toque direto, sem simular movimento de mouse
   expect(controls).toHaveClass('opacity-100');
-  await user.click(screen.getByTestId('narrada-stage'));
+  fireEvent.click(screen.getByTestId('narrada-stage'));
   expect(controls).toHaveClass('opacity-0');
   await user.click(screen.getByTestId('narrada-mostrar-controles'));
   expect(controls).toHaveClass('opacity-100');
