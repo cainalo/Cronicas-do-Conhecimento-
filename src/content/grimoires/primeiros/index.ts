@@ -94,7 +94,7 @@ export const licoesPrimeiros: Lesson[] = [
   {
     id: 'lic.prim.01',
     chapterId: 'cap.prim.01',
-    title: 'A Primeira Página do Aprendiz',
+    title: 'Introdução à Tecnologia da Informação',
     goal: 'Entrada, processamento, memória e saída; bits e bytes; hardware e software; sistema operacional, arquivos e permissões; algoritmo, variável, condição e repetição.',
     cards: [
       { title: 'O que a máquina faz', body: '**Entrada** (teclado, mouse), **processamento** (CPU), **memória** e **saída** (tela, impressora).\n\n**Bit** é 0 ou 1. **Byte** = 8 bits.\n\nKB, MB, GB, TB: cada degrau é cerca de mil vezes o anterior.' },
