@@ -1,16 +1,16 @@
-// Missão-piloto do Arquivo Real: consulta SQL (tópico ti.dados.sql do edital TCE-GO 2026, B02).
-// Fatos de SQL conferidos com o texto do capítulo cap.dados.01 (seção "sql") e com a lógica de três
-// valores implementada em src/lib/sql.ts. Dados e personagens são fictícios.
+// Caso prático de SQL (tópico ti.dados.sql do edital TCE-GO 2026, B02).
+// Conceitos conferidos com o capítulo cap.dados.01 (seção "sql") e com a lógica de três valores
+// implementada em src/lib/sql.ts. Os fornecedores e valores são fictícios.
 import type { Mission } from '@/content/types';
 
 const fornecedor = {
   name: 'fornecedor',
   columns: ['cnpj', 'nome', 'cidade'],
   rows: [
-    [11, 'Ferraria do Vale', 'Goiânia'],
-    [22, 'Papelaria Real', 'Anápolis'],
-    [33, 'Tecelagem Aurora', 'Goiânia'],
-    [44, 'Companhia Névoa Cinzenta', null],
+    [11, 'Alfa Tecnologia', 'Goiânia'],
+    [22, 'Papelaria Central', 'Anápolis'],
+    [33, 'TecnoDados', 'Goiânia'],
+    [44, 'Serviços Integrados', null],
   ],
 };
 
@@ -36,15 +36,8 @@ export const missaoSql01: Mission = {
   sectionId: 'sql',
   topicIds: ['ti.dados.sql'],
   minutes: 12,
-  place: 'Setor de controle de empenhos',
+  place: 'Auditoria de dados e empenhos',
   mystery: 'Por que a lista de empenhos sem conferência veio vazia, se a equipe de controle tem certeza de que há pagamentos pendentes?',
-  scene: [
-    { who: 'Narração', text: 'Subsolo do Arquivo Real, noite fria desde a queda das torres. A lareira e as velas da mesa de Isolda são a única luz.', shot: 'geral', action: 'camera-entra' },
-    { who: 'Conde Valério', text: 'Pedi ao sistema a lista dos empenhos ainda sem conferência. Veio vazia. Então está tudo em ordem, não está?', shot: 'dupla', action: 'valerio-entra' },
-    { who: 'Brites', text: 'O sistema está funcionando. Se a lista veio vazia, é porque não há nada para conferir.', shot: 'dupla', action: 'brites-cruza-bracos' },
-    { who: 'Isolda', text: 'Lista vazia não é prova de nada. Aprendiz, abra o livro de empenhos e refaça a consulta com as próprias mãos.', shot: 'close', action: 'isolda-aponta' },
-    { who: 'Bubo', text: 'Antes de mexer na consulta, vamos entender como as tabelas guardam as coisas.', shot: 'objeto', action: 'livro-abre' },
-  ],
   objectives: [
     'Ler uma tabela: linha, coluna e chave.',
     'Filtrar linhas com WHERE e entender por que NULL não se compara com "=".',
