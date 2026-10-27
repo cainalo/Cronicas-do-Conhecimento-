@@ -497,7 +497,7 @@ export function NarratedPlayer({
           data-testid="narrada-cena"
         >
           <div className="relative flex h-full max-h-full w-full items-center justify-center" data-testid="narrada-elementos-visuais">
-            <CinematicScene scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} beatIndex={pos.beat} controlsVisible={controlsVisible} />
+            <CinematicSceneMemo scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} beatIndex={pos.beat} controlsVisible={controlsVisible} />
           </div>
         </div>
       </section>
@@ -532,7 +532,7 @@ export function NarratedPlayer({
         onClick={stopOverlayClick} aria-hidden={!controlsVisible} data-testid="narrada-seek-panel">
         <div className="rounded-xl border border-white/20 bg-[#171b1b]/82 px-3 py-2 text-white shadow-lg backdrop-blur-lg">
           <div className="mb-1 flex items-center justify-between gap-3 text-[0.62rem] font-semibold tabular-nums text-white/75">
-            <span>{formatTime(currentMs)}</span><span>{formatTime(totalMs)} · duração estimada</span>
+            <span>{formatTime(currentMs)}</span><span>{formatTime(totalMs)} · {hasGeneratedTrack ? 'faixa de áudio' : 'tempo estimado'}</span>
           </div>
           <input type="range" min={0} max={Math.max(1, totalMs)} step={100} value={Math.min(totalMs, currentMs)}
             onPointerDown={startSeek} onPointerUp={finishSeek} onPointerCancel={finishSeek}
@@ -545,7 +545,7 @@ export function NarratedPlayer({
         onClick={stopOverlayClick} aria-hidden={!controlsVisible} data-testid="narrada-controles-flutuantes">
         <span className="sr-only">{VOICE_LABEL[voice.kind]}</span>
         <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => jump(positionAtBeat(l, Math.max(0, beatIndex - 1)))} aria-label="Voltar uma fala"><Icon name="voltar" size={17} /></button>
-        <button type="button" className="grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-white/25 bg-[#c8402a] text-white shadow-xl transition hover:bg-[#a0301c]" onClick={togglePlayback} aria-label={playing ? 'Pausar aula' : done ? 'Assistir novamente' : 'Reproduzir aula'} data-testid="narrada-tocar">{playing ? <span aria-hidden="true" className="text-xl leading-none">Ⅱ</span> : <Icon name="play" size={19} />}</button>
+        <button type="button" className="grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-white/25 bg-[#c8402a] text-white shadow-xl transition hover:bg-[#a0301c]" onClick={togglePlayback} disabled={preparingTrack} aria-label={preparingTrack ? 'Preparando a narração' : playing ? 'Pausar aula' : done ? 'Assistir novamente' : 'Reproduzir aula'} data-testid="narrada-tocar">{preparingTrack ? <Icon name="ampulheta" size={19} /> : playing ? <span aria-hidden="true" className="text-xl leading-none">Ⅱ</span> : <Icon name="play" size={19} />}</button>
         <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => jump(positionAtBeat(l, Math.min(positions.length - 1, beatIndex + 1)))} aria-label="Avançar uma fala"><Icon name="seta" size={17} /></button>
         <label className="shrink-0" onClick={stopOverlayClick}><span className="sr-only">Velocidade da voz</span>
           <select className="h-10 max-w-[3.6rem] rounded-full border border-white/20 bg-[#171b1b]/88 px-2 text-xs font-bold text-white shadow-lg backdrop-blur-md sm:max-w-[4.2rem]" value={rate} onChange={(e) => setRate(Number(e.target.value) as (typeof RATES)[number])} aria-label="Velocidade da voz" data-testid="narrada-velocidade">
@@ -748,6 +748,8 @@ function CinematicScene({
 
   if (!historicalPhoto && visual.kind === 'timeline') historicalPhoto = historicalVisualFor(headline + ' ' + support);
 
+  const cueMotion = useCueMotion(scene.id + ':' + beatIndex);
+
   return (
     <article
       className={'ccv-film-scene ' + (controlsVisible ? 'has-controls' : 'controls-hidden')}
@@ -766,7 +768,7 @@ function CinematicScene({
       </header>
 
       <div className="ccv-film-content">
-        <section className="ccv-film-copy" key={scene.id + ':copy:' + beatIndex}>
+        <section className={'ccv-film-copy' + (cueMotion ? ' is-cue-change' : '')}>
           <p className="ccv-film-eyebrow"><span />{eyebrow}</p>
           {dateOrStep && <p className="ccv-film-date">{dateOrStep}</p>}
           <h2 className="ccv-film-headline">{headline}</h2>
@@ -781,7 +783,7 @@ function CinematicScene({
 
         <section className="ccv-film-art" aria-label="Demonstração visual" data-testid="narrada-cena-visual">
           <div className="ccv-film-art__rings" aria-hidden="true"><span /><span /><span /></div>
-          <div className="ccv-film-cut" key={scene.id + ':visual:' + beatIndex} data-testid="narrada-corte-suave">
+          <div className={'ccv-film-cut' + (cueMotion ? ' is-cue-change' : '')} data-testid="narrada-corte-suave">
             {numberline ? (
               <div className="ccv-film-numberline">
                 <CinematicNumberLine from={numberline.from} to={numberline.to} state={numberline.state} />
@@ -826,6 +828,19 @@ function CinematicScene({
       </footer>
     </article>
   );
+}
+
+const CinematicSceneMemo = memo(CinematicScene);
+
+function useCueMotion(cue: string): boolean {
+  const [active, setActive] = useState(false);
+  useEffect(() => {
+    setActive(false);
+    const frame = window.requestAnimationFrame(() => setActive(true));
+    const reset = window.setTimeout(() => setActive(false), 520);
+    return () => { window.cancelAnimationFrame(frame); window.clearTimeout(reset); };
+  }, [cue]);
+  return active;
 }
 
 function CinematicNumberLine({ from, to, state }: { from: number; to: number; state: NumberLineState }) {
