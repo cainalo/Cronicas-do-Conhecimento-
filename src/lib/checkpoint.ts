@@ -1,6 +1,6 @@
 // Fonte única da trilha (auditoria de 24/10/2026, P0-01/P0-02): a mesma função decide para onde
-// levam o "Continuar" do cabeçalho, o botão central do menu, a Torre e o cartão de ritmo. Também
-// guarda o ponto exato de cada atividade em andamento (página do Aprender, fila da Prática, etapa da
+// levam o "Continuar" do cabeçalho, o botão central do menu, o painel inicial e o cartão de ritmo. Também
+// guarda o ponto exato de cada atividade em andamento (trecho do Aprender, fila da Prática, etapa da
 // missão, cartão/questão do Desafio, etapa da microaula), para retomar no mesmo lugar depois de sair
 // ou recarregar. Funções puras, sem React.
 import type { StudyData, SessionProgress } from './model';
