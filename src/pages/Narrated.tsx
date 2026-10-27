@@ -788,7 +788,7 @@ function CinematicScene({
         <span className="ccv-film-counter">{String(sceneIndex + 1).padStart(2, '0')} / {String(sceneCount).padStart(2, '0')}</span>
       </header>
 
-      <div className="ccv-film-content">
+      <div className={"ccv-film-content" + (cutawayVisible ? " has-cutaway" : "")}>
         <section className={'ccv-film-copy' + (cueMotion ? ' is-cue-change' : '')}>
           <p className="ccv-film-eyebrow"><span />{eyebrow}</p>
           {dateOrStep && <p className="ccv-film-date">{dateOrStep}</p>}
