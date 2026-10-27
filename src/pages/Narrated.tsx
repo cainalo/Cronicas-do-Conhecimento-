@@ -77,6 +77,10 @@ export function NarratedPlayer({
   const beatIndex = beatIndexOf(l, pos);
   const durations = useMemo(() => positions.map((p) => readingMs(l.scenes[p.scene].beats[p.beat].say, rate)), [l, positions, rate]);
   const estimatedTotalMs = durations.reduce((sum, value) => sum + value, 0);
+  // A faixa gerada tem duração própria; seus pontos de montagem usam a linha temporal em 1×.
+  // A velocidade escolhida altera a reprodução, não a posição relativa das cenas no arquivo.
+  const trackDurations = useMemo(() => positions.map((p) => readingMs(l.scenes[p.scene].beats[p.beat].say, 1)), [l, positions]);
+  const estimatedTrackTotalMs = trackDurations.reduce((sum, value) => sum + value, 0);
   const script = useMemo(() => positions.map((p) => l.scenes[p.scene].beats[p.beat].say.trim()).join('\n\n'), [l, positions]);
   const hasGeneratedTrack = voice.kind === 'gemini' && !!generatedTrack;
   const totalMs = hasGeneratedTrack && trackDurationMs > 0 ? trackDurationMs : estimatedTotalMs;
@@ -84,7 +88,7 @@ export function NarratedPlayer({
   const currentMs = Math.min(totalMs, hasGeneratedTrack ? mediaElapsedMs : beforeMs + beatElapsed);
   const scene = l.scenes[pos.scene];
   const say = scene.beats[pos.beat].say;
-  const beatVisualDuration = durations[beatIndex] ?? 2200;
+  const beatVisualDuration = (hasGeneratedTrack ? trackDurations[beatIndex] : durations[beatIndex]) ?? 2200;
   const beatVisualProgress = Math.min(1, beatElapsed / Math.max(1, beatVisualDuration));
   // Um plano de apoio entra durante a fala (não apenas entre frases) quando existe tempo
   // suficiente para ele ser percebido; sai antes de a próxima fala começar.
@@ -166,19 +170,19 @@ export function NarratedPlayer({
       if (realDuration > 0 && realDuration !== trackDurationMs) setTrackDurationMs(realDuration);
       const mediaMs = Math.min(realDuration || estimatedTotalMs, Math.max(0, audio.currentTime * 1000));
       setMediaElapsedMs(mediaMs);
-      const projectedMs = realDuration > 0 ? (mediaMs / realDuration) * estimatedTotalMs : mediaMs;
+      const projectedMs = realDuration > 0 ? (mediaMs / realDuration) * estimatedTrackTotalMs : mediaMs;
       let cursor = 0;
-      let nextIndex = Math.max(0, durations.length - 1);
-      for (let i = 0; i < durations.length; i++) {
-        if (projectedMs < cursor + durations[i] || i === durations.length - 1) { nextIndex = i; break; }
-        cursor += durations[i];
+      let nextIndex = Math.max(0, trackDurations.length - 1);
+      for (let i = 0; i < trackDurations.length; i++) {
+        if (projectedMs < cursor + trackDurations[i] || i === trackDurations.length - 1) { nextIndex = i; break; }
+        cursor += trackDurations[i];
       }
       if (activeCueRef.current !== nextIndex) {
         activeCueRef.current = nextIndex;
         setPos(positionAtBeat(l, nextIndex));
         setSpeechWordIndex(undefined);
       }
-      const localElapsed = Math.max(0, Math.min(durations[nextIndex] ?? 0, projectedMs - cursor));
+      const localElapsed = Math.max(0, Math.min(trackDurations[nextIndex] ?? 0, projectedMs - cursor));
       elapsedRef.current = localElapsed;
       setBeatElapsed(localElapsed);
       setVoiceStarted(!audio.paused && !audio.ended);
@@ -212,7 +216,7 @@ export function NarratedPlayer({
       audio.removeEventListener('pause', updatePosition);
       audio.removeEventListener('ended', onEnded);
     };
-  }, [generatedTrack, playing, l, durations, rate, estimatedTotalMs, trackDurationMs]);
+  }, [generatedTrack, playing, l, trackDurations, rate, estimatedTrackTotalMs, trackDurationMs]);
 
   useEffect(() => {
     if (!playing || !positions.length || (voice.kind === 'gemini' && voice.createAudioTrack)) return;
@@ -317,8 +321,8 @@ export function NarratedPlayer({
   const jump = (p: NarrationPos) => {
     const targetIndex = beatIndexOf(l, p);
     if (trackRef.current && Number.isFinite(trackRef.current.audio.duration) && trackRef.current.audio.duration > 0) {
-      const estimatedPosition = durations.slice(0, targetIndex).reduce((sum, value) => sum + value, 0);
-      const targetMs = estimatedTotalMs > 0 ? (estimatedPosition / estimatedTotalMs) * trackRef.current.audio.duration * 1000 : 0;
+      const estimatedPosition = trackDurations.slice(0, targetIndex).reduce((sum, value) => sum + value, 0);
+      const targetMs = estimatedTrackTotalMs > 0 ? (estimatedPosition / estimatedTrackTotalMs) * trackRef.current.audio.duration * 1000 : 0;
       trackRef.current.audio.currentTime = targetMs / 1000;
       activeCueRef.current = targetIndex;
       setMediaElapsedMs(targetMs);
@@ -364,16 +368,16 @@ export function NarratedPlayer({
       const clamped = Math.min(audio.duration * 1000, target);
       audio.currentTime = clamped / 1000;
       setMediaElapsedMs(clamped);
-      const projectedMs = (clamped / Math.max(1, audio.duration * 1000)) * estimatedTotalMs;
+      const projectedMs = (clamped / Math.max(1, audio.duration * 1000)) * estimatedTrackTotalMs;
       let cursor = 0;
-      let targetIndex = Math.max(0, durations.length - 1);
-      for (let i = 0; i < durations.length; i++) {
-        if (projectedMs < cursor + durations[i] || i === durations.length - 1) { targetIndex = i; break; }
-        cursor += durations[i];
+      let targetIndex = Math.max(0, trackDurations.length - 1);
+      for (let i = 0; i < trackDurations.length; i++) {
+        if (projectedMs < cursor + trackDurations[i] || i === trackDurations.length - 1) { targetIndex = i; break; }
+        cursor += trackDurations[i];
       }
       activeCueRef.current = targetIndex;
       setPos(positionAtBeat(l, targetIndex));
-      const localOffset = Math.max(0, Math.min(durations[targetIndex] ?? 0, projectedMs - cursor));
+      const localOffset = Math.max(0, Math.min(trackDurations[targetIndex] ?? 0, projectedMs - cursor));
       seekOffsetRef.current = localOffset;
       elapsedRef.current = localOffset;
       setBeatElapsed(localOffset);
