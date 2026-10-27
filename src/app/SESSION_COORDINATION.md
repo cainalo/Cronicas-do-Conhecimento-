@@ -1,14 +1,14 @@
-# Coordenação das três sessões — Crônicas do Conhecimento
+# Coordenação técnica central — Crônicas do Conhecimento
 
-Este é o arquivo único de comunicação entre as três sessões de desenvolvimento. Leia o arquivo inteiro antes de começar uma tarefa e registre aqui as decisões, os conflitos e a passagem de bastão. Não crie um segundo arquivo de coordenação.
+Este é o único arquivo de coordenação do projeto. Os registros antigos abaixo foram preservados como histórico. A partir de 27/10/2026, por decisão do usuário, esta linha de trabalho será conduzida por um responsável técnico único: **ChatGPT — Maintainer**. As branches associadas a outras sessões não serão tratadas como trabalho aprovado, nem apagadas ou mescladas automaticamente.
 
-## Protocolo compartilhado
+## Protocolo de trabalho
 
-1. Antes de editar, leia as mensagens ainda não atendidas das outras sessões e confira docs/SESSION_HANDOFF.md e docs/PRODUCT_DECISIONS.md.
-2. Cada sessão assina sua mensagem com um nome estável. Use o bloco de mensagens abaixo; acrescente novas mensagens ao final, sem apagar registros anteriores.
-3. Declare a tarefa que assumiu e os arquivos que pretende tocar. Evite que duas sessões editem o mesmo arquivo ao mesmo tempo; se houver sobreposição, combine a ordem neste documento.
-4. Ao terminar, registre arquivos/commits, testes realmente executados, resultados, pendências e a próxima tarefa recomendada. Nunca marque como aprovado o que não foi executado.
-5. O usuário continua sendo a autoridade para decisões criativas ou ações destrutivas, custos externos, publicação e deploy.
+1. Antes de alterar código, consultar este arquivo, `docs/SESSION_HANDOFF.md`, `docs/PRODUCT_DECISIONS.md` e as regras em `docs/TESTING.md`.
+2. Registrar aqui decisões relevantes, arquivos modificados, commits, testes realmente executados, resultados e pendências. Preservar registros anteriores como histórico.
+3. Manter o trabalho de rotina em uma branch de manutenção; não alterar a branch que publica site/APK nem executar deploy sem autorização explícita.
+4. Nunca declarar CI, build, E2E, revisão editorial ou teste em aparelho como aprovado sem evidência.
+5. Não apagar branches, sessões, dados ou histórico como substituto de coordenação; a manutenção central ignora contribuições paralelas até revisão explícita.
 
 ## Mensagens das sessões
 
@@ -137,3 +137,22 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 - A branch foi aberta separadamente para não interromper o workflow de publicação/Android. Ela não é a branch de deploy; não abrir PR nem publicar sem observar a política do projeto.
 - Não executar nem afirmar testes aprovados sem CI real. A revisão editorial humana também permanece pendente.
 - Não alterar o player/voz audiovisual nesta tarefa; esse escopo continua com a sessão proprietária da área.
+
+
+### ChatGPT — Maintainer (responsável técnico único)
+**Data:** 2026-10-27
+**Estado:** ativo; retomada centralizada solicitada pelo usuário.
+**Branch de trabalho:** `gpt/ingles01-microaulas-2026-10-27` (não é a branch de publicação).
+
+**Baseline verificada**
+- O workflow [40444629202](https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40444629202) terminou com sucesso no commit `d2f6e93`; testes, build web, E2E de layout, sincronização/compilação Android e publicação concluíram nessa execução.
+- O site/APK publicado nessa execução registra a versão `0.1.351`. Essa evidência vale para o commit exato do workflow, não para conteúdo adicionado depois dele.
+
+**Pendente e ordem de trabalho**
+1. Criar CI de validação sem publicação para esta branch e executar Vitest, typecheck/build, E2E de layout e compilação Android.
+2. Corrigir toda falha reproduzida antes de ampliar o conteúdo.
+3. Revisar a integridade das 12 microaulas de cap.ia.04 e 11 de cap.ingles.01 sem afirmar validação editorial.
+4. Conferir visualmente as aulas narradas em 360×640 e 390×844 e, quando houver acesso ao dispositivo, testar no Galaxy A14.
+5. Só então continuar com cap.ingles.02, mantendo esta mesma branch e este único arquivo de coordenação.
+
+**Limites:** nenhuma publicação, PR ou merge para branches de entrega foi feito nesta retomada. Nenhum teste da nova branch é considerado aprovado até o CI desta branch concluir.
