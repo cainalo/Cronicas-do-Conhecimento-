@@ -341,7 +341,7 @@ export function NarratedPlayer({
       </section>
 
       <div
-        className={\`absolute left-3 top-[max(0.85rem,env(safe-area-inset-top))] z-30 max-w-[calc(100vw-5.5rem)] transition-all duration-300 \${visibleClass}\`}
+        className={`absolute left-3 top-[max(0.85rem,env(safe-area-inset-top))] z-30 max-w-[calc(100vw-5.5rem)] transition-all duration-300 ${visibleClass}`}
         onClick={stopOverlayClick} aria-hidden={!controlsVisible} data-testid="narrada-titulo-flutuante"
       >
         <div className="rounded-full border border-white/20 bg-[#171b1b]/78 px-3 py-2 text-white shadow-lg backdrop-blur-md">
@@ -350,23 +350,23 @@ export function NarratedPlayer({
           <p className="truncate text-[0.65rem] text-white/70">{scene.heading} · cena {pos.scene + 1}/{l.scenes.length}</p>
         </div>
       </div>
-      <button type="button" className={\`absolute right-3 top-[max(0.85rem,env(safe-area-inset-top))] z-40 grid h-11 w-11 place-items-center rounded-full border border-white/25 bg-[#171b1b]/80 text-white shadow-lg backdrop-blur-md transition-all duration-300 \${visibleClass}\`}
+      <button type="button" className={`absolute right-3 top-[max(0.85rem,env(safe-area-inset-top))] z-40 grid h-11 w-11 place-items-center rounded-full border border-white/25 bg-[#171b1b]/80 text-white shadow-lg backdrop-blur-md transition-all duration-300 ${visibleClass}`}
         onClick={(event) => { event.stopPropagation(); stop(); setPlaying(false); if (onClose) onClose(); }}
         aria-label={exitLabel} title={exitLabel} data-testid="narrada-sair">
         <Icon name="sair" size={19} />
       </button>
-      <p className={\`absolute left-4 right-4 z-10 mx-auto max-w-3xl rounded-2xl border border-white/15 bg-[#171b1b]/82 px-4 py-3 text-center text-sm font-medium leading-relaxed text-white shadow-xl backdrop-blur-md transition-all duration-500 sm:left-10 sm:right-10 sm:px-6 sm:text-base \${controlsVisible ? 'bottom-[calc(8.55rem+env(safe-area-inset-bottom))]' : 'bottom-[max(1.15rem,env(safe-area-inset-bottom))]'}\`}
+      <p className={`absolute left-4 right-4 z-10 mx-auto max-w-3xl rounded-2xl border border-white/15 bg-[#171b1b]/82 px-4 py-3 text-center text-sm font-medium leading-relaxed text-white shadow-xl backdrop-blur-md transition-all duration-500 sm:left-10 sm:right-10 sm:px-6 sm:text-base ${controlsVisible ? 'bottom-[calc(8.55rem+env(safe-area-inset-bottom))]' : 'bottom-[max(1.15rem,env(safe-area-inset-bottom))]'}`}
         aria-live="polite" data-testid="narrada-legenda" onClick={stopOverlayClick}>
         <span className="sr-only">Legenda: </span>
         <span data-testid="narrada-legenda-texto">
           {(say.match(/\S+\s*/g) ?? [say]).map((word, i) => {
             const estimatedWord = voiceStarted ? wordIndexAtChar(say, Math.floor((beatElapsed / Math.max(1, durations[beatIndex] ?? 2200)) * say.length)) : -1;
             const activeWord = playing && voiceStarted ? (speechWordIndex ?? estimatedWord) : -1;
-            return <span key={\`\${i}-\${word}\`} className={i === activeWord ? 'rounded bg-[#f0bf69]/25 px-0.5 font-bold text-[#ffd38a] transition-colors duration-200' : i < activeWord ? 'text-white/65 transition-colors duration-200' : 'text-white transition-colors duration-200'}>{word}</span>;
+            return <span key={`${i}-${word}`} className={i === activeWord ? 'rounded bg-[#f0bf69]/25 px-0.5 font-bold text-[#ffd38a] transition-colors duration-200' : i < activeWord ? 'text-white/65 transition-colors duration-200' : 'text-white transition-colors duration-200'}>{word}</span>;
           })}
         </span>
       </p>
-      <div className={\`absolute bottom-[calc(4.7rem+env(safe-area-inset-bottom))] left-4 right-4 z-30 mx-auto max-w-2xl transition-all duration-300 \${visibleClass}\`}
+      <div className={`absolute bottom-[calc(4.7rem+env(safe-area-inset-bottom))] left-4 right-4 z-30 mx-auto max-w-2xl transition-all duration-300 ${visibleClass}`}
         onClick={stopOverlayClick} aria-hidden={!controlsVisible} data-testid="narrada-seek-panel">
         <div className="rounded-xl border border-white/20 bg-[#171b1b]/82 px-3 py-2 text-white shadow-lg backdrop-blur-lg">
           <div className="mb-1 flex items-center justify-between gap-3 text-[0.62rem] font-semibold tabular-nums text-white/75">
@@ -379,7 +379,7 @@ export function NarratedPlayer({
             className="block h-5 w-full cursor-pointer accent-[#f0bf69]" data-testid="narrada-seek" />
         </div>
       </div>
-      <div className={\`absolute bottom-[max(0.35rem,env(safe-area-inset-bottom))] left-2 right-2 z-30 mx-auto flex max-w-xl items-center justify-center gap-1.5 px-1 transition-all duration-300 sm:bottom-[max(0.85rem,env(safe-area-inset-bottom))] sm:gap-3 \${visibleClass}\`}
+      <div className={`absolute bottom-[max(0.35rem,env(safe-area-inset-bottom))] left-2 right-2 z-30 mx-auto flex max-w-xl items-center justify-center gap-1.5 px-1 transition-all duration-300 sm:bottom-[max(0.85rem,env(safe-area-inset-bottom))] sm:gap-3 ${visibleClass}`}
         onClick={stopOverlayClick} aria-hidden={!controlsVisible} data-testid="narrada-controles-flutuantes">
         <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => jump(positionAtBeat(l, Math.max(0, beatIndex - 1)))} aria-label="Voltar uma fala"><Icon name="voltar" size={17} /></button>
         <button type="button" className="grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-white/25 bg-[#c8402a] text-white shadow-xl transition hover:bg-[#a0301c]" onClick={togglePlayback} aria-label={playing ? 'Pausar aula' : done ? 'Assistir novamente' : 'Reproduzir aula'} data-testid="narrada-tocar">{playing ? <span aria-hidden="true" className="text-xl leading-none">Ⅱ</span> : <Icon name="play" size={19} />}</button>
@@ -389,7 +389,7 @@ export function NarratedPlayer({
             {RATES.map((r) => <option key={r} value={r}>{r.toLocaleString('pt-BR')}×</option>)}
           </select>
         </label>
-        <button type="button" className={\`grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 text-white shadow-lg backdrop-blur-md transition \${voice.kind === 'gemini' ? 'bg-[#6e3b5c]' : 'bg-[#171b1b]/82 hover:bg-[#6e3b5c]'}\`} onClick={() => { setShowTranscript(false); setShowVoiceSettings((v) => !v); setVoiceStatus(''); }} aria-label="Preferências de voz" aria-expanded={showVoiceSettings} data-testid="narrada-preferencias-voz"><Icon name="som" size={17} /></button>
+        <button type="button" className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 text-white shadow-lg backdrop-blur-md transition ${voice.kind === 'gemini' ? 'bg-[#6e3b5c]' : 'bg-[#171b1b]/82 hover:bg-[#6e3b5c]'}`} onClick={() => { setShowTranscript(false); setShowVoiceSettings((v) => !v); setVoiceStatus(''); }} aria-label="Preferências de voz" aria-expanded={showVoiceSettings} data-testid="narrada-preferencias-voz"><Icon name="som" size={17} /></button>
         <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => { setShowVoiceSettings(false); setShowTranscript((v) => !v); }} aria-label={showTranscript ? 'Ocultar transcrição' : 'Mostrar transcrição'} aria-expanded={showTranscript} data-testid="narrada-transcricao"><Icon name="livro" size={17} /></button>
       </div>
       {showVoiceSettings && controlsVisible && (

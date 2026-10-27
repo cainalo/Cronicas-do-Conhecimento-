@@ -178,7 +178,7 @@ function SlideCard({ slide, index, total }: { slide: ReviewSlide; index: number;
     <footer className="relative mt-3 flex shrink-0 items-end justify-between gap-3 border-t border-white/30 pt-2.5"><span className="text-[0.62rem] text-white/75">Material de revisão · {slide.chapterId}</span><span className="font-mono text-xs tabular-nums text-white/80">{String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span></footer>
   </article>;
 
-  return <article className={\`review-slide-card relative flex h-full min-h-0 flex-col overflow-hidden rounded-[1.35rem] border border-white/15 p-4 shadow-sm sm:rounded-[1.8rem] sm:p-8 \${palette}\`} data-testid="slide-card">
+  return <article className={`review-slide-card relative flex h-full min-h-0 flex-col overflow-hidden rounded-[1.35rem] border border-white/15 p-4 shadow-sm sm:rounded-[1.8rem] sm:p-8 ${palette}`} data-testid="slide-card">
     <div className="review-slide-cover__ring review-slide-cover__ring--inner" aria-hidden="true" />
     <div className="relative flex min-h-0 flex-1 flex-col">
       <header className="relative flex shrink-0 items-start gap-3">
