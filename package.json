@@ -9,7 +9,8 @@
     "test": "vitest run",
     "typecheck": "tsc -b",
     "test:e2e": "node scripts/e2e-layout.mjs",
-    "test:visual": "node scripts/e2e-visual-audit.mjs"
+    "test:visual": "node scripts/e2e-visual-audit.mjs",
+    "report:bundle": "node scripts/report-bundle-sizes.mjs"
   },
   "repository": {
     "type": "git",
