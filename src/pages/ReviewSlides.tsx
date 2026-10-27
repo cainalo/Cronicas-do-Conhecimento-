@@ -27,42 +27,85 @@ export function plainReviewText(markdown: string): string {
     .replace(/^\s*\d+\.\s+/gm, '• ')
     .replace(/\*\*(.*?)\*\*/g, '$1')
     .replace(/\*(.*?)\*/g, '$1')
-    .replace(/^\s*\|.*\|\s*$/gm, '')
+    .replace(/^\s*\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)+\|?\s*$/gm, '')
+    .replace(/^\s*\|([^\n]*?)\|\s*$/gm, (_, cells: string) => '• ' + cells.split('|').map((cell: string) => cell.trim()).filter(Boolean).join(' · '))
     .replace(/^\s*[-:| ]{3,}\s*$/gm, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
 
-/** Excertos literais do capítulo e verbetes do glossário; a lâmina não inventa um resumo. */
+/**
+ * Quebra o material inteiro em lâminas legíveis. Limite por palavra/frase, nunca por
+ * substring: nenhuma lâmina termina no meio de uma palavra ou corta o final do texto.
+ */
+export function splitReviewChunks(value: string, maxChars = 300): string[] {
+  const normalized = plainReviewText(value);
+  const paragraphs = normalized.split(/\n\s*\n/).map((p) => p.replace(/\s+/g, ' ').trim()).filter(Boolean);
+  const result: string[] = [];
+  for (const paragraph of paragraphs) {
+    let current = '';
+    const flush = () => { if (current.trim()) result.push(current.trim()); current = ''; };
+    const sentences = paragraph.match(/[^.!?]+[.!?]+[\]})'"']*|[^.!?]+$/g) ?? [paragraph];
+    for (const rawSentence of sentences) {
+      const sentence = rawSentence.trim();
+      if (!sentence) continue;
+      if (sentence.length > maxChars) {
+        flush();
+        let part = '';
+        for (const word of sentence.split(/\s+/)) {
+          if (part && (part + ' ' + word).length > maxChars) { result.push(part); part = word; }
+          else part = part ? part + ' ' + word : word;
+        }
+        if (part) current = part;
+      } else if (current && (current + ' ' + sentence).length > maxChars) {
+        flush();
+        current = sentence;
+      } else {
+        current = current ? current + ' ' + sentence : sentence;
+      }
+    }
+    flush();
+  }
+  return result.length ? result : ['Abra o capítulo completo para revisar este trecho.'];
+}
+
+/** Cada lâmina usa texto real do capítulo, dividido sem truncamento. */
 export function buildReviewSlides(chapter: Chapter): ReviewSlide[] {
   const slides: ReviewSlide[] = [{
     id: chapter.id + ':capa', kind: 'cover', title: chapter.title,
     eyebrow: 'Caderno visual de revisão', body: chapter.subtitle, chapterId: chapter.id,
   }];
   for (const section of chapter.sections) {
-    const paragraphs = plainReviewText(section.body)
-      .split(/\n\s*\n/)
-      .map((part) => part.replace(/\s+/g, ' ').trim())
-      .filter((part) => part.length > 30 && !/^\d+\s*\|/.test(part));
-    slides.push({
-      id: chapter.id + ':' + section.id, kind: 'section',
-      title: section.title.replace(/^\d+\.\s*/, ''),
-      eyebrow: 'Pontos de revisão · texto do capítulo',
-      body: paragraphs.slice(0, 3).join('\n\n').slice(0, 560) || 'Abra o capítulo completo para revisar este trecho.',
-      chapterId: chapter.id, sectionId: section.id,
+    const chunks = splitReviewChunks(section.body);
+    chunks.forEach((body, partIndex) => {
+      slides.push({
+        id: chapter.id + ':' + section.id + ':' + partIndex, kind: 'section',
+        title: section.title.replace(/^\d+\.\s*/, ''),
+        eyebrow: chunks.length > 1 ? `Pontos de revisão · parte ${partIndex + 1} de ${chunks.length}` : 'Pontos de revisão · texto do capítulo',
+        body, chapterId: chapter.id, sectionId: section.id,
+      });
     });
   }
   for (const item of chapter.glossary) {
-    slides.push({
-      id: chapter.id + ':termo:' + item.term, kind: 'glossary', title: item.term,
-      eyebrow: 'Conceito-chave', body: item.definition.length > 520 ? item.definition.slice(0, 500).replace(/\s+\S*$/, '') + '…' : item.definition, chapterId: chapter.id,
+    const chunks = splitReviewChunks(item.definition);
+    chunks.forEach((body, partIndex) => {
+      slides.push({
+        id: chapter.id + ':termo:' + item.term + ':' + partIndex, kind: 'glossary',
+        title: item.term,
+        eyebrow: chunks.length > 1 ? `Conceito-chave · parte ${partIndex + 1} de ${chunks.length}` : 'Conceito-chave',
+        body, chapterId: chapter.id,
+      });
     });
   }
-  if (chapter.references.length) {
-    slides.push({
-      id: chapter.id + ':fontes', kind: 'references', title: 'Fontes e aprofundamento',
-      eyebrow: 'Confira as referências do capítulo',
-      body: chapter.references.slice(0, 5).map((ref) => ref.title + '\n' + ref.detail).join('\n\n').slice(0, 620), chapterId: chapter.id,
+  for (const ref of chapter.references) {
+    const chunks = splitReviewChunks(ref.title + '\n\n' + ref.detail);
+    chunks.forEach((body, partIndex) => {
+      slides.push({
+        id: chapter.id + ':fonte:' + ref.title + ':' + partIndex, kind: 'references',
+        title: 'Fontes e aprofundamento',
+        eyebrow: chunks.length > 1 ? `Referência · parte ${partIndex + 1} de ${chunks.length}` : 'Confira as referências do capítulo',
+        body, chapterId: chapter.id,
+      });
     });
   }
   slides.push({
@@ -76,32 +119,34 @@ export function buildReviewSlides(chapter: Chapter): ReviewSlide[] {
 
 function SlideCard({ slide, index, total }: { slide: ReviewSlide; index: number; total: number }) {
   const palettes: Record<ReviewSlide['kind'], string> = {
-    cover: 'bg-[#173e49] text-white',
-    section: 'bg-surface text-ink',
-    glossary: 'bg-[#f0e3bd] text-[#3b2c12]',
-    references: 'bg-[#d6e7e6] text-[#172e34]',
-    closing: 'bg-[#f3d7ca] text-[#3a211c]',
+    cover: 'bg-[#c8402a] text-white',
+    section: 'bg-[#1f5c7a] text-white',
+    glossary: 'bg-[#6e3b5c] text-white',
+    references: 'bg-[#a8365e] text-white',
+    closing: 'bg-[#9e6a14] text-white',
   };
+  const sectionPalette = ['bg-[#1f5c7a] text-white', 'bg-[#6e3b5c] text-white', 'bg-[#a8365e] text-white', 'bg-[#9e6a14] text-white', 'bg-[#c8402a] text-white'];
+  const palette = slide.kind === 'section' ? sectionPalette[index % sectionPalette.length] : palettes[slide.kind];
   return (
     <article
-      className={`review-slide-card relative flex h-full min-h-0 flex-col overflow-hidden rounded-[1.35rem] border border-line/70 p-4 shadow-sm sm:rounded-[1.8rem] sm:p-8 ${palettes[slide.kind]}`}
+      className={`review-slide-card relative flex h-full min-h-0 flex-col overflow-hidden rounded-[1.35rem] border border-white/15 p-4 shadow-sm sm:rounded-[1.8rem] sm:p-8 ${palette}`}
       data-testid="slide-card"
     >
       <div className="absolute -right-10 -top-10 h-36 w-36 rotate-12 rounded-3xl border-[14px] border-[#c8402a]/15" aria-hidden="true" />
       <div className="absolute -bottom-8 -left-8 h-28 w-28 rounded-full border-[10px] border-[#2e7182]/15" aria-hidden="true" />
       <div className="relative flex min-h-0 flex-1 flex-col">
-        <p className={`text-[0.62rem] font-bold uppercase tracking-[0.13em] ${slide.kind === 'cover' ? 'text-[#f4bd7b]' : 'text-[#2e7182]'}`}>{slide.eyebrow}</p>
-        <h2 className="mt-2 max-h-[26%] overflow-hidden font-display text-xl font-semibold leading-tight sm:mt-3 sm:text-3xl">{slide.title}</h2>
+        <p className="text-[0.62rem] font-bold uppercase tracking-[0.13em] text-white/75">{slide.eyebrow}</p>
+        <h2 className="mt-2 shrink-0 font-display text-xl font-semibold leading-tight sm:mt-3 sm:text-3xl">{slide.title}</h2>
         {slide.kind === 'cover' ? (
-          <p className="mt-3 max-h-[44%] overflow-hidden text-sm leading-relaxed text-white/80 sm:mt-5 sm:text-lg">{slide.body}</p>
+          <p className="mt-3 min-h-0 flex-1 overflow-hidden break-words text-base leading-relaxed text-white/90 sm:mt-5 sm:text-xl sm:leading-8">{slide.body}</p>
         ) : slide.kind === 'glossary' ? (
-          <p className="mt-4 min-h-0 flex-1 overflow-hidden text-sm leading-relaxed sm:mt-6 sm:text-lg sm:leading-7">{slide.body}</p>
+          <p className="mt-4 min-h-0 flex-1 overflow-hidden break-words text-base leading-relaxed sm:mt-6 sm:text-xl sm:leading-8">{slide.body}</p>
         ) : (
-          <div className="mt-3 min-h-0 flex-1 overflow-hidden whitespace-pre-line text-[0.8rem] leading-[1.35rem] sm:mt-5 sm:text-base sm:leading-7">{slide.body}</div>
+          <div className="mt-3 min-h-0 flex-1 overflow-hidden whitespace-pre-line break-words text-[clamp(0.92rem,2.3vh,1.25rem)] leading-[1.4] sm:mt-5 sm:text-lg sm:leading-[1.55]">{slide.body}</div>
         )}
       </div>
-      <div className={`relative mt-3 flex shrink-0 items-end justify-between gap-3 border-t pt-2.5 ${slide.kind === 'cover' ? 'border-white/25' : 'border-current/15'}`}>
-        <span className={`text-[0.62rem] ${slide.kind === 'cover' ? 'text-white/70' : 'opacity-65'}`}>Crônicas do Conhecimento</span>
+      <div className="relative mt-3 flex shrink-0 items-end justify-between gap-3 border-t border-white/30 pt-2.5">
+        <span className="text-[0.62rem] text-white/75">Crônicas do Conhecimento</span>
         <span className="font-mono text-xs tabular-nums opacity-70">{String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
       </div>
     </article>
