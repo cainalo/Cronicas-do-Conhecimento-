@@ -56,7 +56,10 @@ it('página: começa parada; legenda de uma linha é opcional; controles reinici
   expect(caption).toHaveTextContent(/Imagine que sua conta tem saldo zero/);
   expect(caption).toContainElement(screen.getByTestId('narrada-legenda-texto'));
   expect(caption.querySelector('p')!).toHaveClass('whitespace-nowrap', 'overflow-hidden');
-  expect(screen.getByTestId('narrada-player')).toHaveClass('fixed', 'inset-0', 'h-[100dvh]', 'overflow-hidden', 'w-auto');
+  const player = screen.getByTestId('narrada-player');
+  expect(player).toHaveClass('fixed', 'left-0', 'right-0', 'top-0', 'bottom-0', 'h-[100dvh]', 'overflow-hidden', 'w-screen');
+  expect(player.style.width).toBe('100vw');
+  expect(player.style.height).toBe('100dvh');
   expect(screen.getByTestId('narrada-cena')).not.toHaveClass('px-3', 'sm:px-6');
   expect(screen.getByTestId('narrada-elementos-visuais')).toBeInTheDocument();
   expect(screen.getByText(/sem voz neste aparelho/)).toBeInTheDocument();
