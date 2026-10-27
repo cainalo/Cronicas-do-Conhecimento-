@@ -1,10 +1,10 @@
 // Aula visual narrada com player de tela inteira, cena animada e linha do tempo arrastável.
 // A busca é estimada por fala: a voz do aparelho não fornece uma duração exata de vídeo.
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getNarrated } from '@/content';
 import type { NarratedLesson, NumberLineState, Scene } from '@/content/narrated/types';
-import { GEMINI_TTS_VOICES, getGeminiTtsApiKey, getGeminiTtsVoice, getVoice, readingMs, saveGeminiTtsApiKey, saveGeminiTtsVoice } from '@/app/voice';
+import { GEMINI_TTS_VOICES, getGeminiTtsApiKey, getGeminiTtsVoice, getVoice, readingMs, saveGeminiTtsApiKey, saveGeminiTtsVoice, type VoiceAudioTrack } from '@/app/voice';
 import { soundscape } from '@/app/soundscape';
 import { beatIndexOf, narrationPositions, nextBeat, positionAtBeat, revealOf, transcript, type NarrationPos } from '@/lib/narration';
 import { Icon } from '@/components/Icon';
@@ -60,7 +60,14 @@ export function NarratedPlayer({
   const [geminiVoiceDraft, setGeminiVoiceDraft] = useState(() => getGeminiTtsVoice());
   const [voiceStatus, setVoiceStatus] = useState('');
   const [testingVoice, setTestingVoice] = useState(false);
+  const [preparingTrack, setPreparingTrack] = useState(false);
+  const [generatedTrack, setGeneratedTrack] = useState<VoiceAudioTrack | null>(null);
+  const [trackDurationMs, setTrackDurationMs] = useState(0);
+  const [mediaElapsedMs, setMediaElapsedMs] = useState(0);
   const hideControlsTimer = useRef<number | undefined>(undefined);
+  const trackRef = useRef<VoiceAudioTrack | null>(null);
+  const trackRequest = useRef(0);
+  const activeCueRef = useRef(0);
   const elapsedRef = useRef(0);
   const resumeAfterSeek = useRef(false);
   const seekOffsetRef = useRef(0);
@@ -69,9 +76,12 @@ export function NarratedPlayer({
   const positions = useMemo(() => narrationPositions(l), [l]);
   const beatIndex = beatIndexOf(l, pos);
   const durations = useMemo(() => positions.map((p) => readingMs(l.scenes[p.scene].beats[p.beat].say, rate)), [l, positions, rate]);
-  const totalMs = durations.reduce((sum, value) => sum + value, 0);
+  const estimatedTotalMs = durations.reduce((sum, value) => sum + value, 0);
+  const script = useMemo(() => positions.map((p) => l.scenes[p.scene].beats[p.beat].say.trim()).join('\n\n'), [l, positions]);
+  const hasGeneratedTrack = voice.kind === 'gemini' && !!generatedTrack;
+  const totalMs = hasGeneratedTrack && trackDurationMs > 0 ? trackDurationMs : estimatedTotalMs;
   const beforeMs = durations.slice(0, beatIndex).reduce((sum, value) => sum + value, 0);
-  const currentMs = Math.min(totalMs, beforeMs + beatElapsed);
+  const currentMs = Math.min(totalMs, hasGeneratedTrack ? mediaElapsedMs : beforeMs + beatElapsed);
   const scene = l.scenes[pos.scene];
   const say = scene.beats[pos.beat].say;
 
@@ -80,7 +90,12 @@ export function NarratedPlayer({
     voice.stop();
   }, [voice]);
 
-  useEffect(() => () => stop(), [stop]);
+  useEffect(() => () => {
+    trackRequest.current += 1;
+    trackRef.current?.dispose();
+    trackRef.current = null;
+    stop();
+  }, [stop]);
   // A composição cobre a viewport, então a página por trás não deve continuar rolando no toque.
   useEffect(() => {
     const bodyOverflow = document.body.style.overflow;
