@@ -1,11 +1,8 @@
-// Livro paginado: o capítulo é dividido em blocos (parágrafo, tabela, lista, código, citação) que
-// depois são distribuídos em páginas conforme a altura disponível na tela. Funções puras.
-import type { Chapter, SectionExtras } from '@/content/types';
+// Utilitários de conteúdo para leitura contínua. Mantém divisão segura de Markdown para blocos altos.
+import type { Chapter } from '@/content/types';
 import { parsePegadinhas } from './practice';
 
 export type BookBlock =
-  | { kind: 'cover' }
-  | { kind: 'scene'; sectionId: string; lines: { who: string; text: string }[]; cont?: boolean }
   | { kind: 'title'; sectionId: string; number: number; title: string }
   | { kind: 'md'; sectionId: string; md: string; first?: boolean }
   | { kind: 'quiz'; sectionId: string; items: { statement: string; answer: boolean; why: string }[] }
@@ -52,49 +49,23 @@ export function splitMarkdown(md: string): string[] {
   return out;
 }
 
-/** Todos os blocos do livro de um capítulo, na ordem de leitura. */
-export function chapterBlocks(chapter: Chapter, extras: (sectionId: string) => SectionExtras | undefined): BookBlock[] {
-  const out: BookBlock[] = [{ kind: 'cover' }];
-  chapter.sections.forEach((s, idx) => {
-    void extras(s.id);
-    // As cenas de diálogo da história antiga não entram mais no livro (pacote v4, limpeza de identidade).
-    out.push({ kind: 'title', sectionId: s.id, number: idx + 1, title: s.title.replace(/^\d+\.\s*/, '') });
-    const i = s.body.indexOf('### Pegadinhas');
-    const body = i >= 0 ? s.body.slice(0, i) : s.body;
-    splitMarkdown(body).forEach((md, k) => out.push({ kind: 'md', sectionId: s.id, md, first: k === 0 }));
-    const quiz = parsePegadinhas(s.body);
-    if (quiz.length) out.push({ kind: 'quiz', sectionId: s.id, items: quiz });
-    out.push({ kind: 'end', sectionId: s.id });
+/**
+ * Cria blocos semânticos em ordem para uma página contínua. Sem capa, cena, fólio ou paginação.
+ */
+export function chapterBlocks(chapter: Chapter): BookBlock[] {
+  const out: BookBlock[] = [];
+  chapter.sections.forEach((section, index) => {
+    out.push({ kind: 'title', sectionId: section.id, number: index + 1, title: section.title.replace(/^\d+\.\s*/, '') });
+    const marker = section.body.indexOf('### Pegadinhas');
+    const body = marker >= 0 ? section.body.slice(0, marker) : section.body;
+    splitMarkdown(body).forEach((md, blockIndex) => out.push({ kind: 'md', sectionId: section.id, md, first: blockIndex === 0 }));
+    const quiz = parsePegadinhas(section.body);
+    if (quiz.length) out.push({ kind: 'quiz', sectionId: section.id, items: quiz });
+    out.push({ kind: 'end', sectionId: section.id });
   });
   for (let i = 0; i < chapter.glossary.length; i += 4) out.push({ kind: 'glossary', items: chapter.glossary.slice(i, i + 4) });
   if (chapter.references.length) out.push({ kind: 'refs', items: chapter.references });
   return out;
-}
-
-/** Blocos que sempre começam página nova. */
-/**
- * Distribui os blocos em páginas, dada a altura de cada bloco e a altura útil da página.
- * Cena e título de seção abrem página; o título fica na mesma página do primeiro parágrafo.
- * Bloco maior que a página ocupa uma página sozinho (com rolagem interna).
- */
-export function paginate(blocks: BookBlock[], heights: number[], pageHeight: number): number[][] {
-  const pages: number[][] = [];
-  let cur: number[] = [];
-  let used = 0;
-  blocks.forEach((b, i) => {
-    const h = heights[i] ?? 0;
-    const forced = b.kind === 'scene' || b.kind === 'cover' || blocks[i - 1]?.kind === 'cover' || b.kind === 'glossary' || b.kind === 'refs' || (b.kind === 'title' && blocks[i - 1]?.kind !== 'scene');
-    const afterScene = b.kind === 'title' && blocks[i - 1]?.kind === 'scene';
-    if (cur.length && (forced || afterScene || used + h > pageHeight)) {
-      pages.push(cur);
-      cur = [];
-      used = 0;
-    }
-    cur.push(i);
-    used += h;
-  });
-  if (cur.length) pages.push(cur);
-  return pages;
 }
 
 /**
@@ -154,25 +125,3 @@ export function splitMdBlock(md: string): [string, string] | null {
   return [text.slice(0, best).trim(), text.slice(best).trim()];
 }
 
-/** Aplica splitMdBlock ao bloco i (só blocos de texto), mantendo seção e capitular só no primeiro. */
-export function splitBlockAt(blocks: BookBlock[], i: number): BookBlock[] | null {
-  const b = blocks[i];
-  if (b.kind === 'md') {
-    const parts = splitMdBlock(b.md);
-    if (!parts) return null;
-    return [...blocks.slice(0, i), { ...b, md: parts[0] }, { kind: 'md', sectionId: b.sectionId, md: parts[1] }, ...blocks.slice(i + 1)];
-  }
-  if (b.kind === 'scene' && b.lines.length > 1) {
-    const h = Math.ceil(b.lines.length / 2);
-    return [...blocks.slice(0, i), { ...b, lines: b.lines.slice(0, h) }, { ...b, lines: b.lines.slice(h), cont: true }, ...blocks.slice(i + 1)];
-  }
-  if (b.kind === 'quiz' && b.items.length > 1) {
-    const h = Math.ceil(b.items.length / 2);
-    return [...blocks.slice(0, i), { ...b, items: b.items.slice(0, h) }, { ...b, items: b.items.slice(h) }, ...blocks.slice(i + 1)];
-  }
-  if (b.kind === 'glossary' && b.items.length > 1) {
-    const h = Math.ceil(b.items.length / 2);
-    return [...blocks.slice(0, i), { ...b, items: b.items.slice(0, h) }, { ...b, items: b.items.slice(h) }, ...blocks.slice(i + 1)];
-  }
-  return null;
-}
