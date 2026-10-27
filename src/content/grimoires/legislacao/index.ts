@@ -85,7 +85,7 @@ export const licoesLegislacao: Lesson[] = [
   {
     id: 'lic.leg.01',
     chapterId: 'cap.leg.01',
-    title: 'Os Segredos dos Súditos',
+    title: 'Proteção de Dados e Legislação',
     goal: 'Conceitos e princípios da LGPD em sistemas, anonimização e pseudonimização, neutralidade e guarda de registros.',
     cards: [
       { title: 'LGPD no código', body: '**Necessidade** = minimização. **By design**: desde a concepção (art. 46, § 2º). **By default**: o padrão é o mais protetivo.\n\nAnonimizado **não** é dado pessoal; pseudonimizado **é**. Hash simples de CPF não anonimiza.' },
