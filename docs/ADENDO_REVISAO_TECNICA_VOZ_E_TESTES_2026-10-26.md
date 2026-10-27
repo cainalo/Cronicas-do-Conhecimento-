@@ -74,3 +74,24 @@ A auditoria de `src/pages/ReviewSlides.tsx` não muda neste adendo. Na versão c
 5. Validar as vozes com a mesma amostra em pt-BR e medir custo a partir da duração e do número real de caracteres do catálogo.
 6. A outra sessão deve continuar com a reconstrução de `Narrated.tsx` e `ReviewSlides.tsx`; esta contribuição não os altera.
 
+
+
+## 7. Implementação auxiliar adicionada depois da primeira versão deste adendo
+
+Foi criado `src/lib/narration-timeline.ts` como módulo puro, sem dependência de React e sem alterar o player. Ele:
+
+- cria a faixa textual canônica, unindo as falas com o mesmo separador de duas quebras de linha usado na faixa Gemini atual;
+- guarda os offsets de caracteres de cada cena/fala;
+- transforma um alinhamento de caracteres com timestamps em cues de fala e de palavra;
+- converte tempos em milissegundos e oferece `cueAtTime`, que escolhe a fala ativa pelo início temporal real e mantém a composição estável durante pausas;
+- rejeita explicitamente vetores de alinhamento incompletos, timestamps inválidos ou texto normalizado incompatível, em vez de fingir precisão.
+
+Arquivo: https://github.com/cainalo/Cronicas-do-Conhecimento-/blob/claude/cronicas-conhecimento-estudos-jgbofo/src/lib/narration-timeline.ts
+
+Foi também criado `src/test/narration-timeline.test.ts` com testes para preservação do texto e offsets, conversão de timestamps por caractere em cues, seleção temporal da fala e rejeição de alinhamentos incompatíveis ou incompletos.
+
+Arquivo: https://github.com/cainalo/Cronicas-do-Conhecimento-/blob/claude/cronicas-conhecimento-estudos-jgbofo/src/test/narration-timeline.test.ts
+
+**Limite atual:** esse utilitário ainda não está conectado ao contrato de `VoiceAudioTrack` nem ao componente do player. É uma peça isolada para a sessão responsável pela interface integrar sem copiar lógica de alinhamento para dentro de React. O provedor precisa devolver os timestamps de caracteres correspondentes ao texto exato submetido; se usar `normalized_alignment`, o adaptador deve mapear a normalização para o texto original antes de produzir os cues.
+
+A consulta ao GitHub não retornou execuções de workflow nem status de commit para os testes anteriores. Logo, esses novos testes estão **escritos e gravados, mas não executados**; typecheck e build continuam pendentes.
