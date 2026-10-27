@@ -602,16 +602,6 @@ export function NarratedPlayer({
         </div>
       </section>
 
-      <div
-        className={`absolute left-3 top-[max(0.85rem,env(safe-area-inset-top))] z-30 max-w-[calc(100vw-5.5rem)] transition-all duration-300 ${visibleClass}`}
-        onClick={stopOverlayClick} aria-hidden={!controlsVisible} data-testid="narrada-titulo-flutuante"
-      >
-        <div className="rounded-full border border-white/20 bg-[#171b1b]/78 px-3 py-2 text-white shadow-lg backdrop-blur-md">
-          <p className="text-[0.55rem] font-black uppercase tracking-[0.15em] text-[#ffbb8c]">{embedded ? 'Aula narrada · IA' : 'Aula narrada · ' + l.minutes + ' min'}</p>
-          <p className="mt-0.5 truncate text-sm font-semibold leading-tight sm:text-base">{l.title}</p>
-          <p className="truncate text-[0.65rem] text-white/70">{scene.heading} · cena {pos.scene + 1}/{l.scenes.length}</p>
-        </div>
-      </div>
       <button type="button" className={`absolute right-3 top-[max(0.85rem,env(safe-area-inset-top))] z-40 grid h-11 w-11 place-items-center rounded-full border border-white/25 bg-[#171b1b]/80 text-white shadow-lg backdrop-blur-md transition-all duration-300 ${visibleClass}`}
         onClick={(event) => { event.stopPropagation(); stop(); setPlaying(false); if (onClose) onClose(); }}
         aria-label={exitLabel} title={exitLabel} data-testid="narrada-sair">
@@ -938,7 +928,6 @@ function CinematicScene({
             <p className="ccv-film-eyebrow"><span />{eyebrow}</p>
             {dateOrStep && <p className="ccv-film-date">{dateOrStep}</p>}
             <h2 className="ccv-film-headline">{headline}</h2>
-            {support && <p className="ccv-film-support">{support}</p>}
             <div className="ccv-film-progress" aria-hidden="true">
               {Array.from({ length: Math.max(1, progressCount) }, (_, index) => (
                 <span key={index} className={index < progressIndex ? 'is-past' : index === progressIndex ? 'is-current' : ''} />
@@ -986,6 +975,11 @@ function CinematicScene({
             )}
           </div>
         </section>
+        {support && (
+          <section key={scene.id + ':' + beatIndex} className="ccv-film-details" aria-label="Explicação do conceito" data-testid="narrada-explicacao-cena">
+            <p className="ccv-film-support">{support}</p>
+          </section>
+        )}
       </div>
 
       <footer className="ccv-film-footer">
@@ -1093,25 +1087,45 @@ function CinematicCutaway({
   );
 }
 
+export function splitCaptionLines(text: string): Array<{ start: number; end: number; text: string }> {
+  const words = text.match(/\S+\s*/g) ?? [text];
+  const lines: Array<{ start: number; end: number; text: string }> = [];
+  let start = 0;
+  let charCount = 0;
+
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i].trimEnd();
+    charCount += words[i].length;
+    const wordCount = i - start + 1;
+    const naturalStop = /[.!?…;:]$/.test(word) && wordCount >= 4;
+    const limitReached = wordCount >= 7 || charCount >= 40;
+    if (i === words.length - 1 || naturalStop || limitReached) {
+      lines.push({ start, end: i + 1, text: words.slice(start, i + 1).join('').trim() });
+      start = i + 1;
+      charCount = 0;
+    }
+  }
+
+  return lines;
+}
+
 function CaptionLine({ text, activeWordIndex, highlightWord }: { text: string; activeWordIndex: number; highlightWord: boolean }) {
-  const tokens = text.match(/\S+\s*/g) ?? [text];
-  const visibleCount = Math.min(8, tokens.length);
-  const start = Math.min(Math.max(0, activeWordIndex - 3), Math.max(0, tokens.length - visibleCount));
-  const end = Math.min(tokens.length, start + visibleCount);
+  const words = text.match(/\S+\s*/g) ?? [text];
+  const lines = splitCaptionLines(text);
+  const activeLine = lines.find((line) => activeWordIndex >= line.start && activeWordIndex < line.end) ?? lines[0];
+  const visibleWords = words.slice(activeLine.start, activeLine.end);
 
   return (
-    <div className="mb-[clamp(.35rem,1vh,.7rem)] flex min-h-[1.8rem] w-full shrink-0 items-center justify-center px-1"
+    <div className="ccv-caption-line flex w-full shrink-0 items-center justify-center px-1"
       role="status" aria-label="Legenda da fala atual" aria-live="polite" aria-atomic="true" data-testid="narrada-legenda">
-      <p className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap rounded-md bg-[#171b1b]/88 px-2 py-1 text-center text-[0.68rem] font-medium leading-5 text-white shadow-sm sm:px-3 sm:text-sm">
+      <p className="w-full max-w-full overflow-hidden whitespace-nowrap rounded-md bg-[#171b1b]/90 px-2 py-1 text-center text-[0.7rem] font-medium leading-5 text-white shadow-sm sm:px-3 sm:text-sm">
         <span className="sr-only">Legenda: </span>
-        <span data-testid="narrada-legenda-texto">
-          {start > 0 && <span aria-hidden="true">… </span>}
-          {tokens.slice(start, end).map((word, offset) => {
-            const i = start + offset;
-            const active = highlightWord && i === activeWordIndex;
-            return <span key={`${i}-${word}`} className={active ? 'rounded bg-[#f0bf69]/25 px-0.5 font-bold text-[#ffd38a]' : 'text-white'}>{word}</span>;
+        <span data-testid="narrada-legenda-texto" data-caption-start={activeLine.start} data-caption-end={activeLine.end}>
+          {visibleWords.map((word, offset) => {
+            const index = activeLine.start + offset;
+            const active = highlightWord && index === activeWordIndex;
+            return <span key={`${index}-${word}`} className={active ? 'rounded bg-[#f0bf69]/25 text-[#ffd38a]' : 'text-white'}>{word}</span>;
           })}
-          {end < tokens.length && <span aria-hidden="true">…</span>}
         </span>
       </p>
     </div>
