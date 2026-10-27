@@ -523,7 +523,7 @@ function EditorialVideoCut({ scene, reveal, phase, say }: { scene: Scene; reveal
   }
 
   return (
-    <div className={`anim-tile-in relative flex min-h-0 w-full max-w-3xl flex-1 flex-col justify-center overflow-hidden rounded-[1.6rem] p-4 text-white shadow-2xl sm:rounded-[2rem] sm:p-8 ${palette.bg}`} data-testid="narrada-plano-de-apoio">
+    <div className={`editorial-cut-in relative flex min-h-0 w-full max-w-3xl flex-1 flex-col justify-center overflow-hidden rounded-[1.6rem] p-4 text-white shadow-2xl sm:rounded-[2rem] sm:p-8 ${palette.bg}`} data-testid="narrada-plano-de-apoio">
       <div className="absolute -right-10 -top-12 h-48 w-48 rotate-12 rounded-[2rem] border-[16px] border-white/15" aria-hidden="true" />
       <div className="absolute -bottom-12 -left-8 h-40 w-40 rounded-full border-[14px] border-white/15" aria-hidden="true" />
       <div className="relative flex min-h-0 flex-1 flex-col justify-center">
@@ -537,11 +537,11 @@ function EditorialVideoCut({ scene, reveal, phase, say }: { scene: Scene; reveal
           </div>
         ) : (
           <div className="mt-4 flex min-h-0 items-center gap-3 sm:mt-6 sm:gap-6">
-            <div className="anim-bob grid h-24 w-24 shrink-0 place-items-center rounded-2xl bg-white/15 p-2 sm:h-40 sm:w-40 sm:rounded-[1.8rem] sm:p-4">
+            <div className="editorial-object-drift grid h-24 w-24 shrink-0 place-items-center rounded-2xl bg-white/15 p-2 sm:h-40 sm:w-40 sm:rounded-[1.8rem] sm:p-4">
               <Illustration name={art} accent="#f0bf69" animate className="h-full w-full text-white" />
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="anim-tile-in font-display text-[clamp(1.5rem,5vh,3.3rem)] font-semibold leading-[1.04] tracking-tight">{title}</h3>
+              <h3 className="editorial-title-in font-display text-[clamp(1.5rem,5vh,3.3rem)] font-semibold leading-[1.04] tracking-tight">{title}</h3>
               {equation && <p className="mt-3 font-mono text-xl font-black sm:text-3xl">{equation}</p>}
             </div>
           </div>
