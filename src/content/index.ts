@@ -207,6 +207,7 @@ import { dvCiHistoria, dvCiPipeline, dvCiAmbientes, dvCiFerramentas } from './mi
 import { dvIacHistoria, dvIacDeclarativa, dvIacContainers, dvIacKubernetes, dvObsHistoria, dvObsSlo, dvObsAlertas } from './micro/devops-plataforma';
 import { microLessonsAgentesMcp } from './micro/ia-agentes-mcp';
 import { microLessonsEticaDados } from './micro/ia-etica-dados';
+import { microLessonsInglesLeitura } from './micro/ingles-estrategias';
 export const microLessons: MicroLesson[] = [
   primHistoria,
   primQuatroTarefas,
@@ -408,6 +409,7 @@ export const microLessons: MicroLesson[] = [
   dvObsAlertas,
   ...microLessonsAgentesMcp,
   ...microLessonsEticaDados,
+  ...microLessonsInglesLeitura,
   matNumerosReta,
   matSomarSubtrair,
   matMultiplicarDividir,
