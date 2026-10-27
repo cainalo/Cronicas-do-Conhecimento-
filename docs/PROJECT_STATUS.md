@@ -1,6 +1,12 @@
 # Estado do projeto (atualizado em 2026-10-27)
 
 
+## Arquitetura e desempenho — 27/10/2026
+- `src/App.tsx`: 29 páginas secundárias foram migradas para `React.lazy` e `Suspense`, mantendo os caminhos das rotas e os provedores globais. Fluxos centrais (início, trilha, biblioteca, leitor, aprender, prática, lição e revisão) permanecem carregados diretamente.
+- `scripts/e2e-layout.mjs`: ampliado para visitar 34 caminhos de tela/configuração e rotas adiadas em duas viewports móveis, com e sem cartões de vidro.
+- `scripts/e2e-visual-audit.mjs` e `npm run test:visual`: auditoria com capturas em três viewports, dois temas e todos os 33 capítulos; relatório/capturas são guardados em artefato no CI e ignorados pelo Git local.
+- A refatoração não altera IDs de conteúdo, navegação, armazenamento ou persistência. Ainda não há medição real dos tamanhos dos chunks nem resultado final confirmado do novo workflow; nenhuma redução de desempenho é quantificada como aprovada.
+
 ## Baseline de CI e alterações ainda pendentes — 27/10/2026
 - O workflow [40444629202](https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40444629202) concluiu com sucesso para o commit `d2f6e93`: `npm ci`, `npm test`, build web/typecheck, `npm run test:e2e`, sync do Capacitor, compilação do APK e publicação no GitHub Pages.
 - O manifesto de publicação desse run registra a versão `0.1.351`. O resultado não deve ser extrapolado para commits posteriores.
