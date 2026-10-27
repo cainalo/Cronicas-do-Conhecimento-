@@ -106,7 +106,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   };
 
   const renderMd = (md: string) => (
-    <div className="prose-manuscript !font-sans !text-[1.02rem] [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0 [&_table]:!text-sm">
+    <div className="prose-content !font-sans !text-[1.02rem] [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0 [&_table]:!text-sm">
       <Markdown>{md}</Markdown>
     </div>
   );
