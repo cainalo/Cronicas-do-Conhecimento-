@@ -139,5 +139,5 @@
 ## 27/10/2026 — retomada com responsável técnico único
 - Por solicitação do usuário, a manutenção foi centralizada nesta linha de trabalho; os registros anteriores em `src/app/SESSION_COORDINATION.md` permanecem como histórico. Branches paralelas não são apagadas, mescladas ou consideradas aprovadas automaticamente.
 - Baseline comprovada: Actions [40444629202](https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40444629202) concluiu com sucesso no commit `d2f6e93`, gerando a versão `0.1.351`. Esse sucesso não comprova alterações posteriores em `gpt/ingles01-microaulas-2026-10-27`.
-- Próxima ação: instalar CI dedicado sem etapa de publicação para validar testes, build, E2E e Android na branch de manutenção. Depois corrigir falhas reais antes de iniciar cap.ingles.02.
+- Foi criado `.github/workflows/validate-branch.yml` na branch de manutenção; ele roda testes, build, E2E e compilação Android sem deploy. O status final da execução ainda não foi confirmado por esta sessão. Corrigir qualquer falha reproduzida antes de iniciar cap.ingles.02.
 
