@@ -1,6 +1,4 @@
-// Aprender: a porta de entrada de cada trecho, para quem está começando do zero. Um livrinho de
-// poucas páginas curtas (uma ideia por página), as palavras novas, três verificações fáceis e,
-// no fim, o convite para praticar. O texto completo fica para depois, como aprofundamento.
+// Aprender: sequência responsiva em etapas, com explicações, vocabulário, verificações e acesso à prática.
 import { useEffect, useMemo } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
@@ -204,12 +202,11 @@ function SimpleLearnPage() {
             Continuar <Icon name="avancar" size={18} />
           </button>
         ) : (
-          <Link to={`/pratica/${chapterId}/${sectionId}`} className="btn-primary flex min-h-[46px] flex-1 items-center justify-center">
-            Ir para a prática <Icon name="avancar" size={18} />
-          </Link>
+          <span className="flex min-h-[46px] flex-1 items-center justify-center rounded-xl bg-raised/55 px-3 text-sm font-semibold text-muted">
+            Trecho concluído
+          </span>
         )}
       </div>
     </div>
   );
-}
 }
