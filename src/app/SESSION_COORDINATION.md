@@ -170,3 +170,13 @@ Este é o único arquivo de coordenação do projeto. Os registros antigos abaix
 - O gate definitivo precisa confirmar Vitest, typecheck/build, E2E, auditoria visual e compilação Android. Não foi possível obter um resultado final de Actions através do status de commit disponível; não declarar aprovação.
 - O inventário confirma que não há PRs abertos. As branches canônicas são `main`, `claude/cronicas-conhecimento-estudos-jgbofo` (entrega/publicação) e `gh-pages`; a branch de manutenção ativa é `gpt/ingles01-microaulas-2026-10-27`. Branches experimentais ainda existem como refs históricas: esta conexão não expõe uma operação para excluí-las fisicamente.
 
+### ChatGPT — Maintainer: integridade editorial e inventário de branches
+**Data:** 2026-10-27
+**Estado:** testes adicionais escritos; resultado de CI pendente.
+
+- `src/test/narrated-editorial.test.ts`: ampliado para validar estrutura de todas as aulas narradas no catálogo, além dos testes editoriais específicos existentes.
+- `src/test/review-slides-integrity.test.ts`: adicionado teste de integridade que reconstrói texto normalizado das seções, glossários e referências de todos os capítulos; verifica ordem, cobertura e ausência de fallback que esconda conteúdo.
+- `scripts/e2e-layout.mjs` e `scripts/e2e-visual-audit.mjs` agora aguardam o fallback de `React.lazy` desaparecer antes de medir/capturar; o relatório de erros JavaScript é reiniciado por rota para não propagar uma falha anterior.
+- Inventário de branches documentado em `docs/ARCHITECTURE.md`. A branch `gpt/ia04-etica-dados-2026-10-27` não possui commits/arquivos exclusivos frente à branch central. A branch `codex/qa-visual-audit-20261026` tem seus componentes úteis copiados; outras branches de narração contêm versões alternativas e seguem preservadas até revisão.
+- A conexão de ferramentas não expõe uma operação de exclusão de branch. Não foi feita limpeza destrutiva de refs. O CI e revisão editorial continuam pendentes.
+
