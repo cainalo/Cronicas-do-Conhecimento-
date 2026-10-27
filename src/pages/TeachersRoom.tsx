@@ -13,7 +13,7 @@ import { emptyFeed, lessonAnswered, lessonUnlocked, toReview, type FeedPost, typ
 import { learnKey, logUnit, seriesKey } from '@/lib/pace';
 import { markSectionRead } from '@/lib/study';
 import type { StudyData } from '@/lib/model';
-import { splitMarkdown } from '@/lib/book';
+import { splitMarkdown } from '@/lib/reading-content';
 import { Icon } from '@/components/Icon';
 import { Markdown } from '@/components/Markdown';
 import { PageHeader } from '@/components/Page';
