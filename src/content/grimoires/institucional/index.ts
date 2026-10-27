@@ -11,11 +11,8 @@ export const grimorioInstitucional: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'cg.legislacao',
   title: 'Legislação Institucional',
-  epithet: 'Legislação Institucional',
-  description: 'As leis que fundam a casa: a Administração Pública e o controle externo na Constituição Federal, a Carta de Goiás, a Lei Orgânica e o Regimento do TCE-GO, as carreiras, o estatuto dos servidores, o Código de Ética e as políticas internas do Tribunal.',
+  description: 'Normas de organização pública e controle externo:  a Administração Pública e o controle externo na Constituição Federal, a Carta de Goiás, a Lei Orgânica e o Regimento do TCE-GO, as carreiras, o estatuto dos servidores, o Código de Ética e as políticas internas do Tribunal.',
   chapterIds: ['cap.inst.01', 'cap.inst.02'],
-  sigil: 'selo',
-  binding: 'sangue',
 };
 
 export const capInstCf: Chapter = {
@@ -104,7 +101,7 @@ export const licoesInstitucional: Lesson[] = [
   {
     id: 'lic.inst.01',
     chapterId: 'cap.inst.01',
-    title: 'O Juramento da Carta',
+    title: 'Regime Jurídico dos Servidores',
     goal: 'Princípios e regras do art. 37, mandato eletivo e estabilidade, e as competências do controle externo nos arts. 70 a 75.',
     cards: [
       { title: 'Art. 37', body: '**LIMPE**. Concurso: **até 2 anos, prorroga 1 vez**. Função de confiança: **só efetivos**.\n\nAcumula: **2 professor**, **professor + técnico/científico**, **2 saúde**. Improbidade: **suspensão** dos direitos políticos. § 6º: responsabilidade **objetiva**, regresso por dolo ou culpa.' },
@@ -116,7 +113,7 @@ export const licoesInstitucional: Lesson[] = [
   {
     id: 'lic.inst.02',
     chapterId: 'cap.inst.02',
-    title: 'Os Livros da Casa',
+    title: 'Normas e Políticas do Tribunal',
     goal: 'O TCE-GO na Constituição estadual e na Lei Orgânica, julgamento de contas e sanções, carreiras, estatuto goiano, ética e resoluções.',
     cards: [
       { title: 'TCE-GO e Lei Orgânica', body: '**7 conselheiros**, sede na Capital. Contas do Governador: parecer em **60 dias**.\n\nRegulares: **quitação plena**. Com ressalva: falta **formal sem dano**. Iliquidáveis: **trancamento**.\n\nArt. 111: multa até **2x o dano**. Art. 112: teto em valor fixo.' },
