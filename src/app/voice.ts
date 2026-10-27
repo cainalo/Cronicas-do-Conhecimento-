@@ -197,7 +197,7 @@ async function createGeminiAudioTrack(apiKey: string, voiceName: string, text: s
             text,
             annotations: [{
               type: 'speech_metadata',
-              style: `Português brasileiro (pt-BR), sotaque brasileiro natural. Narração educacional de alta qualidade, como uma professora experiente explicando com calma para uma pessoa ao lado: timbre humano, caloroso e natural; articulação clara, sem exagero; ritmo conversacional, entonação expressiva ligada ao sentido; pausas discretas nas vírgulas e pausas naturais entre parágrafos. Evite voz de GPS, leitura mecânica, cadência uniforme e entusiasmo artificial. Mantenha o ritmo natural e conversacional; a velocidade final será controlada pelo player. Leia somente o texto fornecido, sem acrescentar palavras.`,
+              style: `Português brasileiro (pt-BR) natural. Voz feminina, acolhedora e expressiva, como uma professora experiente explicando com calma e clareza. Ritmo conversacional, articulação nítida e pausas naturais. Evite voz de GPS, leitura mecânica, cadência uniforme e entusiasmo artificial. Leia exatamente o texto fornecido.`,
             }],
           }],
         }],
