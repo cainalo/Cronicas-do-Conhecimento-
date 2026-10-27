@@ -1,5 +1,5 @@
 // Série "Relações e dedução" (cap.mat.02, trecho associacao), no ritmo lento com história pedido em
-// 25/10/2026: a primeira aula conta de Aristóteles aos cavaleiros e valetes de Smullyan; as seguintes
+// 25/10/2026: a primeira aula contextualiza a história da lógica e apresenta enigmas de verdade e mentira; as seguintes
 // ensinam a tabela de associação, a ordenação e o método das hipóteses, e por fim a dedução válida,
 // uma ideia por etapa, com exemplos resolvidos. Fatos conferidos com o texto do capítulo
 // (01-relacoes-deducao.md). Revisão editorial humana: pendente.
@@ -28,7 +28,7 @@ export const matLogHistoria: MicroLesson = {
       id: 'aristoteles',
       part: 'A história',
       title: 'Século IV a.C.: Aristóteles e os estoicos',
-      art: 'livro',
+      art: 'computador',
       goal: 'Saber que a lógica como estudo das conclusões válidas começou na Grécia antiga.',
       explain:
         'No **século IV a.C.**, o filósofo grego **Aristóteles** estudou os **silogismos**: duas premissas com "todo", "algum" ou "nenhum" e uma conclusão que decorre delas.\n\nPouco depois, os filósofos **estoicos**, como **Crisipo** (século III a.C.), estudaram frases do tipo "**se... então**". Deles vêm formas que a prova cobra até hoje, como o *modus ponens*.\n\nA pergunta dos dois era a mesma: **quando uma conclusão é obrigatória?**',
@@ -99,25 +99,25 @@ export const matLogHistoria: MicroLesson = {
     {
       id: 'enigmas',
       part: 'A história',
-      title: '1978: cavaleiros e valetes',
+      title: '1978: pessoas verídicas e mentirosas',
       art: 'professores',
       goal: 'Conhecer a origem dos enigmas de verdade e mentira.',
       explain:
-        'Em **1978**, o matemático e lógico americano **Raymond Smullyan** publicou um livro de enigmas com uma ilha de **cavaleiros**, que **sempre dizem a verdade**, e **valetes**, que **sempre mentem**.\n\nOs enigmas de "quem fala a verdade" se espalharam pelos concursos. A técnica para resolvê-los é a mesma dos gregos: **supor** uma possibilidade e ver se ela leva a uma **contradição**.',
+        'Em **1978**, o matemático e lógico americano **Raymond Smullyan** publicou um livro de enigmas com uma grupo de **verídicos**, que **sempre dizem a verdade**, e **pessoas mentirosas**, que **sempre mentem**.\n\nOs enigmas de "quem fala a verdade" se espalharam pelos concursos. A técnica para resolvê-los é a mesma dos gregos: **supor** uma possibilidade e ver se ela leva a uma **contradição**.',
       check: {
         kind: 'choice',
         id: 'en-c',
-        prompt: 'Nos enigmas de Smullyan, um valete:',
+        prompt: 'Nos enigmas de Smullyan, um mentiroso:',
         options: [
           { text: 'Sempre mente', why: 'Isso.' },
-          { text: 'Sempre diz a verdade', why: 'Esse é o cavaleiro.' },
+          { text: 'Sempre diz a verdade', why: 'Esse é o verídico.' },
           { text: 'Às vezes mente, às vezes não', why: 'Nos enigmas, cada um é sempre fiel ao seu tipo.' },
         ],
         answer: 0,
         errorKind: 'confusao',
       },
       recovery: {
-        explain: 'Na ilha, ninguém muda de lado: o **cavaleiro** é como um relógio certo, **sempre** acerta; o **valete** é como um relógio que sempre marca a hora errada. Se você souber qual é qual, toda frase vira pista.',
+        explain: 'No grupo, ninguém muda de lado: o **verídico** é como um relógio certo, **sempre** acerta; o **mentiroso** é como um relógio que sempre marca a hora errada. Se você souber qual é qual, toda frase vira pista.',
         check: {
           kind: 'choice',
           id: 'en-r',
@@ -125,7 +125,7 @@ export const matLogHistoria: MicroLesson = {
           options: [
             { text: 'Supor uma possibilidade e procurar contradição', why: 'Isso.' },
             { text: 'Escolher a resposta mais comprida', why: 'Na lógica, testa-se cada hipótese.' },
-            { text: 'Acreditar em quem fala primeiro', why: 'Quem fala primeiro pode ser valete.' },
+            { text: 'Acreditar em quem fala primeiro', why: 'Quem fala primeiro pode ser mentiroso.' },
           ],
           answer: 0,
           errorKind: 'procedimento',
@@ -138,7 +138,7 @@ export const matLogHistoria: MicroLesson = {
       kind: 'order',
       id: 'cons-1',
       prompt: 'Ordene a história.',
-      items: ['Silogismos de Aristóteles (século IV a.C.)', 'Círculos de Euler (1768)', 'Diagramas de Venn (1880)', 'Cavaleiros e valetes de Smullyan (1978)'],
+      items: ['Silogismos de Aristóteles (século IV a.C.)', 'Círculos de Euler (1768)', 'Diagramas de Venn (1880)', 'Pessoas verídicas e mentirosas de Smullyan (1978)'],
       why: 'Da Grécia antiga aos enigmas modernos.',
       errorKind: 'conceito',
     },
@@ -157,7 +157,7 @@ export const matLogHistoria: MicroLesson = {
       kind: 'fix',
       id: 'cons-3',
       prompt: 'A anotação tem um erro. Toque na linha errada.',
-      lines: ['Cavaleiro: sempre diz a verdade', 'Valete: sempre mente', '"Todo A é B": círculos separados'],
+      lines: ['Verídico: sempre diz a verdade', 'Mentiroso: sempre mente', '"Todo A é B": círculos separados'],
       bug: 2,
       why: '"Todo A é B" é o círculo A dentro de B; separados é "nenhum".',
       fixed: '"Todo A é B": A dentro de B',
@@ -169,7 +169,7 @@ export const matLogHistoria: MicroLesson = {
     'Século IV a.C.: Aristóteles e os silogismos ("todo", "algum", "nenhum").',
     'Século III a.C.: os estoicos, como Crisipo, e as frases "se... então".',
     '1768: círculos de Euler; 1880: diagramas de Venn.',
-    '1978: Raymond Smullyan e os cavaleiros (verdade) e valetes (mentira).',
+    '1978: Raymond Smullyan e os verídicos (verdade) e pessoas mentirosas (mentira).',
   ],
 };
 
@@ -429,33 +429,33 @@ export const matLogOrdem: MicroLesson = {
     {
       id: 'contradicao',
       part: 'Verdade e mentira',
-      title: 'Cavaleiros, valetes e contradição',
+      title: 'Pessoas verídicas e mentirosas e contradição',
       art: 'interruptor',
-      goal: 'Resolver um enigma de cavaleiros e valetes por contradição.',
+      goal: 'Resolver um enigma de pessoas verídicas e mentirosas por contradição.',
       explain:
-        'Lembre: **cavaleiro** sempre diz a verdade, **valete** sempre mente.\n\nA diz: "**Nós dois somos valetes**".\n\n1. Suponha que A é **cavaleiro**. Então a frase é verdadeira, e A seria valete. **Contradição**.\n2. Logo, A é **valete**, e a frase é **falsa**.\n3. Se é falso que "os dois são valetes", pelo menos um não é. Como A é, **B é cavaleiro**.',
+        'Lembre: **verídico** sempre diz a verdade, **mentiroso** sempre mente.\n\nA diz: "**Nós dois somos pessoas mentirosas**".\n\n1. Suponha que A é **verídico**. Então a frase é verdadeira, e A seria mentiroso. **Contradição**.\n2. Logo, A é **mentiroso**, e a frase é **falsa**.\n3. Se é falso que "os dois são pessoas mentirosas", pelo menos um não é. Como A é, **B é verídico**.',
       check: {
         kind: 'choice',
         id: 'ct-c',
-        prompt: 'Por que A não pode ser cavaleiro?',
+        prompt: 'Por que A não pode ser verídico?',
         options: [
-          { text: 'Porque a frase dele, sendo verdadeira, o tornaria valete', why: 'Isso: é uma contradição.' },
+          { text: 'Porque a frase dele, sendo verdadeira, o tornaria mentiroso', why: 'Isso: é uma contradição.' },
           { text: 'Porque ele falou primeiro', why: 'A ordem de fala não importa.' },
-          { text: 'Porque cavaleiros não falam de si', why: 'Falam, sim; o problema é a contradição.' },
+          { text: 'Porque verídicos não falam de si', why: 'Falam, sim; o problema é a contradição.' },
         ],
         answer: 0,
         errorKind: 'procedimento',
       },
       recovery: {
-        explain: 'Pense num **interruptor**: só tem duas posições. Se ligar ("A é cavaleiro") faz a lâmpada mostrar "desligado", o interruptor **não pode** estar ligado. Então está desligado: A é valete. Daí, a frase é mentira, e B é cavaleiro.',
+        explain: 'Pense num **interruptor**: só tem duas posições. Se ligar ("A é verídico") faz a lâmpada mostrar "desligado", o interruptor **não pode** estar ligado. Então está desligado: A é mentiroso. Daí, a frase é mentira, e B é verídico.',
         check: {
           kind: 'choice',
           id: 'ct-r',
           prompt: 'No enigma, B é:',
           options: [
-            { text: 'Cavaleiro', why: 'Isso: a frase falsa de A diz que não são os dois valetes.' },
-            { text: 'Valete', why: 'Se B fosse valete, a frase de A seria verdadeira.' },
-            { text: 'Não dá para saber', why: 'Dá: B é cavaleiro.' },
+            { text: 'Verídico', why: 'Isso: a frase falsa de A diz que não são os dois pessoas mentirosas.' },
+            { text: 'Mentiroso', why: 'Se B fosse mentiroso, a frase de A seria verdadeira.' },
+            { text: 'Não dá para saber', why: 'Dá: B é verídico.' },
           ],
           answer: 0,
           errorKind: 'conceito',
@@ -502,7 +502,7 @@ export const matLogOrdem: MicroLesson = {
   summary: [
     'Ordenação: linha de posições; comece pelas posições fixas e pelos blocos "imediatamente".',
     'Verdade e mentira: teste cada hipótese e conte as verdades; vale a que bate com o enunciado.',
-    'Cavaleiros e valetes: suponha um tipo e procure contradição.',
+    'Pessoas verídicas e mentirosas: suponha um tipo e procure contradição.',
   ],
 };
 

@@ -5,7 +5,7 @@ O edital descreve o raciocínio lógico como **estrutura lógica de relações a
 - **Século IV a.C.: os silogismos.** Aristóteles estudou conclusões que decorrem de premissas com "todo", "algum" e "nenhum".
 - **Século III a.C.: os estoicos.** Filósofos como Crisipo estudaram frases do tipo "se... então", de onde vêm formas como o *modus ponens*.
 - **1768 e 1880: os círculos.** Leonhard Euler explicou os silogismos com círculos em cartas a uma princesa alemã, publicadas em 1768; John Venn propôs, em 1880, os diagramas com círculos sempre cruzados.
-- **1978: cavaleiros e valetes.** Raymond Smullyan publicou enigmas com cavaleiros, que sempre dizem a verdade, e valetes, que sempre mentem.
+- **1978: pessoas verídicas e mentirosas.** Raymond Smullyan publicou enigmas com pessoa verídicas, que sempre dizem a verdade, e pessoas mentirosas, que sempre mentem.
 
 ### Problemas de associação: a tabela de dupla entrada
 
@@ -57,7 +57,7 @@ Quando o problema diz quantos falam a verdade, teste cada hipótese possível e 
 
 Só a hipótese "C é o culpado" deixa exatamente uma afirmação verdadeira. O responsável é **C**, e quem fala a verdade é B.
 
-Variante com "cavaleiros" (sempre falam a verdade) e "valetes" (sempre mentem): A diz "Nós dois somos valetes". Se A fosse cavaleiro, a frase seria verdadeira e ele seria valete, contradição. Logo A é valete, a frase é falsa, e portanto não são os dois valetes: **B é cavaleiro**.
+Variante com "pessoa verídicas" (sempre falam a verdade) e "pessoas mentirosas" (sempre mentem): A diz "Nós dois somos pessoas mentirosas". Se A fosse pessoa verídica, a frase seria verdadeira e ele seria mentiroso, contradição. Logo A é mentiroso, a frase é falsa, e portanto não são os dois pessoas mentirosas: **B é pessoa verídica**.
 
 ### Dedução válida a partir de hipóteses
 
