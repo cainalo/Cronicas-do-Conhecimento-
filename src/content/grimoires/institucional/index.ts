@@ -101,7 +101,7 @@ export const licoesInstitucional: Lesson[] = [
   {
     id: 'lic.inst.01',
     chapterId: 'cap.inst.01',
-    title: 'O Juramento da Carta',
+    title: 'Fundamentos de Administração Pública e Controle',
     goal: 'Princípios e regras do art. 37, mandato eletivo e estabilidade, e as competências do controle externo nos arts. 70 a 75.',
     cards: [
       { title: 'Art. 37', body: '**LIMPE**. Concurso: **até 2 anos, prorroga 1 vez**. Função de confiança: **só efetivos**.\n\nAcumula: **2 professor**, **professor + técnico/científico**, **2 saúde**. Improbidade: **suspensão** dos direitos políticos. § 6º: responsabilidade **objetiva**, regresso por dolo ou culpa.' },
