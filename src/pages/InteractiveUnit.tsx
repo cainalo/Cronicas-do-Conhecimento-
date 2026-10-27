@@ -132,7 +132,7 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
     );
   };
   const md = (text: string) => (
-    <div className="prose-manuscript [&>*:first-child]:!mt-0">
+    <div className="prose-content [&>*:first-child]:!mt-0">
       <Markdown strong={strong}>{text}</Markdown>
     </div>
   );
