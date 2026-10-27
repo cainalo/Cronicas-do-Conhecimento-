@@ -137,9 +137,13 @@ export function NarratedPlayer({
     const ticket = ++token.current;
     const duration = durations[beatIndex] ?? 1800;
     const text = l.scenes[pos.scene].beats[pos.beat].say;
-    const startOffset = Math.min(duration, Math.max(0, seekOffsetRef.current));
+    const requestedOffset = Math.min(duration, Math.max(0, seekOffsetRef.current));
+    const requestedChar = requestedOffset > 0 ? Math.min(text.length - 1, Math.floor((requestedOffset / Math.max(1, duration)) * text.length)) : 0;
+    const wordStarts = Array.from(text.matchAll(/\\S+/g)).map((match) => match.index ?? 0);
+    const startChar = wordStarts.reduce((nearest, candidate) =>
+      Math.abs(candidate - requestedChar) < Math.abs(nearest - requestedChar) ? candidate : nearest, 0);
+    const startOffset = text.length ? (startChar / text.length) * duration : 0;
     seekOffsetRef.current = 0;
-    const startChar = startOffset > 0 ? Math.min(text.length - 1, Math.floor((startOffset / Math.max(1, duration)) * text.length)) : 0;
     const spokenText = text.slice(startChar).trim() || text;
     let watchdog: number | undefined;
     let advanceTimer: number | undefined;
