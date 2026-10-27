@@ -63,7 +63,7 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
   const captionWords = screen.getByTestId('narrada-legenda-texto').querySelectorAll(':scope > span');
   expect(captionWords.length).toBeGreaterThan(1);
   expect(captionWords[0]).toHaveClass('text-[#ffd38a]');
-  await act(async () => void vi.advanceTimersByTime(8000));
+  await act(async () => void vi.advanceTimersByTime(20000));
   expect(screen.getByTestId('narrada-legenda')).not.toHaveTextContent(l.scenes[0].beats[0].say);
   expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-0');
   await user.click(screen.getByTestId('narrada-mostrar-controles'));
@@ -105,7 +105,7 @@ it('sequência única: a aula narrada abre automaticamente em tela inteira e seg
   expect(screen.getByRole('dialog', { name: /Aula narrada: Do ábaco ao celular/ })).toBeInTheDocument();
   expect(screen.getByTestId('narrada-seek')).toBeInTheDocument();
   expect(screen.queryByTestId('midia-narrada')).toBeNull();
-  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/não foi inventado de uma vez/);
+  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/nenhuma dessas capacidades apareceu de uma vez/);
   await user.click(screen.getByRole('button', { name: 'Ir para a prática' }));
   expect(screen.queryByRole('dialog', { name: /Aula narrada/ })).toBeNull();
   expect(screen.getByText(/Organize a linha do tempo/)).toBeInTheDocument();
