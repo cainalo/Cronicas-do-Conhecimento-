@@ -149,10 +149,11 @@ Este é o único arquivo de coordenação do projeto. Os registros antigos abaix
 - O site/APK publicado nessa execução registra a versão `0.1.351`. Essa evidência vale para o commit exato do workflow, não para conteúdo adicionado depois dele.
 
 **Pendente e ordem de trabalho**
-1. Criar CI de validação sem publicação para esta branch e executar Vitest, typecheck/build, E2E de layout e compilação Android.
-2. Corrigir toda falha reproduzida antes de ampliar o conteúdo.
-3. Revisar a integridade das 12 microaulas de cap.ia.04 e 11 de cap.ingles.01 sem afirmar validação editorial.
-4. Conferir visualmente as aulas narradas em 360×640 e 390×844 e, quando houver acesso ao dispositivo, testar no Galaxy A14.
-5. Só então continuar com cap.ingles.02, mantendo esta mesma branch e este único arquivo de coordenação.
+1. Workflow sem publicação criado em `.github/workflows/validate-branch.yml` no commit `e5e635d`. Executa Vitest, typecheck/build web, E2E de layout, sync do Capacitor e compilação Android sem escrever em `gh-pages`.
+2. Confirmar o resultado final desse workflow. A API de status consultada até agora não expôs um check concluído para o commit; não declarar CI aprovado sem abrir a execução correspondente.
+3. Corrigir toda falha reproduzida antes de ampliar o conteúdo.
+4. Revisar a integridade das 12 microaulas de cap.ia.04 e 11 de cap.ingles.01 sem afirmar validação editorial.
+5. Conferir visualmente as aulas narradas em 360×640 e 390×844 e, quando houver acesso ao dispositivo, testar no Galaxy A14.
+6. Só então continuar com cap.ingles.02, mantendo esta mesma branch e este único arquivo de coordenação.
 
 **Limites:** nenhuma publicação, PR ou merge para branches de entrega foi feito nesta retomada. Nenhum teste da nova branch é considerado aprovado até o CI desta branch concluir.
