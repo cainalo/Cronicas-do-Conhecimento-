@@ -53,7 +53,7 @@ export function splitReviewChunks(value: string, maxChars = 250): string[] {
     for (let i = 0; i < paragraph.length; i += 1) {
       if (!'.!?'.includes(paragraph[i])) continue;
       let end = i + 1;
-      while (/[])}'"”’]/.test(paragraph[end] ?? '')) end += 1;
+      while ([')', ']', '}', "'", '"', '”', '’'].includes(paragraph[end] ?? '')) end += 1;
       if (end < paragraph.length && !/\s/.test(paragraph[end])) continue;
       const sentence = paragraph.slice(sentenceStart, end).trim();
       if (sentence) sentences.push(sentence);
