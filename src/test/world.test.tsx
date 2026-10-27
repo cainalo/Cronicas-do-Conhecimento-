@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
+import { waitForRouteReady } from './route-ready';
 import { saveData } from '@/lib/storage';
 import { emptyData } from '@/lib/model';
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
@@ -118,6 +119,7 @@ describe('tela do escritório (tela cheia)', () => {
   it('mapa por cima de tudo; ir até um objeto mostra a descrição; ir até a Marta abre a conversa', async () => {
     const user = userEvent.setup();
     renderWorld();
+    await waitForRouteReady();
     expect(screen.getByTestId('mundo')).toBeInTheDocument();
     expect(screen.getByTestId('mundo-objetivo')).toHaveTextContent(/Marta/);
     await user.click(screen.getByRole('button', { name: 'Ir até' }));
@@ -133,6 +135,7 @@ describe('tela do escritório (tela cheia)', () => {
   it('teclado anda uma casa e vira o personagem; Esc fecha o painel', async () => {
     const user = userEvent.setup();
     renderWorld();
+    await waitForRouteReady();
     const before = JSON.parse(localStorage.getItem('cronicas:mundo:mundo.escritorio')!).pos;
     await user.keyboard('{ArrowDown}');
     const after = JSON.parse(localStorage.getItem('cronicas:mundo:mundo.escritorio')!);
