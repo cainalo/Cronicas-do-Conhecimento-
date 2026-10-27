@@ -458,8 +458,12 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
    Nada some e reaparece a cada atualização do relógio: não há animação de opacidade,
    pisca, pulso ou remount visual por frame. */
 @keyframes ccv-film-cut-in {
-  from { transform: translate3d(14px, 5px, 0) scale(.99); }
-  to { transform: translate3d(0, 0, 0) scale(1); }
+  from { opacity: .62; transform: translate3d(0, 8px, 0) scale(.992); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes ccv-film-scene-in {
+  from { opacity: .82; transform: scale(.975); }
+  to { opacity: 1; transform: scale(1); }
 }
 @keyframes ccv-film-drift {
   0%, 100% { transform: translate3d(0, 0, 0) rotate(-1deg); }
@@ -553,7 +557,8 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
   gap: clamp(1.2rem, 4vw, 4rem);
 }
 .ccv-film-copy { min-width: 0; }
-.ccv-film-copy.is-cue-change { animation: ccv-film-cut-in 390ms cubic-bezier(.2,.7,.2,1) both; }
+.ccv-film-copy.is-cue-change { animation: ccv-film-cut-in 440ms cubic-bezier(.16,1,.3,1) both; }
+.ccv-film-cut.is-scene-change { animation: ccv-film-scene-in 480ms cubic-bezier(.16,1,.3,1) both; }
 .ccv-film-eyebrow {
   display: flex;
   align-items: center;
