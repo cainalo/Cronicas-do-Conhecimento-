@@ -1,4 +1,4 @@
-// Auditoria visual de rotas do Crônicas do Conhecimento.
+// Auditoria visual de rotas do Crônicas do Conhecimento (leitura contínua, sem páginas de livro).
 // Execute depois de npm run build: npm run test:visual
 // Capturas e métricas são evidências de inspeção; candidatos a clipping exigem revisão humana.
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -17,13 +17,6 @@ const VIEWPORTS = [
   { width: 1280, height: 800, id: '1280x800' },
 ];
 const THEMES = ['light', 'dark'];
-const CHAPTERS = [
-  'cap.prim.01', 'cap.prim.02', 'cap.seg.01', 'cap.seg.02', 'cap.ia.01', 'cap.ia.02', 'cap.ia.03', 'cap.ia.04',
-  'cap.dev.01', 'cap.dev.02', 'cap.dev.03', 'cap.dev.04', 'cap.infra.01', 'cap.infra.02', 'cap.infra.03',
-  'cap.dados.01', 'cap.dados.02', 'cap.gov.01', 'cap.gov.02', 'cap.leg.01', 'cap.leg.02', 'cap.es.01', 'cap.es.02',
-  'cap.devops.01', 'cap.devops.02', 'cap.ingles.01', 'cap.ingles.02', 'cap.port.01', 'cap.port.02',
-  'cap.inst.01', 'cap.inst.02', 'cap.mat.01', 'cap.mat.02',
-];
 const ROUTES = [
   '/', '/trilha', '/explorar', '/biblioteca', '/estudos', '/revisar', '/progresso', '/edital',
   '/conta', '/conta/acesso', '/conta/sincronizacao', '/conta/aparencia', '/conta/sons', '/conta/dados', '/conta/sobre', '/conta/tela',
@@ -33,7 +26,6 @@ const ROUTES = [
   '/escritorio', '/simulador', '/simulador/suporte-lento', '/aula-narrada/narrada.prim.historia',
   '/video/yt-YJyY6A_MOQc', '/download',
   '/conta/dados?qa=1',
-  ...CHAPTERS.map((id) => '/capitulo/' + id),
 ];
 
 const slug = (s) => s.replace(/[^a-zA-Z0-9-]+/g, '-').replace(/^-|-$/g, '').slice(0, 110) || 'home';
@@ -127,88 +119,6 @@ async function inspect(page, where) {
   });
 }
 
-async function sweepEveryBookPage(browser) {
-  // A paginacao do livro e sensivel a largura/altura. Percorre cada folha no viewport
-  // mobile mais restritivo, em claro e escuro; reducedMotion elimina a espera da animacao.
-  const viewport = { width: 360, height: 640, id: '360x640' };
-  for (const theme of THEMES) {
-    const context = await browser.newContext({
-      viewport: { width: viewport.width, height: viewport.height },
-      colorScheme: theme,
-      reducedMotion: 'reduce',
-    });
-    await context.addInitScript((mode) => {
-      try { localStorage.setItem('cronicas:prefs:v4', JSON.stringify({ fontScale: 1, theme: mode })); } catch {}
-    }, theme);
-    const page = await context.newPage();
-    page.setDefaultTimeout(10000);
-    for (const chapter of CHAPTERS) {
-      const route = '/capitulo/' + chapter;
-      const routeErrors = [];
-      const onPageError = (e) => routeErrors.push(String(e));
-      page.on('pageerror', onPageError);
-      try {
-        await page.goto(BASE + route, { waitUntil: 'load', timeout: 20000 });
-        await page.waitForTimeout(WAIT_MS);
-        let captured = 0;
-        let totalPages = 0;
-        for (let safety = 0; safety < 100; safety++) {
-          const status = await page.evaluate(() => {
-            const m = document.body.innerText.match(/página\s+(\d+)\s+de\s+(\d+)/i);
-            return m ? { current: Number(m[1]), total: Number(m[2]) } : null;
-          });
-          if (!status) {
-            failures.push(route + ' (' + viewport.id + ', ' + theme + '): não encontrei o indicador de paginação do livro');
-            break;
-          }
-          totalPages = status.total;
-          const tag = 'book-' + chapter + '-p' + String(status.current).padStart(3, '0') + '-' + viewport.id + '-' + theme;
-          const report = await inspect(page, tag);
-          report.route = route;
-          report.viewportId = viewport.id;
-          report.theme = theme;
-          report.bookPage = status.current;
-          report.bookPageCount = status.total;
-          report.jsErrors = [...routeErrors];
-          reports.push(report);
-          await page.screenshot({ path: resolve(OUT, tag + '.png') });
-          captured++;
-          if (report.horizontalOverflow) failures.push(tag + ': rolagem horizontal (' + report.document.width + 'px para viewport ' + viewport.width + 'px)');
-          const clippedLeaf = report.clippingCandidates.find((c) => String(c.className).split(/\s+/).includes('leaf-body'));
-          if (clippedLeaf) failures.push(tag + ': conteúdo excede o corpo da folha sem rolagem: ' + clippedLeaf.scrollHeight + 'px > ' + clippedLeaf.clientHeight + 'px');
-          if (routeErrors.length) failures.push(tag + ': erro JavaScript: ' + routeErrors.join(' | '));
-          routeErrors.length = 0;
-          if (status.current >= status.total) break;
-
-          const next = page.locator('button[aria-label="Próxima página"]').first();
-          if (!(await next.count())) {
-            failures.push(tag + ': botão de próxima página ausente antes da última folha');
-            break;
-          }
-          if (await next.isDisabled()) {
-            failures.push(tag + ': próxima página desabilitada em ' + status.current + '/' + status.total);
-            break;
-          }
-          await next.click();
-          await page.waitForFunction((previous) => {
-            const m = document.body.innerText.match(/página\s+(\d+)\s+de\s+(\d+)/i);
-            return !!m && Number(m[1]) !== previous;
-          }, status.current, { timeout: 5000 });
-        }
-        if (captured === 0 || (totalPages > 0 && captured < totalPages)) {
-          failures.push(route + ' (' + viewport.id + ', ' + theme + '): capturadas ' + captured + ' páginas de ' + totalPages);
-        }
-        console.log('LIVRO ' + chapter + ': ' + captured + '/' + totalPages + ' páginas (' + theme + ', ' + viewport.id + ')');
-      } catch (e) {
-        failures.push(route + ' (' + viewport.id + ', ' + theme + '): falha ao percorrer as páginas: ' + String(e));
-      } finally {
-        page.off('pageerror', onPageError);
-      }
-    }
-    await context.close();
-  }
-}
-
 async function run() {
   await mkdir(OUT, { recursive: true });
   server = await startServer();
@@ -264,7 +174,6 @@ async function run() {
         await context.close();
       }
     }
-    await sweepEveryBookPage(browser);
   } finally {
     await browser.close();
     killServer(server);
