@@ -36,11 +36,6 @@ export function ScenarioListPage() {
     <div className="space-y-4">
       <PageHeader area="explorar" icon="tela" title="Simulador" subtitle="Situações de trabalho para aplicar o que você estudou" />
       <p className="text-sm text-muted">Os cenários são opcionais e não mudam o seu ponto na trilha. Pessoas, máquinas e números são fictícios.</p>
-      <Link to="/escritorio" className="card block p-4 transition hover:-translate-y-0.5" data-testid="abrir-escritorio">
-        <span className="kicker">Novo</span>
-        <span className="mt-0.5 block font-title text-xl leading-tight">Escritório de TI, em mapa</span>
-        <span className="mt-1 block text-sm text-muted">A mesma situação do servidor lento, andando pelo escritório: recepção, suporte, relatórios e sala de servidores.</span>
-      </Link>
       <ul className="space-y-3">
         {scenarios.map((s) => {
           const lock = missing(data, s);
