@@ -88,7 +88,7 @@ it('material completo: leitura contínua e navegação por trechos', async () =>
   await waitForRouteReady();
   await waitForRouteReady();
   expect(screen.getByRole('heading', { name: 'Criptografia' })).toBeInTheDocument();
-  expect(screen.getByRole('link', { name: 'Material completo' })).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: 'Voltar à trilha' })).toBeInTheDocument();
   expect(screen.getByRole('link', { name: 'Estudar este trecho' })).toHaveAttribute('href', '/aprender/cap.seg.01/fundamentos');
   expect(screen.queryByRole('button', { name: 'Próxima página' })).toBeNull();
 });
@@ -134,7 +134,7 @@ it('simulado: monta, responde, entrega e mostra o boletim', async () => {
   await user.click(screen.getAllByRole('button', { pressed: false }).find((b) => b.textContent?.startsWith('A'))!);
   window.confirm = () => true;
   await user.click(screen.getByRole('button', { name: 'Entregar a prova' }));
-  expect(screen.getByRole('heading', { name: /resultado do simulado/i })).toBeInTheDocument();
+  expect(screen.getByText('Boletim do simulado')).toBeInTheDocument();
   const exams = Object.values(loadData('visitante').exams);
   expect(exams).toHaveLength(1);
   expect(exams[0].finishedAt).toBeTruthy();
