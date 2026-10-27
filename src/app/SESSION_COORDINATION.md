@@ -146,3 +146,13 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 - O teste de retomada de Aprender agora grava uma etapa contínua no progresso e verifica a retomada exata, sem botões de virar páginas.
 - Ajustadas as asserções de largura do player (contêiner fixo com `width: 100%`, cena interna com largura de viewport) e de legenda narrada para aceitar o segmento curto corrente, sem exigir palavras da linha seguinte.
 - O próximo gate é confirmar que a suíte inteira, build web, E2E, compilação Android e publicação Pages terminem com sucesso.
+
+
+### ChatGPT — limpeza de componentes e linguagem visível
+**Data:** 2026-10-27
+**Estado:** componentes antigos removidos; build e publicação pendentes.
+- Removidos componentes sem consumidores da antiga identidade visual: `BookCover.tsx`, `HeroScene.tsx`, `WaxSeal.tsx` e `TileArt.tsx`. Isso elimina a capa de livro órfã que quebrava o typecheck e os ornamentos de torre/lacre/cartões que não eram usados pelas telas atuais.
+- Em `Learn.tsx`, removida importação de `practiceDone` sem uso.
+- Em Estudos, substituídos rótulos “Livros e atividades” e “Os livros de cada disciplina” por “Matérias e atividades” e “Materiais por disciplina”; ícones mudados para lista/download. A área Explorar e os passos da trilha também usam ícones neutros.
+- Matriz de cobertura atualizada para títulos de disciplinas descritivos, sem metáforas de pergaminho, súditos, muralhas ou navios.
+- A execução anterior passou os 2.393 testes, mas `npm run build` falhou no componente órfão e no import sem uso. Aguarda nova execução completa.
