@@ -1,7 +1,7 @@
 // Prática estilo Duolingo: cada seção vira uma rodada curta de atividades variadas, montada a
 // partir do próprio conteúdo (pegadinhas do texto, glossário do capítulo, questões da seção e os
 // extras escritos para a seção: verdadeiro ou falso e complete a lacuna). Regras puras e testáveis.
-import type { Chapter, Question, SectionExtras, SimpleSection } from '@/content/types';
+import type { Chapter, Question, SimpleSection } from '@/content/types';
 import type { StudyData } from './model';
 import { grantXp } from './study';
 
@@ -57,7 +57,6 @@ export function buildPractice(
   chapter: Chapter,
   sectionId: string,
   bank: Question[],
-  extras?: SectionExtras,
   rand: () => number = Math.random,
   simple?: SimpleSection,
   /** Glossário permitido (reformulação: só conceitos já ensinados). Padrão: o glossário do capítulo. */
@@ -68,19 +67,11 @@ export function buildPractice(
   const key = `${chapter.id}:${sectionId}`;
 
   const tfs: Activity[] = [
-    ...(extras?.truths ?? []).map((t, i) => ({ kind: 'tf' as const, id: `${key}:v${i}`, ...t })),
     ...shuffle(parsePegadinhas(section.body), rand)
       .slice(0, 2)
       .map((t, i) => ({ kind: 'tf' as const, id: `${key}:p${i}`, ...t })),
   ];
-  const blanks: Activity[] = (extras?.blanks ?? []).map((b, i) => ({
-    kind: 'blank' as const,
-    id: `${key}:b${i}`,
-    sentence: b.sentence,
-    options: shuffle(b.options, rand),
-    answer: b.answer,
-    why: b.why,
-  }));
+  const blanks: Activity[] = [];
 
   // Glossário do capítulo: escolher o termo certo e associar pares.
   const gloss = shuffle(glossary, rand);
