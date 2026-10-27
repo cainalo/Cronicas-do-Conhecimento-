@@ -111,8 +111,10 @@ export function NarratedPlayer({
     + Math.min(sceneCueDurations[pos.beat] ?? 0, beatElapsed);
   const sceneProgress = Math.min(1, sceneElapsedMs / Math.max(1, sceneDurationMs));
   const supportsCutaway = scene.beats.length > 1 && sceneDurationMs >= 9500 && scene.visual.kind !== 'title';
-  const cutawayVisible = playing && voiceStarted && supportsCutaway
-    && sceneProgress >= 0.34 && sceneProgress < 0.68;
+  // Visibilidade baseada na posição do filme, não no estado instantâneo da voz:
+  // a síntese local faz pequenas pausas entre frases, mas o plano não deve piscar nelas.
+  // Isso também mantém o mesmo quadro quando a pessoa pausa ou arrasta a linha do tempo.
+  const cutawayVisible = supportsCutaway && sceneProgress >= 0.34 && sceneProgress < 0.68;
 
   const stop = useCallback(() => {
     token.current += 1;
