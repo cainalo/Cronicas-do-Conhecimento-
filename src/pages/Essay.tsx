@@ -25,7 +25,7 @@ export function EssayListPage() {
                 <h2 className="text-xl">{p.title}</h2>
                 <p className="mt-1 text-sm text-muted">{p.topicIds.map((t) => topicTitle(p.contestId, t)).join(' · ')}</p>
                 <p className="mt-2 text-sm">
-                  {e?.submittedAt ? <span className="text-ok">Entregue</span> : e?.body ? <span className="rubric">Rascunho salvo</span> : 'Não iniciado'}
+                  {e?.submittedAt ? <span className="text-ok">Entregue</span> : e?.body ? <span className="text-gold">Rascunho salvo</span> : 'Não iniciado'}
                 </p>
               </Link>
             </li>
@@ -75,8 +75,8 @@ export function EssayPage() {
     <div className="space-y-5">
       <PageHeader area="treino" icon="pena" title={p.title} subtitle={`Estudo de caso autoral, não é questão da FCC · limite de treino: ${p.lineLimit} linhas`} />
 
-      <section className="manuscript px-4 py-5">
-        <div className="prose-manuscript">
+      <section className="card px-4 py-5">
+        <div className="prose-content">
           <h3>Situação</h3>
           <Markdown>{p.scenario}</Markdown>
           <h3>O que se pede</h3>
@@ -96,7 +96,7 @@ export function EssayPage() {
             <ul className="mt-2 space-y-1.5">
               {p.criteria.map((c) => (
                 <li key={c.id}>
-                  <span className="rubric">¶</span> {c.text} <span className="text-sm text-muted">({c.points} pontos)</span>
+                  <span className="text-gold">¶</span> {c.text} <span className="text-sm text-muted">({c.points} pontos)</span>
                 </li>
               ))}
             </ul>
@@ -109,7 +109,7 @@ export function EssayPage() {
           <label htmlFor="resposta" className="font-display text-lg">
             Sua resposta
           </label>
-          <span className={`text-sm ${lines > p.lineLimit ? 'rubric' : 'text-muted'}`}>
+          <span className={`text-sm ${lines > p.lineLimit ? 'text-gold' : 'text-muted'}`}>
             cerca de {lines} de {p.lineLimit} linhas
           </span>
         </div>
@@ -155,13 +155,13 @@ export function EssayPage() {
               </label>
             ))}
             <p className="pt-2 text-right font-display text-lg">
-              Estimativa: <span className="rubric">{score}</span> de 100 {score >= 50 ? '(acima do mínimo de 50)' : '(abaixo do mínimo de 50)'}
+              Estimativa: <span className="text-gold">{score}</span> de 100 {score >= 50 ? '(acima do mínimo de 50)' : '(abaixo do mínimo de 50)'}
             </p>
           </section>
-          <section className="manuscript px-4 py-5">
-            <div className="prose-manuscript">
+          <section className="card px-4 py-5">
+            <div className="prose-content">
               <h3>Resposta-modelo</h3>
-              <div className="illuminated">
+              <div >
                 <Markdown>{p.modelAnswer}</Markdown>
               </div>
               <h3>Comentário</h3>
