@@ -15,7 +15,7 @@ concurrency:
 jobs:
   build-deploy:
     # Playwright 1.56.1 ainda não suporta ubuntu-26.04, para o qual ubuntu-latest resolveu em 27/10/2026.
-  runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04
     env:
       # Com a chave de release nos segredos, qualquer branch pode publicar. Sem ela, a chave de
       # assinatura vem do cache do Actions, que é separado por branch: publicar de dois branches
