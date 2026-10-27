@@ -304,7 +304,23 @@ export function NarratedPlayer({
   }, [playing, voiceStarted, beatIndex, durations]);
 
   const jump = (p: NarrationPos) => {
+    const targetIndex = beatIndexOf(l, p);
+    if (trackRef.current && Number.isFinite(trackRef.current.audio.duration) && trackRef.current.audio.duration > 0) {
+      const estimatedPosition = durations.slice(0, targetIndex).reduce((sum, value) => sum + value, 0);
+      const targetMs = estimatedTotalMs > 0 ? (estimatedPosition / estimatedTotalMs) * trackRef.current.audio.duration * 1000 : 0;
+      trackRef.current.audio.currentTime = targetMs / 1000;
+      activeCueRef.current = targetIndex;
+      setMediaElapsedMs(targetMs);
+      setPos(p);
+      setBeatElapsed(0);
+      elapsedRef.current = 0;
+      setSpeechWordIndex(undefined);
+      setVoiceStarted(!trackRef.current.audio.paused);
+      setDone(false);
+      return;
+    }
     stop();
+    activeCueRef.current = targetIndex;
     seekOffsetRef.current = 0;
     elapsedRef.current = 0;
     setBeatElapsed(0);
@@ -317,15 +333,45 @@ export function NarratedPlayer({
   const startSeek = () => {
     resumeAfterSeek.current = playing;
     if (playing) {
-      stop();
-      setPlaying(false);
-      setVoiceStarted(false);
-      setSpeechWordIndex(undefined);
+      if (trackRef.current) {
+        trackRef.current.audio.pause();
+        setPlaying(false);
+        setVoiceStarted(false);
+      } else {
+        stop();
+        setPlaying(false);
+        setVoiceStarted(false);
+        setSpeechWordIndex(undefined);
+      }
     }
   };
 
   const seekTo = (rawValue: number) => {
     const target = Math.max(0, Math.min(totalMs, rawValue));
+    if (trackRef.current && Number.isFinite(trackRef.current.audio.duration) && trackRef.current.audio.duration > 0) {
+      const audio = trackRef.current.audio;
+      const clamped = Math.min(audio.duration * 1000, target);
+      audio.currentTime = clamped / 1000;
+      setMediaElapsedMs(clamped);
+      const projectedMs = (clamped / Math.max(1, audio.duration * 1000)) * estimatedTotalMs;
+      let cursor = 0;
+      let targetIndex = Math.max(0, durations.length - 1);
+      for (let i = 0; i < durations.length; i++) {
+        if (projectedMs < cursor + durations[i] || i === durations.length - 1) { targetIndex = i; break; }
+        cursor += durations[i];
+      }
+      activeCueRef.current = targetIndex;
+      setPos(positionAtBeat(l, targetIndex));
+      const localOffset = Math.max(0, Math.min(durations[targetIndex] ?? 0, projectedMs - cursor));
+      seekOffsetRef.current = localOffset;
+      elapsedRef.current = localOffset;
+      setBeatElapsed(localOffset);
+      setVoiceStarted(!audio.paused && !audio.ended);
+      setSpeechWordIndex(undefined);
+      setDone(false);
+      return;
+    }
+
     let cursor = 0;
     let targetIndex = Math.max(0, positions.length - 1);
     for (let i = 0; i < durations.length; i++) {
@@ -337,6 +383,7 @@ export function NarratedPlayer({
     }
     const targetOffset = Math.max(0, target - cursor);
     const localOffset = Math.min(durations[targetIndex] ?? 0, targetOffset);
+    activeCueRef.current = targetIndex;
     setPos(positionAtBeat(l, targetIndex));
     seekOffsetRef.current = localOffset;
     elapsedRef.current = localOffset;
@@ -355,6 +402,12 @@ export function NarratedPlayer({
 
   const togglePlayback = () => {
     if (playing) {
+      if (trackRef.current) {
+        trackRef.current.audio.pause();
+        setPlaying(false);
+        setVoiceStarted(false);
+        return;
+      }
       stop();
       setPlaying(false);
       seekOffsetRef.current = 0;
@@ -362,18 +415,61 @@ export function NarratedPlayer({
       setBeatElapsed(0);
       setVoiceStarted(false);
       setSpeechWordIndex(undefined);
-    } else {
-      if (done) {
+      return;
+    }
+
+    if (done) {
+      if (trackRef.current) {
+        trackRef.current.audio.currentTime = 0;
+        setMediaElapsedMs(0);
+      }
+      activeCueRef.current = 0;
+      setPos({ scene: 0, beat: 0 });
+      seekOffsetRef.current = 0;
+      elapsedRef.current = 0;
+      setBeatElapsed(0);
+      setVoiceStarted(false);
+      setSpeechWordIndex(undefined);
+    }
+    setDone(false);
+
+    if (voice.kind === 'gemini' && voice.createAudioTrack) {
+      if (trackRef.current) {
+        setPlaying(true);
+        return;
+      }
+      if (preparingTrack) return;
+      const requestId = ++trackRequest.current;
+      setPreparingTrack(true);
+      setVoiceStatus('Gerando uma única faixa contínua de áudio para esta aula…');
+      void voice.createAudioTrack(script, rate).then((track) => {
+        if (requestId !== trackRequest.current) {
+          track.dispose();
+          return;
+        }
+        trackRef.current = track;
+        setGeneratedTrack(track);
+        setTrackDurationMs(track.durationMs);
+        setMediaElapsedMs(0);
+        activeCueRef.current = 0;
         setPos({ scene: 0, beat: 0 });
-        seekOffsetRef.current = 0;
-        elapsedRef.current = 0;
         setBeatElapsed(0);
         setVoiceStarted(false);
-        setSpeechWordIndex(undefined);
-      }
-      setDone(false);
-      setPlaying(true);
+        setVoiceStatus('');
+        setPlaying(true);
+      }).catch((error) => {
+        if (requestId !== trackRequest.current || (error instanceof DOMException && error.name === 'AbortError')) return;
+        setVoiceStatus(error instanceof Error ? error.message : 'Não foi possível gerar o áudio. Confira a chave e a conexão.');
+        setShowVoiceSettings(true);
+        setControlsVisible(true);
+        setPlaying(false);
+      }).finally(() => {
+        if (requestId === trackRequest.current) setPreparingTrack(false);
+      });
+      return;
     }
+
+    setPlaying(true);
   };
 
   // O palco visual ocupa a viewport inteira. Cabeçalho, legenda e controles são camadas
