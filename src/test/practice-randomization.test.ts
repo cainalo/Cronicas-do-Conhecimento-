@@ -45,7 +45,7 @@ const question: Question = {
 
 describe('variação das atividades de prática', () => {
   it('embaralha alternativas e reatribui as letras sem perder a resposta correta', () => {
-    const activities = buildPractice(chapter, 'fundamentos', [question], undefined, () => 0, undefined);
+    const activities = buildPractice(chapter, 'fundamentos', [question], () => 0);
     const mcq = activities.find((activity) => activity.kind === 'mcq');
     expect(mcq).toBeDefined();
     if (!mcq || mcq.kind !== 'mcq') throw new Error('Questão de múltipla escolha não foi criada');
@@ -59,7 +59,7 @@ describe('variação das atividades de prática', () => {
   });
 
   it('gera duas lacunas distintas e oferece cada resposta correta no banco de opções', () => {
-    const activities = buildPractice(chapter, 'fundamentos', [], undefined, () => 0, undefined);
+    const activities = buildPractice(chapter, 'fundamentos', [], () => 0);
     const exercise = activities.find((activity) => activity.kind === 'multiBlank');
     expect(exercise).toBeDefined();
     if (!exercise || exercise.kind !== 'multiBlank') throw new Error('Exercício de lacunas múltiplas não foi criado');
@@ -72,7 +72,7 @@ describe('variação das atividades de prática', () => {
   });
 
   it('gera montagem de frase com palavras da definição e palavras extras', () => {
-    const activities = buildPractice(chapter, 'fundamentos', [], undefined, () => 0.9999999, undefined);
+    const activities = buildPractice(chapter, 'fundamentos', [], () => 0.9999999);
     const build = activities.find((activity) => activity.kind === 'build');
     expect(build).toBeDefined();
     if (!build || build.kind !== 'build') throw new Error('Atividade de montar frase não foi criada');

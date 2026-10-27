@@ -127,3 +127,12 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 - Adicionado a scripts/e2e-layout.mjs o teste checkNarratedSceneWidth, que mede o bounding box real de [data-testid=narrada-cena-cinematica] em 360×640 e 390×844, com tema padrão e estilo de cartões vidro. A cena precisa alcançar o limite esquerdo e direito do viewport; 1 px de sangria é permitido e não deve causar rolagem lateral.
 - Commit do teste: 00ef5eaad8a8ce980fc9f5efaa45e8f2c0e268bf.
 - Esta verificação é deliberadamente separada do teste de overlay externo: ela mede a própria cena, alvo do defeito visual relatado. Executar e conferir o resultado no workflow final. A checagem em Android físico permanece pendente.
+
+
+### ChatGPT — recuperação do fluxo de testes após remoção do leitor paginado
+**Data:** 2026-10-27
+**Estado:** correção registrada na branch de publicação; aguardando workflow completo.
+- O workflow `40550487364` falhou em `npm test`: `src/lib/feed.ts` ainda importava `splitMarkdown` de `./book`, mas o leitor paginado e `src/lib/book.ts` já tinham sido removidos. Corrigido para importar o helper neutro `./reading-content`, já usado pelas telas de leitura e microaula.
+- Atualizados os testes de fluxo que ainda exigiam botões de virar página/sumário físico. Agora verificam material de referência em uma coluna rolável, links para estudar o trecho e ausência de alternância para leitor paginado.
+- Corrigidos os argumentos posicionais no teste de embaralhamento de prática, que passava a função aleatória como se fosse `SimpleSection`, gerando acesso inválido a `simple.checks`.
+- Próximo passo: executar de novo testes, build, E2E, compilação do APK e publicação Pages; não declarar concluído antes de todos os passos.

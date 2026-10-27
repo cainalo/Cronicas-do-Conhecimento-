@@ -8,7 +8,7 @@ import type { TeacherPost } from '@/content/teachers';
 import type { CuratedVideo } from '@/content/estudos/materiais';
 import type { NarratedLesson } from '@/content/narrated/types';
 import type { MissionActivity } from './activities';
-import { splitMarkdown } from './book';
+import { splitMarkdown } from './reading-content';
 
 export type FeedPostKind = 'explica' | 'carrossel' | 'exemplo' | 'atividade' | 'video' | 'narrada' | 'dica' | 'resumo';
 

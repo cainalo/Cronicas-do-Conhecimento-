@@ -80,34 +80,24 @@ it('fluxo: lição → erro → revisão → recuperação, com persistência lo
   expect(loadData('visitante').attempts).toHaveLength(11);
 });
 
-it('livro: vira páginas, marca o trecho como lido e busca no sumário', async () => {
-  const user = userEvent.setup();
+it('material de referência: leitura vertical sem paginação física', () => {
   renderAt('/capitulo/cap.seg.01');
   expect(screen.getByRole('heading', { name: 'Criptografia' })).toBeInTheDocument();
-  // Vira até o fim do primeiro trecho (a página com "Praticar agora").
-  for (let i = 0; i < 6 && !screen.queryByTestId('praticar-fundamentos'); i++) {
-    await user.click(screen.getByRole('button', { name: 'Próxima página' }));
-  }
-  expect(screen.getByTestId('praticar-fundamentos')).toBeInTheDocument();
-  expect(loadData('visitante').reading['cap.seg.01'].sectionsRead).toEqual(['fundamentos']);
-  await user.click(screen.getByRole('button', { name: 'Sumário' }));
-  await user.type(screen.getByPlaceholderText('Buscar no capítulo…'), 'Kerckhoffs');
-  expect(screen.getAllByText(/1\. Fundamentos/).length).toBeGreaterThan(0);
+  const article = screen.getByRole('article', { name: 'Material de referência' });
+  expect(within(article).getAllByText(/Kerckhoffs/).length).toBeGreaterThan(0);
+  expect(screen.getByRole('heading', { name: /Fundamentos e objetivos/ })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /Próxima página|Sumário|virar páginas/i })).toBeNull();
+  expect(screen.getByRole('link', { name: /Estudar este trecho/ })).toHaveAttribute('href', '/aprender/cap.seg.01/fundamentos');
 });
 
-it('aprender: livro simples do trecho, palavras novas e convite para praticar', async () => {
-  const user = userEvent.setup();
-  // Os trechos vão virando séries de microaulas; o livro simples segue nos que ainda não têm série.
+it('aprender: introdução em leitura contínua com vocabulário, verificações e prática', () => {
   renderAt(`/aprender/${SIMPLE.c}/${SIMPLE.s}`);
-  expect(screen.getAllByText(/Trecho 1/).length).toBeGreaterThan(0);
-  for (let i = 0; i < 12 && !screen.queryByTestId(`praticar-${SIMPLE.s}`); i++) {
-    await user.click(screen.getByRole('button', { name: 'Próxima página' }));
-    if (i === 0) expect(screen.getByText(/^1 de \d$/)).toBeInTheDocument();
-    expect(screen.getByRole("region", { name: "Onde você está" })).toHaveTextContent("Trecho 1 de");
-  }
-  expect(screen.getByText('Trecho aprendido!')).toBeInTheDocument();
-  expect(loadData('visitante').reading[SIMPLE.c].sectionsRead).toEqual([SIMPLE.s]);
-  expect(screen.getByRole('link', { name: /texto completo/ })).toHaveAttribute('href', `/capitulo/${SIMPLE.c}#${SIMPLE.s}`);
+  expect(screen.getAllByText(/Etapa \\d+ de/).length).toBeGreaterThan(0);
+  expect(screen.getByRole('heading', { name: 'Palavras importantes' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Você entendeu?' })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /Próxima página|virar página/i })).toBeNull();
+  expect(screen.getByRole('link', { name: /Praticar agora/ })).toHaveAttribute('href', `/pratica/${SIMPLE.c}/${SIMPLE.s}`);
+  expect(screen.getByRole('link', { name: 'Material de referência' })).toHaveAttribute('href', `/capitulo/${SIMPLE.c}#${SIMPLE.s}`);
 });
 
 it('prática: abre a rodada do trecho e mostra a primeira atividade', async () => {
@@ -345,15 +335,11 @@ it('ponto salvo pela microaula antiga continua valendo no texto interativo', () 
   expect(screen.getByRole('listitem', { current: 'step' })).toHaveTextContent('Threads: tarefas dentro do processo');
 });
 
-it('livro: modo de leitura contínua mostra o mesmo conteúdo sem virar páginas', async () => {
-  const user = userEvent.setup();
+it('material de referência não oferece alternância para formato paginado', () => {
   renderAt('/capitulo/cap.seg.01');
-  await user.click(screen.getByRole('button', { name: 'Leitura contínua, sem virar páginas' }));
-  const art = screen.getByRole('article', { name: 'Leitura contínua' });
-  expect(within(art).getAllByText(/Kerckhoffs/).length).toBeGreaterThan(0);
-  expect(screen.queryByRole('button', { name: 'Próxima página' })).toBeNull();
-  await user.click(screen.getByRole('button', { name: 'Voltar ao livro com páginas' }));
-  expect(screen.getByRole('button', { name: 'Próxima página' })).toBeInTheDocument();
+  expect(screen.getByRole('article', { name: 'Material de referência' })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /página|sumário|capa/i })).toBeNull();
+  expect(screen.getByRole('link', { name: /Voltar à trilha/ })).toBeInTheDocument();
 });
 
 it('prática bloqueada antes do Aprender do trecho, com caminho para aprender', () => {
