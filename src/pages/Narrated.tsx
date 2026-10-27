@@ -74,9 +74,6 @@ export function NarratedPlayer({
   const currentMs = Math.min(totalMs, beforeMs + beatElapsed);
   const scene = l.scenes[pos.scene];
   const say = scene.beats[pos.beat].say;
-  // O enquadramento não alterna por relógio. Isso evitava estabilidade visual e causava piscadas.
-  // O plano só muda de composição quando muda o trecho narrado.
-  const visualPhase = pos.beat % 3;
 
   const stop = useCallback(() => {
     token.current += 1;
@@ -336,7 +333,7 @@ export function NarratedPlayer({
           data-testid="narrada-cena"
         >
           <div className="relative flex h-full max-h-full w-full items-center justify-center" data-testid="narrada-elementos-visuais">
-            <CinematicScene scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} phase={visualPhase} />
+            <CinematicScene scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} beatIndex={pos.beat} />
           </div>
         </div>
       </section>
@@ -510,130 +507,159 @@ function HistoricalPhoto({ photo, variant = 'scene' }: { photo: HistoricalVisual
   </figure>;
 }
 
+/**
+ * Cena audiovisual estável: um único assunto em foco, não uma pilha de cartões.
+ * O palco inteiro persiste entre falas; só o plano de apoio recebe uma transição suave
+ * quando a fala/etapa muda. Não existem pulsos, flashes ou animações repetidas por render.
+ */
 function CinematicScene({
-  scene, reveal, sceneIndex, sceneCount, phase,
-}: { scene: Scene; reveal: number; sceneIndex: number; sceneCount: number; phase: number }) {
+  scene, reveal, sceneIndex, sceneCount, beatIndex,
+}: { scene: Scene; reveal: number; sceneIndex: number; sceneCount: number; beatIndex: number }) {
   const visual = scene.visual;
   const palette = CINEMA_PALETTES[sceneIndex % CINEMA_PALETTES.length];
   const activeIndex = (length: number) => Math.max(0, Math.min(length - 1, reveal - 1));
   let headline = scene.heading;
   let support = '';
   let eyebrow = 'IDEIA EM FOCO';
-  let art: IllustrationName = illustrationForText(scene.heading + ' ' + support);
+  let art: IllustrationName = illustrationForText(scene.heading);
+  let dateOrStep = '';
+  let equation: string | undefined;
+  let historicalPhoto: HistoricalVisual | undefined;
+  let numberline: { from: number; to: number; state: NumberLineState } | undefined;
+  let progressCount = 1;
+  let progressIndex = 0;
 
   if (visual.kind === 'title') {
     headline = visual.title;
-    support = visual.subtitle ?? support;
+    support = visual.subtitle ?? '';
     art = visual.art ?? illustrationForText(visual.title);
     eyebrow = 'ABERTURA';
   } else if (visual.kind === 'cards') {
-    const item = visual.cards[activeIndex(visual.cards.length)];
-    if (item) { headline = item.title; support = item.text; art = illustrationForText(item.title + ' ' + item.text); }
-    eyebrow = 'CONCEITO';
+    const index = activeIndex(visual.cards.length);
+    const item = visual.cards[index];
+    if (item) {
+      headline = item.title;
+      support = item.text;
+      art = illustrationForText(item.title + ' ' + item.text);
+      dateOrStep = String(index + 1).padStart(2, '0');
+    }
+    eyebrow = 'CONCEITO EM FOCO';
+    progressCount = visual.cards.length;
+    progressIndex = index;
   } else if (visual.kind === 'timeline') {
-    const item = visual.items[activeIndex(visual.items.length)];
-    if (item) { headline = item.title; support = item.text; art = illustrationForText(item.title + ' ' + item.text); eyebrow = item.year; }
+    const index = activeIndex(visual.items.length);
+    const item = visual.items[index];
+    if (item) {
+      headline = item.title;
+      support = item.text;
+      dateOrStep = item.year;
+      art = illustrationForText(item.title + ' ' + item.text);
+      historicalPhoto = historicalVisualFor(item.title + ' ' + item.text);
+    }
+    eyebrow = 'MARCO HISTÓRICO';
+    progressCount = visual.items.length;
+    progressIndex = index;
   } else if (visual.kind === 'equation') {
-    headline = visual.lines[activeIndex(visual.lines.length)] ?? visual.lines[0] ?? scene.heading;
+    const index = activeIndex(visual.lines.length);
+    equation = visual.lines[index] ?? visual.lines[0] ?? '';
+    headline = equation;
     support = visual.note ?? '';
+    dateOrStep = 'PASSO ' + (index + 1);
     art = illustrationForText(headline + ' ' + support);
-    eyebrow = 'ETAPA DO RACIOCÍNIO';
+    eyebrow = 'RACIOCÍNIO PASSO A PASSO';
+    progressCount = visual.lines.length;
+    progressIndex = index;
   } else if (visual.kind === 'numberline') {
-    const state = visual.states[Math.min(visual.states.length - 1, Math.max(0, reveal))] ?? visual.states[0] ?? {};
+    const index = Math.min(visual.states.length - 1, Math.max(0, reveal));
+    const state = visual.states[index] ?? visual.states[0] ?? {};
     const jump = state.jumps?.[0];
     headline = jump ? (jump.to > jump.from ? 'Avance para a direita' : 'Volte para a esquerda') : 'Encontre a posição';
-    eyebrow = 'RETA NUMÉRICA';
-    art = 'degraus';
+    support = jump ? `Partimos de ${jump.from} e chegamos a ${jump.to}.` : 'Observe a posição do número em relação ao zero.';
+    eyebrow = 'MOVIMENTO NA RETA NUMÉRICA';
+    dateOrStep = jump ? `${jump.from} → ${jump.to}` : 'RETA NUMÉRICA';
+    numberline = { from: visual.from, to: visual.to, state };
+    progressCount = visual.states.length;
+    progressIndex = index;
   }
 
-  const historicalPhoto = historicalVisualFor(headline + ' ' + support);
+  if (!historicalPhoto && visual.kind === 'timeline') historicalPhoto = historicalVisualFor(headline + ' ' + support);
 
   return (
     <article
-      className="ccv-scene"
+      className="ccv-film-scene"
       style={{ '--ccv-background': palette.background, '--ccv-accent': palette.accent, '--ccv-secondary': palette.secondary } as CSSProperties}
       aria-label={scene.heading}
       data-testid="narrada-cena-cinematica"
-      data-phase={phase}
+      data-beat={beatIndex}
     >
-      <div className="ccv-scene__orbit ccv-scene__orbit--one" aria-hidden="true" />
-      <div className="ccv-scene__orbit ccv-scene__orbit--two" aria-hidden="true" />
-      <div className="ccv-scene__top">
-        <span>CRÔNICAS DO CONHECIMENTO</span>
-        <span className="ccv-scene__counter">{String(sceneIndex + 1).padStart(2, '0')} <i /> {String(sceneCount).padStart(2, '0')}</span>
-      </div>
+      <div className="ccv-film-grain" aria-hidden="true" />
+      <div className="ccv-film-orbit ccv-film-orbit--one" aria-hidden="true" />
+      <div className="ccv-film-orbit ccv-film-orbit--two" aria-hidden="true" />
 
-      <div className={'ccv-scene__layout ccv-scene__layout--phase-' + phase}>
-        <div className="ccv-scene__copy">
-          <p className="ccv-scene__eyebrow"><span />{eyebrow}</p>
-          <h2 className="ccv-scene__headline">{headline}</h2>
-          <p className="ccv-scene__support">{support}</p>
-          <div className="ccv-scene__soundline" aria-hidden="true">
-            <span className="ccv-scene__soundline-mark">▶</span>
-            <span className="ccv-scene__soundline-rule"><i /></span>
-            <span className="ccv-scene__soundline-label">AULA NARRADA</span>
+      <header className="ccv-film-header">
+        <span className="ccv-film-brand">CRÔNICAS <i /> DO CONHECIMENTO</span>
+        <span className="ccv-film-counter">{String(sceneIndex + 1).padStart(2, '0')} / {String(sceneCount).padStart(2, '0')}</span>
+      </header>
+
+      <div className="ccv-film-content">
+        <section className="ccv-film-copy" key={scene.id + ':copy:' + beatIndex}>
+          <p className="ccv-film-eyebrow"><span />{eyebrow}</p>
+          {dateOrStep && <p className="ccv-film-date">{dateOrStep}</p>}
+          <h2 className="ccv-film-headline">{headline}</h2>
+          {support && <p className="ccv-film-support">{support}</p>}
+          <div className="ccv-film-progress" aria-hidden="true">
+            {Array.from({ length: Math.max(1, progressCount) }, (_, index) => (
+              <span key={index} className={index < progressIndex ? 'is-past' : index === progressIndex ? 'is-current' : ''} />
+            ))}
           </div>
-        </div>
+          <p className="ccv-film-footnote">{scene.heading}</p>
+        </section>
 
-        <div className="ccv-scene__visual" key={scene.id + ':' + visual.kind} data-testid="narrada-cena-visual">
-          {visual.kind === 'title' && (
-            <div className="ccv-scene__hero-art">
-              <div className="ccv-scene__art-disc" aria-hidden="true"><span /><span /><span /></div>
-              <Illustration name={art} accent={palette.accent} animate className="ccv-scene__illustration ccv-scene__illustration--hero" label={visual.title} />
-              {visual.subtitle && <span className="ccv-scene__floating-label">{visual.subtitle}</span>}
-            </div>
-          )}
-
-          {visual.kind === 'cards' && (
-            <div className="ccv-sequence">
-              <div className="ccv-sequence__rail" aria-hidden="true" />
-              {visual.cards.map((item, index) => (
-                <div key={scene.id + ':step:' + index} className={'ccv-sequence__step ' + (index === activeIndex(visual.cards.length) ? 'is-active ccv-scene__change' : index < activeIndex(visual.cards.length) ? 'is-past' : '')}>
-                  <span className="ccv-sequence__number">{String(index + 1).padStart(2, '0')}</span>
-                  <span className="ccv-sequence__label">{item.title}</span>
-                </div>
-              ))}
-              <div className="ccv-sequence__focus">
-                <span className="ccv-sequence__focus-number">{String(activeIndex(visual.cards.length) + 1).padStart(2, '0')}</span>
-                <Illustration name={art} accent={palette.accent} animate className="ccv-scene__illustration" />
+        <section className="ccv-film-art" aria-label="Demonstração visual" data-testid="narrada-cena-visual">
+          <div className="ccv-film-art__rings" aria-hidden="true"><span /><span /><span /></div>
+          <div className="ccv-film-cut" key={scene.id + ':visual:' + beatIndex} data-testid="narrada-corte-suave">
+            {numberline ? (
+              <div className="ccv-film-numberline">
+                <CinematicNumberLine from={numberline.from} to={numberline.to} state={numberline.state} />
               </div>
-            </div>
-          )}
-
-          {visual.kind === 'timeline' && (
-            <div className="ccv-timeline">
-              <div className="ccv-timeline__path" aria-hidden="true"><span style={{ height: (((activeIndex(visual.items.length) + 1) / visual.items.length) * 100) + '%' }} /></div>
-              {visual.items.map((item, index) => (
-                <div key={scene.id + ':event:' + index} className={'ccv-timeline__event ' + (index === activeIndex(visual.items.length) ? 'is-active ccv-scene__change' : index < activeIndex(visual.items.length) ? 'is-past' : '')}>
-                  <span className="ccv-timeline__dot">{index < activeIndex(visual.items.length) ? '✓' : String(index + 1).padStart(2, '0')}</span>
-                  <span className="ccv-timeline__year">{item.year}</span>
-                  <strong>{item.title}</strong>
-                  {index === activeIndex(visual.items.length) && <span className="ccv-timeline__current">AGORA</span>}
+            ) : historicalPhoto ? (
+              <HistoricalPhoto photo={historicalPhoto} />
+            ) : visual.kind === 'title' ? (
+              <div className="ccv-film-hero">
+                <Illustration name={art} accent={palette.accent} animate={false} className="ccv-film-illustration" label={headline} />
+                <span className="ccv-film-symbol" aria-hidden="true">↗</span>
+              </div>
+            ) : visual.kind === 'equation' ? (
+              <div className="ccv-film-equation">
+                {progressIndex > 0 && <p className="ccv-film-equation__previous">{visual.lines[progressIndex - 1]}</p>}
+                <span className="ccv-film-equation__rule" aria-hidden="true" />
+                <strong>{equation}</strong>
+                {progressIndex < visual.lines.length - 1 && <span className="ccv-film-equation__next" aria-hidden="true">↓</span>}
+              </div>
+            ) : visual.kind === 'timeline' ? (
+              <div className="ccv-film-event">
+                <div className="ccv-film-event__date">{dateOrStep}</div>
+                <div className="ccv-film-event__illustration">
+                  <Illustration name={art} accent={palette.accent} animate={false} className="ccv-film-illustration" label={headline} />
                 </div>
-              ))}
-              <div className="ccv-timeline__illustration">{historicalPhoto ? <HistoricalPhoto photo={historicalPhoto} /> : <Illustration name={art} accent={palette.accent} animate className="ccv-scene__illustration" />}</div>
-            </div>
-          )}
-
-          {visual.kind === 'equation' && (
-            <div className="ccv-equation">
-              {visual.lines.map((line, index) => (
-                <div key={scene.id + ':equation:' + index} className={'ccv-equation__line ' + (index === activeIndex(visual.lines.length) ? 'is-active ccv-scene__change' : index < activeIndex(visual.lines.length) ? 'is-past' : '')}>
-                  <span className="ccv-equation__index">{index === 0 ? 'PASSO 1' : 'PASSO ' + (index + 1)}</span>
-                  <strong>{line}</strong>
-                  {index === activeIndex(visual.lines.length) && <span className="ccv-equation__underline" />}
-                </div>
-              ))}
-              {visual.note && <p className="ccv-equation__note">{visual.note}</p>}
-            </div>
-          )}
-
-          {visual.kind === 'numberline' && (
-            <CinematicNumberLine from={visual.from} to={visual.to} state={visual.states[Math.min(visual.states.length - 1, Math.max(0, reveal))] ?? visual.states[0] ?? {}} />
-          )}
-        </div>
+                <div className="ccv-film-event__caption">{headline}</div>
+              </div>
+            ) : (
+              <div className="ccv-film-concept">
+                <span className="ccv-film-concept__number">{dateOrStep}</span>
+                <Illustration name={art} accent={palette.accent} animate={false} className="ccv-film-illustration" label={headline} />
+                <span className="ccv-film-concept__baseline">{scene.heading}</span>
+              </div>
+            )}
+          </div>
+        </section>
       </div>
-      <div className="ccv-scene__footer"><span>{scene.heading}</span><span className="ccv-scene__footer-rule" /><span>APRENDER · ENTENDER · APLICAR</span></div>
+
+      <footer className="ccv-film-footer">
+        <span>VER · ENTENDER · APLICAR</span>
+        <span className="ccv-film-footer__line" />
+        <span>ÁUDIO E IMAGEM SINCRONIZADOS</span>
+      </footer>
     </article>
   );
 }
