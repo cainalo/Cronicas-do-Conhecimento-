@@ -9,11 +9,8 @@ export const grimorioDevops: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.devops',
   title: 'DevOps e Engenharia de Entrega',
-  epithet: 'DevOps e Engenharia de Entrega',
-  description: 'Como as mudanças saem da oficina e chegam ao povo sem naufragar: Git e branching, pipelines de CI/CD, infraestrutura como código, contêineres, Kubernetes e observabilidade.',
+  description: 'Como entregar mudanças com segurança e previsibilidade: Git e branching, pipelines de CI/CD, infraestrutura como código, contêineres, Kubernetes e observabilidade.',
   chapterIds: ['cap.devops.01', 'cap.devops.02'],
-  sigil: 'chave',
-  binding: 'floresta',
 };
 
 export const capDevopsEntrega: Chapter = {
