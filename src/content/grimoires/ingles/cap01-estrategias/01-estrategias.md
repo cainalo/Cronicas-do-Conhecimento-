@@ -1,3 +1,7 @@
+### Contexto histórico
+
+Os métodos de leitura rápida passaram a ser estudados também como habilidades ensináveis: em maio de 1969, Martha J. Maxwell apresentou um trabalho sobre treinamento em *skimming* e *scanning*, e em 1972 publicou um artigo discutindo as bases e a avaliação dessas técnicas. Esses registros documentam o ensino sistemático dessas estratégias, sem afirmar que a pesquisadora as inventou. A proposta é adaptar a leitura ao objetivo: compreender a ideia geral ou localizar um dado. Fontes: [ERIC, trabalho de 1969](https://eric.ed.gov/?id=ED031380) e [artigo de 1972](https://doi.org/10.1080/10862967209547021).
+
 A prova de Língua Inglesa do cargo de TI é de **leitura técnica**. O edital pede compreensão de textos técnicos e científicos, identificação da **ideia principal**, **localização de informações específicas**, vocabulário de TI e interpretação de manuais, documentação de software, artigos técnicos e documentação de APIs. As perguntas costumam vir em português, sobre um texto em inglês. Ninguém vai pedir que você escreva em inglês, mas é preciso entender com precisão o que o texto afirma, o que ele apenas sugere e o que ele não diz.
 
 > Nota de fonte: o edital prevê 2 questões de Língua Inglesa (Leitura Técnica) na prova de Conhecimentos Específicos. O formato exato (um texto para as duas questões ou textos separados) só se conhece no dia da prova. Os exemplos deste grimório são autorais.
