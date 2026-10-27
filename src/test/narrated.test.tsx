@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
+import { waitForRouteReady } from './route-ready';
 import { microLessons, narratedLessons } from '@/content';
 import { nextBeat, prevScene, revealOf, transcript, validateNarrated } from '@/lib/narration';
 import { emptyData } from '@/lib/model';
@@ -52,6 +53,7 @@ it('página: começa parada; legenda de uma linha é opcional; controles reinici
       </StudyProvider>
     </PrefsProvider>,
   );
+  await waitForRouteReady();
   const caption = screen.getByTestId('narrada-legenda');
   expect(caption).toHaveTextContent(/Imagine que sua conta tem saldo zero/);
   expect(caption).toContainElement(screen.getByTestId('narrada-legenda-texto'));
