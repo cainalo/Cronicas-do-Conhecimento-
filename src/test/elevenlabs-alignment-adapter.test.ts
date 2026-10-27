@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { parseElevenLabsForcedAlignmentResponse } from '@/lib/elevenlabs-alignment-adapter';
+import { narratedLessons } from '@/content';
+import { buildAlignedNarrationTimeline, buildNarrationScript } from '@/lib/narration-timeline';
 
 function responseFor(text: string) {
   const characters = Array.from(text);
@@ -56,6 +58,21 @@ describe('adaptador de resposta ElevenLabs Forced Alignment', () => {
     reversed.characters[2].start = 0.01;
     reversed.characters[2].end = 0.02;
     expect(() => parseElevenLabsForcedAlignmentResponse(reversed, transcript)).toThrow(/not monotonic/);
+  });
+
+
+  it('conecta o payload adaptado ao helper de cues por cena/fala', () => {
+    const lesson = narratedLessons.find((item) => item.id === 'narrada.prim.historia');
+    if (!lesson) throw new Error('Aula histórica não encontrada.');
+
+    const script = buildNarrationScript(lesson);
+    const parsed = parseElevenLabsForcedAlignmentResponse(responseFor(script.text), script.text);
+    const timeline = buildAlignedNarrationTimeline(lesson, parsed.alignment);
+
+    expect(timeline.script.text).toBe(script.text);
+    expect(timeline.cues).toHaveLength(lesson.scenes.reduce((sum, scene) => sum + scene.beats.length, 0));
+    expect(timeline.wordCues.length).toBeGreaterThan(timeline.cues.length);
+    expect(timeline.durationMs).toBeGreaterThan(0);
   });
 
   it('rejeita payload sem loss ou sem array de caracteres', () => {
