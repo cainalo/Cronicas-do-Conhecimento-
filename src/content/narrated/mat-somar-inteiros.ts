@@ -104,13 +104,13 @@ export const narradaSomarInteiros: NarratedLesson = {
       heading: 'Subtrair é somar o oposto',
       visual: {
         kind: 'equation',
-        lines: ['5 − 8', '= 5 + (−8)', '= −(8 − 5)', '= −3'],
+        lines: ['5 − 8', '= 5 + (−8)', '= −3'],
         note: 'Troque a subtração pela adição do oposto do segundo número.',
       },
       beats: [
         { say: 'Agora vamos calcular cinco menos oito. Na reta, começamos no cinco e andar para trás oito unidades nos leva ao menos três. Mas há uma regra que funciona para todos os inteiros: subtrair um número é o mesmo que somar o seu oposto.', show: 1 },
         { say: 'O oposto de oito é menos oito. Então cinco menos oito pode ser reescrito como cinco mais menos oito. Agora temos uma soma com sinais diferentes: os módulos são cinco e oito.', show: 2 },
-        { say: 'Oito é o maior módulo. Fazemos oito menos cinco, que dá três, e conservamos o sinal do número de maior módulo, que é menos oito. O resultado final é menos três.', show: 4 },
+        { say: 'Oito é o maior módulo. Fazemos oito menos cinco, que dá três, e conservamos o sinal do número de maior módulo, que é menos oito. O resultado final é menos três.', show: 3 },
       ],
     },
     {
