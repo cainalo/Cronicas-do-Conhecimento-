@@ -10,7 +10,7 @@ export const narradaHistoriaComputador: NarratedLesson = {
   id: 'narrada.prim.historia',
   title: 'Do ábaco ao celular',
   lessonId: 'prim.computador.1',
-  minutes: 5,
+  minutes: 7,
   scenes: [
     {
       id: 'abertura',
@@ -50,9 +50,10 @@ export const narradaHistoriaComputador: NarratedLesson = {
         ],
       },
       beats: [
-        { say: 'Charles Babbage juntou as duas ideias: uma máquina de fazer contas que seguiria cartões, com uma parte para calcular e outra para guardar números.' },
-        { say: 'Em 1843, Ada Lovelace publicou instruções para essa máquina. É considerado o primeiro programa de computador.' },
-        { say: 'Em 1890, Herman Hollerith usou máquinas elétricas e cartões perfurados para contar a população dos Estados Unidos. A empresa dele deu origem à IBM.' },
+        { say: 'Charles Babbage imaginou a Máquina Analítica: um projeto mecânico que receberia instruções em cartões perfurados. Ele separava o cálculo, chamado de moinho, do espaço para guardar números, chamado de armazém. A máquina completa nunca foi construída em sua época, mas a arquitetura antecipou ideias usadas nos computadores.', show: 1 },
+        { say: 'Ada Lovelace era uma matemática britânica que estudou o projeto de Babbage. Em 1843, traduziu um texto sobre a máquina e acrescentou notas muito maiores que o original.', show: 2 },
+        { say: 'Em suas notas, descreveu passo a passo como calcular números de Bernoulli com a máquina. Por isso, Ada é frequentemente considerada a primeira programadora, embora a máquina nunca tenha sido construída por completo naquela época.', show: 2 },
+        { say: 'Em 1890, Herman Hollerith usou máquinas elétricas e cartões perfurados para contar a população dos Estados Unidos. A empresa que cresceu a partir do seu trabalho viria a ser conhecida como IBM.', show: 3 },
       ],
     },
     {
@@ -67,9 +68,11 @@ export const narradaHistoriaComputador: NarratedLesson = {
         ],
       },
       beats: [
-        { say: 'Em 1946 foi apresentado o ENIAC, um dos primeiros computadores eletrônicos. Tinha cerca de dezoito mil válvulas e ocupava uma sala inteira.' },
-        { say: 'Em 1947 surgiu o transistor, um interruptor elétrico minúsculo que fazia o trabalho da válvula, menor, mais barato e mais frio.' },
-        { say: 'Em 1971, a Intel lançou o 4004: um processador inteiro num único chip.' },
+        { say: 'Em 1946, o ENIAC foi apresentado ao público como um computador digital eletrônico de uso geral. Não parecia um computador de mesa: era uma fileira de enormes painéis metálicos que ocupavam uma sala inteira.', show: 1 },
+        { say: 'O ENIAC reunia cerca de dezoito mil válvulas eletrônicas e pesava dezenas de toneladas. Para mudar o programa, a equipe conectava cabos e ajustava interruptores nos painéis; não bastava abrir um arquivo como fazemos hoje.', show: 1 },
+        { say: 'Um grupo de seis mulheres, entre elas Jean Jennings Bartik e Betty Snyder Holberton, aprendeu a programar a máquina e a calcular trajetórias e outros problemas. Por muito tempo, o trabalho dessas programadoras recebeu menos reconhecimento do que merecia.', show: 1 },
+        { say: 'Em 1947 surgiu o transistor, um interruptor elétrico muito menor que uma válvula. Ele consumia menos energia, gerava menos calor e ajudou a tornar os computadores mais compactos e confiáveis.', show: 2 },
+        { say: 'Em 1971, a Intel lançou o 4004, um microprocessador que reunia a unidade central de processamento em um único chip. Esse passo abriu caminho para dispositivos cada vez menores.', show: 3 },
       ],
     },
     {

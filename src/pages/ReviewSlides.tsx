@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { chapters, getChapter } from '@/content';
 import type { Chapter } from '@/content/types';
 import { Icon } from '@/components/Icon';
+import { Illustration, illustrationFor } from '@/components/Illustration';
 
 export interface ReviewSlide {
   id: string;
@@ -38,7 +39,7 @@ export function plainReviewText(markdown: string): string {
  * Quebra o material inteiro em lâminas legíveis. Limite por palavra/frase, nunca por
  * substring: nenhuma lâmina termina no meio de uma palavra ou corta o final do texto.
  */
-export function splitReviewChunks(value: string, maxChars = 300): string[] {
+export function splitReviewChunks(value: string, maxChars = 430): string[] {
   const normalized = plainReviewText(value);
   const paragraphs = normalized.split(/\n\s*\n/).map((p) => p.replace(/\s+/g, ' ').trim()).filter(Boolean);
   const result: string[] = [];
@@ -117,6 +118,35 @@ export function buildReviewSlides(chapter: Chapter): ReviewSlide[] {
   return slides;
 }
 
+function reviewHistoricalVisual(value: string): { src: string; alt: string; caption: string; source: string; sourceUrl: string } | undefined {
+  const text = value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if (/ada lovelace|ada king|lovelace/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ada_Lovelace_portrait.jpg?width=900',
+    alt: 'Retrato em aquarela de Ada Lovelace, matemática do século XIX',
+    caption: 'Ada Lovelace · c. 1840', source: 'Domínio público · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Ada_Lovelace_portrait.jpg',
+  };
+  if (/\beniac\b/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/ENIAC.jpg?width=1000',
+    alt: 'Painéis do ENIAC, computador eletrônico pioneiro',
+    caption: 'ENIAC · computador pioneiro', source: 'CC BY-SA 4.0 · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:ENIAC.jpg',
+  };
+  return undefined;
+}
+
+function SlideVisual({ slide, variant = 'standard' }: { slide: ReviewSlide; variant?: 'standard' | 'cover' }) {
+  const photo = reviewHistoricalVisual(slide.title + ' ' + slide.body);
+  if (photo) return <figure className={'review-slide-visual review-slide-visual--' + variant} data-testid="review-slide-visual">
+    <img src={photo.src} alt={photo.alt} loading="eager" decoding="async" />
+    <figcaption><strong>{photo.caption}</strong><a href={photo.sourceUrl} target="_blank" rel="noopener noreferrer">{photo.source}</a></figcaption>
+  </figure>;
+  return <div className={'review-slide-illustration review-slide-illustration--' + variant} data-testid="review-slide-visual">
+    <Illustration name={illustrationFor(slide.chapterId + ' ' + slide.title + ' ' + slide.body)} animate className="h-full w-full" />
+    <span aria-hidden="true">{String(slide.chapterId.replace(/[^a-z0-9]/gi, '').length + slide.title.length).padStart(2, '0')}</span>
+  </div>;
+}
+
 function SlideCard({ slide, index, total }: { slide: ReviewSlide; index: number; total: number }) {
   const palettes: Record<ReviewSlide['kind'], string> = {
     cover: 'bg-[#c8402a] text-white',
@@ -127,30 +157,41 @@ function SlideCard({ slide, index, total }: { slide: ReviewSlide; index: number;
   };
   const sectionPalette = ['bg-[#1f5c7a] text-white', 'bg-[#6e3b5c] text-white', 'bg-[#a8365e] text-white', 'bg-[#9e6a14] text-white', 'bg-[#c8402a] text-white'];
   const palette = slide.kind === 'section' ? sectionPalette[index % sectionPalette.length] : palettes[slide.kind];
-  return (
-    <article
-      className={`review-slide-card relative flex h-full min-h-0 flex-col overflow-hidden rounded-[1.35rem] border border-white/15 p-4 shadow-sm sm:rounded-[1.8rem] sm:p-8 ${palette}`}
-      data-testid="slide-card"
-    >
-      <div className="absolute -right-10 -top-10 h-36 w-36 rotate-12 rounded-3xl border-[14px] border-[#c8402a]/15" aria-hidden="true" />
-      <div className="absolute -bottom-8 -left-8 h-28 w-28 rounded-full border-[10px] border-[#2e7182]/15" aria-hidden="true" />
-      <div className="relative flex min-h-0 flex-1 flex-col">
-        <p className="text-[0.62rem] font-bold uppercase tracking-[0.13em] text-white/75">{slide.eyebrow}</p>
-        <h2 className="mt-2 shrink-0 font-display text-xl font-semibold leading-tight sm:mt-3 sm:text-3xl">{slide.title}</h2>
-        {slide.kind === 'cover' ? (
-          <p className="mt-3 min-h-0 flex-1 overflow-hidden break-words text-base leading-relaxed text-white/90 sm:mt-5 sm:text-xl sm:leading-8">{slide.body}</p>
-        ) : slide.kind === 'glossary' ? (
-          <p className="mt-4 min-h-0 flex-1 overflow-hidden break-words text-base leading-relaxed sm:mt-6 sm:text-xl sm:leading-8">{slide.body}</p>
-        ) : (
-          <div className="mt-3 min-h-0 flex-1 overflow-hidden whitespace-pre-line break-words text-[clamp(0.92rem,2.3vh,1.25rem)] leading-[1.4] sm:mt-5 sm:text-lg sm:leading-[1.55]">{slide.body}</div>
-        )}
+
+  if (slide.kind === 'cover') return <article className="review-slide-card review-slide-cover relative flex h-full min-h-0 flex-col overflow-hidden rounded-[1.35rem] border border-white/15 p-4 shadow-sm sm:rounded-[1.8rem] sm:p-8" data-testid="slide-card">
+    <div className="review-slide-cover__ring" aria-hidden="true" />
+    <div className="review-slide-cover__ring review-slide-cover__ring--inner" aria-hidden="true" />
+    <div className="review-slide-cover__grid" aria-hidden="true" />
+    <div className="relative flex min-h-0 flex-1 flex-col sm:grid sm:grid-cols-[minmax(0,1fr)_minmax(0,.8fr)] sm:items-center sm:gap-5">
+      <div className="relative z-10 flex min-h-0 flex-col justify-center">
+        <p className="text-[0.65rem] font-black uppercase tracking-[0.2em] text-white/80">CRÔNICAS DO CONHECIMENTO</p>
+        <div className="mt-5 flex items-center gap-2 text-[0.62rem] font-black uppercase tracking-[0.16em] text-[#fff1c9]"><span className="h-2 w-2 rounded-full bg-[#fff1c9]" />{slide.eyebrow}</div>
+        <h2 className="mt-3 max-w-[12ch] font-display text-[clamp(2.2rem,6.3vh,5rem)] font-semibold leading-[.98] tracking-tight sm:mt-5">{slide.title}</h2>
+        <p className="mt-4 max-w-xl text-base leading-relaxed text-white/90 sm:mt-6 sm:text-xl sm:leading-8">{slide.body}</p>
+        <div className="mt-5 flex items-center gap-3 border-t border-white/30 pt-3 sm:mt-8"><span className="font-mono text-[0.65rem] font-bold tracking-widest text-[#fff1c9]">CADERNO VISUAL</span><span className="h-px flex-1 bg-white/35" /><span className="text-[0.65rem] font-bold uppercase tracking-widest text-white/70">Aprender · revisar · aplicar</span></div>
       </div>
-      <div className="relative mt-3 flex shrink-0 items-end justify-between gap-3 border-t border-white/30 pt-2.5">
-        <span className="text-[0.62rem] text-white/75">Crônicas do Conhecimento</span>
-        <span className="font-mono text-xs tabular-nums opacity-70">{String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
+      <div className="relative mt-4 flex min-h-0 flex-1 items-center justify-center sm:mt-0">
+        <SlideVisual slide={slide} variant="cover" />
+        <div className="absolute bottom-2 right-2 rotate-[-7deg] border-2 border-white/60 px-3 py-2 text-[0.58rem] font-black uppercase tracking-[0.2em] text-white/85 sm:bottom-4 sm:right-0">GUIA DE ESTUDO</div>
       </div>
-    </article>
-  );
+    </div>
+    <footer className="relative mt-3 flex shrink-0 items-end justify-between gap-3 border-t border-white/30 pt-2.5"><span className="text-[0.62rem] text-white/75">Material de revisão · {slide.chapterId}</span><span className="font-mono text-xs tabular-nums text-white/80">{String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span></footer>
+  </article>;
+
+  return <article className={\`review-slide-card relative flex h-full min-h-0 flex-col overflow-hidden rounded-[1.35rem] border border-white/15 p-4 shadow-sm sm:rounded-[1.8rem] sm:p-8 \${palette}\`} data-testid="slide-card">
+    <div className="review-slide-cover__ring review-slide-cover__ring--inner" aria-hidden="true" />
+    <div className="relative flex min-h-0 flex-1 flex-col">
+      <header className="relative flex shrink-0 items-start gap-3">
+        <div className="grid h-11 w-11 shrink-0 place-items-center border border-white/30 bg-white/10 font-mono text-sm font-black sm:h-14 sm:w-14 sm:text-lg">{String(index + 1).padStart(2, '0')}</div>
+        <div className="min-w-0 flex-1"><p className="text-[0.62rem] font-black uppercase tracking-[0.16em] text-white/70">{slide.eyebrow}</p><h2 className="mt-1 font-display text-xl font-semibold leading-tight sm:mt-2 sm:text-3xl">{slide.title}</h2></div>
+      </header>
+      <div className="relative mt-3 flex min-h-0 flex-1 flex-col gap-3 sm:mt-5 sm:grid sm:grid-cols-[minmax(0,1.2fr)_minmax(0,.8fr)] sm:items-center sm:gap-6">
+        <div className="review-slide-copy min-h-0 flex-1 whitespace-pre-line break-words text-[clamp(.98rem,2.45vh,1.28rem)] leading-[1.45] sm:text-lg sm:leading-[1.6]" data-testid="review-slide-copy">{slide.body}</div>
+        <SlideVisual slide={slide} />
+      </div>
+    </div>
+    <footer className="relative mt-3 flex shrink-0 items-end justify-between gap-3 border-t border-white/30 pt-2.5"><span className="text-[0.62rem] font-bold uppercase tracking-wider text-white/75">Crônicas do Conhecimento</span><span className="font-mono text-xs tabular-nums text-white/80">{String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span></footer>
+  </article>;
 }
 
 export function ReviewSlidesPage() {

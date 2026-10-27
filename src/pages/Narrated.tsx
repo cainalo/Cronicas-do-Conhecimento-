@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, 
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getNarrated } from '@/content';
 import type { NarratedLesson, NumberLineState, Scene } from '@/content/narrated/types';
-import { getVoice, readingMs } from '@/app/voice';
+import { GEMINI_TTS_VOICES, getGeminiTtsApiKey, getGeminiTtsVoice, getVoice, readingMs, saveGeminiTtsApiKey, saveGeminiTtsVoice } from '@/app/voice';
 import { soundscape } from '@/app/soundscape';
 import { beatIndexOf, narrationPositions, nextBeat, positionAtBeat, revealOf, transcript, type NarrationPos } from '@/lib/narration';
 import { Icon } from '@/components/Icon';
@@ -12,7 +12,7 @@ import { Illustration, type IllustrationName } from '@/components/Illustration';
 import { ActivityView } from '@/components/activities/ActivityView';
 
 const RATES = [0.8, 1, 1.2] as const;
-const VOICE_LABEL = { nativa: 'voz pt-BR priorizada do aparelho (neural/natural quando instalada)', navegador: 'voz pt-BR priorizada do navegador (neural/natural quando disponível)', nenhuma: 'sem voz neste aparelho: legendas no tempo de leitura' } as const;
+const VOICE_LABEL = { gemini: 'voz neural Gemini · áudio gerado por IA', nativa: 'voz pt-BR priorizada do aparelho (neural/natural quando instalada)', navegador: 'voz pt-BR priorizada do navegador (neural/natural quando disponível)', nenhuma: 'sem voz neste aparelho: legendas no tempo de leitura' } as const;
 const formatTime = (ms: number) => {
   const total = Math.max(0, Math.floor(ms / 1000));
   return String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
@@ -55,6 +55,11 @@ export function NarratedPlayer({
   const [voiceStarted, setVoiceStarted] = useState(false);
   const [speechWordIndex, setSpeechWordIndex] = useState<number>();
   const [controlsVisible, setControlsVisible] = useState(true);
+  const [showVoiceSettings, setShowVoiceSettings] = useState(false);
+  const [geminiKeyDraft, setGeminiKeyDraft] = useState(() => getGeminiTtsApiKey());
+  const [geminiVoiceDraft, setGeminiVoiceDraft] = useState(() => getGeminiTtsVoice());
+  const [voiceStatus, setVoiceStatus] = useState('');
+  const [testingVoice, setTestingVoice] = useState(false);
   const hideControlsTimer = useRef<number | undefined>(undefined);
   const elapsedRef = useRef(0);
   const resumeAfterSeek = useRef(false);
@@ -195,10 +200,18 @@ export function NarratedPlayer({
         if (token.current !== ticket) return;
         if (watchdog !== undefined) window.clearTimeout(watchdog);
         advanceTimer = window.setTimeout(advance, Math.max(300, Math.min(900, duration * 0.16)));
-      }).catch(() => {
+      }).catch((error) => {
         if (token.current !== ticket) return;
+        if (error instanceof DOMException && error.name === 'AbortError') return;
         if (watchdog !== undefined) window.clearTimeout(watchdog);
-        advanceTimer = window.setTimeout(advance, Math.max(900, duration));
+        setVoiceStatus(error instanceof Error ? error.message : 'Não foi possível gerar a voz. Confira a conexão e as preferências.');
+        if (voice.kind === 'gemini') {
+          setShowVoiceSettings(true);
+          setControlsVisible(true);
+          setPlaying(false);
+        } else {
+          advanceTimer = window.setTimeout(advance, Math.max(900, duration));
+        }
       });
     }
     return () => {
@@ -318,137 +331,99 @@ export function NarratedPlayer({
           <div className="absolute -right-16 bottom-[26%] h-52 w-52 rounded-full bg-[#c8402a]/10 blur-3xl" />
         </div>
         <div
-          className={`absolute inset-0 grid place-items-center transition-[padding] duration-300 ${controlsVisible ? 'px-4 pb-[14.5rem] pt-28 sm:px-10 sm:pb-[15rem] sm:pt-32' : 'px-4 pb-8 pt-8 sm:px-10'}`}
+          className="absolute inset-0 grid place-items-center px-3 sm:px-6"
           data-testid="narrada-cena"
         >
           <div className="relative flex h-full max-h-full w-full items-center justify-center" data-testid="narrada-elementos-visuais">
-            <CinematicScene scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} beatIndex={pos.beat} phase={visualPhase} />
+            <CinematicScene key={scene.id} scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} beatIndex={pos.beat} phase={visualPhase} />
           </div>
         </div>
       </section>
 
-      <header
-        className={`absolute left-4 right-4 top-[max(0.85rem,env(safe-area-inset-top))] z-20 mx-auto flex max-w-5xl items-start gap-3 rounded-2xl border border-line/70 bg-bg/85 p-3 shadow-[0_8px_28px_rgb(27_26_23_/_0.08)] backdrop-blur-md transition-all duration-300 sm:left-7 sm:right-7 sm:p-4 ${visibleClass}`}
-        onClick={stopOverlayClick}
-        aria-hidden={!controlsVisible}
-        data-testid="narrada-cabecalho-flutuante"
+      <div
+        className={\`absolute left-3 top-[max(0.85rem,env(safe-area-inset-top))] z-30 max-w-[calc(100vw-5.5rem)] transition-all duration-300 \${visibleClass}\`}
+        onClick={stopOverlayClick} aria-hidden={!controlsVisible} data-testid="narrada-titulo-flutuante"
       >
-        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#2e7182] text-white sm:h-11 sm:w-11">
-          <Icon name="livro" size={22} />
+        <div className="rounded-full border border-white/20 bg-[#171b1b]/78 px-3 py-2 text-white shadow-lg backdrop-blur-md">
+          <p className="text-[0.55rem] font-black uppercase tracking-[0.15em] text-[#ffbb8c]">{embedded ? 'Aula narrada · IA' : 'Aula narrada · ' + l.minutes + ' min'}</p>
+          <p className="mt-0.5 truncate text-sm font-semibold leading-tight sm:text-base">{l.title}</p>
+          <p className="truncate text-[0.65rem] text-white/70">{scene.heading} · cena {pos.scene + 1}/{l.scenes.length}</p>
         </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-muted">{embedded ? 'Aula visual narrada' : 'Aula narrada · cerca de ' + l.minutes + ' min'}</p>
-          <h1 className="mt-0.5 text-base font-semibold leading-tight sm:text-xl">{l.title}</h1>
-          <p className="mt-1 truncate text-xs text-muted sm:text-sm">{scene.heading} <span className="mx-1 opacity-50">·</span> Cena {pos.scene + 1} de {l.scenes.length}</p>
-        </div>
-        <button
-          type="button"
-          className="grid min-h-10 min-w-10 shrink-0 place-items-center rounded-full border border-line bg-surface text-ink transition hover:bg-raised sm:min-h-11 sm:min-w-11"
-          onClick={() => { stop(); setPlaying(false); if (onClose) onClose(); }}
-          aria-label={exitLabel}
-          title={exitLabel}
-          data-testid="narrada-sair"
-        >
-          <Icon name="sair" size={19} />
-        </button>
-      </header>
-
-      <p
-        className={`absolute left-5 right-5 z-10 mx-auto max-w-3xl rounded-xl bg-[#171b1b]/90 px-4 py-3 text-center text-sm font-medium leading-relaxed text-white shadow-lg backdrop-blur-sm transition-[bottom] duration-300 sm:left-10 sm:right-10 sm:px-6 sm:py-3.5 sm:text-base ${controlsVisible ? 'bottom-[calc(14rem+env(safe-area-inset-bottom))] sm:bottom-[calc(15rem+env(safe-area-inset-bottom))]' : 'bottom-8'}`}
-        aria-live="polite"
-        data-testid="narrada-legenda"
-      >
+      </div>
+      <button type="button" className={\`absolute right-3 top-[max(0.85rem,env(safe-area-inset-top))] z-40 grid h-11 w-11 place-items-center rounded-full border border-white/25 bg-[#171b1b]/80 text-white shadow-lg backdrop-blur-md transition-all duration-300 \${visibleClass}\`}
+        onClick={(event) => { event.stopPropagation(); stop(); setPlaying(false); if (onClose) onClose(); }}
+        aria-label={exitLabel} title={exitLabel} data-testid="narrada-sair">
+        <Icon name="sair" size={19} />
+      </button>
+      <p className={\`absolute left-4 right-4 z-10 mx-auto max-w-3xl rounded-2xl border border-white/15 bg-[#171b1b]/82 px-4 py-3 text-center text-sm font-medium leading-relaxed text-white shadow-xl backdrop-blur-md transition-all duration-500 sm:left-10 sm:right-10 sm:px-6 sm:text-base \${controlsVisible ? 'bottom-[calc(8.55rem+env(safe-area-inset-bottom))]' : 'bottom-[max(1.15rem,env(safe-area-inset-bottom))]'}\`}
+        aria-live="polite" data-testid="narrada-legenda" onClick={stopOverlayClick}>
         <span className="sr-only">Legenda: </span>
         <span data-testid="narrada-legenda-texto">
           {(say.match(/\S+\s*/g) ?? [say]).map((word, i) => {
-            // No Android nativo não há evento de palavra; estimamos pela posição em
-            // caracteres para que palavras longas não avancem tão depressa quanto as curtas.
-            const estimatedWord = voiceStarted
-              ? wordIndexAtChar(say, Math.floor((beatElapsed / Math.max(1, durations[beatIndex] ?? 2200)) * say.length))
-              : -1;
+            const estimatedWord = voiceStarted ? wordIndexAtChar(say, Math.floor((beatElapsed / Math.max(1, durations[beatIndex] ?? 2200)) * say.length)) : -1;
             const activeWord = playing && voiceStarted ? (speechWordIndex ?? estimatedWord) : -1;
-            return <span key={`${i}-${word}`} className={i === activeWord ? 'rounded bg-[#f0bf69]/25 px-0.5 font-bold text-[#ffd38a] transition-colors duration-150' : i < activeWord ? 'text-white/65 transition-colors duration-150' : 'text-white transition-colors duration-150'}>{word}</span>;
+            return <span key={\`\${i}-\${word}\`} className={i === activeWord ? 'rounded bg-[#f0bf69]/25 px-0.5 font-bold text-[#ffd38a] transition-colors duration-200' : i < activeWord ? 'text-white/65 transition-colors duration-200' : 'text-white transition-colors duration-200'}>{word}</span>;
           })}
         </span>
       </p>
-
-      <div
-        className={`absolute bottom-[max(0.85rem,env(safe-area-inset-bottom))] left-4 right-4 z-20 mx-auto max-w-3xl transition-all duration-300 sm:bottom-[max(1.25rem,env(safe-area-inset-bottom))] sm:left-8 sm:right-8 ${visibleClass}`}
-        onClick={stopOverlayClick}
-        aria-hidden={!controlsVisible}
-        data-testid="narrada-controles-flutuantes"
-      >
-        <div className="rounded-2xl border border-line/80 bg-bg/90 p-3 shadow-[0_14px_36px_rgb(27_26_23_/_0.16)] backdrop-blur-xl sm:p-4">
-          <div className="mb-2 flex items-center justify-between gap-3 text-[0.68rem] font-medium tabular-nums text-muted sm:text-xs">
-            <span>{formatTime(currentMs)}</span>
-            <span>{formatTime(totalMs)} · tempo estimado</span>
+      <div className={\`absolute bottom-[calc(4.7rem+env(safe-area-inset-bottom))] left-4 right-4 z-30 mx-auto max-w-2xl transition-all duration-300 \${visibleClass}\`}
+        onClick={stopOverlayClick} aria-hidden={!controlsVisible} data-testid="narrada-seek-panel">
+        <div className="rounded-xl border border-white/20 bg-[#171b1b]/82 px-3 py-2 text-white shadow-lg backdrop-blur-lg">
+          <div className="mb-1 flex items-center justify-between gap-3 text-[0.62rem] font-semibold tabular-nums text-white/75">
+            <span>{formatTime(currentMs)}</span><span>{formatTime(totalMs)} · duração estimada</span>
           </div>
-          <input
-            type="range" min={0} max={Math.max(1, totalMs)} step={250} value={Math.min(totalMs, currentMs)}
+          <input type="range" min={0} max={Math.max(1, totalMs)} step={100} value={Math.min(totalMs, currentMs)}
             onPointerDown={startSeek} onPointerUp={finishSeek} onPointerCancel={finishSeek}
-            onChange={(e) => seekTo(Number(e.target.value))}
-            aria-label="Barra de progresso da aula"
-            aria-valuetext={'Fala ' + (beatIndex + 1) + ' de ' + positions.length + ' · tempo estimado'}
-            className="mb-3 block h-5 w-full cursor-pointer accent-[#c8402a]" data-testid="narrada-seek"
-          />
-          <div className="flex items-center justify-center gap-2 sm:gap-3">
-            <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line bg-surface transition hover:bg-raised sm:h-11 sm:w-11" onClick={() => jump(positionAtBeat(l, Math.max(0, beatIndex - 1)))} aria-label="Voltar uma fala">
-              <Icon name="voltar" size={18} />
-            </button>
-            <button
-              type="button"
-              className="flex min-h-11 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-[#c8402a] px-4 font-semibold text-white transition hover:bg-[#a0301c] sm:max-w-xs sm:text-base"
-              onClick={togglePlayback}
-              data-testid="narrada-tocar"
-            >
-              {playing ? <span aria-hidden="true" className="text-lg leading-none">Ⅱ</span> : <Icon name="play" size={19} />}
-              {playing ? 'Pausar aula' : done ? 'Assistir novamente' : beatIndex === 0 ? 'Começar aula' : 'Continuar aula'}
-            </button>
-            <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line bg-surface transition hover:bg-raised sm:h-11 sm:w-11" onClick={() => jump(positionAtBeat(l, Math.min(positions.length - 1, beatIndex + 1)))} aria-label="Avançar uma fala">
-              <Icon name="seta" size={18} />
-            </button>
-            <label className="shrink-0">
-              <span className="sr-only">Velocidade da voz</span>
-              <select className="h-10 max-w-[4.8rem] rounded-full border border-line bg-surface px-2 text-xs font-semibold sm:h-11" value={rate} onChange={(e) => setRate(Number(e.target.value) as (typeof RATES)[number])} aria-label="Velocidade da voz">
-                {RATES.map((r) => <option key={r} value={r}>{r.toLocaleString('pt-BR')}×</option>)}
-              </select>
-            </label>
-          </div>
-          <div className="mt-3 flex items-center justify-between gap-2 border-t border-line/70 pt-2">
-            <span className="min-w-0 truncate text-[0.67rem] text-muted">Narração: {VOICE_LABEL[voice.kind]}.</span>
-            <button type="button" className="shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-[#c8402a] hover:bg-[#c8402a]/10" aria-expanded={showTranscript} onClick={() => setShowTranscript((v) => !v)}>
-              {showTranscript ? 'Ocultar transcrição' : 'Transcrição'}
-            </button>
-          </div>
-          <div className="mt-2 flex flex-wrap justify-center gap-2" aria-label="Cenas">
-            {l.scenes.map((item, i) => (
-              <button
-                key={item.id}
-                type="button"
-                className={`h-1.5 w-5 rounded-full transition-all ${i < pos.scene ? 'bg-[#2e7182]' : i === pos.scene ? 'w-8 bg-[#c8402a]' : 'bg-line'}`}
-                aria-label={'Ir para a cena ' + (i + 1) + ': ' + item.heading}
-                aria-current={i === pos.scene ? 'step' : undefined}
-                onClick={() => jump({ scene: i, beat: 0 })}
-              />
-            ))}
-          </div>
-          {showTranscript && (
-            <section className="mt-3 max-h-40 overflow-y-auto rounded-xl border border-line bg-surface p-3 text-xs leading-relaxed sm:text-sm" aria-label="Transcrição">
-              {transcript(l).map((t) => <div key={t.heading} className="mb-3 last:mb-0"><h2 className="font-semibold text-[#2e7182]">{t.heading}</h2><p className="mt-1">{t.lines.join(' ')}</p></div>)}
-            </section>
-          )}
+            onChange={(e) => seekTo(Number(e.target.value))} aria-label="Barra de progresso da aula"
+            aria-valuetext={'Posição ' + formatTime(currentMs) + ' de ' + formatTime(totalMs)}
+            className="block h-5 w-full cursor-pointer accent-[#f0bf69]" data-testid="narrada-seek" />
         </div>
       </div>
-
-      {!controlsVisible && (
-        <button
-          type="button"
-          className="absolute inset-0 z-10 cursor-pointer"
-          aria-label="Mostrar controles da aula"
-          onClick={(event) => { event.stopPropagation(); togglePlayerControls(); }}
-          data-testid="narrada-mostrar-controles"
-        />
+      <div className={\`absolute bottom-[max(0.35rem,env(safe-area-inset-bottom))] left-2 right-2 z-30 mx-auto flex max-w-xl items-center justify-center gap-1.5 px-1 transition-all duration-300 sm:bottom-[max(0.85rem,env(safe-area-inset-bottom))] sm:gap-3 \${visibleClass}\`}
+        onClick={stopOverlayClick} aria-hidden={!controlsVisible} data-testid="narrada-controles-flutuantes">
+        <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => jump(positionAtBeat(l, Math.max(0, beatIndex - 1)))} aria-label="Voltar uma fala"><Icon name="voltar" size={17} /></button>
+        <button type="button" className="grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-white/25 bg-[#c8402a] text-white shadow-xl transition hover:bg-[#a0301c]" onClick={togglePlayback} aria-label={playing ? 'Pausar aula' : done ? 'Assistir novamente' : 'Reproduzir aula'} data-testid="narrada-tocar">{playing ? <span aria-hidden="true" className="text-xl leading-none">Ⅱ</span> : <Icon name="play" size={19} />}</button>
+        <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => jump(positionAtBeat(l, Math.min(positions.length - 1, beatIndex + 1)))} aria-label="Avançar uma fala"><Icon name="seta" size={17} /></button>
+        <label className="shrink-0" onClick={stopOverlayClick}><span className="sr-only">Velocidade da voz</span>
+          <select className="h-10 max-w-[3.6rem] rounded-full border border-white/20 bg-[#171b1b]/88 px-2 text-xs font-bold text-white shadow-lg backdrop-blur-md sm:max-w-[4.2rem]" value={rate} onChange={(e) => setRate(Number(e.target.value) as (typeof RATES)[number])} aria-label="Velocidade da voz" data-testid="narrada-velocidade">
+            {RATES.map((r) => <option key={r} value={r}>{r.toLocaleString('pt-BR')}×</option>)}
+          </select>
+        </label>
+        <button type="button" className={\`grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 text-white shadow-lg backdrop-blur-md transition \${voice.kind === 'gemini' ? 'bg-[#6e3b5c]' : 'bg-[#171b1b]/82 hover:bg-[#6e3b5c]'}\`} onClick={() => { setShowTranscript(false); setShowVoiceSettings((v) => !v); setVoiceStatus(''); }} aria-label="Preferências de voz" aria-expanded={showVoiceSettings} data-testid="narrada-preferencias-voz"><Icon name="som" size={17} /></button>
+        <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => { setShowVoiceSettings(false); setShowTranscript((v) => !v); }} aria-label={showTranscript ? 'Ocultar transcrição' : 'Mostrar transcrição'} aria-expanded={showTranscript} data-testid="narrada-transcricao"><Icon name="livro" size={17} /></button>
+      </div>
+      {showVoiceSettings && controlsVisible && (
+        <section className="absolute bottom-[calc(9.5rem+env(safe-area-inset-bottom))] left-3 right-3 z-40 mx-auto max-h-[calc(100dvh-12rem)] max-w-xl overflow-y-auto rounded-2xl border border-white/20 bg-[#171b1b]/96 p-4 text-white shadow-2xl backdrop-blur-xl" onClick={stopOverlayClick} aria-label="Configurações da voz" data-testid="narrada-painel-voz">
+          <div className="flex items-start justify-between gap-3"><div><h2 className="font-display text-xl font-semibold">Voz da narração</h2><p className="mt-1 text-xs leading-relaxed text-white/70">A voz neural soa mais humana, mas precisa de chave pessoal e internet. Sem ela, o app usa a voz instalada no aparelho.</p></div>
+            <button type="button" onClick={() => setShowVoiceSettings(false)} aria-label="Fechar preferências de voz" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/10">×</button>
+          </div>
+          <label className="mt-3 block text-sm font-semibold">Voz neural Gemini
+            <select className="mt-1 h-10 w-full rounded-lg border border-white/20 bg-[#282725] px-3 text-sm text-white" value={geminiVoiceDraft} onChange={(e) => setGeminiVoiceDraft(e.target.value)} data-testid="narrada-gemini-voice">{GEMINI_TTS_VOICES.map((v) => <option key={v.id} value={v.id}>{v.label}</option>)}</select>
+          </label>
+          <label className="mt-3 block text-sm font-semibold">Chave de API do Gemini
+            <input className="mt-1 h-10 w-full rounded-lg border border-white/20 bg-[#282725] px-3 text-sm text-white placeholder:text-white/40" type="password" autoComplete="off" spellCheck={false} placeholder="Cole sua chave do AI Studio" value={geminiKeyDraft} onChange={(e) => setGeminiKeyDraft(e.target.value)} data-testid="narrada-gemini-key" />
+          </label>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <button type="button" className="rounded-full bg-[#c8402a] px-4 py-2 text-sm font-bold text-white" onClick={() => { stop(); setPlaying(false); saveGeminiTtsApiKey(geminiKeyDraft); saveGeminiTtsVoice(geminiVoiceDraft); setVoiceStatus(geminiKeyDraft.trim() ? 'Preferência guardada neste dispositivo. Toque em Testar voz.' : 'Chave removida. A voz local do aparelho será usada.'); }} data-testid="narrada-salvar-voz">Salvar preferência</button>
+            <button type="button" disabled={testingVoice || !geminiKeyDraft.trim()} className="rounded-full border border-white/25 px-4 py-2 text-sm font-bold disabled:opacity-40" onClick={async () => {
+              setTestingVoice(true); setVoiceStatus('Gerando uma amostra de voz…'); stop(); setPlaying(false); saveGeminiTtsApiKey(geminiKeyDraft); saveGeminiTtsVoice(geminiVoiceDraft);
+              try { await getVoice().speak('Olá! Esta é uma amostra da voz neural da sua aula. Vamos aprender com calma, clareza e exemplos.', 0.95); setVoiceStatus('Amostra concluída. A voz neural está pronta para as aulas.'); }
+              catch (error) { setVoiceStatus(error instanceof Error ? error.message : 'Não foi possível gerar a amostra. Confira a chave e a conexão.'); }
+              finally { setTestingVoice(false); }
+            }} data-testid="narrada-testar-voz">{testingVoice ? 'Gerando…' : 'Testar voz'}</button>
+            <a className="text-xs font-semibold text-[#ffbb8c] underline underline-offset-2" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Obter chave no AI Studio</a>
+          </div>
+          <p className="mt-2 text-[0.68rem] leading-relaxed text-white/55">A chave fica no armazenamento local deste aparelho e é enviada ao Google para gerar o áudio; não é enviada ao repositório. A API pode ter limites ou custos conforme sua conta.</p>
+          {voiceStatus && <p className="mt-2 rounded-lg bg-white/10 p-2 text-xs leading-relaxed" role="status">{voiceStatus}</p>}
+        </section>
       )}
+      {showTranscript && controlsVisible && (
+        <section className="absolute bottom-[calc(9.5rem+env(safe-area-inset-bottom))] left-3 right-3 z-40 mx-auto max-h-[calc(100dvh-12rem)] max-w-xl overflow-y-auto rounded-2xl border border-white/20 bg-[#171b1b]/96 p-4 text-white shadow-2xl backdrop-blur-xl" onClick={stopOverlayClick} aria-label="Transcrição" data-testid="narrada-transcricao-painel">
+          <h2 className="font-display text-xl font-semibold">Transcrição completa</h2>
+          {transcript(l).map((t) => <div key={t.heading} className="mb-3 last:mb-0"><h3 className="font-semibold text-[#ffbb8c]">{t.heading}</h3><p className="mt-1 text-sm leading-relaxed text-white/85">{t.lines.join(' ')}</p></div>)}
+        </section>
+      )}
+      {!controlsVisible && <button type="button" className="absolute inset-0 z-10 cursor-pointer" aria-label="Mostrar controles da aula" onClick={(event) => { event.stopPropagation(); togglePlayerControls(); }} data-testid="narrada-mostrar-controles" />}
 
       {done && l.check && (
         <div className="absolute inset-x-4 bottom-28 z-30 mx-auto max-w-xl rounded-2xl border border-line bg-bg/95 p-4 shadow-xl backdrop-blur-xl sm:bottom-32" role="region" aria-label="Checagem">
@@ -487,6 +462,33 @@ function illustrationForText(value: string): IllustrationName {
   return 'livro';
 }
 
+type HistoricalVisual = { src: string; alt: string; caption: string; source: string; sourceUrl: string };
+function historicalVisualFor(value: string): HistoricalVisual | undefined {
+  const text = value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if (/ada lovelace|ada king|lovelace/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ada_Lovelace_portrait.jpg?width=900',
+    alt: 'Retrato em aquarela de Ada Lovelace, de cerca de 1840',
+    caption: 'Ada Lovelace · matemática e autora de notas sobre a Máquina Analítica',
+    source: 'Retrato de domínio público · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Ada_Lovelace_portrait.jpg',
+  };
+  if (/\beniac\b/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/ENIAC.jpg?width=1000',
+    alt: 'Painéis do computador eletrônico ENIAC em exposição',
+    caption: 'ENIAC · computador eletrônico pioneiro, instalado em grandes painéis',
+    source: 'Imagem CC BY-SA 4.0 · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:ENIAC.jpg',
+  };
+  return undefined;
+}
+
+function HistoricalPhoto({ photo, variant = 'scene' }: { photo: HistoricalVisual; variant?: 'scene' | 'slide' }) {
+  return <figure className={'ccv-historical-photo ccv-historical-photo--' + variant} data-testid="historical-photo">
+    <img src={photo.src} alt={photo.alt} loading="eager" decoding="async" />
+    <figcaption><strong>{photo.caption}</strong><a href={photo.sourceUrl} target="_blank" rel="noopener noreferrer">{photo.source}</a></figcaption>
+  </figure>;
+}
+
 function CinematicScene({
   scene, reveal, sceneIndex, sceneCount, beatIndex, phase,
 }: { scene: Scene; reveal: number; sceneIndex: number; sceneCount: number; beatIndex: number; phase: number }) {
@@ -523,6 +525,8 @@ function CinematicScene({
     art = 'degraus';
   }
 
+  const historicalPhoto = historicalVisualFor(headline + ' ' + support);
+
   return (
     <article
       className="ccv-scene"
@@ -541,8 +545,8 @@ function CinematicScene({
       <div className={'ccv-scene__layout ccv-scene__layout--phase-' + phase}>
         <div className="ccv-scene__copy">
           <p className="ccv-scene__eyebrow"><span />{eyebrow}</p>
-          <h2 key={scene.id + ':' + beatIndex + ':' + headline} className="ccv-scene__headline ccv-scene__change">{headline}</h2>
-          <p key={scene.id + ':' + beatIndex + ':' + support} className="ccv-scene__support ccv-scene__change">{support}</p>
+          <h2 className="ccv-scene__headline">{headline}</h2>
+          <p className="ccv-scene__support">{support}</p>
           <div className="ccv-scene__soundline" aria-hidden="true">
             <span className="ccv-scene__soundline-mark">▶</span>
             <span className="ccv-scene__soundline-rule"><i /></span>
@@ -586,7 +590,7 @@ function CinematicScene({
                   {index === activeIndex(visual.items.length) && <span className="ccv-timeline__current">AGORA</span>}
                 </div>
               ))}
-              <div className="ccv-timeline__illustration"><Illustration name={art} accent={palette.accent} animate className="ccv-scene__illustration" /></div>
+              <div className="ccv-timeline__illustration">{historicalPhoto ? <HistoricalPhoto photo={historicalPhoto} /> : <Illustration name={art} accent={palette.accent} animate className="ccv-scene__illustration" />}</div>
             </div>
           )}
 
