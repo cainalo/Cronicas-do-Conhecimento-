@@ -128,7 +128,7 @@ export function Dashboard() {
       <section>
         <SectionTitle>Continue por aqui</SectionTitle>
         <TileGrid>
-          <Tile to="/estudos" icon="livro" color={color('explorar')} title="Matérias e materiais" text="Conteúdo por disciplina, vídeos e aulas narradas." index={0} />
+          <Tile to="/estudos" icon="lista" color={color('explorar')} title="Matérias e materiais" text="Conteúdo por disciplina, vídeos e aulas narradas." index={0} />
           <Tile to="/simulado" icon="relogio" color={color('treino')} title="Simulado" text="Treine com tempo e veja seu resultado." index={1} />
           <Tile to="/progresso" icon="progresso" color={color('reino')} title="Progresso" text="Acompanhe o domínio por disciplina." index={2} />
           <Tile to="/relampago" icon="chama" color={color('grimorios')} title="Rodada rápida" text="Cinco questões para revisar em poucos minutos." index={3} />
