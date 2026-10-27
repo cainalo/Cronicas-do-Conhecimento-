@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
+import { waitForRouteReady } from './route-ready';
 import { loadPrefs } from '@/lib/storage';
 import { DEFAULT_LOOK, PALETTES, applyLook, contrast, contrastWarnings, exportLook, importLook, normalizeLook, resolveColors } from '@/lib/theme';
 
@@ -66,6 +67,7 @@ describe('painel de personalização', () => {
   it('troca paleta, cor, estilo e restaura o padrão, salvando no aparelho', async () => {
     const user = userEvent.setup();
     renderAt('/personalizar');
+    await waitForRouteReady();
     expect(screen.getByRole('heading', { name: 'Personalizar aparência' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /Pôr do sol/ }));
     expect(loadPrefs().look?.palette).toBe('por-do-sol');
