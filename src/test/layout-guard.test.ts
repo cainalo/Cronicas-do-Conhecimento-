@@ -57,23 +57,27 @@ describe('animações de contêiner', () => {
 });
 
 describe('experiência imersiva de aula e revisão', () => {
-  it('a aula narrada mantém o palco preso à viewport e bloqueia rolagem vertical', () => {
-    const src = readFileSync(join(ROOT, 'pages/Narrated.tsx'), 'utf8');
-    expect(src).toMatch(/fixed inset-0[^\n]*h-\[100dvh\]/);
-    expect(src).toMatch(/document\.body\.style\.overflow = 'hidden'/);
-    expect(src).toMatch(/narrada-plano-de-apoio/);
-    expect(src).toMatch(/const visualPhase = Math\.min\(3/);
-    expect(src).toMatch(/wordStarts\.reduce/);
-    expect(src).toMatch(/const targetOffset = Math\.max\(0, target - cursor\)/);
-    expect(src).toMatch(/wordIndexAtChar\(say, Math\.floor/);
+  it('a aula narrada ocupa a viewport e bloqueia rolagem vertical', () => {
+    const narrated = readFileSync(join(ROOT, 'pages/Narrated.tsx'), 'utf8');
+    expect(narrated).toMatch(/fixed inset-0[^\n]*h-\[100dvh\]/);
+    expect(narrated).toMatch(/document\.body\.style\.overflow = 'hidden'/);
+    expect(narrated).toMatch(/function CinematicScene/);
+    expect(narrated).toMatch(/data-testid="narrada-cena-cinematica"/);
+    expect(narrated).toMatch(/wordStarts\.reduce/);
+    expect(narrated).toMatch(/const targetOffset = Math\.max\(0, target - cursor\)/);
+    expect(narrated).toMatch(/wordIndexAtChar\(say, Math\.floor/);
   });
 
-  it('a narração troca planos no decorrer da fala e permite buscar dentro de uma fala', () => {
+  it('a composição audiovisual não remonta a tela por frações do tempo e não usa a faixa antiga de palavras', () => {
     const narrated = readFileSync(join(ROOT, 'pages/Narrated.tsx'), 'utf8');
-    expect(narrated).toMatch(/visualPhase === 1 \|\| visualPhase === 3/);
-    expect(narrated).toMatch(/narrada-plano-de-apoio/);
-    expect(narrated).toMatch(/spokenText/);
-    expect(narrated).not.toMatch(/function SceneMotionStrip/);
+    const css = readFileSync(join(ROOT, 'styles/index.css'), 'utf8');
+    expect(narrated).not.toMatch(/visualPhase|EditorialVideoCut|SceneMotionStrip|function SceneView/);
+    expect(narrated).toMatch(/<CinematicScene key={scene\.id}/);
+    expect(narrated).toMatch(/visual\.kind === 'timeline'/);
+    expect(narrated).toMatch(/visual\.kind === 'equation'/);
+    expect(css).toMatch(/@keyframes ccv-scene-enter/);
+    expect(css).toMatch(/@keyframes ccv-object-float/);
+    expect(css).toMatch(/prefers-reduced-motion: reduce/);
   });
 
   it('as revisões preservam o texto completo sem cortes por substring e usam cores editoriais fortes', () => {
