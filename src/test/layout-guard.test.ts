@@ -58,35 +58,22 @@ describe('animações de contêiner', () => {
 });
 
 describe('experiência imersiva de aula e revisão', () => {
-  it('a aula narrada ocupa a viewport e bloqueia rolagem vertical', () => {
+  it('a aula narrada ocupa a viewport inteira e mantém a legenda estável no rodapé', () => {
     const narrated = readFileSync(join(ROOT, 'pages/Narrated.tsx'), 'utf8');
-    expect(narrated).toMatch(/fixed left-0 right-0 top-0 bottom-0[^\n]*w-screen/);
-    expect(narrated).toContain("width: '100vw'");
-    const filmStyles = readFileSync(join(ROOT, 'styles/index.css'), 'utf8');
-    const sceneStart = filmStyles.indexOf('.ccv-film-scene {');
-    const sceneEnd = filmStyles.indexOf('\n}', sceneStart);
-    const sceneRule = filmStyles.slice(sceneStart, sceneEnd);
-    expect(sceneRule).toContain('position: absolute');
-    expect(sceneRule).toContain('left: 50%');
-    expect(sceneRule).toContain('transform: translateX(-50%)');
-    expect(sceneRule).toContain('width: calc(100vw + 2px)');
-    expect(sceneRule).toContain('box-sizing: border-box');
-    expect(sceneRule).not.toContain('margin-left: calc(50% - 50vw)');
-    expect((sceneRule.match(/^  width:/gm) ?? []).length).toBe(1);
-    expect((sceneRule.match(/^  min-width:/gm) ?? []).length).toBe(1);
-    expect(narrated).toMatch(/document\.body\.style\.overflow = 'hidden'/);
-    // Portal para body evita que transforms/backdrop-filter de ancestrais encolham o player.
+    expect(narrated).toContain("fixed inset-0");
+    expect(narrated).toContain("width: '100%'");
+    expect(narrated).toContain("minWidth: 0");
     expect(narrated).toContain('return createPortal((');
-    expect(narrated).toContain('document.body);');
     expect(narrated).toContain('data-testid="narrada-legendas-toggle"');
-    expect(narrated).toContain('whitespace-nowrap');
-    expect(narrated).not.toContain('ActivityView');
-    expect(narrated).not.toContain('done && l.check');
-    expect(narrated).toMatch(/function CinematicScene/);
-    expect(narrated).toMatch(/data-testid="narrada-cena-cinematica"/);
-    expect(narrated).toMatch(/wordStarts\.reduce/);
-    expect(narrated).toMatch(/const targetOffset = Math\.max\(0, target - cursor\)/);
-    expect(narrated).toMatch(/wordIndexAtChar\(say, Math\.floor/);
+    expect(narrated).toContain('data-testid="narrada-legenda-texto"');
+    expect(narrated).toContain('export function splitCaptionLines');
+    expect(narrated).not.toContain("tokens.slice(start, end)");
+    expect(narrated).not.toContain("font-bold text-[#ffd38a]");
+    const filmStyles = readFileSync(join(ROOT, 'styles/index.css'), 'utf8');
+    expect(filmStyles).toContain('grid-template-columns: minmax(0, 1fr)');
+    expect(filmStyles).toContain('.ccv-caption-line');
+    expect(filmStyles).toContain('bottom: calc(8.2rem + env(safe-area-inset-bottom, 0px))');
+    expect(filmStyles).toContain('@keyframes ccv-film-photo-drift');
   });
 
   it('a composição audiovisual mantém o palco e não usa listas de cartões que piscam', () => {
