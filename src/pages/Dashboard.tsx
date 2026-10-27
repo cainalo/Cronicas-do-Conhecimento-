@@ -115,7 +115,7 @@ export function Dashboard() {
 
       {dueMission && (
         <Link to={`/missao/${dueMission.id}`} className="flex items-center gap-3 rounded-2xl border border-line bg-surface p-4 transition hover:border-ink/20">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-azure/10 text-azure"><Icon name="alvo" size={23} /></span>
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-azure/10 text-azure"><Icon name="trilha" size={23} /></span>
           <span className="min-w-0 flex-1">
             <span className="block text-xs font-semibold text-muted">Revisão prática para hoje</span>
             <span className="mt-1 block font-semibold">{dueMission.title}</span>
