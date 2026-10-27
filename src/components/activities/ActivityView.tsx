@@ -7,7 +7,7 @@ import { ERROR_LABEL, gradeChoice, gradeMulti, gradeOrder, gradeSort, type Missi
 import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
 import { useFx } from '@/app/fx';
-import { PageDots, SwipePages, type PageItem } from '@/components/SwipePages';
+import { ContentFlow, PageDots, type ContentItem } from '@/components/ContentFlow';
 
 export interface ActivityOutcome {
   ok: boolean;
@@ -238,7 +238,7 @@ export function ActivityView({
   const st = (right: boolean, mine: boolean): 'sel' | 'ok' | 'bad' | undefined => (result ? (right ? 'ok' : mine ? 'bad' : undefined) : mine ? 'sel' : undefined);
 
   // Cabeçalho, enunciado e contexto.
-  const head: PageItem[] = [];
+  const head: ContentItem[] = [];
   if (displayA.kind === 'exam' && displayQuestion) {
     head.push({
       key: 'label',
@@ -277,7 +277,7 @@ export function ActivityView({
   }
 
   // Alternativas: cada uma é um item inteiro (nunca cortado ao meio).
-  const opts: PageItem[] = [];
+  const opts: ContentItem[] = [];
   if (displayA.kind === 'choice' || displayA.kind === 'exam') {
     (displayA.kind === 'choice' ? displayA.options.map((o) => o.text) : displayQuestion!.options.map((o) => `${o.key}) ${o.text}`)).forEach((t, i) => {
       const right = displayA.kind === 'choice' ? i === displayA.answer : displayQuestion!.options[i].key === displayQuestion!.answer;
@@ -452,7 +452,7 @@ export function ActivityView({
     const fb = feedback().map((n, i) => ({ key: `f${i}`, node: n }));
     return (
       <div ref={box} className="relative flex min-h-0 flex-1 flex-col">
-        <SwipePages items={[...head, ...opts]} layoutKey={`${displayA.id}:${result ? 'r' : 'q'}`} renderMd={renderMd} gap={8} label="Atividade" footer={(s) => <PageDots {...s} />} />
+        <ContentFlow items={[...head, ...opts]} layoutKey={`${displayA.id}:${result ? 'r' : 'q'}`} renderMd={renderMd} gap={8} label="Atividade" footer={(s) => <PageDots {...s} />} />
         {!result ? (
           <div className="pt-2">
             <button className="btn-primary w-full" disabled={!ready} onClick={check}>
@@ -468,7 +468,7 @@ export function ActivityView({
             <div className="mx-auto max-w-3xl">
             {verdictTitle}
             <div className="mt-1 text-sm leading-snug">
-              <SwipePages
+              <ContentFlow
                 items={fb}
                 layoutKey={`${displayA.id}:fb`}
                 renderMd={renderMd}
