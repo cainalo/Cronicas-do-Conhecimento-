@@ -7,19 +7,16 @@ import c2s1 from './cap02-redes-dados/01-redes-internet.md?raw';
 import c2s2 from './cap02-redes-dados/02-dados-bancos.md?raw';
 import c2s3 from './cap02-redes-dados/03-seguranca.md?raw';
 
-// Grimório introdutório para quem nunca estudou TI. Conteúdo autoral, só conceitos básicos
-// consolidados; serve de porta de entrada para os grimórios técnicos.
+// Material introdutório para quem nunca estudou TI. Conteúdo autoral, só conceitos básicos
+// consolidados; serve de porta de entrada para os materiais técnicos.
 
 export const grimorioPrimeiros: Grimoire = {
   id: 'grim.primeiros',
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.infra',
   title: 'Primeiros Passos em TI',
-  epithet: 'Primeiros Passos em TI',
   description: 'Para quem começa do zero: o que é um computador, hardware e software, sistema operacional e arquivos, algoritmos, redes e internet, bancos de dados e as primeiras regras de segurança.',
   chapterIds: ['cap.prim.01', 'cap.prim.02'],
-  sigil: 'grimorio',
-  binding: 'castanho',
 };
 
 export const capPrimComputador: Chapter = {
@@ -97,7 +94,7 @@ export const licoesPrimeiros: Lesson[] = [
   {
     id: 'lic.prim.01',
     chapterId: 'cap.prim.01',
-    title: 'A Primeira Página do Aprendiz',
+    title: 'Introdução à Tecnologia da Informação',
     goal: 'Entrada, processamento, memória e saída; bits e bytes; hardware e software; sistema operacional, arquivos e permissões; algoritmo, variável, condição e repetição.',
     cards: [
       { title: 'O que a máquina faz', body: '**Entrada** (teclado, mouse), **processamento** (CPU), **memória** e **saída** (tela, impressora).\n\n**Bit** é 0 ou 1. **Byte** = 8 bits.\n\nKB, MB, GB, TB: cada degrau é cerca de mil vezes o anterior.' },
