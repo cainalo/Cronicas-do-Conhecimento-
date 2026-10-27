@@ -159,3 +159,14 @@ Foi lido `docs/PRODUCT_DECISIONS.md`. As decisões de 25/10 reforçam a aparênc
 ### Validação e limitação
 
 Os arquivos foram relidos na branch depois das alterações. Tentei clonar a branch para executar os testes, mas o ambiente de execução não conseguiu resolver o host `github.com` (erro DNS). O wrapper de status/workflows também não retornou status nem execuções correspondentes. Portanto, **os testes foram atualizados, mas não foram executados**. A falta de screenshot e de execução em Android físico impede confirmar visualmente a eliminação de todas as faixas laterais; isso ainda precisa ser verificado no Galaxy A14 ou emulador, principalmente na proporção retrato e com safe area inferior.
+
+
+## 11. Proteção adicional contra bordas laterais e interação interrompida
+
+Após verificar o layout guard mais recente adicionado em paralelo, o player foi ajustado mais uma vez:
+
+- `src/pages/Narrated.tsx` — commits [20df144](https://github.com/cainalo/Cronicas-do-Conhecimento-/commit/20df144ac44fc137ab754a3996ca8621160716ea) e [23136e4](https://github.com/cainalo/Cronicas-do-Conhecimento-/commit/23136e449bffc4042add55361af2862f7bb503bd). O player agora é devolvido por `createPortal(..., document.body)`, para que a caixa fixa não seja limitada por ancestry/transform do layout de Aprender. O timer global também escuta `pointerup` e `pointercancel`, inclusive quando o dedo ou mouse é solto fora dos controles.
+- `src/test/layout-guard.test.ts` — commit [27a76ce](https://github.com/cainalo/Cronicas-do-Conhecimento-/commit/27a76ce7aba80e03d4c3c39852f914b3353fe767). Acrescentei proteções estáticas para portal, legenda em linha única, botão CC e ausência da atividade final.
+- `src/test/narrated.test.tsx` — commit [e306ee9](https://github.com/cainalo/Cronicas-do-Conhecimento-/commit/e306ee968de2f5bc1f29235c2a8fce37f3f3340a). O teste do timeout libera o ponteiro no objeto `window`, não apenas no controle, para cobrir o término fora do painel.
+
+A verificação pela API do GitHub confirma que os arquivos atualizados contêm o portal, o listener global de ponteiro e os testes. Nenhum build, Vitest ou teste de browser executou nesta sessão; a validação final deve ser feita quando a branch estiver disponível num ambiente Node com dependências e num Android físico/emulador.
