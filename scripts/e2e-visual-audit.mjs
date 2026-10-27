@@ -67,15 +67,14 @@ async function startServer() {
  * fallback to disappear before measuring or capturing a route.
  */
 async function waitForDeferredRoute(page) {
-  // Waiting only for the outer <main> is insufficient: Layout mounts it before
-  // React.lazy resolves. Wait for the loading message to disappear AND for the
-  // routed page to provide content; this handles both cached and first-time chunks.
+  // The shell mounts before React.lazy resolves. Wait for the fallback to vanish,
+  // then allow one short paint window for the routed component to commit. Some
+  // full-screen routes render through portals outside <main>.
   await page.waitForFunction(() => {
-    const loading = Array.from(document.querySelectorAll('[role="status"]'))
+    return !Array.from(document.querySelectorAll('[role="status"]'))
       .some((element) => element.textContent?.includes('Carregando esta área'));
-    // Some full-screen routes render through a portal outside <main>.
-    return !loading && Boolean(document.body);
   }, undefined, { timeout: 15000 });
+  await page.waitForTimeout(100);
 }
 
 async function inspect(page, where) {
