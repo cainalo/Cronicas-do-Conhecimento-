@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { narratedLessons } from '@/content';
-import { revealOf, validateNarrated } from '@/lib/narration';
+import { narrationPositions, revealOf, validateNarrated } from '@/lib/narration';
 
 function lessonById(id: string) {
   const lesson = narratedLessons.find((item) => item.id === id);
@@ -91,4 +91,23 @@ describe('conteúdo editorial das aulas narradas prioritárias', () => {
 
     expect(validateNarrated(lesson)).toEqual([]);
   });
+  it('mantém a estrutura íntegra em todas as aulas narradas do catálogo', () => {
+    for (const lesson of narratedLessons) {
+      const beats = lesson.scenes.flatMap((scene) => scene.beats);
+      expect(lesson.scenes.length, lesson.id).toBeGreaterThan(0);
+      expect(narrationPositions(lesson), lesson.id).toHaveLength(beats.length);
+      expect(validateNarrated(lesson), lesson.id).toEqual([]);
+      for (const beat of beats) expect(beat.say.trim(), lesson.id).not.toBe('');
+      for (const scene of lesson.scenes) {
+        if (scene.visual.kind !== 'numberline') continue;
+        const visual = scene.visual;
+        expect(visual.states.length, scene.id).toBe(scene.beats.length);
+        scene.beats.forEach((beat, beatIndex) => {
+          expect(beat.show, `${scene.id}/${beatIndex}`).toBeDefined();
+          expect(visual.states[revealOf(scene, beatIndex)], `${scene.id}/${beatIndex}: estado visual`).toBeDefined();
+        });
+      }
+    }
+  });
+
 });
