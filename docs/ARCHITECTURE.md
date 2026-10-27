@@ -1,32 +1,140 @@
-# Arquitetura
+# Arquitetura e manutenção
+
+Este documento descreve a estrutura real do Crônicas do Conhecimento e define os limites que devem ser preservados durante refatorações. O objetivo é reduzir acoplamento e custo de carregamento **sem alterar rotas, conteúdo, progresso, aparência ou comportamento de estudo**.
+
+## 1. Caminho de inicialização
+
+`index.html` → `src/main.tsx` → `src/App.tsx` → provedores globais → React Router → `Layout` → página e componentes.
+
+- `src/main.tsx`: aplica tema/preferências antes da primeira pintura, inicializa integrações nativas e monta o React.
+- `src/App.tsx`: declara provedores e rotas. Não deve concentrar regras de estudo, persistência ou conteúdo.
+- `src/app/StudyProvider.tsx`: estado de estudo, autenticação e sincronização.
+- `src/app/prefs.tsx` e `src/app/fx.tsx`: preferências visuais e efeitos globais.
+- `src/components/Layout.tsx`: estrutura persistente de navegação; rotas internas não devem recriar sua lógica.
+
+## 2. Mapa de diretórios
 
 ```
 src/
-  content/                 # conteúdo versionado (independente das telas)
-    types.ts               # modelo: Contest, Discipline, Topic, Grimoire, Chapter, Section, Lesson, Question
-    index.ts               # registro central + consultas (getChapter, questionsForContest…)
-    contests/tce-go-2026/  # dados do concurso (com status de verificação)
-    grimoires/seguranca/   # capítulos (.md por seção), questões e lições
-  lib/
-    model.ts               # tipos dos dados do usuário + pendências de sync
-    study.ts               # regras puras: respostas, XP único, revisão, progresso, recomendação
-    merge.ts               # fusão determinística local×remoto
-    sync.ts                # pull → merge → push (idempotente) com o Supabase
-    storage.ts             # localStorage por dono (visitante ou user id) + preferências
-    supabase.ts            # cliente (URL + chave publicável)
-  app/StudyProvider.tsx    # estado global, auth, migração visitante→conta, gatilhos de sync
-  app/prefs.tsx            # tema e tamanho da fonte
-  components/              # Layout (cabeçalho + navegação inferior), Markdown, QuestionCard
-  pages/                   # Dashboard, Library/Grimoire, Reader, Lesson, Review, History, Progress, Edital, Account
-supabase/migrations/       # SQL versionado
-supabase/tests/rls_check.sql
+  app/                 # estado global e integrações de aplicação
+  components/          # componentes de interface reutilizáveis
+  content/
+    contests/          # editais, tópicos e regras específicas por concurso
+    grimoires/         # conteúdo editorial, organizado por disciplina/capítulo
+    micro/             # séries didáticas progressivas e checagens
+    narrated/          # roteiros e dados da aula audiovisual
+    game/              # material de apoio da trilha e atividades contextualizadas
+    index.ts           # registro canônico e consultas do conteúdo
+    types.ts           # contratos TypeScript do conteúdo
+  lib/                 # regras e serviços sem responsabilidade de tela
+  pages/               # telas ligadas às rotas
+  styles/              # estilos globais e identidade visual
+  test/                # testes de domínio, componentes e regressões
+android/               # invólucro Capacitor e projeto nativo
+supabase/
+  migrations/          # alterações SQL versionadas
+  tests/               # verificações de políticas e acesso
+scripts/               # automações de QA reproduzíveis
+docs/                  # decisões, arquitetura, cobertura e handoffs
+.github/workflows/     # CI e publicação
 ```
 
-## Fluxo de dados
-1. Toda ação (responder, ler, marcar) passa por uma função pura de `study.ts`, que devolve o novo `StudyData` e registra o id em `pending`.
-2. `StudyProvider.update` grava imediatamente no `localStorage` (`cronicas:v1:<dono>`).
-3. Com sessão ativa, `syncAll`: puxa o remoto, funde (`mergeData`), envia pendências com `upsert` idempotente, limpa o que foi confirmado. Dispara ao entrar, 1,5 s após mudanças, ao voltar online e ao reabrir a aba; em erro, tenta de novo a cada 30 s.
-4. A UI mostra o estado (Local / Sincronizado / pendentes / Offline / Erro) e o histórico marca cada resposta como "pendente" ou "salvo no servidor".
+Os diretórios acima são limites de responsabilidade, não uma exigência de criar um arquivo por abstração. Evite arquivos-curinga, wrappers que apenas encaminham props ou camadas sem regra própria.
 
-## Multi-concurso
-Telas usam `DEFAULT_CONTEST_ID` e consultas do registro; um novo concurso = nova pasta em `content/contests` + grimórios com `contestId`. `profiles.active_contest_id` já existe para a seleção futura.
+## 3. Limites entre camadas
+
+### Conteúdo — `src/content/`
+O conteúdo é dado versionado e não deve depender de componentes de página. `src/content/index.ts` é o registro canônico: os módulos declaram concursos, grimórios, capítulos, lições, questões, microaulas e material narrado; as telas consultam as funções e coleções exportadas dali.
+
+Regras:
+- IDs são contratos persistentes: não renomear IDs de capítulo, seção, lição, questão ou série sem migração e testes.
+- Questões devem declarar origem e estado de revisão; conteúdo autoral não pode ser rotulado como oficial.
+- História e afirmações técnicas devem ter fonte ou linguagem que explicite os limites da evidência.
+- As séries micro devem ligar cada questão à seção correta e manter ordem única.
+- Não duplicar uma questão nem uma série em um módulo novo quando ela já existe no registro.
+
+### Regras de domínio — `src/lib/`
+Funções de pontuação, revisão, checkpoint, fusão e ordenação devem ser puras sempre que possível. Elas recebem dados e devolvem resultados; não leem DOM, não importam páginas e não fazem efeitos de rede dentro de cálculos puros.
+
+- `study.ts`: regras de progresso e domínio.
+- `storage.ts`: persistência local e preferências.
+- `merge.ts` / `sync.ts`: fusão local-remoto e sincronização.
+- `activities.ts`: contratos e regras das atividades interativas.
+- Os nomes reais dos módulos devem ser consultados antes de criar uma segunda implementação.
+
+### Estado e integrações — `src/app/`
+O estado global deve permanecer pequeno e explícito. Persistência, login, áudio e APIs nativas ficam nos módulos de aplicação/serviço apropriados, e não dentro de componentes visuais. Nenhum segredo privado pode ser incluído no bundle; chave publicável do Supabase continua protegida por RLS.
+
+### Interface — `src/pages/` e `src/components/`
+Páginas compõem fluxos; componentes reutilizáveis não devem importar páginas. A interface não deve reimplementar regras de estudo que já pertençam a `src/lib/`.
+
+### Banco e Android
+Toda alteração de banco deve vir em migração versionada e considerar RLS. Código nativo deve ser testado em build Android; sucesso no navegador não comprova modo imersivo ou comportamento do sistema operacional em aparelho real.
+
+## 4. Carregamento e desempenho
+
+### Rotas sob demanda
+As rotas abaixo agora usam `React.lazy` e uma fronteira `Suspense`, para retirar telas pesadas do carregamento inicial:
+- `/missao/:id` → `src/pages/Mission.tsx`
+- `/simulador` e `/simulador/:id` → `src/pages/Scenarios.tsx`
+- `/sala` → `src/pages/TeachersRoom.tsx`
+- `/escritorio` → `src/pages/World.tsx`
+- `/aula-narrada/:id` → `src/pages/Narrated.tsx`
+- `/slides` → `src/pages/ReviewSlides.tsx`
+
+Os caminhos das rotas, os provedores globais e o layout externo não mudam. As demais telas permanecem estáticas por enquanto para limitar o risco de regressão. Na primeira abertura de uma rota adiada, o espaço de conteúdo fica vazio enquanto o módulo é transferido; o cabeçalho e a navegação externa permanecem montados.
+
+### Dívida de desempenho conhecida
+- `src/content/index.ts` agrega muitos módulos de conteúdo por importação estática. Isso preserva consultas síncronas e a integridade do registro, mas pode manter conteúdo de muitas disciplinas no bundle inicial.
+- O ponto acima só deve ser alterado depois de medir os chunks e mapear todos os consumidores das funções síncronas. Não converter a API de conteúdo em assíncrona de forma ampla como otimização especulativa.
+- Não adicionar novas bibliotecas para resolver problemas que possam ser resolvidos com capacidades existentes.
+- Não remover fontes, assets ou conteúdo apenas porque uma busca simples não localizou uso; verificar referências dinâmicas, rotas, importação de dados e testes.
+- Não afirmar melhoria percentual de velocidade sem comparar build/arquivos e uma medição reproduzível.
+
+### Método para otimizar
+1. Guardar o SHA e a referência do build de base.
+2. Alterar uma camada por vez.
+3. Rodar `npm test`, `npm run build` e `npm run test:e2e`.
+4. Comparar tamanho dos chunks e erros/rotas visitadas.
+5. Inspecionar screenshots em 360×640 e 390×844; testar Android real quando a mudança envolve áudio, tela cheia, teclado, barras do sistema ou persistência.
+6. Reverter a otimização se exigir mudanças visíveis não solicitadas ou piorar confiabilidade.
+
+## 5. Comandos oficiais de validação
+
+```bash
+npm ci
+npm test
+npm run build
+npm run test:e2e
+npx cap sync android
+```
+
+O workflow de publicação também compila o APK. A branch de manutenção usa `.github/workflows/validate-branch.yml` para validar sem atualizar o site ou `gh-pages`.
+
+Validação automatizada não substitui revisão editorial, conferência das fontes, screenshots inspecionadas a olho nem teste físico de Android.
+
+## 6. Regras de refatoração sem mudança do produto
+
+- Preservar textos, IDs, rotas, navegação, armazenamento, versão de dados locais e fluxo de autenticação.
+- Tratar mudanças de layout e animação como alterações visuais, mesmo quando feitas em CSS.
+- Acrescentar teste de regressão antes de remover workaround que protege uma falha anteriormente observada.
+- Reutilizar os contratos já existentes; evitar tipos ou helpers duplicados com nomes diferentes.
+- Atualizar documentação quando a arquitetura realmente mudar, não copiar o mesmo texto para vários arquivos.
+- Não marcar trabalho como concluído enquanto um comando ou inspeção obrigatória estiver pendente.
+- Não publicar nem alternar a assinatura Android sem autorização explícita e plano de compatibilidade das instalações existentes.
+
+## 7. Higiene do repositório
+
+A limpeza é baseada em evidência:
+1. procurar usos estáticos e dinâmicos, rotas, referências de conteúdo e testes;
+2. confirmar se o arquivo contém dados únicos;
+3. remover em lote pequeno, com teste e diff revisado;
+4. preservar logs de decisões relevantes, mas resumir duplicações em vez de criar novos documentos paralelos;
+5. manter apenas branches que tenham propósito ativo, publicação, revisão aberta ou trabalho único ainda não recuperado. Uma branch só pode ser eliminada após verificar o conteúdo exclusivo e preservar o que for aproveitável.
+
+## 8. Estado desta rodada — 27/10/2026
+
+- A divisão de rotas pesadas por importação sob demanda foi implementada em `src/App.tsx`, commit `404ad10`.
+- O baseline do workflow `40444629202` passou no commit `d2f6e93` e publicou a versão `0.1.351`; isso não valida automaticamente mudanças posteriores.
+- O código novo precisa passar pelo workflow de validação isolada antes de ser incorporado a uma branch de publicação.
+- Ainda não foi feita uma remoção automática de arquivos ou branches: o inventário identificou trabalho exclusivo e PRs abertos que precisam de revisão individual.
