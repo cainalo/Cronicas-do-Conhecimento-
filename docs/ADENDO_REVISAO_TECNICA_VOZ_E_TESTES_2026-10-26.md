@@ -134,3 +134,28 @@ A distinção de datas do tear foi gravada nos três arquivos de conteúdo:
 - Trilha para iniciantes: [src/content/micro/prim-computador-a.ts](https://github.com/cainalo/Cronicas-do-Conhecimento-/blob/claude/cronicas-conhecimento-estudos-jgbofo/src/content/micro/prim-computador-a.ts) — commit 07f6e84.
 
 Foi examinada também a versão mais recente de `src/pages/Narrated.tsx` (não alterada por esta sessão). Ela utiliza as mesmas duas imagens históricas. Sua legenda do ENIAC também indica apenas “Imagem CC BY-SA 4.0 · Wikimedia Commons”, sem o nome de autor; recomenda-se aplicar a mesma correção indicada para a tela de revisão, mantendo atribuição apropriada e link da licença. A foto mostra um exemplar em exposição no Bradbury Science Museum, não uma fotografia feita em 1946.
+
+
+## 10. Correções do player narrado após feedback do usuário (26/10/2026)
+
+### Instruções de contexto consultadas
+
+Foi lido `docs/PRODUCT_DECISIONS.md`. As decisões de 25/10 reforçam a aparência editorial chapada, sem páginas brancas, manchas desfocadas ou bolhas decorativas; as telas imersivas devem aproveitar a viewport. Também foram pesquisadas referências a instruções de sessão ou passagem do player nos arquivos indexados do repositório; não foi encontrada uma nota específica deixada por outra sessão sobre estes quatro pedidos. Para evitar conflito, as mudanças desta rodada foram feitas na versão mais recente disponível do player, consultada imediatamente antes da alteração, e os testes do próprio player foram atualizados.
+
+### Arquivos alterados
+
+- `src/pages/Narrated.tsx` — commit [dccb743](https://github.com/cainalo/Cronicas-do-Conhecimento-/commit/dccb743f49e011ad19503eedfecbdc9a55e879e1)
+- `src/test/narrated.test.tsx` — commit [4809a93](https://github.com/cainalo/Cronicas-do-Conhecimento-/commit/4809a937a58c3e747f4a32ad69dec332cb467c6f)
+- `docs/PRODUCT_DECISIONS.md` — commit [2f1be44](https://github.com/cainalo/Cronicas-do-Conhecimento-/commit/2f1be44e8242f9d10a1673957c7dd700a6cfddcf)
+
+### Alterações no player
+
+1. **Tela de borda a borda:** o shell fixo usa largura automática combinada com `inset-0`, evitando a largura rígida `100vw` de `w-screen`; o contêiner visual não adiciona mais padding horizontal de `px-3 sm:px-6`. Também removi duas manchas decorativas desfocadas que não combinavam com a decisão editorial atual.
+2. **Legenda opcional:** botão CC alterna legendas (ativadas por padrão). A legenda passa a ficar na composição normal da cena, abaixo do cabeçalho interno e antes do conteúdo visual, reservando sua própria faixa. Usa linha única, sem quebra, com janela de até oito palavras em torno da posição atual e reticências nas extremidades quando o texto é maior. Assim, a legenda não é uma camada absoluta sobre a ilustração/fórmula.
+3. **Prazo de ocultação correto:** o timer não reinicia por cada mudança de cena. A interação com ponteiro em controles, busca, marcadores e painéis cancela o prazo; ele só é reiniciado no fim da interação. Enquanto existe interação ativa, o timer não oculta os controles. Movimentos também renovam o prazo.
+4. **Fim da aula:** removi o painel `Checagem` que abria por cima da última cena. A pessoa pode usar o botão para assistir novamente ou sair, sem atividade automática por cima do vídeo.
+5. **Testes:** acrescentei checagens de uma linha, ausência das margens/padding laterais, alternância de legenda, interação longa com os controles e conclusão sem abrir a atividade. Também mantive a navegação/transcrição.
+
+### Validação e limitação
+
+Os arquivos foram relidos na branch depois das alterações. Tentei clonar a branch para executar os testes, mas o ambiente de execução não conseguiu resolver o host `github.com` (erro DNS). O wrapper de status/workflows também não retornou status nem execuções correspondentes. Portanto, **os testes foram atualizados, mas não foram executados**. A falta de screenshot e de execução em Android físico impede confirmar visualmente a eliminação de todas as faixas laterais; isso ainda precisa ser verificado no Galaxy A14 ou emulador, principalmente na proporção retrato e com safe area inferior.
