@@ -68,11 +68,11 @@ export function StudiesPage() {
       </section>
 
       <section>
-        <SectionTitle icon="grimorio" color={color}>
-          Livros e atividades
+        <SectionTitle icon="lista" color={color}>
+          Matérias e atividades
         </SectionTitle>
         <TileGrid>
-          <Tile wide to="/biblioteca" icon="grimorio" color={color} title="Biblioteca" text="Os livros de cada disciplina, para ler na ordem que quiser." />
+          <Tile wide to="/biblioteca" icon="lista" color={color} title="Materiais por disciplina" text="Conteúdo organizado por disciplina, leitura contínua, exercícios e referências." />
           <Tile to="/relampago" icon="chama" color="rgb(var(--leaf))" title="Rodada relâmpago" text="5 questões rápidas." />
           <Tile
             to="/flashcards"
@@ -172,7 +172,7 @@ export function StudiesPage() {
       </section>
 
       <section aria-label="Materiais externos">
-        <SectionTitle icon="pergaminho" color={color}>
+        <SectionTitle icon="lista" color={color}>
           Materiais oficiais
         </SectionTitle>
         <ul className="ledger">
