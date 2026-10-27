@@ -102,13 +102,16 @@ export function NarratedPlayer({
   const say = scene.beats[pos.beat].say;
   const captionEstimatedWord = wordIndexAtChar(say, Math.floor((beatElapsed / Math.max(1, durations[beatIndex] ?? 2200)) * say.length));
   const captionWordIndex = Math.max(0, Math.min((say.match(/\S+\s*/g) ?? [say]).length - 1, speechWordIndex ?? captionEstimatedWord));
-  const beatVisualDuration = (hasGeneratedTrack ? trackDurations[beatIndex] : durations[beatIndex]) ?? 2200;
-  const beatVisualProgress = Math.min(1, beatElapsed / Math.max(1, beatVisualDuration));
-  // Um plano de apoio entra durante a fala (não apenas entre frases) quando existe tempo
-  // suficiente para ele ser percebido; sai antes de a próxima fala começar.
-  // Um plano de apoio precisa ficar tempo suficiente para o olho entender a imagem; cortes de frases curtas eram rápidos demais e pareciam piscadas.
-  const cutawayVisible = playing && voiceStarted && beatVisualDuration >= 6000
-    && beatVisualProgress >= 0.24 && beatVisualProgress < 0.84;
+  // O B-roll é calculado pela duração da cena inteira, não pela frase isolada.
+  // Assim ele entra uma única vez no meio da sequência e não abre/fecha a cada legenda.
+  const sceneCueDurations = scene.beats.map((beat) => cueDurationMs(beat.say, hasGeneratedTrack ? 1 : rate));
+  const sceneDurationMs = sceneCueDurations.reduce((sum, value) => sum + value, 0);
+  const sceneElapsedMs = sceneCueDurations.slice(0, pos.beat).reduce((sum, value) => sum + value, 0)
+    + Math.min(sceneCueDurations[pos.beat] ?? 0, beatElapsed);
+  const sceneProgress = Math.min(1, sceneElapsedMs / Math.max(1, sceneDurationMs));
+  const supportsCutaway = scene.beats.length > 1 && sceneDurationMs >= 9500 && scene.visual.kind !== 'title';
+  const cutawayVisible = playing && voiceStarted && supportsCutaway
+    && sceneProgress >= 0.34 && sceneProgress < 0.68;
 
   const stop = useCallback(() => {
     token.current += 1;
@@ -884,11 +887,8 @@ function CinematicScene({
 
   if (!historicalPhoto && visual.kind === 'timeline') historicalPhoto = historicalVisualFor(headline + ' ' + support);
 
-  // Texto acompanha cada fala, mas a arte não reinicia a animação a cada frase.
-  // Só uma troca real de cena faz o plano visual reentrar; isso elimina o efeito de piscada.
-  const cueMotion = useCueMotion(scene.id + ':' + beatIndex);
-  const sceneMotion = useCueMotion(scene.id);
-
+  // Cada frase realiza um corte editorial por máscara e deslocamento, sem fade de opacidade.
+  // O plano de fundo, a paleta e as formas decorativas permanecem vivos e estáveis.
   return (
     <article
       className={'ccv-film-scene ' + (controlsVisible ? 'has-controls' : 'controls-hidden')}
@@ -909,22 +909,24 @@ function CinematicScene({
       {showCaptions && <CaptionLine text={captionText} activeWordIndex={captionWordIndex} highlightWord={highlightCaptionWord} />}
 
       <div className={"ccv-film-content" + (cutawayVisible ? " has-cutaway" : "")}>
-        <section className={'ccv-film-copy' + (cueMotion ? ' is-cue-change' : '')}>
-          <p className="ccv-film-eyebrow"><span />{eyebrow}</p>
-          {dateOrStep && <p className="ccv-film-date">{dateOrStep}</p>}
-          <h2 className="ccv-film-headline">{headline}</h2>
-          {support && <p className="ccv-film-support">{support}</p>}
-          <div className="ccv-film-progress" aria-hidden="true">
-            {Array.from({ length: Math.max(1, progressCount) }, (_, index) => (
-              <span key={index} className={index < progressIndex ? 'is-past' : index === progressIndex ? 'is-current' : ''} />
-            ))}
+        <section className="ccv-film-copy">
+          <div className="ccv-film-copy__take" key={scene.id + ':' + beatIndex} data-testid="narrada-corte-texto">
+            <p className="ccv-film-eyebrow"><span />{eyebrow}</p>
+            {dateOrStep && <p className="ccv-film-date">{dateOrStep}</p>}
+            <h2 className="ccv-film-headline">{headline}</h2>
+            {support && <p className="ccv-film-support">{support}</p>}
+            <div className="ccv-film-progress" aria-hidden="true">
+              {Array.from({ length: Math.max(1, progressCount) }, (_, index) => (
+                <span key={index} className={index < progressIndex ? 'is-past' : index === progressIndex ? 'is-current' : ''} />
+              ))}
+            </div>
+            <p className="ccv-film-footnote">{scene.heading}</p>
           </div>
-          <p className="ccv-film-footnote">{scene.heading}</p>
         </section>
 
         <section className="ccv-film-art" aria-label="Demonstração visual" data-testid="narrada-cena-visual">
           <div className="ccv-film-art__rings" aria-hidden="true"><span /><span /><span /></div>
-          <div className={'ccv-film-cut' + (sceneMotion ? ' is-scene-change' : '')} data-testid="narrada-corte-suave">
+          <div key={scene.id + ':' + beatIndex} className="ccv-film-cut is-cue-cut" data-testid="narrada-corte-suave">
             {numberline ? (
               <div className="ccv-film-numberline">
                 <CinematicNumberLine from={numberline.from} to={numberline.to} state={numberline.state} />
@@ -1093,17 +1095,6 @@ function CaptionLine({ text, activeWordIndex, highlightWord }: { text: string; a
 }
 
 const CinematicSceneMemo = memo(CinematicScene);
-
-function useCueMotion(cue: string): boolean {
-  const [active, setActive] = useState(false);
-  useEffect(() => {
-    setActive(false);
-    const frame = window.requestAnimationFrame(() => setActive(true));
-    const reset = window.setTimeout(() => setActive(false), 520);
-    return () => { window.cancelAnimationFrame(frame); window.clearTimeout(reset); };
-  }, [cue]);
-  return active;
-}
 
 function CinematicNumberLine({ from, to, state }: { from: number; to: number; state: NumberLineState }) {
   const width = 680;
