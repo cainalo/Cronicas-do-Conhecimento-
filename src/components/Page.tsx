@@ -6,7 +6,6 @@ import { usePrefs } from '@/app/prefs';
 import { AREAS, areaColor, type AreaKey } from '@/app/areas';
 import { Icon, type IconName } from '@/components/Icon';
 import { Illustration, type IllustrationName } from '@/components/Illustration';
-import type { ArtId } from '@/components/TileArt';
 
 export const useIsDark = () => usePrefs().prefs.theme === 'dark';
 
@@ -89,22 +88,14 @@ export interface TileProps {
   text: string;
   badge?: string;
   wide?: boolean;
-  /** Mantido por compatibilidade com o desenho antigo; o pôster usa a ilustração do ícone. */
-  art?: ArtId | null;
   /** Ilustração do pôster; por padrão, a que combina com o ícone. */
   illustration?: IllustrationName;
   index?: number;
 }
 
-export const TILE_ARTS: string[] = ['ampulheta', 'cartas', 'relogio', 'pena', 'calendario', 'lista', 'mapa', 'escudo', 'grafico', 'pergaminho', 'grimorio', 'torre', 'chama'];
-
 const ICON_ART: Partial<Record<IconName, IllustrationName>> = {
-  grimorio: 'livro',
-  livro: 'livro',
-  pena: 'livro',
-  pergaminho: 'livro',
-  lista: 'livro',
-  torre: 'livro',
+  livro: 'computador',
+  lista: 'computador',
   cartas: 'revisao',
   ampulheta: 'revisao',
   revisar: 'revisao',
