@@ -67,11 +67,15 @@ async function startServer() {
  * fallback to disappear before measuring or capturing a route.
  */
 async function waitForDeferredRoute(page) {
-  await page.locator('main').first().waitFor({ state: 'attached', timeout: 15000 });
-  const loading = page.locator('[role="status"]').filter({ hasText: 'Carregando esta área' });
-  if (await loading.count()) {
-    await loading.first().waitFor({ state: 'detached', timeout: 15000 });
-  }
+  // Waiting only for the outer <main> is insufficient: Layout mounts it before
+  // React.lazy resolves. Wait for the loading message to disappear AND for the
+  // routed page to provide content; this handles both cached and first-time chunks.
+  await page.waitForFunction(() => {
+    const main = document.querySelector('main');
+    if (!main) return false;
+    if (main.textContent?.includes('Carregando esta área')) return false;
+    return Boolean(main.textContent?.trim());
+  }, undefined, { timeout: 15000 });
 }
 
 async function inspect(page, where) {
