@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
+import { waitForRouteReady } from './route-ready';
 import { DEFAULT_CONTEST_ID, chapters, concepts, questionsForContest, scenarios, teacherPosts, teachers } from '@/content';
 import { advance, choose, restoreScenario, scenarioReport, startScenario, validateScenario, type Scenario } from '@/lib/scenario';
 import { FEED_PAGE, buildFeed, emptySala } from '@/lib/teachers';
@@ -128,10 +129,12 @@ describe('telas da fase 6', () => {
   it('simulador bloqueado antes de estudar; depois joga até o fim e retoma ao voltar', async () => {
     const user = userEvent.setup();
     const { unmount } = renderAt('/simulador/cen.suporte-lento');
+    await waitForRouteReady();
     expect(screen.getByTestId('cenario-bloqueado')).toBeInTheDocument();
     unmount();
     saveData('visitante', readAt(emptyData(), 'cap.infra.03', 'processos'));
     const r2 = renderAt('/simulador/cen.suporte-lento');
+    await waitForRouteReady();
     await user.click(screen.getByRole('button', { name: /Abrir o top/ }));
     expect(screen.getByTestId('cenario-retorno')).toHaveTextContent('Boa decisão');
     await user.click(screen.getByRole('button', { name: 'Continuar' }));
@@ -139,6 +142,7 @@ describe('telas da fase 6', () => {
     r2.unmount();
     // Retoma na etapa da hipótese.
     renderAt('/simulador/cen.suporte-lento');
+    await waitForRouteReady();
     await user.click(screen.getByRole('button', { name: /Falta memória física/ }));
     await user.click(screen.getByRole('button', { name: 'Continuar' }));
     await user.click(screen.getByRole('button', { name: /kill 4127 e conferir/ }));
@@ -152,6 +156,7 @@ describe('telas da fase 6', () => {
     saveData('visitante', before);
     const cp0 = getLearningCheckpoint(before, trailUnits());
     const r = renderAt('/sala');
+    await waitForRouteReady();
     await user.click(screen.getAllByRole('button', { name: 'Guardar' })[0]);
     await user.click(screen.getByTestId('feed-proximo'));
     r.unmount();
