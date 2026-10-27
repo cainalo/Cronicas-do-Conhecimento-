@@ -13,8 +13,10 @@ describe('microaulas graduais de Estratégias de Leitura em Inglês', () => {
   it('cobre as três seções na sequência de 4, 4 e 3 aulas', () => {
     for (const section of sections) {
       const lessons = microSeries('cap.ingles.01', section);
-      expect(lessons.map((lesson) => lesson.exam[0]?.kind === 'exam' ? lesson.exam[0].questionId : ''), section)
-        .toEqual(expectedQuestions[section]);
+      expect(lessons.map((lesson) => {
+        const exam = lesson.exam[0];
+        return exam?.kind === 'exam' ? exam.questionId : '';
+      }), section).toEqual(expectedQuestions[section]);
       expect(lessons.map((lesson) => lesson.series?.order), section)
         .toEqual(Array.from({ length: expectedQuestions[section].length }, (_, i) => i + 1));
       expect(lessons[0].steps[0].part, section).toBe('A história');
