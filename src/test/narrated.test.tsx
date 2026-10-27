@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
@@ -52,13 +52,17 @@ it('página: começa parada; legenda de uma linha é opcional; controles reinici
       </StudyProvider>
     </PrefsProvider>,
   );
-  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Imagine que sua conta tem saldo zero/);
-  expect(screen.getByTestId('narrada-player')).toHaveClass('fixed', 'inset-0', 'h-[100dvh]', 'overflow-hidden');
+  const caption = screen.getByTestId('narrada-legenda');
+  expect(caption).toHaveTextContent(/Imagine que sua conta tem saldo zero/);
+  expect(caption).toContainElement(screen.getByTestId('narrada-legenda-texto'));
+  expect(caption.querySelector('p')).toHaveClass('whitespace-nowrap', 'overflow-hidden');
+  expect(screen.getByTestId('narrada-player')).toHaveClass('fixed', 'inset-0', 'h-[100dvh]', 'overflow-hidden', 'w-auto');
+  expect(screen.getByTestId('narrada-cena')).not.toHaveClass('px-3', 'sm:px-6');
   expect(screen.getByTestId('narrada-elementos-visuais')).toBeInTheDocument();
   expect(screen.getByText(/sem voz neste aparelho/)).toBeInTheDocument();
   // Não toca sozinha.
   await act(async () => void vi.advanceTimersByTime(20000));
-  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(l.scenes[0].beats[0].say);
+  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Imagine que sua conta tem saldo zero/);
   await user.click(screen.getByTestId('narrada-tocar'));
   const captionWords = screen.getByTestId('narrada-legenda-texto').querySelectorAll(':scope > span');
   expect(captionWords.length).toBeLessThanOrEqual(8);
@@ -72,20 +76,32 @@ it('página: começa parada; legenda de uma linha é opcional; controles reinici
   expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-0');
   await user.click(screen.getByTestId('narrada-mostrar-controles'));
   expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-100');
-  // Durante o uso, cada interação reinicia a contagem; trocar cena não reinicia o prazo sozinha.
+  // Segurar a área dos controles por mais que o prazo não deve escondê-los.
+  const controls = screen.getByTestId('narrada-controles-flutuantes');
+  fireEvent.pointerDown(controls, { pointerId: 1, pointerType: 'touch' });
+  await act(async () => void vi.advanceTimersByTime(5000));
+  expect(controls).toHaveClass('opacity-100');
+  fireEvent.pointerUp(controls, { pointerId: 1, pointerType: 'touch' });
+  await act(async () => void vi.advanceTimersByTime(3000));
+  expect(controls).toHaveClass('opacity-100');
+
+  // Cada interação reinicia o prazo; mudar a cena, sozinha, não o reinicia.
   await user.click(screen.getByRole('button', { name: 'Ir para a cena 6: Subtrair é somar o oposto' }));
   await act(async () => void vi.advanceTimersByTime(3000));
-  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-100');
+  expect(controls).toHaveClass('opacity-100');
   await user.click(screen.getByRole('button', { name: 'Ir para a cena 7: Por que subtrair um negativo dá uma soma?' }));
   await act(async () => void vi.advanceTimersByTime(3000));
-  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-100');
+  expect(controls).toHaveClass('opacity-100');
   await act(async () => void vi.advanceTimersByTime(1000));
-  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-0');
-  // Um toque na área do vídeo também esconde os controles; um novo toque revela-os.
+  expect(controls).toHaveClass('opacity-0');
+
+  // Um toque no vídeo revela os controles ocultos; um toque seguinte pode escondê-los.
   await user.click(screen.getByTestId('narrada-stage'));
-  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-0');
+  expect(controls).toHaveClass('opacity-100');
+  await user.click(screen.getByTestId('narrada-stage'));
+  expect(controls).toHaveClass('opacity-0');
   await user.click(screen.getByTestId('narrada-mostrar-controles'));
-  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-100');
+  expect(controls).toHaveClass('opacity-100');
   await user.click(screen.getByTestId('narrada-tocar')); // pausa
   await user.click(screen.getByRole('button', { name: 'Ir para a cena 6: Subtrair é somar o oposto' }));
   expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/cinco menos oito/);
