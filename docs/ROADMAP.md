@@ -11,14 +11,15 @@
 | G | App nativo e offline | ✅ Android (Capacitor) com APK no site e modo imersivo (a validar no aparelho); PWA removido a pedido; iOS pendente | Abrir offline e sincronizar após reconexão, testado |
 | H | Testes amplos, expansão para outros concursos | ⬜ | — |
 
-## Próximas entregas, em ordem (atualizado em 26/10/2026)
-1. **Validar a integração recente:** confirmar em GitHub Actions `npm test`, `npm run build`, `npm run test:e2e` e a compilação Gradle do APK. O resultado da execução mais recente ainda não está confirmado nesta sessão.
-2. **Validar em aparelho real:** abrir a versão publicada no Galaxy A14; conferir modo imersivo, barras do Android, botões inferiores, trilha, aula narrada, videoaula, posts dos professores, flashcards e retomada do progresso.
-3. **Fechar DevOps 02:** revisão editorial humana das 7 microaulas de IaC/contêineres/Kubernetes e observabilidade; corrigir os pontos levantados e só então marcar o conteúdo como validado.
-4. **Continuar a trilha com cap.ia.04**, depois cap.ingles.01 e os demais capítulos, um trecho por vez, incluindo história verificável, explicação progressiva, checagens, recuperação, prática variada e validação mobile.
-5. **Validar Auth/sincronização reais** no navegador ou aparelho, incluindo redirecionamentos do Supabase e recuperação de dados; manter cópia de segurança antes de testar reinício do progresso.
-6. **Curadoria e provas oficiais:** confirmar manualmente os vídeos antes de marcá-los como recomendados e obter PDFs/gabaritos oficiais TCE-GO e normativos ainda pendentes.
-7. **Release Android:** configurar/confirmar uma chave de assinatura estável antes de publicar APKs a partir da `main`; não alternar para uma chave diferente sem planejar a transição para quem já instalou o app.
+## Próximas entregas, em ordem (atualizado em 27/10/2026)
+1. **Validar o código da branch de manutenção sem deploy:** Vitest, typecheck/build web, E2E de layout e compilação Android. O run [40444629202](https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40444629202) foi verde para `d2f6e93`, mas não cobre alterações posteriores na branch `gpt/ingles01-microaulas-2026-10-27`.
+2. **Corrigir regressões reais**, acrescentar testes para cada falha e repetir o pipeline; não inferir sucesso a partir de testes apenas escritos.
+3. **Auditar o conteúdo novo:** 12 microaulas de cap.ia.04 e 11 de cap.ingles.01, mantendo questões autorais identificadas como tais e referências históricas verificáveis. A revisão editorial humana ainda está pendente.
+4. **Verificar interface móvel:** capturas 360×640 e 390×844, sem barras laterais claras, clipping, rolagem horizontal ou overlays menores que a tela. Depois, conferir a experiência real no Galaxy A14.
+5. **Continuar conteúdo só após a validação:** cap.ingles.02, depois os próximos trechos na ordem de `JOURNEY`.
+6. **Validar Auth/sincronização reais** no navegador/aparelho, incluindo redirecionamentos do Supabase e recuperação de dados; manter cópia de segurança antes de testar reinício.
+7. **Curadoria e fontes oficiais:** confirmar vídeos manualmente, obter PDFs/gabaritos do TCE-GO e normativos pendentes, e concluir a revisão humana das questões/textos.
+8. **Release Android:** manter a assinatura estável; não publicar APKs em branch diferente nem alternar chave sem autorização e plano para usuários que já instalaram o app.
 
 ## Feito em 17/10 (pedido "do zero")
 - Explicação simples por trecho, tela Aprender, grimório introdutório, livro de couro com virada por dobra. Próximo: ouvir o usuário sobre a clareza das explicações e ajustar o tom; revisar a camada simples com olhar humano.
