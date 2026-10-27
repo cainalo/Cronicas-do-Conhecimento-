@@ -15,11 +15,8 @@ export const grimorioPrimeiros: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.infra',
   title: 'Primeiros Passos em TI',
-  epithet: 'Primeiros Passos em TI',
   description: 'Para quem começa do zero: o que é um computador, hardware e software, sistema operacional e arquivos, algoritmos, redes e internet, bancos de dados e as primeiras regras de segurança.',
   chapterIds: ['cap.prim.01', 'cap.prim.02'],
-  sigil: 'grimorio',
-  binding: 'castanho',
 };
 
 export const capPrimComputador: Chapter = {
