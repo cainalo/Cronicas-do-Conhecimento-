@@ -43,7 +43,7 @@ describe('motor de aparência', () => {
   });
 
   it('exporta e importa a aparência; código inválido é recusado; campos novos ganham padrão', () => {
-    const l = { ...DEFAULT_LOOK, palette: 'doce', font: 'serifada' as const };
+    const l = { ...DEFAULT_LOOK, palette: 'doce', font: 'mono' as const };
     expect(importLook(exportLook(l))).toEqual(l);
     expect(importLook('nada')).toBeNull();
     expect(normalizeLook({ palette: 'oceano' }).cards).toBe(DEFAULT_LOOK.cards);
@@ -77,7 +77,7 @@ describe('painel de personalização', () => {
     await user.click(screen.getByRole('button', { name: 'Vidro' }));
     expect(document.documentElement.dataset.cards).toBe('vidro');
     await user.click(screen.getByRole('button', { name: 'Restaurar a aparência padrão' }));
-    expect(loadPrefs().look?.palette).toBe('editorial');
+    expect(loadPrefs().look?.palette).toBe(DEFAULT_LOOK.palette);
     expect(document.documentElement.dataset.cards).toBe('editorial');
   });
 });

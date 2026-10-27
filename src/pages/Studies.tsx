@@ -92,7 +92,7 @@ export function StudiesPage() {
             badge={wrong ? `${wrong} a revisar` : undefined}
           />
           <Tile to="/slides" icon="cartas" color="rgb(var(--gold))" title="Slides de revisão" text="Revise os conceitos em lâminas visuais por capítulo; imprima ou salve em PDF." />
-          <Tile to="/simulador" icon="alvo" color="rgb(var(--teal))" title="Casos práticos" text="Treine decisões em situações realistas de TI." />
+          <Tile to="/simulador" icon="play" color="rgb(var(--teal))" title="Casos práticos" text="Treine decisões em situações realistas de TI." />
           <Tile to="/sala" icon="balao" color="rgb(var(--azure))" title="Sala dos Professores" text="Dicas, pegadinhas e mini-desafios." />
         </TileGrid>
       </section>

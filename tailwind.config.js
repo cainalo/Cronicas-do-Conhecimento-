@@ -31,7 +31,7 @@ export default {
         logo: ['var(--font-title)'],
         title: ['var(--font-title)'],
         sans: ['var(--font-text)'],
-        serif: ['"Fraunces Variable"', 'Georgia', 'serif'],
+        serif: ['"IBM Plex Sans"', 'Inter Tight Variable', 'system-ui', 'sans-serif'],
       },
     },
   },

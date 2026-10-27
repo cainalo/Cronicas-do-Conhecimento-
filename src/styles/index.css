@@ -38,7 +38,7 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --font-title: 'IBM Plex Sans', 'Inter Tight Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-text: 'Inter Tight Variable', 'Inter Tight', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  /* Fibra de papel quase imperceptível (só textura, sem cor). */
+  /* Desativado: o fundo padrão é liso, sem textura decorativa. */
   --paper: none;
   --tex-grain: none;
   --tex-leather: none;
@@ -249,14 +249,7 @@ a { text-underline-offset: 3px; }
   .link-grow:hover, a:hover > .link-grow { background-size: 100% 1px; }
 }
 
-/* ---------- Leitor (cartões de estudo, livro, missão) ---------- */
-.manuscript {
-  position: relative;
-  border-radius: var(--radius-card);
-  color: rgb(var(--ink));
-  background-color: rgb(var(--surface));
-  border: 1px solid rgb(var(--line));
-}
+/* ---------- Leitura contínua e materiais de estudo ---------- */
 .prose-content {
   font-family: var(--font-text);
   font-size: calc(1.08rem * var(--font-scale));
