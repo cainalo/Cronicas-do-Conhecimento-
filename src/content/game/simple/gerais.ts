@@ -1,8 +1,8 @@
 import type { SimpleSection } from '@/content/types';
 
 /**
- * Porta de entrada "do zero" das seções dos grimórios de Inglês, Português,
- * Matemática e Conhecimentos Institucionais. O texto completo da seção
+ * Porta de entrada "do zero" das seções de Inglês, Português,
+ * Matemática e Legislação Institucional. O texto completo da seção
  * continua disponível como aprofundamento.
  */
 export const simpleGerais: Record<string, SimpleSection> = {
