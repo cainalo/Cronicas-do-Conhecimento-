@@ -70,6 +70,24 @@ describe('qualidade estrutural das aulas narradas autorais', () => {
     }
   });
 
+
+  it('revela os saltos da reta numérica progressivamente, um por fala', () => {
+    const positive = narradaSomarInteiros.scenes.find((scene) => scene.id === 'somar-positivo');
+    const negative = narradaSomarInteiros.scenes.find((scene) => scene.id === 'somar-negativo');
+    expect(positive?.beats.map((beat) => beat.show)).toEqual([0, 1, 2, 3, 3]);
+    expect(negative?.beats.map((beat) => beat.show)).toEqual([0, 1, 2, 3, 4, 5, 5]);
+    expect(positive?.visual.kind).toBe('numberline');
+    expect(negative?.visual.kind).toBe('numberline');
+    if (positive?.visual.kind === 'numberline') {
+      expect(positive.visual.states).toHaveLength(4);
+      expect(positive.visual.states[3]?.jumps).toHaveLength(3);
+    }
+    if (negative?.visual.kind === 'numberline') {
+      expect(negative.visual.states).toHaveLength(6);
+      expect(negative.visual.states[5]?.jumps).toHaveLength(5);
+    }
+  });
+
   it('as duas aulas reescritas têm duração estimada coerente com a ampliação do roteiro', () => {
     expect(narradaHistoriaComputador.minutes).toBeGreaterThanOrEqual(7);
     expect(narradaSomarInteiros.minutes).toBeGreaterThanOrEqual(7);
