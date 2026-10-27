@@ -8,34 +8,36 @@ import { Dashboard } from '@/pages/Dashboard';
 import { GrimoirePage, LibraryPage } from '@/pages/Library';
 import { BookPage } from '@/pages/Book';
 const MissionPage = lazy(() => import('@/pages/Mission').then((m) => ({ default: m.MissionPage })));
-import { DownloadPage } from '@/pages/Download';
+const DownloadPage = lazy(() => import('@/pages/Download').then((m) => ({ default: m.DownloadPage })));
 import { PracticePage } from '@/pages/Practice';
 import { LearnPage } from '@/pages/Learn';
 import { LessonPage } from '@/pages/Lesson';
 import { ReviewPage } from '@/pages/Review';
 const ReviewSlidesPage = lazy(() => import('@/pages/ReviewSlides').then((m) => ({ default: m.ReviewSlidesPage })));
-import { HistoryPage } from '@/pages/History';
-import { ProgressPage } from '@/pages/Progress';
-import { EditalPage } from '@/pages/Edital';
-import { AccessPage } from '@/pages/settings/Access';
-import { SyncPage } from '@/pages/settings/Sync';
-import { AppearancePage } from '@/pages/settings/Appearance';
-import { SoundsPage } from '@/pages/settings/Sounds';
-import { DataPage } from '@/pages/settings/Data';
-import { AboutPage } from '@/pages/settings/About';
-import { ScreenPage } from '@/pages/settings/Screen';
-import { AccountPage } from '@/pages/Account';
+const HistoryPage = lazy(() => import('@/pages/History').then((m) => ({ default: m.HistoryPage })));
+const ProgressPage = lazy(() => import('@/pages/Progress').then((m) => ({ default: m.ProgressPage })));
+const EditalPage = lazy(() => import('@/pages/Edital').then((m) => ({ default: m.EditalPage })));
+const AccessPage = lazy(() => import('@/pages/settings/Access').then((m) => ({ default: m.AccessPage })));
+const SyncPage = lazy(() => import('@/pages/settings/Sync').then((m) => ({ default: m.SyncPage })));
+const AppearancePage = lazy(() => import('@/pages/settings/Appearance').then((m) => ({ default: m.AppearancePage })));
+const SoundsPage = lazy(() => import('@/pages/settings/Sounds').then((m) => ({ default: m.SoundsPage })));
+const DataPage = lazy(() => import('@/pages/settings/Data').then((m) => ({ default: m.DataPage })));
+const AboutPage = lazy(() => import('@/pages/settings/About').then((m) => ({ default: m.AboutPage })));
+const ScreenPage = lazy(() => import('@/pages/settings/Screen').then((m) => ({ default: m.ScreenPage })));
+const AccountPage = lazy(() => import('@/pages/Account').then((m) => ({ default: m.AccountPage })));
 import { TrainingPage } from '@/pages/Training';
-import { FlashcardsPage } from '@/pages/Flashcards';
-import { ExamPage, ExamResultPage } from '@/pages/Exam';
-import { EssayListPage, EssayPage } from '@/pages/Essay';
-import { PlanPage } from '@/pages/Plan';
-import { BlitzPage } from '@/pages/Blitz';
+const FlashcardsPage = lazy(() => import('@/pages/Flashcards').then((m) => ({ default: m.FlashcardsPage })));
+const ExamPage = lazy(() => import('@/pages/Exam').then((m) => ({ default: m.ExamPage })));
+const ExamResultPage = lazy(() => import('@/pages/Exam').then((m) => ({ default: m.ExamResultPage })));
+const EssayListPage = lazy(() => import('@/pages/Essay').then((m) => ({ default: m.EssayListPage })));
+const EssayPage = lazy(() => import('@/pages/Essay').then((m) => ({ default: m.EssayPage })));
+const PlanPage = lazy(() => import('@/pages/Plan').then((m) => ({ default: m.PlanPage })));
+const BlitzPage = lazy(() => import('@/pages/Blitz').then((m) => ({ default: m.BlitzPage })));
 import { StudiesPage } from '@/pages/Studies';
-import { NotFoundPage } from '@/pages/NotFound';
+const NotFoundPage = lazy(() => import('@/pages/NotFound').then((m) => ({ default: m.NotFoundPage })));
 import { TrailPage } from '@/pages/Trail';
-import { TrailVideoPage } from '@/pages/TrailVideo';
-import { CustomizePage } from '@/pages/Customize';
+const TrailVideoPage = lazy(() => import('@/pages/TrailVideo').then((m) => ({ default: m.TrailVideoPage })));
+const CustomizePage = lazy(() => import('@/pages/Customize').then((m) => ({ default: m.CustomizePage })));
 const ScenarioListPage = lazy(() => import('@/pages/Scenarios').then((m) => ({ default: m.ScenarioListPage })));
 const ScenarioPage = lazy(() => import('@/pages/Scenarios').then((m) => ({ default: m.ScenarioPage })));
 const TeachersRoomPage = lazy(() => import('@/pages/TeachersRoom').then((m) => ({ default: m.TeachersRoomPage })));
@@ -60,7 +62,7 @@ export function AppRoutes() {
         <Route path="biblioteca" element={<LibraryPage />} />
         <Route path="estudos" element={<StudiesPage />} />
         <Route path="trilha" element={<TrailPage />} />
-        <Route path="video/:id" element={<TrailVideoPage />} />
+        <Route path="video/:id" element={<DeferredPage><TrailVideoPage /></DeferredPage>} />
         <Route path="explorar" element={<StudiesPage />} />
         <Route path="revisar" element={<TrainingPage />} />
         <Route path="grimorio/:id" element={<GrimoirePage />} />
@@ -68,8 +70,8 @@ export function AppRoutes() {
         <Route path="aprender/:chapterId/:sectionId" element={<LearnPage />} />
         <Route path="aprender/:chapterId/:sectionId/:aula" element={<LearnPage />} />
         <Route path="missao/:id" element={<DeferredPage><MissionPage /></DeferredPage>} />
-        <Route path="download" element={<DownloadPage />} />
-        <Route path="personalizar" element={<CustomizePage />} />
+        <Route path="download" element={<DeferredPage><DownloadPage /></DeferredPage>} />
+        <Route path="personalizar" element={<DeferredPage><CustomizePage /></DeferredPage>} />
         <Route path="simulador" element={<DeferredPage><ScenarioListPage /></DeferredPage>} />
         <Route path="simulador/:id" element={<DeferredPage><ScenarioPage /></DeferredPage>} />
         <Route path="sala" element={<DeferredPage><TeachersRoomPage /></DeferredPage>} />
@@ -79,29 +81,29 @@ export function AppRoutes() {
         <Route path="licao/:id" element={<LessonPage />} />
         <Route path="revisao" element={<ReviewPage />} />
         <Route path="slides" element={<DeferredPage><ReviewSlidesPage /></DeferredPage>} />
-        <Route path="historico" element={<HistoryPage />} />
-        <Route path="progresso" element={<ProgressPage />} />
-        <Route path="edital" element={<EditalPage />} />
-        <Route path="conta" element={<AccountPage />} />
-        <Route path="conta/acesso" element={<AccessPage />} />
-        <Route path="conta/sincronizacao" element={<SyncPage />} />
-        <Route path="conta/aparencia" element={<AppearancePage />} />
-        <Route path="conta/sons" element={<SoundsPage />} />
-        <Route path="conta/dados" element={<DataPage />} />
-        <Route path="conta/sobre" element={<AboutPage />} />
-        <Route path="conta/tela" element={<ScreenPage />} />
+        <Route path="historico" element={<DeferredPage><HistoryPage /></DeferredPage>} />
+        <Route path="progresso" element={<DeferredPage><ProgressPage /></DeferredPage>} />
+        <Route path="edital" element={<DeferredPage><EditalPage /></DeferredPage>} />
+        <Route path="conta" element={<DeferredPage><AccountPage /></DeferredPage>} />
+        <Route path="conta/acesso" element={<DeferredPage><AccessPage /></DeferredPage>} />
+        <Route path="conta/sincronizacao" element={<DeferredPage><SyncPage /></DeferredPage>} />
+        <Route path="conta/aparencia" element={<DeferredPage><AppearancePage /></DeferredPage>} />
+        <Route path="conta/sons" element={<DeferredPage><SoundsPage /></DeferredPage>} />
+        <Route path="conta/dados" element={<DeferredPage><DataPage /></DeferredPage>} />
+        <Route path="conta/sobre" element={<DeferredPage><AboutPage /></DeferredPage>} />
+        <Route path="conta/tela" element={<DeferredPage><ScreenPage /></DeferredPage>} />
         <Route path="treino" element={<TrainingPage />} />
-        <Route path="plano" element={<PlanPage />} />
+        <Route path="plano" element={<DeferredPage><PlanPage /></DeferredPage>} />
         <Route path="reino" element={<Navigate to="/progresso" replace />} />
         <Route path="personagem" element={<Navigate to="/progresso" replace />} />
-        <Route path="flashcards" element={<FlashcardsPage />} />
-        <Route path="relampago" element={<BlitzPage />} />
+        <Route path="flashcards" element={<DeferredPage><FlashcardsPage /></DeferredPage>} />
+        <Route path="relampago" element={<DeferredPage><BlitzPage /></DeferredPage>} />
         <Route path="diario" element={<Navigate to="/progresso" replace />} />
-        <Route path="simulado" element={<ExamPage />} />
-        <Route path="simulado/:id" element={<ExamResultPage />} />
-        <Route path="discursiva" element={<EssayListPage />} />
-        <Route path="discursiva/:id" element={<EssayPage />} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="simulado" element={<DeferredPage><ExamPage /></DeferredPage>} />
+        <Route path="simulado/:id" element={<DeferredPage><ExamResultPage /></DeferredPage>} />
+        <Route path="discursiva" element={<DeferredPage><EssayListPage /></DeferredPage>} />
+        <Route path="discursiva/:id" element={<DeferredPage><EssayPage /></DeferredPage>} />
+        <Route path="*" element={<DeferredPage><NotFoundPage /></DeferredPage>} />
       </Route>
     </Routes>
   );
