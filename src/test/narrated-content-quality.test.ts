@@ -42,9 +42,9 @@ describe('qualidade estrutural das aulas narradas autorais', () => {
       'eniac',
       'jean jennings bartik',
       'transistor',
-      'circuitos integrados',
+      'circuito integrado',
       'intel',
-      'busicom',
+      'microprocessador',
       'apple ii',
       'ibm pc',
     ]) {
