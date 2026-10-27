@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   build-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       # Com a chave de release nos segredos, qualquer branch pode publicar. Sem ela, a chave de
       # assinatura vem do cache do Actions, que é separado por branch: publicar de dois branches
