@@ -182,3 +182,17 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 - Commit `6a075876c2d3fe9150ead5dd5f5f7155381870e1`: fonte Fraunces removida, tema padrão migra para Aurora, fundo liso e fonte sem serifa, CSS do livro físico removido, preferências antigas normalizadas.
 - Commit `683a692339ae9d74a2da3db482bea5560ccefd82`: ilustrações e ícones que antes mostravam livros foram neutralizados; comentários de Aprender e Unidade Interativa agora descrevem etapas contínuas.
 - Commit `c85fbeac5096222c511287a00f38392ece2dab90`: os exemplos de lógica passaram de cavaleiros/valetes/ilha para pessoas verídicas e mentirosas; revisão editorial final ainda precisa eliminar erros gramaticais remanescentes.
+
+
+### ChatGPT — recuperação do build e expansão do gate de publicação
+**Data:** 2026-10-27  
+**Estado:** versão 0.1.473 publicada; CI e Pages confirmados.  
+- Corrigido `src/pages/Customize.tsx`: removido o import `LOOK_VERSION` que quebrava o typecheck e corrigidas as chaves duplicadas da amostra de paletas.
+- Recuperados `scripts/e2e-visual-audit.mjs`, `scripts/report-bundle-sizes.mjs` e `docs/QA_ANDROID_FISICO.md`; registrados `test:visual` e `report:bundle` no `package.json`.
+- O workflow de publicação agora executa a medição de bundle e a auditoria visual, além de guardar relatório/capturas como artefato. Commit validado: `4c3f3287b838e544c9e97cda5592589529f055c8`.
+- Run `40594287291` passou: 39 arquivos / 2.384 testes; build; bundle report; E2E; auditoria visual; APK; publicação. Deploy de Pages `40595542577` passou. Versão publicada `0.1.473`, APK assinado com chave `debug`.
+- A auditoria visual não detectou falhas bloqueantes, mas reportou 1 candidato a clipping na rota `/aula-narrada/narrada.prim.historia` em cada viewport/tema. Isso exige inspeção humana das capturas antes de afirmar conclusão visual total.
+- Bundle inicial medido em ~4.462,9 KiB brutos / 1.337,8 KiB gzip; o relatório é informativo, não uma otimização.
+- O PR #10 permanece não integrado: branches divergentes e estado `dirty`; não forçar merge. Ver `docs/SESSION_HANDOFF.md` para limites e próximos passos.
+- Esta rodada também atualiza `.github/workflows/pages.yml` para ignorar pushes exclusivamente documentais, evitando recompilar APK em alterações de handoff/coordenação. Como o próprio workflow foi alterado neste commit, uma nova execução de CI será iniciada e deverá ser conferida antes de considerar o novo HEAD totalmente validado.
+- Pendências reais: teste no Android físico, Supabase Auth/sync contra conta de teste, inspeção manual do clipping heurístico e revisão de conteúdo por especialistas.

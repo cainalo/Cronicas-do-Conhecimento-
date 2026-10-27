@@ -3,6 +3,10 @@ name: Publicar site e app Android
 on:
   push:
     branches: [main, claude/cronicas-conhecimento-estudos-jgbofo]
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - 'src/app/SESSION_COORDINATION.md'
   workflow_dispatch:
 
 permissions:

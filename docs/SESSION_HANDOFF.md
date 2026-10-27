@@ -1,7 +1,43 @@
 # Handoff de sessão
 
-**Última atualização:** 2026-10-26
-**Fase:** reformulação "Arquivo Real" (kit em `docs/kit/`, auditoria em `docs/AUDITORIA_REFORMULACAO.md`): fases 0 a 5 do kit feitas para o piloto; expansão pendente.
+**Última atualização:** 2026-10-27
+**Fase:** estabilização de publicação e QA; o estado vigente abaixo prevalece sobre notas históricas posteriores que estejam desatualizadas.
+
+## Estado operacional vigente — 27/10/2026
+
+### Produto e publicação
+A versão vigente é uma plataforma moderna e gamificada de estudos para concursos, com leitura contínua. A antiga direção medieval e o formato de livro físico foram descontinuados; para decisões atuais, prevalecem `docs/PRODUCT_DECISIONS.md` e `docs/PRODUCT_AUDIT_2026-10-27.md`.
+
+- **Site:** https://cainalo.github.io/Cronicas-do-Conhecimento-/
+- **APK Android:** https://cainalo.github.io/Cronicas-do-Conhecimento-/download/cronicas-do-conhecimento.apk
+- **Versão publicada:** 0.1.473 (código 473), compilada em 2026-10-27; assinatura `debug`, apropriada para testes, não para distribuição comercial.
+- **Última validação completa:** workflow `40594287291`, commit `4c3f3287`, conclusão `success`. O job de GitHub Pages `40595542577` também terminou com sucesso.
+
+### O que foi validado
+- `npm test`: 39 arquivos de teste, 2.384 testes aprovados.
+- `npm run build`: TypeScript e Vite aprovados.
+- `npm run report:bundle`: passou e registrou aproximadamente 4.462,9 KiB brutos / 1.337,8 KiB gzip para a carga inicial.
+- `npm run test:e2e`: passou, incluindo a medida geométrica da cena narrada em 360×640 e 390×844.
+- `npm run test:visual`: passou sem falhas automáticas bloqueantes, nos viewports 360×640, 390×844 e 1280×800, em tema claro/escuro. O relatório marcou um candidato heurístico a clipping na aula narrada em todos os seis contextos; consultar o artefato `cronicas-auditoria-visual-4c3f3287b838e544c9e97cda5592589529f055c8` antes de declarar a inspeção visual humana concluída.
+- Sincronização Capacitor, compilação do APK e publicação do site: passaram.
+
+### Limites ainda não verificados
+- O teste manual no Android físico, incluindo modo imersivo/barras do sistema e os controles da aula narrada, continua pendente. Checklist: `docs/QA_ANDROID_FISICO.md`.
+- Autenticação, sincronização e reinício de progresso contra uma conta real do Supabase ainda não foram confirmados ponta a ponta.
+- A matriz de cobertura indica associação de material aos 68 tópicos, mas isso não equivale a revisão por especialista. Legislação local/institucional, respostas e distratores ainda exigem conferência documental e pedagógica.
+- O bundle inicial segue grande; o relatório apenas mede, não otimiza. Investigar imports estáticos em `src/content/index.ts` antes de propor uma divisão assíncrona ampla.
+
+### Branch de manutenção não integrada
+O PR #10, da branch `gpt/ingles01-microaulas-2026-10-27`, passou uma validação isolada (`40565623886`), mas não deve ser mesclado à força: a história diverge da branch de publicação (242 commits à frente e 119 atrás; GitHub marcou o estado como `dirty`). Há mudanças úteis, inclusive microaulas de inglês e testes/auditorias adicionais, mas precisam de integração seletiva com as rotas atuais (`SubjectPage`/`ReadingPage`); a branch do PR ainda usa partes da arquitetura anterior (`GrimoirePage`/`BookPage`).
+
+### Próximas ações recomendadas
+1. Inspecionar as capturas da aula narrada no artefato de auditoria e completar o checklist em Android físico.
+2. Validar login, sincronização e reinício usando uma conta de teste real.
+3. Integrar seletivamente as microaulas de inglês e os testes úteis do PR #10.
+4. Planejar, como tarefa separada, a redução do bundle inicial e a revisão técnica/pedagógica do conteúdo.
+
+## Histórico de contexto e decisões
+As informações abaixo preservam o histórico das iterações anteriores; quando houver conflito, prevalece a seção “Estado operacional vigente” e a documentação de produto mais recente.
 
 ## Situação atual
 - **Rodada de 25/10/2026 (noite): pedidos do usuário. Decisões em PRODUCT_DECISIONS.md, seção "ritmo das aulas, sequência única, feed e Escritório".**
