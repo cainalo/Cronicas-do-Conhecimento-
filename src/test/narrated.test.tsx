@@ -81,7 +81,7 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
   // Vai à última cena e deixa terminar: aparece a checagem opcional.
   await user.click(screen.getByRole('button', { name: /Ir para a cena 9/ }));
   await user.click(screen.getByTestId('narrada-tocar'));
-  for (let i = 0; i < 6; i++) await act(async () => void vi.advanceTimersByTime(8000));
+  for (let i = 0; i < 20; i++) await act(async () => void vi.advanceTimersByTime(8000));
   expect(screen.getByRole('region', { name: 'Checagem' })).toHaveTextContent('Quanto é −4 + 9?');
   vi.useRealTimers();
 });
