@@ -84,22 +84,22 @@ interface Ctx {
 const chaptersDone = ({ data, chapters }: Ctx) => chapters.filter((c) => data.reading[c.id]?.completedAt).length;
 
 export const ACHIEVEMENTS: Achievement[] = [
-  { id: 'primeiro-passo', name: 'Primeiro passo', how: 'Concluir o primeiro trecho de estudo.', progress: ({ data }) => [Math.min(1, Object.values(data.reading).reduce((n, r) => n + r.sectionsRead.length, 0)), 1] },
+  { id: 'primeira-pagina', name: 'Primeiro passo', how: 'Concluir o primeiro trecho de estudo.', progress: ({ data }) => [Math.min(1, Object.values(data.reading).reduce((n, r) => n + r.sectionsRead.length, 0)), 1] },
   { id: 'capitulo', name: 'Etapa concluída', how: 'Concluir todos os trechos de uma etapa.', progress: (c) => [Math.min(1, chaptersDone(c)), 1] },
-  { id: 'leitor-constante', name: 'Leitor constante', how: 'Concluir cinco etapas de estudo.', progress: (c) => [Math.min(5, chaptersDone(c)), 5] },
+  { id: 'bibliotecario', name: 'Leitor constante', how: 'Concluir cinco etapas de estudo.', progress: (c) => [Math.min(5, chaptersDone(c)), 5] },
   { id: 'primeira-licao', name: 'Primeira Lição', how: 'Concluir uma lição.', progress: ({ data }) => [Math.min(1, Object.keys(data.lessons).length), 1] },
   { id: 'licao-perfeita', name: 'Precisão total', how: 'Acertar todas as questões de uma lição.', progress: ({ data }) => [Object.values(data.lessons).some((l) => l.bestScore === 100) ? 1 : 0, 1] },
   { id: 'cem-respostas', name: 'Cem Respostas', how: 'Responder 100 questões.', progress: ({ data }) => [Math.min(100, data.attempts.length), 100] },
-  { id: 'redencao', name: 'Redenção', how: 'Recuperar na revisão 10 questões erradas.', progress: ({ data }) => [Math.min(10, data.xp.filter((e) => e.kind === 'review_recovered').length), 10] },
+  { id: 'redencao', name: 'Recuperação consistente', how: 'Recuperar na revisão 10 questões erradas.', progress: ({ data }) => [Math.min(10, data.xp.filter((e) => e.kind === 'review_recovered').length), 10] },
   { id: 'constancia', name: 'Constância', how: 'Estudar 7 dias seguidos.', progress: ({ data }) => [Math.min(7, bestStreak(data)), 7] },
   {
     id: 'provacao',
-    name: 'Provação Simulada',
+    name: 'Simulado concluído',
     how: 'Concluir um simulado de pelo menos 10 questões com 70% de acertos.',
     progress: ({ data }) => [Object.values(data.exams).some((e) => e.finishedAt && e.questionIds.length >= 10 && (e.correct ?? 0) / e.questionIds.length >= 0.7) ? 1 : 0, 1],
   },
-  { id: 'pena-firme', name: 'Pena Firme', how: 'Entregar um estudo de caso.', progress: ({ data }) => [Object.values(data.essays).some((e) => e.submittedAt) ? 1 : 0, 1] },
-  { id: 'memoria', name: 'Memória de Ferro', how: `Levar 10 flashcards a intervalos de ${MASTERED_DAYS} dias ou mais.`, progress: ({ data }) => [Math.min(10, Object.values(data.cards).filter((c) => c.intervalDays >= MASTERED_DAYS).length), 10] },
+  { id: 'pena-firme', name: 'Estudo de caso entregue', how: 'Entregar um estudo de caso.', progress: ({ data }) => [Object.values(data.essays).some((e) => e.submittedAt) ? 1 : 0, 1] },
+  { id: 'memoria', name: 'Revisão espaçada', how: `Levar 10 flashcards a intervalos de ${MASTERED_DAYS} dias ou mais.`, progress: ({ data }) => [Math.min(10, Object.values(data.cards).filter((c) => c.intervalDays >= MASTERED_DAYS).length), 10] },
   {
     id: 'dominio',
     name: 'Domínio Demonstrado',
