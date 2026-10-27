@@ -1,0 +1,81 @@
+name: Validar branch sem publicação
+
+on:
+  push:
+    branches:
+      - gpt/ingles01-microaulas-2026-10-27
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-branch-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Testes unitários e de integração
+        run: npm test
+
+      - name: Typecheck e build web
+        run: npm run build
+
+      - name: Cache do Chromium
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+
+      - name: Instalar Chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install chromium
+
+      - name: Testes E2E de layout
+        run: npm run test:e2e
+
+      - name: Sincronizar Capacitor
+        run: npx cap sync android
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Preparar keystore de validação
+        run: |
+          if [ ! -f ~/.android/debug.keystore ]; then
+            mkdir -p ~/.android
+            keytool -genkeypair -v -keystore ~/.android/debug.keystore -storepass android \
+              -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 \
+              -dname "CN=Cronicas do Conhecimento,O=Cronicas,C=BR"
+          fi
+
+      - name: Compilar APK sem publicar
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
+
+      - name: Confirmar artefato local
+        run: test -s android/app/build/outputs/apk/release/app-release.apk
+
+      # Este workflow é intencionalmente somente de validação: não publica site, APK ou gh-pages.
