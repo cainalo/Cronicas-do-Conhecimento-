@@ -44,6 +44,7 @@ export const missaoSql01: Mission = {
     'Juntar duas tabelas com JOIN e saber o que o INNER descarta.',
     'Descobrir o que a lista vazia escondia.',
   ],
+  scene: [],
   discovery: [
     {
       title: 'Uma tabela é uma planilha com regras',
@@ -71,8 +72,8 @@ export const missaoSql01: Mission = {
         id: 'd2',
         prompt: 'Quantas linhas essa consulta devolve?',
         options: [
-          { text: 'Duas: Ferraria do Vale e Tecelagem Aurora', why: 'Exato. Só essas duas têm cidade igual a Goiânia.' },
-          { text: 'Quatro, porque a tabela tem quatro linhas', why: 'O WHERE filtra: a Papelaria (Anápolis) e a Névoa Cinzenta (NULL) não passam.' },
+          { text: 'Duas: Alfa Tecnologia e TecnoDados', why: 'Exato. Só essas duas têm cidade igual a Goiânia.' },
+          { text: 'Quatro, porque a tabela tem quatro linhas', why: 'O WHERE filtra: a Papelaria (Anápolis) e a Serviços Integrados (NULL) não passam.' },
           { text: 'Três, contando a linha sem cidade', why: 'NULL não é igual a Goiânia. Comparar com NULL nunca dá verdadeiro.' },
         ],
         answer: 0,
@@ -183,7 +184,7 @@ export const missaoSql01: Mission = {
       variant: {
         kind: 'multi',
         id: 't3b',
-        prompt: 'Agora com a tabela fornecedor: quais condições trazem a Companhia Névoa Cinzenta (cidade NULL, cnpj 44)?',
+        prompt: 'Agora com a tabela fornecedor: quais condições trazem a Serviços Integrados (cidade NULL, cnpj 44)?',
         options: [
           { text: 'cidade IS NULL', correct: true, why: 'A cidade dela não foi informada.' },
           { text: 'cnpj = 44', correct: true, why: 'O cnpj dela é 44.' },
@@ -201,7 +202,7 @@ export const missaoSql01: Mission = {
         { title: 'Consulta B', body: '```sql\nSELECT nome, valor\nFROM fornecedor\nLEFT JOIN empenho\n  ON empenho.cnpj_fornecedor = fornecedor.cnpj;\n```' },
       ],
       answer: 1,
-      why: 'A Consulta B mantém todos os fornecedores (tabela da esquerda). A Tecelagem Aurora, sem empenho, aparece com valor NULL. A Consulta A a esconderia.',
+      why: 'A Consulta B mantém todos os fornecedores (tabela da esquerda). A TecnoDados, sem empenho, aparece com valor NULL. A Consulta A a esconderia.',
       errorKind: 'confusao',
     },
     {
@@ -260,29 +261,29 @@ export const missaoSql01: Mission = {
   ],
   exam: { kind: 'exam', id: 'prova', prompt: 'Questão no estilo da prova', questionId: 'q.dados.01.007' },
   ending: {
-    text: 'Você tem duas provas escritas: R$ 182.000 em empenhos de 2026 sem conferência para a Companhia Névoa Cinzenta, que nem cidade informou, e R$ 40.000 pagos a um cnpj que não existe no cadastro.',
+    text: 'Você tem duas provas escritas: R$ 182.000 em empenhos de 2026 sem conferência para a Serviços Integrados, que nem cidade informou, e R$ 40.000 pagos a um cnpj que não existe no cadastro.',
     prompt: 'A quem você leva a consulta primeiro?',
     options: [
       {
         id: 'leonor',
-        label: 'À auditora Leonor, do Conselho',
-        result: 'Leonor roda a consulta de novo, confere linha por linha e registra o achado com a sua assinatura. "Assim ninguém poderá dizer que a lista sumiu", diz ela.',
-        trust: { leonor: 1 },
-        clue: 'O cnpj 99 recebeu R$ 40.000 sem estar no cadastro. Leonor registrou o achado no livro do Conselho.',
+        label: 'À equipe de auditoria',
+        result: 'A equipe de auditoria executa a consulta novamente, confere as linhas e registra a evidência com data, hora e responsáveis.',
+        trust: { auditoria: 1 },
+        clue: 'O CNPJ 99 recebeu R$ 40.000 sem estar no cadastro. A equipe registrou a inconsistência no relatório de auditoria.',
       },
       {
         id: 'valerio',
-        label: 'Ao Conde Valério, que pediu a lista',
-        result: 'Valério agradece e promete "cuidar disso". No dia seguinte, os dois empenhos da Névoa Cinzenta aparecem com status "pago", sem nota fiscal. Agora há também uma alteração suspeita para explicar.',
-        trust: { valerio: 1, isolda: -1 },
-        clue: 'Depois que Valério viu a consulta, os empenhos 4 e 5 mudaram para "pago" sem nota fiscal.',
+        label: 'Ao solicitante do relatório',
+        result: 'solicitante agradece e promete "cuidar disso". No dia seguinte, os dois empenhos da Serviços Integrados aparecem com status "pago", sem nota fiscal. Agora há também uma alteração suspeita para explicar.',
+        trust: { solicitante: 1, auditoria: -1 },
+        clue: 'Após a consulta ser compartilhada, alguém solicita alterar os empenhos 4 e 5 para "pago" sem nota fiscal.',
       },
       {
         id: 'isolda',
-        label: 'A Isolda, para guardar uma cópia no Arquivo',
-        result: 'Isolda manda copiar a consulta e o resultado para o livro do Arquivo antes de qualquer conversa. "Primeiro a prova fica segura. Depois decidimos a quem mostrar."',
-        trust: { isolda: 1 },
-        clue: 'Há uma cópia da consulta e do resultado no livro do Arquivo, com data e hora.',
+        label: 'À coordenação de auditoria, para preservar a evidência',
+        result: 'A coordenação orienta guardar a consulta, os parâmetros, o resultado e a data de execução antes de compartilhar os achados.',
+        trust: { coordenacao: 1 },
+        clue: 'Há uma cópia da consulta e do resultado no repositório de evidências, com data e hora.',
       },
     ],
   },
