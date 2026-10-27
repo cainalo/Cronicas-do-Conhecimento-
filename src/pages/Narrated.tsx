@@ -602,16 +602,6 @@ export function NarratedPlayer({
         </div>
       </section>
 
-      <div
-        className={`absolute left-3 top-[max(0.85rem,env(safe-area-inset-top))] z-30 max-w-[calc(100vw-5.5rem)] transition-all duration-300 ${visibleClass}`}
-        onClick={stopOverlayClick} aria-hidden={!controlsVisible} data-testid="narrada-titulo-flutuante"
-      >
-        <div className="rounded-full border border-white/20 bg-[#171b1b]/78 px-3 py-2 text-white shadow-lg backdrop-blur-md">
-          <p className="text-[0.55rem] font-black uppercase tracking-[0.15em] text-[#ffbb8c]">{embedded ? 'Aula narrada · IA' : 'Aula narrada · ' + l.minutes + ' min'}</p>
-          <p className="mt-0.5 truncate text-sm font-semibold leading-tight sm:text-base">{l.title}</p>
-          <p className="truncate text-[0.65rem] text-white/70">{scene.heading} · cena {pos.scene + 1}/{l.scenes.length}</p>
-        </div>
-      </div>
       <button type="button" className={`absolute right-3 top-[max(0.85rem,env(safe-area-inset-top))] z-40 grid h-11 w-11 place-items-center rounded-full border border-white/25 bg-[#171b1b]/80 text-white shadow-lg backdrop-blur-md transition-all duration-300 ${visibleClass}`}
         onClick={(event) => { event.stopPropagation(); stop(); setPlaying(false); if (onClose) onClose(); }}
         aria-label={exitLabel} title={exitLabel} data-testid="narrada-sair">
@@ -938,7 +928,6 @@ function CinematicScene({
             <p className="ccv-film-eyebrow"><span />{eyebrow}</p>
             {dateOrStep && <p className="ccv-film-date">{dateOrStep}</p>}
             <h2 className="ccv-film-headline">{headline}</h2>
-            {support && <p className="ccv-film-support">{support}</p>}
             <div className="ccv-film-progress" aria-hidden="true">
               {Array.from({ length: Math.max(1, progressCount) }, (_, index) => (
                 <span key={index} className={index < progressIndex ? 'is-past' : index === progressIndex ? 'is-current' : ''} />
@@ -986,6 +975,12 @@ function CinematicScene({
             )}
           </div>
         </section>
+
+        {support && (
+          <section key={scene.id + ':' + beatIndex} className="ccv-film-details" aria-label="Explicação do conceito" data-testid="narrada-explicacao-cena">
+            <p className="ccv-film-support">{support}</p>
+          </section>
+        )}
       </div>
 
       <footer className="ccv-film-footer">
