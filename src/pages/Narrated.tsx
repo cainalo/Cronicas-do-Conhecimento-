@@ -565,21 +565,21 @@ export function NarratedPlayer({
 
   // O palco visual ocupa a viewport inteira. Cabeçalho, legenda e controles são camadas
   // flutuantes com margens seguras; nunca empurram o vídeo nem ficam colados às bordas.
-  const shell = 'fixed left-0 right-0 top-0 bottom-0 z-[100] isolate h-[100dvh] min-h-[100dvh] max-h-[100dvh] w-screen min-w-[100vw] max-w-none overflow-hidden rounded-none bg-[#c8402a] text-ink';
+  const shell = 'fixed inset-0 z-[2147483000] isolate h-[100dvh] min-h-[100dvh] max-h-[100dvh] w-full min-w-0 max-w-none overflow-hidden rounded-none bg-[#c8402a] text-ink';
   const visibleClass = controlsVisible ? 'opacity-100 translate-y-0 pointer-events-auto' : 'pointer-events-none translate-y-2 opacity-0';
   const stopOverlayClick = (event: MouseEvent) => event.stopPropagation();
 
   return createPortal((
     <div
       className={shell}
-      style={{ width: '100vw', minWidth: '100vw', maxWidth: '100vw', height: '100dvh', minHeight: '100dvh', maxHeight: '100dvh', margin: 0, boxSizing: 'border-box' }}
+      style={{ position: 'fixed', inset: 0, width: '100%', minWidth: 0, maxWidth: 'none', height: '100dvh', minHeight: '100dvh', maxHeight: '100dvh', margin: 0, padding: 0, border: 0, boxSizing: 'border-box', backgroundColor: '#c8402a', overflow: 'hidden' }}
       data-embedded={embedded ? 'true' : undefined}
       data-testid="narrada-player"
       onClick={togglePlayerControls}
       onPointerMove={(event) => { if (event.pointerType === 'mouse' && (event.movementX !== 0 || event.movementY !== 0)) revealControls(); }}
       onKeyDown={revealControls}
     >
-      <section className="absolute inset-0 overflow-hidden bg-bg" aria-label="Aula em vídeo narrado" data-testid="narrada-stage" onClick={(event) => { event.stopPropagation(); togglePlayerControls(); }}>
+      <section className="absolute inset-0 overflow-hidden bg-[#c8402a]" aria-label="Aula em vídeo narrado" data-testid="narrada-stage" onClick={(event) => { event.stopPropagation(); togglePlayerControls(); }}>
         <div
           className="absolute inset-0 grid place-items-center"
           data-testid="narrada-cena"

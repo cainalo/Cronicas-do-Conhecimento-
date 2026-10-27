@@ -233,3 +233,11 @@ Este é o único arquivo de coordenação do projeto. Os registros antigos abaix
 - README e matriz de cobertura foram atualizados para descrever a plataforma sem RPG medieval. Títulos temáticos em índices de conteúdo e conquistas foram substituídos por nomes descritivos, preservando IDs das disciplinas e tópicos.
 - Criado docs/PRODUCT_AUDIT_2026-10-27.md com estado do produto, lacunas de conteúdo e prioridades.
 - Próximos passos: remover artefatos de fantasia sem consumidores após auditoria de referências; conferir dependências; integrar na branch que publica; acompanhar testes, APK e GitHub Pages antes de declarar publicação concluída.
+
+
+### ChatGPT — teste geométrico direto da largura da cena
+**Data:** 2026-10-27  
+**Estado:** teste E2E adicionado; workflow atualizado pendente.  
+- Adicionado a scripts/e2e-layout.mjs o teste checkNarratedSceneWidth, que mede o bounding box real de [data-testid=narrada-cena-cinematica] em 360×640 e 390×844, com tema padrão e estilo de cartões vidro. A cena precisa alcançar o limite esquerdo e direito do viewport; 1 px de sangria é permitido e não deve causar rolagem lateral.
+- Commit do teste: 00ef5eaad8a8ce980fc9f5efaa45e8f2c0e268bf.
+- Esta verificação é deliberadamente separada do teste de overlay externo: ela mede a própria cena, alvo do defeito visual relatado. Executar e conferir o resultado no workflow final. A checagem em Android físico permanece pendente.
