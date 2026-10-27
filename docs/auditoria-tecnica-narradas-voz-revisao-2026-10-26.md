@@ -1,6 +1,6 @@
 # Revisão independente — timeline narrada e adaptador TTS
 
-**Atualizada em:** 27/10/2026, 02:44 UTC
+**Atualizada em:** 27/10/2026, 02:46 UTC
 **Branch revisada:** claude/cronicas-conhecimento-estudos-jgbofo
 **Branch desta contribuição:** gpt/narrated-timeline-review-2026-10-27
 **Escopo:** revisão do código real, testes e integração de alinhamento. Não altera Narrated.tsx, ReviewSlides.tsx, voice.ts nem narration-timeline.ts, para evitar conflito com as outras sessões.
@@ -9,9 +9,9 @@
 
 ### P0 — unificar o texto canônico antes de integrar os timestamps
 
-No snapshot mais recente, src/pages/Narrated.tsx monta a faixa Gemini unindo falas por espaço dentro da mesma cena e separando cenas com duas quebras de linha. Já src/lib/narration-timeline.ts (buildNarrationScript) coloca duas quebras de linha entre todos os beats. O helper rejeita texto divergente de propósito; portanto, a integração falhará ou os offsets não corresponderão às falas posteriores se os dois caminhos continuarem diferentes.
+A análise deve distinguir a base que o revisor viu do topo posterior. No base SHA 07f6e849 (base do PR #9 durante a revisão), Narrated.tsx e buildNarrationScript usavam duas quebras de linha entre cada beat; ali, a divergência não existia e o comentário automático está correto para aquele snapshot. Depois, o commit a384e47 mudou Narrated.tsx para juntar beats da mesma cena com espaço e separar cenas com duas quebras de linha, mas o helper manteve o separador entre cada beat. No topo posterior, isso cria uma divergência real que precisa ser resolvida antes de integrar timestamps.
 
-**Recomendação:** buildNarrationScript deve ser a única fonte do texto enviado ao TTS e do mapeamento de offsets; o player não deve reconstruir nem normalizar o texto separadamente. Alternativamente, ajuste o helper para reproduzir exatamente o formato que o player realmente envia e atualize o teste do contrato do script. Não consumir cues até este contrato ser unificado.
+**Recomendação:** use buildNarrationScript(lesson) como fonte única do texto enviado ao TTS e dos offsets de cada beat. Isso permite manter a pausa intra-cena intencional sem duplicar a regra em React. Alternativamente, atualize o helper e o teste de contrato para reproduzir exatamente o script novo do player. Compare os textos completos byte a byte antes de consumir os cues.
 
 ### P1 — o relógio da faixa é real, mas a troca de cena segue estimada
 
