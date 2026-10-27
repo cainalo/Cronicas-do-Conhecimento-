@@ -13,11 +13,8 @@ export const grimorioDev: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.dev',
   title: 'Desenvolvimento de Sistemas',
-  epithet: 'Desenvolvimento de Sistemas',
   description: 'Como os sistemas conversam (REST, GraphQL, WebSockets, OpenAPI), como provam quem pode entrar (OAuth 2.0, OIDC, JWT), os algoritmos e estruturas de dados que os movem e as linguagens em que são escritos (Java, JavaScript/Node, React, Python, TypeScript), com pacotes e publicação.',
   chapterIds: ['cap.dev.01', 'cap.dev.02', 'cap.dev.03', 'cap.dev.04'],
-  sigil: 'grimorio',
-  binding: 'noite',
 };
 
 export const capDevApis: Chapter = {
@@ -108,7 +105,7 @@ export const licoesDev: Lesson[] = [
         body: '**201** criado · **204** sem conteúdo · **304** use o cache · **401** falta autenticar · **403** sem permissão · **404** não existe · **429** excesso de requisições · **503** indisponível.',
       },
       {
-        title: 'Outras pontes',
+        title: 'Outros padrões de APIs',
         body: '**GraphQL**: um endpoint, o cliente escolhe os campos. **WebSocket**: canal bidirecional, Upgrade e 101. **OpenAPI**: o contrato da API em YAML ou JSON.',
       },
     ],
