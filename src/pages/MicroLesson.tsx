@@ -158,7 +158,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
 
   return (
     // Altura fixa da tela: nada rola para baixo. O que não cabe vai para a parte seguinte, ao lado.
-    <div className="-mt-2 flex flex-col overflow-hidden" style={{ height: 'calc(100dvh - 5.5rem - env(safe-area-inset-top, 0px))' }}>
+    <div className="-mt-2 flex flex-col overflow-hidden" style={{ height: 'calc(100dvh - 1.75rem - env(safe-area-inset-top, 0px))' }}>
       <div className="mb-2 flex items-center gap-3">
         <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => navigate('/trilha')} aria-label="Sair (o lugar fica salvo)">
           <Icon name="errado" size={22} />
