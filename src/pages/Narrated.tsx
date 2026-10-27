@@ -1,6 +1,6 @@
 // Aula visual narrada com player de tela inteira, cena animada e linha do tempo arrastável.
 // A busca é estimada por fala: a voz do aparelho não fornece uma duração exata de vídeo.
-import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getNarrated } from '@/content';
 import type { NarratedLesson, NumberLineState, Scene } from '@/content/narrated/types';
@@ -529,7 +529,7 @@ function CinematicScene({
   return (
     <article
       className="ccv-scene"
-      style={{ '--ccv-background': palette.background, '--ccv-accent': palette.accent, '--ccv-secondary': palette.secondary } as React.CSSProperties}
+      style={{ '--ccv-background': palette.background, '--ccv-accent': palette.accent, '--ccv-secondary': palette.secondary } as CSSProperties}
       aria-label={scene.heading}
       data-testid="narrada-cena-cinematica"
     >
@@ -579,7 +579,7 @@ function CinematicScene({
 
           {visual.kind === 'timeline' && (
             <div className="ccv-timeline">
-              <div className="ccv-timeline__path" aria-hidden="true"><span style={{ width: (((activeIndex(visual.items.length) + 1) / visual.items.length) * 100) + '%' }} /></div>
+              <div className="ccv-timeline__path" aria-hidden="true"><span style={{ height: (((activeIndex(visual.items.length) + 1) / visual.items.length) * 100) + '%' }} /></div>
               {visual.items.map((item, index) => (
                 <div key={scene.id + ':event:' + index} className={'ccv-timeline__event ' + (index === activeIndex(visual.items.length) ? 'is-active ccv-scene__change' : index < activeIndex(visual.items.length) ? 'is-past' : '')}>
                   <span className="ccv-timeline__dot">{index < activeIndex(visual.items.length) ? '✓' : String(index + 1).padStart(2, '0')}</span>
@@ -633,7 +633,7 @@ function CinematicNumberLine({ from, to, state }: { from: number; to: number; st
             <text x={x(number)} y={y + 43} textAnchor="middle" className="ccv-numberline__label">{number}</text>
           </g>
         ))}
-        {jump && <path d={`M${x(jump.from)} ${y - 12} Q${(x(jump.from) + x(jump.to)) / 2} 18 ${x(jump.to)} ${y - 12}`} className="ccv-numberline__jump" pathLength="1" />}
+        {jump && <path key={`${jump.from}-${jump.to}`} d={`M${x(jump.from)} ${y - 12} Q${(x(jump.from) + x(jump.to)) / 2} 18 ${x(jump.to)} ${y - 12}`} className="ccv-numberline__jump" pathLength="1" />}
         {points.map((number, index) => (
           <circle key={number + ':' + index} cx={x(number)} cy={y} r={index === points.length - 1 ? 12 : 7} className={index === points.length - 1 ? 'ccv-numberline__point is-current' : 'ccv-numberline__point'} />
         ))}
