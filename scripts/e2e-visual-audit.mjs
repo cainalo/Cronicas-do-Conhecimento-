@@ -62,6 +62,18 @@ async function startServer() {
   throw new Error('vite preview não respondeu em ' + BASE);
 }
 
+/**
+ * React.lazy chunks are requested after the shell mounts. Wait for the accessible
+ * fallback to disappear before measuring or capturing a route.
+ */
+async function waitForDeferredRoute(page) {
+  await page.locator('main').first().waitFor({ state: 'attached', timeout: 15000 });
+  const loading = page.locator('[role="status"]').filter({ hasText: 'Carregando esta área' });
+  if (await loading.count()) {
+    await loading.first().waitFor({ state: 'detached', timeout: 15000 });
+  }
+}
+
 async function inspect(page, where) {
   return page.evaluate(() => {
     const root = document.documentElement;
@@ -212,8 +224,10 @@ async function run() {
         for (const route of ROUTES) {
           const name = slug(route);
           const tag = vp.id + '-' + theme + '-' + name;
+          jsErrors.length = 0; // cada rota recebe apenas seus próprios erros
           try {
             await page.goto(BASE + route, { waitUntil: 'load', timeout: 20000 });
+            await waitForDeferredRoute(page);
             await page.waitForTimeout(WAIT_MS);
             const report = await inspect(page, tag);
             report.route = route;
