@@ -6,7 +6,6 @@ import { usePrefs } from '@/app/prefs';
 import { AREAS, areaColor, type AreaKey } from '@/app/areas';
 import { Icon, type IconName } from '@/components/Icon';
 import { Illustration, type IllustrationName } from '@/components/Illustration';
-import type { ArtId } from '@/components/TileArt';
 
 export const useIsDark = () => usePrefs().prefs.theme === 'dark';
 
@@ -89,22 +88,18 @@ export interface TileProps {
   text: string;
   badge?: string;
   wide?: boolean;
-  /** Mantido por compatibilidade com o desenho antigo; o pôster usa a ilustração do ícone. */
-  art?: ArtId | null;
   /** Ilustração do pôster; por padrão, a que combina com o ícone. */
   illustration?: IllustrationName;
   index?: number;
 }
 
-export const TILE_ARTS: string[] = ['ampulheta', 'cartas', 'relogio', 'pena', 'calendario', 'lista', 'mapa', 'escudo', 'grafico', 'pergaminho', 'grimorio', 'torre', 'chama'];
-
 const ICON_ART: Partial<Record<IconName, IllustrationName>> = {
-  grimorio: 'livro',
-  livro: 'livro',
-  pena: 'livro',
-  pergaminho: 'livro',
-  lista: 'livro',
-  torre: 'livro',
+  grimorio: 'computador',
+  livro: 'computador',
+  pena: 'computador',
+  pergaminho: 'computador',
+  lista: 'computador',
+  torre: 'computador',
   cartas: 'revisao',
   ampulheta: 'revisao',
   revisar: 'revisao',
@@ -130,7 +125,7 @@ export function Tile({ to, icon, color, title, text, badge, wide, illustration, 
   // No claro, texto branco sobre a cor; no escuro as cores clareiam e o texto fica escuro.
   const fg = dark ? 'rgb(var(--bg))' : '#ffffff';
   const style: CSSProperties = { background: color, color: fg, ['--tile' as string]: color };
-  const art = illustration ?? ICON_ART[icon] ?? 'livro';
+  const art = illustration ?? ICON_ART[icon] ?? 'computador';
   return (
     <div className={`anim-tile-in ${wide ? 'col-span-2' : ''}`} style={{ animationDelay: `${Math.min(index ?? 0, 12) * 70}ms` }}>
       <Link to={to} className="tile-color group relative flex h-full min-h-[11.75rem] flex-col items-start overflow-hidden rounded-[10px] p-4 text-left" style={style}>
