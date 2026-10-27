@@ -1,5 +1,5 @@
 import { lazy, Suspense, type ReactNode } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { FxProvider } from '@/app/fx';
@@ -53,6 +53,11 @@ function DeferredPage({ children }: { children: ReactNode }) {
   return <Suspense fallback={<p role="status" className="sr-only">Carregando esta área…</p>}>{children}</Suspense>;
 }
 
+function LegacyGrimoireRedirect() {
+  const { id = '' } = useParams();
+  return <Navigate to={`/materia/${id}`} replace />;
+}
+
 export function AppRoutes() {
   return (
     <Routes>
@@ -64,7 +69,8 @@ export function AppRoutes() {
         <Route path="video/:id" element={<DeferredPage><TrailVideoPage /></DeferredPage>} />
         <Route path="explorar" element={<StudiesPage />} />
         <Route path="revisar" element={<TrainingPage />} />
-        <Route path="grimorio/:id" element={<GrimoirePage />} />
+        <Route path="materia/:id" element={<GrimoirePage />} />
+        <Route path="grimorio/:id" element={<LegacyGrimoireRedirect />} />
         <Route path="capitulo/:id" element={<BookPage />} />
         <Route path="aprender/:chapterId/:sectionId" element={<LearnPage />} />
         <Route path="aprender/:chapterId/:sectionId/:aula" element={<LearnPage />} />
