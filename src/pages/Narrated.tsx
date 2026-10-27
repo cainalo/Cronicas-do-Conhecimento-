@@ -305,7 +305,7 @@ export function NarratedPlayer({
         >
           <div className="anim-tile-in relative flex h-full max-h-full w-full flex-col items-center justify-center gap-3" key={scene.id}>
             <SceneView scene={scene} reveal={revealOf(scene, pos.beat)} />
-            {scene.visual.kind !== 'cards' && <SceneMotionStrip key={scene.id + ':' + pos.beat} scene={scene} say={say} />}
+            <SceneMotionStrip key={scene.id + ':' + pos.beat} scene={scene} say={say} />
           </div>
         </div>
       </section>
