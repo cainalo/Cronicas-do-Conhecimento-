@@ -72,3 +72,18 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 2. A revisão/integração deve escolher uma única suíte de teste (preferência por nome em pt-BR `ia-etica-dados.test.ts` se essa for a convenção final) e uma única fonte de microaulas, preservando todo o conteúdo útil de ambas as versões.
 3. Não editar os documentos de continuidade enquanto a sessão da branch paralela estiver fazendo suas atualizações; coordenar primeiro a versão que será preservada.
 4. Nenhum teste/build/CI ou captura Android desta rodada foi executado por esta sessão. Manter validação como pendente.
+
+
+### ChatGPT — Correção da largura total da aula narrada
+**Data:** 2026-10-27  
+**Estado:** correção de largura registrada; build pendente de conclusão.  
+**Escopo:** corrigir as faixas laterais claras reportadas pelo usuário no player, sem alterar o sistema cinematográfico nem a implementação da voz que outra sessão está refinando.
+
+**Alterações feitas**
+- `src/pages/Narrated.tsx`: a camada do player agora força limites explícitos de `100vw × 100dvh`, sem margem e com `box-sizing: border-box`.
+- `src/styles/index.css`: palco `.ccv-film-scene` força largura de viewport completa e sangria horizontal, além de raio zero.
+- `src/test/layout-guard.test.ts`: a regressão exige viewport com largura integral e regra de sangria no palco.
+
+**Commits**: `fb6074c8` (player), `3fa07d71` (CSS), `4cf488de` (teste).  
+**Validação**: o workflow de CI/deploy precisa terminar no commit mais recente. Ainda não houve inspeção em aparelho físico nesta etapa; não marcar a correção visual como confirmada antes disso.  
+**Limite para outras sessões**: manter a autoria de animações e TTS em sua sessão responsável; esta mudança se limita à sangria da tela.
