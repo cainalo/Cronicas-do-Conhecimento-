@@ -71,7 +71,7 @@ export function Dashboard() {
 
       <section
         className="relative overflow-hidden rounded-3xl border border-line p-5 sm:p-6"
-        style={{ background: `linear-gradient(120deg, color-mix(in srgb, ${color('grimorios')} 16%, rgb(var(--surface))), rgb(var(--surface)) 78%)` }}
+        style={{ background: `linear-gradient(120deg, color-mix(in srgb, ${color('explorar')} 16%, rgb(var(--surface))), rgb(var(--surface)) 78%)` }}
         aria-label="Continuar estudando"
       >
         <div className="pointer-events-none absolute -right-6 -top-8 h-36 w-36 rounded-full border-[18px] opacity-20" style={{ borderColor: color('grimorios') }} />
@@ -96,7 +96,7 @@ export function Dashboard() {
         <div className="grid grid-cols-3 gap-2 sm:gap-3">
           <CompactStat label="Questões hoje" value={answeredToday} hint={`Meta: ${dailyGoal}`} to="/historico" color={color('treino')} icon="certo" />
           <CompactStat label="Para revisar" value={questionsToReview} hint={questionsToReview ? 'Erros para retomar' : 'Tudo em dia'} to="/revisao" color={color('explorar')} icon="chama" />
-          <CompactStat label="Cartões de hoje" value={cardsDue} hint={cardsDue ? 'Revisão espaçada' : 'Nenhum pendente'} to="/flashcards" color={color('reino')} icon="cartas" />
+          <CompactStat label="Cartões de hoje" value={cardsDue} hint={cardsDue ? 'Revisão espaçada' : 'Nenhum pendente'} to="/flashcards" color={color('treino')} icon="cartas" />
         </div>
         <Link to="/plano" className="block rounded-2xl border border-line bg-surface p-4 transition hover:border-ink/20">
           <div className="flex items-center justify-between gap-3">
@@ -124,6 +124,24 @@ export function Dashboard() {
           <Icon name="avancar" size={18} className="shrink-0 text-muted" />
         </Link>
       )}
+
+
+      <section aria-label="Seu avanço nas matérias" className="overflow-hidden rounded-2xl border border-line bg-surface p-4 sm:p-5">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-semibold text-muted">Sua evolução</p>
+            <h2 className="mt-1 text-lg font-semibold">Você já avançou em {progressPercent}% do conteúdo</h2>
+          </div>
+          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-teal/10 text-base font-bold tabular-nums text-teal">{progressPercent}%</span>
+        </div>
+        <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-raised" role="progressbar" aria-label="Conteúdo lido" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progressPercent}>
+          <div className="h-full rounded-full bg-teal transition-[width] duration-700" style={{ width: `${progressPercent}%` }} />
+        </div>
+        <div className="mt-2 flex items-center justify-between gap-3 text-xs text-muted">
+          <span>{sectionsRead} de {totalSections} trechos estudados</span>
+          <Link to="/progresso" className="font-semibold underline-offset-4 hover:underline">Ver detalhes <Icon name="avancar" size={13} /></Link>
+        </div>
+      </section>
 
       <section>
         <SectionTitle>Continue por aqui</SectionTitle>
