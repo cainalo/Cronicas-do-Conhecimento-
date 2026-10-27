@@ -105,7 +105,7 @@ export const licoesMatematica: Lesson[] = [
   {
     id: 'lic.mat.02',
     chapterId: 'cap.mat.02',
-    title: 'O Interrogatório dos Fictícios',
+    title: 'Problemas de Dedução',
     goal: 'Tabelas de associação, ordenação, verdade e mentira, argumentos válidos; sequências e conceitos; calendários, relógios e direções.',
     cards: [
       { title: 'Relações e dedução', body: 'Tabela: um **✓** por linha e por coluna.\n\nVerdade e mentira: **teste cada hipótese** e conte as verdades.\n\nTodo A é B + algum B é C **não** garante algum A é C.' },
