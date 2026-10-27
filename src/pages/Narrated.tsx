@@ -150,8 +150,61 @@ export function NarratedPlayer({
     return () => soundscape.duck(false);
   }, [playing, voice]);
 
+  // O áudio neural é uma única faixa para a aula toda: o usuário pode buscar qualquer segundo
+  // real da gravação, e o conteúdo visual acompanha a posição sem reiniciar o áudio a cada frase.
   useEffect(() => {
-    if (!playing || !positions.length) return;
+    if (!generatedTrack) return;
+    const audio = generatedTrack.audio;
+    const updatePosition = () => {
+      const realDuration = Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration * 1000 : trackDurationMs;
+      if (realDuration > 0 && realDuration !== trackDurationMs) setTrackDurationMs(realDuration);
+      const mediaMs = Math.min(realDuration || estimatedTotalMs, Math.max(0, audio.currentTime * 1000));
+      setMediaElapsedMs(mediaMs);
+      const projectedMs = realDuration > 0 ? (mediaMs / realDuration) * estimatedTotalMs : mediaMs;
+      let cursor = 0;
+      let nextIndex = Math.max(0, durations.length - 1);
+      for (let i = 0; i < durations.length; i++) {
+        if (projectedMs < cursor + durations[i] || i === durations.length - 1) { nextIndex = i; break; }
+        cursor += durations[i];
+      }
+      if (activeCueRef.current !== nextIndex) {
+        activeCueRef.current = nextIndex;
+        setPos(positionAtBeat(l, nextIndex));
+        setSpeechWordIndex(undefined);
+      }
+      const localElapsed = Math.max(0, Math.min(durations[nextIndex] ?? 0, projectedMs - cursor));
+      elapsedRef.current = localElapsed;
+      setBeatElapsed(localElapsed);
+      setVoiceStarted(!audio.paused && !audio.ended);
+    };
+    const onEnded = () => {
+      updatePosition();
+      setPlaying(false);
+      setDone(true);
+      setVoiceStarted(false);
+    };
+    audio.addEventListener('timeupdate', updatePosition);
+    audio.addEventListener('loadedmetadata', updatePosition);
+    audio.addEventListener('ended', onEnded);
+    audio.playbackRate = rate;
+    updatePosition();
+    if (playing) {
+      void audio.play().catch((error) => {
+        setPlaying(false);
+        setVoiceStatus(error instanceof Error ? error.message : 'Não foi possível reproduzir o áudio.');
+      });
+    } else {
+      audio.pause();
+    }
+    return () => {
+      audio.removeEventListener('timeupdate', updatePosition);
+      audio.removeEventListener('loadedmetadata', updatePosition);
+      audio.removeEventListener('ended', onEnded);
+    };
+  }, [generatedTrack, playing, l, durations, rate, estimatedTotalMs, trackDurationMs]);
+
+  useEffect(() => {
+    if (!playing || !positions.length || (voice.kind === 'gemini' && voice.createAudioTrack)) return;
     const ticket = ++token.current;
     const duration = durations[beatIndex] ?? 1800;
     const text = l.scenes[pos.scene].beats[pos.beat].say;
