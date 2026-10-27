@@ -6,6 +6,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
+import { waitForRouteReady } from './route-ready';
 import { emptyData, type StudyData } from '@/lib/model';
 import { mergeData } from '@/lib/merge';
 import { dropBefore, progressStoreKeys, resetFeedState, resetProgress } from '@/lib/reset';
@@ -183,6 +184,7 @@ describe('tela de reinício', () => {
     const before = localStorage.getItem(KEY);
     const user = userEvent.setup();
     renderAt('/conta/dados');
+    await waitForRouteReady();
     await user.click(screen.getByTestId('abrir-reinicio'));
     const dialog = screen.getByRole('dialog', { name: 'Reiniciar todo o progresso?' });
     expect(dialog).toHaveTextContent('Volta ao zero');
@@ -204,6 +206,7 @@ describe('tela de reinício', () => {
     first.unmount();
 
     const view = renderAt('/conta/dados');
+    await waitForRouteReady();
     await user.click(screen.getByTestId('abrir-reinicio'));
     await user.click(screen.getByTestId('reinicio-confirmo'));
     await user.click(screen.getByTestId('reinicio-confirmar'));
