@@ -63,7 +63,7 @@ describe('experiência imersiva de aula e revisão', () => {
     expect(src).toMatch(/document\.body\.style\.overflow = 'hidden'/);
     expect(src).toMatch(/narrada-plano-de-apoio/);
     expect(src).toMatch(/const visualPhase = Math\.min\(3/);
-    expect(src).toMatch(/const startChar = startOffset/);
+    expect(src).toMatch(/wordStarts\.reduce/);
     expect(src).toMatch(/const targetOffset = Math\.max\(0, target - cursor\)/);
     expect(src).toMatch(/wordIndexAtChar\(say, Math\.floor/);
   });
