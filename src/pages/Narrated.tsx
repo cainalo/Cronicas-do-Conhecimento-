@@ -343,7 +343,7 @@ export function NarratedPlayer({
       >
         <span className="sr-only">Legenda: </span>
         <span data-testid="narrada-legenda-texto">
-          {(say.match(/\S+\s*/g) ?? [say]).map((word, i, words) => {
+          {(say.match(/\S+\s*/g) ?? [say]).map((word, i) => {
             // No Android nativo não há evento de palavra; estimamos pela posição em
             // caracteres para que palavras longas não avancem tão depressa quanto as curtas.
             const estimatedWord = voiceStarted
