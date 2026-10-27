@@ -39,7 +39,7 @@ export function plainReviewText(markdown: string): string {
  * Quebra o material inteiro em lâminas legíveis. Limite por palavra/frase, nunca por
  * substring: nenhuma lâmina termina no meio de uma palavra ou corta o final do texto.
  */
-export function splitReviewChunks(value: string, maxChars = 430): string[] {
+export function splitReviewChunks(value: string, maxChars = 250): string[] {
   const normalized = plainReviewText(value);
   const paragraphs = normalized.split(/\n\s*\n/).map((p) => p.replace(/\s+/g, ' ').trim()).filter(Boolean);
   const result: string[] = [];
@@ -109,12 +109,14 @@ export function buildReviewSlides(chapter: Chapter): ReviewSlide[] {
       });
     });
   }
-  slides.push({
-    id: chapter.id + ':fechamento', kind: 'closing', title: 'Explique com suas palavras',
-    eyebrow: 'Checagem de aprendizagem',
-    body: 'Sem olhar o texto, explique os conceitos principais deste capítulo. Dê um exemplo concreto, diferencie conceitos parecidos e diga em que situação cada um é usado. Depois, abra a prática para testar o que conseguiu recuperar da memória.',
-    chapterId: chapter.id,
-  });
+  const closing = 'Sem olhar o texto, explique os conceitos principais deste capítulo. Dê um exemplo concreto, diferencie conceitos parecidos e diga em que situação cada um é usado. Depois, abra a prática para testar o que conseguiu recuperar da memória.';
+  const closingChunks = splitReviewChunks(closing, 250);
+  closingChunks.forEach((body, partIndex) => slides.push({
+    id: chapter.id + ':fechamento:' + partIndex, kind: 'closing',
+    title: 'Explique com suas palavras',
+    eyebrow: closingChunks.length > 1 ? `Checagem de aprendizagem · parte ${partIndex + 1} de ${closingChunks.length}` : 'Checagem de aprendizagem',
+    body, chapterId: chapter.id,
+  }));
   return slides;
 }
 
