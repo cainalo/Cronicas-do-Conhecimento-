@@ -89,7 +89,7 @@ export const licoesInfra: Lesson[] = [
     cards: [
       { title: 'Camadas e transporte', body: 'TCP/IP: aplicação, transporte, internet, acesso à rede.\n\n**TCP**: conexão, confiável, ordenado. **UDP**: sem conexão, rápido, sem garantias.\n\nPortas: SSH 22, DNS 53, HTTP 80, HTTPS 443, DHCP 67/68.' },
       { title: 'Endereços', body: 'Hosts = **2^h − 2**. /26 = 64 endereços, 62 hosts.\n\nIPv6: 128 bits, `::` uma vez só, sem broadcast, loopback `::1`.' },
-      { title: 'Serviços e muralhas', body: 'DNS: A, AAAA, CNAME, **MX**, PTR. DHCP: **DORA**. HTTP/3 sobre **QUIC/UDP**.\n\nProxy reverso protege servidores; DMZ isola serviços expostos.' },
+      { title: 'Serviços e Segurança de Rede', body: 'DNS: A, AAAA, CNAME, **MX**, PTR. DHCP: **DORA**. HTTP/3 sobre **QUIC/UDP**.\n\nProxy reverso protege servidores; DMZ isola serviços expostos.' },
     ],
     questionIds: Array.from({ length: 12 }, (_, i) => `q.infra.01.${String(i + 1).padStart(3, '0')}`),
   },
