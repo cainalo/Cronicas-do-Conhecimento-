@@ -198,3 +198,11 @@ Este é o único arquivo de coordenação do projeto. Os registros antigos abaix
 - O medidor de bundle passou por verificação sintática e por execução com um `dist/` sintético. Ainda falta medir o build real após `npm run build`; nenhum número de desempenho foi inferido.
 - A única validação de CI confirmada segue sendo o baseline `d2f6e93` / workflow `40444629202`. O novo gate desta branch não foi confirmado pelos status disponíveis.
 
+### ChatGPT — Maintainer: ajuste final de estabilidade dos testes E2E
+**Data:** 2026-10-27
+**Estado:** correção commitada; CI não reportou status nesta consulta.
+
+- Corrigi a condição de espera de `scripts/e2e-layout.mjs` e `scripts/e2e-visual-audit.mjs`: antes, a checagem aceitava `document.body` como evidência de que a rota já havia sido renderizada, mas o shell existe antes da resolução do `React.lazy`. Agora aguarda o fallback de carregamento desaparecer e concede uma janela curta de pintura antes da medição/captura.
+- Commits: `1eb1e2320797988c81f38d340e25812450e220a0` e `833ba91c9db7eb4ba99c92c6c6a0e6d08429a924`.
+- O status combinado do commit mais recente retornou lista vazia; não equivale a CI aprovado. Continuar sem declarar sucesso até haver execução observável do workflow.
+
