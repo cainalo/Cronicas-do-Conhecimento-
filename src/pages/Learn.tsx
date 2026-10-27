@@ -163,7 +163,7 @@ function SimpleLearnPage() {
               <p className="mt-2 text-sm leading-relaxed text-muted">{'Agora pratique para consolidar o que aprendeu.'}</p>
             </div>
             <Link to={`/pratica/${chapterId}/${sectionId}`} className="btn-primary inline-flex min-h-[46px] w-full max-w-sm items-center justify-center" data-testid={`praticar-${sectionId}`}>
-              <Icon name="alvo" size={18} /> {done ? 'Praticar novamente' : 'Começar a prática'}
+              <Icon name="play" size={18} /> {done ? 'Praticar novamente' : 'Começar a prática'}
             </Link>
             <Link to={`/capitulo/${chapterId}#${sectionId}`} className="inline-flex text-sm font-semibold text-muted underline underline-offset-4">
               Consultar material completo
