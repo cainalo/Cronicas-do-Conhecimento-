@@ -51,7 +51,7 @@ const NarratedPage = lazy(() => import('@/pages/Narrated').then((m) => ({ defaul
  * até a rota ser aberta. O layout externo continua visível durante a carga.
  */
 function DeferredPage({ children }: { children: ReactNode }) {
-  return <Suspense fallback={null}>{children}</Suspense>;
+  return <Suspense fallback={<p role="status" className="sr-only">Carregando esta área…</p>}>{children}</Suspense>;
 }
 
 export function AppRoutes() {
