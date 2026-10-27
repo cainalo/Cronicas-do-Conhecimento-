@@ -7,6 +7,6 @@ import { screen, waitFor } from '@testing-library/react';
  */
 export async function waitForRouteReady(): Promise<void> {
   await waitFor(() => {
-    expect(screen.queryByText('Carregando esta área')).not.toBeInTheDocument();
+    expect(screen.queryByText(/Carregando esta área/)).not.toBeInTheDocument();
   });
 }
