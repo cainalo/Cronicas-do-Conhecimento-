@@ -13,11 +13,8 @@ export const grimorioPortugues: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'cg.portugues',
   title: 'Língua Portuguesa',
-  epithet: 'Língua Portuguesa',
   description: 'Ler, acentuar, pontuar e concordar como manda a norma: interpretação e figuras, Acordo Ortográfico, crase, pronomes, concordância, regência, conectivos, reescrita e Redação Oficial pelo Manual da Presidência.',
   chapterIds: ['cap.port.01', 'cap.port.02'],
-  sigil: 'pena',
-  binding: 'sangue',
 };
 
 export const capPortLeitura: Chapter = {
