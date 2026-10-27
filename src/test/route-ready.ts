@@ -6,9 +6,9 @@ import { screen, waitFor } from '@testing-library/react';
  * Isso mantém os testes alinhados com o ciclo real de renderização sem sleeps fixos.
  */
 export async function waitForRouteReady(): Promise<void> {
+  // Narrated and World render fullscreen portals outside <main>; the loading
+  // fallback disappearing is the shared readiness contract for both route styles.
   await waitFor(() => {
-    const main = screen.getByRole('main');
-    expect(main).not.toHaveTextContent(/Carregando esta área/);
-    expect(main.textContent?.trim().length ?? 0).toBeGreaterThan(0);
+    expect(screen.queryByText(/Carregando esta área/)).not.toBeInTheDocument();
   });
 }
