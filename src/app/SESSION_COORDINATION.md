@@ -219,3 +219,6 @@ Este é o único arquivo de coordenação do projeto. Os registros antigos abaix
 - `src/test/narrated.test.tsx`: teste de `splitCaptionLines` cobre preservação da fala, linhas estáveis e ausência de reticências rolantes.
 - Commits desta etapa: `1fc5c109fe2b827abcd20e9032dbd30e1e2a6949`, `ae2d18f17abfa0f2c13f353d360dbe2546913b94`, `80d0114b5e91b3bf3fa9900219ff8309aa1e5f76`, `4bae5fc528fc74f83556d0cc82ed19ed3229eacb`, `b2168ca21dc5e1593efb1c1218b2ef157580b328`, `4db2c27590095a6e9107fe96890f754803c1e1e1`, `2b066ad55396b58db3da17ee92837cf5084de301`.
 - Não foi executado nem confirmado `npm test`, build, E2E, auditoria visual ou build Android nesta sessão. Não houve publicação nem merge; a validação visual real em Android permanece pendente.
+
+
+**Complemento de revisão visual (mesma etapa):** a explicação da cena foi separada do cabeçalho e reposicionada após o visual, formando a sequência título → imagem/diagrama → explicação. Removido o selo flutuante que repetia o título. Commits complementares: `f67d88572f3fc8082f9f0024a324ad2ce56fe13e` e `fb34ba0376c42ad4e47cade8aa806d6a1caaa463`. Teste adicional confirma que a rota de Aprender não renderiza o link global de Conta/perfil. Commit do teste esperado após esta gravação; validação executada até aqui foi estática e do algoritmo puro, não `npm test`/build.
