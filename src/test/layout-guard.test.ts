@@ -72,7 +72,7 @@ describe('experiência imersiva de aula e revisão', () => {
     const narrated = readFileSync(join(ROOT, 'pages/Narrated.tsx'), 'utf8');
     const css = readFileSync(join(ROOT, 'styles/index.css'), 'utf8');
     expect(narrated).not.toMatch(/EditorialVideoCut|SceneMotionStrip|function SceneView/);
-    expect(narrated).toMatch(/const visualPhase = Math\.floor\(currentMs \/ 2800\) % 3/);
+    expect(narrated).toMatch(/const visualPhase = pos\.beat % 3/);
     expect(narrated).toMatch(/<CinematicScene scene={scene}[^>]*phase={visualPhase}/);
     expect(narrated).not.toMatch(/<CinematicScene key=/);
     expect(narrated).toMatch(/data-phase={phase}/);
@@ -81,6 +81,14 @@ describe('experiência imersiva de aula e revisão', () => {
     expect(css).toMatch(/@keyframes ccv-shot-reveal/);
     expect(css).toMatch(/transition: transform 2200ms cubic-bezier/);
     expect(css).toMatch(/prefers-reduced-motion: reduce/);
+  });
+
+  it('as vozes neurais incluem opções expressivas e a composição não troca plano por relógio', () => {
+    const voice = readFileSync(join(ROOT, 'app/voice.ts'), 'utf8');
+    expect(voice).toMatch(/id: 'Sulafat', label: 'Sulafat · acolhedora e quente'/);
+    expect(voice).toMatch(/id: 'Callirrhoe'/);
+    expect(voice).toMatch(/gemini-3\\.8-flash-tts/);
+    expect(voice).toMatch(/cadência uniforme/);
   });
 
   it('as revisões preservam o texto completo sem cortes por substring e usam cores editoriais fortes', () => {
