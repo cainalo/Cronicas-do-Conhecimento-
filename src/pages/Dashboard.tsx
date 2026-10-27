@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
-import { DEFAULT_CONTEST_ID, flashcards, getContest, missions, questionsForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, chapters, flashcards, getContest, missions, questionsForContest } from '@/content';
 import { missionDone, missionsDue } from '@/lib/mission';
 import { reviewQueue } from '@/lib/study';
-import { trailUnits, useCheckpoint } from '@/app/useCheckpoint';
+import { useCheckpoint } from '@/app/useCheckpoint';
 import { dueCards, unlockedCardIds } from '@/lib/training';
 import { isDone, settingsOf } from '@/lib/planner';
 import { usePlanOfToday } from '@/app/usePlanOfToday';
@@ -53,9 +53,9 @@ export function Dashboard() {
     const due = missionsDue(data);
     return missions.find((mission) => due.includes(mission.id) && missionDone(data, mission.id));
   })();
-  const totalUnits = trailUnits().length;
-  const completedUnits = Math.max(0, totalUnits - pending.length);
-  const progressPercent = totalUnits ? Math.min(100, Math.round((completedUnits / totalUnits) * 100)) : 0;
+  const totalSections = chapters.reduce((sum, chapter) => sum + chapter.sections.length, 0);
+  const sectionsRead = chapters.reduce((sum, chapter) => sum + Math.min(chapter.sections.length, data.reading[chapter.id]?.sectionsRead.length ?? 0), 0);
+  const progressPercent = totalSections ? Math.round((sectionsRead / totalSections) * 100) : 0;
 
   return (
     <div className="stagger space-y-6 pb-4 sm:space-y-8">
@@ -137,7 +137,7 @@ export function Dashboard() {
 
       {flashcard && (
         <Link to="/flashcards" className="flex items-start gap-3 rounded-2xl border border-line bg-surface p-4 transition hover:border-ink/20">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gold/10 text-gold"><Icon name="lampada" size={20} /></span>
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gold/10 text-gold"><Icon name="estrela" size={20} /></span>
           <span className="min-w-0 flex-1">
             <span className="kicker">Uma ideia para levar</span>
             <span className="mt-1 block font-semibold leading-snug">{flashcard.front}</span>
@@ -164,7 +164,7 @@ export function Dashboard() {
       )}
 
       <AppDownload compact />
-      <p className="text-center text-xs text-muted">Progresso calculado pelas atividades registradas · {progressPercent}% do percurso</p>
+      <p className="text-center text-xs text-muted">Leitura registrada · {sectionsRead} de {totalSections} trechos ({progressPercent}%)</p>
     </div>
   );
 }
