@@ -9,11 +9,8 @@ export const grimorioDevops: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.devops',
   title: 'DevOps e Engenharia de Entrega',
-  epithet: 'DevOps e Engenharia de Entrega',
-  description: 'Como as mudanças saem da oficina e chegam ao povo sem naufragar: Git e branching, pipelines de CI/CD, infraestrutura como código, contêineres, Kubernetes e observabilidade.',
+  description: 'Como as mudanças são entregues com segurança e previsibilidade: Git e branching, pipelines de CI/CD, infraestrutura como código, contêineres, Kubernetes e observabilidade.',
   chapterIds: ['cap.devops.01', 'cap.devops.02'],
-  sigil: 'chave',
-  binding: 'floresta',
 };
 
 export const capDevopsEntrega: Chapter = {
@@ -90,7 +87,7 @@ export const licoesDevops: Lesson[] = [
   {
     id: 'lic.devops.01',
     chapterId: 'cap.devops.01',
-    title: 'Do Cais ao Mar',
+    title: 'Entrega Contínua e Plataforma',
     goal: 'Comandos e conceitos do Git, Git Flow × trunk-based, pull requests, CI/CD, ambientes, estratégias de implantação e ferramentas.',
     cards: [
       { title: 'Git', body: '`fetch` só baixa; `pull` = fetch + merge. **`revert`** desfaz com novo commit; **`rebase`** reescreve histórico.\n\nGit Flow: main, develop, feature, release, hotfix. **Trunk-based**: integração diária + feature flags.' },
@@ -101,7 +98,7 @@ export const licoesDevops: Lesson[] = [
   {
     id: 'lic.devops.02',
     chapterId: 'cap.devops.02',
-    title: 'Navios em Frota',
+    title: 'Contêineres e Orquestração',
     goal: 'IaC declarativa e idempotente, Docker e Compose, objetos do Kubernetes, métricas, logs, traces, SLI/SLO/SLA e alertas.',
     cards: [
       { title: 'Plataforma', body: 'IaC **declarativa** = estado desejado; idempotente.\n\nContêiner **compartilha o kernel**; VM tem SO próprio. Kubernetes: **Pod**, Deployment, Service, Ingress, ConfigMap/Secret.' },
