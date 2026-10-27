@@ -84,6 +84,12 @@ export function NarratedPlayer({
   const currentMs = Math.min(totalMs, hasGeneratedTrack ? mediaElapsedMs : beforeMs + beatElapsed);
   const scene = l.scenes[pos.scene];
   const say = scene.beats[pos.beat].say;
+  const beatVisualDuration = durations[beatIndex] ?? 2200;
+  const beatVisualProgress = Math.min(1, beatElapsed / Math.max(1, beatVisualDuration));
+  // Um plano de apoio entra durante a fala (não apenas entre frases) quando existe tempo
+  // suficiente para ele ser percebido; sai antes de a próxima fala começar.
+  const cutawayVisible = playing && voiceStarted && beatVisualDuration >= 7200
+    && beatVisualProgress >= 0.3 && beatVisualProgress < 0.72;
 
   const stop = useCallback(() => {
     token.current += 1;
@@ -512,7 +518,7 @@ export function NarratedPlayer({
           data-testid="narrada-cena"
         >
           <div className="relative flex h-full max-h-full w-full items-center justify-center" data-testid="narrada-elementos-visuais">
-            <CinematicSceneMemo scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} beatIndex={pos.beat} controlsVisible={controlsVisible} />
+            <CinematicSceneMemo scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} beatIndex={pos.beat} controlsVisible={controlsVisible} cutawayVisible={cutawayVisible} />
           </div>
         </div>
       </section>
@@ -692,8 +698,8 @@ function HistoricalPhoto({ photo, variant = 'scene' }: { photo: HistoricalVisual
  * quando a fala/etapa muda. Não existem pulsos, flashes ou animações repetidas por render.
  */
 function CinematicScene({
-  scene, reveal, sceneIndex, sceneCount, beatIndex, controlsVisible,
-}: { scene: Scene; reveal: number; sceneIndex: number; sceneCount: number; beatIndex: number; controlsVisible: boolean }) {
+  scene, reveal, sceneIndex, sceneCount, beatIndex, controlsVisible, cutawayVisible,
+}: { scene: Scene; reveal: number; sceneIndex: number; sceneCount: number; beatIndex: number; controlsVisible: boolean; cutawayVisible: boolean }) {
   const visual = scene.visual;
   const palette = CINEMA_PALETTES[sceneIndex % CINEMA_PALETTES.length];
   const activeIndex = (length: number) => Math.max(0, Math.min(length - 1, reveal - 1));
@@ -841,7 +847,103 @@ function CinematicScene({
         <span className="ccv-film-footer__line" />
         <span>ÁUDIO E IMAGEM SINCRONIZADOS</span>
       </footer>
+
+      <CinematicCutaway scene={scene} reveal={reveal} visible={cutawayVisible} palette={palette} />
     </article>
+  );
+}
+
+/**
+ * Inserção de apoio com o assunto real da cena: uma foto de arquivo, uma conta, um
+ * movimento na reta ou o conceito tratado na fala. O palco principal não desmonta.
+ */
+function CinematicCutaway({
+  scene, reveal, visible, palette,
+}: { scene: Scene; reveal: number; visible: boolean; palette: CinemaPalette }) {
+  const visual = scene.visual;
+  const activeIndex = (length: number) => Math.max(0, Math.min(length - 1, reveal - 1));
+  let title = scene.heading;
+  let detail = '';
+  let label = 'PLANO DE APOIO';
+  let art: IllustrationName = illustrationForText(scene.heading);
+  let photo: HistoricalVisual | undefined;
+  let numberline: { from: number; to: number; state: NumberLineState } | undefined;
+  let equation: string | undefined;
+  let previousEquation: string | undefined;
+
+  if (visual.kind === 'title') {
+    title = visual.title;
+    detail = visual.subtitle ?? '';
+    art = visual.art ?? illustrationForText(visual.title);
+    label = 'ABERTURA · DETALHE';
+  } else if (visual.kind === 'cards') {
+    const item = visual.cards[activeIndex(visual.cards.length)];
+    if (item) {
+      title = item.title;
+      detail = item.text;
+      art = illustrationForText(item.title + ' ' + item.text);
+    }
+    label = 'EXEMPLO EM FOCO';
+  } else if (visual.kind === 'timeline') {
+    const item = visual.items[activeIndex(visual.items.length)];
+    if (item) {
+      title = item.title;
+      detail = item.text;
+      label = item.year;
+      art = illustrationForText(item.title + ' ' + item.text);
+      photo = historicalVisualFor(item.title + ' ' + item.text);
+    }
+  } else if (visual.kind === 'equation') {
+    const index = activeIndex(visual.lines.length);
+    equation = visual.lines[index] ?? visual.lines[0] ?? '';
+    previousEquation = index > 0 ? visual.lines[index - 1] : undefined;
+    title = equation;
+    detail = visual.note ?? '';
+    label = 'PASSO DO CÁLCULO';
+    art = illustrationForText(equation + ' ' + detail);
+  } else if (visual.kind === 'numberline') {
+    const index = Math.min(visual.states.length - 1, Math.max(0, reveal));
+    const state = visual.states[index] ?? visual.states[0] ?? {};
+    const jump = state.jumps?.[0];
+    title = jump ? `${jump.from} → ${jump.to}` : 'Posição na reta numérica';
+    detail = jump
+      ? (jump.to > jump.from ? 'O ponto avança para a direita.' : 'O ponto volta para a esquerda.')
+      : 'Observe a relação entre o número e o zero.';
+    label = 'MOVIMENTO EM FOCO';
+    art = 'degraus';
+    numberline = { from: visual.from, to: visual.to, state };
+  }
+
+  return (
+    <aside
+      className={'ccv-cutaway' + (visible ? ' is-visible' : '')}
+      aria-hidden={!visible}
+      data-testid="narrada-insercao-visual"
+      data-visible={visible ? 'true' : 'false'}
+    >
+      <div className="ccv-cutaway__media" style={{ '--ccv-insert-accent': palette.accent } as CSSProperties}>
+        {numberline ? (
+          <div className="ccv-cutaway__numberline"><CinematicNumberLine from={numberline.from} to={numberline.to} state={numberline.state} /></div>
+        ) : photo ? (
+          <img className="ccv-cutaway__photo" src={photo.src} alt={photo.alt} loading="eager" decoding="async" />
+        ) : equation ? (
+          <div className="ccv-cutaway__equation">
+            {previousEquation && <span>{previousEquation}</span>}
+            <i aria-hidden="true" />
+            <strong>{equation}</strong>
+          </div>
+        ) : (
+          <Illustration name={art} accent={palette.accent} animate={false} className="ccv-cutaway__illustration" label={title} />
+        )}
+        <span className="ccv-cutaway__frame" aria-hidden="true" />
+      </div>
+      <div className="ccv-cutaway__copy">
+        <p className="ccv-cutaway__eyebrow"><span />{label}</p>
+        <h3>{title}</h3>
+        {detail && <p className="ccv-cutaway__detail">{detail}</p>}
+        <p className="ccv-cutaway__source">CRÔNICAS DO CONHECIMENTO</p>
+      </div>
+    </aside>
   );
 }
 
