@@ -17,12 +17,9 @@ export const grimorioSeguranca: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.seguranca',
   title: 'Segurança da Informação',
-  epithet: 'Segurança da Informação',
   description:
     'Criptografia, OWASP Top 10, DevSecOps, Zero Trust e a família ISO/IEC 27000. Começa pelo segredo mais antigo: como guardar e provar a palavra escrita.',
   chapterIds: ['cap.seg.01', 'cap.seg.02'],
-  sigil: 'chave',
-  binding: 'sangue',
 };
 
 export const capCriptografia: Chapter = {
@@ -137,7 +134,7 @@ export const licoesCap02: Lesson[] = [
   {
     id: 'lic.seg.02.b',
     chapterId: 'cap.seg.02',
-    title: 'Muralhas, Cópias e Normas',
+    title: 'Controles, Continuidade e Normas',
     goal: 'Malware, engenharia social, IDS/IPS, pentest, backup, continuidade e ISO 27000.',
     cards: [
       { title: 'Ameaças', body: 'Vírus precisa de hospedeiro; **worm** anda sozinho. Spear phishing é direcionado.\n\n**IDS** detecta; **IPS** bloqueia. Caixa preta, cinza e branca.' },
