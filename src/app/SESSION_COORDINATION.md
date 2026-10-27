@@ -119,3 +119,21 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 - O workflow 40444131828 executou 2.511 testes com sucesso e falhou em 1 asserção antiga de src/test/narrated.test.tsx, que ainda exigia a combinação de classes `fixed inset-0 ... w-auto`, incompatível com o shell atual `fixed left-0 right-0 top-0 bottom-0 ... w-screen`. A falha não indicava erro de execução do player nem erro no CSS; era um teste desatualizado após mudanças de outro lote.
 - Atualizado src/test/narrated.test.tsx para validar ancoragem nos quatro lados, altura 100dvh, overflow-hidden, w-screen e estilos inline width/height de 100vw/100dvh. Commit: 7ba8c93dd5dea3ede27e76f724634702f8b225b2.
 - O próximo workflow precisa executar a suíte, layout E2E, build, APK e deploy sem ser cancelado por push concorrente antes de se considerar a publicação concluída. Não houve conferência manual no Galaxy A14.
+
+
+### ChatGPT — microaulas cap.ingles.01 (Estratégias de Leitura)
+**Data:** 2026-10-27  
+**Estado:** implementação em branch isolada; validação pendente.  
+**Branch:** `gpt/ingles01-microaulas-2026-10-27`
+
+**Arquivos reservados/alterados**
+- `src/content/micro/ingles-estrategias.ts`: 11 microaulas (4 estratégias, 4 coesão, 3 gramática), com abertura, três etapas, recuperação, consolidação diversificada e questão autoral vinculada.
+- `src/content/index.ts`: registro de `microLessonsInglesLeitura`.
+- `src/test/ingles-estrategias.test.ts`: regressão da sequência, seções, fontes históricas, diversidade de atividades e vínculos das 11 questões.
+- `src/content/grimoires/ingles/cap01-estrategias/01-estrategias.md`, `02-coesao.md`, `03-gramatica.md`: contexto histórico com referências ao estudo de skimming/scanning (1969/1972), Halliday e Hasan (1976) e RFC 2119/8174.
+- Documentação de continuidade: `docs/CONTENT_COVERAGE.md`, `SESSION_LOG.md`, `SESSION_HANDOFF.md`, `PROJECT_STATUS.md`, `ROADMAP.md` e `TESTING.md`.
+
+**Cuidados**
+- A branch foi aberta separadamente para não interromper o workflow de publicação/Android. Ela não é a branch de deploy; não abrir PR nem publicar sem observar a política do projeto.
+- Não executar nem afirmar testes aprovados sem CI real. A revisão editorial humana também permanece pendente.
+- Não alterar o player/voz audiovisual nesta tarefa; esse escopo continua com a sessão proprietária da área.
