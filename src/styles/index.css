@@ -451,3 +451,24 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 .person.walking .arm-a { animation: arm-swing 0.3s ease-in-out 0.15s infinite; }
 .person.walking .arm-b { animation: arm-swing 0.3s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .person .torso, .person.walking .leg-a, .person.walking .leg-b, .person.walking .arm-a, .person.walking .arm-b { animation: none; } }
+
+/* Cortes editoriais usados pela aula narrada: entrada lateral, zoom de câmera e foco tipográfico. */
+@keyframes editorial-cut-in {
+  0% { opacity: 0; transform: translate3d(5%, 0, 0) scale(1.045); clip-path: inset(0 0 0 18%); }
+  65% { opacity: 1; clip-path: inset(0 0 0 0); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); clip-path: inset(0 0 0 0); }
+}
+@keyframes editorial-object-drift {
+  0% { transform: translate3d(-2px, 3px, 0) scale(1); }
+  100% { transform: translate3d(3px, -4px, 0) scale(1.055); }
+}
+@keyframes editorial-title-in {
+  0% { opacity: 0; transform: translateY(18px) scale(.96); letter-spacing: .015em; }
+  100% { opacity: 1; transform: translateY(0) scale(1); letter-spacing: -.025em; }
+}
+.editorial-cut-in { animation: editorial-cut-in 680ms cubic-bezier(.16, 1, .3, 1) both; }
+.editorial-object-drift { animation: editorial-object-drift 4.8s ease-in-out infinite alternate; }
+.editorial-title-in { animation: editorial-title-in 520ms cubic-bezier(.16, 1, .3, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .editorial-cut-in, .editorial-object-drift, .editorial-title-in { animation-duration: 1ms; animation-iteration-count: 1; }
+}
