@@ -12,11 +12,8 @@ export const grimorioMatematica: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'cg.matematica',
   title: 'Matemática e Raciocínio Lógico',
-  epithet: 'Matemática e Raciocínio Lógico',
   description: 'As contas que guardam o erário e as deduções que desmascaram mentirosos: inteiros, frações, MMC e MDC, razões, divisão proporcional, regra de três, porcentagem, associações, sequências, calendários e relógios.',
   chapterIds: ['cap.mat.01', 'cap.mat.02'],
-  sigil: 'selo',
-  binding: 'noite',
 };
 
 export const capMatAritmetica: Chapter = {
@@ -108,7 +105,7 @@ export const licoesMatematica: Lesson[] = [
   {
     id: 'lic.mat.02',
     chapterId: 'cap.mat.02',
-    title: 'O Interrogatório dos Fictícios',
+    title: 'Problemas de Dedução',
     goal: 'Tabelas de associação, ordenação, verdade e mentira, argumentos válidos; sequências e conceitos; calendários, relógios e direções.',
     cards: [
       { title: 'Relações e dedução', body: 'Tabela: um **✓** por linha e por coluna.\n\nVerdade e mentira: **teste cada hipótese** e conte as verdades.\n\nTodo A é B + algum B é C **não** garante algum A é C.' },
