@@ -12,7 +12,7 @@ import { Illustration, type IllustrationName } from '@/components/Illustration';
 import { ActivityView } from '@/components/activities/ActivityView';
 
 const RATES = [0.8, 1, 1.2] as const;
-const VOICE_LABEL = { nativa: 'voz do aparelho', navegador: 'voz do navegador', nenhuma: 'sem voz neste aparelho: legendas no tempo de leitura' } as const;
+const VOICE_LABEL = { nativa: 'voz pt-BR priorizada do aparelho (neural/natural quando instalada)', navegador: 'voz pt-BR priorizada do navegador (neural/natural quando disponível)', nenhuma: 'sem voz neste aparelho: legendas no tempo de leitura' } as const;
 const formatTime = (ms: number) => {
   const total = Math.max(0, Math.floor(ms / 1000));
   return String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
@@ -460,11 +460,6 @@ export function NarratedPlayer({
   );
 }
 
-/**
- * Plano de apoio editorial: usa apenas objetos, termos e números que pertencem à cena atual.
- * A cada quarto da fala entra um corte visual diferente, com movimento e cor chapada da identidade
- * editorial; não cria etiquetas a partir de palavras soltas da narração.
- */
 /**
  * Direção de arte da aula: cenas compostas a partir dos dados didáticos existentes.
  * O palco permanece montado durante a fala. Só o conteúdo da cena muda quando a narração
