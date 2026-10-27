@@ -61,8 +61,27 @@ describe('experiência imersiva de aula e revisão', () => {
     const src = readFileSync(join(ROOT, 'pages/Narrated.tsx'), 'utf8');
     expect(src).toMatch(/fixed inset-0[^\n]*h-\[100dvh\]/);
     expect(src).toMatch(/document\.body\.style\.overflow = 'hidden'/);
-    expect(src).toMatch(/narrada-elementos-visuais/);
+    expect(src).toMatch(/narrada-plano-de-apoio/);
+    expect(src).toMatch(/const visualPhase = Math\.min\(3/);
+    expect(src).toMatch(/const startChar = startOffset/);
+    expect(src).toMatch(/const targetOffset = Math\.max\(0, target - cursor\)/);
     expect(src).toMatch(/wordIndexAtChar\(say, Math\.floor/);
+  });
+
+  it('a narração troca planos no decorrer da fala e permite buscar dentro de uma fala', () => {
+    const narrated = readFileSync(join(ROOT, 'pages/Narrated.tsx'), 'utf8');
+    expect(narrated).toMatch(/visualPhase === 1 \|\| visualPhase === 3/);
+    expect(narrated).toMatch(/narrada-plano-de-apoio/);
+    expect(narrated).toMatch(/spokenText/);
+    expect(narrated).not.toMatch(/function SceneMotionStrip/);
+  });
+
+  it('as revisões preservam o texto completo sem cortes por substring e usam cores editoriais fortes', () => {
+    const slides = readFileSync(join(ROOT, 'pages/ReviewSlides.tsx'), 'utf8');
+    expect(slides).toMatch(/export function splitReviewChunks/);
+    expect(slides).toMatch(/chunks\.forEach/);
+    expect(slides).not.toMatch(/slice\(0, (560|620|500)\)/);
+    expect(slides).toMatch(/bg-\[#c8402a\] text-white/);
   });
 
   it('os slides de revisão cabem na viewport e aceitam gesto horizontal', () => {
