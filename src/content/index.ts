@@ -139,7 +139,7 @@ export const flashcards: Flashcard[] = chapters.flatMap((c) =>
 );
 export const getFlashcard = (id: string) => flashcards.find((f) => f.id === id);
 
-export { getSectionExtras, allSectionExtras } from './game/scenes';
+export { getSectionExtras, allSectionExtras } from './section-extras';
 export { getSimpleSection, allSimpleSections } from './game/simple';
 
 /** Microaulas (piloto da auditoria: Processos, memória e serviços). Substituem o Aprender do trecho. */
