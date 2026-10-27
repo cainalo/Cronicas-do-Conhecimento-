@@ -690,6 +690,48 @@ function historicalVisualFor(value: string): HistoricalVisual | undefined {
     source: 'Retrato de domínio público · Wikimedia Commons',
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Ada_Lovelace_portrait.jpg',
   };
+  if (/pascaline|maquina de pascal|blaise pascal/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Arts_et_Metiers_Pascaline_dsc03869.jpg?width=1200',
+    alt: 'Pascalina de 1642, calculadora mecânica com discos e engrenagens',
+    caption: 'Pascalina · máquina mecânica de cálculo construída por Blaise Pascal',
+    source: 'David.Monniaux · CC BY-SA 3.0 · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Arts_et_Metiers_Pascaline_dsc03869.jpg',
+  };
+  if (/maquina analitica|analytical engine|babbage/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Analytical_engine_trial_model%2C_Charles_Babbage%2C_1834-1871_-_Science_Museum%2C_London_-_DSC05565.jpg?width=1200',
+    alt: 'Modelo de teste da Máquina Analítica de Charles Babbage em exposição no Science Museum de Londres',
+    caption: 'Máquina Analítica · o projeto de Babbage unia cálculo e armazenamento',
+    source: 'Daderot · CC0 1.0 · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Analytical_engine_trial_model,_Charles_Babbage,_1834-1871_-_Science_Museum,_London_-_DSC05565.jpg',
+  };
+  if (/jacquard|cartoes perfurados|cartões perfurados/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Jacquard.loom.cards.jpg?width=900',
+    alt: 'Close de cartões perfurados usados em um tear Jacquard',
+    caption: 'Cartões perfurados · as instruções controlavam o padrão tecido',
+    source: 'Ghw · domínio público · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Jacquard.loom.cards.jpg',
+  };
+  if (/hollerith|censo/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/1902_Hollerith_electric_tabulating_machine.jpg?width=900',
+    alt: 'Funcionário demonstrando a máquina tabuladora elétrica de Herman Hollerith',
+    caption: 'Tabuladora de Hollerith · cartões perfurados ajudavam a contar o censo',
+    source: 'U.S. Census Bureau · domínio público · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:1902_Hollerith_electric_tabulating_machine.jpg',
+  };
+  if (/4004|microprocessador|microprocessor/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Intel_4004_open.jpg?width=1200',
+    alt: 'Microprocessador Intel 4004 de 1971 aberto, mostrando o circuito interno',
+    caption: 'Intel 4004 · um dos primeiros microprocessadores comerciais em um único chip',
+    source: 'Science Museum Group · CC BY 4.0 · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Intel_4004_open.jpg',
+  };
+  if (/apple ii|computador pessoal|ibm pc/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Apple_II_Computer.jpg?width=900',
+    alt: 'Computador Apple II, exemplo de computador pessoal do fim dos anos 1970',
+    caption: 'Apple II · o computador pessoal chega a casas e escritórios',
+    source: 'Maksym Kozlenko · CC BY-SA 4.0 · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Apple_II_Computer.jpg',
+  };
   if (/\beniac\b/.test(text)) return {
     src: 'https://commons.wikimedia.org/wiki/Special:FilePath/ENIAC.jpg?width=1000',
     alt: 'Painéis do computador eletrônico ENIAC em exposição',
