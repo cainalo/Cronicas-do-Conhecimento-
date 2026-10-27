@@ -4,12 +4,13 @@ import { MemoryRouter } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
+import { waitForRouteReady } from './route-ready';
 
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
 beforeEach(() => localStorage.clear());
 
 describe('apresentação da trilha', () => {
-  it('mostra cada capítulo como uma seção editorial com acesso ao texto e lista ledger', () => {
+  it('mostra cada capítulo como uma seção editorial com acesso ao texto e lista ledger', async () => {
     render(
       <PrefsProvider>
         <StudyProvider>
@@ -19,6 +20,7 @@ describe('apresentação da trilha', () => {
         </StudyProvider>
       </PrefsProvider>,
     );
+    await waitForRouteReady();
 
     expect(screen.getByRole('heading', { name: 'Trilha' })).toBeInTheDocument();
     expect(screen.getByTestId('continuar-trilha')).toBeInTheDocument();
