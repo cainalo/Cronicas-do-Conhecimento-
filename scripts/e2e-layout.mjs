@@ -21,7 +21,7 @@ const PAGES = [
   '/trilha',
   '/explorar',
   '/biblioteca',
-  '/grimorio/grim.primeiros',
+  '/materia/grim.primeiros',
   '/capitulo/cap.prim.01',
   '/aprender/cap.prim.01/computador/prim.computador.1',
   '/pratica/cap.prim.01/computador',
