@@ -552,10 +552,8 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
   align-items: center;
   gap: clamp(1.2rem, 4vw, 4rem);
 }
-.ccv-film-copy {
-  min-width: 0;
-  animation: ccv-film-cut-in 470ms cubic-bezier(.2,.7,.2,1) both;
-}
+.ccv-film-copy { min-width: 0; }
+.ccv-film-copy.is-cue-change { animation: ccv-film-cut-in 390ms cubic-bezier(.2,.7,.2,1) both; }
 .ccv-film-eyebrow {
   display: flex;
   align-items: center;
@@ -627,7 +625,8 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 .ccv-film-art__rings span { position: absolute; top: 15%; left: 23%; width: .55rem; height: .55rem; border-radius: 50%; background: var(--ccv-accent); }
 .ccv-film-art__rings span:nth-child(2) { top: auto; right: 15%; bottom: 23%; left: auto; width: .75rem; height: .75rem; }
 .ccv-film-art__rings span:nth-child(3) { top: 50%; left: 7%; width: .38rem; height: .38rem; }
-.ccv-film-cut { position: relative; z-index: 1; display: grid; width: 100%; height: 100%; min-width: 0; min-height: 0; place-items: center; animation: ccv-film-cut-in 470ms cubic-bezier(.2,.7,.2,1) both; }
+.ccv-film-cut { position: relative; z-index: 1; display: grid; width: 100%; height: 100%; min-width: 0; min-height: 0; place-items: center; }
+.ccv-film-cut.is-cue-change { animation: ccv-film-cut-in 470ms cubic-bezier(.2,.7,.2,1) both; }
 .ccv-film-hero, .ccv-film-concept, .ccv-film-event, .ccv-film-equation { display: flex; width: 100%; height: 100%; min-width: 0; min-height: 0; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
 .ccv-film-illustration {
   display: block;
