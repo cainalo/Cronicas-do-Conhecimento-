@@ -10,11 +10,8 @@ export const grimorioEngSoft: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.engsoft',
   title: 'Engenharia de Software',
-  epithet: 'Engenharia de Software',
   description: 'Como se constrói um sistema que dura: ciclos de vida, Scrum, Kanban, Lean e XP, requisitos e histórias, arquiteturas, SOLID, UML, BPMN, padrões de projeto, testes e dívida técnica.',
   chapterIds: ['cap.es.01', 'cap.es.02'],
-  sigil: 'grimorio',
-  binding: 'floresta',
 };
 
 export const capEsProcesso: Chapter = {
@@ -94,7 +91,7 @@ export const licoesEngSoft: Lesson[] = [
   {
     id: 'lic.es.01',
     chapterId: 'cap.es.01',
-    title: 'O Ofício dos Construtores',
+    title: 'Processos de Engenharia de Software',
     goal: 'Ciclos de vida, Kanban, Lean, XP e TDD; requisitos, histórias INVEST, critérios de aceite e casos de uso.',
     cards: [
       { title: 'Ciclos e métodos', body: '**Iterativo** refina; **incremental** acrescenta. Espiral = riscos.\n\nKanban: **limite de WIP**, fluxo. Lean: eliminar desperdício. XP: par, **TDD**, integração contínua, refatoração.' },
