@@ -73,25 +73,25 @@ describe('experiência imersiva de aula e revisão', () => {
     const css = readFileSync(join(ROOT, 'styles/index.css'), 'utf8');
     expect(narrated).not.toMatch(/EditorialVideoCut|SceneMotionStrip|function SceneView/);
     expect(narrated).not.toMatch(/visualPhase|ccv-sequence__step|ccv-timeline__event|ccv-equation__line/);
-    expect(narrated).toMatch(/<CinematicScene scene={scene}[^>]*beatIndex={pos\\.beat}/);
-    expect(narrated).toMatch(/key={scene\\.id \\+ ':visual:' \\+ beatIndex}/);
-    expect(narrated).toMatch(/data-testid="narrada-corte-suave"/);
-    expect(narrated).toMatch(/visual\\.kind === 'timeline'/);
-    expect(narrated).toMatch(/visual\\.kind === 'equation'/);
-    expect(css).toMatch(/@keyframes ccv-film-cut-in/);
-    expect(css).toMatch(/\\.ccv-film-scene/);
+    expect(narrated).toContain('beatIndex={pos.beat}');
+    expect(narrated).toContain("key={scene.id + ':visual:' + beatIndex}");
+    expect(narrated).toContain('data-testid="narrada-corte-suave"');
+    expect(narrated).toContain("visual.kind === 'timeline'");
+    expect(narrated).toContain("visual.kind === 'equation'");
+    expect(css).toContain('@keyframes ccv-film-cut-in');
+    expect(css).toContain('.ccv-film-scene');
     expect(css).not.toMatch(/ccv-shot-reveal|ccv-scene__change|ccv-sequence__step|ccv-timeline__event/);
-    expect(css).toMatch(/prefers-reduced-motion: reduce/);
+    expect(css).toContain('prefers-reduced-motion: reduce');
   });
 
-  it('as aulas oferecem o catálogo de vozes neurais Gemini documentado e mantêm fallback local', () => {
+  it('as aulas oferecem catálogo de vozes neurais e mantêm fallback local', () => {
     const voice = readFileSync(join(ROOT, 'app/voice.ts'), 'utf8');
-    expect(voice).toMatch(/id: 'Sulafat', label: 'Sulafat · acolhedora e quente \\(recomendada\\)'/);
-    expect(voice).toMatch(/id: 'Callirrhoe'/);
-    expect(voice).toMatch(/id: 'Charon'/);
-    expect(voice).toMatch(/gemini-3\\.8-flash-tts/);
-    expect(voice).toMatch(/cadência uniforme/);
-    expect(voice).toMatch(/nativeVoice\\(\\) \\?\\? browserVoice\\(\\) \\?\\? none/);
+    expect(voice).toContain("id: 'Sulafat', label: 'Sulafat · acolhedora e quente (recomendada)'");
+    expect(voice).toContain("id: 'Callirrhoe'");
+    expect(voice).toContain("id: 'Charon'");
+    expect(voice).toContain("gemini-3.8-flash-tts");
+    expect(voice).toContain('cadência uniforme');
+    expect(voice).toContain('nativeVoice() ?? browserVoice() ?? none');
     expect((voice.match(/id: '[A-Za-z]+'/g) ?? []).length).toBe(30);
   });
 
