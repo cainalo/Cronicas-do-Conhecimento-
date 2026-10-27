@@ -7,6 +7,8 @@ import { screen, waitFor } from '@testing-library/react';
  */
 export async function waitForRouteReady(): Promise<void> {
   await waitFor(() => {
-    expect(screen.queryByText(/Carregando esta área/)).not.toBeInTheDocument();
+    const main = screen.getByRole('main');
+    expect(main).not.toHaveTextContent(/Carregando esta área/);
+    expect(main.textContent?.trim().length ?? 0).toBeGreaterThan(0);
   });
 }
