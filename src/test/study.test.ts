@@ -109,7 +109,7 @@ describe('prática e material de referência', () => {
     expect(p[0].answer).toBe(false);
   });
   it('monta uma rodada variada e conclui a prática uma única vez com XP', () => {
-    const acts = buildPractice(ch, ch.sections[2].id, qfc3(DC3), undefined, () => 0.4);
+    const acts = buildPractice(ch, ch.sections[2].id, qfc3(DC3), () => 0.4);
     const kinds = new Set(acts.map((a) => a.kind));
     expect(kinds.has('tf')).toBe(true);
     expect(kinds.has('term')).toBe(true);
@@ -125,7 +125,7 @@ describe('prática e material de referência', () => {
   });
   it('com a explicação simples, começa pelo aquecimento fácil e fica curta', () => {
     const simple = { pages: [], words: ['a', 'b', 'c', 'd'].map((t) => ({ term: t, meaning: `significado ${t}` })), checks: [{ statement: 'x', answer: true, why: 'y' }, { statement: 'z', answer: false, why: 'w' }, { statement: 'k', answer: true, why: 'q' }] };
-    const acts = buildPractice(ch, ch.sections[2].id, qfc3(DC3), undefined, () => 0.4, simple);
+    const acts = buildPractice(ch, ch.sections[2].id, qfc3(DC3), () => 0.4, simple);
     expect(acts[0].id.endsWith(':s0')).toBe(true);
     expect(acts.slice(0, 4).map((a) => a.kind)).toEqual(['tf', 'tf', 'term', 'pairs']);
     expect(acts.length).toBeLessThanOrEqual(12);
