@@ -4,6 +4,7 @@
 - Gate por mudança (28 critérios): `docs/QUALITY_GATE.md`. Nota 100% só com todos os critérios aplicáveis verificados e evidência automatizada e visual; não verificado não conta como aprovado.
 - `npm test` — Vitest (jsdom) + Testing Library.
 - `npm run build` — typecheck (`tsc -b`) + build.
+- `npm run report:bundle` — mede os chunks JS gerados, a carga inicial referenciada no HTML (entry/modulepreload) e tamanho bruto/gzip; executar depois do build.
 - `npm run test:e2e` — verificação de layout no Chromium, focada em overlays, correção, modais e rolagem horizontal; roda depois do build.
 - `npm run test:visual` — auditoria ampliada de rotas e capítulos, com screenshots em 360×640, 390×844 e 1280×800, em tema claro/escuro; gera artefatos em `artifacts/visual-audit/` (ignorados pelo Git).
 - RLS: executar `supabase/tests/rls_check.sql` (transação revertida) via SQL Editor ou MCP.
