@@ -165,3 +165,11 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 - Tornadas mais descritivas as linhas de Segurança, Redes e Matemática que ainda usavam metáforas de selos, muralhas, erário e livro-caixa.
 - Corrigido na matriz de cobertura o caminho antigo `src/content/game/simple/` para `src/content/simple/` e atualizado o comentário legado da introdução de TI.
 - Próximo gate: verificar instalação de Chromium, E2E, APK e GitHub Pages.
+
+
+### ChatGPT — atualiza E2E para leitura contínua
+**Data:** 2026-10-27
+**Estado:** execução pendente após este patch.
+- O E2E foi atualizado para validar o contrato novo da tela de referência: artigo rolável visível, limites dentro da viewport, ausência de botões de sumário/página e ausência de rolagem horizontal.
+- Removida a exigência antiga de abrir um botão “Sumário”, que pertence ao leitor paginado removido e era o único motivo reportado para os quatro casos E2E falharem (360x640, 360x640 vidro, 390x844, 390x844 vidro).
+- Os checks do modal “Entender”, cena narrada em largura total e cartões de correção continuam mantidos.
