@@ -100,7 +100,8 @@ export function NarratedPlayer({
   const currentMs = Math.min(totalMs, hasGeneratedTrack ? mediaElapsedMs : beforeMs + beatElapsed);
   const scene = l.scenes[pos.scene];
   const say = scene.beats[pos.beat].say;
-  const captionEstimatedWord = wordIndexAtChar(say, Math.floor((beatElapsed / Math.max(1, durations[beatIndex] ?? 2200)) * say.length));
+  const captionClockDuration = (hasGeneratedTrack ? trackDurations[beatIndex] : durations[beatIndex]) ?? 2200;
+  const captionEstimatedWord = wordIndexAtChar(say, Math.floor((beatElapsed / Math.max(1, captionClockDuration)) * say.length));
   const captionWordIndex = Math.max(0, Math.min((say.match(/\S+\s*/g) ?? [say]).length - 1, speechWordIndex ?? captionEstimatedWord));
   // O B-roll é calculado pela duração da cena inteira, não pela frase isolada.
   // Assim ele entra uma única vez no meio da sequência e não abre/fecha a cada legenda.
@@ -124,6 +125,26 @@ export function NarratedPlayer({
     trackRef.current = null;
     stop();
   }, [stop]);
+  // Carrega em segundo plano as fotos históricas desta aula para que uma troca de plano
+  // não mostre um retângulo vazio enquanto a imagem é baixada durante a narração.
+  useEffect(() => {
+    const images: HTMLImageElement[] = [];
+    for (const item of l.scenes) {
+      if (item.visual.kind !== 'timeline') continue;
+      for (const entry of item.visual.items) {
+        const photo = historicalVisualFor(entry.title + ' ' + entry.text);
+        if (!photo) continue;
+        const image = new Image();
+        image.decoding = 'async';
+        image.src = photo.src;
+        images.push(image);
+      }
+    }
+    return () => {
+      for (const image of images) { image.onload = null; image.onerror = null; }
+    };
+  }, [l]);
+
   // A composição cobre a viewport, então a página por trás não deve continuar rolando no toque.
   useEffect(() => {
     const bodyOverflow = document.body.style.overflow;
