@@ -10,11 +10,8 @@ export const grimorioEngSoft: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.engsoft',
   title: 'Engenharia de Software',
-  epithet: 'Engenharia de Software',
   description: 'Como se constrói um sistema que dura: ciclos de vida, Scrum, Kanban, Lean e XP, requisitos e histórias, arquiteturas, SOLID, UML, BPMN, padrões de projeto, testes e dívida técnica.',
   chapterIds: ['cap.es.01', 'cap.es.02'],
-  sigil: 'grimorio',
-  binding: 'floresta',
 };
 
 export const capEsProcesso: Chapter = {
