@@ -62,3 +62,10 @@
 - A publicação anterior do cap.devops.02 passou pelo Actions run [40394408966](https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40394408966) e gerou o site/APK versão 0.1.129; assinatura Android segue em debug para preservar a identidade de atualização.
 - Depois dessa publicação, foram adicionadas 15 microaulas de cap.ia.02 e testes de regressão. Essa nova rodada ainda precisa passar por CI antes de ser publicada.
 - A revisão editorial humana e o teste em aparelho Android continuam pendentes.
+
+
+### Atualização de conteúdo — 27/10/2026 (branch de trabalho)
+
+- `cap.ingles.01`: implementadas 11 microaulas divididas entre estratégias de leitura, coesão e gramática técnica, usando as 11 questões autorais existentes. O lote está em `gpt/ingles01-microaulas-2026-10-27`; não foi integrado à branch de publicação.
+- Os testes de regressão de Inglês foram escritos para cobertura, sequência, história/fonte, diversidade de prática e vínculo das questões.
+- **Ainda não confirmado:** npm test/build/E2E dessa branch, revisão editorial humana, capturas de viewport e comportamento no Android.
