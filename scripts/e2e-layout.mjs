@@ -3,7 +3,7 @@
 //  1. nenhuma página rola para os lados;
 //  2. todo overlay de tela cheia (position: fixed cobrindo a tela) ocupa a tela inteira;
 //  3. o cartão de certo ou errado das atividades vai de borda a borda e encosta na base;
-//  4. os modais (Entender, Sumário) cobrem a tela inteira;
+//  4. o modal Entender cobre a tela; o material completo é uma página contínua;
 // tudo também com o estilo de cartões "vidro" (backdrop-filter), que já prendeu overlays antes.
 // Uso: npm run build && npm run test:e2e
 import { spawn } from 'node:child_process';
@@ -205,14 +205,13 @@ async function run() {
           await checkFullScreenOverlays(page, `${tag} modal Entender`);
         } else fail(`${tag}: botão Entender não encontrado em ${GUIDE_LESSON}`);
 
-        // Sumário do livro.
+        // O material completo não tem sumário modal nem virada de páginas: é uma leitura contínua.
         await go('/capitulo/cap.prim.01');
-        const sumario = page.getByRole('button', { name: 'Sumário' });
-        if (await sumario.count()) {
-          await sumario.first().click();
-          await page.waitForTimeout(500);
-          await checkFullScreenOverlays(page, `${tag} sumário do livro`);
-        } else fail(`${tag}: botão Sumário não encontrado`);
+        const material = page.getByRole('link', { name: 'Estudar este trecho' });
+        if (await material.count()) {
+          const box = await material.first().boundingBox();
+          if (!box || box.x < -TOL || box.x + box.width > vp.width + TOL) fail(`${tag}: link Estudar este trecho está fora da viewport`);
+        } else fail(`${tag}: link Estudar este trecho não encontrado no material contínuo`);
 
         await page.close();
       }
