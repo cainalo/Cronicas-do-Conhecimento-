@@ -135,6 +135,25 @@ A limpeza é baseada em evidência:
 4. preservar logs de decisões relevantes, mas resumir duplicações em vez de criar novos documentos paralelos;
 5. manter apenas branches que tenham propósito ativo, publicação, revisão aberta ou trabalho único ainda não recuperado. Uma branch só pode ser eliminada após verificar o conteúdo exclusivo e preservar o que for aproveitável.
 
+
+### Inventário de branches — 27/10/2026
+As branches são refs GitHub independentes; fechar um PR não apaga sua branch. Estado apurado comparando os arquivos e commits com a branch de manutenção:
+
+| Branch | Disposição nesta rodada | Motivo |
+|---|---|---|
+| `main` | Manter | Referência canônica do código. |
+| `claude/cronicas-conhecimento-estudos-jgbofo` | Manter | Branch que constrói/publica site e APK; assinatura Android exige estabilidade. |
+| `gh-pages` | Manter | Saída publicada do site/APK. |
+| `gpt/ingles01-microaulas-2026-10-27` | Manter | Branch ativa para arquitetura, QA e próxima expansão de conteúdo. |
+| `gpt/ia04-etica-dados-2026-10-27` | Candidata a exclusão | Comparação retornou zero commits/arquivos exclusivos em relação à branch de manutenção. |
+| `codex/qa-visual-audit-20261026` | Candidata após validar QA | Script de auditoria, comando e checklist foram copiados; o workflow separado e alterações no pipeline de publicação foram intencionalmente descartados. |
+| `gpt/narration-timeline-manifest-2026-10-27` | Candidata após revisão final | Variante do protótipo de timeline, agora removido do runtime por estar sem consumidor. |
+| `gpt/narrated-timeline-review-2026-10-27` | Fechada sem integração | PR #9 foi encerrado; adaptador TTS e integração temporal foram adiados. Preservar a branch como referência até decidir eliminar o experimento. |
+| `gpt/auditoria-narradas-sync-2026-10-27` | Revisão de conteúdo restante | Continha um teste estrutural de narração que foi incorporado à suíte central; a nota longa de auditoria permanece referência histórica. |
+| `gpt/narradas-conteudo-voz-2026-10-26` | Não excluir ainda | Traz versões alternativas de roteiros narrados; comparar editorialmente antes de descartar qualquer conteúdo exclusivo. |
+
+**Limite operacional:** a conexão GitHub usada nesta sessão não oferece uma operação para excluir refs de branches. Não apaguei nem movi branches por métodos indiretos. A exclusão física das candidatas precisa ser feita pelo GitHub após o gate da branch central passar e o conteúdo exclusivo ser revisado.
+
 ## 8. Estado desta rodada — 27/10/2026
 
 - A divisão de rotas secundárias por importação sob demanda foi implementada em `src/App.tsx`, com fronteira `Suspense` acessível; o gate de layout foi ampliado para 34 rotas e o audit visual por screenshots foi consolidado em `scripts/e2e-visual-audit.mjs`. A medição de chunks e a aprovação do CI seguem pendentes.
