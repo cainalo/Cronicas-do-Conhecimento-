@@ -52,3 +52,23 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 - Sem captura/inspeção física no Galaxy A14 nesta auditoria; a verificação visual real ainda falta.
 
 **Próximo passo recomendado:** a sessão proprietária do player deve revisar as duas remontagens por beat e encurtar a direção de voz, depois deixar um único push estabilizar para que testes, build, E2E e APK possam terminar.
+
+
+### ChatGPT — aviso de colisão de escopo (leitura posterior obrigatória)
+**Data:** 2026-10-27  
+**Estado:** implementação inicial já gravada na branch compartilhada; validação ainda pendente.  
+**Aviso:** ao consultar este arquivo, encontrei depois um registro paralelo reservando a implementação de cap.ia.04 em outra branch (`gpt/ia04-etica-dados-2026-10-27`). Antes desse registro aparecer no arquivo comum, a implementação abaixo já havia sido enviada à branch `claude/cronicas-conhecimento-estudos-jgbofo`. Para evitar duplicação, não repliquei o trabalho e não devo continuar editando esses mesmos caminhos até as sessões compararem as duas versões.
+
+**Já presente nesta branch compartilhada**
+- `src/content/micro/ia-etica-dados.ts`: 12 microaulas, 3 por seção, vinculadas às questões autorais q.ia.04.001–012.
+- `src/content/index.ts`: módulo registrado em `microLessons`.
+- `src/test/ia-ethics-data.test.ts`: teste de estrutura, ordem, conteúdo histórico, diversidade e vínculo das questões.
+- Quatro Markdown de `src/content/grimoires/ia/cap04-etica-dados/`: adicionada seção `Contexto histórico` com fontes ligadas.
+- Commits da rodada: `cd9fb2e9dc066b1b86fd9c35116096b06fd80c1b` (módulo), `b607459d200fb28bfa16c3a65ba45c9a6b281a48` (registro), `b7a99e126990daa564ed818974920a00086713f6` (teste), `5d22aefbcc35736a74e6da852c10bfb145e6e319`, `23c73e82cfd9acf630e7c500c35b03416aa75405`, `7347f3ff9c94c4c0daa64602e68aeb7f211f7885` e `3795a450aba67fe0212693682bbbb86509b0a25c` (contextos históricos).
+- Blob SHA consultados posteriormente mostram que alguns desses arquivos tiveram novas atualizações na branch compartilhada; usar sempre o conteúdo mais recente, não copiar cegamente os commits acima.
+
+**Acordo sugerido para resolver a colisão**
+1. A sessão que trabalha em `gpt/ia04-etica-dados-2026-10-27` deve comparar sua proposta com os arquivos listados acima e evitar criar uma segunda série idêntica.
+2. A revisão/integração deve escolher uma única suíte de teste (preferência por nome em pt-BR `ia-etica-dados.test.ts` se essa for a convenção final) e uma única fonte de microaulas, preservando todo o conteúdo útil de ambas as versões.
+3. Não editar os documentos de continuidade enquanto a sessão da branch paralela estiver fazendo suas atualizações; coordenar primeiro a versão que será preservada.
+4. Nenhum teste/build/CI ou captura Android desta rodada foi executado por esta sessão. Manter validação como pendente.
