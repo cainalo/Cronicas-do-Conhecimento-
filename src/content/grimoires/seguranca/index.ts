@@ -17,12 +17,9 @@ export const grimorioSeguranca: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.seguranca',
   title: 'Segurança da Informação',
-  epithet: 'Segurança da Informação',
   description:
     'Criptografia, OWASP Top 10, DevSecOps, Zero Trust e a família ISO/IEC 27000. Começa pelo segredo mais antigo: como guardar e provar a palavra escrita.',
   chapterIds: ['cap.seg.01', 'cap.seg.02'],
-  sigil: 'chave',
-  binding: 'sangue',
 };
 
 export const capCriptografia: Chapter = {
@@ -30,7 +27,7 @@ export const capCriptografia: Chapter = {
   grimoireId: 'grim.seguranca',
   number: 1,
   title: 'Criptografia',
-  subtitle: 'Chaves, selos e resumos: a arte de guardar e provar a informação',
+  subtitle: 'Criptografia, funções hash e assinaturas digitais',
   topicIds: ['ti.seguranca.criptografia'],
   review: 'nao-revisado',
   estimatedMinutes: 55,
