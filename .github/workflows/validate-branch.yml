@@ -15,6 +15,7 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - name: Baixar código
         uses: actions/checkout@v4
@@ -47,6 +48,18 @@ jobs:
 
       - name: Testes E2E de layout
         run: npm run test:e2e
+
+      - name: Auditoria visual das rotas e capítulos
+        run: npm run test:visual
+
+      - name: Guardar relatório e capturas (mesmo em caso de falha)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cronicas-auditoria-visual-${{ github.sha }}
+          path: artifacts/visual-audit/
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Sincronizar Capacitor
         run: npx cap sync android
