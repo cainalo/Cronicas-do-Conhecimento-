@@ -1,7 +1,7 @@
 // Microaula: uma ideia por vez. Cada etapa tem explicação, exemplo e checagem imediata; se errar,
 // vem outra explicação e um item equivalente com outros dados. Depois: prática cumulativa, questão
 // no estilo da prova e síntese. O ponto exato fica salvo (useSession), e o Continuar volta aqui.
-// Nenhuma tela rola para baixo: o que não cabe vira outra parte, ao lado (SwipePages).
+// Nenhuma tela rola para baixo: o que não cabe vira outra parte, ao lado (ContentFlow).
 import { useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
@@ -16,7 +16,7 @@ import { useSession } from '@/app/useSession';
 import { learnKey, logUnit, seriesKey } from '@/lib/pace';
 import { markSectionRead, recordAnswer } from '@/lib/study';
 import { Markdown } from '@/components/Markdown';
-import { PageDots, SwipePages, type PageItem } from '@/components/SwipePages';
+import { ContentFlow, PageDots, type ContentItem } from '@/components/ContentFlow';
 import { splitMarkdown } from '@/lib/book';
 import { Icon } from '@/components/Icon';
 import { Illustration } from '@/components/Illustration';
@@ -112,10 +112,10 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   );
 
   // Explicação em partes que cabem na tela: parágrafos (divisíveis) e o exemplo numa moldura.
-  const explainItems = (): PageItem[] => {
+  const explainItems = (): ContentItem[] => {
     if (!step) return [];
     const body = phase.k === 'explicar' ? step.explain : step.recovery.explain;
-    const items: PageItem[] = splitMarkdown(body).map((md, k) => ({ key: `e${k}`, md }));
+    const items: ContentItem[] = splitMarkdown(body).map((md, k) => ({ key: `e${k}`, md }));
     if (phase.k === 'explicar' && step.art) items.unshift({ key: 'art', node: <Illustration name={step.art} className="mx-auto h-24 w-auto text-ink" /> });
     if (phase.k === 'explicar' && step.example) {
       items.push({
@@ -132,7 +132,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
     return items;
   };
 
-  const summaryItems = (): PageItem[] => [
+  const summaryItems = (): ContentItem[] => [
     { key: 'h', node: <h2 className="text-lg">O que você aprendeu</h2> },
     ...lesson.summary.map((t, k) => ({
       key: `s${k}`,
@@ -195,7 +195,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
           <h1 className="mt-0.5 text-2xl leading-tight">{phase.k === 'explicar' ? step.title : 'Vamos ver de outro jeito'}</h1>
           {phase.k === 'explicar' && <p className="mb-2 mt-0.5 text-sm text-muted">Objetivo: {step.goal}</p>}
           <div className="mt-2 flex min-h-0 flex-1 flex-col">
-            <SwipePages
+            <ContentFlow
               items={explainItems()}
               layoutKey={`${phase.k}-${step.id}`}
               renderMd={renderMd}
@@ -336,7 +336,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
           <p className="kicker">Fim da aula</p>
           <h1 className="mb-3 text-2xl">Aula concluída</h1>
           <div className="mt-2 flex min-h-0 flex-1 flex-col">
-            <SwipePages
+            <ContentFlow
               items={summaryItems()}
               layoutKey="sintese"
               renderMd={renderMd}
