@@ -58,12 +58,12 @@ export function LessonPage() {
       {phase.k === 'cards' && phase.i === 0 && <StepGuide chapterId={lesson.chapterId} current="desafio" open />}
 
       {phase.k === 'cards' && (
-        <section className="manuscript p-5">
-          <p className="rubric font-display text-lg">
+        <section className="card p-5">
+          <p className="text-gold font-display text-lg">
             {lesson.title} · {phase.i + 1}/{lesson.cards.length}
           </p>
           <h1 className="mt-2 text-xl">{lesson.cards[phase.i].title}</h1>
-          <div className="prose-manuscript mt-3">
+          <div className="prose-content mt-3">
             <Markdown>{lesson.cards[phase.i].body}</Markdown>
           </div>
           <div className="mt-4 flex gap-2">
@@ -129,7 +129,7 @@ export function LessonPage() {
                     : 'Toda grande obra começa com rascunhos. Vamos revisar juntos?'}
             </SpeechBubble>
           </div>
-          <p className="rubric text-sm font-semibold">Lição concluída</p>
+          <p className="text-gold text-sm font-semibold">Lição concluída</p>
           <h1 className="font-display text-5xl">{score}%</h1>
           <p className="text-muted">
             {correct} de {qs.length} corretas · +{totalXp(data) - startXp.current} pontos
