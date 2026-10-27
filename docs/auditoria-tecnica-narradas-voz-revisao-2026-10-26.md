@@ -204,7 +204,7 @@ Em um Galaxy A14 5G ou Android equivalente: viewport inteira; ausência de scrol
 - Branch isolada criada: sim.
 - Roteiros completos: já presentes na branch-base atual por commits de outro colaborador; não foram sobrescritos nesta entrega. Teste acrescentado: sim.
 - Testes executados nesta sessão: **nenhum**. O clone local falhou por indisponibilidade de resolução de rede para GitHub, portanto não consegui instalar dependências nem executar Vitest, TypeScript, build ou Playwright.
-- CI: nenhuma verificação passou no resultado de status consultado até este momento; verificar na página do PR.
+- CI: a consulta de status/execuções não retornou verificações para o commit observado. Isso não significa aprovação nem falha; conferir Actions no GitHub antes de mesclar.
 - Áudio gerado e ouvido: não. Não afirmo que alguma voz soa natural até ouvir/comparar as amostras.
 - Interface do player/slides alterada: não.
 
