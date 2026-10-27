@@ -136,7 +136,7 @@ describe('experiência imersiva de aula e revisão', () => {
     expect(src).toMatch(/document\.documentElement\.style\.overflow = 'hidden'/);
     expect(src).toMatch(/review-slide-cover/);
     expect(src).toMatch(/data-testid=\"review-slide-visual\"/);
-    expect(src).toMatch(/maxChars = 430/);
+    expect(src).toMatch(/maxChars = 250/);
     expect(src).not.toMatch(/slice\(0, 560\)|slice\(0, 620\)|slice\(0, 500\)/);
   });
 
