@@ -31,7 +31,7 @@ const ON: [string, string] = ['empenho.cnpj_fornecedor', 'fornecedor.cnpj'];
 
 export const missaoSql01: Mission = {
   id: 'missao.sql.01',
-  title: 'A lista que veio vazia',
+  title: 'O relatório que veio vazio',
   chapterId: 'cap.dados.01',
   sectionId: 'sql',
   topicIds: ['ti.dados.sql'],
@@ -251,7 +251,7 @@ export const missaoSql01: Mission = {
       prompt: 'Situação nova: na tabela servidor, a coluna data_saida fica NULL para quem ainda trabalha no Tribunal. Como listar quem ainda trabalha?',
       options: [
         { text: 'WHERE data_saida IS NULL', why: 'Certo: quem não saiu não tem data de saída.' },
-        { text: 'WHERE data_saida = NULL', why: 'O mesmo erro do Tesoureiro: nenhuma linha passa.' },
+        { text: 'WHERE data_saida = NULL', why: 'O mesmo erro de comparação com NULL: nenhuma linha passa.' },
         { text: 'WHERE data_saida = 0', why: 'NULL não é zero.' },
         { text: 'WHERE data_saida IS NOT NULL', why: 'Isso traria justamente quem já saiu.' },
       ],
@@ -262,24 +262,24 @@ export const missaoSql01: Mission = {
   exam: { kind: 'exam', id: 'prova', prompt: 'Questão no estilo da prova', questionId: 'q.dados.01.007' },
   ending: {
     text: 'Você tem duas provas escritas: R$ 182.000 em empenhos de 2026 sem conferência para a Serviços Integrados, que nem cidade informou, e R$ 40.000 pagos a um cnpj que não existe no cadastro.',
-    prompt: 'A quem você leva a consulta primeiro?',
+    prompt: 'Qual é a próxima ação profissional mais segura?',
     options: [
       {
-        id: 'leonor',
+        id: 'auditoria',
         label: 'À equipe de auditoria',
         result: 'A equipe de auditoria executa a consulta novamente, confere as linhas e registra a evidência com data, hora e responsáveis.',
         trust: { auditoria: 1 },
         clue: 'O CNPJ 99 recebeu R$ 40.000 sem estar no cadastro. A equipe registrou a inconsistência no relatório de auditoria.',
       },
       {
-        id: 'valerio',
+        id: 'solicitante',
         label: 'Ao solicitante do relatório',
-        result: 'solicitante agradece e promete "cuidar disso". No dia seguinte, os dois empenhos da Serviços Integrados aparecem com status "pago", sem nota fiscal. Agora há também uma alteração suspeita para explicar.',
+        result: 'O solicitante agradece e promete "cuidar disso". No dia seguinte, os dois empenhos da Serviços Integrados aparecem com status "pago", sem nota fiscal. Agora há também uma alteração suspeita para explicar.',
         trust: { solicitante: 1, auditoria: -1 },
         clue: 'Após a consulta ser compartilhada, alguém solicita alterar os empenhos 4 e 5 para "pago" sem nota fiscal.',
       },
       {
-        id: 'isolda',
+        id: 'coordenacao',
         label: 'À coordenação de auditoria, para preservar a evidência',
         result: 'A coordenação orienta guardar a consulta, os parâmetros, o resultado e a data de execução antes de compartilhar os achados.',
         trust: { coordenacao: 1 },
