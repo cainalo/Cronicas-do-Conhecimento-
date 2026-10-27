@@ -100,10 +100,10 @@ export const primHistoria: MicroLesson = {
       id: 'jacquard',
       art: 'cartao',
       part: 'Instruções',
-      title: '1804: um tear que seguia cartões',
+      title: '1801–1804: um tear que seguia cartões',
       goal: 'Entender a ideia de dar instruções a uma máquina.',
       explain:
-        'Em **1804**, o francês **Joseph-Marie Jacquard** criou um **tear** (máquina de tecer pano) que seguia **cartões perfurados**: cartões com furinhos.\n\nOnde havia furo, um fio subia; onde não havia, o fio ficava. Assim, os cartões **diziam ao tear o que fazer**.\n\nA grande novidade: **trocando os cartões, o mesmo tear tecia outro desenho**. Nascia a ideia de dar **instruções** a uma máquina, sem precisar construir outra máquina.',
+        'No início do século XIX, o francês **Joseph-Marie Jacquard** aperfeiçoou um **tear** (máquina de tecer pano) controlado por **cartões perfurados**. O Computer History Museum registra uma demonstração de um tear em **1801** e o aperfeiçoamento do controle por cartões em **1804**.\n\nOnde havia furo, um fio subia; onde não havia, o fio ficava. Assim, os cartões **diziam ao tear o que fazer**.\n\nA grande novidade: **trocando os cartões, o mesmo tear tecia outro desenho**. Nascia a ideia de dar **instruções** a uma máquina, sem precisar construir outra máquina.',
       check: {
         kind: 'choice',
         id: 'ja-c',
@@ -276,7 +276,7 @@ export const primHistoria: MicroLesson = {
       kind: 'order',
       id: 'cons-1',
       prompt: 'Organize a linha do tempo.',
-      items: ['Ábaco', 'Máquina de Pascal (1642)', 'Tear de Jacquard (1804)', 'ENIAC (1946)', 'Microprocessador (1971)'],
+      items: ['Ábaco', 'Máquina de Pascal (1642)', 'Tear de Jacquard (1801–1804)', 'ENIAC (1946)', 'Microprocessador (1971)'],
       why: 'Do mais antigo ao mais recente.',
       errorKind: 'conceito',
     },
@@ -308,7 +308,7 @@ export const primHistoria: MicroLesson = {
   summary: [
     'O computador nasceu da vontade de fazer contas mais depressa e sem erro.',
     'Ábaco: a pessoa faz a conta. Pascal (1642): engrenagens somam sozinhas.',
-    'Jacquard (1804): cartões perfurados dão instruções à máquina.',
+    'Jacquard (1801–1804): cartões perfurados dão instruções à máquina.',
     'Babbage (década de 1830) projetou a máquina analítica; Ada Lovelace (1843) escreveu o primeiro programa.',
     'Hollerith (1890): máquinas elétricas no censo; a empresa virou a IBM.',
     'ENIAC (1946): 18 mil válvulas, quase 30 toneladas, uma sala inteira.',
