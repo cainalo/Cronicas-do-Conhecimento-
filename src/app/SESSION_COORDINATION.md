@@ -157,3 +157,16 @@ Este é o único arquivo de coordenação do projeto. Os registros antigos abaix
 6. Só então continuar com cap.ingles.02, mantendo esta mesma branch e este único arquivo de coordenação.
 
 **Limites:** nenhuma publicação, PR ou merge para branches de entrega foi feito nesta retomada. Nenhum teste da nova branch é considerado aprovado até o CI desta branch concluir.
+
+### ChatGPT — Maintainer: arquitetura, desempenho e higiene
+**Data:** 2026-10-27
+**Estado:** refatoração aplicada na branch central; CI aguardando confirmação.
+
+- `src/App.tsx`: 29 páginas secundárias usam importação sob demanda por `React.lazy`/ `Suspense`; os fluxos comuns de estudo permanecem diretos. O fallback anuncia o carregamento a leitores de tela sem alterar a aparência.
+- `scripts/e2e-layout.mjs`: a lista de smoke tests cobre 34 caminhos, incluindo rotas adiadas, Escritório, Simulador, Missão e subpáginas de Conta.
+- Consolidada a auditoria visual por screenshots em `scripts/e2e-visual-audit.mjs`, `npm run test:visual` e `docs/QA_ANDROID_FISICO.md`. O workflow isolado inclui o relatório/capturas como artefato e não publica no site.
+- Removidos `src/lib/narration-timeline.ts` e `src/test/narration-timeline.test.ts`: o protótipo de alinhamento de timestamps não tinha consumidor de produção. A decisão e os critérios para reintrodução estão no adendo técnico de voz.
+- PR #2 foi encerrado como supersedido após incorporar o núcleo da auditoria visual ao workflow isolado. PR #9 foi encerrado sem merge porque o adaptador TTS não está integrado ao player e não havia testes comprovados. Nenhum PR foi mesclado à branch de publicação.
+- O gate definitivo precisa confirmar Vitest, typecheck/build, E2E, auditoria visual e compilação Android. Não foi possível obter um resultado final de Actions através do status de commit disponível; não declarar aprovação.
+- O inventário confirma que não há PRs abertos. As branches canônicas são `main`, `claude/cronicas-conhecimento-estudos-jgbofo` (entrega/publicação) e `gh-pages`; a branch de manutenção ativa é `gpt/ingles01-microaulas-2026-10-27`. Branches experimentais ainda existem como refs históricas: esta conexão não expõe uma operação para excluí-las fisicamente.
+
