@@ -1,5 +1,5 @@
 // Material completo em leitura vertical, responsiva e acessível. Sem capa física, fólio ou virada de página.
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
@@ -199,7 +199,7 @@ export function BookPage() {
           {chapter.sections.map((section, index) => (
             <Link key={section.id} to={`/capitulo/${chapter.id}#${section.id}`} className="flex min-h-11 items-center gap-3 rounded-xl bg-raised/45 px-3 py-2 text-sm transition hover:bg-raised">
               <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-azure/10 text-xs font-bold text-azure">{index + 1}</span>
-              <span className="min-w-0 flex-1">{section.title.replace(/^\\d+\\.\\s*/, '')}</span>
+              <span className="min-w-0 flex-1">{section.title.replace(/^\d+\.\s*/, '')}</span>
               <Icon name="avancar" size={15} className="shrink-0 text-muted" />
             </Link>
           ))}
