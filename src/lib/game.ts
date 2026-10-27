@@ -9,12 +9,12 @@ const localDay = (iso: string) => new Date(iso).toLocaleDateString('sv');
 
 // --- Títulos -----------------------------------------------------------------
 export const TITLES: { minLevel: number; title: string }[] = [
-  { minLevel: 1, title: 'Aprendiz' },
-  { minLevel: 3, title: 'Copista' },
-  { minLevel: 5, title: 'Escriba' },
-  { minLevel: 8, title: 'Investigador' },
-  { minLevel: 12, title: 'Auditor' },
-  { minLevel: 16, title: 'Mestre da Torre' },
+  { minLevel: 1, title: 'Iniciante' },
+  { minLevel: 3, title: 'Praticante' },
+  { minLevel: 5, title: 'Estudioso' },
+  { minLevel: 8, title: 'Analista' },
+  { minLevel: 12, title: 'Especialista' },
+  { minLevel: 16, title: 'Referência' },
 ];
 
 export function titleFor(level: number) {
@@ -84,11 +84,11 @@ interface Ctx {
 const chaptersDone = ({ data, chapters }: Ctx) => chapters.filter((c) => data.reading[c.id]?.completedAt).length;
 
 export const ACHIEVEMENTS: Achievement[] = [
-  { id: 'primeira-pagina', name: 'Primeira Página', how: 'Ler a primeira seção de um grimório.', progress: ({ data }) => [Math.min(1, Object.values(data.reading).reduce((n, r) => n + r.sectionsRead.length, 0)), 1] },
-  { id: 'capitulo', name: 'Capítulo Selado', how: 'Ler um capítulo inteiro.', progress: (c) => [Math.min(1, chaptersDone(c)), 1] },
-  { id: 'bibliotecario', name: 'Bibliotecário', how: 'Ler cinco capítulos inteiros.', progress: (c) => [Math.min(5, chaptersDone(c)), 5] },
+  { id: 'primeira-pagina', name: 'Primeiro passo', how: 'Concluir o primeiro trecho de estudo.', progress: ({ data }) => [Math.min(1, Object.values(data.reading).reduce((n, r) => n + r.sectionsRead.length, 0)), 1] },
+  { id: 'capitulo', name: 'Capítulo concluído', how: 'Concluir todos os trechos de um capítulo.', progress: (c) => [Math.min(1, chaptersDone(c)), 1] },
+  { id: 'bibliotecario', name: 'Leitor constante', how: 'Concluir cinco capítulos.', progress: (c) => [Math.min(5, chaptersDone(c)), 5] },
   { id: 'primeira-licao', name: 'Primeira Lição', how: 'Concluir uma lição.', progress: ({ data }) => [Math.min(1, Object.keys(data.lessons).length), 1] },
-  { id: 'licao-perfeita', name: 'Lição sem Mácula', how: 'Acertar todas as questões de uma lição.', progress: ({ data }) => [Object.values(data.lessons).some((l) => l.bestScore === 100) ? 1 : 0, 1] },
+  { id: 'licao-perfeita', name: 'Precisão total', how: 'Acertar todas as questões de uma lição.', progress: ({ data }) => [Object.values(data.lessons).some((l) => l.bestScore === 100) ? 1 : 0, 1] },
   { id: 'cem-respostas', name: 'Cem Respostas', how: 'Responder 100 questões.', progress: ({ data }) => [Math.min(100, data.attempts.length), 100] },
   { id: 'redencao', name: 'Redenção', how: 'Recuperar na revisão 10 questões erradas.', progress: ({ data }) => [Math.min(10, data.xp.filter((e) => e.kind === 'review_recovered').length), 10] },
   { id: 'constancia', name: 'Constância', how: 'Estudar 7 dias seguidos.', progress: ({ data }) => [Math.min(7, bestStreak(data)), 7] },
@@ -98,8 +98,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     how: 'Concluir um simulado de pelo menos 10 questões com 70% de acertos.',
     progress: ({ data }) => [Object.values(data.exams).some((e) => e.finishedAt && e.questionIds.length >= 10 && (e.correct ?? 0) / e.questionIds.length >= 0.7) ? 1 : 0, 1],
   },
-  { id: 'pena-firme', name: 'Pena Firme', how: 'Entregar um estudo de caso.', progress: ({ data }) => [Object.values(data.essays).some((e) => e.submittedAt) ? 1 : 0, 1] },
-  { id: 'memoria', name: 'Memória de Ferro', how: `Levar 10 flashcards a intervalos de ${MASTERED_DAYS} dias ou mais.`, progress: ({ data }) => [Math.min(10, Object.values(data.cards).filter((c) => c.intervalDays >= MASTERED_DAYS).length), 10] },
+  { id: 'pena-firme', name: 'Caso entregue', how: 'Entregar um estudo de caso.', progress: ({ data }) => [Object.values(data.essays).some((e) => e.submittedAt) ? 1 : 0, 1] },
+  { id: 'memoria', name: 'Memória consolidada', how: `Levar 10 flashcards a intervalos de ${MASTERED_DAYS} dias ou mais.`, progress: ({ data }) => [Math.min(10, Object.values(data.cards).filter((c) => c.intervalDays >= MASTERED_DAYS).length), 10] },
   {
     id: 'dominio',
     name: 'Domínio Demonstrado',
