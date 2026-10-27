@@ -12,7 +12,6 @@ import { getChapter, getLearningUnit, getSimpleSection, microSeries } from '@/co
 import { InteractiveUnitPage } from '@/pages/InteractiveUnit';
 import { MicroLessonPage } from './MicroLesson';
 import { markSectionRead, setLastSection } from '@/lib/study';
-import { practiceDone } from '@/lib/practice';
 import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
 import { TrueFalseCheck } from '@/components/TrueFalseCheck';
