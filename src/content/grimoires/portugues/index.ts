@@ -13,11 +13,8 @@ export const grimorioPortugues: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'cg.portugues',
   title: 'Língua Portuguesa',
-  epithet: 'Língua Portuguesa',
   description: 'Ler, acentuar, pontuar e concordar como manda a norma: interpretação e figuras, Acordo Ortográfico, crase, pronomes, concordância, regência, conectivos, reescrita e Redação Oficial pelo Manual da Presidência.',
   chapterIds: ['cap.port.01', 'cap.port.02'],
-  sigil: 'pena',
-  binding: 'sangue',
 };
 
 export const capPortLeitura: Chapter = {
@@ -102,7 +99,7 @@ export const licoesPortugues: Lesson[] = [
   {
     id: 'lic.port.01',
     chapterId: 'cap.port.01',
-    title: 'A Lente e o Cinzel',
+    title: 'Leitura, Interpretação e Ortografia',
     goal: 'Interpretação, discursos e figuras; Acordo Ortográfico e crase; vírgula, colocação pronominal e relativos; formação de palavras e sinonímia.',
     cards: [
       { title: 'Ler e acentuar', body: 'Resposta **sustentada pelo texto**; desconfie de "sempre" e "nunca".\n\nAcordo: **ideia, heroico** perdem acento; **herói, papéis** mantêm. **Creem, voo**, sem circunflexo. Restam **pôr, pôde, têm/vêm**.' },
@@ -114,7 +111,7 @@ export const licoesPortugues: Lesson[] = [
   {
     id: 'lic.port.02',
     chapterId: 'cap.port.02',
-    title: 'As Leis da Frase e do Ofício',
+    title: 'Sintaxe e Redação Oficial',
     goal: 'Concordância, regência, vozes, correlação verbal, conectivos, reescrita e Redação Oficial pelo Manual da Presidência (3ª ed., 2018).',
     cards: [
       { title: 'Concordância', body: '**Haver** (existir) e **fazer** (tempo): singular, inclusive o auxiliar.\n\n**Vendem-se** casas (VTD) × **precisa-se** de técnicos (VTI).\n\nSujeito posposto: ponha na ordem direta.' },
