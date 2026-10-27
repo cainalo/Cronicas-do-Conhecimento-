@@ -1,5 +1,9 @@
 O edital pede "LGPD aplicada à IA" e, no fim do bloco, a "Estratégia Brasileira de Inteligência Artificial". Os dois temas se completam: a lei impõe deveres no tratamento de dados; a estratégia orienta a política pública.
 
+### Contexto histórico
+
+A Lei nº 13.709/2018 (LGPD) foi sancionada em 14 de agosto de 2018 para regular o tratamento de dados pessoais, inclusive nos meios digitais. Em 6 de abril de 2021, a Portaria MCTI nº 4.617 instituiu a Estratégia Brasileira de Inteligência Artificial (EBIA). Em 2024, o governo lançou o Plano Brasileiro de Inteligência Artificial (PBIA) para 2024–2028. São instrumentos distintos: a LGPD é uma lei; a EBIA orienta a política pública de IA; o PBIA reúne iniciativas e ações para um período. Fontes oficiais: [texto compilado da LGPD no Planalto](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709compilado.htm), [página de IA do MCTI](https://www.gov.br/mcti/pt-br/acompanhe-o-mcti/transformacaodigital/inteligencia-artificial/) e [PBIA no MCTI](https://www.gov.br/mcti/pt-br/acompanhe-o-mcti/transformacaodigital/plano-brasileiro-de-inteligencia-artificial).
+
 ### LGPD e o ciclo de vida de um modelo
 
 A Lei nº 13.709/2018 (LGPD) se aplica sempre que um sistema de IA **trata dados pessoais**: na coleta para treino, no treinamento, na inferência e no armazenamento dos resultados. Dados **anonimizados** não são considerados dados pessoais (art. 12), salvo quando o processo de anonimização puder ser revertido com esforços razoáveis. Dados apenas **pseudonimizados** continuam sendo pessoais.
