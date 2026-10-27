@@ -185,20 +185,25 @@ export function NarratedPlayer({
     };
     audio.addEventListener('timeupdate', updatePosition);
     audio.addEventListener('loadedmetadata', updatePosition);
+    audio.addEventListener('play', updatePosition);
+    audio.addEventListener('pause', updatePosition);
     audio.addEventListener('ended', onEnded);
     audio.playbackRate = rate;
-    updatePosition();
     if (playing) {
+      updatePosition();
       void audio.play().catch((error) => {
         setPlaying(false);
         setVoiceStatus(error instanceof Error ? error.message : 'Não foi possível reproduzir o áudio.');
       });
     } else {
       audio.pause();
+      updatePosition();
     }
     return () => {
       audio.removeEventListener('timeupdate', updatePosition);
       audio.removeEventListener('loadedmetadata', updatePosition);
+      audio.removeEventListener('play', updatePosition);
+      audio.removeEventListener('pause', updatePosition);
       audio.removeEventListener('ended', onEnded);
     };
   }, [generatedTrack, playing, l, durations, rate, estimatedTotalMs, trackDurationMs]);
@@ -400,6 +405,16 @@ export function NarratedPlayer({
     }
   };
 
+  const discardGeneratedTrack = () => {
+    trackRequest.current += 1;
+    trackRef.current?.dispose();
+    trackRef.current = null;
+    setGeneratedTrack(null);
+    setTrackDurationMs(0);
+    setMediaElapsedMs(0);
+    setPreparingTrack(false);
+  };
+
   const togglePlayback = () => {
     if (playing) {
       if (trackRef.current) {
@@ -586,9 +601,9 @@ export function NarratedPlayer({
             <input className="mt-1 h-10 w-full rounded-lg border border-white/20 bg-[#282725] px-3 text-sm text-white placeholder:text-white/40" type="password" autoComplete="off" spellCheck={false} placeholder="Cole sua chave do AI Studio" value={geminiKeyDraft} onChange={(e) => setGeminiKeyDraft(e.target.value)} data-testid="narrada-gemini-key" />
           </label>
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <button type="button" className="rounded-full bg-[#c8402a] px-4 py-2 text-sm font-bold text-white" onClick={() => { stop(); setPlaying(false); saveGeminiTtsApiKey(geminiKeyDraft); saveGeminiTtsVoice(geminiVoiceDraft); setVoiceStatus(geminiKeyDraft.trim() ? 'Preferência guardada neste dispositivo. Toque em Testar voz.' : 'Chave removida. A voz local do aparelho será usada.'); }} data-testid="narrada-salvar-voz">Salvar preferência</button>
+            <button type="button" className="rounded-full bg-[#c8402a] px-4 py-2 text-sm font-bold text-white" onClick={() => { discardGeneratedTrack(); stop(); setPlaying(false); saveGeminiTtsApiKey(geminiKeyDraft); saveGeminiTtsVoice(geminiVoiceDraft); setVoiceStatus(geminiKeyDraft.trim() ? 'Preferência guardada neste dispositivo. Toque em Testar voz.' : 'Chave removida. A voz local do aparelho será usada.'); }} data-testid="narrada-salvar-voz">Salvar preferência</button>
             <button type="button" disabled={testingVoice || !geminiKeyDraft.trim()} className="rounded-full border border-white/25 px-4 py-2 text-sm font-bold disabled:opacity-40" onClick={async () => {
-              setTestingVoice(true); setVoiceStatus('Gerando uma amostra de voz…'); stop(); setPlaying(false); saveGeminiTtsApiKey(geminiKeyDraft); saveGeminiTtsVoice(geminiVoiceDraft);
+              setTestingVoice(true); setVoiceStatus('Gerando uma amostra de voz…'); discardGeneratedTrack(); stop(); setPlaying(false); saveGeminiTtsApiKey(geminiKeyDraft); saveGeminiTtsVoice(geminiVoiceDraft);
               try { await getVoice().speak('Olá! Esta é uma amostra da voz neural da sua aula. Vamos aprender com calma, clareza e exemplos.', 0.95); setVoiceStatus('Amostra concluída. A voz neural está pronta para as aulas.'); }
               catch (error) { setVoiceStatus(error instanceof Error ? error.message : 'Não foi possível gerar a amostra. Confira a chave e a conexão.'); }
               finally { setTestingVoice(false); }
