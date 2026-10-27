@@ -1,11 +1,10 @@
-// Prática de um trecho, no estilo Duolingo: atividades curtas e variadas, painel de resposta embaixo,
-// erros voltam para o fim da fila e o Bubo abre e fecha a rodada com a cena da história.
+// Prática de um trecho: atividades curtas e variadas, correção explicada e recuperação dos erros.
 import { Portal } from '@/components/Portal';
 import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
-import { DEFAULT_CONTEST_ID, concepts, getChapter, getLearningUnit, getSectionExtras, getSimpleSection, learningUnits, questionsForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, concepts, getChapter, getLearningUnit, getSimpleSection, learningUnits, questionsForContest } from '@/content';
 import { practiceUnlocked, taughtConcepts } from '@/lib/engine';
 import { buildPractice, completePractice, isRecovery, nextQueue, practiceId, recoveryFor, type Activity } from '@/lib/practice';
 import { useSession } from '@/app/useSession';
@@ -152,7 +151,6 @@ function PracticeRun() {
   const navigate = useNavigate();
   const chapter = getChapter(chapterId);
   const section = chapter?.sections.find((s) => s.id === sectionId);
-  const extras = getSectionExtras(chapterId, sectionId);
   const simple = getSimpleSection(chapterId, sectionId);
   const { data, update } = useStudy();
   const { sfx, confetti } = useFx();
@@ -312,9 +310,7 @@ function PracticeRun() {
           <div className="mt-6 flex items-end gap-2">
             <Mascot mood="talk" size={92} />
             <SpeechBubble className="anim-toast-in mb-8 flex-1">
-              {extras?.scene?.length
-                ? `${extras.scene[extras.scene.length - 1].text}`
-                : 'Vamos ver o que ficou deste trecho. Errou? A pergunta volta no fim até você acertar.'}
+              Vamos revisar os pontos principais deste trecho. Se errar, a questão volta ao fim da fila.
             </SpeechBubble>
           </div>
           <p className="text-sm text-muted">{total} atividades curtas. Começa fácil e vai ficando mais difícil. Errou? A atividade volta no fim.</p>
@@ -498,7 +494,7 @@ function PracticeRun() {
           <div className="flex items-end gap-2">
             <Mascot mood={score >= 70 ? 'cheer' : 'talk'} size={104} />
             <SpeechBubble className="anim-toast-in mb-10 max-w-[15rem] text-left">
-              {extras?.outro ?? (score >= 70 ? 'Muito bem! A névoa recua deste trecho.' : 'Os erros voltaram até você acertar. Isso também é aprender.')}
+              {score >= 70 ? 'Você consolidou os conceitos deste trecho. Continue para a próxima etapa.' : 'Rodada concluída. Reforce os itens que deram trabalho e tente novamente.'}
             </SpeechBubble>
           </div>
           <h1 className="mt-2 text-2xl">Trecho praticado!</h1>
