@@ -7,6 +7,14 @@
 - `npm run test:e2e` — verificação de layout no Chromium (depois do `npm run build`); roda também no CI e bloqueia a publicação.
 - RLS: executar `supabase/tests/rls_check.sql` (transação revertida) via SQL Editor ou MCP.
 
+
+## Evidência de CI — 27/10/2026
+- [Workflow 40444629202](https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40444629202): **success** no commit `d2f6e93`. A execução concluiu `npm ci`, `npm test`, `npm run build`, `npm run test:e2e`, `npx cap sync android`, `assembleRelease` e publicação no GitHub Pages.
+- A versão publicada nessa execução é `0.1.351`. Essa evidência é específica ao SHA do run.
+- A branch `gpt/ingles01-microaulas-2026-10-27` contém mudanças posteriores e ainda precisa executar o gate isolado de testes, build, E2E e compilação Android. Não declarar esse código verde enquanto o workflow da branch não concluir.
+- Teste físico no Galaxy A14 e revisão editorial humana não são substituídos pelo CI.
+
+
 ## Regra de testes de layout (obrigatória)
 Criada em 26/10/2026, depois de o cartão de certo ou errado e os fundos dos modais aparecerem cortados, com margem clara, no celular. Vale para qualquer mudança em tela, modal, cartão, animação ou estilo.
 
