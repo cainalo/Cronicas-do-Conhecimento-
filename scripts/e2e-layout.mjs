@@ -77,6 +77,21 @@ async function checkNoHorizontalScroll(page, where) {
   if (sw > vw + 1) fail(`${where}: rolagem horizontal (${sw}px > ${vw}px)`);
 }
 
+async function checkNarratedSceneWidth(page, where) {
+  const scene = page.locator('[data-testid="narrada-cena-cinematica"]').first();
+  const box = await scene.boundingBox();
+  const vw = await page.evaluate(() => window.innerWidth);
+  if (!box) {
+    fail(`${where}: cena cinematográfica da aula narrada não está visível`);
+    return;
+  }
+  // A cena pode sangrar 1 px para cada lado para evitar hairlines de arredondamento,
+  // mas nunca pode deixar uma faixa do viewport sem o fundo da cena.
+  if (box.x > TOL || box.x + box.width < vw - TOL) {
+    fail(`${where}: cena narrada deixa uma faixa lateral (x=${box.x.toFixed(2)}, direita=${(box.x + box.width).toFixed(2)}, viewport=${vw}px)`);
+  }
+}
+
 async function setLook(page, cards) {
   await page.evaluate((c) => {
     if (c) document.documentElement.setAttribute('data-cards', c);
@@ -104,6 +119,7 @@ async function run() {
           await go(path);
           await checkNoHorizontalScroll(page, `${tag} ${path}`);
           await checkFullScreenOverlays(page, `${tag} ${path}`);
+          if (path.startsWith('/aula-narrada/')) await checkNarratedSceneWidth(page, `${tag} ${path}`);
         }
 
         // Cartão de certo ou errado.
