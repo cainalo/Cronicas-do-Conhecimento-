@@ -41,7 +41,6 @@ const CustomizePage = lazy(() => import('@/pages/Customize').then((m) => ({ defa
 const ScenarioListPage = lazy(() => import('@/pages/Scenarios').then((m) => ({ default: m.ScenarioListPage })));
 const ScenarioPage = lazy(() => import('@/pages/Scenarios').then((m) => ({ default: m.ScenarioPage })));
 const TeachersRoomPage = lazy(() => import('@/pages/TeachersRoom').then((m) => ({ default: m.TeachersRoomPage })));
-const WorldPage = lazy(() => import('@/pages/World').then((m) => ({ default: m.WorldPage })));
 const NarratedPage = lazy(() => import('@/pages/Narrated').then((m) => ({ default: m.NarratedPage })));
 
 
@@ -75,7 +74,7 @@ export function AppRoutes() {
         <Route path="simulador" element={<DeferredPage><ScenarioListPage /></DeferredPage>} />
         <Route path="simulador/:id" element={<DeferredPage><ScenarioPage /></DeferredPage>} />
         <Route path="sala" element={<DeferredPage><TeachersRoomPage /></DeferredPage>} />
-        <Route path="escritorio" element={<DeferredPage><WorldPage /></DeferredPage>} />
+        <Route path="escritorio" element={<Navigate to="/estudos" replace />} />
         <Route path="aula-narrada/:id" element={<DeferredPage><NarratedPage /></DeferredPage>} />
         <Route path="pratica/:chapterId/:sectionId" element={<PracticePage />} />
         <Route path="licao/:id" element={<LessonPage />} />
