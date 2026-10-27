@@ -95,3 +95,32 @@ Arquivo: https://github.com/cainalo/Cronicas-do-Conhecimento-/blob/claude/cronic
 **Limite atual:** esse utilitário ainda não está conectado ao contrato de `VoiceAudioTrack` nem ao componente do player. É uma peça isolada para a sessão responsável pela interface integrar sem copiar lógica de alinhamento para dentro de React. O provedor precisa devolver os timestamps de caracteres correspondentes ao texto exato submetido; se usar `normalized_alignment`, o adaptador deve mapear a normalização para o texto original antes de produzir os cues.
 
 A consulta ao GitHub não retornou execuções de workflow nem status de commit para os testes anteriores. Logo, esses novos testes estão **escritos e gravados, mas não executados**; typecheck e build continuam pendentes.
+
+
+## 8. Checagem factual da história dos computadores e licenças de imagens
+
+A conferência em fontes históricas acrescentou uma nuance que vale preservar: não é ideal apresentar “1804” como a única data para o tear de Jacquard sem contexto. O Computer History Museum registra uma demonstração do tear em 1801 e, em outro artigo, descreve o aperfeiçoamento do controle por cartões em 1804. Para não reduzir essa sequência a uma única data, os três conteúdos relacionados agora usam “1801–1804” e explicam a diferença entre demonstração e aperfeiçoamento:
+
+- `src/content/narrated/prim-computador.ts`: linha do tempo e fala atualizadas.
+- `src/content/grimoires/primeiros/cap01-computador/01-o-que-e.md`: fonte Markdown do capítulo, também consumida pelos slides de revisão.
+- `src/content/micro/prim-computador-a.ts`: aula introdutória e linha do tempo de consolidação atualizadas.
+
+Fontes históricas verificadas:
+- Jacquard, cartões perfurados e demonstração de 1801: https://www.computerhistory.org/storageengine/punched-cards-control-jacquard-loom/
+- Aperfeiçoamento do mecanismo por Jacquard em 1804: https://computerhistory.org/blog/artifact-adopted-preserving-the-legend-of-j-m-jacquard/
+- Pascalina de Pascal, criada em 1642: https://www.computerhistory.org/revolution/calculators/1/47/195
+- Máquina Analítica e as notas de Ada Lovelace de 1843: https://www.computerhistory.org/babbage/history/
+- ENIAC, apresentado em 1946, aproximadamente 18 mil válvulas e programação por painéis: https://www.computerhistory.org/timeline/1946/
+- Hollerith, censo de 1890 e trajetória empresarial até a IBM: https://www.computerhistory.org/tdih/august/16/
+- Transistor de ponto de contato em 1947: https://www.computerhistory.org/siliconengine/invention-of-the-point-contact-transistor/
+- Circuito integrado de Kilby em 1958 e contribuições subsequentes de Noyce: https://www.computerhistory.org/siliconengine/all-semiconductor-solid-circuit-is-demonstrated/
+- Intel 4004, comercializado em 1971: https://www.computerhistory.org/siliconengine/microprocessor-integrates-cpu-function-onto-a-single-chip/
+
+### Licença e atribuição de imagens atualmente referenciadas em ReviewSlides
+
+A função `reviewHistoricalVisual` de `src/pages/ReviewSlides.tsx` usa:
+
+- **Ada Lovelace portrait.jpg** — pintura de Alfred Edward Chalon, aproximadamente 1840, obra da coleção Science Museum Group; a página Wikimedia Commons indica domínio público/PD-Mark. Fonte: https://commons.wikimedia.org/wiki/File:Ada_Lovelace_portrait.jpg
+- **ENIAC.jpg** — fotografia de Laanderman, feita em 6 de novembro de 2015, mostrando uma parte/exemplar do ENIAC em exposição no Bradbury Science Museum; licença **CC BY-SA 4.0**. Fonte: https://commons.wikimedia.org/wiki/File:ENIAC.jpg
+
+Observações para a sessão que está reconstruindo os slides: a legenda atual do ENIAC diz apenas “CC BY-SA 4.0 · Wikimedia Commons”, mas a licença requer atribuição apropriada ao autor e link para a licença; recomenda-se exibir “Foto: Laanderman, CC BY-SA 4.0” com links para a página de origem e para https://creativecommons.org/licenses/by-sa/4.0/. Além disso, convém legendar a imagem como fotografia de um exemplar em exposição, e não como uma fotografia feita na época do ENIAC. A imagem de Ada está indicada como domínio público na página do arquivo, mas a equipe ainda deve guardar a URL da página de origem no registo de ativos.
