@@ -28,7 +28,7 @@ const ROUTES = [
   '/', '/trilha', '/explorar', '/biblioteca', '/estudos', '/revisar', '/progresso', '/edital',
   '/conta', '/conta/acesso', '/conta/sincronizacao', '/conta/aparencia', '/conta/sons', '/conta/dados', '/conta/sobre', '/conta/tela',
   '/personalizar', '/plano', '/treino', '/simulado', '/discursiva', '/flashcards', '/relampago', '/historico', '/revisao',
-  '/grimorio/grim.primeiros', '/aprender/cap.prim.01/computador/prim.computador.1',
+  '/materia/grim.primeiros', '/aprender/cap.prim.01/computador/prim.computador.1',
   '/pratica/cap.prim.01/computador', '/licao/prim.computador.1', '/sala', '/sala?aula=prim.computador.1',
   '/escritorio', '/simulador', '/simulador/suporte-lento', '/aula-narrada/narrada.prim.historia',
   '/video/yt-YJyY6A_MOQc', '/download',
