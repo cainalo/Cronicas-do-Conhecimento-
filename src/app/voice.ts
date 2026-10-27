@@ -29,10 +29,10 @@ export function getGeminiTtsVoice(): string {
   try {
     const value = typeof localStorage === 'undefined' ? '' : localStorage.getItem(VOICE_STORAGE) ?? '';
     return GEMINI_TTS_VOICES.some((voice) => voice.id === value) ? value : 'Sulafat';
-  } catch { return 'Kore'; }
+  } catch { return 'Sulafat'; }
 }
 export function saveGeminiTtsVoice(value: string): void {
-  try { localStorage.setItem(VOICE_STORAGE, GEMINI_TTS_VOICES.some((voice) => voice.id === value) ? value : 'Kore'); } catch { /* opcional */ }
+  try { localStorage.setItem(VOICE_STORAGE, GEMINI_TTS_VOICES.some((voice) => voice.id === value) ? value : 'Sulafat'); } catch { /* opcional */ }
 }
 
 export function portugueseVoiceScore(v: VoiceCandidate): number {
