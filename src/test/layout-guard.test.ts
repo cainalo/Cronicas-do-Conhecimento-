@@ -72,8 +72,9 @@ describe('experiência imersiva de aula e revisão', () => {
     const narrated = readFileSync(join(ROOT, 'pages/Narrated.tsx'), 'utf8');
     const css = readFileSync(join(ROOT, 'styles/index.css'), 'utf8');
     expect(narrated).not.toMatch(/EditorialVideoCut|SceneMotionStrip|function SceneView/);
-    expect(narrated).toMatch(/const visualPhase = Math\.min\(2, Math\.floor\(beatElapsed \/ 2800\)\)/);
-    expect(narrated).toMatch(/<CinematicScene key={scene\.id}[^>]*phase={visualPhase}/);
+    expect(narrated).toMatch(/const visualPhase = Math\.floor\(currentMs \/ 2800\) % 3/);
+    expect(narrated).toMatch(/<CinematicScene scene={scene}[^>]*phase={visualPhase}/);
+    expect(narrated).not.toMatch(/<CinematicScene key=/);
     expect(narrated).toMatch(/data-phase={phase}/);
     expect(narrated).toMatch(/visual\.kind === 'timeline'/);
     expect(narrated).toMatch(/visual\.kind === 'equation'/);
