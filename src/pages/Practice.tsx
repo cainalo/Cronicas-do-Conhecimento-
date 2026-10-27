@@ -163,8 +163,8 @@ function PracticeRun() {
     return concepts.filter((c) => unit.conceptIds.includes(c.id) && taught.has(c.id)).map((c) => ({ term: c.term, definition: c.definition }));
   }, [chapterId, sectionId]); // eslint-disable-line react-hooks/exhaustive-deps
   const initial = useMemo(
-    () => (chapter ? buildPractice(chapter, sectionId, questionsForContest(DEFAULT_CONTEST_ID), extras, Math.random, simple, glossary) : []),
-    [chapter, sectionId, extras, simple, glossary],
+    () => (chapter ? buildPractice(chapter, sectionId, questionsForContest(DEFAULT_CONTEST_ID), Math.random, simple, glossary) : []),
+    [chapter, sectionId, simple, glossary],
   );
   // Fila, fase e acertos guardados: ao voltar, a prática continua na mesma atividade.
   type Saved = { queue: Activity[]; phase: 'intro' | 'play' | 'done'; firstTry: Record<string, boolean>; total: number };
