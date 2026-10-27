@@ -29,7 +29,7 @@ export const narradaHistoriaComputador: NarratedLesson = {
         items: [
           { year: 'Há milhares de anos', title: 'Ábaco', text: 'Contas móveis ajudam uma pessoa a representar quantidades e executar cálculos.' },
           { year: '1642', title: 'Pascalina', text: 'Engrenagens executam operações aritméticas, reduzindo parte do trabalho manual.' },
-          { year: '1804', title: 'Tear de Jacquard', text: 'Cartões perfurados selecionam padrões e fazem uma máquina seguir instruções externas.' },
+          { year: '1801–1804', title: 'Tear de Jacquard', text: 'Demonstração em 1801; aperfeiçoamento do controle por cartões em 1804.' },
         ],
       },
       beats: [
@@ -37,7 +37,7 @@ export const narradaHistoriaComputador: NarratedLesson = {
         { say: 'Essa distinção importa. Uma ferramenta de cálculo ajuda a pessoa; uma máquina automatizada executa ao menos parte das etapas por um mecanismo. O ábaco é um antepassado importante da computação, mas não era um computador eletrônico nem programável.', show: 1 },
         { say: 'Em 1642, Blaise Pascal construiu um dispositivo mecânico conhecido como Pascalina. Rodas dentadas representavam os números e transferiam o excesso de uma ordem para a seguinte — como quando nove unidades mais uma unidade formam uma dezena. A máquina foi pensada para facilitar cálculos financeiros do pai de Pascal.', show: 2 },
         { say: 'A Pascalina podia realizar adições e subtrações; multiplicações e divisões podiam ser obtidas por repetições de operações. Ainda era uma máquina especializada: não recebia um programa geral para resolver qualquer tarefa. Mesmo assim, mostrou que partes de uma conta podiam ser delegadas a um mecanismo.', show: 2 },
-        { say: 'Em 1804, o tear associado a Joseph-Marie Jacquard usava cartões perfurados para controlar quais fios seriam levantados durante a tecelagem. Uma sequência diferente de cartões produzia um padrão diferente. Os cartões não faziam contas: carregavam instruções que a máquina seguia fisicamente.', show: 3 },
+        { say: 'No início do século XIX, Joseph-Marie Jacquard aprimorou o controle de teares com cartões perfurados. O Computer History Museum registra uma demonstração de um tear de Jacquard em 1801 e o aperfeiçoamento do sistema de cartões em 1804. A sequência de furos determinava quais fios seriam levantados em cada passagem, produzindo um padrão de tecido.', show: 3 },
         { say: 'O princípio novo era poderoso: em vez de reconstruir toda a máquina para mudar o trabalho, era possível trocar as instruções. Essa ideia de separar a máquina da sequência de instruções preparou o terreno para os computadores programáveis.', show: 3 },
       ],
     },
@@ -124,7 +124,7 @@ export const narradaHistoriaComputador: NarratedLesson = {
     id: 'narrada-check',
     prompt: 'Organize do mais antigo ao mais recente.',
     items: ['Pascalina', 'Tear de Jacquard', 'Máquina Analítica de Babbage', 'ENIAC', 'Transistor', 'Intel 4004', 'Smartphone moderno'],
-    why: '1642; 1804; projeto na década de 1830; ENIAC em 1945–1946; transistor em 1947; Intel 4004 em 1971; marco de popularização do smartphone moderno a partir de 2007.',
+    why: 'Pascalina em 1642; tear de Jacquard, entre 1801 e 1804; projeto da Máquina Analítica na década de 1830; ENIAC em 1945–1946; transistor em 1947; Intel 4004 em 1971; marco de popularização do smartphone moderno a partir de 2007.',
   },
 };
 
