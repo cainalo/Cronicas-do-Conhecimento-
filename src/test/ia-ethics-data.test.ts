@@ -62,8 +62,10 @@ describe('microaulas graduais de Ética, LGPD, Ciência de Dados e Big Data', ()
     const used: string[] = [];
     for (const section of sections) {
       const lessons = microSeries('cap.ia.04', section);
-      expect(lessons.map((lesson) => lesson.exam[0]?.kind === 'exam' ? lesson.exam[0].questionId : ''), section)
-        .toEqual(expectedQuestionIds[section]);
+      expect(lessons.map((lesson) => {
+        const exam = lesson.exam[0];
+        return exam?.kind === 'exam' ? exam.questionId : '';
+      }), section).toEqual(expectedQuestionIds[section]);
 
       for (const lesson of lessons) {
         const exam = lesson.exam[0];
