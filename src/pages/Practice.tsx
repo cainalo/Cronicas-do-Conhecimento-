@@ -1,5 +1,4 @@
-// Prática de um trecho, no estilo Duolingo: atividades curtas e variadas, painel de resposta embaixo,
-// erros voltam para o fim da fila e o Bubo abre e fecha a rodada com a cena da história.
+// Prática de um trecho: atividades curtas e variadas, feedback claro e novas tentativas após erros.
 import { Portal } from '@/components/Portal';
 import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -271,7 +270,7 @@ function PracticeRun() {
         </div>
         {simple && phase === 'play' && (
           <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => setHelp(true)} aria-label="Palavras do trecho">
-            <Icon name="pergaminho" size={20} />
+            <Icon name="lista" size={20} />
           </button>
         )}
         <span className={`inline-flex items-center gap-1 text-sm font-bold ${combo >= 2 ? 'anim-hop text-ember' : 'text-muted'}`} aria-label={`Sequência de ${combo}`}>
@@ -312,9 +311,7 @@ function PracticeRun() {
           <div className="mt-6 flex items-end gap-2">
             <Mascot mood="talk" size={92} />
             <SpeechBubble className="anim-toast-in mb-8 flex-1">
-              {extras?.scene?.length
-                ? `${extras.scene[extras.scene.length - 1].text}`
-                : 'Vamos ver o que ficou deste trecho. Errou? A pergunta volta no fim até você acertar.'}
+              {'Pratique uma ideia de cada vez. Se errar, recebe uma explicação e uma nova tentativa no fim da rodada.'}
             </SpeechBubble>
           </div>
           <p className="text-sm text-muted">{total} atividades curtas. Começa fácil e vai ficando mais difícil. Errou? A atividade volta no fim.</p>
@@ -498,7 +495,9 @@ function PracticeRun() {
           <div className="flex items-end gap-2">
             <Mascot mood={score >= 70 ? 'cheer' : 'talk'} size={104} />
             <SpeechBubble className="anim-toast-in mb-10 max-w-[15rem] text-left">
-              {extras?.outro ?? (score >= 70 ? 'Muito bem! A névoa recua deste trecho.' : 'Os erros voltaram até você acertar. Isso também é aprender.')}
+              {score >= 70
+                ? 'Boa revisão: continue seguindo as etapas para consolidar o assunto.'
+                : 'Os erros indicam o que vale revisar. Tente novamente para fixar o conteúdo.'}
             </SpeechBubble>
           </div>
           <h1 className="mt-2 text-2xl">Trecho praticado!</h1>
