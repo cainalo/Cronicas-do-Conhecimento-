@@ -16,10 +16,46 @@ const VIEWPORTS = [
   { width: 390, height: 844 },
 ];
 const PAGES = [
-  '/', '/trilha', '/explorar', '/biblioteca', '/grimorio/grim.primeiros', '/capitulo/cap.prim.01', '/revisar', '/progresso',
-  '/aprender/cap.prim.01/computador/prim.computador.1', '/pratica/cap.prim.01/computador', '/sala', '/simulado', '/plano', '/conta', '/conta/dados', '/video/yt-YJyY6A_MOQc', '/sala?aula=prim.computador.1', '/flashcards?capitulo=cap.prim.01', '/aula-narrada/narrada.prim.historia',
-  // Rotas com importação sob demanda: exercitar a carga real no Chromium, não só o typecheck.
-  '/missao/missao.sql.01', '/simulador', '/escritorio',
+  // Fluxos principais e leitura do conteúdo.
+  '/',
+  '/trilha',
+  '/explorar',
+  '/biblioteca',
+  '/grimorio/grim.primeiros',
+  '/capitulo/cap.prim.01',
+  '/aprender/cap.prim.01/computador/prim.computador.1',
+  '/pratica/cap.prim.01/computador',
+  '/revisar',
+  '/historico',
+  '/progresso',
+  '/edital',
+  '/plano',
+  '/simulado',
+  '/discursiva',
+  '/flashcards?capitulo=cap.prim.01',
+  '/relampago',
+
+  // Configurações e mídia: inclui as rotas que carregam seus módulos sob demanda.
+  '/conta',
+  '/conta/acesso',
+  '/conta/sincronizacao',
+  '/conta/aparencia',
+  '/conta/sons',
+  '/conta/dados',
+  '/conta/sobre',
+  '/conta/tela',
+  '/video/yt-YJyY6A_MOQc',
+  '/download',
+  '/personalizar',
+
+  // Telas mais pesadas com importação dinâmica.
+  '/sala',
+  '/sala?aula=prim.computador.1',
+  '/missao/missao.sql.01',
+  '/simulador',
+  '/escritorio',
+  '/aula-narrada/narrada.prim.historia',
+
 ];
 const LESSON = '/aprender/cap.prim.01/computador/prim.computador.1';
 const GUIDE_LESSON = '/aprender/cap.infra.03/arquivos';
