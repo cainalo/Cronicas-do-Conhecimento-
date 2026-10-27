@@ -147,5 +147,4 @@
 - Documentação de arquitetura e handoff atualizados. Baseline de CI continua vinculada ao commit `d2f6e93`; a nova branch requer execução própria.
 - Removido o protótipo de timeline de narração e seu teste isolado, pois não havia consumidor de produção. A documentação registra as condições para uma eventual reintegração.
 - PR #2 foi encerrado como supersedido pela auditoria consolidada; PR #9 foi encerrado sem merge, com a sincronização por timestamps explicitamente adiada. Nenhum merge ou deploy foi feito.
-- Limite de ferramentas: esta conexão permite editar conteúdo e fechar PRs, mas não exclui refs de branches. As branches antigas foram inventariadas, porém não foram declaradas apagadas.
-
+- Limite de ferramentas: esta conexão permite editar conteúdo e fechar PRs, mas não exclui refs de branches. As branches antigas foram inventariadas, porém não foram declaradas apagadas.\n- Testes adicionais sem execução comprovada: cobertura estrutural de todas as aulas narradas no arquivo editorial existente e `src/test/review-slides-integrity.test.ts` para evitar que a revisão visual omita/trunque seções, glossários ou referências.\n\n
