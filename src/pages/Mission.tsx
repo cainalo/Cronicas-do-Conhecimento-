@@ -152,7 +152,7 @@ export function MissionPage() {
             Descoberta {di + 1} de {m.discovery.length}
           </p>
           <h2 className="text-xl">{m.discovery[di].title}</h2>
-          <div className="prose-manuscript mt-2 !font-sans !text-[1rem]">
+          <div className="prose-content mt-2 !font-sans !text-[1rem]">
             <Markdown>{m.discovery[di].text}</Markdown>
           </div>
           {m.discovery[di].table && (
