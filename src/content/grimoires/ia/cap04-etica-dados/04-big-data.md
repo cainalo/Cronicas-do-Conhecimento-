@@ -1,5 +1,9 @@
 O edital fecha a parte de dados com "fundamentos de Big Data, processamento distribuído e características de volume, velocidade e variedade dos dados". Esta seção cobre os Vs, o ecossistema Hadoop, o Spark e as arquiteturas de armazenamento analítico.
 
+### Contexto histórico
+
+Um marco para o processamento distribuído foi o artigo *MapReduce: Simplified Data Processing on Large Clusters*, de Jeffrey Dean e Sanjay Ghemawat, publicado em 2004. Ele descreveu uma forma de distribuir o processamento entre máquinas e agrupar resultados por chave. O ecossistema se ampliou com armazenamento distribuído, gerenciamento de recursos e motores de processamento como Hadoop e Spark; a referência de Dean e Ghemawat (2004) está listada ao final desta seção.
+
 ### Os Vs do Big Data
 
 O edital cita três Vs, que são o núcleo clássico. A literatura acrescenta outros dois.
