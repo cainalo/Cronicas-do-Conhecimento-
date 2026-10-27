@@ -17,7 +17,7 @@ export function portugueseVoiceScore(v: VoiceCandidate): number {
   const lang = (v.lang ?? '').toLowerCase().replace('_', '-');
   let score = lang === 'pt-br' ? 120 : lang.startsWith('pt-') || lang === 'pt' ? 45 : -1000;
   const name = (v.name ?? '').toLowerCase();
-  if (/(chirp.?3|neural.?2|neural.?hd|dragon.?hd|wavenet|neural|natural|enhanced|premium|studio|high.?quality|online)/i.test(name)) score += 70;
+  if (/(chirp.?3|neural.?2|neural.?hd|dragon.?hd|wavenet|neural|natural|enhanced|premium|studio|high.?quality|online|network|remote|cloud)/i.test(name)) score += 70;
   if (/(google|microsoft|samsung|francisca|thalita|brenda|camila|marina|antonio|antónio|thalia|luciana|felipe)/i.test(name)) score += 18;
   if (/(e.?speak|compact|basic|legacy|robot|low.?quality)/i.test(name)) score -= 45;
   if (v.localService === false) score += 2;
