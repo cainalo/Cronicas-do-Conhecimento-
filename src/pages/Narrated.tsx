@@ -75,13 +75,22 @@ export function NarratedPlayer({
   const voice = getVoice();
   const positions = useMemo(() => narrationPositions(l), [l]);
   const beatIndex = beatIndexOf(l, pos);
-  const durations = useMemo(() => positions.map((p) => readingMs(l.scenes[p.scene].beats[p.beat].say, rate)), [l, positions, rate]);
+  const cueDurationMs = (text: string, rate = 1) => {
+    const normalized = text.trim();
+    const words = normalized.split(/\s+/).filter(Boolean).length;
+    const commas = (normalized.match(/[,;:]/g) ?? []).length;
+    const sentenceStops = (normalized.match(/[.!?…]/g) ?? []).length;
+    const endingPause = /[,;:]$/.test(normalized) ? 90 : /[.!?…]$/.test(normalized) ? 230 : 0;
+    return Math.max(750, (words / 2.15) * 1000 + commas * 85 + sentenceStops * 145 + endingPause) / rate;
+  };
+  // Cada marca usa peso aproximado pela fala, sem o mínimo artificial de 2,6 s por frase.
+  // Com a faixa neural, os pesos são normalizados pela duração real do áudio.
+  const durations = useMemo(() => positions.map((p) => cueDurationMs(l.scenes[p.scene].beats[p.beat].say, rate)), [l, positions, rate]);
   const estimatedTotalMs = durations.reduce((sum, value) => sum + value, 0);
-  // A faixa gerada tem duração própria; seus pontos de montagem usam a linha temporal em 1×.
-  // A velocidade escolhida altera a reprodução, não a posição relativa das cenas no arquivo.
-  const trackDurations = useMemo(() => positions.map((p) => readingMs(l.scenes[p.scene].beats[p.beat].say, 1)), [l, positions]);
+  const trackDurations = useMemo(() => positions.map((p) => cueDurationMs(l.scenes[p.scene].beats[p.beat].say)), [l, positions]);
   const estimatedTrackTotalMs = trackDurations.reduce((sum, value) => sum + value, 0);
-  const script = useMemo(() => positions.map((p) => l.scenes[p.scene].beats[p.beat].say.trim()).join('\n\n'), [l, positions]);
+  // Uma faixa por aula, com fala contínua dentro de cada cena e pausa apenas entre cenas.
+  const script = useMemo(() => l.scenes.map((item) => item.beats.map((beat) => beat.say.trim()).join(' ')).join('\n\n'), [l]);
   const hasGeneratedTrack = voice.kind === 'gemini' && !!generatedTrack;
   const totalMs = hasGeneratedTrack && trackDurationMs > 0 ? trackDurationMs : estimatedTotalMs;
   const beforeMs = durations.slice(0, beatIndex).reduce((sum, value) => sum + value, 0);
