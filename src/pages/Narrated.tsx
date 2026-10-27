@@ -92,8 +92,9 @@ export function NarratedPlayer({
   const beatVisualProgress = Math.min(1, beatElapsed / Math.max(1, beatVisualDuration));
   // Um plano de apoio entra durante a fala (não apenas entre frases) quando existe tempo
   // suficiente para ele ser percebido; sai antes de a próxima fala começar.
-  const cutawayVisible = playing && voiceStarted && beatVisualDuration >= 7200
-    && beatVisualProgress >= 0.3 && beatVisualProgress < 0.72;
+  // Um plano de apoio precisa ficar tempo suficiente para o olho entender a imagem; cortes de frases curtas eram rápidos demais e pareciam piscadas.
+  const cutawayVisible = playing && voiceStarted && beatVisualDuration >= 8500
+    && beatVisualProgress >= 0.26 && beatVisualProgress < 0.82;
 
   const stop = useCallback(() => {
     token.current += 1;
