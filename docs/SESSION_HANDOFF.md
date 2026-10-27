@@ -7,12 +7,13 @@
 ## Prioridade operacional — 27/10/2026
 Esta seção substitui listas antigas de “próxima tarefa” que aparecem mais abaixo; elas ficam como histórico do projeto.
 
-1. **Validar a branch de manutenção sem publicar.** A execução Actions [40444629202](https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40444629202) aprovou o commit `d2f6e93` e publicou a versão `0.1.351`, mas não comprova commits posteriores na branch `gpt/ingles01-microaulas-2026-10-27`.
-2. **Rodar o gate completo nessa branch:** Vitest, TypeScript/build web, E2E de layout em Chromium e compilação Android. Corrigir as falhas antes de adicionar mais conteúdo.
-3. **Revisar conteúdo:** cap.ia.04 tem 12 microaulas e cap.ingles.01 tem 11; conferir IDs, vínculo das questões autorais, fontes históricas, progressão e diversidade. Revisão editorial humana ainda não foi feita.
-4. **Verificação visual e dispositivo:** inspecionar capturas em 360×640 e 390×844; o teste físico de modo imersivo e navegação no Galaxy A14 segue pendente.
-5. **Continuação:** depois de CI verde e revisão estrutural, iniciar cap.ingles.02 nesta mesma branch. Não publicar, abrir PR ou mesclar para branch de entrega sem autorização explícita.
-6. **Pendências externas preservadas:** login/sync com Supabase em dispositivo real; PDFs oficiais de legislação do TCE-GO; conferência manual de vídeos; revisão humana de questões e textos; chave estável de assinatura Android.
+1. **Validar a branch de manutenção sem publicar.** O run [40444629202](https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40444629202) aprovou apenas o commit `d2f6e93` e publicou a versão `0.1.351`; não valida as alterações posteriores.
+2. **Concluir o gate de arquitetura:** Vitest, typecheck/build, `test:e2e`, `test:visual` com revisão do artefato e compilação Android. O resultado final do workflow isolado ainda não foi confirmado por esta sessão.
+3. **Revisar o conteúdo:** cap.ia.04 tem 12 microaulas e cap.ingles.01 tem 11; conferir IDs, vínculo das questões autorais, fontes históricas, progressão e diversidade. Revisão editorial humana ainda não foi feita.
+4. **Medir o bundle:** registrar os tamanhos dos chunks gerados e verificar se o carregamento sob demanda diminuiu o JS inicial; não alegar percentual sem dados.
+5. **Verificação em aparelho:** testar visualmente em 360×640 e 390×844 e, em dispositivo físico disponível, modo imersivo/navegação no Galaxy A14.
+6. **Continuação:** só depois de CI verde e revisão estrutural iniciar cap.ingles.02 nesta mesma branch. Não publicar nem mesclar para branch de entrega sem autorização explícita.
+7. **Pendências externas:** login/sync com Supabase em dispositivo real; PDFs oficiais de legislação do TCE-GO; conferência de vídeos; revisão humana de questões e textos; chave estável de assinatura Android.
 
 
 ## Situação atual
