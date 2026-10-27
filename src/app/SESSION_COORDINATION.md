@@ -156,3 +156,12 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 - Em Estudos, substituídos rótulos “Livros e atividades” e “Os livros de cada disciplina” por “Matérias e atividades” e “Materiais por disciplina”; ícones mudados para lista/download. A área Explorar e os passos da trilha também usam ícones neutros.
 - Matriz de cobertura atualizada para títulos de disciplinas descritivos, sem metáforas de pergaminho, súditos, muralhas ou navios.
 - A execução anterior passou os 2.393 testes, mas `npm run build` falhou no componente órfão e no import sem uso. Aguarda nova execução completa.
+
+
+### ChatGPT — compatibilidade do workflow com o runner Playwright
+**Data:** 2026-10-27
+**Estado:** correção de CI enviada; nova execução pendente.
+- O workflow passou em `npm test` (2.393 testes) e `npm run build`, mas falhou ao instalar Chromium porque `ubuntu-latest` resolveu para Ubuntu 26.04, ainda sem suporte do Playwright 1.56.1 (`Playwright does not support chromium on ubuntu26.04-x64`). Fixado o runner de publicação em `ubuntu-24.04`, alinhado ao workflow de validação.
+- Tornadas mais descritivas as linhas de Segurança, Redes e Matemática que ainda usavam metáforas de selos, muralhas, erário e livro-caixa.
+- Corrigido na matriz de cobertura o caminho antigo `src/content/game/simple/` para `src/content/simple/` e atualizado o comentário legado da introdução de TI.
+- Próximo gate: verificar instalação de Chromium, E2E, APK e GitHub Pages.
