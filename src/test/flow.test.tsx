@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
+import { waitForRouteReady } from './route-ready';
 import { getLesson, getQuestion } from '@/content';
 import { loadData, saveData } from '@/lib/storage';
 import { getChapter } from '@/content';
@@ -125,6 +126,7 @@ it('prática: abre a rodada do trecho e mostra a primeira atividade', async () =
 it('simulado: monta, responde, entrega e mostra o boletim', async () => {
   const user = userEvent.setup();
   renderAt('/simulado');
+  await waitForRouteReady();
   await user.click(screen.getByRole('button', { name: '10' }));
   await user.click(screen.getByRole('button', { name: 'Livre' }));
   await user.click(screen.getByRole('button', { name: /Iniciar simulado com 10 questões/ }));
@@ -142,10 +144,12 @@ it('simulado: monta, responde, entrega e mostra o boletim', async () => {
 it('flashcards: só de capítulos já estudados; revela e avalia um cartão', async () => {
   const user = userEvent.setup();
   const empty = renderAt('/flashcards');
+  await waitForRouteReady();
   expect(screen.queryByRole('button', { name: 'Revelar o verso' })).toBeNull();
   empty.unmount();
   readSection('cap.seg.01', 'fundamentos');
   renderAt('/flashcards');
+  await waitForRouteReady();
   await user.click(screen.getByRole('button', { name: 'Revelar o verso' }));
   await user.click(screen.getByRole('button', { name: /Bom/ }));
   expect(screen.getByText(/Próxima revisão amanhã/)).toBeInTheDocument();
@@ -155,6 +159,7 @@ it('flashcards: só de capítulos já estudados; revela e avalia um cartão', as
 it('caso prático de SQL: objetivos (sem cena de jogo), descoberta e laboratório com a consulta montada', async () => {
   const user = userEvent.setup();
   renderAt('/missao/missao.sql.01');
+  await waitForRouteReady();
   expect(screen.queryByRole('list', { name: 'Transcrição da cena' })).toBeNull();
   expect(screen.getByText(/Por que a lista de empenhos/)).toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: 'Vamos lá' }));
