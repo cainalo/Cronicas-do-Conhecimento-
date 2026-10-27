@@ -1,4 +1,12 @@
-# Estado do projeto (atualizado em 2026-10-26)
+# Estado do projeto (atualizado em 2026-10-27)
+
+
+## Baseline de CI e alterações ainda pendentes — 27/10/2026
+- O workflow [40444629202](https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40444629202) concluiu com sucesso para o commit `d2f6e93`: `npm ci`, `npm test`, build web/typecheck, `npm run test:e2e`, sync do Capacitor, compilação do APK e publicação no GitHub Pages.
+- O manifesto de publicação desse run registra a versão `0.1.351`. O resultado não deve ser extrapolado para commits posteriores.
+- A branch de manutenção `gpt/ingles01-microaulas-2026-10-27` contém 11 microaulas novas de Inglês e os testes correspondentes, ainda sem execução comprovada. Ela não é a branch publicada. Até o CI isolado concluir, essas mudanças permanecem **não validadas**.
+- A auditoria visual física no Galaxy A14, a revisão editorial humana e a validação real de login/sincronização com Supabase continuam pendentes.
+
 
 ## Funciona e foi testado
 - **25/10 (noite):** série piloto com história em cap.prim.01 / computador; aula narrada e vídeo dentro da aula; feed com perfis, revisões rápidas e comentários; Escritório 2D em tela cheia (mapa novo, 4 direções). Testes automáticos e capturas em 390 e 1280 px.
@@ -51,7 +59,7 @@
 - Confirmação de e-mail: depende da configuração padrão do Supabase Auth (provavelmente ativa). URL de redirecionamento precisa ser cadastrada ao publicar.
 
 ## Incompleto / não iniciado
-- Cobertura do edital: 68 de 68 tópicos com material (13 grimórios, 391 questões autorais); normas estaduais/TCE-GO em panorama verificável (ver CONTENT_COVERAGE).
+- Cobertura do edital: 68 de 68 tópicos com material (14 grimórios, 407 questões autorais); normas estaduais/TCE-GO em panorama verificável (ver CONTENT_COVERAGE).
 - Narrativa de RPG removida no pacote v4 a pedido; lembretes não iniciados.
 
 ## Conhecido
