@@ -63,3 +63,14 @@
 - **Sequência única:** tudo dentro da aula, na trilha: história, explicação, **aula narrada**, **videoaula conferida** (quando houver), checagens, prática e questão de prova. Feed, vídeos, aulas narradas e Escritório viram **bibliotecas por tipo**; cada item mostra a que ponto da trilha pertence e leva até lá.
 - **Feed dos professores:** mais completo e com mais elementos de rede social, com **fotos reais da Wikimedia** (só domínio público ou licença livre, com autor, licença e link no post) **e mais ilustrações próprias** no estilo do app. Em 25/10 os domínios da Wikimedia ainda estavam bloqueados pela rede do ambiente; o usuário vai liberá-los.
 - **Escritório 2D:** vista de cima ilustrada, em vetor colorido sem degradê; **mapa em tela cheia**, com conversas e atividades em painéis por cima; mais detalhes, movimentação mais realista (passos animados nas quatro direções) e interações reais.
+
+
+## 26/10/2026 — Player da aula narrada: tela cheia, legenda opcional e controles
+
+- A composição visual da aula deve ocupar toda a viewport, sem faixas claras laterais criadas pelo contêiner ou por padding do palco. A cena continua em tela cheia; controles e legenda não devem criar rolagem nem alterar o tamanho externo do player.
+- A legenda é opcional, controlada pelo botão CC. Quando ativa, mostra uma única linha compacta por vez e fica em um espaço reservado no layout interno da cena, sem cobrir texto, fórmula, ilustração ou fotografia. Para frases longas, o texto exibido acompanha uma janela de até oito palavras em torno do ponto atual.
+- O prazo de ocultação dos controles começa depois da última interação e reinicia a cada movimento ou ação. Enquanto o ponteiro/dedo estiver pressionado sobre controles, slider, marcadores de cena ou painéis, a interface permanece visível. O avanço automático da narração, sozinho, não deve reiniciar a contagem.
+- Ao concluir a narração, não abrir automaticamente uma atividade/checagem sobre o vídeo. A pessoa pode reproduzir novamente ou sair.
+- Validar no Android real que a cena vai de borda a borda e que o safe area inferior não causa colisão entre legendas, barra de busca e botões.
+
+Implementação nesta rodada: `src/pages/Narrated.tsx`; testes propostos em `src/test/narrated.test.tsx`. O build/teste local ainda não foi executado por indisponibilidade de rede para clonar o repositório no ambiente de trabalho.
