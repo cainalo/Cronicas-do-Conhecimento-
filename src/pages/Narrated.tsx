@@ -74,8 +74,9 @@ export function NarratedPlayer({
   const currentMs = Math.min(totalMs, beforeMs + beatElapsed);
   const scene = l.scenes[pos.scene];
   const say = scene.beats[pos.beat].say;
-  // Movimento de câmera contínuo ao longo da aula inteira; a mudança de frase não reinicia o enquadramento.
-  const visualPhase = Math.floor(currentMs / 2800) % 3;
+  // O enquadramento não alterna por relógio. Isso evitava estabilidade visual e causava piscadas.
+  // O plano só muda de composição quando muda o trecho narrado.
+  const visualPhase = pos.beat % 3;
 
   const stop = useCallback(() => {
     token.current += 1;
