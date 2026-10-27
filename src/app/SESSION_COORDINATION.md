@@ -206,3 +206,16 @@ Este é o único arquivo de coordenação do projeto. Os registros antigos abaix
 - Commits: `1eb1e2320797988c81f38d340e25812450e220a0` e `833ba91c9db7eb4ba99c92c6c6a0e6d08429a924`.
 - O status combinado do commit mais recente retornou lista vazia; não equivale a CI aprovado. Continuar sem declarar sucesso até haver execução observável do workflow.
 
+
+
+### ChatGPT — Maintainer: fluxo vertical da aula narrada e limpeza das rotas de atividade
+**Data:** 2026-10-27  
+**Estado:** alterações registradas na branch de manutenção; validação integrada ainda pendente.
+
+- `src/pages/Narrated.tsx`: a legenda deixou de usar uma janela móvel com reticências. `splitCaptionLines` divide cada fala em trechos completos, priorizando pontuação e limitando cada trecho a sete palavras ou cerca de 40 caracteres; só o trecho da palavra narrada fica visível. O destaque muda cor/fundo sem alterar tamanho da fonte, peso ou espaçamento.
+- `src/styles/index.css`: cena narrada reorganizada em fluxo vertical — assunto/título acima, arte/foto abaixo — e plano de apoio também vertical. A legenda fica ancorada na parte inferior do vídeo, acima da faixa de busca/controles; imagens históricas recebem movimento lento, mantendo as animações de troca de fala e a opção de movimento reduzido do sistema.
+- `src/components/Layout.tsx`: cabeçalho global (voltar/perfil) ocultado nas rotas imersivas `/aprender`, `/pratica`, `/licao` e `/missao`, mantendo o X/progresso próprios de cada atividade e sem alterar as rotas de navegação comum.
+- `src/pages/MicroLesson.tsx`, `src/pages/Practice.tsx` e `src/pages/Mission.tsx`: alturas ajustadas para não reservar os 5,5 rem que antes correspondiam ao cabeçalho geral.
+- `src/test/narrated.test.tsx`: teste de `splitCaptionLines` cobre preservação da fala, linhas estáveis e ausência de reticências rolantes.
+- Commits desta etapa: `1fc5c109fe2b827abcd20e9032dbd30e1e2a6949`, `ae2d18f17abfa0f2c13f353d360dbe2546913b94`, `80d0114b5e91b3bf3fa9900219ff8309aa1e5f76`, `4bae5fc528fc74f83556d0cc82ed19ed3229eacb`, `b2168ca21dc5e1593efb1c1218b2ef157580b328`, `4db2c27590095a6e9107fe96890f754803c1e1e1`, `2b066ad55396b58db3da17ee92837cf5084de301`.
+- Não foi executado nem confirmado `npm test`, build, E2E, auditoria visual ou build Android nesta sessão. Não houve publicação nem merge; a validação visual real em Android permanece pendente.
