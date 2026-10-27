@@ -8,7 +8,6 @@ import {
   COLOR_GROUPS,
   COLOR_LABEL,
   DEFAULT_LOOK,
-  LOOK_VERSION,
   PALETTES,
   contrastWarnings,
   exportLook,
@@ -134,8 +133,8 @@ export function CustomizePage() {
                 style={{ background: c.bg }}
               >
                 <span className="flex gap-1">
-                  {[c.primary, c.secondary, c.teal, c.pink, c.accent].map((x) => (
-                    <span key={x} className="swatch" style={{ background: x }} />
+                  {[c.primary, c.secondary, c.teal, c.pink, c.accent].map((x, i) => (
+                    <span key={`${p.id}-swatch-${i}`} className="swatch" style={{ background: x }} />
                   ))}
                 </span>
                 <span className="mt-2 block text-sm font-bold" style={{ color: c.ink }}>
