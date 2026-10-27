@@ -46,13 +46,13 @@ Criada em 26/10/2026, depois de o cartão de certo ou errado e os fundos dos mod
 | `src/test/study.test.ts` | XP único, revisão/recuperação, lição (melhor nota), capítulo lido, níveis, domínio, recomendação, marcadores |
 | `src/test/merge.test.ts` | fusão entre aparelhos, XP sem duplicar, migração do visitante |
 | `src/test/game.test.ts` | títulos, sequência, domínio, selos, missões, Rodada relâmpago (escolha das questões) |
-| `src/test/study.test.ts` (prática e livro) | pegadinhas, montagem da prática, XP único, divisão em blocos, paginação, pistas proporcionais |
-| `src/test/flow.test.tsx` | fluxo real de telas: lição com erro → resultado 90% → nova sessão → revisão → recuperação; leitor (marcar lida, busca); Aprender (páginas, trecho estudado, link do texto completo); prática; simulado |
+| `src/test/study.test.ts` (prática e leitura contínua) | pegadinhas, montagem da prática, XP único, divisão didática em blocos, pistas proporcionais |
+| `src/test/flow.test.tsx` | fluxo real de telas: lição com erro → resultado 90% → nova sessão → revisão → recuperação; leitura contínua (marcar lida, busca); Aprender (trecho estudado, link do conteúdo completo); prática; simulado |
 | `src/test/content.test.ts` (camada simples) | toda seção tem explicação simples; 4–7 páginas; até 70 palavras por página; última "Resumindo"; 4–8 palavras novas; 3 verificações com V e F |
 
 ## Últimos resultados (2026-10-24, auditoria)
 - `npm test`: **787/787** (10 microaulas; regra contra listas aninhadas). Antes: **753/753** (micro.test.ts roda as regras para as 4 microaulas do cap.infra.03). Antes: **741/741** (+ `packPages` em `micro.test.ts`; varredura Playwright das fases da microaula sem rolagem em 390×844, 360×640, 1280×800). Antes: **740/740** (rodada Estudos: `studies.test.tsx` com página Estudos, vídeo só ao tocar, página não encontrada, Conta sem servidor e volumes, recuperação adaptativa; `planner.test.ts` com a ordem do dia seguindo a trilha). Antes: 731 (novos: `checkpoint.test.ts`, `micro.test.ts`, divisão de blocos do livro, fluxos de retomada em Aprender/Missão/Desafio/Prática/Microaula, destino único dos botões, leitura contínua).
-- Livro: script Playwright percorreu todas as folhas dos 33 capítulos em 390×844 (fonte 1) e 1280×800 (fonte 1,4): **0 folhas com conteúdo transbordando**, sem erros de console; 20 combinações extras (fontes 1 e 1,4 em 5 capítulos) também 0.
+- Leitura contínua: a tela de conteúdo usa rolagem vertical responsiva, sem virada de página ou paginação física. A inspeção visual automatizada cobre a rota de conteúdo em viewports móveis e desktop.
 - Microaula no Chromium 390×844: explicação, checagem, erro com recuperação e Torre mostrando "Você parou aqui".
 - Não testado: sincronização real com o Supabase (domínio bloqueado), APK em aparelho, leitor de tela.
 
@@ -82,3 +82,7 @@ Login/cadastro/recuperação e sincronização HTTP com o Supabase (rede do cont
 - `src/test/narrated-editorial.test.ts`: além da revisão editorial de duas aulas, agora percorre o catálogo completo e valida estrutura, falas e estados da reta numérica.
 - `src/test/review-slides-integrity.test.ts`: novo teste para texto integral/ordem nas lâminas de seção, glossário e referências de todos os capítulos.
 - Nenhum dos novos testes listados acima teve execução confirmada nesta sessão. O workflow isolado precisa concluir `npm test`, typecheck/build, E2E, auditoria visual e Gradle antes de considerar esta branch validada.
+
+
+## Mudança de formato (27/10/2026)
+O material por capítulo é leitura contínua, responsiva e acessível. Não existe mais requisito de percorrer folhas, folhear páginas ou validar contador de paginação. O teste visual valida o conteúdo renderizado e os limites da viewport; qualquer referência histórica a livro físico/paginação não é um critério atual.
