@@ -72,9 +72,8 @@ export const lessons: Lesson[] = [...licoesPrimeiros, ...licoesCap01, ...licoesC
 export const questions: Question[] = [...questoesPrimeiros, ...questoesCap01, ...questoesSegCap02, ...questoesIaCap01, ...questoesIaCap02, ...questoesIaCap0304, ...questoesDev, ...questoesDevCap0304, ...questoesInfra, ...questoesInfraSo, ...questoesDados, ...questoesGovernanca, ...questoesLegislacao, ...questoesEngSoft, ...questoesDevops, ...questoesIngles, ...questoesPortugues, ...questoesInstitucional, ...questoesMatematica];
 
 /**
- * Caminho recomendado, do mais fácil ao mais difícil: começa pelo básico (Primeiro Pergaminho,
- * sistema operacional, redes, dados, lógica), intercala as matérias gerais e deixa para depois
- * os assuntos que dependem dos anteriores (criptografia, identidade, agentes, normas).
+ * Caminho recomendado, do mais fácil ao mais difícil: começa pelo básico de TI, sistema operacional,
+ * redes, dados e lógica; intercala matérias gerais e avança para criptografia, identidade, agentes e normas.
  */
 const JOURNEY = [
   'cap.prim.01', 'cap.prim.02', 'cap.infra.03', 'cap.infra.01', 'cap.dados.01', 'cap.dev.03', 'cap.mat.01', 'cap.port.01',
