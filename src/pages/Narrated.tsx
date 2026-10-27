@@ -4,7 +4,7 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState, type CSSProper
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getNarrated } from '@/content';
 import type { NarratedLesson, NumberLineState, Scene } from '@/content/narrated/types';
-import { GEMINI_TTS_VOICES, getGeminiTtsApiKey, getGeminiTtsVoice, getVoice, readingMs, saveGeminiTtsApiKey, saveGeminiTtsVoice, type VoiceAudioTrack } from '@/app/voice';
+import { GEMINI_TTS_VOICES, getGeminiTtsApiKey, getGeminiTtsVoice, getVoice, saveGeminiTtsApiKey, saveGeminiTtsVoice, type VoiceAudioTrack } from '@/app/voice';
 import { soundscape } from '@/app/soundscape';
 import { beatIndexOf, narrationPositions, nextBeat, positionAtBeat, revealOf, transcript, type NarrationPos } from '@/lib/narration';
 import { Icon } from '@/components/Icon';
@@ -26,6 +26,15 @@ function wordIndexAtChar(text: string, charIndex: number): number {
     if (charIndex < start + words[i][0].length) return i;
   }
   return words.length - 1;
+}
+
+function cueDurationMs(text: string, rate = 1): number {
+  const normalized = text.trim();
+  const words = normalized.split(/\s+/).filter(Boolean).length;
+  const commas = (normalized.match(/[,;:]/g) ?? []).length;
+  const sentenceStops = (normalized.match(/[.!?…]/g) ?? []).length;
+  const endingPause = /[,;:]$/.test(normalized) ? 90 : /[.!?…]$/.test(normalized) ? 230 : 0;
+  return Math.max(750, (words / 2.15) * 1000 + commas * 85 + sentenceStops * 145 + endingPause) / rate;
 }
 
 export function NarratedPage() {
@@ -75,14 +84,6 @@ export function NarratedPlayer({
   const voice = getVoice();
   const positions = useMemo(() => narrationPositions(l), [l]);
   const beatIndex = beatIndexOf(l, pos);
-  const cueDurationMs = (text: string, rate = 1) => {
-    const normalized = text.trim();
-    const words = normalized.split(/\s+/).filter(Boolean).length;
-    const commas = (normalized.match(/[,;:]/g) ?? []).length;
-    const sentenceStops = (normalized.match(/[.!?…]/g) ?? []).length;
-    const endingPause = /[,;:]$/.test(normalized) ? 90 : /[.!?…]$/.test(normalized) ? 230 : 0;
-    return Math.max(750, (words / 2.15) * 1000 + commas * 85 + sentenceStops * 145 + endingPause) / rate;
-  };
   // Cada marca usa peso aproximado pela fala, sem o mínimo artificial de 2,6 s por frase.
   // Com a faixa neural, os pesos são normalizados pela duração real do áudio.
   const durations = useMemo(() => positions.map((p) => cueDurationMs(l.scenes[p.scene].beats[p.beat].say, rate)), [l, positions, rate]);
