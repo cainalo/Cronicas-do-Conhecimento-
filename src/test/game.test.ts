@@ -75,5 +75,3 @@ describe('rodada relâmpago', () => {
     expect(picked.every((q) => q.chapterId === 'cap.dados.01')).toBe(true);
   });
 });
-
-});
