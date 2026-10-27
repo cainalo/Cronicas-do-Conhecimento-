@@ -477,7 +477,7 @@ function PostBody({ p, prefs, setPrefs }: { p: FeedPost; prefs: FeedPrefs; setPr
   const [steps, setSteps] = useState(1);
   const [recover, setRecover] = useState<'nao' | 'mostrar' | 'feito'>('nao');
   const md = (t: string) => (
-    <div className="prose-manuscript !text-[1rem] [&>*:last-child]:!mb-0">
+    <div className="prose-content !text-[1rem] [&>*:last-child]:!mb-0">
       <Markdown>{t}</Markdown>
     </div>
   );
