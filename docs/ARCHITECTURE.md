@@ -85,6 +85,7 @@ Os caminhos das rotas, os provedores globais e o layout externo não mudam. As t
 
 O script `scripts/e2e-layout.mjs` visita as rotas adiadas principais e as subpáginas de Conta em duas dimensões móveis, com e sem cartões de vidro. Uma alteração de rota só pode ser considerada estável depois que esse gate passar no CI.
 
+- Protótipo de alinhamento por timestamps foi removido por não ter consumidor em produção; a sincronização da aula narrada continua estimada. Não manter helpers sem chamada real no caminho de execução.
 ### Dívida de desempenho conhecida
 - `src/content/index.ts` agrega muitos módulos de conteúdo por importação estática. Isso preserva consultas síncronas e a integridade do registro, mas pode manter conteúdo de muitas disciplinas no bundle inicial.
 - O ponto acima só deve ser alterado depois de medir os chunks e mapear todos os consumidores das funções síncronas. Não converter a API de conteúdo em assíncrona de forma ampla como otimização especulativa.
