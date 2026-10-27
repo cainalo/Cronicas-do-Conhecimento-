@@ -162,7 +162,6 @@ export function buildAlignedNarrationTimeline(
     };
   });
 
-  const characters = Array.from(script.text);
   const wordCues: NarrationWordCue[] = [];
   WORD_PATTERN.lastIndex = 0;
   let match: RegExpExecArray | null;
