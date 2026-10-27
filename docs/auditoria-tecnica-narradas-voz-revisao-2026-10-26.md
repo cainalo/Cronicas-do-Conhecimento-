@@ -1,6 +1,6 @@
 # Revisão independente — timeline narrada e adaptador TTS
 
-**Atualizada em:** 27/10/2026, 03:00 UTC
+**Atualizada em:** 27/10/2026, 03:02 UTC
 **Branch revisada:** claude/cronicas-conhecimento-estudos-jgbofo
 **Branch desta contribuição:** gpt/narrated-timeline-review-2026-10-27
 **Escopo:** revisão do código real, testes e integração de alinhamento. Não altera Narrated.tsx, ReviewSlides.tsx, voice.ts nem narration-timeline.ts, para evitar conflito com as outras sessões.
@@ -55,7 +55,7 @@ Não alterei a implementação temporal compartilhada, o player, a camada de voz
 - A execução #40440317764 no commit 09a6ef0b concluiu com sucesso: 39 arquivos / 2.425 testes, build web, Playwright de layout, compilação do APK e publicação do site. Link: https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40440317764.
 - A execução #40440849594 no commit dccb743f falhou em duas expectativas antigas que requeriam a fala inteira na legenda; a nova legenda mostra uma janela móvel de até oito palavras. Link: https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40440849594.
 - A execução #40441307848 no commit cfceb18 também falhou em duas verificações da legenda: uma contou a span de reticências (aria-hidden) como palavra, e a outra esperava uma frase que não estava na janela inicial. Link: https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40441307848.
-- A execução mais recente consultada, #40441617532 para o commit 2dc4607e, falhou em um teste: 38 arquivos passaram, 2.426 testes passaram e 1 falhou. Em src/test/narrated.test.tsx:101, o teste toca no palco e espera opacity-100, mas os controles continuam opacity-0 / pointer-events-none. O achado foi comunicado à sessão do player. Como npm test falhou, build, E2E e Gradle foram pulados. Link: https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40441617532.
+- A execução #40441617532 para o commit 2dc4607e falhou em um teste: 38 arquivos passaram, 2.426 testes passaram e 1 falhou. Em src/test/narrated.test.tsx:101, o teste toca no palco e espera opacity-100, mas os controles continuam opacity-0 / pointer-events-none. O achado foi comunicado à sessão do player. O commit seguinte, 5e1016d3, acrescentou um onClick explícito ao palco para alternar os controles sem duplo acionamento. A execução #40441926666 para esse commit está em andamento e ainda não tem resultado final. Links: https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40441617532 e https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40441926666. Como o run anterior falhou no npm test, build, E2E e Gradle foram pulados nele.
 
 Essas execuções testam a branch-base em SHAs específicos; não validam os testes acrescentados pelo PR #9. Os resultados também não comprovam o funcionamento em aparelho Android real.
 
