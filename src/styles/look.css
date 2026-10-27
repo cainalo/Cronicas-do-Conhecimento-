@@ -67,7 +67,7 @@
 :root[data-font='arredondada'] { --font-text: ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, sans-serif; --font-title: ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, sans-serif; }
 :root[data-font='serifada'] { --font-text: 'Fraunces Variable', Georgia, serif; }
 :root[data-font='mono'] { --font-text: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; --font-title: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; }
-.prose-manuscript, .learn-text { line-height: var(--leading); }
+.prose-content, .learn-text { line-height: var(--leading); }
 
 /* ---------- Movimento ---------- */
 :root[data-motion='reduzido'] .anim-floaty, :root[data-motion='reduzido'] .anim-bob, :root[data-motion='reduzido'] .anim-drift, :root[data-motion='reduzido'] .anim-twinkle { animation: none; }
