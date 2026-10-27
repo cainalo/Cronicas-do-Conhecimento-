@@ -69,10 +69,10 @@ export function StudiesPage() {
 
       <section>
         <SectionTitle icon="grimorio" color={color}>
-          Livros e atividades
+          Matérias e prática
         </SectionTitle>
         <TileGrid>
-          <Tile wide to="/biblioteca" icon="grimorio" color={color} title="Biblioteca" text="Os livros de cada disciplina, para ler na ordem que quiser." />
+          <Tile wide to="/biblioteca" icon="lista" color={color} title="Matérias e materiais" text="Conteúdo por disciplina, leitura contínua, atividades e referências." />
           <Tile to="/relampago" icon="chama" color="rgb(var(--leaf))" title="Rodada relâmpago" text="5 questões rápidas." />
           <Tile
             to="/flashcards"
@@ -92,7 +92,6 @@ export function StudiesPage() {
             badge={wrong ? `${wrong} a revisar` : undefined}
           />
           <Tile to="/slides" icon="cartas" color="rgb(var(--gold))" title="Slides de revisão" text="Revise os conceitos em lâminas visuais por capítulo; imprima ou salve em PDF." />
-          <Tile to="/escritorio" icon="tela" color="rgb(var(--teal))" title="Escritório de TI" text="Ande pelo escritório, converse com a equipe e resolva um chamado." />
           <Tile to="/sala" icon="balao" color="rgb(var(--azure))" title="Sala dos Professores" text="Dicas, pegadinhas e mini-desafios." />
         </TileGrid>
       </section>
