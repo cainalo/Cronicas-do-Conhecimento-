@@ -8,7 +8,7 @@ import { getVoice, readingMs } from '@/app/voice';
 import { soundscape } from '@/app/soundscape';
 import { beatIndexOf, narrationPositions, nextBeat, positionAtBeat, revealOf, transcript, type NarrationPos } from '@/lib/narration';
 import { Icon } from '@/components/Icon';
-import { Illustration } from '@/components/Illustration';
+import { Illustration, type IllustrationName } from '@/components/Illustration';
 import { ActivityView } from '@/components/activities/ActivityView';
 
 const RATES = [0.8, 1, 1.2] as const;
@@ -58,6 +58,7 @@ export function NarratedPlayer({
   const hideControlsTimer = useRef<number | undefined>(undefined);
   const elapsedRef = useRef(0);
   const resumeAfterSeek = useRef(false);
+  const seekOffsetRef = useRef(0);
   const token = useRef(0);
   const voice = getVoice();
   const positions = useMemo(() => narrationPositions(l), [l]);
@@ -68,6 +69,8 @@ export function NarratedPlayer({
   const currentMs = Math.min(totalMs, beforeMs + beatElapsed);
   const scene = l.scenes[pos.scene];
   const say = scene.beats[pos.beat].say;
+  const beatDuration = durations[beatIndex] ?? 2200;
+  const visualPhase = Math.min(3, Math.floor((beatElapsed / Math.max(1, beatDuration)) * 4));
 
   const stop = useCallback(() => {
     token.current += 1;
@@ -134,6 +137,10 @@ export function NarratedPlayer({
     const ticket = ++token.current;
     const duration = durations[beatIndex] ?? 1800;
     const text = l.scenes[pos.scene].beats[pos.beat].say;
+    const startOffset = Math.min(duration, Math.max(0, seekOffsetRef.current));
+    seekOffsetRef.current = 0;
+    const startChar = startOffset > 0 ? Math.min(text.length - 1, Math.floor((startOffset / Math.max(1, duration)) * text.length)) : 0;
+    const spokenText = text.slice(startChar).trim() || text;
     let watchdog: number | undefined;
     let advanceTimer: number | undefined;
     const advance = () => {
@@ -141,6 +148,7 @@ export function NarratedPlayer({
       const next = nextBeat(l, pos);
       if (next) {
         elapsedRef.current = 0;
+        seekOffsetRef.current = 0;
         setBeatElapsed(0);
         setVoiceStarted(false);
         setSpeechWordIndex(undefined);
@@ -167,17 +175,17 @@ export function NarratedPlayer({
         }, Math.max(duration * 2.3, 5000));
       };
       armWatchdog();
-      void voice.speak(text, rate, {
+      void voice.speak(spokenText, rate, {
         onStart: () => {
           if (token.current !== ticket) return;
-          elapsedRef.current = 0;
-          setBeatElapsed(0);
+          elapsedRef.current = startOffset;
+          setBeatElapsed(startOffset);
           setVoiceStarted(true);
           armWatchdog();
         },
         onBoundary: (charIndex) => {
           if (token.current !== ticket) return;
-          setSpeechWordIndex(wordIndexAtChar(text, charIndex));
+          setSpeechWordIndex(wordIndexAtChar(text, startChar + charIndex));
         },
       }).then(() => {
         if (token.current !== ticket) return;
@@ -214,6 +222,7 @@ export function NarratedPlayer({
 
   const jump = (p: NarrationPos) => {
     stop();
+    seekOffsetRef.current = 0;
     elapsedRef.current = 0;
     setBeatElapsed(0);
     setVoiceStarted(false);
@@ -243,9 +252,12 @@ export function NarratedPlayer({
       }
       cursor += durations[i];
     }
+    const targetOffset = Math.max(0, target - cursor);
+    const localOffset = Math.min(durations[targetIndex] ?? 0, targetOffset);
     setPos(positionAtBeat(l, targetIndex));
-    elapsedRef.current = 0;
-    setBeatElapsed(0);
+    seekOffsetRef.current = localOffset;
+    elapsedRef.current = localOffset;
+    setBeatElapsed(localOffset);
     setVoiceStarted(false);
     setSpeechWordIndex(undefined);
     setDone(false);
@@ -262,6 +274,7 @@ export function NarratedPlayer({
     if (playing) {
       stop();
       setPlaying(false);
+      seekOffsetRef.current = 0;
       elapsedRef.current = 0;
       setBeatElapsed(0);
       setVoiceStarted(false);
@@ -269,6 +282,7 @@ export function NarratedPlayer({
     } else {
       if (done) {
         setPos({ scene: 0, beat: 0 });
+        seekOffsetRef.current = 0;
         elapsedRef.current = 0;
         setBeatElapsed(0);
         setVoiceStarted(false);
@@ -303,9 +317,12 @@ export function NarratedPlayer({
           className={`absolute inset-0 grid place-items-center transition-[padding] duration-300 ${controlsVisible ? 'px-4 pb-[14.5rem] pt-28 sm:px-10 sm:pb-[15rem] sm:pt-32' : 'px-4 pb-8 pt-8 sm:px-10'}`}
           data-testid="narrada-cena"
         >
-          <div className="anim-tile-in relative flex h-full max-h-full w-full flex-col items-center justify-center gap-3" key={scene.id}>
-            <SceneView scene={scene} reveal={revealOf(scene, pos.beat)} />
-            <SceneMotionStrip key={scene.id + ':' + pos.beat} scene={scene} say={say} />
+          <div className="relative flex h-full max-h-full w-full flex-col items-center justify-center gap-3" key={scene.id + ':' + pos.beat + ':' + visualPhase} data-testid="narrada-corte-editorial">
+            {visualPhase === 1 || visualPhase === 3
+              ? <EditorialVideoCut scene={scene} reveal={revealOf(scene, pos.beat)} phase={visualPhase} say={say} />
+              : <div className="anim-tile-in flex h-full max-h-full w-full items-center justify-center" key={'plano-principal:' + scene.id + ':' + pos.beat + ':' + visualPhase}>
+                  <SceneView scene={scene} reveal={revealOf(scene, pos.beat)} />
+                </div>}
           </div>
         </div>
       </section>
@@ -443,43 +460,99 @@ export function NarratedPlayer({
   );
 }
 
-function SceneMotionStrip({ scene, say }: { scene: Scene; say: string }) {
-  const stopWords = new Set(['para', 'pela', 'pelo', 'como', 'isso', 'essa', 'esse', 'estas', 'estes', 'quando', 'onde', 'entre', 'sobre', 'muito', 'mais', 'menos', 'também', 'porque', 'então', 'depois', 'antes', 'ainda', 'cada', 'que', 'com', 'sem', 'uma', 'uns', 'umas', 'dos', 'das', 'por', 'não', 'são', 'ser', 'tem', 'ter', 'foi', 'vai', 'aos', 'nas', 'nos']);
-  // Palavras-chave entram em sequência curta para dar movimento ao quadro sem
-  // alongar a narração nem transformar a aula em uma pilha de slides.
-  const keywords = Array.from(new Set((say + ' ' + say + ' ' + scene.heading)
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, ' ').split(/\s+/)
-    .filter((word) => word.length >= 4 && !stopWords.has(word))))
-    .slice(0, 5);
-  const palettes = [
-    'border-[#2e7182]/30 bg-[#d6e7e6] text-[#172e34]',
-    'border-[#c8402a]/30 bg-[#f3d7ca] text-[#3a211c]',
-    'border-[#9e6a14]/30 bg-[#f0e3bd] text-[#3b2c12]',
+/**
+ * Plano de apoio editorial: usa apenas objetos, termos e números que pertencem à cena atual.
+ * A cada quarto da fala entra um corte visual diferente, com movimento e cor chapada da identidade
+ * editorial; não cria etiquetas a partir de palavras soltas da narração.
+ */
+function EditorialVideoCut({ scene, reveal, phase, say }: { scene: Scene; reveal: number; phase: number; say: string }) {
+  const v = scene.visual;
+  const colors = [
+    { bg: 'bg-[#c8402a]', chip: 'bg-white text-[#c8402a]', line: 'bg-[#f0bf69]' },
+    { bg: 'bg-[#1f5c7a]', chip: 'bg-white text-[#1f5c7a]', line: 'bg-[#f0bf69]' },
+    { bg: 'bg-[#6e3b5c]', chip: 'bg-white text-[#6e3b5c]', line: 'bg-[#ffbb8c]' },
+    { bg: 'bg-[#a8365e]', chip: 'bg-white text-[#a8365e]', line: 'bg-[#f3d7ca]' },
   ];
-  const artFor = (word: string) => /dado|memoria|arquivo|valor|guardar|variavel/.test(word)
-    ? 'dados'
-    : /rede|internet|servidor|protocolo|pacote/.test(word)
-      ? 'rede'
-      : /nuvem|cloud|online/.test(word)
-        ? 'nuvem'
-        : /computador|processador|hardware|maquina/.test(word)
-          ? 'computador'
-          : (['livro', 'teclado', 'dados'] as const)[word.length % 3];
-  if (!keywords.length) return null;
+  const palette = colors[phase % colors.length];
+  const chooseArt = (label: string): IllustrationName => {
+    const s = label.toLowerCase();
+    if (/dado|memória|memoria|arquivo|guardar|banco/.test(s)) return 'dados';
+    if (/rede|internet|servidor|roteador|protocolo|pacote/.test(s)) return 'rede';
+    if (/computador|processador|hardware|máquina|maquina|cpu|chip/.test(s)) return 'computador';
+    if (/nuvem|cloud|online/.test(s)) return 'nuvem';
+    if (/conta|soma|número|numero|reta|positivo|negativo|oposto/.test(s)) return 'degraus';
+    if (/tempo|ano|história|historia|data|origem/.test(s)) return 'calendario';
+    if (/cartão|cartao|teclado|entrada|saída|saida|interruptor/.test(s)) return 'teclado';
+    if (/lei|regra|direito|norma|controle/.test(s)) return 'balanca';
+    return 'livro';
+  };
+
+  let title = scene.heading;
+  let detail = say;
+  let art: IllustrationName = chooseArt(scene.heading + ' ' + say);
+  let kicker = 'IDEIA-CHAVE';
+  let equation: string | undefined;
+  let numberline: { from: number; to: number; state: NumberLineState } | undefined;
+
+  if (v.kind === 'title') {
+    title = v.title;
+    detail = v.subtitle || say;
+    art = v.art ?? chooseArt(v.title);
+    kicker = 'ABERTURA';
+  } else if (v.kind === 'cards') {
+    const item = v.cards[Math.min(v.cards.length - 1, Math.max(0, reveal - 1))] ?? v.cards[0];
+    if (item) { title = item.title; detail = item.text; art = chooseArt(item.title + ' ' + item.text); }
+    kicker = 'EXEMPLO VISUAL';
+  } else if (v.kind === 'timeline') {
+    const item = v.items[Math.min(v.items.length - 1, Math.max(0, reveal - 1))] ?? v.items[0];
+    if (item) { title = item.title; detail = item.text; kicker = item.year; art = chooseArt(item.title + ' ' + item.text); }
+  } else if (v.kind === 'equation') {
+    equation = v.lines[Math.min(v.lines.length - 1, Math.max(0, reveal - 1))] ?? v.lines[0];
+    title = equation;
+    detail = v.note || say;
+    art = chooseArt(equation + ' ' + detail);
+    kicker = 'PASSO DA CONTA';
+  } else if (v.kind === 'numberline') {
+    const state = v.states[Math.min(v.states.length - 1, Math.max(0, reveal))] ?? v.states[v.states.length - 1] ?? {};
+    numberline = { from: v.from, to: v.to, state };
+    const jump = state.jumps?.[0];
+    title = jump ? (jump.to > jump.from ? 'Movimento para a direita' : 'Movimento para a esquerda') : 'Localize o número';
+    detail = say;
+    art = 'degraus';
+    kicker = 'NA RETA NUMÉRICA';
+  }
+
   return (
-    <div className="relative flex w-full max-w-2xl flex-wrap items-center justify-center gap-2 px-1 sm:gap-2.5" aria-hidden="true" data-testid="narrada-elementos-visuais">
-      {keywords.map((word, i) => (
-        <div
-          key={scene.id + ':' + word}
-          className={`anim-tile-in flex min-w-0 max-w-[48%] items-center gap-1.5 rounded-xl border px-2 py-1.5 shadow-sm transition-all duration-500 sm:gap-2 sm:px-3 sm:py-2 ${palettes[i % palettes.length]} `}
-          style={{ animationDelay: `${i * 130}ms` }}
-        >
-          <span className="anim-bob grid h-8 w-9 shrink-0 place-items-center sm:h-10 sm:w-11"><Illustration name={artFor(word)} animate className="h-8 w-9 sm:h-10 sm:w-11" /></span>
-          <span className="min-w-0 truncate text-xs font-bold capitalize sm:text-sm">{word}</span>
-          <span className="hidden text-[0.58rem] font-bold uppercase tracking-wider opacity-65 sm:inline">{['IDEIA', 'LIGAÇÃO', 'EXEMPLO'][i]}</span>
+    <div className={`anim-tile-in relative flex min-h-0 w-full max-w-3xl flex-1 flex-col justify-center overflow-hidden rounded-[1.6rem] p-4 text-white shadow-2xl sm:rounded-[2rem] sm:p-8 ${palette.bg}`} data-testid="narrada-plano-de-apoio">
+      <div className="absolute -right-10 -top-12 h-48 w-48 rotate-12 rounded-[2rem] border-[16px] border-white/15" aria-hidden="true" />
+      <div className="absolute -bottom-12 -left-8 h-40 w-40 rounded-full border-[14px] border-white/15" aria-hidden="true" />
+      <div className="relative flex min-h-0 flex-1 flex-col justify-center">
+        <div className="flex items-center justify-between gap-3">
+          <span className={`inline-flex w-fit rounded-full px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.16em] ${palette.chip}`}>{kicker}</span>
+          <span className="h-1.5 w-12 rounded-full bg-white/35"><span className={`block h-full rounded-full ${palette.line}`} style={{ width: phase === 1 ? '38%' : '72%' }} /></span>
         </div>
-      ))}
+        {numberline ? (
+          <div className="anim-tile-in mt-4 rounded-2xl bg-white p-2 text-[#1b1a17] sm:mt-6 sm:p-4">
+            <NumberLine from={numberline.from} to={numberline.to} state={numberline.state} />
+          </div>
+        ) : (
+          <div className="mt-4 flex min-h-0 items-center gap-3 sm:mt-6 sm:gap-6">
+            <div className="anim-bob grid h-24 w-24 shrink-0 place-items-center rounded-2xl bg-white/15 p-2 sm:h-40 sm:w-40 sm:rounded-[1.8rem] sm:p-4">
+              <Illustration name={art} accent="#f0bf69" animate className="h-full w-full text-white" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h3 className="anim-tile-in font-display text-[clamp(1.5rem,5vh,3.3rem)] font-semibold leading-[1.04] tracking-tight">{title}</h3>
+              {equation && <p className="mt-3 font-mono text-xl font-black sm:text-3xl">{equation}</p>}
+            </div>
+          </div>
+        )}
+        <p className="anim-tile-in mt-4 max-w-2xl border-l-4 border-white/80 pl-3 text-base font-medium leading-relaxed sm:mt-6 sm:pl-5 sm:text-xl sm:leading-8">{detail}</p>
+        <div className="mt-5 flex items-center gap-2" aria-hidden="true">
+          <span className={`h-2 w-2 rounded-full ${palette.line}`} />
+          <span className="h-px flex-1 bg-white/25" />
+          <span className="font-mono text-[0.6rem] font-bold tracking-widest text-white/70">CRÔNICAS · VÍDEO AULA</span>
+        </div>
+      </div>
     </div>
   );
 }
