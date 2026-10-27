@@ -11,11 +11,8 @@ export const grimorioIngles: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.ingles',
   title: 'Língua Inglesa (Leitura Técnica)',
-  epithet: 'Língua Inglesa (Leitura Técnica)',
   description: 'Como decifrar manuais, documentação de software, artigos técnicos e APIs escritos em inglês: skimming e scanning, falsos cognatos, conectivos, referência pronominal, modais, voz passiva, afixos e o vocabulário de TI.',
   chapterIds: ['cap.ingles.01', 'cap.ingles.02'],
-  sigil: 'pena',
-  binding: 'floresta',
 };
 
 export const capInglesLeitura: Chapter = {
@@ -98,7 +95,7 @@ export const licoesIngles: Lesson[] = [
   {
     id: 'lic.ingles.01',
     chapterId: 'cap.ingles.01',
-    title: 'A Língua dos Estrangeiros',
+    title: 'Textos técnicos em inglês',
     goal: 'Skimming e scanning, falsos cognatos de TI, conectivos, referência pronominal, voz passiva, imperativo, modais e afixos.',
     cards: [
       { title: 'Ler com estratégia', body: 'Leia a **pergunta antes** do texto. Ideia geral = **skimming**; dado pontual = **scanning**.\n\nFalsos cognatos: *actually* = na verdade; *eventually* = por fim; *library* = biblioteca; *data* = dados; *assume* = supor.' },
