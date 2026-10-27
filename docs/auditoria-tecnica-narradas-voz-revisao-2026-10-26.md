@@ -1,6 +1,6 @@
 # Revisão independente — timeline narrada e adaptador TTS
 
-**Atualizada em:** 27/10/2026, 02:51 UTC
+**Atualizada em:** 27/10/2026, 02:52 UTC
 **Branch revisada:** claude/cronicas-conhecimento-estudos-jgbofo
 **Branch desta contribuição:** gpt/narrated-timeline-review-2026-10-27
 **Escopo:** revisão do código real, testes e integração de alinhamento. Não altera Narrated.tsx, ReviewSlides.tsx, voice.ts nem narration-timeline.ts, para evitar conflito com as outras sessões.
@@ -48,7 +48,7 @@ Arquivos novos nesta contribuição:
 
 Não alterei a implementação temporal compartilhada, o player, a camada de voz, os roteiros nem os slides.
 
-**Testes do PR #9 não executados nesta sessão.** O clone local não funcionou devido a falha de resolução de rede para GitHub, e não há verificações de CI associadas ao head deste PR; portanto, não afirmo que os testes novos deste PR passem. Como evidência separada da branch-base, o CI do commit aca7985 executou 39 arquivos e 2.425 testes, mas falhou no build TypeScript em src/test/narrated-editorial.test.ts:85 por narrowing do tipo Visual. O commit ebc8947 corrigiu esse erro guardando o discriminante em const visual = scene.visual. A execução subsequente #40440317764 para o commit 09a6ef0b concluiu com sucesso: 39 arquivos/2.425 testes, build web, verificação de layout Playwright, compilação do APK e publicação do site. Link: https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40440317764. Esse CI cobre a branch-base nesse commit, mas não inclui os arquivos ainda não mesclados do PR #9.
+**Testes do PR #9 não executados nesta sessão.** O clone local não funcionou devido a falha de resolução de rede para GitHub, e não há verificações de CI associadas ao head deste PR; portanto, não afirmo que os testes novos deste PR passem. Como evidência separada da branch-base, o CI do commit aca7985 executou 39 arquivos e 2.425 testes, mas falhou no build TypeScript em src/test/narrated-editorial.test.ts:85 por narrowing do tipo Visual. O commit ebc8947 corrigiu esse erro guardando o discriminante em const visual = scene.visual. A execução #40440317764 para o commit 09a6ef0b concluiu com sucesso: 39 arquivos/2.425 testes, build web, verificação de layout Playwright, compilação do APK e publicação do site. Link: https://github.com/cainalo/Cronicas-do-Conhecimento-/actions/runs/40440317764. Depois, a branch-base avançou para dccb743f (ajustes de tela cheia, controle de legendas e timeout dos controles); a execução #40440849594 para esse commit estava em andamento na última consulta. Esses CI cobrem somente a branch-base e não incluem os arquivos ainda não mesclados do PR #9.
 
 ## 4. Coordenação entre sessões
 
