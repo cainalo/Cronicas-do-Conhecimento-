@@ -26,3 +26,11 @@
 ## Roteiro da auditoria (24/10/2026, docs/auditoria/09_ROADMAP_FASEADO.md)
 - ✅ Fase 0 baseline · ✅ Fase 1 trilha única e retomada · ✅ Fase 2 piloto Processos (aguarda aprovação) · ✅ Fase 4 livro sem rolagem
 - 🔄 Fase 3 migração por lotes (grimório de Infraestrutura completo em microaulas; próximos: Segurança e Dados) · ✅ Fase 5 página Estudos e vídeos (curadoria de vídeos pendente de conferência) · ✅ P1-14 ordem do dia na trilha única · ✅ página não encontrada e Conta em modo local · ✅ volumes separados · ✅ recuperação adaptativa na Prática · ⬜ Fase 6 polimento visual/áudio · ⬜ Fase 7 auditoria total de conteúdo e release
+
+
+## Atualização de sequência — 27/10/2026
+
+1. Revisar e validar a rodada de `cap.ia.04` (12 microaulas) e a rodada de `cap.ingles.01` (11 microaulas em branch isolada).
+2. Integrar os arquivos escolhidos após comparar versões e garantir que não haja séries duplicadas.
+3. Depois de testes, build e E2E concluídos, continuar para `cap.ingles.02` e os demais trechos na ordem de `JOURNEY`.
+4. Continuam pendentes a revisão editorial humana e a inspeção física da experiência Android; nenhum status de CI é presumido a partir da mera escrita dos testes.
