@@ -60,7 +60,11 @@ describe('animações de contêiner', () => {
 describe('experiência imersiva de aula e revisão', () => {
   it('a aula narrada ocupa a viewport e bloqueia rolagem vertical', () => {
     const narrated = readFileSync(join(ROOT, 'pages/Narrated.tsx'), 'utf8');
-    expect(narrated).toMatch(/fixed inset-0[^\n]*h-\[100dvh\]/);
+    expect(narrated).toMatch(/fixed left-0 right-0 top-0 bottom-0[^\n]*w-screen/);
+    expect(narrated).toContain("width: '100vw'");
+    const filmStyles = readFileSync(join(ROOT, 'styles/index.css'), 'utf8');
+    expect(filmStyles).toMatch(/\.ccv-film-scene\s*\{[^}]*width: 100vw/s);
+    expect(filmStyles).toMatch(/margin-left: calc\(50% - 50vw\)/);
     expect(narrated).toMatch(/document\.body\.style\.overflow = 'hidden'/);
     // Portal para body evita que transforms/backdrop-filter de ancestrais encolham o player.
     expect(narrated).toContain('return createPortal((');
