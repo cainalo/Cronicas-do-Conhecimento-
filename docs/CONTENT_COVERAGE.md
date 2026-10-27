@@ -125,3 +125,12 @@ Grimório de Segurança inteiro em microaulas: cap.seg.01 (Criptografia, 6 aulas
 - **Revisão:** as séries novas de Primeiros Passos, cap.dados.01, cap.dev.03, cap.mat.01, cap.port.01, cap.ia.03, cap.ia.01, cap.dev.01, cap.dados.02, cap.dev.02, cap.mat.02, cap.port.02, cap.dev.04, cap.es.01, cap.es.02, cap.devops.01 e cap.devops.02 ainda sem revisão humana.
 - **Aulas narradas novas:** "Do ábaco ao celular", com o novo tipo de cena linha do tempo, e "As quatro tarefas do computador".
 - **Sequência única:** a aula narrada e as videoaulas conferidas entram na própria aula, numa fase "Veja de outro jeito" antes da prática. As bibliotecas de aulas narradas e de vídeos mostram "Na trilha" com o link para a aula.
+
+
+## 27/10/2026 — microaulas de Inglês técnico (branch de trabalho)
+
+- Implementadas 11 microaulas para `cap.ingles.01`: quatro de estratégias de leitura (skimming/scanning, falsos cognatos, limites e inferência), quatro de coesão (conectivos, condições, referência pronominal e comparativos) e três de gramática (modais de obrigação, voz passiva e afixos).
+- As aulas reutilizam as 11 questões autorais existentes (`q.ingles.01.001–011`); não foram criadas questões nem rotuladas questões como oficiais.
+- As três seções completas receberam um bloco de contexto histórico com referências: Maxwell (1969/1972), Halliday e Hasan (1976), RFC 2119/8174.
+- Implementação em `src/content/micro/ingles-estrategias.ts`; registro em `src/content/index.ts`; teste de regressão em `src/test/ingles-estrategias.test.ts`.
+- **Estado de validação:** o teste foi escrito, mas não executado nesta branch; revisão editorial humana e inspeção visual seguem pendentes.
