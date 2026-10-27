@@ -97,7 +97,7 @@ export function Layout() {
   const onAccount = areaOf(pathname) === 'conta';
   return (
     <div className={standaloneNarration ? "h-dvh overflow-hidden" : "flex min-h-dvh flex-col"}>
-      {!standaloneNarration && !activityRoute && <header className="wood-bar wood-bar-top safe-top sticky top-0 z-30">
+      {!standaloneNarration && !activityRoute && <header className="app-bar app-bar-top safe-top sticky top-0 z-30">
         <div className="relative mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
           <div className="flex min-w-[2.5rem] items-center gap-1">
             {inner ? (
@@ -153,7 +153,7 @@ export function Layout() {
 
       {!immersive && <nav
         aria-label="Navegação principal"
-        className="wood-bar wood-bar-bottom safe-bottom-nav fixed inset-x-0 bottom-0 z-30 flex items-stretch justify-around lg:hidden"
+        className="app-bar app-bar-bottom safe-bottom-nav fixed inset-x-0 bottom-0 z-30 flex items-stretch justify-around lg:hidden"
       >
         {TABS.map((t) => (
           <Tab key={t} area={t} variant="bottom" />
