@@ -46,7 +46,23 @@ export function splitReviewChunks(value: string, maxChars = 250): string[] {
   for (const paragraph of paragraphs) {
     let current = '';
     const flush = () => { if (current.trim()) result.push(current.trim()); current = ''; };
-    const sentences = paragraph.match(/[^.!?]+[.!?]+[\]})'"']*|[^.!?]+$/g) ?? [paragraph];
+    // Só divide depois de pontuação seguida de espaço/fim. Ponto antes de ":" ou
+    // ";" pertence a abreviações como "Ex.:" e iniciais bibliográficas como "A. S.;".
+    const sentences: string[] = [];
+    let sentenceStart = 0;
+    for (let i = 0; i < paragraph.length; i += 1) {
+      if (!'.!?'.includes(paragraph[i])) continue;
+      let end = i + 1;
+      while (/[])}'"”’]/.test(paragraph[end] ?? '')) end += 1;
+      if (end < paragraph.length && !/\s/.test(paragraph[end])) continue;
+      const sentence = paragraph.slice(sentenceStart, end).trim();
+      if (sentence) sentences.push(sentence);
+      while (end < paragraph.length && /\s/.test(paragraph[end])) end += 1;
+      sentenceStart = end;
+      i = end - 1;
+    }
+    const remainder = paragraph.slice(sentenceStart).trim();
+    if (remainder) sentences.push(remainder);
     for (const rawSentence of sentences) {
       const sentence = rawSentence.trim();
       if (!sentence) continue;
