@@ -58,7 +58,7 @@ export function LibraryPage() {
             return (
               <li key={subject.id}>
                 <Link
-                  to={`/grimorio/${subject.id}`}
+                  to={`/materia/${subject.id}`}
                   className="group block h-full rounded-2xl border border-line p-4 transition hover:-translate-y-0.5 hover:border-ink/25 sm:p-5"
                   style={{ background: `color-mix(in srgb, rgb(${tint}) 8%, rgb(var(--surface)))` }}
                 >
@@ -104,7 +104,7 @@ export function LibraryPage() {
   );
 }
 
-export function GrimoirePage() {
+export function SubjectPage() {
   const { id = '' } = useParams();
   const { data } = useStudy();
   const subject = getGrimoire(id);

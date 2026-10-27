@@ -1,10 +1,10 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { FxProvider } from '@/app/fx';
 import { Layout } from '@/components/Layout';
 import { Dashboard } from '@/pages/Dashboard';
-import { GrimoirePage, LibraryPage } from '@/pages/Library';
+import { LibraryPage, SubjectPage } from '@/pages/Library';
 import { ReadingPage } from '@/pages/Reading';
 import { MissionPage } from '@/pages/Mission';
 import { DownloadPage } from '@/pages/Download';
@@ -37,8 +37,12 @@ import { TrailVideoPage } from '@/pages/TrailVideo';
 import { CustomizePage } from '@/pages/Customize';
 import { ScenarioListPage, ScenarioPage } from '@/pages/Scenarios';
 import { TeachersRoomPage } from '@/pages/TeachersRoom';
-import { WorldPage } from '@/pages/World';
 import { NarratedPage } from '@/pages/Narrated';
+
+function LegacySubjectRedirect() {
+  const { id = '' } = useParams();
+  return <Navigate to={`/materia/${id}`} replace />;
+}
 
 export function AppRoutes() {
   return (
@@ -51,7 +55,8 @@ export function AppRoutes() {
         <Route path="video/:id" element={<TrailVideoPage />} />
         <Route path="explorar" element={<StudiesPage />} />
         <Route path="revisar" element={<TrainingPage />} />
-        <Route path="grimorio/:id" element={<GrimoirePage />} />
+        <Route path="materia/:id" element={<SubjectPage />} />
+        <Route path="grimorio/:id" element={<LegacySubjectRedirect />} />
         <Route path="capitulo/:id" element={<ReadingPage />} />
         <Route path="aprender/:chapterId/:sectionId" element={<LearnPage />} />
         <Route path="aprender/:chapterId/:sectionId/:aula" element={<LearnPage />} />
@@ -61,7 +66,7 @@ export function AppRoutes() {
         <Route path="simulador" element={<ScenarioListPage />} />
         <Route path="simulador/:id" element={<ScenarioPage />} />
         <Route path="sala" element={<TeachersRoomPage />} />
-        <Route path="escritorio" element={<WorldPage />} />
+        <Route path="escritorio" element={<Navigate to="/simulador" replace />} />
         <Route path="aula-narrada/:id" element={<NarratedPage />} />
         <Route path="pratica/:chapterId/:sectionId" element={<PracticePage />} />
         <Route path="licao/:id" element={<LessonPage />} />
