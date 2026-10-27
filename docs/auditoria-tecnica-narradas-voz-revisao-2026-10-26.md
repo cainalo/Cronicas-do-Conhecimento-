@@ -1,6 +1,6 @@
 # Revisão independente — timeline narrada e adaptador TTS
 
-**Atualizada em:** 27/10/2026, 02:43 UTC
+**Atualizada em:** 27/10/2026, 02:44 UTC
 **Branch revisada:** claude/cronicas-conhecimento-estudos-jgbofo
 **Branch desta contribuição:** gpt/narrated-timeline-review-2026-10-27
 **Escopo:** revisão do código real, testes e integração de alinhamento. Não altera Narrated.tsx, ReviewSlides.tsx, voice.ts nem narration-timeline.ts, para evitar conflito com as outras sessões.
