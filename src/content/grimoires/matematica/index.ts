@@ -12,7 +12,7 @@ export const grimorioMatematica: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'cg.matematica',
   title: 'Matemática e Raciocínio Lógico',
-  description: 'As contas que guardam o erário e as deduções que desmascaram mentirosos: inteiros, frações, MMC e MDC, razões, divisão proporcional, regra de três, porcentagem, associações, sequências, calendários e relógios.',
+  description: 'Operações com inteiros, frações, múltiplos e divisores, proporções, regra de três, porcentagem, associações, sequências, calendários e raciocínio lógico.',
   chapterIds: ['cap.mat.01', 'cap.mat.02'],
 };
 
@@ -21,7 +21,7 @@ export const capMatAritmetica: Chapter = {
   grimoireId: 'grim.matematica',
   number: 1,
   title: 'Números, Proporções e Porcentagens',
-  subtitle: 'As contas do livro-caixa, conferidas duas vezes',
+  subtitle: 'Operações numéricas e conferência de resultados',
   topicIds: ['cg.matematica.aritmetica', 'cg.matematica.proporcao'],
   review: 'nao-revisado',
   estimatedMinutes: 50,
