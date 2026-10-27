@@ -336,7 +336,7 @@ export function NarratedPlayer({
           data-testid="narrada-cena"
         >
           <div className="relative flex h-full max-h-full w-full items-center justify-center" data-testid="narrada-elementos-visuais">
-            <CinematicScene scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} beatIndex={pos.beat} phase={visualPhase} />
+            <CinematicScene scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} sceneCount={l.scenes.length} phase={visualPhase} />
           </div>
         </div>
       </section>
@@ -391,7 +391,7 @@ export function NarratedPlayer({
             {RATES.map((r) => <option key={r} value={r}>{r.toLocaleString('pt-BR')}×</option>)}
           </select>
         </label>
-        <button type="button" className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 text-white shadow-lg backdrop-blur-md transition ${voice.kind === 'gemini' ? 'bg-[#6e3b5c]' : 'bg-[#171b1b]/82 hover:bg-[#6e3b5c]'}`} onClick={() => { setShowTranscript(false); setShowVoiceSettings((v) => !v); setVoiceStatus(''); }} aria-label="Preferências de voz" aria-expanded={showVoiceSettings} data-testid="narrada-preferencias-voz"><Icon name="som" size={17} /></button>
+        <button type="button" className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 text-white shadow-lg backdrop-blur-md transition ${voice.kind === 'gemini' ? 'bg-[#6e3b5c]' : 'bg-[#171b1b]/82 hover:bg-[#6e3b5c]'}`} onClick={() => { setShowTranscript(false); setShowVoiceSettings((v) => !v); setVoiceStatus(''); }} aria-label="Preferências de voz" aria-expanded={showVoiceSettings} data-testid="narrada-preferencias-voz"><Icon name="alaude" size={17} /></button>
         <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => { setShowVoiceSettings(false); setShowTranscript((v) => !v); }} aria-label={showTranscript ? 'Ocultar transcrição' : 'Transcrição'} aria-expanded={showTranscript} data-testid="narrada-transcricao"><Icon name="livro" size={17} /></button>
       </div>
       <div
@@ -511,8 +511,8 @@ function HistoricalPhoto({ photo, variant = 'scene' }: { photo: HistoricalVisual
 }
 
 function CinematicScene({
-  scene, reveal, sceneIndex, sceneCount, beatIndex, phase,
-}: { scene: Scene; reveal: number; sceneIndex: number; sceneCount: number; beatIndex: number; phase: number }) {
+  scene, reveal, sceneIndex, sceneCount, phase,
+}: { scene: Scene; reveal: number; sceneIndex: number; sceneCount: number; phase: number }) {
   const visual = scene.visual;
   const palette = CINEMA_PALETTES[sceneIndex % CINEMA_PALETTES.length];
   const activeIndex = (length: number) => Math.max(0, Math.min(length - 1, reveal - 1));
