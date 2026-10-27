@@ -23,22 +23,49 @@ describe('integridade de conteúdo dos slides de revisão', () => {
     }
   });
 
-  it('preserva definições do glossário e referências completas', () => {
+  it('preserva as definições do glossário nas lâminas geradas, em ordem', () => {
     for (const chapter of chapters) {
+      const slides = buildReviewSlides(chapter);
+      const glossarySlides = slides.filter((slide) => slide.kind === 'glossary');
+      let cursor = 0;
+
       for (const item of chapter.glossary) {
-        expect(
-          splitReviewChunks(item.definition).join(' '),
-          chapter.id + '/glossário/' + item.term,
-        ).toBe(normalizedMarkdown(item.definition));
+        const chunks = splitReviewChunks(item.definition);
+        const matching = glossarySlides.slice(cursor, cursor + chunks.length);
+        const label = chapter.id + '/glossário/' + item.term;
+
+        expect(matching.length, label + ': quantidade de lâminas geradas').toBe(chunks.length);
+        expect(matching.every((slide) => slide.title === item.term), label + ': termo/título incorreto').toBe(true);
+        expect(matching.map((slide) => slide.body).join(' '), label + ': definição omitida ou reordenada')
+          .toBe(normalizedMarkdown(item.definition));
+        cursor += chunks.length;
       }
+
+      expect(cursor, chapter.id + ': lâminas extras ou ausentes de glossário').toBe(glossarySlides.length);
+    }
+  });
+
+  it('preserva as referências geradas nas lâminas, em ordem e sem omissões', () => {
+    for (const chapter of chapters) {
+      const slides = buildReviewSlides(chapter);
+      const referenceSlides = slides.filter((slide) => slide.kind === 'references');
+      let cursor = 0;
 
       for (const ref of chapter.references) {
         const source = ref.title + '\n\n' + ref.detail;
-        expect(
-          splitReviewChunks(source).join(' '),
-          chapter.id + '/referência/' + ref.title,
-        ).toBe(normalizedMarkdown(source));
+        const chunks = splitReviewChunks(source);
+        const matching = referenceSlides.slice(cursor, cursor + chunks.length);
+        const label = chapter.id + '/referência/' + ref.title;
+
+        expect(matching.length, label + ': quantidade de lâminas geradas').toBe(chunks.length);
+        expect(matching.every((slide) => slide.title === 'Fontes e aprofundamento'), label + ': título de referência')
+          .toBe(true);
+        expect(matching.map((slide) => slide.body).join(' '), label + ': referência omitida ou reordenada')
+          .toBe(normalizedMarkdown(source));
+        cursor += chunks.length;
       }
+
+      expect(cursor, chapter.id + ': lâminas extras ou ausentes de referências').toBe(referenceSlides.length);
     }
   });
 
@@ -47,19 +74,21 @@ describe('integridade de conteúdo dos slides de revisão', () => {
       const slides = buildReviewSlides(chapter);
       const sectionSlides = slides.filter((slide) => slide.kind === 'section');
 
+      expect(slides[0]?.kind, chapter.id + ': capa ausente').toBe('cover');
+      expect(slides.at(-1)?.kind, chapter.id + ': fechamento ausente').toBe('closing');
+
       let previousIndex = -1;
       for (const section of chapter.sections) {
         const matching = sectionSlides.filter((slide) => slide.sectionId === section.id);
-        expect(matching.length, chapter.id + '/' + section.id + ': seção ausente').toBeGreaterThan(0);
+        const label = chapter.id + '/' + section.id;
+        expect(matching.length, label + ': seção ausente').toBeGreaterThan(0);
 
         const firstIndex = slides.indexOf(matching[0]);
-        expect(firstIndex, chapter.id + '/' + section.id + ': seção fora de ordem').toBeGreaterThan(previousIndex);
+        expect(firstIndex, label + ': seção fora de ordem').toBeGreaterThan(previousIndex);
         previousIndex = firstIndex;
 
-        expect(
-          matching.map((slide) => slide.body).join(' '),
-          chapter.id + '/' + section.id + ': corpo das lâminas não preserva o texto',
-        ).toBe(normalizedMarkdown(section.body));
+        expect(matching.map((slide) => slide.body).join(' '), label + ': corpo das lâminas não preserva o texto')
+          .toBe(normalizedMarkdown(section.body));
       }
     }
   });
