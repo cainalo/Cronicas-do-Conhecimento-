@@ -56,7 +56,7 @@ describe('linha do tempo baseada no alinhamento real do áudio', () => {
     expect(cueAtTime(timeline.cues, -1)).toBeUndefined();
   });
 
-  it('rejeita silenciosamente nenhum desalinhamento: falha explicitamente se o texto não coincidir', () => {
+  it('falha explicitamente quando o texto alinhado não corresponde ao texto enviado', () => {
     const lesson = lessonById('narrada.mat.somar-inteiros');
     const script = buildNarrationScript(lesson);
     const alignment = syntheticAlignment(script.text);
