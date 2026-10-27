@@ -36,7 +36,7 @@ export function AppDownload({ compact = false }: { compact?: boolean }) {
           </p>
         </div>
         <a href={APK_URL} download className="btn-primary shrink-0 !px-4">
-          <Icon name="grimorio" size={18} /> Baixar
+          <Icon name="download" size={18} /> Baixar
         </a>
       </div>
       {!compact && (
