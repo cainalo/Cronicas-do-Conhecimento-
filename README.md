@@ -18,6 +18,9 @@ npm install
 npm run dev        # http://localhost:5173 (use o IP da rede para abrir no celular)
 npm test           # testes unitários e de fluxo (Vitest + Testing Library)
 npm run build      # typecheck + build de produção em dist/
+npm run test:e2e   # layout no Chromium (build prévio necessário)
+npm run test:visual # capturas e auditoria das rotas/33 capítulos (build prévio necessário)
+npm run report:bundle # tamanho bruto/gzip do JS e carga inicial estimada (build prévio)
 npm run preview    # serve o build
 ```
 
