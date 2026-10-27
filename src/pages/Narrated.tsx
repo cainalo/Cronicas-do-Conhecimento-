@@ -601,7 +601,7 @@ function SceneView({ scene, reveal }: { scene: Scene; reveal: number }) {
           return (
             <div
               key={c.title}
-              className={`rounded-2xl border p-4 transition-all duration-500 sm:p-5 ${i === reveal - 1 ? 'anim-tile-in' : ''} ${['border-[#2e7182]/35 bg-[#d6e7e6] text-[#172e34]','border-[#c8402a]/30 bg-[#f3d7ca] text-[#3a211c]','border-[#9e6a14]/30 bg-[#f0e3bd] text-[#3b2c12]','border-[#a8365e]/30 bg-[#edd6e0] text-[#3c2030]'][i % 4]} ${i < reveal ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-25'} ${i === reveal - 1 ? 'scale-[1.02] shadow-lg ring-2 ring-[#c8402a]/35' : ''}`}
+              className={`rounded-2xl border p-4 transition-all duration-500 sm:p-5 ${i === reveal - 1 ? 'anim-tile-in' : ''} ${['border-[#c8402a] bg-[#c8402a] text-white','border-[#1f5c7a] bg-[#1f5c7a] text-white','border-[#6e3b5c] bg-[#6e3b5c] text-white','border-[#a8365e] bg-[#a8365e] text-white'][i % 4]} ${i < reveal ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-25'} ${i === reveal - 1 ? 'scale-[1.02] shadow-lg ring-2 ring-[#c8402a]/35' : ''}`}
             >
               <div className="mb-2 flex items-center gap-2">
                 <Illustration name={art} animate className="h-10 w-12 shrink-0" />
