@@ -9,11 +9,8 @@ export const grimorioLegislacao: Grimoire = {
   contestId: 'tce-go-2026-tecnico-ti',
   disciplineId: 'ti.legislacao',
   title: 'Legislação Aplicada à TI',
-  epithet: 'Legislação Aplicada à TI',
   description: 'As leis que todo sistema deve obedecer: LGPD aplicada ao código, Marco Civil da Internet, segurança nas contratações, certificação digital e as normas de Goiás e do próprio Tribunal.',
   chapterIds: ['cap.leg.01', 'cap.leg.02'],
-  sigil: 'pena',
-  binding: 'noite',
 };
 
 export const capLegDados: Chapter = {
