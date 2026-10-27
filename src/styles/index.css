@@ -457,13 +457,14 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 /* Cor chapada editorial, enquadramento persistente e movimento por transformação.
    Nada some e reaparece a cada atualização do relógio: não há animação de opacidade,
    pisca, pulso ou remount visual por frame. */
+/* Cortes de edição: máscara + deslocamento, sem sumir e reaparecer por opacidade. */
 @keyframes ccv-film-cut-in {
-  from { opacity: .62; transform: translate3d(0, 8px, 0) scale(.992); }
-  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  from { clip-path: inset(0 0 100% 0); transform: translate3d(0, 14px, 0); }
+  to { clip-path: inset(0); transform: translate3d(0, 0, 0); }
 }
 @keyframes ccv-film-scene-in {
-  from { opacity: .82; transform: scale(.975); }
-  to { opacity: 1; transform: scale(1); }
+  from { clip-path: inset(0 100% 0 0); transform: translate3d(1rem, 0, 0) scale(.99); }
+  to { clip-path: inset(0); transform: translate3d(0, 0, 0) scale(1); }
 }
 @keyframes ccv-film-drift {
   0%, 100% { transform: translate3d(0, 0, 0) rotate(-1deg); }
@@ -557,8 +558,9 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
   gap: clamp(1.2rem, 4vw, 4rem);
 }
 .ccv-film-copy { min-width: 0; }
-.ccv-film-copy.is-cue-change { animation: ccv-film-cut-in 440ms cubic-bezier(.16,1,.3,1) both; }
-.ccv-film-cut.is-scene-change { animation: ccv-film-scene-in 480ms cubic-bezier(.16,1,.3,1) both; }
+.ccv-film-copy__take { animation: ccv-film-cut-in 460ms cubic-bezier(.16,1,.3,1) both; }
+.ccv-film-cut.is-cue-cut { animation: ccv-film-scene-in 560ms cubic-bezier(.16,1,.3,1) both; }
+.ccv-film-copy__take, .ccv-film-cut.is-cue-cut { will-change: transform, clip-path; }
 .ccv-film-eyebrow {
   display: flex;
   align-items: center;
@@ -868,4 +870,9 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 @media (prefers-reduced-motion: reduce) {
   .ccv-film-scene, .ccv-film-copy, .ccv-film-cut, .ccv-film-illustration, .ccv-film-orbit { animation: none !important; }
   .ccv-film-scene *, .ccv-film-scene *::before, .ccv-film-scene *::after { transition: none !important; }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .ccv-film-copy__take, .ccv-film-cut.is-cue-cut, .ccv-film-illustration, .ccv-film-orbit { animation: none !important; transition: none !important; }
 }
