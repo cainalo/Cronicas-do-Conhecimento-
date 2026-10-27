@@ -9,3 +9,6 @@ android/app/build
 
 # Capturas de tela de verificação (ficam no scratchpad, não no repositório)
 shots/
+
+# Relatórios e capturas locais gerados pela auditoria visual
+artifacts/

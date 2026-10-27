@@ -36,6 +36,8 @@ jobs:
       # ---------- App Android (Capacitor) ----------
       - name: Build web para o app
         run: npm run build
+      - name: Medir bundle JavaScript bruto e gzip
+        run: npm run report:bundle
       # Regra de testes de layout (docs/TESTING.md): overlays, cartão de correção e rolagem lateral
       # conferidos no Chromium. Se falhar, nada é publicado.
       - name: Cache do navegador Playwright
@@ -49,6 +51,16 @@ jobs:
         run: npx playwright install chromium
       - name: Verificação de layout no navegador
         run: npm run test:e2e
+      - name: Auditoria visual das rotas e capítulos
+        run: npm run test:visual
+      - name: Guardar relatório e capturas da auditoria
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cronicas-auditoria-visual-${{ github.sha }}
+          path: artifacts/visual-audit/
+          if-no-files-found: warn
+          retention-days: 14
       - run: npx cap sync android
       - uses: actions/setup-java@v4
         with:
