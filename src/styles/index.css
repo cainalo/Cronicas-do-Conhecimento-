@@ -689,7 +689,155 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 .ccv-historical-photo figcaption { display: flex; flex-direction: column; gap: .3rem; color: rgba(255,255,255,.95); font-size: clamp(.58rem,1.1vh,.75rem); line-height: 1.35; }
 .ccv-historical-photo figcaption strong { font-family: var(--font-title); font-size: clamp(.75rem,1.6vh,1rem); line-height: 1.2; }
 .ccv-historical-photo figcaption a { color: var(--ccv-accent); font-size: .62rem; font-weight: 800; text-decoration: underline; }
+
+/* Inserts editoriais durante a fala: um plano de apoio entra e sai suavemente,
+   sem desmontar a cena base nem fazer piscar a composição. */
+.ccv-film-content { transform: translate3d(0,0,0); transition: transform 760ms cubic-bezier(.16,1,.3,1); }
+.ccv-film-content.has-cutaway .ccv-film-art { transform: scale(.975) translate3d(-.35rem,0,0); }
+.ccv-film-art { transform: translate3d(0,0,0); transition: transform 760ms cubic-bezier(.16,1,.3,1); }
+.ccv-cutaway {
+  position: absolute;
+  z-index: 5;
+  top: 20%;
+  right: clamp(.8rem, 3vw, 2.8rem);
+  display: grid;
+  width: min(56vw, 43rem);
+  min-height: 28vh;
+  max-height: 44vh;
+  grid-template-columns: minmax(0, .88fr) minmax(0, 1.12fr);
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.58);
+  border-left: 6px solid var(--ccv-accent);
+  background: var(--ccv-secondary);
+  color: #fff;
+  box-shadow: 0 26px 72px rgba(0,0,0,.32);
+  transform: translate3d(calc(100% + 2.2rem), 0, 0) scale(.965);
+  transform-origin: right center;
+  transition: transform 680ms cubic-bezier(.16,1,.3,1);
+  pointer-events: none;
+  will-change: transform;
+}
+.ccv-cutaway.is-visible { transform: translate3d(0,0,0) scale(1); }
+.ccv-cutaway__media {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  place-items: center;
+  overflow: hidden;
+  padding: clamp(.55rem, 1.5vw, 1.2rem);
+  background: var(--ccv-background);
+}
+.ccv-cutaway__photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 41vh;
+  object-fit: cover;
+  filter: saturate(1.02) contrast(1.06);
+}
+.ccv-cutaway__illustration {
+  display: block;
+  width: 100%;
+  max-height: 34vh;
+  color: #fff;
+  overflow: visible;
+}
+.ccv-cutaway__frame {
+  position: absolute;
+  inset: .5rem;
+  border: 1px solid rgba(255,255,255,.34);
+  pointer-events: none;
+}
+.ccv-cutaway__copy {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(.75rem, 2vw, 1.5rem);
+}
+.ccv-cutaway__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin: 0 0 .55rem;
+  color: var(--ccv-accent);
+  font-size: clamp(.56rem, 1.15vh, .72rem);
+  font-weight: 900;
+  letter-spacing: .14em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+.ccv-cutaway__eyebrow span { display: inline-block; width: 1.3rem; height: 3px; flex: 0 0 auto; background: var(--ccv-accent); }
+.ccv-cutaway__copy h3 {
+  max-width: 18ch;
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-title);
+  font-size: clamp(1.1rem, 3.25vh, 2.45rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -.025em;
+  overflow-wrap: anywhere;
+}
+.ccv-cutaway__detail {
+  margin: .6rem 0 0;
+  padding-left: .7rem;
+  border-left: 3px solid var(--ccv-accent);
+  color: rgba(255,255,255,.9);
+  font-size: clamp(.7rem, 1.55vh, 1rem);
+  font-weight: 520;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.ccv-cutaway__source {
+  margin: .75rem 0 0;
+  color: rgba(255,255,255,.57);
+  font-size: .52rem;
+  font-weight: 850;
+  letter-spacing: .15em;
+}
+.ccv-cutaway__numberline { display: grid; width: 100%; min-height: 0; place-items: center; }
+.ccv-cutaway__numberline .ccv-numberline { width: 100%; }
+.ccv-cutaway__numberline .ccv-numberline svg { max-height: 23vh; }
+.ccv-cutaway__numberline .ccv-numberline__readout { gap: .3rem; flex-wrap: wrap; }
+.ccv-cutaway__numberline .ccv-numberline__readout span { font-size: .46rem; }
+.ccv-cutaway__numberline .ccv-numberline__readout strong { font-size: clamp(1.1rem, 3vh, 2rem); }
+.ccv-cutaway__numberline .ccv-numberline__readout em { margin-left: 0; font-size: .62rem; }
+.ccv-cutaway__equation { display: flex; width: 100%; min-height: 0; flex-direction: column; align-items: center; justify-content: center; gap: .4rem; text-align: center; }
+.ccv-cutaway__equation span { color: rgba(255,255,255,.68); font-family: ui-monospace, monospace; font-size: clamp(.65rem, 1.5vh, 1rem); }
+.ccv-cutaway__equation i { width: 38%; height: 3px; background: var(--ccv-insert-accent, #f0bf69); }
+.ccv-cutaway__equation strong { color: #fff; font-family: ui-monospace, monospace; font-size: clamp(1.2rem, 3.3vh, 2.7rem); line-height: 1.06; overflow-wrap: anywhere; }
+
 @media (max-width: 640px) {
+  .ccv-cutaway {
+    top: 24%;
+    right: .55rem;
+    left: .55rem;
+    width: auto;
+    min-height: 22vh;
+    max-height: 31vh;
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    border-left-width: 4px;
+    transform: translate3d(calc(100% + 1rem), 0, 0) scale(.98);
+  }
+  .ccv-cutaway.is-visible { transform: translate3d(0,0,0) scale(1); }
+  .ccv-cutaway__media { padding: .45rem; }
+  .ccv-cutaway__photo { max-height: 29vh; }
+  .ccv-cutaway__illustration { max-height: 26vh; }
+  .ccv-cutaway__frame { inset: .25rem; }
+  .ccv-cutaway__copy { padding: .55rem .6rem; }
+  .ccv-cutaway__eyebrow { gap: .3rem; margin-bottom: .35rem; font-size: .49rem; letter-spacing: .08em; }
+  .ccv-cutaway__eyebrow span { width: .75rem; height: 2px; }
+  .ccv-cutaway__copy h3 { font-size: clamp(.95rem, 2.6vh, 1.35rem); line-height: 1.04; }
+  .ccv-cutaway__detail { margin-top: .4rem; padding-left: .4rem; border-left-width: 2px; font-size: clamp(.62rem, 1.45vh, .8rem); line-height: 1.24; }
+  .ccv-cutaway__source { margin-top: .35rem; font-size: .4rem; letter-spacing: .08em; }
+  .ccv-cutaway__numberline .ccv-numberline svg { max-height: 16vh; }
+  .ccv-cutaway__numberline .ccv-numberline__readout strong { font-size: 1rem; }
+  .ccv-cutaway__equation strong { font-size: clamp(.9rem, 2.7vh, 1.3rem); }
+
   .ccv-film-scene { padding: calc(env(safe-area-inset-top) + 4.8rem) .9rem calc(env(safe-area-inset-bottom) + 10.2rem); }
   .ccv-film-scene.controls-hidden { padding-bottom: calc(env(safe-area-inset-bottom) + 5rem); }
   .ccv-film-header { justify-content: flex-end; margin-bottom: .25rem; }
