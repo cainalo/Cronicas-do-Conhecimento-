@@ -96,7 +96,7 @@ describe('progresso e recomendação', () => {
 });
 
 import { buildPractice, completePractice, parsePegadinhas, practiceDone } from '@/lib/practice';
-import { chapterBlocks, paginate, splitMarkdown } from '@/lib/book';
+import { chapterBlocks, splitMarkdown } from '@/lib/book';
 import { cluesRevealed } from '@/lib/game';
 import { getChapter as gch, questionsForContest as qfc3, DEFAULT_CONTEST_ID as DC3 } from '@/content';
 import { emptyData as ed3 } from '@/lib/model';
@@ -131,14 +131,12 @@ describe('prática e livro', () => {
     expect(acts.length).toBeLessThanOrEqual(12);
     expect(acts[acts.length - 1].kind).toBe('mcq');
   });
-  it('divide o texto em blocos e pagina respeitando a altura', () => {
+  it('divide Markdown e produz material contínuo sem capa nem cenas', () => {
     const blocks = splitMarkdown('### Título\n\nTexto um.\n\n```\ncódigo\n\nainda código\n```\n\nFim.');
     expect(blocks).toEqual(['### Título\n\nTexto um.', '```\ncódigo\n\nainda código\n```', 'Fim.']);
-    const bb = chapterBlocks(ch, () => undefined);
-    expect(bb[0].kind).toBe('cover');
-    const pages = paginate(bb, bb.map(() => 100), 250);
-    expect(pages.flat()).toEqual(bb.map((_, i) => i));
-    expect(pages.every((p) => p.length <= 3)).toBe(true);
+    const material = chapterBlocks(ch);
+    expect(material[0].kind).toBe('title');
+    expect(material.length).toBeGreaterThan(ch.sections.length);
   });
   it('revela as pistas em proporção ao avanço', () => {
     expect(cluesRevealed(0, 140, 35)).toBe(0);
@@ -148,17 +146,8 @@ describe('prática e livro', () => {
   });
 });
 
-import { visiblePages } from '@/components/LeatherBook';
-describe('códice de duas páginas', () => {
-  it('mostra a dupla que começa na página par e não passa do fim', () => {
-    expect(visiblePages(3, 10, true)).toEqual([2, 3]);
-    expect(visiblePages(8, 9, true)).toEqual([8]);
-    expect(visiblePages(5, 10, false)).toEqual([5]);
-  });
-});
-
-import { splitMdBlock, splitBlockAt } from '@/lib/book';
-describe('livro sem rolagem: divisão de blocos altos', () => {
+import { splitMdBlock } from '@/lib/book';
+describe('divisão de Markdown para leitura contínua', () => {
   it('tabela: metade das linhas em cada pedaço, repetindo o cabeçalho', () => {
     const t = '| a | b |\n|---|---|\n| 1 | 2 |\n| 3 | 4 |\n| 5 | 6 |';
     const [x, y] = splitMdBlock(t)!;
@@ -175,11 +164,8 @@ describe('livro sem rolagem: divisão de blocos altos', () => {
     expect(p.every((x) => /[.]$/.test(x))).toBe(true);
     expect(splitMdBlock('palavra')).toBeNull();
   });
-  it('subtítulo fica com o primeiro pedaço; cenas e pegadinhas também se dividem', () => {
-    const [h1] = splitMdBlock('### Título\n\n- a\n- b')!;
-    expect(h1.startsWith('### Título')).toBe(true);
-    const out = splitBlockAt([{ kind: 'scene', sectionId: 's', lines: [{ who: 'A', text: '1' }, { who: 'B', text: '2' }] }], 0)!;
-    expect(out).toHaveLength(2);
-    expect(out[1].kind === 'scene' && out[1].cont).toBe(true);
+  it('subtítulo fica com o primeiro bloco de conteúdo', () => {
+    const [first] = splitMdBlock('### Título\n\n- a\n- b')!;
+    expect(first.startsWith('### Título')).toBe(true);
   });
 });
