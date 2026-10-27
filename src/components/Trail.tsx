@@ -22,7 +22,7 @@ export function chapterStops(c: Chapter, data: StudyData): Stop[] {
   const stops: Stop[] = c.sections.flatMap((s) => {
     const label = s.title.replace(/^\d+\.\s*/, '');
     return [
-      { key: `${c.id}:${s.id}:ler`, to: `/aprender/${c.id}/${s.id}`, label: `Aprender: ${label}`, icon: 'grimorio' as IconName, done: read.has(s.id), kind: 'read' as const },
+      { key: `${c.id}:${s.id}:ler`, to: `/aprender/${c.id}/${s.id}`, label: `Aprender: ${label}`, icon: 'lista' as IconName, done: read.has(s.id), kind: 'read' as const },
       {
         key: `${c.id}:${s.id}:praticar`,
         to: `/pratica/${c.id}/${s.id}`,
