@@ -39,7 +39,7 @@ it('validador acusa revelação fora do alcance e número fora da reta', () => {
   expect(errs).toMatch(/9 fora da reta/);
 });
 
-it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcrição; checagem no fim', async () => {
+it('página: começa parada; legenda de uma linha é opcional; controles reiniciam o prazo; sem atividade ao terminar', async () => {
   vi.useFakeTimers({ shouldAdvanceTime: true });
   const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
   const l = narratedLessons.find((x) => x.id === 'narrada.mat.somar-inteiros')!;
@@ -52,7 +52,7 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
       </StudyProvider>
     </PrefsProvider>,
   );
-  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(l.scenes[0].beats[0].say);
+  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Imagine que sua conta tem saldo zero/);
   expect(screen.getByTestId('narrada-player')).toHaveClass('fixed', 'inset-0', 'h-[100dvh]', 'overflow-hidden');
   expect(screen.getByTestId('narrada-elementos-visuais')).toBeInTheDocument();
   expect(screen.getByText(/sem voz neste aparelho/)).toBeInTheDocument();
@@ -61,13 +61,26 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
   expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(l.scenes[0].beats[0].say);
   await user.click(screen.getByTestId('narrada-tocar'));
   const captionWords = screen.getByTestId('narrada-legenda-texto').querySelectorAll(':scope > span');
-  expect(captionWords.length).toBeGreaterThan(1);
+  expect(captionWords.length).toBeLessThanOrEqual(8);
   expect(captionWords[0]).toHaveClass('text-[#ffd38a]');
+  await user.click(screen.getByTestId('narrada-legendas-toggle'));
+  expect(screen.queryByTestId('narrada-legenda')).toBeNull();
+  await user.click(screen.getByTestId('narrada-legendas-toggle'));
+  expect(screen.getByTestId('narrada-legenda')).toBeInTheDocument();
   await act(async () => void vi.advanceTimersByTime(20000));
-  expect(screen.getByTestId('narrada-legenda')).not.toHaveTextContent(l.scenes[0].beats[0].say);
+  expect(screen.getByTestId('narrada-legenda')).not.toHaveTextContent(/Imagine que sua conta tem saldo zero/);
   expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-0');
   await user.click(screen.getByTestId('narrada-mostrar-controles'));
   expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-100');
+  // Durante o uso, cada interação reinicia a contagem; trocar cena não reinicia o prazo sozinha.
+  await user.click(screen.getByRole('button', { name: 'Ir para a cena 6: Subtrair é somar o oposto' }));
+  await act(async () => void vi.advanceTimersByTime(3000));
+  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-100');
+  await user.click(screen.getByRole('button', { name: 'Ir para a cena 7: Por que subtrair um negativo dá uma soma?' }));
+  await act(async () => void vi.advanceTimersByTime(3000));
+  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-100');
+  await act(async () => void vi.advanceTimersByTime(1000));
+  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-0');
   // Um toque na área do vídeo também esconde os controles; um novo toque revela-os.
   await user.click(screen.getByTestId('narrada-stage'));
   expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-0');
@@ -78,11 +91,12 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
   expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/cinco menos oito/);
   await user.click(screen.getByRole('button', { name: 'Transcrição' }));
   expect(screen.getByRole('region', { name: 'Transcrição' })).toHaveTextContent(/seis menos menos dois/i);
-  // Vai à última cena e deixa terminar: aparece a checagem opcional.
+  // Vai à última cena e deixa terminar: a aula acaba sem abrir outra atividade.
   await user.click(screen.getByRole('button', { name: /Ir para a cena 9/ }));
   await user.click(screen.getByTestId('narrada-tocar'));
   for (let i = 0; i < 20; i++) await act(async () => void vi.advanceTimersByTime(8000));
-  expect(screen.getByRole('region', { name: 'Checagem' })).toHaveTextContent('Quanto é −4 + 9?');
+  expect(screen.queryByRole('region', { name: 'Checagem' })).not.toBeInTheDocument();
+  expect(screen.getByTestId('narrada-tocar')).toHaveAttribute('aria-label', 'Assistir novamente');
   vi.useRealTimers();
 });
 
