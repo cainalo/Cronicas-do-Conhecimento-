@@ -87,3 +87,27 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 **Commits**: `fb6074c8` (player), `3fa07d71` (CSS), `4cf488de` (teste).  
 **Validação**: o workflow de CI/deploy precisa terminar no commit mais recente. Ainda não houve inspeção em aparelho físico nesta etapa; não marcar a correção visual como confirmada antes disso.  
 **Limite para outras sessões**: manter a autoria de animações e TTS em sua sessão responsável; esta mudança se limita à sangria da tela.
+
+
+### ChatGPT — correção definitiva da sangria lateral da aula narrada
+**Data:** 2026-10-27  
+**Estado:** correção de CSS e teste enviados; CI/deploy em execução; inspeção física pendente.  
+**Tarefa assumida:** corrigir novamente as duas faixas laterais claras sem alterar Narrated.tsx, voice.ts nem a composição audiovisual, que permanece sob revisão de outra sessão.
+
+**Causa encontrada**
+- A regra .ccv-film-scene tinha declarações contraditórias no mesmo bloco: width: 100vw e min-width: 100vw eram sobrescritas mais abaixo por width: 100% e min-width: 0; a margem usada para sangria continuava ativa. Isso anulava a largura integral esperada em algumas larguras de contêiner/WebView.
+
+**Alterações**
+- src/styles/index.css: a cena agora se ancora ao centro do contêiner, usa width/min-width calc(100vw + 2px), transform translateX(-50%), box-sizing: border-box e margem zero. O excesso de 1 px de cada lado evita filetes causados por arredondamento de pixels, sendo recortado pelo player que já usa overflow-hidden.
+- src/test/layout-guard.test.ts: o teste verifica a âncora central, o excesso de 2 px e a inexistência de declarações repetidas de width/min-width na regra principal.
+
+**Commits**
+- CSS: 575e9d07a6d51f61bbfc3c8885ad644d84ffecf8
+- Teste: 910ba5dadccb4690be5a080fcbd41811e19e15d5
+
+**Validação**
+- O workflow para o commit de CSS (run 40444055477) estava em andamento; o workflow do teste/commit mais recente (run 40444060705) estava pendente na última consulta.
+- Não declarar build, testes, publicação ou correção visual confirmados até consultar os resultados atuais. A conferência final no Galaxy A14 físico continua pendente.
+- Este lote não altera a animação por fala nem a configuração da voz neural para evitar conflito com a sessão proprietária do player.
+
+**Próxima ação:** confirmar resultados dos workflows, verificar se o Pages publicou a versão que contém o novo CSS e conferir o resultado no aparelho; se as faixas persistirem, coletar dimensões renderizadas reais da .ccv-film-scene e do WebView antes de novos ajustes.
