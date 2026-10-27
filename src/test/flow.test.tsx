@@ -134,6 +134,7 @@ it('simulado: monta, responde, entrega e mostra o boletim', async () => {
   await user.click(screen.getAllByRole('button', { pressed: false }).find((b) => b.textContent?.startsWith('A'))!);
   window.confirm = () => true;
   await user.click(screen.getByRole('button', { name: 'Entregar a prova' }));
+  await waitForRouteReady();
   expect(screen.getByText('Boletim do simulado')).toBeInTheDocument();
   const exams = Object.values(loadData('visitante').exams);
   expect(exams).toHaveLength(1);
