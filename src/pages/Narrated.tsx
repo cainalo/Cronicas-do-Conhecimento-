@@ -552,7 +552,7 @@ export function NarratedPlayer({
       data-embedded={embedded ? 'true' : undefined}
       data-testid="narrada-player"
       onClick={togglePlayerControls}
-      onPointerMove={revealControls}
+      onPointerMove={(event) => { if (event.pointerType === 'mouse' && (event.movementX !== 0 || event.movementY !== 0)) revealControls(); }}
       onKeyDown={revealControls}
     >
       <section className="absolute inset-0 overflow-hidden bg-bg" aria-label="Aula em vídeo narrado" data-testid="narrada-stage" onClick={(event) => { event.stopPropagation(); togglePlayerControls(); }}>
