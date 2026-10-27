@@ -111,3 +111,11 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 - Este lote não altera a animação por fala nem a configuração da voz neural para evitar conflito com a sessão proprietária do player.
 
 **Próxima ação:** confirmar resultados dos workflows, verificar se o Pages publicou a versão que contém o novo CSS e conferir o resultado no aparelho; se as faixas persistirem, coletar dimensões renderizadas reais da .ccv-film-scene e do WebView antes de novos ajustes.
+
+
+### ChatGPT — correção do teste legado do player
+**Data:** 2026-10-27  
+**Estado:** expectativa de teste atualizada; CI da nova revisão pendente.  
+- O workflow 40444131828 executou 2.511 testes com sucesso e falhou em 1 asserção antiga de src/test/narrated.test.tsx, que ainda exigia a combinação de classes `fixed inset-0 ... w-auto`, incompatível com o shell atual `fixed left-0 right-0 top-0 bottom-0 ... w-screen`. A falha não indicava erro de execução do player nem erro no CSS; era um teste desatualizado após mudanças de outro lote.
+- Atualizado src/test/narrated.test.tsx para validar ancoragem nos quatro lados, altura 100dvh, overflow-hidden, w-screen e estilos inline width/height de 100vw/100dvh. Commit: 7ba8c93dd5dea3ede27e76f724634702f8b225b2.
+- O próximo workflow precisa executar a suíte, layout E2E, build, APK e deploy sem ser cancelado por push concorrente antes de se considerar a publicação concluída. Não houve conferência manual no Galaxy A14.
