@@ -104,7 +104,7 @@ export const narradaSomarInteiros: NarratedLesson = {
       heading: 'Subtrair é somar o oposto',
       visual: {
         kind: 'equation',
-        lines: ['5 − 8', '= 5 + (−8)', '= 5 − 8', '= −3'],
+        lines: ['5 − 8', '= 5 + (−8)', '= −(8 − 5)', '= −3'],
         note: 'Troque a subtração pela adição do oposto do segundo número.',
       },
       beats: [
