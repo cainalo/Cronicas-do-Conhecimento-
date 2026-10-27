@@ -170,3 +170,10 @@ Após verificar o layout guard mais recente adicionado em paralelo, o player foi
 - `src/test/narrated.test.tsx` — commit [e306ee9](https://github.com/cainalo/Cronicas-do-Conhecimento-/commit/e306ee968de2f5bc1f29235c2a8fce37f3f3340a). O teste do timeout libera o ponteiro no objeto `window`, não apenas no controle, para cobrir o término fora do painel.
 
 A verificação pela API do GitHub confirma que os arquivos atualizados contêm o portal, o listener global de ponteiro e os testes. Nenhum build, Vitest ou teste de browser executou nesta sessão; a validação final deve ser feita quando a branch estiver disponível num ambiente Node com dependências e num Android físico/emulador.
+
+## Decisão de arquitetura — 27/10/2026
+- O protótipo `src/lib/narration-timeline.ts` não era consumido por `src/pages/Narrated.tsx`, `src/app/voice.ts` nem por outro módulo de produção. Ele existia ao lado de testes unitários, sem integrar os timestamps à interface.
+- Para evitar manter um módulo órfão e não alterar a sincronização percebida pelo usuário sem validação audiovisual, o protótipo e seu teste principal foram removidos da branch de manutenção central. Os commits/branches anteriores preservam o histórico da proposta; a ideia não é considerada implementada.
+- Reintroduzir o alinhamento só quando o player tiver uma fonte real de timestamps, texto canônico compartilhado entre síntese e cues e testes ponta a ponta com faixas representativas. Enquanto isso, a sincronização por estimativa permanece explicitamente como comportamento atual.
+- Essa remoção não altera o site: a implementação retirada não era importada pelo caminho de execução da aplicação. O gate de testes da branch precisa confirmar a ausência de dependências indiretas.
+
