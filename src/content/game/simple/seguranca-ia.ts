@@ -1,7 +1,7 @@
 import type { SimpleSection } from '@/content/types';
 
 /**
- * Porta de entrada "do zero" das seções dos grimórios de Segurança da Informação e de IA.
+ * Porta de entrada "do zero" das seções de Segurança da Informação e Inteligência Artificial.
  * Linguagem simples; o texto completo de cada seção continua disponível como aprofundamento.
  */
 export const simpleSegurancaIa: Record<string, SimpleSection> = {
@@ -342,7 +342,7 @@ export const simpleSegurancaIa: Record<string, SimpleSection> = {
       },
       {
         title: 'Confiança zero',
-        text: 'Antigamente, quem estava dentro da rede era visto como confiável, como em um castelo com muralha. O **Zero Trust**, ou confiança zero, muda isso: estar dentro da rede não dá confiança. Cada acesso é verificado. O lema é "nunca confie, sempre verifique". Ele é descrito pelo NIST, um órgão de padrões dos Estados Unidos.',
+        text: 'Antigamente, muitas redes tratavam os acessos internos como confiáveis por padrão. O **Zero Trust**, ou confiança zero, muda isso: estar dentro da rede não garante confiança. Cada acesso é verificado, de acordo com o princípio "nunca confie, sempre verifique". O NIST descreve essa abordagem em suas publicações de segurança.',
       },
       {
         title: 'Resumindo',
