@@ -69,8 +69,6 @@ export function NarratedPlayer({
   const currentMs = Math.min(totalMs, beforeMs + beatElapsed);
   const scene = l.scenes[pos.scene];
   const say = scene.beats[pos.beat].say;
-  const beatDuration = durations[beatIndex] ?? 2200;
-  const visualPhase = Math.min(3, Math.floor((beatElapsed / Math.max(1, beatDuration)) * 4));
 
   const stop = useCallback(() => {
     token.current += 1;
@@ -321,12 +319,8 @@ export function NarratedPlayer({
           className={`absolute inset-0 grid place-items-center transition-[padding] duration-300 ${controlsVisible ? 'px-4 pb-[14.5rem] pt-28 sm:px-10 sm:pb-[15rem] sm:pt-32' : 'px-4 pb-8 pt-8 sm:px-10'}`}
           data-testid="narrada-cena"
         >
-          <div className="relative flex h-full max-h-full w-full flex-col items-center justify-center gap-3" key={scene.id + ':' + pos.beat + ':' + visualPhase} data-testid="narrada-elementos-visuais">
-            {visualPhase === 1 || visualPhase === 3
-              ? <EditorialVideoCut scene={scene} reveal={revealOf(scene, pos.beat)} phase={visualPhase} say={say} />
-              : <div className="anim-tile-in flex h-full max-h-full w-full items-center justify-center" key={'plano-principal:' + scene.id + ':' + pos.beat + ':' + visualPhase}>
-                  <SceneView scene={scene} reveal={revealOf(scene, pos.beat)} />
-                </div>}
+          <div className="relative flex h-full max-h-full w-full items-center justify-center" data-testid="narrada-elementos-visuais">
+            <CinematicScene key={scene.id} scene={scene} reveal={revealOf(scene, pos.beat)} sceneIndex={pos.scene} beatIndex={pos.beat} />
           </div>
         </div>
       </section>
@@ -469,207 +463,182 @@ export function NarratedPlayer({
  * A cada quarto da fala entra um corte visual diferente, com movimento e cor chapada da identidade
  * editorial; não cria etiquetas a partir de palavras soltas da narração.
  */
-function EditorialVideoCut({ scene, reveal, phase, say }: { scene: Scene; reveal: number; phase: number; say: string }) {
-  const v = scene.visual;
-  const colors = [
-    { bg: 'bg-[#c8402a]', chip: 'bg-white text-[#c8402a]', line: 'bg-[#f0bf69]' },
-    { bg: 'bg-[#1f5c7a]', chip: 'bg-white text-[#1f5c7a]', line: 'bg-[#f0bf69]' },
-    { bg: 'bg-[#6e3b5c]', chip: 'bg-white text-[#6e3b5c]', line: 'bg-[#ffbb8c]' },
-    { bg: 'bg-[#a8365e]', chip: 'bg-white text-[#a8365e]', line: 'bg-[#f3d7ca]' },
-  ];
-  const palette = colors[phase % colors.length];
-  const chooseArt = (label: string): IllustrationName => {
-    const s = label.toLowerCase();
-    if (/dado|memória|memoria|arquivo|guardar|banco/.test(s)) return 'dados';
-    if (/rede|internet|servidor|roteador|protocolo|pacote/.test(s)) return 'rede';
-    if (/computador|processador|hardware|máquina|maquina|cpu|chip/.test(s)) return 'computador';
-    if (/nuvem|cloud|online/.test(s)) return 'nuvem';
-    if (/conta|soma|número|numero|reta|positivo|negativo|oposto/.test(s)) return 'degraus';
-    if (/tempo|ano|história|historia|data|origem/.test(s)) return 'calendario';
-    if (/cartão|cartao|teclado|entrada|saída|saida|interruptor/.test(s)) return 'teclado';
-    if (/lei|regra|direito|norma|controle/.test(s)) return 'balanca';
-    return 'livro';
-  };
+/**
+ * Direção de arte da aula: cenas compostas a partir dos dados didáticos existentes.
+ * O palco permanece montado durante a fala. Só o conteúdo da cena muda quando a narração
+ * avança para outra frase; não há alternância de componentes por porcentagem do relógio.
+ */
+type CinemaPalette = { background: string; accent: string; secondary: string; name: string };
+const CINEMA_PALETTES: CinemaPalette[] = [
+  { background: '#c8402a', accent: '#f0bf69', secondary: '#1b1a17', name: 'vermelhão editorial' },
+  { background: '#1f5c7a', accent: '#ffbb8c', secondary: '#111f2a', name: 'azul petróleo' },
+  { background: '#6e3b5c', accent: '#f0bf69', secondary: '#241521', name: 'ameixa' },
+  { background: '#a8365e', accent: '#f3d7ca', secondary: '#351723', name: 'framboesa' },
+  { background: '#9e6a14', accent: '#fff1c9', secondary: '#2c1e07', name: 'ocre' },
+];
 
-  let title = scene.heading;
-  let detail = say;
-  let art: IllustrationName = chooseArt(scene.heading + ' ' + say);
-  let kicker = 'IDEIA-CHAVE';
-  let equation: string | undefined;
-  let numberline: { from: number; to: number; state: NumberLineState } | undefined;
+function illustrationForText(value: string): IllustrationName {
+  const text = value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if (/dado|memoria|arquivo|armazen|guardar|banco|informacao/.test(text)) return 'dados';
+  if (/rede|internet|servidor|roteador|protocolo|pacote|conexao/.test(text)) return 'rede';
+  if (/computador|processador|hardware|maquina|cpu|chip/.test(text)) return 'computador';
+  if (/nuvem|cloud|online/.test(text)) return 'nuvem';
+  if (/conta|soma|numero|reta|positivo|negativo|oposto|subtrair/.test(text)) return 'degraus';
+  if (/tempo|ano|historia|data|origem|evolucao/.test(text)) return 'calendario';
+  if (/cartao|teclado|entrada|saida|interruptor/.test(text)) return 'teclado';
+  if (/lei|regra|direito|norma|controle/.test(text)) return 'balanca';
+  return 'livro';
+}
 
-  if (v.kind === 'title') {
-    title = v.title;
-    detail = v.subtitle || say;
-    art = v.art ?? chooseArt(v.title);
-    kicker = 'ABERTURA';
-  } else if (v.kind === 'cards') {
-    const item = v.cards[Math.min(v.cards.length - 1, Math.max(0, reveal - 1))] ?? v.cards[0];
-    if (item) { title = item.title; detail = item.text; art = chooseArt(item.title + ' ' + item.text); }
-    kicker = 'EXEMPLO VISUAL';
-  } else if (v.kind === 'timeline') {
-    const item = v.items[Math.min(v.items.length - 1, Math.max(0, reveal - 1))] ?? v.items[0];
-    if (item) { title = item.title; detail = item.text; kicker = item.year; art = chooseArt(item.title + ' ' + item.text); }
-  } else if (v.kind === 'equation') {
-    equation = v.lines[Math.min(v.lines.length - 1, Math.max(0, reveal - 1))] ?? v.lines[0];
-    title = equation;
-    detail = v.note || say;
-    art = chooseArt(equation + ' ' + detail);
-    kicker = 'PASSO DA CONTA';
-  } else if (v.kind === 'numberline') {
-    const state = v.states[Math.min(v.states.length - 1, Math.max(0, reveal))] ?? v.states[v.states.length - 1] ?? {};
-    numberline = { from: v.from, to: v.to, state };
+function CinematicScene({
+  scene, reveal, sceneIndex, beatIndex,
+}: { scene: Scene; reveal: number; sceneIndex: number; beatIndex: number }) {
+  const visual = scene.visual;
+  const palette = CINEMA_PALETTES[sceneIndex % CINEMA_PALETTES.length];
+  const activeIndex = (length: number) => Math.max(0, Math.min(length - 1, reveal - 1));
+  let headline = scene.heading;
+  let support = scene.beats[beatIndex]?.say ?? '';
+  let eyebrow = 'IDEIA EM FOCO';
+  let art: IllustrationName = illustrationForText(scene.heading + ' ' + support);
+
+  if (visual.kind === 'title') {
+    headline = visual.title;
+    support = visual.subtitle ?? support;
+    art = visual.art ?? illustrationForText(visual.title);
+    eyebrow = 'ABERTURA';
+  } else if (visual.kind === 'cards') {
+    const item = visual.cards[activeIndex(visual.cards.length)];
+    if (item) { headline = item.title; support = item.text; art = illustrationForText(item.title + ' ' + item.text); }
+    eyebrow = 'CONCEITO';
+  } else if (visual.kind === 'timeline') {
+    const item = visual.items[activeIndex(visual.items.length)];
+    if (item) { headline = item.title; support = item.text; art = illustrationForText(item.title + ' ' + item.text); eyebrow = item.year; }
+  } else if (visual.kind === 'equation') {
+    headline = visual.lines[activeIndex(visual.lines.length)] ?? visual.lines[0] ?? scene.heading;
+    support = visual.note ?? (scene.beats[beatIndex]?.say ?? '');
+    art = illustrationForText(headline + ' ' + support);
+    eyebrow = 'ETAPA DO RACIOCÍNIO';
+  } else if (visual.kind === 'numberline') {
+    const state = visual.states[Math.min(visual.states.length - 1, Math.max(0, reveal))] ?? visual.states[0] ?? {};
     const jump = state.jumps?.[0];
-    title = jump ? (jump.to > jump.from ? 'Movimento para a direita' : 'Movimento para a esquerda') : 'Localize o número';
-    detail = say;
+    headline = jump ? (jump.to > jump.from ? 'Avance para a direita' : 'Volte para a esquerda') : 'Encontre a posição';
+    eyebrow = 'RETA NUMÉRICA';
     art = 'degraus';
-    kicker = 'NA RETA NUMÉRICA';
   }
 
   return (
-    <div className={`editorial-cut-in relative flex min-h-0 w-full max-w-3xl flex-1 flex-col justify-center overflow-hidden rounded-[1.6rem] p-4 text-white shadow-2xl sm:rounded-[2rem] sm:p-8 ${palette.bg}`} data-testid="narrada-plano-de-apoio">
-      <div className="absolute -right-10 -top-12 h-48 w-48 rotate-12 rounded-[2rem] border-[16px] border-white/15" aria-hidden="true" />
-      <div className="absolute -bottom-12 -left-8 h-40 w-40 rounded-full border-[14px] border-white/15" aria-hidden="true" />
-      <div className="relative flex min-h-0 flex-1 flex-col justify-center">
-        <div className="flex items-center justify-between gap-3">
-          <span className={`inline-flex w-fit rounded-full px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.16em] ${palette.chip}`}>{kicker}</span>
-          <span className="h-1.5 w-12 rounded-full bg-white/35"><span className={`block h-full rounded-full ${palette.line}`} style={{ width: phase === 1 ? '38%' : '72%' }} /></span>
-        </div>
-        {numberline ? (
-          <div className="anim-tile-in mt-4 rounded-2xl bg-white p-2 text-[#1b1a17] sm:mt-6 sm:p-4">
-            <NumberLine from={numberline.from} to={numberline.to} state={numberline.state} />
-          </div>
-        ) : (
-          <div className="mt-4 flex min-h-0 items-center gap-3 sm:mt-6 sm:gap-6">
-            <div className="editorial-object-drift grid h-24 w-24 shrink-0 place-items-center rounded-2xl bg-white/15 p-2 sm:h-40 sm:w-40 sm:rounded-[1.8rem] sm:p-4">
-              <Illustration name={art} accent="#f0bf69" animate className="h-full w-full text-white" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h3 className="editorial-title-in font-display text-[clamp(1.5rem,5vh,3.3rem)] font-semibold leading-[1.04] tracking-tight">{title}</h3>
-              {equation && <p className="mt-3 font-mono text-xl font-black sm:text-3xl">{equation}</p>}
-            </div>
-          </div>
-        )}
-        <p className="anim-tile-in mt-4 max-w-2xl border-l-4 border-white/80 pl-3 text-base font-medium leading-relaxed sm:mt-6 sm:pl-5 sm:text-xl sm:leading-8">{detail}</p>
-        <div className="mt-5 flex items-center gap-2" aria-hidden="true">
-          <span className={`h-2 w-2 rounded-full ${palette.line}`} />
-          <span className="h-px flex-1 bg-white/25" />
-          <span className="font-mono text-[0.6rem] font-bold tracking-widest text-white/70">CRÔNICAS · VÍDEO AULA</span>
-        </div>
+    <article
+      className="ccv-scene"
+      style={{ '--ccv-background': palette.background, '--ccv-accent': palette.accent, '--ccv-secondary': palette.secondary } as React.CSSProperties}
+      aria-label={scene.heading}
+      data-testid="narrada-cena-cinematica"
+    >
+      <div className="ccv-scene__orbit ccv-scene__orbit--one" aria-hidden="true" />
+      <div className="ccv-scene__orbit ccv-scene__orbit--two" aria-hidden="true" />
+      <div className="ccv-scene__top">
+        <span>CRÔNICAS DO CONHECIMENTO</span>
+        <span className="ccv-scene__counter">{String(sceneIndex + 1).padStart(2, '0')} <i /> {String(sceneIndex + 1).padStart(2, '0')}</span>
       </div>
-    </div>
-  );
-}
 
-function SceneView({ scene, reveal }: { scene: Scene; reveal: number }) {
-  const v = scene.visual;
-  if (v.kind === 'title')
-    return (
-      <div className="flex w-full max-w-lg flex-col items-center text-center">
-        {v.art && <Illustration name={v.art} animate className="h-28 w-36 text-ink" />}
-        <h2 className="anim-tile-in mt-2 text-[1.9rem] leading-tight sm:text-[2.3rem]">{v.title}</h2>
-        {v.subtitle && reveal >= 2 && <p className="anim-tile-in mt-2 font-title text-lg italic text-muted">{v.subtitle}</p>}
-      </div>
-    );
-  if (v.kind === 'timeline')
-    return (
-      <ol className="relative w-full max-w-xl border-l-2 border-line pl-5">
-        {v.items.map((it, i) => (
-          <li
-            key={it.year + it.title}
-            className={`relative pb-3 transition-all duration-500 last:pb-0 ${i === reveal - 1 ? 'anim-tile-in' : ''} ${i < reveal ? 'translate-x-0 opacity-100' : 'translate-x-2 opacity-20'}`}
-          >
-            <span className={`absolute -left-[1.72rem] top-1.5 h-3 w-3 rounded-full border-2 ${i < reveal ? 'border-gold bg-gold' : 'border-line bg-bg'}`} aria-hidden="true" />
-            <p className="font-title text-sm tabular-nums text-gold">{it.year}</p>
-            <p className={`font-title leading-tight ${i === reveal - 1 ? 'text-lg' : 'text-base'}`}>{it.title}</p>
-            {i === reveal - 1 && <p className="anim-tile-in mt-0.5 text-sm text-muted">{it.text}</p>}
-          </li>
-        ))}
-      </ol>
-    );
-  if (v.kind === 'numberline') return <NumberLine from={v.from} to={v.to} state={v.states[reveal] ?? {}} />;
-  if (v.kind === 'cards')
-    return (
-      <div className={`grid w-full gap-3 ${v.cards.length > 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2'}`}>
-        {v.cards.map((c, i) => {
-          const subject = (c.title + ' ' + c.text).toLowerCase();
-          const art = /computador|processador|\\bcpu\\b|hardware|máquina/.test(subject)
-            ? 'computador'
-            : /rede|servidor|roteador|\\bip\\b/.test(subject)
-              ? 'rede'
-              : /dado|memória|arquivo|banco|guardar/.test(subject)
-                ? 'dados'
-                : /nuvem|internet/.test(subject)
-                  ? 'nuvem'
-                  : (['livro', 'teclado', 'computador', 'dados'] as const)[i % 4];
-          return (
-            <div
-              key={c.title}
-              className={`rounded-2xl border p-4 transition-all duration-500 sm:p-5 ${i === reveal - 1 ? 'anim-tile-in' : ''} ${['border-[#c8402a] bg-[#c8402a] text-white','border-[#1f5c7a] bg-[#1f5c7a] text-white','border-[#6e3b5c] bg-[#6e3b5c] text-white','border-[#a8365e] bg-[#a8365e] text-white'][i % 4]} ${i < reveal ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-25'} ${i === reveal - 1 ? 'scale-[1.02] shadow-lg ring-2 ring-[#c8402a]/35' : ''}`}
-            >
-              <div className="mb-2 flex items-center gap-2">
-                <Illustration name={art} animate className="h-10 w-12 shrink-0" />
-                <p className="font-title text-lg leading-tight">{c.title}</p>
+      <div className="ccv-scene__layout">
+        <div className="ccv-scene__copy">
+          <p className="ccv-scene__eyebrow"><span />{eyebrow}</p>
+          <h2 key={scene.id + ':' + beatIndex + ':' + headline} className="ccv-scene__headline ccv-scene__change">{headline}</h2>
+          <p key={scene.id + ':' + beatIndex + ':' + support} className="ccv-scene__support ccv-scene__change">{support}</p>
+          <div className="ccv-scene__soundline" aria-hidden="true">
+            <span className="ccv-scene__soundline-mark">▶</span>
+            <span className="ccv-scene__soundline-rule"><i /></span>
+            <span className="ccv-scene__soundline-label">AULA NARRADA</span>
+          </div>
+        </div>
+
+        <div className="ccv-scene__visual" key={scene.id + ':' + visual.kind} data-testid="narrada-cena-visual">
+          {visual.kind === 'title' && (
+            <div className="ccv-scene__hero-art">
+              <div className="ccv-scene__art-disc" aria-hidden="true"><span /><span /><span /></div>
+              <Illustration name={art} accent={palette.accent} animate className="ccv-scene__illustration ccv-scene__illustration--hero" label={visual.title} />
+              {visual.subtitle && <span className="ccv-scene__floating-label">{visual.subtitle}</span>}
+            </div>
+          )}
+
+          {visual.kind === 'cards' && (
+            <div className="ccv-sequence">
+              <div className="ccv-sequence__rail" aria-hidden="true" />
+              {visual.cards.map((item, index) => (
+                <div key={scene.id + ':step:' + index} className={'ccv-sequence__step ' + (index === activeIndex(visual.cards.length) ? 'is-active ccv-scene__change' : index < activeIndex(visual.cards.length) ? 'is-past' : '')}>
+                  <span className="ccv-sequence__number">{String(index + 1).padStart(2, '0')}</span>
+                  <span className="ccv-sequence__label">{item.title}</span>
+                </div>
+              ))}
+              <div className="ccv-sequence__focus">
+                <span className="ccv-sequence__focus-number">{String(activeIndex(visual.cards.length) + 1).padStart(2, '0')}</span>
+                <Illustration name={art} accent={palette.accent} animate className="ccv-scene__illustration" />
               </div>
-              <p className="text-sm leading-relaxed">{c.text}</p>
             </div>
-          );
-        })}
+          )}
+
+          {visual.kind === 'timeline' && (
+            <div className="ccv-timeline">
+              <div className="ccv-timeline__path" aria-hidden="true"><span style={{ width: (((activeIndex(visual.items.length) + 1) / visual.items.length) * 100) + '%' }} /></div>
+              {visual.items.map((item, index) => (
+                <div key={scene.id + ':event:' + index} className={'ccv-timeline__event ' + (index === activeIndex(visual.items.length) ? 'is-active ccv-scene__change' : index < activeIndex(visual.items.length) ? 'is-past' : '')}>
+                  <span className="ccv-timeline__dot">{index < activeIndex(visual.items.length) ? '✓' : String(index + 1).padStart(2, '0')}</span>
+                  <span className="ccv-timeline__year">{item.year}</span>
+                  <strong>{item.title}</strong>
+                  {index === activeIndex(visual.items.length) && <span className="ccv-timeline__current">AGORA</span>}
+                </div>
+              ))}
+              <div className="ccv-timeline__illustration"><Illustration name={art} accent={palette.accent} animate className="ccv-scene__illustration" /></div>
+            </div>
+          )}
+
+          {visual.kind === 'equation' && (
+            <div className="ccv-equation">
+              {visual.lines.map((line, index) => (
+                <div key={scene.id + ':equation:' + index} className={'ccv-equation__line ' + (index === activeIndex(visual.lines.length) ? 'is-active ccv-scene__change' : index < activeIndex(visual.lines.length) ? 'is-past' : '')}>
+                  <span className="ccv-equation__index">{index === 0 ? 'PASSO 1' : 'PASSO ' + (index + 1)}</span>
+                  <strong>{line}</strong>
+                  {index === activeIndex(visual.lines.length) && <span className="ccv-equation__underline" />}
+                </div>
+              ))}
+              {visual.note && <p className="ccv-equation__note">{visual.note}</p>}
+            </div>
+          )}
+
+          {visual.kind === 'numberline' && (
+            <CinematicNumberLine from={visual.from} to={visual.to} state={visual.states[Math.min(visual.states.length - 1, Math.max(0, reveal))] ?? visual.states[0] ?? {}} />
+          )}
+        </div>
       </div>
-    );
-  return (
-    <div className="w-full max-w-md">
-      <div className="space-y-1 text-center font-title text-[1.8rem] tabular-nums sm:text-[2.2rem]">
-        {v.lines.map((line, i) =>
-          i < reveal ? (
-            <p key={line} className={`anim-tile-in leading-tight ${i === reveal - 1 ? 'text-ink' : 'text-muted'}`}>
-              {line}
-              {i === reveal - 1 && <span className="ml-2 inline-block h-2 w-2 rounded-full bg-gold align-middle" aria-hidden="true" />}
-            </p>
-          ) : null,
-        )}
-      </div>
-      {v.note && reveal >= v.lines.length && <p className="anim-tile-in mx-auto mt-4 w-fit border-l-2 border-gold pl-3 text-sm">{v.note}</p>}
-    </div>
+      <div className="ccv-scene__footer"><span>{scene.heading}</span><span className="ccv-scene__footer-rule" /><span>APRENDER · ENTENDER · APLICAR</span></div>
+    </article>
   );
 }
 
-/** Reta numérica: marcas, números, pontos e saltos em arco que se desenham. */
-function NumberLine({ from, to, state }: { from: number; to: number; state: NumberLineState }) {
-  const W = 640;
-  const pad = 30;
-  const step = (W - 2 * pad) / (to - from);
-  const X = (n: number) => pad + (n - from) * step;
-  const y = 110;
-  const nums = Array.from({ length: to - from + 1 }, (_, i) => from + i);
+function CinematicNumberLine({ from, to, state }: { from: number; to: number; state: NumberLineState }) {
+  const width = 680;
+  const pad = 26;
+  const y = 122;
+  const x = (value: number) => pad + ((value - from) / (to - from)) * (width - pad * 2);
+  const points = state.points ?? [];
+  const jump = state.jumps?.[0];
+  const current = points.length ? points[points.length - 1] : 0;
   return (
-    <svg viewBox={`0 0 ${W} 160`} className="h-auto w-full max-w-2xl" role="img" aria-label="Reta numérica">
-      <line x1={pad - 14} y1={y} x2={W - pad + 14} y2={y} stroke="currentColor" strokeWidth="1.6" />
-      {nums.map((n) => (
-        <g key={n}>
-          <line x1={X(n)} y1={y - 6} x2={X(n)} y2={y + 6} stroke="currentColor" strokeWidth={n === 0 ? 2 : 1.2} />
-          <text x={X(n)} y={y + 26} textAnchor="middle" fontSize="15" fill="currentColor" fontFamily="var(--font-text)" className="tabular-nums">
-            {n < 0 ? `−${-n}` : n}
-          </text>
-        </g>
-      ))}
-      <g className="draw">
-        {(state.jumps ?? []).map((j) => {
-          const x1 = X(j.from);
-          const x2 = X(j.to);
-          const h = Math.min(70, 18 + Math.abs(x2 - x1) * 0.25);
-          const dir = x2 > x1 ? 1 : -1;
-          return (
-            <g key={`${j.from}-${j.to}`}>
-              <path pathLength={1} d={`M${x1} ${y - 8} Q${(x1 + x2) / 2} ${y - 8 - h * 2} ${x2} ${y - 8}`} fill="none" stroke="rgb(var(--gold))" strokeWidth="2.4" />
-              <path pathLength={1} d={`M${x2 - dir * 9} ${y - 18} L${x2} ${y - 8} L${x2 - dir * 1} ${y - 21}`} fill="none" stroke="rgb(var(--gold))" strokeWidth="2.4" />
-            </g>
-          );
-        })}
-      </g>
-      {(state.points ?? []).map((n, i) => (
-        <circle key={`${n}-${i}`} cx={X(n)} cy={y} r={7} fill={i === (state.points ?? []).length - 1 ? 'rgb(var(--gold))' : 'rgb(var(--ink))'} className="anim-tile-in" />
-      ))}
-    </svg>
+    <div className="ccv-numberline">
+      <svg viewBox={`0 0 ${width} 210`} role="img" aria-label="Reta numérica animada">
+        <path d={`M${pad} ${y} H${width - pad}`} className="ccv-numberline__base" />
+        {Array.from({ length: to - from + 1 }, (_, index) => from + index).map((number) => (
+          <g key={number}>
+            <path d={`M${x(number)} ${y - 14} V${y + 14}`} className="ccv-numberline__tick" />
+            <text x={x(number)} y={y + 43} textAnchor="middle" className="ccv-numberline__label">{number}</text>
+          </g>
+        ))}
+        {jump && <path d={`M${x(jump.from)} ${y - 12} Q${(x(jump.from) + x(jump.to)) / 2} 18 ${x(jump.to)} ${y - 12}`} className="ccv-numberline__jump" pathLength="1" />}
+        {points.map((number, index) => (
+          <circle key={number + ':' + index} cx={x(number)} cy={y} r={index === points.length - 1 ? 12 : 7} className={index === points.length - 1 ? 'ccv-numberline__point is-current' : 'ccv-numberline__point'} />
+        ))}
+      </svg>
+      <div className="ccv-numberline__readout"><span>POSIÇÃO</span><strong>{current > 0 ? '+' + current : String(current)}</strong>{jump && <em>{jump.from} → {jump.to}</em>}</div>
+    </div>
   );
 }
