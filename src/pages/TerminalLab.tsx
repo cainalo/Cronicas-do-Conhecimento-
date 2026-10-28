@@ -53,7 +53,7 @@ function TerminalLabRun({ lab }: { lab: TerminalLab }) {
   const fileBrowserEntries = [
     ...state.directories
       .filter((path) => path !== state.cwd && path.startsWith(directoryPrefix) && !path.slice(directoryPrefix.length).includes('/'))
-      .map((path) => ({ path, label: path.split('/').pop() + '/', kind: 'directory' as const, command: 'cd ' + path })),
+      .map((path) => ({ path, label: (path.split('/').pop() ?? path) + '/', kind: 'directory' as const, command: 'cd ' + path })),
     ...Object.keys(state.files)
       .filter((path) => path.startsWith(directoryPrefix) && !path.slice(directoryPrefix.length).includes('/'))
       .map((path) => ({ path, label: path.split('/').pop() ?? path, kind: 'file' as const, command: 'cat ' + (path.startsWith(directoryPrefix) ? path.slice(directoryPrefix.length) : path) })),
