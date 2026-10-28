@@ -6,6 +6,7 @@ import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
 import { saveData } from '@/lib/storage';
 import { emptyData } from '@/lib/model';
+import { createTerminalState, executeTerminalCommand, getTerminalLab, terminalLabProgress } from '@/lib/terminal-lab';
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
 import { getScenario } from '@/content';
 import { escritorio } from '@/content/world/escritorio';
@@ -117,11 +118,11 @@ describe('escritório: móveis, objetos de ambiente e direção', () => {
 });
 
 describe('tela do escritório (tela cheia)', () => {
-  const renderWorld = () =>
+  const renderWorld = (path = '/escritorio') =>
     render(
       <PrefsProvider>
         <StudyProvider>
-          <MemoryRouter initialEntries={['/escritorio']}>
+          <MemoryRouter initialEntries={[path]}>
             <AppRoutes />
           </MemoryRouter>
         </StudyProvider>
@@ -147,6 +148,77 @@ describe('tela do escritório (tela cheia)', () => {
     await user.click(screen.getByRole('button', { name: 'Ir até' }));
     await user.click(screen.getByRole('button', { name: /Marta, Suporte/ }));
     expect(await screen.findByTestId('mundo-conversa')).toHaveTextContent(/primeiro chamado/);
+  });
+
+  it('o terminal do mapa exige concluir o laboratório antes de liberar a evidência', async () => {
+    const user = userEvent.setup();
+    renderWorld();
+    await user.click(screen.getByRole('button', { name: 'Ir até' }));
+    await user.click(screen.getByRole('button', { name: /terminal na mesa da Marta/i }));
+    const panel = await screen.findByTestId('mundo-objeto');
+    expect(panel).toHaveTextContent(/conclua os comandos Linux no laboratório/i);
+    expect(panel).not.toHaveTextContent(/saída do top/i);
+    expect(screen.getByRole('link', { name: /iniciar laboratório de comandos/i })).toHaveAttribute(
+      'href',
+      '/laboratorio/processos?origem=escritorio',
+    );
+  });
+
+  it('registra a evidência depois que todos os passos do laboratório foram concluídos', async () => {
+    let labState = createTerminalState();
+    for (const command of ['pwd', 'ps aux', 'top', 'vmstat 2', 'kill 4127', 'free -h', 'df -h']) {
+      labState = executeTerminalCommand(labState, command).state;
+    }
+    const labDefinition = getTerminalLab('processos')!;
+    expect(terminalLabProgress(labDefinition, labState).done).toBe(true);
+    localStorage.setItem('cronicas:terminal-lab:v1:processos', JSON.stringify(labState));
+
+    const user = userEvent.setup();
+    renderWorld();
+    await user.click(screen.getByRole('button', { name: 'Ir até' }));
+    await user.click(screen.getByRole('button', { name: /terminal na mesa da Marta/i }));
+    const panel = await screen.findByTestId('mundo-objeto');
+    expect(await screen.findByText(/Anotado no caderno de investigação/i)).toBeInTheDocument();
+    expect(panel).toHaveTextContent(/Investigue antes de formular a hipótese/i);
+    expect(screen.getByRole('link', { name: /revisar laboratório de comandos/i })).toHaveAttribute(
+      'href',
+      '/laboratorio/processos?origem=escritorio',
+    );
+  });
+
+  it('bloqueia o diagnóstico quando a triagem ainda não foi registrada', () => {
+    renderWorld('/escritorio?fase=diagnostico');
+    expect(screen.getByTestId('mundo-etapa-bloqueada')).toHaveTextContent(/Conclua a etapa anterior primeiro/);
+    expect(screen.getByRole('link', { name: /Continuar: Triagem do chamado/ })).toHaveAttribute(
+      'href',
+      '/escritorio?fase=triagem',
+    );
+  });
+
+  it('a resolução exige diagnóstico registrado e libera a fase anterior corretamente', () => {
+    renderWorld('/escritorio?fase=resolucao');
+    expect(screen.getByTestId('mundo-etapa-bloqueada')).toHaveTextContent(/Conclua a etapa anterior primeiro/);
+    expect(screen.getByRole('link', { name: /Continuar: Diagnóstico com evidências/ })).toHaveAttribute(
+      'href',
+      '/escritorio?fase=diagnostico',
+    );
+  });
+
+  it('mostra os objetivos da fase depois de registrar a etapa anterior', () => {
+    saveData('visitante', {
+      ...emptyData(),
+      reading: { 'cap.infra.03': { chapterId: 'cap.infra.03', sectionsRead: ['processos'], updatedAt: '2026-10-28T10:00:00.000Z' } },
+      unitLog: { 'escritorio:triagem': '2026-10-28T10:00:00.000Z' },
+    });
+    renderWorld('/escritorio?fase=diagnostico');
+    expect(screen.getByTestId('mundo-fase')).toHaveTextContent(/Fase 2 de 3/);
+    expect(screen.getByTestId('mundo-fase')).toHaveTextContent(/Diagnóstico com evidências/);
+  });
+
+  it('oferece retorno ao mapa ao abrir o laboratório a partir do escritório', () => {
+    renderWorld('/laboratorio/processos?origem=escritorio');
+    expect(screen.getByTestId('return-office-map')).toHaveTextContent(/Voltar ao mapa do Escritório de TI/);
+    expect(screen.getByRole('link', { name: /Voltar ao mapa do Escritório de TI/ })).toHaveAttribute('href', '/escritorio');
   });
 
   it('teclado anda uma casa e vira o personagem; Esc fecha o painel', async () => {

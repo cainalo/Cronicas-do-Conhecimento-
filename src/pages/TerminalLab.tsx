@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { Icon, type IconName } from '@/components/Icon';
 import { PageHeader } from '@/components/Page';
@@ -93,6 +93,8 @@ function TerminalLabCatalog() {
 
 function TerminalWorkbench({ labId }: { labId: string }) {
   const lab = getTerminalLab(labId)!;
+  const [searchParams] = useSearchParams();
+  const returnToOffice = searchParams.get('origem') === 'escritorio';
   const { data, update } = useStudy();
   const [state, setState] = useState<TerminalState>(() => loadState(labId));
   const [command, setCommand] = useState('');
@@ -147,6 +149,15 @@ function TerminalWorkbench({ labId }: { labId: string }) {
           <span className="rounded-full bg-raised px-3 py-1 text-xs text-muted">{progress.completed}/{progress.total} objetivos</span>
         </div>
       </PageHeader>
+
+      {returnToOffice && (
+        <div className="rounded-2xl border border-teal/30 bg-surface p-3" data-testid="return-office-map">
+          <p className="text-sm text-muted">Quando concluir a prática, volte ao mapa para continuar a investigação com a Marta.</p>
+          <Link to="/escritorio" className="mt-2 inline-flex min-h-10 items-center gap-2 rounded-xl border border-line bg-raised px-3 py-2 text-sm font-semibold">
+            Voltar ao mapa do Escritório de TI <Icon name="voltar" size={16} />
+          </Link>
+        </div>
+      )}
 
       {lab.id === 'processos' && (
         <section className="rounded-2xl border border-teal/30 bg-surface p-4" data-testid="external-linux-environment">

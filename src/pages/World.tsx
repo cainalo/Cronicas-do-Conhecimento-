@@ -38,18 +38,35 @@ import { Icon } from '@/components/Icon';
 import { PageHeader } from '@/components/Page';
 import { ScenarioClosing } from './Scenarios';
 import { OfficeTerminal, type OfficeTerminalMode } from '@/components/OfficeTerminal';
-import { createTerminalState, type TerminalState } from '@/lib/terminal-lab';
+import { createTerminalState, getTerminalLab, terminalLabProgress, type TerminalState } from '@/lib/terminal-lab';
 
 /** Unidade de desenho de uma casa (o mapa é escalado para a tela). */
 const T = 48;
 const STEP_MS = 170;
 const KEY = (id: string) => `cronicas:mundo:${id}`;
 const OFFICE_TERMINAL_KEY = 'cronicas:office-terminal:v3';
-const OFFICE_PHASES: Record<string, { step: string; title: string; goal: string }> = {
+const PROCESS_LAB_KEY = 'cronicas:terminal-lab:v1:processos';
+type OfficePhaseId = 'triagem' | 'diagnostico' | 'resolucao';
+const OFFICE_PHASES: Record<OfficePhaseId, { step: string; title: string; goal: string }> = {
   triagem: { step: 'Fase 1 de 3', title: 'Triagem do chamado', goal: 'Vá à recepção e examine o chamado 2318 para confirmar o sintoma.' },
   diagnostico: { step: 'Fase 2 de 3', title: 'Diagnóstico com evidências', goal: 'Encontre o terminal da Marta e colete as evidências do processo e da memória.' },
   resolucao: { step: 'Fase 3 de 3', title: 'Resolução e fechamento', goal: 'Siga o diagnóstico, avalie as decisões e feche o chamado com base nas evidências.' },
 };
+function parseOfficePhase(value: string | null): OfficePhaseId | undefined {
+  return value === 'triagem' || value === 'diagnostico' || value === 'resolucao' ? value : undefined;
+}
+function processLabIsComplete(): boolean {
+  try {
+    const raw = localStorage.getItem(PROCESS_LAB_KEY);
+    if (!raw) return false;
+    const state = JSON.parse(raw) as TerminalState;
+    if (!state || typeof state.cwd !== 'string' || !state.files || !Array.isArray(state.commands) || !Array.isArray(state.transcript)) return false;
+    const lab = getTerminalLab('processos');
+    return !!lab && terminalLabProgress(lab, state).done;
+  } catch {
+    return false;
+  }
+}
 const reduced = () => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 function load(w: World, s: Scenario): WorldState | undefined {
@@ -73,7 +90,7 @@ export function WorldPage() {
   const s = useMemo(() => scenarioForOfficeMap(getScenario(escritorio.scenarioId)!), []);
   const { data } = useStudy();
   const [searchParams] = useSearchParams();
-  const phase = searchParams.get('fase') ?? undefined;
+  const phase = parseOfficePhase(searchParams.get('fase'));
   const unitKey = searchParams.get('u') ?? (phase ? 'escritorio:' + phase : undefined);
   const missing = s.requires.filter((r) => !data.reading[r.chapterId]?.sectionsRead.includes(r.sectionId));
   if (missing.length) {
@@ -92,6 +109,31 @@ export function WorldPage() {
               </li>
             ))}
           </ul>
+        </section>
+      </div>
+    );
+  }
+  const requiredPreviousPhase: OfficePhaseId | undefined =
+    phase === 'diagnostico' && !data.unitLog?.['escritorio:triagem']
+      ? 'triagem'
+      : phase === 'resolucao' && !data.unitLog?.['escritorio:diagnostico']
+        ? 'diagnostico'
+        : undefined;
+  if (requiredPreviousPhase) {
+    const previous = OFFICE_PHASES[requiredPreviousPhase];
+    return (
+      <div className="space-y-4">
+        <PageHeader area="explorar" title="Escritório de TI" subtitle="As etapas são liberadas em sequência, conforme as evidências do chamado." art="suporte" />
+        <section className="card p-5" data-testid="mundo-etapa-bloqueada">
+          <p className="kicker">{previous.step}</p>
+          <h2 className="mt-1 text-lg">Conclua a etapa anterior primeiro</h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            {previous.title}: {previous.goal} Esta etapa seguinte só será liberada quando a conclusão anterior estiver registrada na trilha.
+          </p>
+          <Link to={`/escritorio?fase=${requiredPreviousPhase}`} className="btn-primary mt-4 w-full">
+            Continuar: {previous.title} <Icon name="avancar" size={18} />
+          </Link>
+          <Link to="/trilha" className="btn-ghost mt-2 w-full">Voltar à trilha</Link>
         </section>
       </div>
     );
@@ -215,7 +257,9 @@ function WorldPlay({ w, s, phase, unitKey }: { w: World; s: Scenario; phase?: st
 
   // Abrir um objeto já disponível o anota no caderno (o exame acontece aqui, fora da renderização).
   useEffect(() => {
-    if (panel?.kind === 'object' && panel.id !== 'terminal' && panel.id !== 'console') setSt((cur) => examine(w, s, cur, panel.id).state);
+    if (panel?.kind !== 'object' || panel.id === 'console') return;
+    if (panel.id === 'terminal' && !processLabIsComplete()) return;
+    setSt((cur) => examine(w, s, cur, panel.id).state);
   }, [panel, w, s]);
 
   const near = adjacentInteractable(w, st.pos);
@@ -311,6 +355,23 @@ function WorldPlay({ w, s, phase, unitKey }: { w: World; s: Scenario; phase?: st
     if (!phaseInfo || !unitKey || !phaseDone || data.unitLog?.[unitKey]) return;
     update((current) => logUnit(current, unitKey));
   }, [phaseInfo, unitKey, phaseDone, data.unitLog, update]);
+
+  // Registra marcos alcançados mesmo quando o mapa é retomado sem a query-string da trilha.
+  useEffect(() => {
+    update((current) => {
+      let next = current;
+      if (!next.unitLog?.['escritorio:triagem'] && st.examined.includes('chamado')) {
+        next = logUnit(next, 'escritorio:triagem');
+      }
+      if (!next.unitLog?.['escritorio:diagnostico'] && ['ev.top', 'ev.vmstat'].every((e) => st.scenario.evidence.includes(e))) {
+        next = logUnit(next, 'escritorio:diagnostico');
+      }
+      if (!next.unitLog?.['escritorio:resolucao'] && st.closed) {
+        next = logUnit(next, 'escritorio:resolucao');
+      }
+      return next;
+    });
+  }, [st.examined, st.scenario.evidence, st.closed, update]);
 
   const restart = () => {
     setSt(fresh(w, s));
@@ -496,10 +557,27 @@ function InteractionPanel({
         <h2 className="mt-0.5 pr-8 text-lg first-letter:uppercase">{o.label}</h2>
         {!res.available ? (
           <p className="mt-2 text-sm">{o.locked}</p>
+        ) : terminalMode === 'diagnostico' && !processLabIsComplete() ? (
+          <div className="mt-3 space-y-3">
+            <p className="text-sm leading-relaxed">
+              A evidência deste terminal está vinculada ao exercício prático. Conclua os comandos Linux no laboratório para liberar os registros e continuar a investigação com a Marta.
+            </p>
+            <p className="rounded-lg border border-line bg-raised/60 p-3 text-xs leading-relaxed text-muted">
+              Observe processos, interprete memória e swap, encerre o processo fictício com segurança e verifique a recuperação. Apenas abrir o laboratório não conclui a tarefa.
+            </p>
+            <Link to="/laboratorio/processos?origem=escritorio" className="btn-primary w-full" data-testid="iniciar-laboratorio-escritorio">
+              Iniciar laboratório de comandos <Icon name="avancar" size={18} />
+            </Link>
+          </div>
         ) : terminalMode ? (
           <>
             <p className="mt-2 text-sm text-muted">{terminalMode === 'diagnostico' ? 'Investigue antes de formular a hipótese: rode os comandos e leia a saída do sistema.' : 'Execute a decisão tomada e confira se a memória se recuperou e o serviço continua ativo.'}</p>
             <OfficeTerminal mode={terminalMode} state={terminalState} setState={setTerminalState} evidenceRecorded={evidenceRecorded} expectedAction={expectedAction} onComplete={() => onTerminalComplete(o.id as 'terminal' | 'console')} />
+            {terminalMode === 'diagnostico' && (
+              <Link to="/laboratorio/processos?origem=escritorio" className="mt-3 inline-flex text-sm font-semibold text-teal underline underline-offset-4">
+                Revisar laboratório de comandos
+              </Link>
+            )}
             {evidenceRecorded && (
               <div className="mt-4 space-y-3 border-t border-line pt-3">
                 {evs.map((e) => <div key={e.id}><p className="text-sm font-semibold">{e.title}</p><pre className="mt-1 whitespace-pre-wrap break-words rounded-md border border-line bg-ink/5 p-3 font-mono text-[0.78rem] leading-relaxed">{e.body}</pre>{e.hint && <p className="mt-1 text-sm text-muted">{e.hint}</p>}</div>)}
