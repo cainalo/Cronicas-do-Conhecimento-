@@ -98,7 +98,7 @@ export function Layout() {
   return (
     <div className={standaloneNarration ? "h-dvh overflow-hidden" : "flex min-h-dvh flex-col"}>
       {!standaloneNarration && !activityRoute && <header className="app-bar app-bar-top safe-top sticky top-0 z-30">
-        <div className="relative mx-auto grid h-14 max-w-5xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-4 sm:px-6">
+        <div className="relative mx-auto grid h-14 max-w-5xl grid-cols-[minmax(2.5rem,1fr)_auto_minmax(2.5rem,1fr)] items-center gap-3 px-4 sm:px-6">
           <div className="flex min-w-0 items-center gap-2">
             {inner ? (
               <button
@@ -118,11 +118,11 @@ export function Layout() {
 
           <Link
             to="/"
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md focus-visible:outline-offset-4"
+            className="relative col-start-2 row-start-1 flex w-[7.4rem] min-w-0 items-center justify-center justify-self-center overflow-hidden rounded-md focus-visible:outline-offset-4 sm:w-36 lg:w-40"
             aria-label="Pórtico, início"
             data-testid="portico-wordmark-center"
           >
-            <PorticoWordmark width={210} className="h-auto w-[8.5rem] sm:w-36 lg:w-40" />
+            <PorticoWordmark width={200} className="block h-auto w-full max-w-full" />
           </Link>
 
           <div className="flex min-w-0 items-center justify-end gap-2 sm:gap-3">
@@ -135,7 +135,7 @@ export function Layout() {
               </span>
             )}
             {!immersive && (
-              <span className="lg:hidden">
+              <span className="hidden sm:inline-flex lg:hidden">
                 <ContinueButton variant="compact" />
               </span>
             )}
