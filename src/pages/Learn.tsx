@@ -129,7 +129,7 @@ function SimpleLearnPage() {
         </section>
 
         <section {...stageProps()} aria-label="Texto completo da matéria">
-          <p className="kicker">Leitura principal · texto de referência</p>
+          <p className="kicker">Etapa 1 de {stageTotal} · texto de referência</p>
           <h2 className="mt-1 text-xl leading-snug">{section.title.replace(/^\\d+\\.\\s*/, '')}</h2>
           <div className="prose-content learn-text reference-reading mt-3">
             <Markdown>{section.body}</Markdown>
