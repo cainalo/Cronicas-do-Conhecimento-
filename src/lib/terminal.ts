@@ -107,6 +107,7 @@ export const getTerminalLab = (id?: string): TerminalLab | undefined =>
 
 export interface TerminalEntry {
   id: number;
+  cwd: string;
   command: string;
   output: string;
   exitCode: 0 | 1;
@@ -333,7 +334,7 @@ function taskUpdates(
 
 export function runTerminalCommand(state: TerminalState, rawCommand: string): TerminalRun {
   const commandText = rawCommand.trim().slice(0, 500);
-  if (!commandText) return { state, entry: { id: state.nextEntryId, command: '', output: '', exitCode: 0 } };
+  if (!commandText) return { state, entry: { id: state.nextEntryId, cwd: state.cwd, command: '', output: '', exitCode: 0 } };
   const before = state;
   let cwd = state.cwd;
   let files = { ...state.files };
@@ -414,7 +415,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
       case 'cat':
       case 'head':
       case 'tail': {
-        const fileArg = args.find((a) => !a.startsWith('-'));
+        const fileArg = args.find((a, index) => !a.startsWith('-') && !(index > 0 && args[index - 1] === '-n'));
         if (!fileArg) fail(command + ': informe um arquivo');
         else {
           const path = resolvePath(cwd, fileArg);
@@ -686,7 +687,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
     }
   }
 
-  const entry: TerminalEntry = { id: state.nextEntryId, command: commandText, output, exitCode };
+  const entry: TerminalEntry = { id: state.nextEntryId, cwd: state.cwd, command: commandText, output, exitCode };
   let next: TerminalState = {
     ...state,
     cwd,
