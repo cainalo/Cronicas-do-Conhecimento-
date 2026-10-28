@@ -9,6 +9,7 @@ import { GEMINI_TTS_VOICES, getGeminiTtsApiKey, getGeminiTtsVoice, getVoice, sav
 import { soundscape } from '@/app/soundscape';
 import { beatIndexOf, narrationPositions, nextBeat, positionAtBeat, revealOf, transcript, type NarrationPos } from '@/lib/narration';
 import { Icon } from '@/components/Icon';
+import { SaberioWordmark } from '@/components/Logo';
 import { Illustration, type IllustrationName } from '@/components/Illustration';
 
 const RATES = [0.8, 1, 1.2] as const;
@@ -114,7 +115,7 @@ export function NarratedPlayer({
   // Visibilidade baseada na posição do filme, não no estado instantâneo da voz:
   // a síntese local faz pequenas pausas entre frases, mas o plano não deve piscar nelas.
   // Isso também mantém o mesmo quadro quando a pessoa pausa ou arrasta a linha do tempo.
-  const cutawayVisible = supportsCutaway && sceneProgress >= 0.34 && sceneProgress < 0.68;
+  const cutawayVisible = supportsCutaway && sceneProgress >= 0.34 && sceneProgress < 0.68 && l.id !== 'narrada.prim.historia';
 
   const stop = useCallback(() => {
     token.current += 1;
@@ -591,6 +592,8 @@ export function NarratedPlayer({
               sceneIndex={pos.scene}
               sceneCount={l.scenes.length}
               beatIndex={pos.beat}
+              globalStep={beatIndex}
+              isMindMapMode={l.id === 'narrada.prim.historia'}
               controlsVisible={controlsVisible}
               cutawayVisible={cutawayVisible}
               showCaptions={showCaptions}
@@ -816,8 +819,178 @@ function HistoricalPhoto({ photo, variant = 'scene' }: { photo: HistoricalVisual
  * O palco inteiro persiste entre falas; só o plano de apoio recebe uma transição suave
  * quando a fala/etapa muda. Não existem pulsos, flashes ou animações repetidas por render.
  */
+type SaberioMindMapNode = {
+  id: string;
+  revealAt: number;
+  date: string;
+  title: string;
+  summary: string;
+  art: IllustrationName;
+};
+type SaberioMindMapBranch = {
+  id: string;
+  title: string;
+  startAt: number;
+  color: string;
+  nodes: SaberioMindMapNode[];
+};
+
+/**
+ * First-lesson art direction: the map grows from the narrated beats. New facts are
+ * drawn into the board instead of replacing the entire picture; the current fact is highlighted.
+ */
+const SABERIO_MIND_MAP_BRANCHES: SaberioMindMapBranch[] = [
+  {
+    id: 'contar',
+    title: 'Ferramentas de cálculo',
+    startAt: 1,
+    color: '#c8402a',
+    nodes: [
+      { id: 'abaco', revealAt: 2, date: 'ORIGENS', title: 'Ábaco', summary: 'Contas móveis', art: 'abaco' },
+      { id: 'pascalina', revealAt: 4, date: '1642', title: 'Pascalina', summary: 'Rodas dentadas', art: 'engrenagem' },
+      { id: 'jacquard', revealAt: 6, date: '1801–04', title: 'Tear de Jacquard', summary: 'Instruções em cartões', art: 'dados' },
+    ],
+  },
+  {
+    id: 'programar',
+    title: 'Instruções e dados',
+    startAt: 8,
+    color: '#1f5c7a',
+    nodes: [
+      { id: 'babbage', revealAt: 8, date: '1830s', title: 'Máquina Analítica', summary: 'Cálculo + armazenamento', art: 'computador' },
+      { id: 'ada', revealAt: 10, date: '1843', title: 'Ada Lovelace', summary: 'Algoritmo publicado', art: 'alvo' },
+      { id: 'hollerith', revealAt: 12, date: '1890', title: 'Hollerith', summary: 'Tabulação de dados', art: 'dados' },
+    ],
+  },
+  {
+    id: 'eletronica',
+    title: 'Era eletrônica',
+    startAt: 14,
+    color: '#6e3b5c',
+    nodes: [
+      { id: 'eniac', revealAt: 14, date: '1945–46', title: 'ENIAC', summary: 'Válvulas eletrônicas', art: 'suporte' },
+      { id: 'programadoras', revealAt: 16, date: 'DÉCADA DE 1940', title: 'Programadoras', summary: 'A equipe também programava', art: 'rede' },
+      { id: 'transistor', revealAt: 17, date: '1947', title: 'Transistor', summary: 'Menor e mais eficiente', art: 'engrenagem' },
+      { id: 'integrado', revealAt: 18, date: '1958–59', title: 'Circuito integrado', summary: 'Vários componentes em um chip', art: 'dados' },
+    ],
+  },
+  {
+    id: 'compactar',
+    title: 'Computação no bolso',
+    startAt: 19,
+    color: '#9e6a14',
+    nodes: [
+      { id: 'microprocessador', revealAt: 19, date: '1971', title: 'Microprocessador', summary: 'A CPU em um chip', art: 'computador' },
+      { id: 'pc', revealAt: 20, date: '1977–81', title: 'PC pessoal', summary: 'Computadores em casa e no trabalho', art: 'computador' },
+      { id: 'smartphone', revealAt: 21, date: '2007+', title: 'Smartphone', summary: 'Computação no bolso', art: 'computador' },
+    ],
+  },
+  {
+    id: 'sistema',
+    title: 'O que todo computador faz',
+    startAt: 23,
+    color: '#346834',
+    nodes: [
+      { id: 'entrada', revealAt: 23, date: '01', title: 'Entrada', summary: 'Receber dados e instruções', art: 'rede' },
+      { id: 'processamento', revealAt: 24, date: '02', title: 'Processamento', summary: 'Executar instruções', art: 'engrenagem' },
+      { id: 'memoria', revealAt: 25, date: '03', title: 'Memória e armazenamento', summary: 'Guardar informação', art: 'dados' },
+      { id: 'saida', revealAt: 26, date: '04', title: 'Saída', summary: 'Apresentar resultados', art: 'progresso' },
+    ],
+  },
+];
+
+function SaberioMindMap({
+  globalStep, sceneIndex, sceneCount, currentTitle, currentDetail, dateOrStep,
+}: {
+  globalStep: number;
+  sceneIndex: number;
+  sceneCount: number;
+  currentTitle: string;
+  currentDetail: string;
+  dateOrStep: string;
+}) {
+  const allNodes = SABERIO_MIND_MAP_BRANCHES.flatMap((branch) => branch.nodes);
+  const revealedNodes = allNodes.filter((node) => node.revealAt <= globalStep);
+  const activeNode = [...revealedNodes].sort((a, b) => b.revealAt - a.revealAt)[0];
+  const rootActive = !activeNode;
+
+  return (
+    <section
+      className="ccv-mindmap-content"
+      aria-label="Mapa mental em construção: do ábaco ao celular"
+      data-testid="narrada-mapa-mental"
+      data-step={globalStep}
+      data-revealed-count={revealedNodes.length}
+    >
+      <div className={'ccv-mindmap-root' + (rootActive ? ' is-active' : '')} data-testid="narrada-mindmap-root">
+        <span className="ccv-mindmap-root__eyebrow">SABERIO · MAPA MENTAL</span>
+        <strong>Do ábaco ao celular</strong>
+        <span className="ccv-mindmap-root__subtitle">As ideias se conectam e transformam o jeito de calcular.</span>
+      </div>
+
+      <div className="ccv-mindmap-map">
+        <div className="ccv-mindmap-trunk" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="ccv-mindmap-grid">
+          {SABERIO_MIND_MAP_BRANCHES.filter((branch) => branch.startAt <= globalStep).map((branch, branchIndex) => (
+            <section
+              key={branch.id}
+              className="ccv-mindmap-branch"
+              style={{ '--mindmap-branch-color': branch.color } as CSSProperties}
+              data-testid={'narrada-mindmap-branch-' + branch.id}
+            >
+              <h3 className="ccv-mindmap-branch__title">
+                <span>{String(branchIndex + 1).padStart(2, '0')}</span>
+                {branch.title}
+              </h3>
+              <div className="ccv-mindmap-nodes">
+                {branch.nodes.filter((node) => node.revealAt <= globalStep).map((node) => {
+                  const active = activeNode?.id === node.id;
+                  return (
+                    <div
+                      key={node.id}
+                      className={'ccv-mindmap-node' + (active ? ' is-active' : ' is-past')}
+                      data-testid={'narrada-mindmap-node-' + node.id}
+                      data-active={active ? 'true' : 'false'}
+                    >
+                      <div className="ccv-mindmap-node__art">
+                        <Illustration name={node.art} accent={branch.color} animate className="ccv-mindmap-node__icon" />
+                      </div>
+                      <div className="ccv-mindmap-node__copy">
+                        <span className="ccv-mindmap-node__date">{node.date}</span>
+                        <strong>{node.title}</strong>
+                        <span className="ccv-mindmap-node__summary">{node.summary}</span>
+                      </div>
+                      <span className="ccv-mindmap-node__port" aria-hidden="true" />
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+
+      <div className="ccv-mindmap-current" data-testid="narrada-mindmap-current">
+        <span className="ccv-mindmap-current__pulse" aria-hidden="true" />
+        <div className="ccv-mindmap-current__copy">
+          <span>{dateOrStep || (globalStep === 0 ? 'COMEÇO DA HISTÓRIA' : 'IDEIA EM DESTAQUE')}</span>
+          <strong>{currentTitle}</strong>
+          {currentDetail && <small>{currentDetail}</small>}
+        </div>
+        <span className="ccv-mindmap-current__counter">{String(sceneIndex + 1).padStart(2, '0')} / {String(sceneCount).padStart(2, '0')}</span>
+      </div>
+    </section>
+  );
+}
+
 function CinematicScene({
-  scene, reveal, sceneIndex, sceneCount, beatIndex, controlsVisible, cutawayVisible,
+  scene, reveal, sceneIndex, sceneCount, beatIndex, globalStep, isMindMapMode, controlsVisible, cutawayVisible,
   showCaptions, captionText, captionWordIndex, highlightCaptionWord,
 }: {
   scene: Scene;
@@ -825,6 +998,8 @@ function CinematicScene({
   sceneIndex: number;
   sceneCount: number;
   beatIndex: number;
+  globalStep: number;
+  isMindMapMode: boolean;
   controlsVisible: boolean;
   cutawayVisible: boolean;
   showCaptions: boolean;
@@ -905,8 +1080,8 @@ function CinematicScene({
   // O plano de fundo, a paleta e as formas decorativas permanecem vivos e estáveis.
   return (
     <article
-      className={'ccv-film-scene ' + (controlsVisible ? 'has-controls' : 'controls-hidden')}
-      style={{ '--ccv-background': palette.background, '--ccv-accent': palette.accent, '--ccv-secondary': palette.secondary } as CSSProperties}
+      className={'ccv-film-scene ' + (controlsVisible ? 'has-controls' : 'controls-hidden') + (isMindMapMode ? ' is-mindmap-mode' : '')}
+      style={{ '--ccv-background': isMindMapMode ? '#f4f0e8' : palette.background, '--ccv-accent': isMindMapMode ? '#c8402a' : palette.accent, '--ccv-secondary': isMindMapMode ? '#1f5c7a' : palette.secondary } as CSSProperties}
       aria-label={scene.heading}
       data-testid="narrada-cena-cinematica"
       data-beat={beatIndex}
@@ -916,75 +1091,88 @@ function CinematicScene({
       <div className="ccv-film-orbit ccv-film-orbit--two" aria-hidden="true" />
 
       <header className="ccv-film-header">
-        <span className="ccv-film-brand">CRÔNICAS <i /> DO CONHECIMENTO</span>
+        <SaberioWordmark width={124} color={isMindMapMode ? "#1b1a17" : "#ffffff"} accent={isMindMapMode ? "#c8402a" : palette.accent} className="ccv-film-brand-wordmark" />
         <span className="ccv-film-counter">{String(sceneIndex + 1).padStart(2, '0')} / {String(sceneCount).padStart(2, '0')}</span>
       </header>
 
-      {showCaptions && <CaptionLine text={captionText} activeWordIndex={captionWordIndex} highlightWord={highlightCaptionWord} />}
-
       <div className={"ccv-film-content" + (cutawayVisible ? " has-cutaway" : "")}>
         <section className="ccv-film-copy">
-          <div className="ccv-film-copy__take" key={scene.id + ':' + beatIndex} data-testid="narrada-corte-texto">
-            <p className="ccv-film-eyebrow"><span />{eyebrow}</p>
-            {dateOrStep && <p className="ccv-film-date">{dateOrStep}</p>}
-            <h2 className="ccv-film-headline">{headline}</h2>
-            <div className="ccv-film-progress" aria-hidden="true">
-              {Array.from({ length: Math.max(1, progressCount) }, (_, index) => (
-                <span key={index} className={index < progressIndex ? 'is-past' : index === progressIndex ? 'is-current' : ''} />
-              ))}
+          {isMindMapMode ? (
+        <SaberioMindMap
+          globalStep={globalStep}
+          sceneIndex={sceneIndex}
+          sceneCount={sceneCount}
+          currentTitle={headline}
+          currentDetail={support}
+          dateOrStep={dateOrStep}
+        />
+      ) : (
+        <div className="ccv-film-copy__take" key={scene.id + ':' + beatIndex} data-testid="narrada-corte-texto">
+              <p className="ccv-film-eyebrow"><span />{eyebrow}</p>
+              {dateOrStep && <p className="ccv-film-date">{dateOrStep}</p>}
+              <h2 className="ccv-film-headline">{headline}</h2>
+              <div className="ccv-film-progress" aria-hidden="true">
+                {Array.from({ length: Math.max(1, progressCount) }, (_, index) => (
+                  <span key={index} className={index < progressIndex ? 'is-past' : index === progressIndex ? 'is-current' : ''} />
+                ))}
+              </div>
+              <p className="ccv-film-footnote">{scene.heading}</p>
             </div>
-            <p className="ccv-film-footnote">{scene.heading}</p>
-          </div>
-        </section>
-
-        <section className="ccv-film-art" aria-label="Demonstração visual" data-testid="narrada-cena-visual">
-          <div className="ccv-film-art__rings" aria-hidden="true"><span /><span /><span /></div>
-          <div key={scene.id + ':' + beatIndex} className="ccv-film-cut is-cue-cut" data-testid="narrada-corte-suave">
-            {numberline ? (
-              <div className="ccv-film-numberline">
-                <CinematicNumberLine from={numberline.from} to={numberline.to} state={numberline.state} />
-              </div>
-            ) : historicalPhoto ? (
-              <HistoricalPhoto photo={historicalPhoto} />
-            ) : visual.kind === 'title' ? (
-              <div className="ccv-film-hero">
-                <Illustration name={art} accent={palette.accent} animate={false} className="ccv-film-illustration" label={headline} />
-                <span className="ccv-film-symbol" aria-hidden="true">↗</span>
-              </div>
-            ) : visual.kind === 'equation' ? (
-              <div className="ccv-film-equation">
-                {progressIndex > 0 && <p className="ccv-film-equation__previous">{visual.lines[progressIndex - 1]}</p>}
-                <span className="ccv-film-equation__rule" aria-hidden="true" />
-                <strong>{equation}</strong>
-                {progressIndex < visual.lines.length - 1 && <span className="ccv-film-equation__next" aria-hidden="true">↓</span>}
-              </div>
-            ) : visual.kind === 'timeline' ? (
-              <div className="ccv-film-event">
-                <div className="ccv-film-event__date">{dateOrStep}</div>
-                <div className="ccv-film-event__illustration">
-                  <Illustration name={art} accent={palette.accent} animate={false} className="ccv-film-illustration" label={headline} />
-                </div>
-                <div className="ccv-film-event__caption">{headline}</div>
-              </div>
-            ) : (
-              <div className="ccv-film-concept">
-                <span className="ccv-film-concept__number">{dateOrStep}</span>
-                <Illustration name={art} accent={palette.accent} animate={false} className="ccv-film-illustration" label={headline} />
-                <span className="ccv-film-concept__baseline">{scene.heading}</span>
-              </div>
-            )}
-          </div>
-        </section>
-        {support && (
-          <section key={scene.id + ':' + beatIndex} className="ccv-film-details" aria-label="Explicação do conceito" data-testid="narrada-explicacao-cena">
-            <p className="ccv-film-support">{support}</p>
           </section>
-        )}
-      </div>
+  
+          <section className="ccv-film-art" aria-label="Demonstração visual" data-testid="narrada-cena-visual">
+            <div className="ccv-film-art__rings" aria-hidden="true"><span /><span /><span /></div>
+            <div key={scene.id + ':' + beatIndex} className="ccv-film-cut is-cue-cut" data-testid="narrada-corte-suave">
+              {numberline ? (
+                <div className="ccv-film-numberline">
+                  <CinematicNumberLine from={numberline.from} to={numberline.to} state={numberline.state} />
+                </div>
+              ) : historicalPhoto ? (
+                <HistoricalPhoto photo={historicalPhoto} />
+              ) : visual.kind === 'title' ? (
+                <div className="ccv-film-hero">
+                  <Illustration name={art} accent={palette.accent} animate={false} className="ccv-film-illustration" label={headline} />
+                  <span className="ccv-film-symbol" aria-hidden="true">↗</span>
+                </div>
+              ) : visual.kind === 'equation' ? (
+                <div className="ccv-film-equation">
+                  {progressIndex > 0 && <p className="ccv-film-equation__previous">{visual.lines[progressIndex - 1]}</p>}
+                  <span className="ccv-film-equation__rule" aria-hidden="true" />
+                  <strong>{equation}</strong>
+                  {progressIndex < visual.lines.length - 1 && <span className="ccv-film-equation__next" aria-hidden="true">↓</span>}
+                </div>
+              ) : visual.kind === 'timeline' ? (
+                <div className="ccv-film-event">
+                  <div className="ccv-film-event__date">{dateOrStep}</div>
+                  <div className="ccv-film-event__illustration">
+                    <Illustration name={art} accent={palette.accent} animate={false} className="ccv-film-illustration" label={headline} />
+                  </div>
+                  <div className="ccv-film-event__caption">{headline}</div>
+                </div>
+              ) : (
+                <div className="ccv-film-concept">
+                  <span className="ccv-film-concept__number">{dateOrStep}</span>
+                  <Illustration name={art} accent={palette.accent} animate={false} className="ccv-film-illustration" label={headline} />
+                  <span className="ccv-film-concept__baseline">{scene.heading}</span>
+                </div>
+              )}
+            </div>
+          </section>
+          {support && (
+            <section key={scene.id + ':' + beatIndex} className="ccv-film-details" aria-label="Explicação do conceito" data-testid="narrada-explicacao-cena">
+              <p className="ccv-film-support">{support}</p>
+            </section>
+          )}
+        </div>
+  
+        <footer className="ccv-film-footer">
+          <span>VER · ENTENDER · APLICAR</span>
+          <span className="ccv-film-footer__l
+      )}
 
-      <footer className="ccv-film-footer">
-        <span>VER · ENTENDER · APLICAR</span>
-        <span className="ccv-film-footer__line" />
+      {showCaptions && <CaptionLine text={captionText} activeWordIndex={captionWordIndex} highlightWord={highlightCaptionWord} />}
+
+ine" />
         <span>ÁUDIO E IMAGEM SINCRONIZADOS</span>
       </footer>
 

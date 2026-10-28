@@ -135,3 +135,10 @@ Antes: `npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escur
 ## Preferência visual mais recente — 27/10/2026
 
 O usuário aprovou a estrutura, a navegação e os novos cartões do dashboard, mas pediu para recuperar a identidade **Editorial** anterior. O padrão vigente deve ser papel quente (#F4F0E8), tinta escura (#1B1A17), Fraunces nos títulos e Inter Tight no corpo; cores chapadas fortes: vermelhão (#C8402A), petróleo (#1F5C7A), ameixa (#6E3B5C), ocre (#9E6A14) e verde (#346834). Manter o dashboard e seus recursos atuais, mas aplicar a paleta saturada aos novos cartões de resumo, plano e evolução; não reintroduzir a estética azul-acinzentada/Aurora nem páginas antigas removidas.
+
+
+## Direção de marca e audiovisual — 28/10/2026
+
+Nome de trabalho escolhido: **Saberio** — aprender conectando ideias. Wordmark SVG próprio (“SABERIO”) e símbolo separado: C aberto em azul-petróleo atravessado por uma ponte vermelha. A identidade editorial anterior está restabelecida. A pesquisa exploratória de nomes não substitui verificação formal de marca no INPI e domínio.
+
+A aula `narrada.prim.historia` passa a usar um mapa mental dedicado que acumula, ao longo dos beats, os marcos do ábaco, Pascalina, Jacquard, Máquina Analítica, Ada, Hollerith, ENIAC, transistor, circuito integrado, microprocessador, PC e smartphone. As falas originais foram preservadas; o novo mapa usa `beatIndex` para revelar e destacar os conceitos em sincronia. A legenda deixa a posição absoluta e passa a ocupar uma faixa real após a composição visual. Validar especialmente a legibilidade do mapa no Galaxy A14 e a sincronização com voz neural real.

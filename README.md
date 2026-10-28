@@ -1,6 +1,6 @@
-# Crônicas do Conhecimento
+# Saberio
 
-Plataforma de estudos gamificada para concursos públicos, com foco inicial no concurso **TCE-GO 2026 — Técnico de Controle Externo, Tecnologia da Informação (FCC)**. A experiência combina uma trilha guiada, microaulas, atividades interativas, aulas narradas, revisão espaçada e simulados. A identidade visual é moderna, com cartões visuais e leitura contínua — sem narrativa medieval ou formato de livro físico.
+Plataforma de estudos gamificada **Saberio**, com foco inicial no concurso **TCE-GO 2026 — Técnico de Controle Externo, Tecnologia da Informação (FCC)**. A experiência combina uma trilha guiada, microaulas, atividades interativas, aulas narradas, revisão espaçada e simulados. A identidade visual é moderna, com cartões visuais e leitura contínua — sem narrativa medieval ou formato de livro físico.
 
 ## Recursos atuais
 - Trilha guiada com continuidade, progresso por trechos e atividades práticas.
@@ -34,3 +34,7 @@ A hospedagem estática deve ter fallback de SPA para `index.html`. Para links de
 
 ## Arquitetura e colaboração
 Leia `CLAUDE.md`, `docs/ARCHITECTURE.md`, `docs/TESTING.md` e `docs/SESSION_HANDOFF.md`. As sessões registram decisões e trabalho compartilhado em `src/app/SESSION_COORDINATION.md`.
+
+
+## Marca Saberio
+Saberio é a nova identidade do produto. O símbolo mantém um C aberto com uma ponte vermelha — a conexão que permite atravessar da dúvida ao conhecimento. O wordmark é desenhado com caminhos SVG próprios e não depende de uma fonte tipográfica. O nome é uma proposta de produto; antes de uso comercial definitivo, confirme a disponibilidade jurídica e de domínio.

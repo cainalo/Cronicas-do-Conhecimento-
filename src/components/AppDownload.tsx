@@ -9,7 +9,7 @@ interface Version {
 }
 
 const base = import.meta.env.BASE_URL;
-export const APK_URL = `${base}download/cronicas-do-conhecimento.apk`;
+export const APK_URL = `${base}download/saberio.apk`;
 
 /** Cartão de download do app Android. Não aparece dentro do próprio app. */
 export function AppDownload({ compact = false }: { compact?: boolean }) {

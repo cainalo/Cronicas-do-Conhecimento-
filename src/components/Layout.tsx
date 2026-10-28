@@ -5,7 +5,7 @@ import { logUnit } from '@/lib/pace';
 import { AREAS, areaOf, isAreaHome, type AreaKey } from '@/app/areas';
 import { useCheckpoint } from '@/app/useCheckpoint';
 import { Icon } from '@/components/Icon';
-import { Logo } from '@/components/Logo';
+import { LogoMark, SaberioWordmark } from '@/components/Logo';
 
 // Reformulação (Fase 1): cinco áreas, iguais no celular (menu de baixo) e no computador (topo).
 const TABS: AreaKey[] = ['torre', 'grimorios', 'explorar', 'treino', 'reino'];
@@ -98,28 +98,34 @@ export function Layout() {
   return (
     <div className={standaloneNarration ? "h-dvh overflow-hidden" : "flex min-h-dvh flex-col"}>
       {!standaloneNarration && !activityRoute && <header className="app-bar app-bar-top safe-top sticky top-0 z-30">
-        <div className="relative mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
-          <div className="flex min-w-[2.5rem] items-center gap-1">
+        <div className="relative mx-auto grid h-14 max-w-5xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-4 sm:px-6">
+          <div className="flex min-w-0 items-center gap-2">
             {inner ? (
               <button
                 type="button"
                 onClick={() => (window.history.length > 1 ? navigate(-1) : navigate(AREAS[areaOf(pathname)].to))}
-                className="-ml-2 grid h-10 w-10 place-items-center rounded-full text-ink transition hover:bg-ink/5"
+                className="-ml-2 grid h-10 w-10 shrink-0 place-items-center rounded-full text-ink transition hover:bg-ink/5"
                 aria-label="Voltar"
               >
                 <Icon name="voltar" size={22} />
               </button>
             ) : (
-              <Logo />
+              <Link to="/" className="-ml-2 grid h-10 w-10 shrink-0 place-items-center rounded-full transition hover:bg-ink/5" aria-label="Saberio, início">
+                <LogoMark size={29} />
+              </Link>
             )}
-            <nav aria-label="Navegação principal" className="ml-6 hidden items-center lg:flex">
-              {TABS.map((t) => (
-                <Tab key={t} area={t} variant="top" />
-              ))}
-            </nav>
           </div>
 
-          <div className="flex items-center gap-3">
+          <Link
+            to="/"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md focus-visible:outline-offset-4"
+            aria-label="Saberio, início"
+            data-testid="saberio-wordmark-center"
+          >
+            <SaberioWordmark width={220} className="h-auto w-[8.5rem] sm:w-36 lg:w-40" />
+          </Link>
+
+          <div className="flex min-w-0 items-center justify-end gap-2 sm:gap-3">
             <span className="hidden sm:inline-flex">
               <SyncBadge />
             </span>
@@ -137,14 +143,18 @@ export function Layout() {
               to="/conta"
               aria-label="Conta e configurações"
               title="Conta e configurações"
-              className={`relative grid h-10 w-10 place-items-center rounded-full border text-ink transition hover:border-ink ${onAccount ? 'border-ink' : 'border-ink/20'}`}
+              className={`relative grid h-10 w-10 shrink-0 place-items-center rounded-full border text-ink transition hover:border-ink ${onAccount ? 'border-ink' : 'border-ink/20'}`}
             >
               <Icon name="pessoa" size={19} />
             </Link>
           </div>
         </div>
+        <nav aria-label="Navegação principal" className="mx-auto hidden h-10 max-w-5xl items-center justify-center gap-1 border-t border-ink/10 px-4 lg:flex">
+          {TABS.map((t) => (
+            <Tab key={t} area={t} variant="top" />
+          ))}
+        </nav>
       </header>}
-
       <main className={standaloneNarration ? 'h-dvh min-h-0 w-full overflow-hidden p-0' : `mx-auto w-full flex-1 px-4 sm:px-6 ${/^\/(capitulo|aprender)\//.test(pathname) ? 'max-w-3xl lg:max-w-6xl' : 'max-w-3xl'} ${immersive ? 'pb-3 pt-4' : 'pb-32 pt-5 lg:pb-12'}`}>
         <div key={pathname} className={standaloneNarration ? 'h-full min-h-0 w-full' : 'page-enter'}>
           <Outlet />

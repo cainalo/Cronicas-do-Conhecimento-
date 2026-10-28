@@ -152,6 +152,17 @@ it('sequência única: a aula narrada abre automaticamente em tela inteira e seg
   expect(screen.getByTestId('narrada-seek')).toBeInTheDocument();
   expect(screen.queryByTestId('midia-narrada')).toBeNull();
   expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Pegue o celular que está na sua/);
+  const mindMap = screen.getByTestId('narrada-mapa-mental');
+  const filmScene = screen.getByTestId('narrada-cena-cinematica');
+  const caption = screen.getByTestId('narrada-legenda');
+  expect(mindMap).toHaveAttribute('data-step', '0');
+  expect(screen.queryByTestId('narrada-mindmap-node-abaco')).toBeNull();
+  expect(caption.parentElement).toBe(filmScene);
+  expect(Array.from(filmScene.children).indexOf(caption)).toBeGreaterThan(Array.from(filmScene.children).indexOf(mindMap));
+  await user.click(screen.getByRole('button', { name: 'Avançar uma fala' }));
+  await user.click(screen.getByRole('button', { name: 'Avançar uma fala' }));
+  expect(screen.getByTestId('narrada-mapa-mental')).toHaveAttribute('data-step', '2');
+  expect(screen.getByTestId('narrada-mindmap-node-abaco')).toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: 'Ir para a prática' }));
   expect(screen.queryByRole('dialog', { name: /Aula narrada/ })).toBeNull();
   expect(screen.getByText(/Organize a linha do tempo/)).toBeInTheDocument();

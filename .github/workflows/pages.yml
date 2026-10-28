@@ -35,6 +35,11 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Gerar ícones Saberio para Android e Web
+        run: |
+          mkdir -p "$RUNNER_TEMP/saberio-assets"
+          cp public/icon.svg "$RUNNER_TEMP/saberio-assets/icon.svg"
+          npx capacitor-assets generate --assetPath "$RUNNER_TEMP/saberio-assets" --android --pwa --iconBackgroundColor "#f4f0e8" --iconBackgroundColorDark "#151412" --splashBackgroundColor "#f4f0e8" --splashBackgroundColorDark "#151412"
       - run: npm test
 
       # ---------- App Android (Capacitor) ----------
@@ -105,7 +110,7 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon
-      - run: cp android/app/build/outputs/apk/release/app-release.apk "$RUNNER_TEMP/cronicas-do-conhecimento.apk"
+      - run: cp android/app/build/outputs/apk/release/app-release.apk "$RUNNER_TEMP/saberio.apk"
 
       # ---------- Site (GitHub Pages) ----------
       - run: npm run build
@@ -116,9 +121,10 @@ jobs:
       - name: Incluir o APK no site
         run: |
           mkdir -p dist/download
-          cp "$RUNNER_TEMP/cronicas-do-conhecimento.apk" dist/download/
-          SIZE=$(stat -c%s dist/download/cronicas-do-conhecimento.apk)
-          SHA=$(sha256sum dist/download/cronicas-do-conhecimento.apk | cut -d' ' -f1)
+          cp "$RUNNER_TEMP/saberio.apk" dist/download/saberio.apk
+          cp "$RUNNER_TEMP/saberio.apk" dist/download/cronicas-do-conhecimento.apk
+          SIZE=$(stat -c%s dist/download/saberio.apk)
+          SHA=$(sha256sum dist/download/saberio.apk | cut -d' ' -f1)
           SIGNING=$([ -n "${ANDROID_KEYSTORE_PATH:-}" ] && echo release || echo debug)
           printf '{"versionName":"%s","versionCode":%s,"size":%s,"sha256":"%s","signing":"%s","builtAt":"%s","commit":"%s"}\n' \
             "$APP_VERSION_NAME" "$APP_VERSION_CODE" "$SIZE" "$SHA" "$SIGNING" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "${GITHUB_SHA::7}" > dist/download/version.json

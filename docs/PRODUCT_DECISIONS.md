@@ -82,3 +82,13 @@ Implementação nesta rodada: `src/pages/Narrated.tsx`; testes propostos em `src
 - Restaurar o padrão editorial anterior: papel quente (#F4F0E8), tinta escura (#1B1A17), Fraunces nos títulos e Inter Tight no texto, com vermelhão (#C8402A), azul-petróleo (#1F5C7A), ameixa (#6E3B5C), ocre (#9E6A14) e verde (#346834).
 - Preservar a estrutura atual do dashboard e os cards de evolução, resumo diário e plano. Os novos cartões de dados/ações na página inicial usam cores editoriais chapadas e fortes, no mesmo padrão visual dos cartões de atalho em Explorar.
 - Não restaurar páginas ou ornamentos removidos; esta alteração é somente de identidade visual, tipografia e tratamento cromático dos novos cartões.
+
+
+## 28/10/2026 — nova marca e mapa mental animado
+
+- Nome de trabalho escolhido: **Saberio**. Direção: aprender conectando ideias; símbolo C aberto atravessado por uma pequena ponte vermelha; paleta editorial em papel quente, azul-petróleo, vermelhão, ameixa e ocre.
+- O símbolo é um SVG vetorial distinto do wordmark. O wordmark “SABERIO” é desenhado por caminhos SVG próprios, não é apenas texto numa fonte.
+- A escolha de nome é criativa e provisória até uma pesquisa formal de marcas no INPI, nomes de domínio e classes de uso. Busca na web por si só não confirma disponibilidade jurídica.
+- Primeira aula com direção de arte dedicada: “Do ábaco ao celular”. O mapa visual acrescenta nós no índice da fala: ábaco, Pascalina, tear de Jacquard, Máquina Analítica, Ada Lovelace, Hollerith, ENIAC, programadoras, transistor, circuito integrado, microprocessador, PC, smartphone e funções fundamentais do computador.
+- A legenda foi movida para o fluxo normal do palco, depois da área visual, com altura reservada; deixa de sobrepor a cena. O botão CC permanece opcional.
+- Os ícones Android/PWA são regenerados no pipeline a partir do SVG do símbolo; a versão curta do APK fica disponível em `download/saberio.apk` e o caminho antigo permanece como alias de compatibilidade.

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-labelledby="title">
+  <title id="title">Símbolo Saberio — C com ponte</title>
+  <path d="M31 10C25 5 17 5 11 10 4 16 4 30 11 36 17 41 25 41 31 36" fill="none" stroke="#1f5c7a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M30 19Q36 13.8 42 19M30 20.5H42" fill="none" stroke="#c8402a" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32.5 20.5V24M39.5 20.5V24" fill="none" stroke="#c8402a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
