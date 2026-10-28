@@ -164,11 +164,14 @@ describe('tela do escritório (tela cheia)', () => {
     );
   });
 
-  it('a URL de uma fase do jogo mostra seu objetivo no mapa sem pular etapas', () => {
+  it('a URL de uma fase do jogo mostra seu objetivo e permite voltar à trilha', async () => {
+    const user = userEvent.setup();
     renderWorld('/escritorio?fase=diagnostico');
     expect(screen.getByTestId('mundo-etapa-trilha')).toHaveTextContent(/Etapa 2 de 3/);
     expect(screen.getByTestId('mundo-etapa-trilha')).toHaveTextContent(/Identificar a causa/);
     expect(screen.getByTestId('mundo-objetivo')).toHaveTextContent(/Marta/);
+    await user.click(screen.getByRole('button', { name: 'Voltar à trilha' }));
+    expect(await screen.findByTestId('continuar-trilha')).toBeInTheDocument();
   });
 
   it('teclado anda uma casa e vira o personagem; Esc fecha o painel', async () => {
