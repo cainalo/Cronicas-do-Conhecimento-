@@ -106,25 +106,25 @@ export interface PaletteSeed {
 }
 
 const PAPEL = {
-  light: { bg: '#f4f0e8', surface: '#fbf9f4', raised: '#ece6da', line: '#d9d1c2', ink: '#1b1a17', muted: '#5f5a50' },
-  dark: { bg: '#151412', surface: '#1e1c19', raised: '#2a2723', line: '#3a3631', ink: '#efeae0', muted: '#aba395' },
+  light: { bg: '#f7efdf', surface: '#fff9ef', raised: '#efe2cd', line: '#d9c9af', ink: '#0f4c5c', muted: '#52646a' },
+  dark: { bg: '#10282e', surface: '#143840', raised: '#1d4650', line: '#315760', ink: '#f7efdf', muted: '#b6c4c3' },
 };
 
 export const PALETTES: PaletteSeed[] = [
   {
     id: 'editorial',
-    name: 'Editorial',
-    hue: 40,
+    name: 'Pórtico',
+    hue: 43,
     primary: '#c8402a',
-    secondary: '#6e3b5c',
-    teal: '#1f5c7a',
-    pink: '#a8365e',
-    accent: '#9e6a14',
-    sun: '#c4921e',
-    ok: '#346834',
-    bad: '#b02822',
+    secondary: '#6b3a6e',
+    teal: '#0f4c5c',
+    pink: '#6b3a6e',
+    accent: '#d4a017',
+    sun: '#d4a017',
+    ok: '#556b2f',
+    bad: '#ae2f24',
     neutrals: PAPEL,
-    areas: { areaHoje: '#c8402a', areaTrilha: '#1f5c7a', areaExplorar: '#6e3b5c', areaRevisar: '#9e6a14', areaProgresso: '#346834', areaConta: '#3a3631' },
+    areas: { areaHoje: '#c8402a', areaTrilha: '#0f4c5c', areaExplorar: '#6b3a6e', areaRevisar: '#d4a017', areaProgresso: '#556b2f', areaConta: '#25474d' },
   },
   {
     id: 'jornal',

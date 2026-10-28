@@ -1,6 +1,6 @@
-# Saberio
+# Pórtico
 
-Plataforma de estudos gamificada **Saberio**, com foco inicial no concurso **TCE-GO 2026 — Técnico de Controle Externo, Tecnologia da Informação (FCC)**. A experiência combina uma trilha guiada, microaulas, atividades interativas, aulas narradas, revisão espaçada e simulados. A identidade visual é moderna, com cartões visuais e leitura contínua — sem narrativa medieval ou formato de livro físico.
+Plataforma de estudos gamificada **Pórtico**, com foco inicial no concurso **TCE-GO 2026 — Técnico de Controle Externo, Tecnologia da Informação (FCC)**. A experiência combina uma trilha guiada, microaulas, atividades interativas, aulas narradas, revisão espaçada e simulados. A identidade visual é moderna, com cartões visuais e leitura contínua — sem narrativa medieval ou formato de livro físico.
 
 ## Recursos atuais
 - Trilha guiada com continuidade, progresso por trechos e atividades práticas.
@@ -36,5 +36,5 @@ A hospedagem estática deve ter fallback de SPA para `index.html`. Para links de
 Leia `CLAUDE.md`, `docs/ARCHITECTURE.md`, `docs/TESTING.md` e `docs/SESSION_HANDOFF.md`. As sessões registram decisões e trabalho compartilhado em `src/app/SESSION_COORDINATION.md`.
 
 
-## Marca Saberio
-Saberio é a nova identidade do produto. O símbolo mantém um C aberto com uma ponte vermelha — a conexão que permite atravessar da dúvida ao conhecimento. O wordmark é desenhado com caminhos SVG próprios e não depende de uma fonte tipográfica. O nome é uma proposta de produto; antes de uso comercial definitivo, confirme a disponibilidade jurídica e de domínio.
+## Identidade Pórtico
+Pórtico é a identidade do produto. O wordmark é desenhado em caminhos SVG próprios e o símbolo mostra um portal em azul-petróleo, com degraus terracota e uma estrela ocre. A paleta aprovada também inclui ameixa, verde-oliva e papel quente. O nome e a marca ainda devem passar por verificação formal de disponibilidade no INPI e de domínio antes de uso comercial definitivo.

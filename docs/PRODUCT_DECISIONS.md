@@ -92,3 +92,15 @@ Implementação nesta rodada: `src/pages/Narrated.tsx`; testes propostos em `src
 - Primeira aula com direção de arte dedicada: “Do ábaco ao celular”. O mapa visual acrescenta nós no índice da fala: ábaco, Pascalina, tear de Jacquard, Máquina Analítica, Ada Lovelace, Hollerith, ENIAC, programadoras, transistor, circuito integrado, microprocessador, PC, smartphone e funções fundamentais do computador.
 - A legenda foi movida para o fluxo normal do palco, depois da área visual, com altura reservada; deixa de sobrepor a cena. O botão CC permanece opcional.
 - Os ícones Android/PWA são regenerados no pipeline a partir do SVG do símbolo; a versão curta do APK fica disponível em `download/saberio.apk` e o caminho antigo permanece como alias de compatibilidade.
+
+
+## 28/10/2026 — identidade visual aprovada: Pórtico
+
+A referência aprovada pelo usuário é a prancha de marca **Pórtico**. Ela substitui a proposta provisória Saberio, inclusive a wordmark e o símbolo anteriormente com C/ponte. A identidade final desta etapa:
+- Nome: **Pórtico**.
+- Wordmark horizontal com lettering vetorial próprio, incluindo o arco/linha inferior e a estrela terracota; não é texto simples em uma fonte.
+- Símbolo: portal em arco duplo, estrela ocre e escadaria terracota; versão app/favicon sobre azul-petróleo.
+- Paleta: azul-petróleo `#0F4C5C`, terracota `#C8402A`, ocre `#D4A017`, ameixa `#6B3A6E`, verde-oliva `#556B2F`, papel `#F7EFDF`.
+- Aplicar no topo (wordmark centralizado, ações nos cantos), ícone do site, PWA, app Android e marca usada no vídeo narrado.
+- A aula do ábaco mantém o mapa mental que cresce com a narração; esta decisão altera a identidade, não o conteúdo pedagógico.
+- A disponibilidade do nome e da marca precisa de verificação formal no INPI e de domínio antes de uso comercial definitivo.

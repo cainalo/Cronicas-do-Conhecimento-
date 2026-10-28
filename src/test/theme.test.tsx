@@ -15,13 +15,13 @@ beforeEach(() => {
 });
 
 describe('motor de aparência', () => {
-  it('usa por padrão a identidade editorial aprovada: papel, vermelhão, petróleo e Fraunces/Inter Tight', () => {
+  it('usa por padrão a identidade Pórtico aprovada: papel, terracota, azul-petróleo e Fraunces/Inter Tight', () => {
     expect(DEFAULT_LOOK).toMatchObject({ palette: 'editorial', bg: 'papel', font: 'editorial' });
     const c = resolveColors(DEFAULT_LOOK, 'light');
-    expect(c.bg).toBe('#f4f0e8');
-    expect(c.ink).toBe('#1b1a17');
+    expect(c.bg).toBe('#f7efdf');
+    expect(c.ink).toBe('#0f4c5c');
     expect(c.primary).toBe('#c8402a');
-    expect(c.teal).toBe('#1f5c7a');
+    expect(c.teal).toBe('#0f4c5c');
     expect(normalizeLook({ palette: 'editorial', bg: 'papel', font: 'editorial' }))
       .toMatchObject({ palette: 'editorial', bg: 'papel', font: 'editorial' });
     expect(migrateLook({ v: 3, palette: 'aurora', bg: 'liso', font: 'plex' }))

@@ -9,7 +9,7 @@ import { GEMINI_TTS_VOICES, getGeminiTtsApiKey, getGeminiTtsVoice, getVoice, sav
 import { soundscape } from '@/app/soundscape';
 import { beatIndexOf, narrationPositions, nextBeat, positionAtBeat, revealOf, transcript, type NarrationPos } from '@/lib/narration';
 import { Icon } from '@/components/Icon';
-import { SaberioWordmark } from '@/components/Logo';
+import { PorticoWordmark } from '@/components/Logo';
 import { Illustration, type IllustrationName } from '@/components/Illustration';
 
 const RATES = [0.8, 1, 1.2] as const;
@@ -725,11 +725,11 @@ export function NarratedPlayer({
  */
 type CinemaPalette = { background: string; accent: string; secondary: string; name: string };
 const CINEMA_PALETTES: CinemaPalette[] = [
-  { background: '#c8402a', accent: '#f0bf69', secondary: '#1b1a17', name: 'vermelhão editorial' },
-  { background: '#1f5c7a', accent: '#ffbb8c', secondary: '#111f2a', name: 'azul petróleo' },
-  { background: '#6e3b5c', accent: '#f0bf69', secondary: '#241521', name: 'ameixa' },
-  { background: '#a8365e', accent: '#f3d7ca', secondary: '#351723', name: 'framboesa' },
-  { background: '#9e6a14', accent: '#fff1c9', secondary: '#2c1e07', name: 'ocre' },
+  { background: '#0f4c5c', accent: '#d4a017', secondary: '#10282e', name: 'azul-petróleo' },
+  { background: '#c8402a', accent: '#f7efdf', secondary: '#8d2d1e', name: 'terracota' },
+  { background: '#6b3a6e', accent: '#d4a017', secondary: '#28132b', name: 'ameixa' },
+  { background: '#556b2f', accent: '#f7efdf', secondary: '#263313', name: 'verde-oliva' },
+  { background: '#7c5b0d', accent: '#f7efdf', secondary: '#342605', name: 'ocre profundo' },
 ];
 
 function illustrationForText(value: string): IllustrationName {
@@ -819,7 +819,7 @@ function HistoricalPhoto({ photo, variant = 'scene' }: { photo: HistoricalVisual
  * O palco inteiro persiste entre falas; só o plano de apoio recebe uma transição suave
  * quando a fala/etapa muda. Não existem pulsos, flashes ou animações repetidas por render.
  */
-type SaberioMindMapNode = {
+type PorticoMindMapNode = {
   id: string;
   revealAt: number;
   date: string;
@@ -827,15 +827,15 @@ type SaberioMindMapNode = {
   summary: string;
   art: IllustrationName;
 };
-type SaberioMindMapBranch = {
+type PorticoMindMapBranch = {
   id: string;
   title: string;
   startAt: number;
   color: string;
-  nodes: SaberioMindMapNode[];
+  nodes: PorticoMindMapNode[];
 };
 
-const SABERIO_MIND_MAP_BRANCHES: SaberioMindMapBranch[] = [
+const PORTICO_MIND_MAP_BRANCHES: PorticoMindMapBranch[] = [
   {
     id: 'contar', title: 'Ferramentas de cálculo', startAt: 1, color: '#c8402a',
     nodes: [
@@ -845,7 +845,7 @@ const SABERIO_MIND_MAP_BRANCHES: SaberioMindMapBranch[] = [
     ],
   },
   {
-    id: 'programar', title: 'Instruções e dados', startAt: 8, color: '#1f5c7a',
+    id: 'programar', title: 'Instruções e dados', startAt: 8, color: '#0f4c5c',
     nodes: [
       { id: 'babbage', revealAt: 8, date: '1830s', title: 'Máquina Analítica', summary: 'Cálculo + armazenamento', art: 'computador' },
       { id: 'ada', revealAt: 10, date: '1843', title: 'Ada Lovelace', summary: 'Algoritmo publicado', art: 'alvo' },
@@ -853,7 +853,7 @@ const SABERIO_MIND_MAP_BRANCHES: SaberioMindMapBranch[] = [
     ],
   },
   {
-    id: 'eletronica', title: 'Era eletrônica', startAt: 14, color: '#6e3b5c',
+    id: 'eletronica', title: 'Era eletrônica', startAt: 14, color: '#6b3a6e',
     nodes: [
       { id: 'eniac', revealAt: 14, date: '1945–46', title: 'ENIAC', summary: 'Válvulas eletrônicas', art: 'suporte' },
       { id: 'programadoras', revealAt: 16, date: 'DÉCADA DE 1940', title: 'Programadoras', summary: 'A equipe também programava', art: 'rede' },
@@ -862,7 +862,7 @@ const SABERIO_MIND_MAP_BRANCHES: SaberioMindMapBranch[] = [
     ],
   },
   {
-    id: 'compactar', title: 'Computação no bolso', startAt: 19, color: '#9e6a14',
+    id: 'compactar', title: 'Computação no bolso', startAt: 19, color: '#d4a017',
     nodes: [
       { id: 'microprocessador', revealAt: 19, date: '1971', title: 'Microprocessador', summary: 'A CPU em um chip', art: 'computador' },
       { id: 'pc', revealAt: 20, date: '1977–81', title: 'PC pessoal', summary: 'Computadores para todos', art: 'computador' },
@@ -870,7 +870,7 @@ const SABERIO_MIND_MAP_BRANCHES: SaberioMindMapBranch[] = [
     ],
   },
   {
-    id: 'sistema', title: 'O que todo computador faz', startAt: 23, color: '#346834',
+    id: 'sistema', title: 'O que todo computador faz', startAt: 23, color: '#556b2f',
     nodes: [
       { id: 'entrada', revealAt: 23, date: '01', title: 'Entrada', summary: 'Receber dados e instruções', art: 'rede' },
       { id: 'processamento', revealAt: 24, date: '02', title: 'Processamento', summary: 'Executar instruções', art: 'engrenagem' },
@@ -880,7 +880,7 @@ const SABERIO_MIND_MAP_BRANCHES: SaberioMindMapBranch[] = [
   },
 ];
 
-function SaberioMindMap({
+function PorticoMindMap({
   globalStep, sceneIndex, sceneCount, currentTitle, currentDetail, dateOrStep,
 }: {
   globalStep: number;
@@ -890,7 +890,7 @@ function SaberioMindMap({
   currentDetail: string;
   dateOrStep: string;
 }) {
-  const allNodes = SABERIO_MIND_MAP_BRANCHES.flatMap((branch) => branch.nodes);
+  const allNodes = PORTICO_MIND_MAP_BRANCHES.flatMap((branch) => branch.nodes);
   const revealedNodes = allNodes.filter((node) => node.revealAt <= globalStep);
   const activeNode = [...revealedNodes].sort((a, b) => b.revealAt - a.revealAt)[0];
 
@@ -904,7 +904,7 @@ function SaberioMindMap({
     >
       <div className={'ccv-mindmap-root' + (!activeNode ? ' is-active' : '')} data-testid="narrada-mindmap-root">
         <div className="ccv-mindmap-root__brand">
-          <span className="ccv-mindmap-root__eyebrow">SABERIO · MAPA MENTAL</span>
+          <span className="ccv-mindmap-root__eyebrow">PÓRTICO · MAPA MENTAL</span>
           <strong>Do ábaco ao celular</strong>
         </div>
         <span className="ccv-mindmap-root__subtitle">As ideias se conectam e transformam o jeito de calcular.</span>
@@ -912,7 +912,7 @@ function SaberioMindMap({
       <div className="ccv-mindmap-map">
         <div className="ccv-mindmap-trunk" aria-hidden="true"><span /><span /><span /><span /><span /></div>
         <div className="ccv-mindmap-grid">
-          {SABERIO_MIND_MAP_BRANCHES.filter((branch) => branch.startAt <= globalStep).map((branch, branchIndex) => (
+          {PORTICO_MIND_MAP_BRANCHES.filter((branch) => branch.startAt <= globalStep).map((branch, branchIndex) => (
             <section
               key={branch.id}
               className="ccv-mindmap-branch"
@@ -1064,13 +1064,13 @@ function CinematicScene({
       <div className="ccv-film-orbit ccv-film-orbit--two" aria-hidden="true" />
 
       <header className="ccv-film-header">
-        <SaberioWordmark width={124} color={isMindMapMode ? "#1b1a17" : "#ffffff"} accent={isMindMapMode ? "#c8402a" : palette.accent} className="ccv-film-brand-wordmark" />
+        <PorticoWordmark width={124} color={isMindMapMode ? "#0f4c5c" : "#f7efdf"} accent="#c8402a" className="ccv-film-brand-wordmark" />
         <span className="ccv-film-counter">{String(sceneIndex + 1).padStart(2, '0')} / {String(sceneCount).padStart(2, '0')}</span>
       </header>
 
       <div className={"ccv-film-content" + (cutawayVisible ? " has-cutaway" : "")}>
         {isMindMapMode ? (
-          <SaberioMindMap
+          <PorticoMindMap
             globalStep={globalStep}
             sceneIndex={sceneIndex}
             sceneCount={sceneCount}

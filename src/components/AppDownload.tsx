@@ -9,7 +9,7 @@ interface Version {
 }
 
 const base = import.meta.env.BASE_URL;
-export const APK_URL = `${base}download/saberio.apk`;
+export const APK_URL = `${base}download/portico.apk`;
 
 /** Cartão de download do app Android. Não aparece dentro do próprio app. */
 export function AppDownload({ compact = false }: { compact?: boolean }) {
@@ -28,7 +28,7 @@ export function AppDownload({ compact = false }: { compact?: boolean }) {
   return (
     <section className="card overflow-hidden">
       <div className="flex items-center gap-4 p-4">
-        <img src={`${base}pwa-192.png`} alt="" className="h-14 w-14 shrink-0 rounded-2xl shadow-lg" />
+        <img src={`${base}icon.svg`} alt="" className="h-14 w-14 shrink-0 rounded-2xl shadow-lg" />
         <div className="min-w-0 flex-1">
           <p className="font-display text-lg leading-tight">App para Android</p>
           <p className="text-sm text-muted">

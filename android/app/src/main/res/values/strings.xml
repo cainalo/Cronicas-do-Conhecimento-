@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Saberio</string>
-    <string name="title_activity_main">Crônicas do Arquivo Real</string>
+    <string name="app_name">Pórtico</string>
+    <string name="title_activity_main">Pórtico</string>
     <string name="package_name">io.github.cainalo.cronicas</string>
     <string name="custom_url_scheme">io.github.cainalo.cronicas</string>
 </resources>

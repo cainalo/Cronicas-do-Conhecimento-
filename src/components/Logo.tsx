@@ -1,92 +1,64 @@
 import { Link } from 'react-router-dom';
 
-/**
- * Saberio brand mark: an open C-shaped path with a bridge spanning its center.
- * The wordmark below is drawn from custom SVG paths, not text rendered in a font.
- */
+/** Pórtico: arco duplo, estrela ocre e degraus terracota. Wordmark vetorial próprio. */
 export function LogoMark({
   size = 32,
-  accent = 'rgb(var(--gold))',
   color = 'rgb(var(--teal))',
+  accent = 'rgb(var(--gold))',
+  star = 'rgb(var(--sun))',
+  paper = 'rgb(var(--bg))',
   className = '',
 }: {
-  size?: number;
-  accent?: string;
-  color?: string;
-  className?: string;
+  size?: number; color?: string; accent?: string; star?: string; paper?: string; className?: string;
 }) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 48 48"
-      aria-hidden="true"
-      focusable="false"
-      className={className}
-    >
-      <path
-        d="M31 10C25 5 17 5 11 10 4 16 4 30 11 36 17 41 25 41 31 36"
-        fill="none"
-        stroke={color}
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path d="M30 19Q36 13.8 42 19" fill="none" stroke={accent} strokeWidth="3.2" strokeLinecap="round" />
-      <path d="M30 20.5H42" fill="none" stroke={accent} strokeWidth="3.2" strokeLinecap="round" />
-      <path d="M32.5 20.5V24M39.5 20.5V24" fill="none" stroke={accent} strokeWidth="2.4" strokeLinecap="round" />
+    <svg width={size} height={size} viewBox="0 0 100 100" aria-hidden="true" focusable="false" className={className}>
+      <path d="M19 83V42A31 31 0 0 1 81 42V83" fill="none" stroke={color} strokeWidth="7.5" strokeLinecap="square" />
+      <path d="M31 75V43A19 19 0 0 1 69 43V66" fill="none" stroke={color} strokeWidth="5.2" strokeLinecap="square" />
+      <path d="M50 31 55.5 39 64 42 55.5 45 50 53 44.5 45 36 42 44.5 39Z" fill={star} />
+      <path d="M42 56H58L62 63H38Z" fill={accent} stroke={paper} strokeWidth="1.6" />
+      <path d="M36 65H64L69 73H31Z" fill={accent} stroke={paper} strokeWidth="1.6" />
+      <path d="M29 75H71L77 84H23Z" fill={accent} stroke={paper} strokeWidth="1.6" />
     </svg>
   );
 }
 
-export function SaberioWordmark({
-  width = 220,
+/**
+ * Bespoke wordmark paths: stylized Pórtico with an arched baseline and terracotta star.
+ * The SVG contains no text nodes or font dependency.
+ */
+export function PorticoWordmark({
+  width = 200,
   color = 'rgb(var(--teal))',
   accent = 'rgb(var(--gold))',
   className = '',
 }: {
-  width?: number;
-  color?: string;
-  accent?: string;
-  className?: string;
+  width?: number; color?: string; accent?: string; className?: string;
 }) {
   return (
-    <svg
-      width={width}
-      height={Math.round(width * 42 / 230)}
-      viewBox="0 0 230 42"
-      role="img"
-      aria-label="Saberio"
-      focusable="false"
-      className={className}
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2.9"
-    >
-      <g stroke={color}>
-        <path d="M21 7C18 3.5 11 3 7 6 2 10 5 16 11 18L16 20C23 23 22 30 16 33 11 36 5 34 3 31" />
-        <path d="M30 34L41.5 5 53 34M34.5 23H48.5" />
-        <path d="M61 5V34M61 5H71C81 5 81 18 71 19H61M70 19C83 19 83 34 71 34H61" />
-        <path d="M112 5H93V34H112M93 19.5H108" />
-        <path d="M122 34V5H133C145 5 145 18 133 19H122M133 19L146 34" />
-        <path d="M155 5H172M163.5 5V34M155 34H172" />
-        <path d="M200 4.5C210 4.5 215 10.2 215 19.5S210 34.5 200 34.5 185 28.8 185 19.5 190 4.5 200 4.5Z" />
+    <svg width={width} height={Math.round(width * 132 / 500)} viewBox="0 0 500 132" role="img" aria-label="Pórtico" focusable="false" className={className}>
+      <g fill={color} fillRule="evenodd">
+        <path d="M9 98V25Q9 16 1 13V8H53C84 8 100 22 100 43C100 65 83 78 54 78H35V87Q35 94 48 96V101H9Z M35 66H51C67 66 76 58 76 43C76 28 67 20 51 20H35Z" />
+        <path d="M139 29C119 29 107 43 107 65C107 87 119 101 139 101C159 101 171 87 171 65C171 43 159 29 139 29ZM139 42C149 42 156 50 156 65C156 80 149 88 139 88C129 88 122 80 122 65C122 50 129 42 139 42Z" />
+        <path d="M129 23L144 10L151 13L137 27Z" />
+        <path d="M181 100V49Q181 42 173 40V35H196V49C203 38 212 31 221 34C231 37 230 50 221 53C213 55 209 47 204 47C199 47 196 53 196 61V88Q196 94 208 96V100Z" />
+        <path d="M256 100C247 100 242 94 242 84V45H230V35H242V20L257 15V35H279V45H257V82Q257 90 264 90Q271 90 277 82L284 88C277 97 268 101 259 101Z" />
+        <path d="M292 46H309V88Q309 94 317 96V100H284V96Q292 94 292 88Z" />
+        <circle cx="300.5" cy="24" r="8.5" />
+        <path d="M376 43L367 54C360 47 353 43 345 43C333 43 326 52 326 66C326 81 333 89 345 89C354 89 362 84 368 76L377 83C370 96 357 102 342 102C321 102 307 87 307 67C307 45 322 31 344 31C357 31 368 36 376 43Z" />
+        <path d="M417 31C397 31 385 45 385 67C385 89 397 103 417 103C437 103 449 89 449 67C449 45 437 31 417 31ZM417 44C427 44 434 52 434 67C434 82 427 90 417 90C407 90 400 82 400 67C400 52 407 44 417 44Z" />
       </g>
-      <g stroke={accent}>
-        <path d="M34.5 23Q41.5 15.5 48.5 23M34.5 24.5H48.5" strokeWidth="2.9" />
-        <path d="M37 24.5V27M46 24.5V27" strokeWidth="2.2" />
-      </g>
+      <path d="M40 108Q231 77 441 108" fill="none" stroke={color} strokeWidth="3.2" strokeLinecap="round" />
+      <path d="M247 104L252 112L261 115L252 118L247 126L242 118L233 115L242 112Z" fill={accent} />
     </svg>
   );
 }
 
-/** Compact combined lockup for places where the complete brand signature is needed. */
 export function Logo({ full = false }: { full?: boolean }) {
   return (
-    <Link to="/" className="group flex items-center gap-2 text-ink" aria-label="Saberio, início">
-      <LogoMark size={full ? 32 : 28} className="shrink-0 transition-transform duration-500 ease-out group-hover:-rotate-6" />
-      <SaberioWordmark width={full ? 184 : 156} className="h-auto" />
+    <Link to="/" className="group flex items-center gap-2 text-ink" aria-label="Pórtico, início">
+      <LogoMark size={full ? 34 : 29} className="shrink-0 transition-transform duration-500 ease-out group-hover:-translate-y-0.5" />
+      <PorticoWordmark width={full ? 184 : 156} className="h-auto" />
     </Link>
   );
 }

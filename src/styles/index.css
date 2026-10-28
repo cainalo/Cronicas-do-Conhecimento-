@@ -18,24 +18,24 @@
 */
 
 :root {
-  --bg: 244 240 232;
-  --surface: 251 249 244;
-  --raised: 236 230 218;
-  --line: 217 209 194;
-  --ink: 27 26 23;
-  --muted: 95 90 80;
+  --bg: 247 239 223;
+  --surface: 255 249 239;
+  --raised: 239 226 205;
+  --line: 217 201 175;
+  --ink: 15 76 92;
+  --muted: 82 100 106;
   --gold: 200 64 42;
   --ember: 160 48 28;
-  --azure: 110 59 92;
-  --teal: 31 92 122;
-  --leaf: 158 106 20;
-  --pink: 168 54 94;
-  --sun: 196 146 30;
-  --ok: 52 104 52;
-  --bad: 176 40 34;
-  --parchment: 251 249 244;
-  --leather: 27 26 23;
-  --sepia: 27 26 23;
+  --azure: 107 58 110;
+  --teal: 15 76 92;
+  --leaf: 212 160 23;
+  --pink: 107 58 110;
+  --sun: 212 160 23;
+  --ok: 85 107 47;
+  --bad: 174 47 36;
+  --parchment: 255 249 239;
+  --leather: 15 76 92;
+  --sepia: 15 76 92;
   --font-scale: 1;
   --radius-card: 10px;
   --radius-control: 8px;
@@ -55,24 +55,24 @@
   color-scheme: light;
 }
 :root[data-theme='dark'] {
-  --bg: 21 20 18;
-  --surface: 30 28 25;
-  --raised: 42 39 35;
-  --line: 58 54 49;
-  --ink: 239 234 224;
-  --muted: 171 163 149;
-  --gold: 236 112 88;
-  --ember: 244 140 116;
-  --azure: 196 140 176;
-  --teal: 112 176 206;
-  --leaf: 222 172 86;
-  --pink: 226 128 160;
-  --sun: 232 196 98;
-  --ok: 128 190 120;
+  --bg: 16 40 46;
+  --surface: 20 56 64;
+  --raised: 29 70 80;
+  --line: 49 87 96;
+  --ink: 247 239 223;
+  --muted: 182 196 195;
+  --gold: 232 102 78;
+  --ember: 246 147 126;
+  --azure: 190 144 193;
+  --teal: 110 173 185;
+  --leaf: 234 191 96;
+  --pink: 202 155 204;
+  --sun: 235 202 112;
+  --ok: 163 186 111;
   --bad: 240 120 108;
-  --parchment: 30 28 25;
-  --leather: 239 234 224;
-  --sepia: 239 234 224;
+  --parchment: 20 56 64;
+  --leather: 247 239 223;
+  --sepia: 247 239 223;
   --shadow-lift: 0 12px 26px -16px rgb(0 0 0 / 0.7);
   color-scheme: dark;
 }
@@ -962,7 +962,7 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 }
 
 
-/* ---------- Saberio: marca e aula-mapa (primeira aula histórica) ---------- */
+/* ---------- Pórtico: marca e aula-mapa (primeira aula histórica) ---------- */
 .ccv-film-brand-wordmark { display: block; flex: 0 0 auto; height: auto; max-width: 40vw; }
 .ccv-film-scene {
   padding-bottom: calc(8.7rem + env(safe-area-inset-bottom, 0px));
@@ -997,11 +997,11 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 
 /* O modo editorial usa uma área real para a legenda; o vídeo não passa por baixo dela. */
 .ccv-film-scene.is-mindmap-mode {
-  --ccv-background: #f4f0e8 !important;
+  --ccv-background: #f7efdf !important;
   --ccv-accent: #c8402a !important;
-  --ccv-secondary: #1f5c7a !important;
-  color: #1b1a17;
-  background: #f4f0e8;
+  --ccv-secondary: #0f4c5c !important;
+  color: #0f3039;
+  background: #f7efdf;
 }
 .ccv-film-scene.is-mindmap-mode .ccv-film-grain,
 .ccv-film-scene.is-mindmap-mode .ccv-film-orbit { display: none; }
@@ -1035,10 +1035,10 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
   gap: .65rem;
   min-width: 0;
   padding: clamp(.4rem, 1.1vh, .8rem) clamp(.55rem, 1.5vw, 1.15rem);
-  border: 1px solid #d9d1c2;
+  border: 1px solid #d9c9af;
   border-left: 4px solid #c8402a;
   border-radius: 8px;
-  background: #fbf9f4;
+  background: #fff9ef;
   box-shadow: 0 5px 18px rgb(27 26 23 / .06);
 }
 .ccv-mindmap-root::after {
@@ -1052,7 +1052,7 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 }
 .ccv-mindmap-root__eyebrow {
   display: block;
-  color: #1f5c7a;
+  color: #0f4c5c;
   font-size: clamp(.46rem, .9vh, .62rem);
   font-weight: 900;
   letter-spacing: .13em;
@@ -1062,7 +1062,7 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 .ccv-mindmap-root strong {
   display: block;
   margin-top: .08rem;
-  color: #1b1a17;
+  color: #0f3039;
   font-family: var(--font-title);
   font-size: clamp(1rem, 2.6vh, 1.9rem);
   font-weight: 760;
@@ -1097,7 +1097,7 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
   justify-self: center;
   width: 1px;
   height: clamp(.35rem, 1vh, .65rem);
-  background: linear-gradient(#c8402a, rgb(31 92 122 / .18));
+  background: linear-gradient(#c8402a, rgb(15 76 92 / .18));
 }
 .ccv-mindmap-grid {
   position: relative;
@@ -1120,7 +1120,7 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
   flex-direction: column;
   align-self: stretch;
   padding: clamp(.28rem, .8vh, .55rem);
-  border: 1px solid #d9d1c2;
+  border: 1px solid #d9c9af;
   border-top: 2px solid var(--mindmap-branch-color);
   border-radius: 7px;
   background: rgb(251 249 244 / .94);
@@ -1133,7 +1133,7 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
   gap: .3rem;
   min-height: 1.6em;
   margin: 0;
-  color: #1b1a17;
+  color: #0f3039;
   font-family: var(--font-text);
   font-size: clamp(.55rem, 1.15vh, .74rem);
   font-weight: 850;
@@ -1166,8 +1166,8 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
   padding: .2rem .28rem;
   border: 1px solid transparent;
   border-radius: 5px;
-  background: #f4f0e8;
-  color: #1b1a17;
+  background: #f7efdf;
+  color: #0f3039;
   animation: ccv-mindmap-node-in 450ms cubic-bezier(.16,1,.3,1) both;
   transition: background-color 450ms ease, border-color 450ms ease, transform 450ms cubic-bezier(.16,1,.3,1), opacity 450ms ease;
 }
@@ -1175,8 +1175,8 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 .ccv-mindmap-node.is-active {
   z-index: 1;
   transform: translateX(2px);
-  border-color: color-mix(in srgb, var(--mindmap-branch-color) 52%, #d9d1c2);
-  background: color-mix(in srgb, var(--mindmap-branch-color) 11%, #fbf9f4);
+  border-color: color-mix(in srgb, var(--mindmap-branch-color) 52%, #d9c9af);
+  background: color-mix(in srgb, var(--mindmap-branch-color) 11%, #fff9ef);
   box-shadow: 0 3px 10px color-mix(in srgb, var(--mindmap-branch-color) 12%, transparent);
   opacity: 1;
 }
@@ -1209,7 +1209,7 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 }
 .ccv-mindmap-node__copy strong {
   overflow: hidden;
-  color: #1b1a17;
+  color: #0f3039;
   font-family: var(--font-title);
   font-size: clamp(.57rem, 1.2vh, .8rem);
   font-weight: 720;
@@ -1241,8 +1241,8 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
   min-width: 0;
   margin-top: .15rem;
   padding: .35rem .5rem;
-  border-top: 1px solid #d9d1c2;
-  color: #1b1a17;
+  border-top: 1px solid #d9c9af;
+  color: #0f3039;
 }
 .ccv-mindmap-current__pulse {
   position: relative;
@@ -1271,7 +1271,7 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 }
 .ccv-mindmap-current__copy strong {
   overflow: hidden;
-  color: #1b1a17;
+  color: #0f3039;
   font-family: var(--font-title);
   font-size: clamp(.8rem, 1.7vh, 1.1rem);
   font-weight: 700;
@@ -1289,7 +1289,7 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 }
 .ccv-mindmap-current__counter {
   flex: 0 0 auto;
-  color: #1f5c7a;
+  color: #0f4c5c;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: .62rem;
   font-weight: 850;

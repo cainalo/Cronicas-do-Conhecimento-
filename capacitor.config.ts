@@ -2,10 +2,10 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.github.cainalo.cronicas',
-  appName: 'Saberio',
+  appName: 'Pórtico',
   webDir: 'dist',
   android: {
-    backgroundColor: '#f4f0e8',
+    backgroundColor: '#f7efdf',
   },
 };
 

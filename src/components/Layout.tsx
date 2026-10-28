@@ -5,7 +5,7 @@ import { logUnit } from '@/lib/pace';
 import { AREAS, areaOf, isAreaHome, type AreaKey } from '@/app/areas';
 import { useCheckpoint } from '@/app/useCheckpoint';
 import { Icon } from '@/components/Icon';
-import { LogoMark, SaberioWordmark } from '@/components/Logo';
+import { LogoMark, PorticoWordmark } from '@/components/Logo';
 
 // Reformulação (Fase 1): cinco áreas, iguais no celular (menu de baixo) e no computador (topo).
 const TABS: AreaKey[] = ['torre', 'grimorios', 'explorar', 'treino', 'reino'];
@@ -110,7 +110,7 @@ export function Layout() {
                 <Icon name="voltar" size={22} />
               </button>
             ) : (
-              <Link to="/" className="-ml-2 grid h-10 w-10 shrink-0 place-items-center rounded-full transition hover:bg-ink/5" aria-label="Saberio, início">
+              <Link to="/" className="-ml-2 grid h-10 w-10 shrink-0 place-items-center rounded-full transition hover:bg-ink/5" aria-label="Pórtico, início">
                 <LogoMark size={29} />
               </Link>
             )}
@@ -119,10 +119,10 @@ export function Layout() {
           <Link
             to="/"
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md focus-visible:outline-offset-4"
-            aria-label="Saberio, início"
-            data-testid="saberio-wordmark-center"
+            aria-label="Pórtico, início"
+            data-testid="portico-wordmark-center"
           >
-            <SaberioWordmark width={220} className="h-auto w-[8.5rem] sm:w-36 lg:w-40" />
+            <PorticoWordmark width={210} className="h-auto w-[8.5rem] sm:w-36 lg:w-40" />
           </Link>
 
           <div className="flex min-w-0 items-center justify-end gap-2 sm:gap-3">

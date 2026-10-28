@@ -204,3 +204,8 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 - Preservar o layout/funcionalidades atuais. Os cards de resumo, continuação, plano e evolução do dashboard passam a usar as cores chapadas editoriais; os atalhos de Explorar permanecem no componente `Tile`.
 - Recolocada a dependência local `@fontsource-variable/fraunces` em `package.json`/lockfile.
 - Testes adicionados para os tokens editoriais, migração da aparência salva e cores chapadas da home.
+
+
+## 28/10/2026 — atualização de marca (preferência explícita do usuário)
+
+A prancha que o usuário escolheu é **Pórtico**. Ela substitui a proposta de nome intermediária Saberio. O símbolo é um portal com arco duplo, estrela ocre e degraus terracota; wordmark própria em paths SVG, com linha em arco e estrela terracota. Cores: #0F4C5C, #C8402A, #D4A017, #6B3A6E, #556B2F, #F7EFDF. Atualizar nome no site, metadata, PWA, Capacitor e Android; a aula-mapa continua sendo a primeira aula da história dos computadores.

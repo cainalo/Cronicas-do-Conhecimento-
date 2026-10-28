@@ -142,3 +142,14 @@ O usuário aprovou a estrutura, a navegação e os novos cartões do dashboard, 
 Nome de trabalho escolhido: **Saberio** — aprender conectando ideias. Wordmark SVG próprio (“SABERIO”) e símbolo separado: C aberto em azul-petróleo atravessado por uma ponte vermelha. A identidade editorial anterior está restabelecida. A pesquisa exploratória de nomes não substitui verificação formal de marca no INPI e domínio.
 
 A aula `narrada.prim.historia` passa a usar um mapa mental dedicado que acumula, ao longo dos beats, os marcos do ábaco, Pascalina, Jacquard, Máquina Analítica, Ada, Hollerith, ENIAC, transistor, circuito integrado, microprocessador, PC e smartphone. As falas originais foram preservadas; o novo mapa usa `beatIndex` para revelar e destacar os conceitos em sincronia. A legenda deixa a posição absoluta e passa a ocupar uma faixa real após a composição visual. Validar especialmente a legibilidade do mapa no Galaxy A14 e a sincronização com voz neural real.
+
+
+## Identidade aprovada pelo usuário — 28/10/2026
+
+O usuário escolheu a prancha de marca **Pórtico** enviada na conversa. Ela substitui integralmente o nome provisório Saberio proposto nesta sessão. Usar a identidade visual da referência:
+- Wordmark “Pórtico” desenhada como paths vetoriais, com arco inferior e estrela terracota.
+- Símbolo de portal em arco duplo, estrela ocre e escadas terracota; app/favicon em bloco azul-petróleo.
+- Paleta #0F4C5C, #C8402A, #D4A017, #6B3A6E, #556B2F e #F7EFDF.
+- Barra superior com wordmark centralizado, símbolo/voltar à esquerda e ações à direita.
+- A aula narrada “Do ábaco ao celular” permanece em modo mapa mental cumulativo, com legenda em uma faixa de layout reservada.
+- Nome/direito de marca/domínio ainda carecem de consulta formal; não afirmar que a marca está legalmente disponível.
