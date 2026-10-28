@@ -363,7 +363,7 @@ function WorldPlay({ w, s, stageId }: { w: World; s: Scenario; stageId?: OfficeS
       {/* Barra do alto: sair, onde estou, objetivo, caderno e "ir até". */}
       <div className="pointer-events-none absolute inset-x-0 top-0 p-3" style={{ paddingTop: 'max(0.75rem, env(safe-area-inset-top))' }}>
         <div className="pointer-events-auto flex items-start gap-2">
-          <button className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-surface/95 shadow-md" onClick={() => navigate('/explorar')} aria-label="Sair do escritório (fica salvo)">
+          <button className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-surface/95 shadow-md" onClick={() => navigate(stageId ? '/trilha' : '/explorar')} aria-label={stageId ? 'Voltar à trilha' : 'Sair do escritório (fica salvo)'}>
             <Icon name="voltar" size={20} />
           </button>
           <div className="min-w-0 flex-1 rounded-2xl bg-surface/95 px-3 py-2 shadow-md">
