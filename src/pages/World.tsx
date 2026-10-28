@@ -6,7 +6,7 @@
 // no checkpoint da trilha. Posição e escolhas ficam salvas neste aparelho.
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent } from 'react';
 import { createPortal } from 'react-dom';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { getScenario } from '@/content';
 import { escritorio } from '@/content/world/escritorio';
@@ -35,12 +35,36 @@ import {
 import { Icon } from '@/components/Icon';
 import { PageHeader } from '@/components/Page';
 import { logUnit } from '@/lib/pace';
+import { isTerminalLabComplete, restoreTerminalState, type TerminalState } from '@/lib/terminal';
 import { ScenarioClosing } from './Scenarios';
 
 /** Unidade de desenho de uma casa (o mapa é escalado para a tela). */
 const T = 48;
 const STEP_MS = 170;
 const KEY = (id: string) => `cronicas:mundo:${id}`;
+const TERMINAL_PROCESS_KEY = 'cronicas:terminal-lab:v1:processos-linux';
+type OfficeStageId = 'triagem' | 'diagnostico' | 'fechamento';
+const OFFICE_STAGES: Record<OfficeStageId, { eyebrow: string; title: string; description: string }> = {
+  triagem: { eyebrow: 'Etapa 1 de 3 · Triagem', title: 'Coletar evidências', description: 'Examine os sinais do chamado e execute os comandos do laboratório antes de formar uma hipótese.' },
+  diagnostico: { eyebrow: 'Etapa 2 de 3 · Diagnóstico', title: 'Identificar a causa', description: 'Compare os sinais encontrados, explique a causa mais provável e escolha uma intervenção segura.' },
+  fechamento: { eyebrow: 'Etapa 3 de 3 · Intervenção', title: 'Verificar a recuperação', description: 'Aplique a decisão, confira a recuperação do servidor e feche o chamado com evidências.' },
+};
+function readProcessLabState(): TerminalState | undefined {
+  try {
+    const raw = localStorage.getItem(TERMINAL_PROCESS_KEY);
+    if (!raw) return undefined;
+    return restoreTerminalState('processos-linux', JSON.parse(raw));
+  } catch {
+    return undefined;
+  }
+}
+function processLabIsComplete(): boolean {
+  const saved = readProcessLabState();
+  return !!saved && isTerminalLabComplete('processos-linux', saved);
+}
+function parseOfficeStage(value: string | null): OfficeStageId | undefined {
+  return value === 'triagem' || value === 'diagnostico' || value === 'fechamento' ? value : undefined;
+}
 const reduced = () => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 function load(w: World, s: Scenario): WorldState | undefined {
@@ -55,6 +79,8 @@ const fresh = (w: World, s: Scenario): WorldState => ({ worldId: w.id, version: 
 export function WorldPage() {
   const s = getScenario(escritorio.scenarioId)!;
   const { data } = useStudy();
+  const [searchParams] = useSearchParams();
+  const stageId = parseOfficeStage(searchParams.get('fase'));
   const missing = s.requires.filter((r) => !data.reading[r.chapterId]?.sectionsRead.includes(r.sectionId));
   if (missing.length) {
     return (
@@ -76,7 +102,7 @@ export function WorldPage() {
       </div>
     );
   }
-  return <WorldPlay w={escritorio} s={s} />;
+  return <WorldPlay w={escritorio} s={s} stageId={stageId} />;
 }
 
 type Panel = { kind: 'actor'; id: string } | { kind: 'object'; id: string } | null;
@@ -94,7 +120,7 @@ function useViewport() {
   return v;
 }
 
-function WorldPlay({ w, s }: { w: World; s: Scenario }) {
+function WorldPlay({ w, s, stageId }: { w: World; s: Scenario; stageId?: OfficeStageId }) {
   const navigate = useNavigate();
   const { update } = useStudy();
   const [st, setSt] = useState<WorldState>(() => load(w, s) ?? fresh(w, s));
@@ -201,7 +227,11 @@ function WorldPlay({ w, s }: { w: World; s: Scenario }) {
 
   // Abrir um objeto já disponível o anota no caderno (o exame acontece aqui, fora da renderização).
   useEffect(() => {
-    if (panel?.kind === 'object') setSt((cur) => examine(w, s, cur, panel.id).state);
+    if (panel?.kind !== 'object') return;
+    // No caso do servidor lento, a evidência do terminal só é registrada depois de o aluno concluir
+    // o laboratório de comandos. Isso conecta o trabalho prático ao avanço do cenário no mapa.
+    if (panel.id === 'terminal' && !processLabIsComplete()) return;
+    setSt((cur) => examine(w, s, cur, panel.id).state);
   }, [panel, w, s]);
 
   const near = adjacentInteractable(w, st.pos);
@@ -340,6 +370,13 @@ function WorldPlay({ w, s }: { w: World; s: Scenario }) {
             <p className="truncate text-xs text-muted">
               Escritório de TI · <span data-testid="mundo-sala">{room?.name ?? ''}</span>
             </p>
+            {stageId && (
+              <div className="mt-1 border-t border-line/70 pt-1" data-testid="mundo-etapa-trilha">
+                <p className="text-[10px] font-bold uppercase tracking-wide text-gold">{OFFICE_STAGES[stageId].eyebrow}</p>
+                <p className="text-xs font-semibold leading-snug">{OFFICE_STAGES[stageId].title}</p>
+                <p className="text-[11px] leading-snug text-muted">{OFFICE_STAGES[stageId].description}</p>
+              </div>
+            )}
             <p className="text-sm leading-snug">
               <span className="kicker">Objetivo</span> <b data-testid="mundo-objetivo">{objective}</b>
             </p>
@@ -434,6 +471,7 @@ function InteractionPanel({ w, s, st, setSt, panel, onRestart }: { w: World; s: 
 
   if (panel.kind === 'object') {
     const o = w.objects.find((x) => x.id === panel.id)!;
+    const terminalLocked = o.id === 'terminal' && !processLabIsComplete();
     const res = examine(w, s, st, o.id);
     const evs = s.evidence.filter((e) => o.evidenceIds.includes(e.id));
     return (
@@ -442,6 +480,11 @@ function InteractionPanel({ w, s, st, setSt, panel, onRestart }: { w: World; s: 
         <h2 className="mt-0.5 pr-8 text-lg first-letter:uppercase">{o.label}</h2>
         {!res.available ? (
           <p className="mt-2 text-sm">{o.locked}</p>
+        ) : terminalLocked ? (
+          <div className="mt-2 space-y-2">
+            <p className="text-sm leading-relaxed">A evidência deste terminal está vinculada ao exercício prático. Conclua os comandos Linux no laboratório para liberar os registros e continuar a investigação com a Marta.</p>
+            <p className="rounded-lg border border-line bg-raised/60 p-3 text-xs leading-relaxed text-muted">Você deverá observar os processos, interpretar memória e swap, encerrar o processo de forma graciosa e verificar a recuperação. Abrir o laboratório não marca a tarefa como concluída.</p>
+          </div>
         ) : evs.length === 0 ? (
           <p className="mt-2 text-sm">{o.info}</p>
         ) : (
@@ -459,9 +502,9 @@ function InteractionPanel({ w, s, st, setSt, panel, onRestart }: { w: World; s: 
         {o.id === 'terminal' && (
           <div className="mt-4 border-t border-line pt-3">
             <Link to="/laboratorio/processos-linux?origem=escritorio" className="btn-primary w-full">
-              Investigar com comandos no terminal <Icon name="avancar" size={18} />
+              {terminalLocked ? 'Iniciar laboratório de comandos' : 'Revisar laboratório de comandos'} <Icon name="avancar" size={18} />
             </Link>
-            <p className="mt-2 text-xs leading-relaxed text-muted">Abra o laboratório, execute comandos Linux e volte ao mapa para concluir o chamado.</p>
+            <p className="mt-2 text-xs leading-relaxed text-muted">{terminalLocked ? 'Conclua as tarefas no terminal para liberar os registros do chamado.' : 'Laboratório concluído: as evidências estão disponíveis no caderno para comparar com as decisões do cenário.'}</p>
           </div>
         )}
       </section>
