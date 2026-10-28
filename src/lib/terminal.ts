@@ -285,11 +285,11 @@ function hasPermission(path: string, state: TerminalState, permission: 'r' | 'w'
 }
 
 function shellScriptOutput(script: string): string {
-  const output = script.split('\\n').map((line) => line.trim()).filter((line) => line.startsWith('echo ')).map((line) => {
-    const match = line.match(/^echo\\s+(?:"([^"]*)"|'([^']*)'|(.+))$/);
+  const output = script.split('\n').map((line) => line.trim()).filter((line) => line.startsWith('echo ')).map((line) => {
+    const match = line.match(/^echo\s+(?:"([^"]*)"|'([^']*)'|(.+))$/);
     return match ? (match[1] ?? match[2] ?? match[3] ?? '') : '';
   }).filter(Boolean);
-  return output.length ? output.join('\\n') : 'Script executado; não há comandos echo reconhecidos neste laboratório.';
+  return output.length ? output.join('\n') : 'Script executado; não há comandos echo reconhecidos neste laboratório.';
 }
 
 function modeString(path: string, state: TerminalState): string {
