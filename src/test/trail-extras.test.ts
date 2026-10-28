@@ -63,6 +63,7 @@ describe('trilha com todos os materiais', () => {
   it('insere laboratórios de comandos e a fase do mapa na trilha correspondente', () => {
     const first = units.findIndex((u) => u.key === 'laboratorio:primeiros-passos');
     const logs = units.findIndex((u) => u.key === 'laboratorio:arquivos-logs');
+    const permissions = units.findIndex((u) => u.key === 'laboratorio:permissoes');
     const processes = units.findIndex((u) => u.key === 'laboratorio:processos-linux');
     const office1 = units.findIndex((u) => u.key === 'escritorio:triagem');
     const office2 = units.findIndex((u) => u.key === 'escritorio:diagnostico');
@@ -75,6 +76,9 @@ describe('trilha com todos os materiais', () => {
     expect(units[first].to).toContain('/laboratorio/primeiros-passos');
     expect(units[logs].chapterId).toBe('cap.infra.03');
     expect(units[logs].sectionId).toBe('arquivos');
+    expect(units[permissions].chapterId).toBe('cap.infra.03');
+    expect(units[permissions].sectionId).toBe('arquivos');
+    expect(permissions).toBe(logs + 1);
     expect(units[processes].kind).toBe('laboratorio');
     expect(units[office1].kind).toBe('escritorio');
     expect(office1).toBe(processes + 1);
