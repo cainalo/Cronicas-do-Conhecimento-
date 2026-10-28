@@ -36,6 +36,23 @@ describe('laboratórios de terminal', () => {
     expect(isTerminalLabComplete('arquivos-logs', state)).toBe(true);
   });
 
+  it('permissões: inspeciona e altera modos Unix com ls -l, stat e chmod', () => {
+    let state = createTerminalState('permissoes');
+    state = run(state, 'cd /home/aprendiz').state;
+    state = run(state, 'ls -l scripts').state;
+    expect(state.history[state.history.length - 1]?.output).toContain('-rw-r--r--');
+    state = run(state, 'stat scripts/backup.sh').state;
+    expect(state.history[state.history.length - 1]?.output).toContain('0644/-rw-r--r--');
+    state = run(state, 'chmod u+x scripts/backup.sh').state;
+    expect(state.permissions['/home/aprendiz/scripts/backup.sh']).toBe('744');
+    state = run(state, 'ls -l scripts/backup.sh').state;
+    expect(state.history[state.history.length - 1]?.output).toContain('-rwxr--r--');
+    state = run(state, 'chmod 600 dados/clientes.csv').state;
+    state = run(state, 'stat dados/clientes.csv').state;
+    expect(state.history[state.history.length - 1]?.output).toContain('0600/-rw-------');
+    expect(isTerminalLabComplete('permissoes', state)).toBe(true);
+  });
+
   it('chamado do servidor: observa memória, processos e verifica o encerramento', () => {
     let state = createTerminalState('processos-linux');
     state = run(state, 'top').state;
