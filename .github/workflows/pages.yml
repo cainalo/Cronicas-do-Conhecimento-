@@ -40,6 +40,8 @@ jobs:
           mkdir -p "$RUNNER_TEMP/portico-assets"
           cp public/portico-launcher.svg "$RUNNER_TEMP/portico-assets/icon.svg"
           npx capacitor-assets generate --assetPath "$RUNNER_TEMP/portico-assets" --android --pwa --iconBackgroundColor "#0F4C5C" --iconBackgroundColorDark "#0F4C5C" --splashBackgroundColor "#F7EFDF" --splashBackgroundColorDark "#10282E"
+      - name: Reforçar a marca Pórtico e invalidar cache dos ícones web
+        run: node scripts/version-pwa-icons.mjs
       - run: npm test
 
       # ---------- App Android (Capacitor) ----------

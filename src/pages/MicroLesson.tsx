@@ -22,6 +22,7 @@ import { Icon } from '@/components/Icon';
 import { Illustration } from '@/components/Illustration';
 import { StepGuide } from '@/components/StepGuide';
 import { ActivityView } from '@/components/activities/ActivityView';
+import { ReferenceText } from '@/components/ReferenceText';
 
 type Phase =
   | { k: 'abertura' }
@@ -106,7 +107,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   };
 
   const renderMd = (md: string) => (
-    <div className="prose-content !font-sans !text-[1.02rem] [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0 [&_table]:!text-sm">
+    <div className="prose-content learn-text !font-sans !text-[1.02rem] [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0 [&_table]:!text-sm">
       <Markdown>{md}</Markdown>
     </div>
   );
@@ -169,6 +170,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
         <span className="text-xs font-semibold text-muted">
           {slot}/{totalSlots}
         </span>
+        <ReferenceText chapterId={lesson.chapterId} sectionId={lesson.sectionId} mode="drawer" />
       </div>
       {series ? (
         <p className="mb-2 truncate text-sm text-muted">

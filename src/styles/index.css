@@ -1103,3 +1103,74 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
   }
   .ccv-film-illustration * { animation: none !important; transition: none !important; }
 }
+
+
+/* Leitura editorial: parágrafos, listas explicativas e exemplos usam alinhamento justificado. */
+.prose-content :is(p, li, blockquote, dd),
+.prose-stem :is(p, li, blockquote),
+.learn-text :is(p, li, blockquote, dd) {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+/* Palavras importantes sublinhadas: o realce ajuda a escanear o texto sem perder a leitura editorial. */
+.prose-content.learn-text strong,
+.learn-text strong,
+.reference-reading strong {
+  text-decoration-line: underline;
+  text-decoration-color: rgb(var(--gold) / .95);
+  text-decoration-thickness: .065em;
+  text-underline-offset: .16em;
+}
+.reference-reading strong {
+  box-shadow: inset 0 -0.32em 0 rgb(var(--sun) / .24);
+}
+
+/* O conteúdo imersivo reserva o recorte da câmera/notch antes dos controles da aula. */
+main.safe-top-content {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 1rem) !important;
+}
+.activity-progress-sticky {
+  top: calc(env(safe-area-inset-top, 0px) + .75rem);
+  scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 5rem);
+}
+
+/* Navegação do site recolhe ao rolar para baixo e reaparece ao subir. */
+.app-bar-top,
+.app-bar-bottom {
+  transition: transform 240ms cubic-bezier(.2,.7,.2,1), opacity 180ms ease;
+  will-change: transform;
+}
+.app-bar-top.is-scroll-hidden {
+  transform: translate3d(0, -110%, 0);
+  opacity: 0;
+  pointer-events: none;
+}
+.app-bar-bottom.is-scroll-hidden {
+  transform: translate3d(0, 110%, 0);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-bar-top,
+  .app-bar-bottom,
+  .reference-text-chevron {
+    transition: none !important;
+  }
+}
+
+/* Leitura completa embutida nas aulas. */
+.reference-text > summary { list-style: none; }
+.reference-text > summary::-webkit-details-marker { display: none; }
+.reference-text-chevron { transition: transform 180ms ease; }
+.reference-text[open] .reference-text-chevron { transform: rotate(90deg); }
+.reference-text-body { overflow-wrap: anywhere; }
+.reference-drawer-overlay {
+  padding-top: max(env(safe-area-inset-top, 0px), .75rem);
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), .75rem);
+}
+.reference-drawer-panel {
+  max-height: 88dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}

@@ -16,6 +16,7 @@ import { conceptForTerm } from '@/lib/contentValidator';
 import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
 import { ActivityView } from '@/components/activities/ActivityView';
+import { ReferenceText } from '@/components/ReferenceText';
 
 type Stage = 'abertura' | 'etapas' | 'pratica' | 'prova' | 'sintese';
 
@@ -131,7 +132,7 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
     );
   };
   const md = (text: string) => (
-    <div className="prose-content [&>*:first-child]:!mt-0">
+    <div className="prose-content learn-text [&>*:first-child]:!mt-0">
       <Markdown strong={strong}>{text}</Markdown>
     </div>
   );
@@ -153,7 +154,7 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
 
   return (
     <div className="mx-auto max-w-3xl pb-10">
-      <div className="sticky top-14 z-20 -mx-4 mb-4 flex items-center gap-3 border-b border-line bg-bg/95 px-4 py-2 backdrop-blur sm:-mx-6 sm:px-6">
+      <div className="activity-progress-sticky sticky z-20 -mx-4 mb-4 flex items-center gap-3 border-b border-line bg-bg/95 px-4 py-2 backdrop-blur sm:-mx-6 sm:px-6">
         <button className="grid h-10 w-10 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => navigate('/trilha')} aria-label="Sair (o lugar fica salvo)">
           <Icon name="errado" size={20} />
         </button>
@@ -177,6 +178,8 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
           <span className="rounded-full bg-azure/10 px-2.5 py-1 font-semibold text-azure">Toque nos termos sublinhados para ver a definição</span>
         </p>
       </header>
+
+      <ReferenceText chapterId={unit.chapterId} sectionId={unit.sectionId} mode="inline" defaultOpen />
 
       {st.stage === 'abertura' && (
         <section className="card p-4 sm:p-5" aria-label="Pergunta de abertura">

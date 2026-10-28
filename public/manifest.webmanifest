@@ -10,8 +10,23 @@
   "background_color": "#f7efdf",
   "theme_color": "#0f4c5c",
   "icons": [
-    { "src": "./pwa-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "./pwa-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "./maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "./pwa-192.png?v=portico-20261028-2",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./pwa-512.png?v=portico-20261028-2",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./maskable-512.png?v=portico-20261028-2",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

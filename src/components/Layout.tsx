@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useStudy } from '@/app/StudyProvider';
 import { logUnit } from '@/lib/pace';
 import { AREAS, areaOf, isAreaHome, type AreaKey } from '@/app/areas';
@@ -87,6 +87,7 @@ function useTrailVisit() {
 export function Layout() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const [chromeVisible, setChromeVisible] = useState(true);
   useTrailVisit();
   const inner = !isAreaHome(pathname);
   // Leitura/prática ocultam a navegação inferior; aula narrada standalone ocupa a viewport inteira.
@@ -95,9 +96,26 @@ export function Layout() {
   const activityRoute = /^\/(aprender|pratica|licao|missao)\//.test(pathname);
   const immersive = standaloneNarration || /^\/(capitulo|aprender|pratica|licao|missao)\//.test(pathname);
   const onAccount = areaOf(pathname) === 'conta';
+
+  // As barras desaparecem ao ler para baixo e voltam quando o usuário sobe.
+  // O estado é restaurado ao trocar de rota e ao retornar perto do início.
+  useEffect(() => {
+    let previousY = window.scrollY;
+    setChromeVisible(true);
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      const delta = currentY - previousY;
+      if (Math.abs(delta) < 6) return;
+      previousY = currentY;
+      if (currentY <= 28 || delta < 0) setChromeVisible(true);
+      else setChromeVisible(false);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [pathname]);
   return (
     <div className={standaloneNarration ? "h-dvh overflow-hidden" : "flex min-h-dvh flex-col"}>
-      {!standaloneNarration && !activityRoute && <header className="app-bar app-bar-top safe-top sticky top-0 z-30">
+      {!standaloneNarration && !activityRoute && <header className={`app-bar app-bar-top safe-top sticky top-0 z-30 ${chromeVisible ? '' : 'is-scroll-hidden'}`}>
         <div className="relative mx-auto grid h-14 max-w-5xl grid-cols-[minmax(2.5rem,1fr)_auto_minmax(2.5rem,1fr)] items-center gap-3 px-4 sm:px-6">
           <div className="flex min-w-0 items-center gap-2">
             {inner ? (
@@ -155,7 +173,7 @@ export function Layout() {
           ))}
         </nav>
       </header>}
-      <main className={standaloneNarration ? 'h-dvh min-h-0 w-full overflow-hidden p-0' : `mx-auto w-full flex-1 px-4 sm:px-6 ${/^\/(capitulo|aprender)\//.test(pathname) ? 'max-w-3xl lg:max-w-6xl' : 'max-w-3xl'} ${immersive ? 'pb-3 pt-4' : 'pb-32 pt-5 lg:pb-12'}`}>
+      <main className={standaloneNarration ? 'h-dvh min-h-0 w-full overflow-hidden p-0' : `mx-auto w-full flex-1 px-4 sm:px-6 ${/^\/(capitulo|aprender)\//.test(pathname) ? 'max-w-3xl lg:max-w-6xl' : 'max-w-3xl'} ${immersive ? 'pb-3 pt-4 safe-top-content' : 'pb-32 pt-5 lg:pb-12'}`}>
         <div key={pathname} className={standaloneNarration ? 'h-full min-h-0 w-full' : 'page-enter'}>
           <Outlet />
         </div>
@@ -163,7 +181,7 @@ export function Layout() {
 
       {!immersive && <nav
         aria-label="Navegação principal"
-        className="app-bar app-bar-bottom safe-bottom-nav fixed inset-x-0 bottom-0 z-30 flex items-stretch justify-around lg:hidden"
+        className={`app-bar app-bar-bottom safe-bottom-nav fixed inset-x-0 bottom-0 z-30 flex items-stretch justify-around lg:hidden ${chromeVisible ? '' : 'is-scroll-hidden'}`}
       >
         {TABS.map((t) => (
           <Tab key={t} area={t} variant="bottom" />

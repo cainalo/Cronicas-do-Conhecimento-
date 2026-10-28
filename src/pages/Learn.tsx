@@ -13,6 +13,7 @@ import { InteractiveUnitPage } from '@/pages/InteractiveUnit';
 import { MicroLessonPage } from './MicroLesson';
 import { markSectionRead, setLastSection } from '@/lib/study';
 import { Markdown } from '@/components/Markdown';
+import { ReferenceText } from '@/components/ReferenceText';
 import { Icon } from '@/components/Icon';
 import { TrueFalseCheck } from '@/components/TrueFalseCheck';
 
@@ -116,6 +117,7 @@ function SimpleLearnPage() {
           <div className="h-full rounded-full bg-gold transition-[width] duration-300" style={{ width: `${(Math.min(session.state + 1, stageTotal) / stageTotal) * 100}%` }} />
         </div>
         <span className="text-xs font-semibold text-muted">{Math.min(session.state + 1, stageTotal)}/{stageTotal}</span>
+        <ReferenceText chapterId={chapterId} sectionId={sectionId} mode="drawer" />
       </div>
 
       <div ref={rootRef} className="space-y-3">
