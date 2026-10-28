@@ -4,7 +4,7 @@ Atualizado em 28/10/2026. Este documento separa o simulador educacional já impl
 
 ## Estado atual: terminal didático isolado
 
-`src/lib/terminal.ts` interpreta um subconjunto explícito de comandos num sistema de arquivos virtual. Isso permite ensinar navegação, leitura de logs, memória/processos, execução guiada de JavaScript e Git sem dar acesso ao dispositivo, ao navegador ou ao servidor de hospedagem. As tarefas do exercício só contam como concluídas quando os comandos e os estados exigidos são observados.
+`src/lib/terminal.ts` interpreta um subconjunto explícito de comandos num sistema de arquivos virtual. Isso permite ensinar navegação, leitura de logs, permissões Unix (`ls -l`, `stat`, `chmod`), memória/processos, execução guiada de JavaScript e Git sem dar acesso ao dispositivo, ao navegador ou ao servidor de hospedagem. As tarefas do exercício só contam como concluídas quando os comandos e os estados exigidos são observados.
 
 Esse runtime é intencionalmente limitado. Ele **não é um kernel Linux nem um shell POSIX completo**: as saídas de processos e rede são dados do cenário, o comando `node` interpreta exemplos conhecidos em vez de executar JavaScript arbitrário, e parte dos comandos ainda não está implementada. A interface informa essa distinção.
 
