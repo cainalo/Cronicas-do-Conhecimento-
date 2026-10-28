@@ -1,11 +1,19 @@
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile, stat } from 'node:fs/promises';
 
 const manifestPath = 'public/manifest.webmanifest';
-const version = 'portico-20261028-2';
+const htmlPath = 'index.html';
+// Unique per workflow commit: mobile browsers often cache installed-app icons more
+// aggressively than ordinary page assets, so a permanent version string is insufficient.
+const version = 'portico-' + (process.env.GITHUB_SHA?.slice(0, 12) || Date.now().toString(36));
 const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
 
-// capacitor-assets pode reescrever o manifesto ao gerar os PNGs. Reaplique a marca
-// aprovada e atribua URLs versionadas para forçar o celular a buscar os ícones novos.
+for (const path of ['public/pwa-192.png', 'public/pwa-512.png', 'public/maskable-512.png', 'public/apple-touch-icon.png']) {
+  const info = await stat(path);
+  if (info.size < 1000) throw new Error('Ícone web ausente ou inválido: ' + path);
+}
+
+// capacitor-assets can rewrite the manifest during generation. Reapply the approved
+// Pórtico metadata and version all installed-app icon URLs.
 Object.assign(manifest, {
   id: './',
   name: 'Pórtico',
@@ -24,4 +32,12 @@ Object.assign(manifest, {
   ],
 });
 await writeFile(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
-console.log('Manifesto Pórtico atualizado; cache dos ícones marcado como ' + version);
+
+let html = await readFile(htmlPath, 'utf8');
+for (const asset of ['icon\\.svg', 'apple-touch-icon\\.png', 'manifest\\.webmanifest']) {
+  const pattern = new RegExp('(href="%BASE_URL%' + asset + '\\?v=)[^"]+');
+  if (!pattern.test(html)) throw new Error('Link com versão de cache não encontrado em index.html: ' + asset);
+  html = html.replace(pattern, (_match, prefix) => prefix + version);
+}
+await writeFile(htmlPath, html);
+console.log('Ícones Pórtico gerados e cache invalidado com ' + version);

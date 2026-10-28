@@ -40,6 +40,30 @@ jobs:
           mkdir -p "$RUNNER_TEMP/portico-assets"
           cp public/portico-launcher.svg "$RUNNER_TEMP/portico-assets/icon.svg"
           npx capacitor-assets generate --assetPath "$RUNNER_TEMP/portico-assets" --android --pwa --iconBackgroundColor "#0F4C5C" --iconBackgroundColorDark "#0F4C5C" --splashBackgroundColor "#F7EFDF" --splashBackgroundColorDark "#10282E"
+      - name: Atualizar IDs dos ícones Android para limpar o cache do launcher
+        shell: bash
+        run: |
+          set -euo pipefail
+          RES="android/app/src/main/res"
+          # Resource names novos também obrigam o Android Launcher a reler os ícones após atualizar.
+          for dir in "$RES"/mipmap-*; do
+            [ -d "$dir" ] || continue
+            for suffix in "" "_round" "_background" "_foreground"; do
+              src="$dir/ic_launcher${suffix}.png"
+              if [ -f "$src" ]; then
+                cp "$src" "$dir/ic_portico_launcher${suffix}.png"
+              fi
+            done
+          done
+          for suffix in "" "_round"; do
+            src="$RES/mipmap-anydpi-v26/ic_launcher${suffix}.xml"
+            if [ -f "$src" ]; then
+              sed 's/ic_launcher_background/ic_portico_launcher_background/g; s/ic_launcher_foreground/ic_portico_launcher_foreground/g' "$src" > "$RES/mipmap-anydpi-v26/ic_portico_launcher${suffix}.xml"
+            fi
+          done
+          test -f "$RES/mipmap-mdpi/ic_portico_launcher.png"
+          test -f "$RES/mipmap-mdpi/ic_portico_launcher_round.png"
+          test -f "$RES/mipmap-anydpi-v26/ic_portico_launcher.xml"
       - name: Reforçar a marca Pórtico e invalidar cache dos ícones web
         run: node scripts/version-pwa-icons.mjs
       - run: npm test

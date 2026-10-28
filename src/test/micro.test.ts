@@ -128,6 +128,7 @@ describe('retomada da microaula com ponto salvo inválido', () => {
   it('vai para a fase válida mais próxima em vez de quebrar a tela', () => {
     expect(clampPhase({ k: 'explicar', i: 1 }, l)).toEqual({ k: 'explicar', i: 1 });
     expect(clampPhase({ k: 'checar', i: 5 }, l)).toEqual({ k: 'praticar', i: 0 });
+    expect(clampPhase({ k: 'midia' }, l, false)).toEqual({ k: 'praticar', i: 0 });
     expect(clampPhase({ k: 'praticar', i: 3 }, l)).toEqual({ k: 'prova', i: 0 });
     expect(clampPhase({ k: 'prova', i: 2 }, l)).toEqual({ k: 'sintese' });
     expect(clampPhase({ k: 'praticar', i: 3 }, { ...l, exam: [] })).toEqual({ k: 'sintese' });

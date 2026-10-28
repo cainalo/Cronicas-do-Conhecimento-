@@ -3,12 +3,10 @@
 // no estilo da prova e síntese. O ponto exato fica salvo (useSession), e o Continuar volta aqui.
 // Nenhuma tela rola para baixo: o que não cabe vira outra parte, ao lado (ContentFlow).
 import { useMemo } from 'react';
-import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import type { MicroLesson } from '@/content/types';
 import type { FeedPost } from '@/lib/feed';
-import { curatedVideos, feedPostsOf, getChapter, getQuestion, narratedFor, teacherForChapter } from '@/content';
-import { NarratedPlayer } from './Narrated';
+import { curatedVideos, feedPostsOf, getChapter, getQuestion, teacherForChapter } from '@/content';
 import { VideoEmbed } from '@/components/VideoEmbed';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
@@ -30,7 +28,7 @@ type Phase =
   | { k: 'checar'; i: number }
   | { k: 'recuperar'; i: number }
   | { k: 'rechecar'; i: number }
-  /** Sequência única (25/10/2026): aula narrada e videoaula conferida, dentro da aula, antes da prática. */
+  /** Videoaulas complementares conferidas, quando existirem, antes da prática. A aula narrada é uma unidade separada da trilha. */
   | { k: 'midia' }
   | { k: 'praticar'; i: number }
   | { k: 'prova'; i: number }
@@ -66,11 +64,10 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   const { update } = useStudy();
   const { sfx, confetti } = useFx();
   const chapter = getChapter(lesson.chapterId)!;
-  const narrated = narratedFor(lesson.id);
-  // Só videoaulas conferidas entram na sequência; as "a conferir" ficam na biblioteca de vídeos.
+  // A aula narrada possui unidade própria na trilha; aqui ficam somente videoaulas externas conferidas.
   const videos = curatedVideos.filter((v) => v.lessonId === lesson.id && v.status === 'conferido');
   const relatedTips = useMemo(() => feedPostsOf(lesson.id).filter((post) => post.kind === 'dica'), [lesson.id]);
-  const hasMedia = !!narrated || videos.length > 0;
+  const hasMedia = videos.length > 0;
   const n = lesson.steps.length;
   // Em série, cada aula tem o seu ponto salvo; sozinha, usa a chave do trecho (como antes).
   const key = series ? seriesKey(lesson.chapterId, lesson.sectionId, lesson.id) : learnKey(lesson.chapterId, lesson.sectionId);
@@ -248,40 +245,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
         </section>
       )}
 
-      {phase.k === 'midia' && narrated && createPortal(
-        <div
-          className="fixed inset-0 z-[80] overflow-hidden bg-bg px-3 sm:px-6"
-          role="dialog"
-          aria-modal="true"
-          aria-label={'Aula narrada: ' + narrated.title}
-          style={{
-            paddingTop: 'max(0.5rem, env(safe-area-inset-top, 0px))',
-            paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom, 0px))',
-          }}
-        >
-          <div className="mx-auto flex h-full min-h-0 w-full max-w-4xl flex-col">
-            <div className="min-h-0 flex-1">
-              <NarratedPlayer
-                l={narrated}
-                embedded
-                exitLabel="Ir para a prática"
-                onClose={() => set(lesson.consolidation.length ? { k: 'praticar', i: 0 } : lesson.exam.length ? { k: 'prova', i: 0 } : { k: 'sintese' })}
-              />
-            </div>
-            <RelatedProfessionalPosts posts={relatedTips} />
-            {videos.length > 0 && (
-              <details className="max-h-20 shrink-0 overflow-y-auto rounded-lg border border-line bg-surface px-3 py-2 text-sm">
-                <summary className="cursor-pointer font-semibold">Videoaulas complementares</summary>
-                <div className="mt-2 space-y-2">
-                  {videos.map((v) => <VideoEmbed key={v.id} url={v.url} title={v.title} meta={[v.channel, v.duration].filter(Boolean).join(' · ')} />)}
-                </div>
-              </details>
-            )}
-          </div>
-        </div>,
-        document.body,
-      )}
-      {phase.k === 'midia' && !narrated && (
+      {phase.k === 'midia' && (
         <section className="flex min-h-0 flex-1 flex-col overflow-hidden" aria-label="Veja de outro jeito">
           <div className="mb-3 shrink-0">
             <p className="kicker">Antes de praticar</p>
