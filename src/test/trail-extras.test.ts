@@ -64,7 +64,9 @@ describe('trilha com todos os materiais', () => {
     const first = units.findIndex((u) => u.key === 'laboratorio:primeiros-passos');
     const logs = units.findIndex((u) => u.key === 'laboratorio:arquivos-logs');
     const processes = units.findIndex((u) => u.key === 'laboratorio:processos-linux');
-    const office = units.findIndex((u) => u.key === 'escritorio:processos-linux');
+    const office1 = units.findIndex((u) => u.key === 'escritorio:triagem');
+    const office2 = units.findIndex((u) => u.key === 'escritorio:diagnostico');
+    const office3 = units.findIndex((u) => u.key === 'escritorio:fechamento');
     const js = units.findIndex((u) => u.key === 'laboratorio:javascript');
     const git = units.findIndex((u) => u.key === 'laboratorio:git');
 
@@ -74,20 +76,27 @@ describe('trilha com todos os materiais', () => {
     expect(units[logs].chapterId).toBe('cap.infra.03');
     expect(units[logs].sectionId).toBe('arquivos');
     expect(units[processes].kind).toBe('laboratorio');
-    expect(units[office].kind).toBe('escritorio');
-    expect(office).toBe(processes + 1);
-    expect(units[office].to).toContain('/escritorio?fase=processos-linux');
+    expect(units[office1].kind).toBe('escritorio');
+    expect(office1).toBe(processes + 1);
+    expect(office2).toBe(office1 + 1);
+    expect(office3).toBe(office2 + 1);
+    expect(units[office1].to).toContain('/escritorio?fase=triagem');
+    expect(units[office2].to).toContain('/escritorio?fase=diagnostico');
+    expect(units[office3].to).toContain('/escritorio?fase=fechamento');
     expect(units[js].chapterId).toBe('cap.dev.04');
     expect(units[git].chapterId).toBe('cap.devops.01');
   });
 
   it('laboratório e fase do mapa só contam como concluídos após registro explícito', () => {
     const lab = units.find((u) => u.key === 'laboratorio:processos-linux')!;
-    const office = units.find((u) => u.key === 'escritorio:processos-linux')!;
+    const office = units.find((u) => u.key === 'escritorio:triagem')!;
+    const finale = units.find((u) => u.key === 'escritorio:fechamento')!;
     expect(unitDone(emptyData(), lab)).toBeUndefined();
     expect(unitDone(emptyData(), office)).toBeUndefined();
+    expect(unitDone(emptyData(), finale)).toBeUndefined();
     expect(unitDone(logUnit(emptyData(), lab.key), lab)).toBeTruthy();
     expect(unitDone(logUnit(emptyData(), office.key), office)).toBeTruthy();
+    expect(unitDone(logUnit(emptyData(), finale.key), finale)).toBeTruthy();
   });
 
 });
