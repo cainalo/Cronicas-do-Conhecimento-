@@ -11,7 +11,7 @@ export const REVIEW_DAYS = 7;
 
 export interface Unit {
   key: string;
-  kind: 'aprender' | 'narrada' | 'video' | 'professores' | 'praticar' | 'missao' | 'flashcards' | 'desafio';
+  kind: 'aprender' | 'narrada' | 'video' | 'professores' | 'praticar' | 'missao' | 'flashcards' | 'desafio' | 'laboratorio';
   chapterId: string;
   sectionId?: string;
   title: string;
@@ -32,6 +32,8 @@ export interface TrailExtras {
   videosFor?: (chapterId: string, sectionId: string) => { id: string; title: string; lessonId?: string }[];
   /** Primeira aula do trecho no feed dos professores (há posts quando o trecho tem aulas em série). */
   postsLessonFor?: (chapterId: string, sectionId: string) => string | undefined;
+  /** Laboratórios interativos que entram depois da prática do trecho. */
+  labsFor?: (chapterId: string, sectionId: string) => { id: string; title: string }[];
   /** O capítulo tem cartões de memorização. */
   hasCards?: (chapterId: string) => boolean;
 }
@@ -85,6 +87,10 @@ export function courseUnits(
         out.push({ key, kind: 'professores', chapterId: c.id, sectionId: s.id, title: `Professores: ${t}`, to: withVisit(`/sala?aula=${postsLesson}`, key) });
       }
       out.push({ key: practiceId(c.id, s.id), kind: 'praticar', chapterId: c.id, sectionId: s.id, title: `Praticar: ${t}`, to: `/pratica/${c.id}/${s.id}` });
+      for (const lab of extras.labsFor?.(c.id, s.id) ?? []) {
+        const key = `laboratorio:${lab.id}`;
+        out.push({ key, kind: 'laboratorio', chapterId: c.id, sectionId: s.id, title: `Laboratório prático: ${lab.title}`, to: `/laboratorio/${lab.id}?u=${encodeURIComponent(key)}` });
+      }
       const m = missions.find((x) => x.chapterId === c.id && x.sectionId === s.id);
       if (m) out.push({ key: missionKey(m.id), kind: 'missao', chapterId: c.id, sectionId: s.id, title: `Caso prático: ${m.title}`, to: `/missao/${m.id}` });
     }
@@ -103,6 +109,7 @@ export function courseUnits(
 /** Data em que a atividade foi concluída pela primeira vez (ou true, se concluída sem data guardada). */
 export function unitDone(data: StudyData, u: Unit): string | true | undefined {
   if (VISIT_KINDS.includes(u.kind)) return data.unitLog?.[u.key];
+  if (u.kind === 'laboratorio') return data.unitLog?.[u.key];
   if (u.kind === 'aprender') {
     const log = data.unitLog?.[u.key];
     if (log) return log;
