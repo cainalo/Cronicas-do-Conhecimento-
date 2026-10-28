@@ -17,10 +17,10 @@ describe('laboratórios de terminal', () => {
     state = run(state, 'pwd').state;
     expect(state.completedTasks).toContain('pwd');
     state = run(state, 'ls -la').state;
-    expect(state.history.at(-1)?.output).toContain('.bashrc');
+    expect(state.history[state.history.length - 1]?.output).toContain('.bashrc');
     state = run(state, 'cd /home/aprendiz/projetos/demo').state;
     state = run(state, 'cat README.md').state;
-    expect(state.history.at(-1)?.output).toContain('Projeto demo');
+    expect(state.history[state.history.length - 1]?.output).toContain('Projeto demo');
     expect(isTerminalLabComplete('primeiros-passos', state)).toBe(true);
   });
 
@@ -29,28 +29,28 @@ describe('laboratórios de terminal', () => {
     state = run(state, 'cd /var/log').state;
     state = run(state, 'ls -lah').state;
     state = run(state, 'grep -in "ERROR" app.log').state;
-    expect(state.history.at(-1)?.output).toContain('ERROR');
-    expect(state.history.at(-1)?.output).toContain('3:');
+    expect(state.history[state.history.length - 1]?.output).toContain('ERROR');
+    expect(state.history[state.history.length - 1]?.output).toContain('3:');
     state = run(state, 'tail -n 5 app.log').state;
-    expect(state.history.at(-1)?.output).toContain('120 segundos');
+    expect(state.history[state.history.length - 1]?.output).toContain('120 segundos');
     expect(isTerminalLabComplete('arquivos-logs', state)).toBe(true);
   });
 
   it('chamado do servidor: observa memória, processos e verifica o encerramento', () => {
     let state = createTerminalState('processos-linux');
     state = run(state, 'top').state;
-    expect(state.history.at(-1)?.output).toContain('4127');
+    expect(state.history[state.history.length - 1]?.output).toContain('4127');
     state = run(state, 'free -h').state;
-    expect(state.history.at(-1)?.output).toContain('96Mi');
+    expect(state.history[state.history.length - 1]?.output).toContain('96Mi');
     state = run(state, 'vmstat 1 3').state;
-    expect(state.history.at(-1)?.output).toContain('4120');
+    expect(state.history[state.history.length - 1]?.output).toContain('4120');
     state = run(state, 'kill 4127').state;
-    expect(state.history.at(-1)?.output).toContain('SIGTERM');
+    expect(state.history[state.history.length - 1]?.output).toContain('SIGTERM');
     state = run(state, 'ps aux').state;
-    expect(state.history.at(-1)?.output).not.toContain('4127');
+    expect(state.history[state.history.length - 1]?.output).not.toContain('4127');
     expect(isTerminalLabComplete('processos-linux', state)).toBe(true);
     state = run(state, 'free -h').state;
-    expect(state.history.at(-1)?.output).toContain('5.4Gi');
+    expect(state.history[state.history.length - 1]?.output).toContain('5.4Gi');
   });
 
   it('JavaScript: edita um arquivo do sistema virtual, executa e valida sintaxe', () => {
@@ -58,12 +58,12 @@ describe('laboratórios de terminal', () => {
     state = run(state, 'cd /home/aprendiz/projeto').state;
     state = run(state, 'cat app.js').state;
     state = run(state, 'node app.js').state;
-    expect(state.history.at(-1)?.output).toContain('Sistema pronto');
+    expect(state.history[state.history.length - 1]?.output).toContain('Sistema pronto');
     state = run(state, 'echo \'console.log("Olá do terminal!")\' > app.js').state;
     state = run(state, 'node app.js').state;
-    expect(state.history.at(-1)?.output).toContain('Olá do terminal!');
+    expect(state.history[state.history.length - 1]?.output).toContain('Olá do terminal!');
     state = run(state, 'node --check app.js').state;
-    expect(state.history.at(-1)?.output).toContain('Syntax OK');
+    expect(state.history[state.history.length - 1]?.output).toContain('Syntax OK');
     expect(isTerminalLabComplete('javascript', state)).toBe(true);
   });
 
@@ -72,10 +72,10 @@ describe('laboratórios de terminal', () => {
     state = run(state, 'cd /home/aprendiz/projeto').state;
     state = run(state, 'git status').state;
     state = run(state, 'git log --oneline').state;
-    expect(state.history.at(-1)?.output).toContain('a13f7c2');
+    expect(state.history[state.history.length - 1]?.output).toContain('a13f7c2');
     state = run(state, 'echo "Anotação de estudo" >> README.md').state;
     state = run(state, 'git diff -- README.md').state;
-    expect(state.history.at(-1)?.output).toContain('+Anotação de estudo');
+    expect(state.history[state.history.length - 1]?.output).toContain('+Anotação de estudo');
     expect(isTerminalLabComplete('git', state)).toBe(true);
   });
 
