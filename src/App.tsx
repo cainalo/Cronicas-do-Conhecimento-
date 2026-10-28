@@ -38,6 +38,7 @@ import { CustomizePage } from '@/pages/Customize';
 import { ScenarioListPage, ScenarioPage } from '@/pages/Scenarios';
 import { TeachersRoomPage } from '@/pages/TeachersRoom';
 import { WorldPage } from '@/pages/World';
+import { TerminalLabPage } from '@/pages/TerminalLab';
 import { NarratedPage } from '@/pages/Narrated';
 
 export function AppRoutes() {
@@ -60,6 +61,8 @@ export function AppRoutes() {
         <Route path="personalizar" element={<CustomizePage />} />
         <Route path="simulador" element={<ScenarioListPage />} />
         <Route path="simulador/:id" element={<ScenarioPage />} />
+        <Route path="laboratorio" element={<TerminalLabPage />} />
+        <Route path="laboratorio/:id" element={<TerminalLabPage />} />
         <Route path="sala" element={<TeachersRoomPage />} />
         <Route path="escritorio" element={<WorldPage />} />
         <Route path="aula-narrada/:id" element={<NarratedPage />} />
