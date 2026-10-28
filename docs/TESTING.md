@@ -55,3 +55,12 @@ Login/cadastro/recuperação e sincronização HTTP com o Supabase (rede do cont
 
 ## Execução de 25/10/2026 (noite)
 `npm test`: 1003/1003; `tsc -b` e build OK. Testes novos: fase de mídia da aula (narrada dentro da aula), feed social (perfil, curtir, revisão rápida), tela do Escritório (ir até, objeto, conversa, teclado, Esc), móveis e direção no mapa, retomada da microaula com ponto salvo inválido.
+
+## Laboratórios de terminal e mapa — adicionados em 28/10/2026
+
+Testes de regressão incluídos:
+- `src/test/terminal.test.ts`: navegação e arquivos, busca nos logs, leitura de processos/memória, alteração de JavaScript, Git e bloqueios de comandos destrutivos.
+- `src/test/trail-extras.test.ts`: posição dos cinco laboratórios e das três fases do Escritório, além do registro de conclusão.
+- `src/test/world.test.tsx`: encaminhamento do objeto de terminal no mapa para o laboratório.
+
+**Status desta rodada:** os testes foram escritos, mas não executados nesta sessão. Antes de aprovar a branch, rode `npm test`, `npm run build` e `npm run test:e2e`; confira a UI em 360×640 e 390×844. Não marcar como aprovado com base apenas na presença dos testes.
