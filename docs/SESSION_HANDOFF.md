@@ -94,3 +94,15 @@ Antes: `npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escur
 2. Quando o usuário enviar os PDFs, ampliar `legislacao/cap02-normas/02-goias-tce.md` e `institucional/cap02-goias/*` e suas questões.
 3. Narrativa: falas extras por marco (nível, selos) se o usuário quiser.
 4. Ideias pendentes: virada de página no leitor, ilustrações nas margens.
+
+## Rodada 28/10/2026 — laboratórios práticos de TI e fases do Escritório
+
+**Branch de trabalho:** `feat/laboratorios-terminal-trilha` (partiu de `main`; não mesclada nem publicada).
+
+- Adicionado `src/lib/terminal.ts`: terminal didático com sistema de arquivos e processos virtuais, comandos Linux comuns, leitura/filtragem de logs, um chamado de servidor lento, uma tarefa Node/JavaScript e inspeção de diferenças Git. Não usa `eval` nem executa shell no aparelho/servidor; operações administrativas e remoção recursiva forçada são bloqueadas. Saídas claramente didáticas.
+- Adicionada `src/pages/TerminalLab.tsx`, rotas `/laboratorio/:id`, histórico com diretório de trabalho, sugestões preenchíveis, dicas e checklist com conclusão por tarefa. O estado de cada laboratório é salvo no aparelho.
+- A trilha única agora recebe cinco laboratórios após a prática de suas seções: sistema operacional/arquivos, logs, processos, JavaScript e Git.
+- O objeto “terminal na mesa da Marta” do mapa abre o laboratório de processos. O caso original segue no mapa e foi dividido em três marcos que aparecem como unidades próprias da trilha: triagem (só depois de examinar o terminal), diagnóstico (ao chegar à etapa de diagnóstico) e intervenção/verificação/fechamento (quando o chamado for encerrado).
+- Testes adicionados em `src/test/terminal.test.ts`, `src/test/trail-extras.test.ts` e `src/test/world.test.tsx`.
+
+**Validação pendente:** esta sessão alterou os arquivos diretamente no GitHub, mas não executou `npm test`, `npm run build` ou `npm run test:e2e`. O workflow de publicação atual é restrito a `main` e à branch de publicação do app; portanto, não interpretar a existência desta branch como CI verde ou publicação concluída. Executar os três comandos antes de aprovar/mesclar/publicar.
