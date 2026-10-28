@@ -286,11 +286,12 @@ function taskUpdates(
   before: TerminalState,
   after: TerminalState,
   output: string,
+  exitCode: 0 | 1,
 ): string[] {
   const done = new Set(after.completedTasks);
   const cmd = command;
   const argText = args.join(' ');
-  const success = output.length >= 0;
+  const success = exitCode === 0;
   const mark = (id: string) => done.add(id);
   const valid = (text: string) => success && text.length > 0;
   if (labId === 'primeiros-passos') {
@@ -441,9 +442,11 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
             const p = resolvePath(cwd, f);
             if (files[p] === undefined) { fail('grep: ' + f + ': arquivo inexistente'); break; }
             linesFor(p).forEach((line, i) => {
-              const haystack = args.some((a) => a.includes('i')) ? line.toLowerCase() : line;
-              const needle = args.some((a) => a.includes('i')) ? pattern.toLowerCase() : pattern;
-              if (haystack.includes(needle)) matches.push((args.some((a) => a.includes('n')) ? String(i + 1) + ':' : '') + line);
+              const insensitive = args.some((a) => a.startsWith('-') && a.includes('i'));
+              const numbered = args.some((a) => a.startsWith('-') && a.includes('n'));
+              const haystack = insensitive ? line.toLowerCase() : line;
+              const needle = insensitive ? pattern.toLowerCase() : pattern;
+              if (haystack.includes(needle)) matches.push((numbered ? String(i + 1) + ':' : '') + line);
             });
           }
           if (exitCode === 0) output = matches.join('\n') || 'Nenhuma linha corresponde ao padrão.';
@@ -617,8 +620,8 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
           if (files[target] === undefined) fail('node --check: arquivo inexistente: ' + args[1]);
           else {
             const code = files[target];
-            const open = (code.match(/[({[]/g) ?? []).length;
-            const close = (code.match(/[)}\\]]/g) ?? []).length;
+            const open = [...code].filter((ch) => ch === '(' || ch === '{' || ch === '[').length;
+            const close = [...code].filter((ch) => ch === ')' || ch === '}' || ch === ']').length;
             if (open !== close || !code.includes('console.log')) fail('SyntaxError: verifique parênteses, chaves e console.log no exemplo.');
             else output = 'Syntax OK';
           }
@@ -633,7 +636,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
       case 'python':
         if (args[0] === '--version' || args[0] === '-V') output = 'Python 3.12.0 (versão de exemplo)';
         else if (args[0] === '-c' && args[1]) {
-          const m = args[1].match(/^print\\((['"])(.*?)\\1\\)$/);
+          const m = args[1].match(/^print\((['"])(.*?)\1\)$/);
           output = m ? m[2] : 'O laboratório só interpreta print com texto literal; não executa código arbitrário.';
           if (!m) exitCode = 1;
         } else fail('Uso: python --version ou python -c "print(\'texto\')"');
@@ -693,6 +696,6 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
     history: [...state.history, entry].slice(-100),
     nextEntryId: state.nextEntryId + 1,
   };
-  next = { ...next, completedTasks: taskUpdates(state.labId, command, args, before, next, output) };
+  next = { ...next, completedTasks: taskUpdates(state.labId, command, args, before, next, output, exitCode) };
   return { state: next, entry };
 }
