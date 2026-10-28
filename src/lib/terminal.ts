@@ -64,10 +64,11 @@ export const terminalLabs: TerminalLab[] = [
       { id: 'stat-script', title: 'Consulte os metadados do arquivo', hint: 'stat scripts/backup.sh deve mostrar o modo inicial 0644.' },
       { id: 'chmod-script', title: 'Permita que o proprietário execute o script', hint: 'Use chmod u+x scripts/backup.sh. Isso acrescenta execução para o dono, sem mudar as permissões do grupo e dos outros.' },
       { id: 'verify-script', title: 'Confira que a permissão mudou', hint: 'Use ls -l scripts/backup.sh ou stat scripts/backup.sh e confirme que o dono tem x.' },
+      { id: 'run-script', title: 'Execute o script que você autorizou', hint: 'Use ./scripts/backup.sh. Sem a permissão de execução, o sistema retorna Permission denied.' },
       { id: 'secure-data', title: 'Restrinja o arquivo de dados fictício', hint: 'Use chmod 600 dados/clientes.csv. Somente o proprietário terá leitura e escrita.' },
       { id: 'verify-data', title: 'Confirme o modo 0600', hint: 'Use stat dados/clientes.csv e confira o modo final.' },
     ],
-    suggestions: ['cd /home/aprendiz', 'ls -l scripts', 'stat scripts/backup.sh', 'chmod u+x scripts/backup.sh', 'ls -l scripts/backup.sh', 'chmod 600 dados/clientes.csv', 'stat dados/clientes.csv'],
+    suggestions: ['cd /home/aprendiz', 'ls -l scripts', 'stat scripts/backup.sh', 'chmod u+x scripts/backup.sh', 'ls -l scripts/backup.sh', './scripts/backup.sh', 'chmod 600 dados/clientes.csv', 'stat dados/clientes.csv'],
   },
   {
     id: 'processos-linux',
@@ -273,6 +274,24 @@ function words(raw: string): string[] {
   return result;
 }
 
+function hasPermission(path: string, state: TerminalState, permission: 'r' | 'w' | 'x'): boolean {
+  const isDir = state.directories.includes(path);
+  const mode = (state.permissions[path] ?? (isDir ? '755' : '644')).padStart(3, '0').slice(-3);
+  const ownerBits = Number.parseInt(mode[0], 8) || 0;
+  const needed = permission === 'r' ? 4 : permission === 'w' ? 2 : 1;
+  // Todos os arquivos de treino pertencem ao usuário atual, aprendiz; grupo/outros aparecem
+  // nas saídas para estudo, mas não há troca de usuário neste sandbox.
+  return (ownerBits & needed) !== 0;
+}
+
+function shellScriptOutput(script: string): string {
+  const output = script.split('\\n').map((line) => line.trim()).filter((line) => line.startsWith('echo ')).map((line) => {
+    const match = line.match(/^echo\\s+(?:"([^"]*)"|'([^']*)'|(.+))$/);
+    return match ? (match[1] ?? match[2] ?? match[3] ?? '') : '';
+  }).filter(Boolean);
+  return output.length ? output.join('\\n') : 'Script executado; não há comandos echo reconhecidos neste laboratório.';
+}
+
 function modeString(path: string, state: TerminalState): string {
   const isDir = state.directories.includes(path);
   const mode = (state.permissions[path] ?? (isDir ? '755' : '644')).padStart(3, '0').slice(-3);
@@ -384,6 +403,7 @@ function taskUpdates(
     if (cmd === 'stat' && args.includes('scripts/backup.sh') && output.includes('0644') && success) mark('stat-script');
     if (cmd === 'chmod' && args[0] === 'u+x' && args[1] === 'scripts/backup.sh' && after.permissions[script] === '744' && success) mark('chmod-script');
     if (cmd === 'ls' && args.some((a) => a.endsWith('backup.sh')) && args.some((a) => a.startsWith('-') && a.includes('l')) && modeString(script, after).includes('x') && valid(output)) mark('verify-script');
+    if (cmd === 'scripts/backup.sh' && output.includes('Relatorio de estudo pronto') && success) mark('run-script');
     if (cmd === 'chmod' && args[0] === '600' && args[1] === 'dados/clientes.csv' && after.permissions[dataFile] === '600' && success) mark('secure-data');
     if (cmd === 'stat' && args.includes('dados/clientes.csv') && output.includes('0600') && success) mark('verify-data');
   }
@@ -519,6 +539,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
           const path = resolvePath(cwd, fileArg);
           if (isDirectory(path, directories)) fail(command + ': ' + fileArg + ' é um diretório');
           else if (files[path] === undefined) fail(command + ': ' + fileArg + ': arquivo inexistente');
+          else if (!hasPermission(path, { ...state, cwd, files, directories, permissions, processes, history: state.history, completedTasks: state.completedTasks, nextEntryId: state.nextEntryId }, 'r')) fail(command + ': ' + fileArg + ': Permissão negada');
           else {
             let lines = linesFor(path);
             const nIndex = args.indexOf('-n');
@@ -746,6 +767,14 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
       case 'journalctl':
         output = 'Oct 28 08:32:18 relat-01 reports-api: tempo de resposta acima de 120s\nOct 28 08:35:41 relat-01 reports-api: requisição encerrada por timeout';
         break;
+      case 'scripts/backup.sh': {
+        const target = resolvePath(cwd, command);
+        const view = { ...state, cwd, files, directories, permissions, processes, history: state.history, completedTasks: state.completedTasks, nextEntryId: state.nextEntryId };
+        if (files[target] === undefined) fail(command + ': arquivo inexistente');
+        else if (!hasPermission(target, view, 'x')) fail('bash: ' + command + ': Permissão negada. Verifique a permissão de execução com ls -l e chmod.');
+        else output = shellScriptOutput(files[target]);
+        break;
+      }
       case 'node': {
         const fileArg = args.find((a) => a.endsWith('.js'));
         if (args[0] === '--version' || args[0] === '-v') output = 'v22.11.0 (versão de exemplo)';
@@ -763,6 +792,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
         else {
           const target = resolvePath(cwd, fileArg);
           if (files[target] === undefined) fail('node: arquivo inexistente: ' + fileArg);
+          else if (!hasPermission(target, { ...state, cwd, files, directories, permissions, processes, history: state.history, completedTasks: state.completedTasks, nextEntryId: state.nextEntryId }, 'r')) fail('node: ' + fileArg + ': Permissão negada');
           else output = nodeOutput(files[target]);
         }
         break;
