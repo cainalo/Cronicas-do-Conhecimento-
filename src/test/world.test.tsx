@@ -135,18 +135,24 @@ describe('tela do escritório (tela cheia)', () => {
     saveData('visitante', { ...emptyData(), reading: { 'cap.infra.03': { chapterId: 'cap.infra.03', sectionsRead: ['processos'], updatedAt: '2026-10-25T10:00:00.000Z' } } });
   });
 
-  it('mapa por cima de tudo; ir até um objeto mostra a descrição; ir até a Marta abre a conversa', async () => {
+  it('registra a triagem ao examinar o chamado e preserva a interação com o quadro e a Marta', async () => {
     const user = userEvent.setup();
     renderWorld();
     expect(screen.getByTestId('mundo')).toBeInTheDocument();
     expect(screen.getByTestId('mundo-objetivo')).toHaveTextContent(/Marta/);
+
     await user.click(screen.getByRole('button', { name: 'Ir até' }));
-    await user.click(screen.getByRole('button', { name: /Quadro de chamados do Suporte/ }));
+    await user.click(screen.getByRole('button', { name: /chamado 2318, no balcão/i }));
     expect(await screen.findByTestId('mundo-objeto')).toHaveTextContent(/2318/);
     await waitFor(() => {
       const saved = JSON.parse(localStorage.getItem('cronicas:v1:visitante')!);
       expect(saved.unitLog?.['escritorio:triagem']).toBeTruthy();
     });
+
+    await user.click(screen.getByRole('button', { name: 'Fechar o painel' }));
+    await user.click(screen.getByRole('button', { name: 'Ir até' }));
+    await user.click(screen.getByRole('button', { name: /Quadro de chamados do Suporte/ }));
+    expect(await screen.findByTestId('mundo-objeto')).toHaveTextContent(/2318/);
     expect(screen.getByTestId('mundo-sala')).toHaveTextContent('Suporte');
     await user.click(screen.getByRole('button', { name: 'Fechar o painel' }));
     await user.click(screen.getByRole('button', { name: 'Ir até' }));
