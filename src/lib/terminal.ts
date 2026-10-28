@@ -408,6 +408,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
   let cwd = state.cwd;
   let files = { ...state.files };
   let directories = [...state.directories];
+  let permissions = { ...state.permissions };
   let processes = state.processes.map((p) => ({ ...p }));
   let output = '';
   let exitCode: 0 | 1 = 0;
@@ -463,15 +464,32 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
       case 'ls': {
         const targetArg = args.find((a) => !a.startsWith('-'));
         const target = resolvePath(cwd, targetArg);
-        if (!isDirectory(target, directories)) fail('ls: não é possível acessar ' + (targetArg ?? '.') + ': diretório inexistente');
-        else {
-          let names = childNames(target, { ...state, cwd, files, directories, processes, history: state.history, completedTasks: state.completedTasks, nextEntryId: state.nextEntryId });
-          if (args.some((a) => a.includes('a'))) {
+        const longFormat = args.some((a) => a.startsWith('-') && a.includes('l'));
+        const includeHidden = args.some((a) => a.startsWith('-') && a.includes('a'));
+        const view = { ...state, cwd, files, directories, permissions, processes, history: state.history, completedTasks: state.completedTasks, nextEntryId: state.nextEntryId };
+        if (!exists(target, view)) fail('ls: não é possível acessar ' + (targetArg ?? '.') + ': caminho inexistente');
+        else if (!isDirectory(target, directories)) {
+          const name = target.split('/').pop() ?? target;
+          output = longFormat
+            ? modeString(target, view) + ' 1 aprendiz aprendiz ' + String(files[target]?.length ?? 0).padStart(5) + ' Out 28 09:10 ' + name
+            : name;
+        } else {
+          let names = childNames(target, view);
+          if (includeHidden) {
             names = ['.', '..', ...names];
-            if (target === HOME) names.push('.bashrc');
+            if (target === HOME && !names.includes('.bashrc')) names.push('.bashrc');
             names = [...new Set(names)].sort();
           }
-          output = names.length ? names.join('  ') : '(diretório vazio)';
+          output = longFormat
+            ? names.map((name) => {
+                const cleanName = name.endsWith('/') ? name.slice(0, -1) : name;
+                const fullPath = cleanName === '.' ? target : cleanName === '..'
+                  ? (target.slice(0, target.lastIndexOf('/')) || '/')
+                  : resolvePath(target, cleanName);
+                const size = files[fullPath]?.length ?? 4096;
+                return modeString(fullPath, view) + ' 1 aprendiz aprendiz ' + String(size).padStart(5) + ' Out 28 09:10 ' + name;
+              }).join('\\n')
+            : names.length ? names.join('  ') : '(diretório vazio)';
         }
         break;
       }
