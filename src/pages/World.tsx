@@ -104,7 +104,7 @@ function WorldPlay({ w, s }: { w: World; s: Scenario }) {
     const nodeId = st.scenario.nodeId;
     update((data) => {
       let next = data;
-      if (nodeId !== 'n.inicio' || st.closed) next = logUnit(next, 'escritorio:triagem');
+      if ((nodeId !== 'n.inicio' && st.examined.includes('terminal')) || st.closed) next = logUnit(next, 'escritorio:triagem');
       if (nodeId === 'n.acao' || nodeId === 'n.fim' || st.closed) next = logUnit(next, 'escritorio:diagnostico');
       if (st.closed) next = logUnit(next, 'escritorio:fechamento');
       return next;
