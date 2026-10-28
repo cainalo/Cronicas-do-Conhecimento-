@@ -327,12 +327,12 @@ function childNames(path: string, state: TerminalState): string[] {
   for (const dir of state.directories) {
     if (dir === path || !dir.startsWith(prefix)) continue;
     const rest = dir.slice(prefix.length);
-    if (rest && !rest.includes('/')) names.add(rest + '/');
+    if (rest && !rest.includes('/') && !rest.startsWith('.')) names.add(rest + '/');
   }
   for (const file of Object.keys(state.files)) {
     if (!file.startsWith(prefix)) continue;
     const rest = file.slice(prefix.length);
-    if (rest && !rest.includes('/')) names.add(rest);
+    if (rest && !rest.includes('/') && !rest.startsWith('.')) names.add(rest);
   }
   return [...names].sort((a, b) => a.localeCompare(b));
 }
@@ -385,7 +385,7 @@ function taskUpdates(
   const valid = (text: string) => success && text.length > 0;
   if (labId === 'primeiros-passos') {
     if (cmd === 'pwd' && valid(output)) mark('pwd');
-    if (cmd === 'ls' && args.some((a) => a.includes('a')) && valid(output)) mark('ls-hidden');
+    if (cmd === 'ls' && args.some((a) => a.startsWith('-') && a.includes('a')) && valid(output)) mark('ls-hidden');
     if (cmd === 'cd' && after.cwd === DEMO) mark('cd-demo');
     if (cmd === 'cat' && before.cwd === DEMO && args.includes('README.md') && valid(output)) mark('readme');
   }
@@ -477,9 +477,9 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
       case 'help':
         output = [
           'Comandos disponíveis neste ambiente didático:',
-          'pwd, ls -la, cd, cat, head, tail, grep, find, touch, mkdir, cp, mv, rm, echo ... > arquivo',
+          'pwd, ls -la/-l, cd, cat, head, tail, grep, find, touch, mkdir, cp, mv, rm, stat, chmod, echo ... > arquivo',
           'whoami, uname -a, free -h, top, ps aux, vmstat 1 3, kill PID, df -h, du -sh, ip addr, ping',
-          'node, node --check, npm, git status, git log, git diff.',
+          'node, node --check, npm, git status, git log, git diff. Script conhecido: ./scripts/backup.sh depois de chmod u+x.',
           'Alguns comandos são amostras simuladas; nada é executado fora deste laboratório.',
         ].join('\n');
         break;
