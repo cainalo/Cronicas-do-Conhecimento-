@@ -537,7 +537,11 @@ export const trailExtras: TrailExtras = {
     .filter((lab) => lab.chapterId === chapterId && lab.sectionId === sectionId)
     .map((lab) => ({ id: lab.id, title: lab.title })),
   officeFor: (chapterId, sectionId) => chapterId === 'cap.infra.03' && sectionId === 'processos'
-    ? [{ id: 'processos-linux', title: 'Investigar o servidor lento (chamado 2318)' }]
+    ? [
+        { id: 'triagem', title: 'Fase 1 · Triagem e coleta de evidências' },
+        { id: 'diagnostico', title: 'Fase 2 · Diagnóstico e escolha da intervenção' },
+        { id: 'fechamento', title: 'Fase 3 · Verificação e fechamento do chamado' },
+      ]
     : [],
   hasCards: (chapterId) => flashcards.some((f) => f.chapterId === chapterId),
 };
