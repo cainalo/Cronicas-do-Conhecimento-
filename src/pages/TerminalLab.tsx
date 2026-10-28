@@ -148,6 +148,29 @@ function TerminalWorkbench({ labId }: { labId: string }) {
         </div>
       </PageHeader>
 
+      {lab.id === 'processos' && (
+        <section className="rounded-2xl border border-teal/30 bg-surface p-4" data-testid="external-linux-environment">
+          <div className="flex items-start gap-3">
+            <Icon name="tela" size={22} className="shrink-0 text-teal" />
+            <div className="min-w-0 flex-1">
+              <h2 className="font-semibold">Quer praticar comandos em um Linux real?</h2>
+              <p className="mt-1 text-sm leading-relaxed text-muted">
+                Este laboratório interno simula saídas e usa arquivos virtuais. Para abrir um Linux x86 emulado no navegador,
+                experimente o perfil Buildroot do v86. É uma experiência externa: não compartilha estado nem registra progresso no Pórtico.
+              </p>
+              <a
+                href="https://copy.sh/v86/?profile=buildroot"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-xl border border-line bg-raised px-3 py-2 text-sm font-semibold"
+              >
+                Abrir emulador Linux externo <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="card space-y-3 p-4" aria-label="Objetivos do laboratório">
         <div className="flex items-start justify-between gap-3">
           <div>
