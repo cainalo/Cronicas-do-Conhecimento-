@@ -499,7 +499,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
                   : resolvePath(target, cleanName);
                 const size = files[fullPath]?.length ?? 4096;
                 return modeString(fullPath, view) + ' 1 aprendiz aprendiz ' + String(size).padStart(5) + ' Out 28 09:10 ' + name;
-              }).join('\\n')
+              }).join('\n')
             : names.length ? names.join('  ') : '(diretório vazio)';
         }
         break;
@@ -650,7 +650,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
             '  File: ' + target,
             '  Size: ' + size + '  Blocks: ' + Math.ceil(size / 512) + '  IO Block: 4096 ' + type,
             'Access: (' + mode + '/' + modeString(target, view) + ')  Uid: (1000/aprendiz)  Gid: (1000/aprendiz)',
-          ].join('\\n');
+          ].join('\n');
         }
         break;
       }
@@ -826,6 +826,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
     cwd,
     files,
     directories,
+    permissions,
     processes,
     history: [...state.history, entry].slice(-100),
     nextEntryId: state.nextEntryId + 1,
