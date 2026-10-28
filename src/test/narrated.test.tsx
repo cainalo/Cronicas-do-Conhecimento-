@@ -161,10 +161,10 @@ it('sequência única: a aula narrada abre automaticamente em tela inteira e seg
   expect(filmContent).not.toBeNull();
   expect(caption.parentElement).toBe(filmScene);
   expect(Array.from(filmScene.children).indexOf(caption)).toBeGreaterThan(Array.from(filmScene.children).indexOf(filmContent as Element));
-  const startingBeat = filmScene.getAttribute('data-beat');
+  const startingCut = screen.getByTestId('narrada-corte-suave');
   await user.click(screen.getByRole('button', { name: 'Avançar uma fala' }));
   await user.click(screen.getByRole('button', { name: 'Avançar uma fala' }));
-  expect(filmScene.getAttribute('data-beat')).not.toBe(startingBeat);
+  expect(screen.getByTestId('narrada-corte-suave')).not.toBe(startingCut);
   await user.click(screen.getByRole('button', { name: 'Ir para a prática' }));
   expect(screen.queryByRole('dialog', { name: /Aula narrada/ })).toBeNull();
   expect(screen.getByText(/Organize a linha do tempo/)).toBeInTheDocument();
