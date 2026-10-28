@@ -539,8 +539,8 @@ export const trailExtras: TrailExtras = {
   officeFor: (chapterId, sectionId) => chapterId === 'cap.infra.03' && sectionId === 'processos'
     ? [
         { id: 'triagem', title: 'Fase 1 · Triagem e coleta de evidências' },
-        { id: 'diagnostico', title: 'Fase 2 · Diagnóstico e escolha da intervenção' },
-        { id: 'fechamento', title: 'Fase 3 · Verificação e fechamento do chamado' },
+        { id: 'diagnostico', title: 'Fase 2 · Diagnóstico da causa' },
+        { id: 'fechamento', title: 'Fase 3 · Intervenção, verificação e fechamento' },
       ]
     : [],
   hasCards: (chapterId) => flashcards.some((f) => f.chapterId === chapterId),
