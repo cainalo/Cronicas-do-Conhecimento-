@@ -536,5 +536,8 @@ export const trailExtras: TrailExtras = {
   labsFor: (chapterId, sectionId) => terminalLabs
     .filter((lab) => lab.chapterId === chapterId && lab.sectionId === sectionId)
     .map((lab) => ({ id: lab.id, title: lab.title })),
+  officeFor: (chapterId, sectionId) => chapterId === 'cap.infra.03' && sectionId === 'processos'
+    ? [{ id: 'processos-linux', title: 'Investigar o servidor lento (chamado 2318)' }]
+    : [],
   hasCards: (chapterId) => flashcards.some((f) => f.chapterId === chapterId),
 };
