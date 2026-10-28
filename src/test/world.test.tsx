@@ -10,10 +10,27 @@ vi.mock('@/lib/supabase', () => ({ supabase: null }));
 import { getScenario } from '@/content';
 import { escritorio } from '@/content/world/escritorio';
 import { advance, choose, startScenario } from '@/lib/scenario';
-import { adjacentInteractable, currentObjective, examine, facingOf, findPath, pathNextTo, restoreWorld, roomAt, talk, validateWorld, walkable, type WorldState } from '@/lib/world';
+import { adjacentInteractable, currentObjective, examine, scenarioForOfficeMap, facingOf, findPath, pathNextTo, restoreWorld, roomAt, talk, validateWorld, walkable, type WorldState } from '@/lib/world';
 
 const s = getScenario(escritorio.scenarioId)!;
 const start = (): WorldState => ({ worldId: escritorio.id, version: escritorio.version, pos: escritorio.start, facing: 'direita', examined: [], scenario: startScenario(s, 't0'), updatedAt: 't0' });
+
+describe('cenário especial para o mapa interativo', () => {
+  it('não injeta a saída do terminal automaticamente no mapa jogável', () => {
+    const mapScenario = scenarioForOfficeMap(s);
+    let state = startScenario(mapScenario, 't0');
+    state = advance(mapScenario, choose(mapScenario, state, 'd.reiniciar', 't1'), 't1');
+    for (const d of ['d.top', 'd.cpu']) state = advance(mapScenario, choose(mapScenario, state, d, 't2'), 't2');
+    expect(state.nodeId).toBe('n.top');
+    expect(state.evidence).not.toContain('ev.top');
+    expect(state.evidence).not.toContain('ev.vmstat');
+    state = advance(mapScenario, choose(mapScenario, state, 'd.thrashing', 't3'), 't3');
+    state = advance(mapScenario, choose(mapScenario, state, 'd.term', 't4'), 't4');
+    expect(state.nodeId).toBe('n.fim');
+    expect(state.evidence).not.toContain('ev.depois');
+    expect(s.nodes.find((node) => node.id === 'n.top')?.evidenceIds).toEqual(['ev.top', 'ev.vmstat']);
+  });
+});
 
 describe('escritório 2D', () => {
   it('mapa válido: grade regular, todos alcançáveis, cada nó com quem o apresenta', () => {
@@ -43,13 +60,11 @@ describe('escritório 2D', () => {
     expect(talk(escritorio, w, 'joao').kind).toBe('conversa');
     expect(talk(escritorio, w, 'marta').kind).toBe('node');
     w = { ...w, scenario: advance(s, choose(s, w.scenario, 'd.top')) };
-    // O estado só ganha evidências quando o objeto de terminal é examinado depois dos comandos.
-    expect(w.scenario.evidence).not.toContain('ev.top');
+    // O motor genérico do cenário conserva suas evidências de referência; o mapa usa scenarioForOfficeMap.
+    expect(w.scenario.evidence).toEqual(expect.arrayContaining(['ev.top', 'ev.vmstat']));
     expect(talk(escritorio, w, 'marta')).toEqual({ kind: 'falta', objectIds: ['terminal'] });
     expect(currentObjective(escritorio, w)).toMatch(/terminal/);
     w = examine(escritorio, s, w, 'terminal').state;
-    expect(w.scenario.evidence).toContain('ev.top');
-    expect(w.scenario.evidence).toContain('ev.vmstat');
     expect(talk(escritorio, w, 'marta').kind).toBe('node');
     // Hipótese errada volta à mesma etapa; a certa leva ao João.
     w = { ...w, scenario: advance(s, choose(s, w.scenario, 'd.cpu')) };
@@ -60,7 +75,6 @@ describe('escritório 2D', () => {
     expect(examine(escritorio, s, w, 'console').available).toBe(false);
     w = { ...w, scenario: advance(s, choose(s, w.scenario, 'd.term')) };
     expect(talk(escritorio, w, 'marta')).toEqual({ kind: 'falta', objectIds: ['console'] });
-    expect(w.scenario.evidence).not.toContain('ev.depois');
     const ex = examine(escritorio, s, w, 'console');
     expect(ex.available).toBe(true);
     w = ex.state;

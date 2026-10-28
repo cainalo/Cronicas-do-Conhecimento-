@@ -17,6 +17,7 @@ import {
   currentObjective,
   decorTiles,
   examine,
+  scenarioForOfficeMap,
   facingOf,
   findPath,
   occupied,
@@ -69,7 +70,7 @@ function loadOfficeTerminalState(): TerminalState {
 }
 
 export function WorldPage() {
-  const s = getScenario(escritorio.scenarioId)!;
+  const s = useMemo(() => scenarioForOfficeMap(getScenario(escritorio.scenarioId)!), []);
   const { data } = useStudy();
   const [searchParams] = useSearchParams();
   const phase = searchParams.get('fase') ?? undefined;

@@ -90,6 +90,7 @@ export const cenarioSuporteLento: Scenario = {
       speakerId: 'marta',
       objective: 'Formar a hipótese.',
       dialogue: 'Esta é a tela do top. Junto, rodei o vmstat por alguns segundos. Qual é a sua hipótese?',
+      evidenceIds: ['ev.top', 'ev.vmstat'],
       decisions: [
         {
           id: 'd.thrashing',
@@ -155,6 +156,7 @@ export const cenarioSuporteLento: Scenario = {
       speakerId: 'marta',
       terminal: true,
       dialogue: 'O importador terminou, a memória voltou e os relatórios abrem de novo. Chamado resolvido. Vamos combinar com o João de rodar a carga à noite.',
+      evidenceIds: ['ev.depois'],
     },
   ],
   principle:
