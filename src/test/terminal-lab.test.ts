@@ -102,7 +102,7 @@ describe('terminal Linux virtual e isolado', () => {
     expect(shell.run('git status')).toContain('not a git repository');
     expect(shell.run('cd /home/aluno/projetos/portal')).toBe('');
     expect(shell.run('git status')).toContain('working tree clean');
-    expect(shell.run('echo "const status = pronto; console.log(status);" > index.js')).toBe('');
+    expect(shell.run(`echo "const status = 'pronto'; console.log(status);" > index.js`)).toBe('');
     expect(shell.run('git diff')).toContain("+const status = 'pronto'; console.log(status);");
     expect(shell.run('git add index.js')).toBe('');
     expect(shell.run('git status')).toContain('Changes to be committed');
