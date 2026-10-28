@@ -261,7 +261,7 @@ function nodeOutput(code: string): string {
   const output: string[] = [];
   const strings = /console\.log\(\s*(['"])(.*?)\1\s*\)/g;
   let match: RegExpExecArray | null;
-  while ((match = strings.exec(code))) output.push(match[2].replace(/\\\n/g, '\n'));
+  while ((match = strings.exec(code))) output.push(match[2].replace(/\\n/g, '\n'));
   const arithmetic = /console\.log\(\s*(-?\d+(?:\.\d+)?)\s*([+*/-])\s*(-?\d+(?:\.\d+)?)\s*\)/g;
   while ((match = arithmetic.exec(code))) {
     const a = Number(match[1]);
