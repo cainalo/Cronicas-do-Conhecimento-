@@ -6,6 +6,7 @@ import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
 import { saveData } from '@/lib/storage';
 import { emptyData } from '@/lib/model';
+import { createTerminalState, runTerminalCommand } from '@/lib/terminal';
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
 import { getScenario } from '@/content';
 import { escritorio } from '@/content/world/escritorio';
@@ -98,11 +99,11 @@ describe('escritório: móveis, objetos de ambiente e direção', () => {
 });
 
 describe('tela do escritório (tela cheia)', () => {
-  const renderWorld = () =>
+  const renderWorld = (path = '/escritorio') =>
     render(
       <PrefsProvider>
         <StudyProvider>
-          <MemoryRouter initialEntries={['/escritorio']}>
+          <MemoryRouter initialEntries={[path]}>
             <AppRoutes />
           </MemoryRouter>
         </StudyProvider>
@@ -130,16 +131,44 @@ describe('tela do escritório (tela cheia)', () => {
     expect(await screen.findByTestId('mundo-conversa')).toHaveTextContent(/primeiro chamado/);
   });
 
-  it('o terminal da Marta abre o laboratório de comandos do chamado', async () => {
+  it('o terminal do mapa exige completar o laboratório antes de liberar evidências', async () => {
     const user = userEvent.setup();
     renderWorld();
     await user.click(screen.getByRole('button', { name: 'Ir até' }));
     await user.click(screen.getByRole('button', { name: /terminal na mesa da Marta/i }));
-    expect(await screen.findByTestId('mundo-objeto')).toHaveTextContent(/saída do top/i);
-    expect(screen.getByRole('link', { name: /investigar com comandos no terminal/i })).toHaveAttribute(
+    const panel = await screen.findByTestId('mundo-objeto');
+    expect(panel).toHaveTextContent(/conclua os comandos Linux no laboratório/i);
+    expect(panel).not.toHaveTextContent(/saída do top/i);
+    expect(screen.getByRole('link', { name: /iniciar laboratório de comandos/i })).toHaveAttribute(
       'href',
       '/laboratorio/processos-linux?origem=escritorio',
     );
+  });
+
+  it('o mapa libera e registra evidências depois que o laboratório foi realmente concluído', async () => {
+    let lab = createTerminalState('processos-linux');
+    for (const command of ['top', 'free -h', 'vmstat 1 3', 'kill 4127', 'ps aux']) {
+      lab = runTerminalCommand(lab, command).state;
+    }
+    localStorage.setItem('cronicas:terminal-lab:v1:processos-linux', JSON.stringify(lab));
+    const user = userEvent.setup();
+    renderWorld();
+    await user.click(screen.getByRole('button', { name: 'Ir até' }));
+    await user.click(screen.getByRole('button', { name: /terminal na mesa da Marta/i }));
+    const panel = await screen.findByTestId('mundo-objeto');
+    expect(panel).toHaveTextContent(/saída do top/i);
+    expect(panel).toHaveTextContent(/Anotado no caderno/i);
+    expect(screen.getByRole('link', { name: /revisar laboratório de comandos/i })).toHaveAttribute(
+      'href',
+      '/laboratorio/processos-linux?origem=escritorio',
+    );
+  });
+
+  it('a URL de uma fase do jogo mostra seu objetivo no mapa sem pular etapas', () => {
+    renderWorld('/escritorio?fase=diagnostico');
+    expect(screen.getByTestId('mundo-etapa-trilha')).toHaveTextContent(/Etapa 2 de 3/);
+    expect(screen.getByTestId('mundo-etapa-trilha')).toHaveTextContent(/Identificar a causa/);
+    expect(screen.getByTestId('mundo-objetivo')).toHaveTextContent(/Marta/);
   });
 
   it('teclado anda uma casa e vira o personagem; Esc fecha o painel', async () => {
