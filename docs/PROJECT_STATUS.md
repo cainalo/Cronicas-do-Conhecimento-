@@ -1,5 +1,11 @@
 # Estado do projeto (atualizado em 2026-10-26)
 
+
+## Implementação em andamento — 28/10/2026 (branch de laboratório)
+
+- **Em revisão, não validado por execução:** terminal virtual interativo e cinco exercícios práticos; integração na trilha; ligação a partir do terminal físico desenhado no Escritório; três marcos rastreáveis do caso do servidor lento.
+- **Não afirmar como executado ou publicado:** a suíte Vitest, o typecheck/build e os testes de layout Chromium precisam ser rodados no branch `feat/laboratorios-terminal-trilha`. Esta branch não altera a versão de `main` nem publica o site/APK.
+
 ## Funciona e foi testado
 - **25/10 (noite):** série piloto com história em cap.prim.01 / computador; aula narrada e vídeo dentro da aula; feed com perfis, revisões rápidas e comentários; Escritório 2D em tela cheia (mapa novo, 4 direções). Testes automáticos e capturas em 390 e 1280 px.
 - **Pacote v4 (25/10/2026):** Conta em áreas, sons para estudar, reinício seguro do progresso (testado com servidor simulado), Hoje editorial, sem telas de RPG, escritório 2D, aula narrada, feed curricular. Detalhes em `docs/V4_EXECUCAO.md`.
