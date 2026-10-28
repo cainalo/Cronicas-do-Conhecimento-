@@ -20,12 +20,14 @@ const STATE_LABEL: Record<UnitState, string> = {
 const KIND_LABEL: Record<string, string> = {
   aprender: 'Aprender',
   praticar: 'Praticar',
+  laboratorio: 'Laboratório no terminal',
   missao: 'Caso prático',
   desafio: 'Desafio',
 };
 const KIND_ICON: Record<string, IconName> = {
   aprender: 'grimorio',
   praticar: 'chama',
+  laboratorio: 'tela',
   missao: 'mapa',
   desafio: 'escudo',
 };
