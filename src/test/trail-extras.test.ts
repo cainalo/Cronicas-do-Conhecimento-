@@ -60,4 +60,34 @@ describe('trilha com todos os materiais', () => {
     expect(u.to).toContain(`u=${encodeURIComponent(u.key)}`);
     expect(unitDone(logUnit(emptyData(), u.key), u)).toBeTruthy();
   });
+  it('insere laboratórios de comandos e a fase do mapa na trilha correspondente', () => {
+    const first = units.findIndex((u) => u.key === 'laboratorio:primeiros-passos');
+    const logs = units.findIndex((u) => u.key === 'laboratorio:arquivos-logs');
+    const processes = units.findIndex((u) => u.key === 'laboratorio:processos-linux');
+    const office = units.findIndex((u) => u.key === 'escritorio:processos-linux');
+    const js = units.findIndex((u) => u.key === 'laboratorio:javascript');
+    const git = units.findIndex((u) => u.key === 'laboratorio:git');
+
+    expect(first).toBeGreaterThan(0);
+    expect(units[first - 1].kind).toBe('praticar');
+    expect(units[first].to).toContain('/laboratorio/primeiros-passos');
+    expect(units[logs].chapterId).toBe('cap.infra.03');
+    expect(units[logs].sectionId).toBe('arquivos');
+    expect(units[processes].kind).toBe('laboratorio');
+    expect(units[office].kind).toBe('escritorio');
+    expect(office).toBe(processes + 1);
+    expect(units[office].to).toContain('/escritorio?fase=processos-linux');
+    expect(units[js].chapterId).toBe('cap.dev.04');
+    expect(units[git].chapterId).toBe('cap.devops.01');
+  });
+
+  it('laboratório e fase do mapa só contam como concluídos após registro explícito', () => {
+    const lab = units.find((u) => u.key === 'laboratorio:processos-linux')!;
+    const office = units.find((u) => u.key === 'escritorio:processos-linux')!;
+    expect(unitDone(emptyData(), lab)).toBeUndefined();
+    expect(unitDone(emptyData(), office)).toBeUndefined();
+    expect(unitDone(logUnit(emptyData(), lab.key), lab)).toBeTruthy();
+    expect(unitDone(logUnit(emptyData(), office.key), office)).toBeTruthy();
+  });
+
 });
