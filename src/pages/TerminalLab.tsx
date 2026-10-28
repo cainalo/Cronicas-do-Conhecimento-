@@ -94,6 +94,32 @@ function TerminalLabRun({ lab }: { lab: TerminalLab }) {
         art="suporte"
       />
 
+      {lab.id === 'processos-linux' && (
+        <section className="rounded-2xl border border-[#52775e]/40 bg-surface p-4">
+          <div className="flex items-start gap-3">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#dce9dc] text-[#234f35]" aria-hidden="true">
+              <span className="font-mono text-lg font-bold">$_</span>
+            </span>
+            <div className="min-w-0 flex-1">
+              <h2 className="font-semibold">Quer experimentar um Linux de verdade?</h2>
+              <p className="mt-1 text-sm leading-relaxed text-muted">
+                O terminal desta página usa um sistema virtual didático. Para experimentar um sistema operacional
+                emulado no navegador, você pode abrir o v86 com o perfil leve Buildroot. Esta experiência é externa,
+                não compartilha estado nem registra o progresso no Pórtico.
+              </p>
+              <a
+                href="https://copy.sh/v86/?profile=buildroot"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-xl border border-line bg-raised px-3 py-2 text-sm font-semibold hover:border-[#52775e]"
+              >
+                Abrir emulador Linux externo <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="rounded-2xl border border-line bg-raised/70 p-4">
         <div className="flex items-start gap-3">
           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#dce9dc] text-[#234f35]" aria-hidden="true">
