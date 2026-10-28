@@ -47,6 +47,8 @@ describe('laboratórios de terminal', () => {
     expect(state.permissions['/home/aprendiz/scripts/backup.sh']).toBe('744');
     state = run(state, 'ls -l scripts/backup.sh').state;
     expect(state.history[state.history.length - 1]?.output).toContain('-rwxr--r--');
+    state = run(state, './scripts/backup.sh').state;
+    expect(state.history[state.history.length - 1]?.output).toContain('Relatorio de estudo pronto');
     state = run(state, 'chmod 600 dados/clientes.csv').state;
     state = run(state, 'stat dados/clientes.csv').state;
     expect(state.history[state.history.length - 1]?.output).toContain('0600/-rw-------');
@@ -94,6 +96,14 @@ describe('laboratórios de terminal', () => {
     state = run(state, 'git diff -- README.md').state;
     expect(state.history[state.history.length - 1]?.output).toContain('+Anotação de estudo');
     expect(isTerminalLabComplete('git', state)).toBe(true);
+  });
+
+  it('recusa leitura de um arquivo quando o proprietário não tem permissão de leitura', () => {
+    let state = createTerminalState('permissoes');
+    state = run(state, 'chmod 000 dados/clientes.csv').state;
+    state = run(state, 'cat dados/clientes.csv').state;
+    expect(state.history[state.history.length - 1]?.exitCode).toBe(1);
+    expect(state.history[state.history.length - 1]?.output).toContain('Permissão negada');
   });
 
   it('sistema virtual bloqueia privilégios administrativos e remoção recursiva perigosa', () => {
