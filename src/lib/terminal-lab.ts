@@ -146,9 +146,6 @@ function redirectParts(line: string): { command: string; operator: '>' | '>>'; t
   }
   return undefined;
 }
-function containsCommand(state: TerminalState, matcher: RegExp): boolean {
-  return state.commands.some((line) => matcher.test(line.trim()));
-}
 const helpText = [
   'COMANDOS DISPONÍVEIS NO LABORATÓRIO',
   'Arquivos: pwd, ls -la, cd, cat, head, tail, grep, find, touch, mkdir -p, cp, mv, rm',

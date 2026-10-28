@@ -90,6 +90,7 @@ class Parser {
   private statements = 0;
   constructor(private readonly tokens: Token[]) {}
   private get t(): Token { return this.tokens[this.pos]; }
+  private isValue(value: string): boolean { return this.t.value === value; }
   private take(): Token { return this.tokens[this.pos++]; }
   private match(value: string): boolean {
     if (this.t.value !== value) return false;
@@ -140,7 +141,7 @@ class Parser {
       this.need('log');
       this.need('(');
       const args: Expr[] = [];
-      if (this.t.value !== ')') {
+      if (!this.isValue(')')) {
         do { args.push(this.expression()); } while (this.match(','));
       }
       this.need(')');

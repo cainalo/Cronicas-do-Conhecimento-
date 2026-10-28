@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { Icon, type IconName } from '@/components/Icon';
-import { PageHeader, SectionTitle } from '@/components/Page';
+import { PageHeader } from '@/components/Page';
 import { logUnit } from '@/lib/pace';
 import {
   createTerminalState,
@@ -72,7 +72,7 @@ function TerminalLabCatalog() {
         </div>
       </section>
       <div className="grid gap-3 sm:grid-cols-2">
-        {TERMINAL_LABS.map((lab, index) => (
+        {TERMINAL_LABS.map((lab) => (
           <Link key={lab.id} to={'/laboratorio/' + lab.id} className="card card-interactive flex min-h-40 flex-col p-4" data-testid={'terminal-lab-' + lab.id}>
             <div className="flex items-center justify-between gap-3">
               <span className="kicker">{lab.eyebrow}</span>

@@ -64,6 +64,8 @@ const TRAIL_WHY: Record<Unit['kind'], string> = {
   video: 'Uma videoaula sobre o mesmo assunto.',
   professores: 'Os posts dos professores sobre o trecho.',
   flashcards: 'Cartões para memorizar os termos do capítulo.',
+  laboratorio: 'Treinar procedimentos em um ambiente virtual interativo.',
+  escritorio: 'Aplicar o conteúdo em uma situação simulada do trabalho de TI.',
 };
 
 const sectionMinutes = (c: Chapter) => Math.max(5, Math.round(c.estimatedMinutes / c.sections.length));
