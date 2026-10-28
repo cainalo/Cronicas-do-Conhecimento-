@@ -196,3 +196,11 @@ Este é o arquivo único de comunicação entre as três sessões de desenvolvim
 - O PR #10 permanece não integrado: branches divergentes e estado `dirty`; não forçar merge. Ver `docs/SESSION_HANDOFF.md` para limites e próximos passos.
 - Esta rodada também atualiza `.github/workflows/pages.yml` para ignorar pushes exclusivamente documentais, evitando recompilar APK em alterações de handoff/coordenação. Como o próprio workflow foi alterado neste commit, uma nova execução de CI será iniciada e deverá ser conferida antes de considerar o novo HEAD totalmente validado.
 - Pendências reais: teste no Android físico, Supabase Auth/sync contra conta de teste, inspeção manual do clipping heurístico e revisão de conteúdo por especialistas.
+
+### ChatGPT — restauração cromática do estilo editorial solicitada pelo usuário
+**Data:** 2026-10-27  
+**Estado:** patch preparado; build/testes e publicação precisam confirmar o resultado antes de marcar a tarefa como finalizada.
+- Restaurar tokens do estilo editorial anterior em `src/styles/index.css`, fonte Fraunces (títulos) + Inter Tight (corpo) e padrão `palette: editorial`, `bg: papel`, `font: editorial` em `src/lib/theme.ts`. Aumentar `LOOK_VERSION` para 4 para que preferências gravadas com a paleta Aurora migrem para o editorial, mantendo eventuais cores que a pessoa customizou manualmente.
+- Preservar o layout/funcionalidades atuais. Os cards de resumo, continuação, plano e evolução do dashboard passam a usar as cores chapadas editoriais; os atalhos de Explorar permanecem no componente `Tile`.
+- Recolocada a dependência local `@fontsource-variable/fraunces` em `package.json`/lockfile.
+- Testes adicionados para os tokens editoriais, migração da aparência salva e cores chapadas da home.

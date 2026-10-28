@@ -15,18 +15,22 @@ import { SyncBadge } from '@/components/Layout';
 import { SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
 
 function CompactStat({ label, value, hint, to, color, icon }: { label: string; value: number; hint: string; to: string; color: string; icon: 'chama' | 'cartas' | 'certo' }) {
+  const dark = useIsDark();
+  const foreground = dark ? 'rgb(var(--bg))' : '#ffffff';
+
   return (
     <Link
       to={to}
-      className="group min-w-0 rounded-2xl border border-line p-3 transition hover:-translate-y-0.5 hover:border-ink/20 sm:p-4"
-      style={{ background: `color-mix(in srgb, ${color} 10%, rgb(var(--surface)))` }}
+      data-testid={label === 'Questões hoje' ? 'dashboard-stat-questions' : label === 'Para revisar' ? 'dashboard-stat-review' : 'dashboard-stat-flashcards'}
+      className="group min-w-0 rounded-2xl border border-transparent p-3 transition hover:-translate-y-0.5 hover:brightness-95 sm:p-4"
+      style={{ background: color, color: foreground }}
     >
       <span className="flex items-center justify-between gap-2">
-        <span className="text-xs font-semibold leading-snug text-muted">{label}</span>
-        <Icon name={icon} size={17} className="shrink-0" style={{ color }} />
+        <span className="text-xs font-semibold leading-snug opacity-90">{label}</span>
+        <Icon name={icon} size={17} className="shrink-0 opacity-95" />
       </span>
       <span className="mt-2 block text-3xl font-semibold leading-none tabular-nums">{value}</span>
-      <span className="mt-2 block text-xs leading-snug text-muted">{hint}</span>
+      <span className="mt-2 block text-xs leading-snug opacity-90">{hint}</span>
     </Link>
   );
 }
@@ -35,6 +39,7 @@ export function Dashboard() {
   const { data, session } = useStudy();
   const dark = useIsDark();
   const color = (key: Parameters<typeof areaColor>[0]) => areaColor(key, dark);
+  const foreground = dark ? 'rgb(var(--bg))' : '#ffffff';
   const contest = getContest(DEFAULT_CONTEST_ID)!;
   const bank = questionsForContest(contest.id);
   const checkpoint = useCheckpoint();
@@ -70,19 +75,25 @@ export function Dashboard() {
       </header>
 
       <section
-        className="relative overflow-hidden rounded-3xl border border-line p-5 sm:p-6"
-        style={{ background: `linear-gradient(120deg, color-mix(in srgb, ${color('explorar')} 16%, rgb(var(--surface))), rgb(var(--surface)) 78%)` }}
+        className="relative overflow-hidden rounded-3xl border border-transparent p-5 sm:p-6"
+        style={{ background: color('torre'), color: foreground }}
         aria-label="Continuar estudando"
+        data-testid="dashboard-continuar"
       >
-        <div className="pointer-events-none absolute -right-6 -top-8 h-36 w-36 rounded-full border-[18px] opacity-20" style={{ borderColor: color('grimorios') }} />
-        <p className="kicker">{checkpoint.resuming ? 'Retome de onde parou' : checkpoint.action === 'Começar' ? 'Seu primeiro passo' : 'Próxima atividade'}</p>
-        <h2 className="relative mt-2 max-w-2xl text-2xl font-semibold leading-tight sm:text-3xl">{checkpoint.title}</h2>
-        <p className="relative mt-2 max-w-xl text-sm leading-relaxed text-muted">{checkpoint.context}</p>
+        <div className="pointer-events-none absolute -right-6 -top-8 h-36 w-36 rounded-full border-[18px] opacity-20" style={{ borderColor: foreground }} />
+        <p className="kicker" style={{ color: foreground }}>{checkpoint.resuming ? 'Retome de onde parou' : checkpoint.action === 'Começar' ? 'Seu primeiro passo' : 'Próxima atividade'}</p>
+        <h2 className="relative mt-2 max-w-2xl text-2xl font-semibold leading-tight sm:text-3xl" style={{ color: foreground }}>{checkpoint.title}</h2>
+        <p className="relative mt-2 max-w-xl text-sm leading-relaxed opacity-90">{checkpoint.context}</p>
         <div className="relative mt-5 flex flex-wrap items-center gap-3">
-          <Link to={checkpoint.to} className="btn-primary inline-flex min-h-[46px] items-center justify-center gap-2 px-5" data-testid="continuar-torre">
+          <Link
+            to={checkpoint.to}
+            className="btn-primary inline-flex min-h-[46px] items-center justify-center gap-2 px-5"
+            style={{ background: foreground, color: color('torre'), borderColor: foreground }}
+            data-testid="continuar-torre"
+          >
             <Icon name="play" size={17} fill="currentColor" /> {checkpoint.action} <Icon name="avancar" size={17} />
           </Link>
-          <Link to="/trilha" className="inline-flex min-h-[42px] items-center gap-1 text-sm font-semibold text-muted underline-offset-4 hover:underline">
+          <Link to="/trilha" className="inline-flex min-h-[42px] items-center gap-1 text-sm font-semibold underline-offset-4 hover:underline opacity-90" style={{ color: foreground }}>
             Ver trilha <Icon name="avancar" size={15} />
           </Link>
         </div>
@@ -94,19 +105,24 @@ export function Dashboard() {
           <Link to="/plano" className="text-sm font-semibold text-muted underline-offset-4 hover:underline">Plano completo</Link>
         </div>
         <div className="grid grid-cols-3 gap-2 sm:gap-3">
-          <CompactStat label="Questões hoje" value={answeredToday} hint={`Meta: ${dailyGoal}`} to="/historico" color={color('treino')} icon="certo" />
-          <CompactStat label="Para revisar" value={questionsToReview} hint={questionsToReview ? 'Erros para retomar' : 'Tudo em dia'} to="/revisao" color={color('explorar')} icon="chama" />
-          <CompactStat label="Cartões de hoje" value={cardsDue} hint={cardsDue ? 'Revisão espaçada' : 'Nenhum pendente'} to="/flashcards" color={color('treino')} icon="cartas" />
+          <CompactStat label="Questões hoje" value={answeredToday} hint={`Meta: ${dailyGoal}`} to="/historico" color={color('torre')} icon="certo" />
+          <CompactStat label="Para revisar" value={questionsToReview} hint={questionsToReview ? 'Erros para retomar' : 'Tudo em dia'} to="/revisao" color={color('grimorios')} icon="chama" />
+          <CompactStat label="Cartões de hoje" value={cardsDue} hint={cardsDue ? 'Revisão espaçada' : 'Nenhum pendente'} to="/flashcards" color={color('explorar')} icon="cartas" />
         </div>
-        <Link to="/plano" className="block rounded-2xl border border-line bg-surface p-4 transition hover:border-ink/20">
+        <Link
+          to="/plano"
+          className="block rounded-2xl border border-transparent p-4 transition hover:-translate-y-0.5 hover:brightness-95"
+          style={{ background: color('grimorios'), color: foreground }}
+          data-testid="dashboard-plano"
+        >
           <div className="flex items-center justify-between gap-3">
             <span className="font-semibold">Plano de hoje</span>
-            <span className="text-sm text-muted">{plan.restDay ? 'Dia de descanso' : pending.length ? `${pending.length} pendente(s)` : 'Concluído'}</span>
+            <span className="text-sm opacity-90">{plan.restDay ? 'Dia de descanso' : pending.length ? `${pending.length} pendente(s)` : 'Concluído'}</span>
           </div>
-          <div className="mt-3 h-2 overflow-hidden rounded-full bg-raised">
-            <div className="h-full rounded-full bg-gold transition-[width] duration-500" style={{ width: `${plan.items.length ? Math.round(((plan.items.length - pending.length) / plan.items.length) * 100) : 100}%` }} />
+          <div className="mt-3 h-2 overflow-hidden rounded-full" style={{ background: dark ? 'rgb(0 0 0 / 0.18)' : 'rgb(255 255 255 / 0.24)' }}>
+            <div className="h-full rounded-full transition-[width] duration-500" style={{ width: `${plan.items.length ? Math.round(((plan.items.length - pending.length) / plan.items.length) * 100) : 100}%`, background: foreground }} />
           </div>
-          <div className="mt-2 flex items-center justify-between gap-2 text-xs text-muted">
+          <div className="mt-2 flex items-center justify-between gap-2 text-xs opacity-90">
             <span>{plan.items.length - pending.length} de {plan.items.length} atividades feitas</span>
             <span className="inline-flex items-center gap-1 font-semibold">Abrir plano <Icon name="avancar" size={14} /></span>
           </div>
@@ -126,20 +142,28 @@ export function Dashboard() {
       )}
 
 
-      <section aria-label="Seu avanço nas matérias" className="overflow-hidden rounded-2xl border border-line bg-surface p-4 sm:p-5">
+      <section
+        aria-label="Seu avanço nas matérias"
+        data-testid="dashboard-progress"
+        className="overflow-hidden rounded-2xl border border-transparent p-4 sm:p-5"
+        style={{ background: color('explorar'), color: foreground }}
+      >
         <div className="flex items-center justify-between gap-3">
           <div>
-            <p className="text-sm font-semibold text-muted">Sua evolução</p>
+            <p className="text-sm font-semibold opacity-90">Sua evolução</p>
             <h2 className="mt-1 text-lg font-semibold">Você já avançou em {progressPercent}% do conteúdo</h2>
           </div>
-          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-teal/10 text-base font-bold tabular-nums text-teal">{progressPercent}%</span>
+          <span
+            className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-base font-bold tabular-nums"
+            style={{ background: dark ? 'rgb(0 0 0 / 0.18)' : 'rgb(255 255 255 / 0.22)', color: foreground }}
+          >{progressPercent}%</span>
         </div>
-        <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-raised" role="progressbar" aria-label="Conteúdo lido" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progressPercent}>
-          <div className="h-full rounded-full bg-teal transition-[width] duration-700" style={{ width: `${progressPercent}%` }} />
+        <div className="mt-4 h-2.5 overflow-hidden rounded-full" style={{ background: dark ? 'rgb(0 0 0 / 0.18)' : 'rgb(255 255 255 / 0.24)' }} role="progressbar" aria-label="Conteúdo lido" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progressPercent}>
+          <div className="h-full rounded-full transition-[width] duration-700" style={{ width: `${progressPercent}%`, background: foreground }} />
         </div>
-        <div className="mt-2 flex items-center justify-between gap-3 text-xs text-muted">
+        <div className="mt-2 flex items-center justify-between gap-3 text-xs opacity-90">
           <span>{sectionsRead} de {totalSections} trechos estudados</span>
-          <Link to="/progresso" className="font-semibold underline-offset-4 hover:underline">Ver detalhes <Icon name="avancar" size={13} /></Link>
+          <Link to="/progresso" className="font-semibold underline-offset-4 hover:underline" style={{ color: foreground }}>Ver detalhes <Icon name="avancar" size={13} /></Link>
         </div>
       </section>
 

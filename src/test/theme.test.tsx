@@ -5,7 +5,7 @@ import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
 import { loadPrefs } from '@/lib/storage';
-import { DEFAULT_LOOK, PALETTES, applyLook, contrast, contrastWarnings, exportLook, importLook, normalizeLook, resolveColors } from '@/lib/theme';
+import { DEFAULT_LOOK, PALETTES, applyLook, contrast, contrastWarnings, exportLook, importLook, migrateLook, normalizeLook, resolveColors } from '@/lib/theme';
 
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
 
@@ -15,6 +15,19 @@ beforeEach(() => {
 });
 
 describe('motor de aparência', () => {
+  it('usa por padrão a identidade editorial aprovada: papel, vermelhão, petróleo e Fraunces/Inter Tight', () => {
+    expect(DEFAULT_LOOK).toMatchObject({ palette: 'editorial', bg: 'papel', font: 'editorial' });
+    const c = resolveColors(DEFAULT_LOOK, 'light');
+    expect(c.bg).toBe('#f4f0e8');
+    expect(c.ink).toBe('#1b1a17');
+    expect(c.primary).toBe('#c8402a');
+    expect(c.teal).toBe('#1f5c7a');
+    expect(normalizeLook({ palette: 'editorial', bg: 'papel', font: 'editorial' }))
+      .toMatchObject({ palette: 'editorial', bg: 'papel', font: 'editorial' });
+    expect(migrateLook({ v: 3, palette: 'aurora', bg: 'liso', font: 'plex' }))
+      .toMatchObject({ palette: 'editorial', bg: 'papel', font: 'editorial' });
+  });
+
   it('todas as paletas passam no contraste de texto, no claro e no escuro', () => {
     for (const p of PALETTES) {
       for (const theme of ['light', 'dark'] as const) {
@@ -62,6 +75,15 @@ describe('painel de personalização', () => {
       </PrefsProvider>,
     );
   }
+
+  it('mostra os novos cartões da página inicial com cores chapadas editoriais', () => {
+    renderAt('/');
+    expect(screen.getByTestId('dashboard-continuar').style.background).toBe('rgb(var(--area-hoje))');
+    expect(screen.getByTestId('dashboard-stat-questions').style.background).toBe('rgb(var(--area-hoje))');
+    expect(screen.getByTestId('dashboard-stat-review').style.background).toBe('rgb(var(--area-trilha))');
+    expect(screen.getByTestId('dashboard-plano').style.background).toBe('rgb(var(--area-trilha))');
+    expect(screen.getByTestId('dashboard-progress').style.background).toBe('rgb(var(--area-explorar))');
+  });
 
   it('troca paleta, cor, estilo e restaura o padrão, salvando no aparelho', async () => {
     const user = userEvent.setup();

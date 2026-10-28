@@ -197,19 +197,19 @@ export interface Look {
   previous?: Omit<Look, 'previous'>;
 }
 
-export const LOOK_VERSION = 3;
+export const LOOK_VERSION = 4;
 
 export const DEFAULT_LOOK: Look = {
   v: LOOK_VERSION,
-  palette: 'aurora',
+  palette: 'editorial',
   colors: { light: {}, dark: {} },
-  bg: 'liso',
+  bg: 'papel',
   cards: 'editorial',
   tiles: 'solido',
   buttons: 'suave',
   motion: 'completo',
   density: 'normal',
-  font: 'plex',
+  font: 'editorial',
   shadow: 'nenhuma',
   radius: 10,
   leading: 1.65,
@@ -217,9 +217,9 @@ export const DEFAULT_LOOK: Look = {
 
 // Valores de estilo que deixaram de existir viram o equivalente atual.
 const RENAMED: Partial<Record<keyof Look, Record<string, string>>> = {
-  bg: { papel: 'liso', manchas: 'liso' },
-  font: { editorial: 'plex', serifada: 'plex' },
-  palette: { editorial: 'aurora', jornal: 'oceano' },
+  bg: { manchas: 'liso' },
+  font: { serifada: 'editorial' },
+  palette: { jornal: 'oceano' },
   cards: { tingido: 'editorial' },
 };
 

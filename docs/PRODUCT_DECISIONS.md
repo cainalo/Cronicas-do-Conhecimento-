@@ -74,3 +74,11 @@
 - Validar no Android real que a cena vai de borda a borda e que o safe area inferior não causa colisão entre legendas, barra de busca e botões.
 
 Implementação nesta rodada: `src/pages/Narrated.tsx`; testes propostos em `src/test/narrated.test.tsx`. O build/teste local ainda não foi executado por indisponibilidade de rede para clonar o repositório no ambiente de trabalho.
+
+
+## 27/10/2026 — manter a interface nova e restaurar a identidade editorial
+
+- O usuário aprovou a estrutura mais recente da página inicial, a disposição dos cartões e as melhorias funcionais, mas rejeitou o fundo azul-acinzentado, a paleta Aurora e a tipografia sem serifa nos títulos.
+- Restaurar o padrão editorial anterior: papel quente (#F4F0E8), tinta escura (#1B1A17), Fraunces nos títulos e Inter Tight no texto, com vermelhão (#C8402A), azul-petróleo (#1F5C7A), ameixa (#6E3B5C), ocre (#9E6A14) e verde (#346834).
+- Preservar a estrutura atual do dashboard e os cards de evolução, resumo diário e plano. Os novos cartões de dados/ações na página inicial usam cores editoriais chapadas e fortes, no mesmo padrão visual dos cartões de atalho em Explorar.
+- Não restaurar páginas ou ornamentos removidos; esta alteração é somente de identidade visual, tipografia e tratamento cromático dos novos cartões.

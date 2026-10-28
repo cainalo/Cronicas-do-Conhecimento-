@@ -1,3 +1,5 @@
+@import '@fontsource-variable/fraunces/full.css';
+@import '@fontsource-variable/fraunces/full-italic.css';
 @import '@fontsource-variable/inter-tight/index.css';
 @import '@fontsource/ibm-plex-sans/400.css';
 @import '@fontsource/ibm-plex-sans/600.css';
@@ -6,40 +8,44 @@
 @tailwind utilities;
 
 /*
-  Identidade visual atual: plataforma de estudo clara, moderna e mobile-first.
-  Tipografia sem serifa, fundo limpo, cartões coloridos e contraste alto.
-  Os nomes dos tokens antigos permanecem apenas como aliases internos para compatibilidade.
+  Identidade editorial (25/10/2026, escolhida pelo usuário): papel quente e tinta escura, títulos em
+  serifa (Fraunces), texto em Inter Tight, cores fortes e chapadas usadas como pôster, sem degradê,
+  sem brilho, sem bolhas. Linhas finas organizam a página; o movimento é preciso e curto (entrada
+  das peças, traço que se desenha, setas que avançam).
+  Os nomes de token antigos continuam (componentes e o painel de personalização os usam):
+  --gold = destaque principal (vermelhão), --ember = destaque escuro, --azure = ameixa,
+  --teal = petróleo, --leaf = ocre, --pink = framboesa, --sun = mostarda, --ok/--bad = acerto/erro.
 */
 
 :root {
-  --bg: 247 249 252;
-  --surface: 255 255 255;
-  --raised: 238 242 249;
-  --line: 220 226 237;
-  --ink: 28 36 53;
-  --muted: 89 101 121;
-  --gold: 66 92 218;
-  --ember: 42 60 153;
-  --azure: 111 74 196;
-  --teal: 13 122 106;
-  --leaf: 33 126 84;
-  --pink: 194 53 122;
-  --sun: 217 154 16;
-  --ok: 30 112 74;
-  --bad: 172 53 68;
-  --parchment: 255 255 255;
-  --leather: 28 36 53;
-  --sepia: 28 36 53;
+  --bg: 244 240 232;
+  --surface: 251 249 244;
+  --raised: 236 230 218;
+  --line: 217 209 194;
+  --ink: 27 26 23;
+  --muted: 95 90 80;
+  --gold: 200 64 42;
+  --ember: 160 48 28;
+  --azure: 110 59 92;
+  --teal: 31 92 122;
+  --leaf: 158 106 20;
+  --pink: 168 54 94;
+  --sun: 196 146 30;
+  --ok: 52 104 52;
+  --bad: 176 40 34;
+  --parchment: 251 249 244;
+  --leather: 27 26 23;
+  --sepia: 27 26 23;
   --font-scale: 1;
   --radius-card: 10px;
   --radius-control: 8px;
   --shadow-card: none;
   --shadow-lift: 0 10px 24px -16px rgb(27 26 23 / 0.35);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --font-title: 'IBM Plex Sans', 'Inter Tight Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-title: 'Fraunces Variable', 'Fraunces', Georgia, 'Times New Roman', serif;
   --font-text: 'Inter Tight Variable', 'Inter Tight', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  /* Desativado: o fundo padrão é liso, sem textura decorativa. */
-  --paper: none;
+  /* Fibra de papel quase imperceptível (só textura, sem cor). */
+  --paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.09'/%3E%3C/svg%3E");
   --tex-grain: none;
   --tex-leather: none;
   --tex-leather-mottle: none;
@@ -81,13 +87,14 @@ body {
   color: rgb(var(--ink));
   min-height: 100dvh;
   background-color: rgb(var(--bg));
-  background-image: none;
+  background-image: var(--paper);
 }
 h1, h2, h3, .font-display, .font-logo, .font-gothic, .font-title {
   font-family: var(--font-title);
   font-optical-sizing: auto;
-  font-weight: 650;
-  letter-spacing: -0.02em;
+  font-weight: 560;
+  letter-spacing: -0.018em;
+  font-variation-settings: 'SOFT' 30, 'WONK' 0;
 }
 h1 { font-weight: 600; letter-spacing: -0.028em; }
 h3 { font-weight: 600; }
