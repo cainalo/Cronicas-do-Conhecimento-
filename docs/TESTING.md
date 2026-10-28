@@ -63,4 +63,6 @@ Testes de regressão incluídos:
 - `src/test/trail-extras.test.ts`: posição dos cinco laboratórios e das três fases do Escritório, além do registro de conclusão.
 - `src/test/world.test.tsx`: encaminhamento do objeto de terminal no mapa para o laboratório.
 
+O roteiro E2E também visita `/laboratorio/primeiros-passos`, `/laboratorio/processos-linux` e `/escritorio` em 360×640 e 390×844.
+
 **Status desta rodada:** os testes foram escritos, mas não executados nesta sessão. Antes de aprovar a branch, rode `npm test`, `npm run build` e `npm run test:e2e`; confira a UI em 360×640 e 390×844. Não marcar como aprovado com base apenas na presença dos testes.
