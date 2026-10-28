@@ -291,7 +291,7 @@ function changeMode(current: string, spec: string): string | undefined {
   const operator = match[2];
   const perms = match[3];
   const digits = current.padStart(3, '0').slice(-3).split('').map((digit) => Number.parseInt(digit, 8) || 0);
-  const slots = [1, 2, 4]; // dono, grupo, outros
+  const slots = [4, 2, 1]; // dono, grupo, outros
   const scopeBits: Record<string, number> = { u: 4, g: 2, o: 1, a: 7 };
   const permBits: Record<string, number> = { r: 4, w: 2, x: 1 };
   for (let i = 0; i < 3; i++) {
@@ -376,8 +376,19 @@ function taskUpdates(
     if (cmd === 'grep' && argText.toLowerCase().includes('error') && argText.includes('app.log') && output.includes('ERROR')) mark('grep-error');
     if (cmd === 'tail' && after.cwd === '/var/log' && argText.includes('app.log') && valid(output)) mark('tail-log');
   }
+  if (labId === 'permissoes') {
+    const script = HOME + '/scripts/backup.sh';
+    const dataFile = HOME + '/dados/clientes.csv';
+    if (cmd === 'cd' && after.cwd === HOME) mark('cd-home');
+    if (cmd === 'ls' && args.some((a) => a === 'scripts' || a.endsWith('/scripts')) && args.some((a) => a.startsWith('-') && a.includes('l')) && valid(output)) mark('ls-mode');
+    if (cmd === 'stat' && args.includes('scripts/backup.sh') && output.includes('0644') && success) mark('stat-script');
+    if (cmd === 'chmod' && args[0] === 'u+x' && args[1] === 'scripts/backup.sh' && after.permissions[script] === '744' && success) mark('chmod-script');
+    if (cmd === 'ls' && args.some((a) => a.endsWith('backup.sh')) && args.some((a) => a.startsWith('-') && a.includes('l')) && modeString(script, after).includes('x') && valid(output)) mark('verify-script');
+    if (cmd === 'chmod' && args[0] === '600' && args[1] === 'dados/clientes.csv' && after.permissions[dataFile] === '600' && success) mark('secure-data');
+    if (cmd === 'stat' && args.includes('dados/clientes.csv') && output.includes('0600') && success) mark('verify-data');
+  }
   if (labId === 'processos-linux') {
-    if (cmd === 'top' || (cmd === 'ps' && args.includes('aux'))) if (valid(output)) mark('top');
+    if (cmd === 'top' && valid(output)) mark('top');
     if (cmd === 'free' && args.includes('-h') && valid(output)) mark('free');
     if (cmd === 'vmstat' && valid(output)) mark('vmstat');
     if (cmd === 'kill' && args.length === 1 && args[0] === '4127' && !after.processes.find((p) => p.pid === 4127 && !p.terminated)) mark('kill-graceful');
@@ -572,8 +583,8 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
               if (recursive) {
                 const parts = target.split('/').filter(Boolean);
                 let p = '';
-                for (const part of parts) { p += '/' + part; if (!directories.includes(p)) directories.push(p); }
-              } else directories.push(target);
+                for (const part of parts) { p += '/' + part; if (!directories.includes(p)) { directories.push(p); permissions[p] ??= '755'; } }
+              } else { directories.push(target); permissions[target] = '755'; }
               output = 'Diretório criado: ' + target;
             }
           }
@@ -587,7 +598,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
           const target = resolvePath(cwd, raw);
           if (!safeWritable(target)) fail('Permissão negada: grave apenas em /home/aprendiz ou /tmp.');
           else if (!directories.includes(target.slice(0, target.lastIndexOf('/')) || '/')) fail('Diretório pai inexistente.');
-          else { if (files[target] === undefined) files[target] = ''; output = ''; }
+          else { if (files[target] === undefined) { files[target] = ''; permissions[target] = '644'; } output = ''; }
         }
         break;
       }
@@ -604,7 +615,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
         if (!raw) fail('rm: informe um arquivo');
         else if (!safeWritable(target)) fail('Permissão negada: arquivos do sistema são protegidos.');
         else if (files[target] === undefined) fail('rm: não foi possível remover: arquivo inexistente');
-        else { delete files[target]; output = ''; }
+        else { delete files[target]; delete permissions[target]; output = ''; }
         break;
       }
       case 'cp':
@@ -618,9 +629,44 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
           else if (!safeWritable(to) || !directories.includes(to.slice(0, to.lastIndexOf('/')) || '/')) fail('Destino não permitido ou diretório pai inexistente.');
           else {
             files[to] = files[from];
-            if (command === 'mv') delete files[from];
+            permissions[to] = permissions[from] ?? '644';
+            if (command === 'mv') { delete files[from]; delete permissions[from]; }
             output = '';
           }
+        }
+        break;
+      }
+      case 'stat': {
+        const raw = args.find((a) => !a.startsWith('-'));
+        const target = raw ? resolvePath(cwd, raw) : '';
+        const view = { ...state, cwd, files, directories, permissions, processes, history: state.history, completedTasks: state.completedTasks, nextEntryId: state.nextEntryId };
+        if (!raw) fail('stat: informe um arquivo ou diretório');
+        else if (!exists(target, view)) fail('stat: não foi possível consultar ' + raw + ': caminho inexistente');
+        else {
+          const size = files[target]?.length ?? 4096;
+          const mode = (permissions[target] ?? (directories.includes(target) ? '755' : '644')).padStart(4, '0');
+          const type = directories.includes(target) ? 'diretório' : 'arquivo regular';
+          output = [
+            '  File: ' + target,
+            '  Size: ' + size + '  Blocks: ' + Math.ceil(size / 512) + '  IO Block: 4096 ' + type,
+            'Access: (' + mode + '/' + modeString(target, view) + ')  Uid: (1000/aprendiz)  Gid: (1000/aprendiz)',
+          ].join('\\n');
+        }
+        break;
+      }
+      case 'chmod': {
+        const spec = args[0];
+        const raw = args[1];
+        const target = raw ? resolvePath(cwd, raw) : '';
+        const view = { ...state, cwd, files, directories, permissions, processes, history: state.history, completedTasks: state.completedTasks, nextEntryId: state.nextEntryId };
+        if (!spec || !raw) fail('Uso: chmod MODO ARQUIVO');
+        else if (!exists(target, view)) fail('chmod: não foi possível acessar ' + raw + ': caminho inexistente');
+        else if (!safeWritable(target)) fail('Permissão negada: o laboratório só permite mudar permissões em /home/aprendiz e /tmp.');
+        else {
+          const oldMode = permissions[target] ?? (directories.includes(target) ? '755' : '644');
+          const newMode = changeMode(oldMode, spec);
+          if (!newMode) fail('chmod: modo não reconhecido. Use um modo octal como 600 ou uma alteração simbólica como u+x.');
+          else { permissions[target] = newMode; output = ''; }
         }
         break;
       }
