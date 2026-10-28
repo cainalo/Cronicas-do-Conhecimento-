@@ -26,3 +26,9 @@
 ## Roteiro da auditoria (24/10/2026, docs/auditoria/09_ROADMAP_FASEADO.md)
 - ✅ Fase 0 baseline · ✅ Fase 1 trilha única e retomada · ✅ Fase 2 piloto Processos (aguarda aprovação) · ✅ Fase 4 livro sem rolagem
 - 🔄 Fase 3 migração por lotes (grimório de Infraestrutura completo em microaulas; próximos: Segurança e Dados) · ✅ Fase 5 página Estudos e vídeos (curadoria de vídeos pendente de conferência) · ✅ P1-14 ordem do dia na trilha única · ✅ página não encontrada e Conta em modo local · ✅ volumes separados · ✅ recuperação adaptativa na Prática · ⬜ Fase 6 polimento visual/áudio · ⬜ Fase 7 auditoria total de conteúdo e release
+
+## Incremento em revisão — 28/10/2026
+
+- 🟡 Laboratórios de comandos no terminal virtual: navegação e arquivos, análise de logs, processos/memória, JavaScript/Node e Git. Critério: tarefas executam com semântica previsível, estado isolado e sem executar comandos no dispositivo; testes automatizados verdes.
+- 🟡 Escritório de TI no mapa: manter o mapa atual e ligar o terminal interativo ao chamado; dividir triagem, diagnóstico e fechamento em marcos separados na trilha. Critério: evidência e escolhas determinam o avanço; estados persistem; regressão do mapa e navegação móvel verdes.
+- ⬜ Antes de mesclar ou publicar: executar `npm test`, `npm run build` e `npm run test:e2e`; revisar no navegador em 360×640 e 390×844; só então pedir aprovação para integração.
