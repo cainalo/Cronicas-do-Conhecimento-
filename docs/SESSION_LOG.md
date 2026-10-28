@@ -126,3 +126,11 @@
 - Causa: `.github/workflows/pages.yml` só permite publicar a partir da `main` quando o segredo de keystore de release existe; sem esse segredo, apenas `claude/cronicas-conhecimento-estudos-jgbofo` publica para manter a assinatura estável do APK.
 - Integrei a versão atual da `main` na branch de publicação pelo PR #5, merge `783725a6e61f018fe115d93c50b89a5cf20f1c49`, preservando a branch que mantém a assinatura do Android.
 - O próximo build precisa passar por testes, build e E2E antes de atualizar `gh-pages`. Não considerar a publicação concluída até verificar o novo `download/version.json` e o bundle do site.
+
+## 28/10/2026 — terminais práticos e Escritório de TI
+
+- Criada a branch `feat/laboratorios-terminal-trilha` a partir da `main`, preservando o branch publicado.
+- Implementados cinco laboratórios de comandos com estado virtual, tarefas/dicas, persistência local e conexão à trilha única.
+- O terminal na mesa da Marta passa ao laboratório de processos; triagem, diagnóstico e fechamento do chamado viram três unidades da trilha com critérios de conclusão vinculados ao estado do jogo.
+- Acrescentados testes unitários para comandos, conclusão, ordenação da trilha e encaminhamento mapa→terminal.
+- **Sem validação final:** não foi possível executar a suíte, build e E2E nesta sessão; nenhuma publicação ou mesclagem foi feita.
