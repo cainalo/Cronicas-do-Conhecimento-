@@ -1,7 +1,7 @@
 // Terminal educacional em sistema de arquivos virtual. Nenhum comando é enviado ao aparelho,
 // ao servidor de hospedagem ou a uma shell real. A sintaxe e os efeitos suportados são interpretados
 // aqui, dentro de um ambiente descartável e previsível para aprender com segurança.
-export type TerminalLabId = 'primeiros-passos' | 'arquivos-logs' | 'processos-linux' | 'javascript' | 'git';
+export type TerminalLabId = 'primeiros-passos' | 'arquivos-logs' | 'permissoes' | 'processos-linux' | 'javascript' | 'git';
 
 export interface TerminalTask {
   id: string;
@@ -50,6 +50,24 @@ export const terminalLabs: TerminalLab[] = [
       { id: 'tail-log', title: 'Leia as cinco linhas mais recentes', hint: 'tail -n 5 app.log mostra o final do arquivo.' },
     ],
     suggestions: ['cd /var/log', 'ls -lah', 'grep -in "ERROR" app.log', 'tail -n 5 app.log'],
+  },
+  {
+    id: 'permissoes',
+    title: 'Permissões e acesso a arquivos',
+    subtitle: 'Leia modos Unix, verifique metadados e conceda somente a permissão necessária.',
+    objective: 'Uma pessoa da equipe não consegue executar o script de relatório. Inspecione as permissões antes de alterá-las; depois restrinja um arquivo de dados fictício para que só o proprietário possa lê-lo e modificá-lo.',
+    chapterId: 'cap.infra.03',
+    sectionId: 'arquivos',
+    tasks: [
+      { id: 'cd-home', title: 'Entre na pasta do usuário', hint: 'Use cd /home/aprendiz. Os arquivos de treino ficam dentro da pasta pessoal.' },
+      { id: 'ls-mode', title: 'Leia as permissões do script', hint: 'Use ls -l scripts ou ls -l scripts/backup.sh. r = leitura, w = escrita, x = execução.' },
+      { id: 'stat-script', title: 'Consulte os metadados do arquivo', hint: 'stat scripts/backup.sh deve mostrar o modo inicial 0644.' },
+      { id: 'chmod-script', title: 'Permita que o proprietário execute o script', hint: 'Use chmod u+x scripts/backup.sh. Isso acrescenta execução para o dono, sem mudar as permissões do grupo e dos outros.' },
+      { id: 'verify-script', title: 'Confira que a permissão mudou', hint: 'Use ls -l scripts/backup.sh ou stat scripts/backup.sh e confirme que o dono tem x.' },
+      { id: 'secure-data', title: 'Restrinja o arquivo de dados fictício', hint: 'Use chmod 600 dados/clientes.csv. Somente o proprietário terá leitura e escrita.' },
+      { id: 'verify-data', title: 'Confirme o modo 0600', hint: 'Use stat dados/clientes.csv e confira o modo final.' },
+    ],
+    suggestions: ['cd /home/aprendiz', 'ls -l scripts', 'stat scripts/backup.sh', 'chmod u+x scripts/backup.sh', 'ls -l scripts/backup.sh', 'chmod 600 dados/clientes.csv', 'stat dados/clientes.csv'],
   },
   {
     id: 'processos-linux',
@@ -127,6 +145,7 @@ export interface TerminalState {
   cwd: string;
   files: Record<string, string>;
   directories: string[];
+  permissions: Record<string, string>;
   processes: TerminalProcess[];
   history: TerminalEntry[];
   completedTasks: string[];
@@ -148,15 +167,34 @@ const BASE_FILES: Record<string, string> = {
   [PROJECT + '/README.md']: '# Projeto de exemplo\n\nAplicação pequena para aprender comandos, código e Git.\n',
   [PROJECT + '/app.js']: 'console.log("Sistema pronto");\n',
   [PROJECT + '/package.json']: '{\n  "name": "projeto-de-estudo",\n  "version": "1.0.0",\n  "private": true\n}\n',
+  [HOME + '/scripts/backup.sh']: '#!/bin/sh\necho "Relatorio de estudo pronto"\n',
+  [HOME + '/dados/clientes.csv']: 'id,registro\n1,dado-ficticio\n',
   '/var/log/app.log': '2026-10-28T08:30:11Z INFO  serviço inicializado\n2026-10-28T08:31:04Z WARN  fila de relatórios crescendo\n2026-10-28T08:32:17Z ERROR conexão esgotada ao consultar relat-01\n2026-10-28T08:32:20Z ERROR nova tentativa excedeu o tempo limite\n2026-10-28T08:34:01Z INFO  nova tentativa agendada\n2026-10-28T08:35:40Z ERROR consulta excedeu 120 segundos\n',
   '/var/log/syslog': 'Oct 28 08:30:12 relat-01 kernel: memória livre abaixo do limite de alerta\nOct 28 08:32:18 relat-01 reports-api: tempo de resposta acima de 120s\nOct 28 08:35:41 relat-01 reports-api: requisição encerrada por timeout\n',
   '/etc/os-release': 'NAME="Debian GNU/Linux"\nVERSION="12 (bookworm)"\nID=debian\n',
   '/srv/relatorios/status.txt': 'Serviço de relatórios: degradado\nHost: relat-01\nÚltima coleta: 08:35 UTC\n',
 };
 const BASE_DIRECTORIES = [
-  '/', '/home', HOME, HOME + '/projetos', DEMO, PROJECT, '/var', '/var/log',
+  '/', '/home', HOME, HOME + '/projetos', DEMO, PROJECT, HOME + '/scripts', HOME + '/dados', '/var', '/var/log',
   '/etc', '/tmp', '/srv', '/srv/relatorios', '/proc', '/usr', '/usr/bin',
 ];
+const BASE_MODES: Record<string, string> = {
+  [HOME]: '755',
+  [HOME + '/README.md']: '644',
+  [HOME + '/.bashrc']: '644',
+  [DEMO + '/README.md']: '644',
+  [PROJECT + '/README.md']: '644',
+  [PROJECT + '/app.js']: '644',
+  [PROJECT + '/package.json']: '644',
+  [HOME + '/scripts']: '755',
+  [HOME + '/scripts/backup.sh']: '644',
+  [HOME + '/dados']: '700',
+  [HOME + '/dados/clientes.csv']: '640',
+  '/var/log/app.log': '644',
+  '/var/log/syslog': '640',
+  '/etc/os-release': '644',
+  '/srv/relatorios/status.txt': '644',
+};
 const INITIAL_PROCESSES: TerminalProcess[] = [
   { pid: 4127, user: 'relat', cpu: 9.8, mem: 71.5, command: 'importador', terminated: false },
   { pid: 912, user: 'postgres', cpu: 6.2, mem: 9.0, command: 'postgres', terminated: false },
@@ -170,6 +208,7 @@ export function createTerminalState(labId: TerminalLabId): TerminalState {
     cwd: HOME,
     files: { ...BASE_FILES },
     directories: [...BASE_DIRECTORIES],
+    permissions: { ...BASE_MODES },
     processes: INITIAL_PROCESSES.map((p) => ({ ...p })),
     history: [],
     completedTasks: [],
