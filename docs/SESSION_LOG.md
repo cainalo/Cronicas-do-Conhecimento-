@@ -130,7 +130,7 @@
 ## 28/10/2026 — terminais práticos e Escritório de TI
 
 - Criada a branch `feat/laboratorios-terminal-trilha` a partir da `main`, preservando o branch publicado.
-- Implementados cinco laboratórios de comandos com estado virtual, tarefas/dicas, persistência local e conexão à trilha única.
+- Implementados seis laboratórios de comandos com estado virtual, tarefas/dicas, persistência local e conexão à trilha única; o laboratório de permissões altera de verdade os modos no filesystem virtual com `chmod`.
 - O terminal na mesa da Marta passa ao laboratório de processos; triagem, diagnóstico e fechamento do chamado viram três unidades da trilha com critérios de conclusão vinculados ao estado do jogo.
-- Acrescentados testes unitários para comandos, conclusão, ordenação da trilha e encaminhamento mapa→terminal.
-- **Sem validação final:** não foi possível executar a suíte, build e E2E nesta sessão; nenhuma publicação ou mesclagem foi feita.
+- Acrescentados testes unitários para comandos, permissões, conclusão, ordenação da trilha e encaminhamento mapa→terminal. Criada `docs/ARQUITETURA_LABORATORIO_REAL.md` com o caminho para integrar Linux emulado v86 e avaliar WebContainers para Node.js.
+- **Sem validação final:** o workflow dedicado está configurado, mas as execuções foram canceladas enquanto novos commits chegavam; solicitar uma execução do branch completo antes da aprovação. Nenhuma publicação ou mesclagem foi feita.
