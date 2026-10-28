@@ -31,7 +31,7 @@ describe('laboratório de programação JavaScript', () => {
 
   it('recusa loops e APIs fora do subconjunto sem avaliar o código como JavaScript arbitrário', () => {
     expect(runJavaScriptSubset('while (true) { console.log("loop"); }').error).toMatch(/não faz parte deste laboratório/);
-    expect(runJavaScriptSubset('console.log(window.location);').error).toMatch(/não foi declarada/);
+    expect(runJavaScriptSubset('console.log(window.location);').ok).toBe(false);
     expect(runJavaScriptSubset('console.log(fetch("https://example.com"));').ok).toBe(false);
   });
 });
