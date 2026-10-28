@@ -14,6 +14,11 @@ import {
 import { logUnit } from '@/lib/pace';
 
 const storageKey = (id: string) => 'cronicas:terminal-lab:v1:' + id;
+const formatPath = (cwd: string) => cwd === '/home/aprendiz'
+  ? '~'
+  : cwd.startsWith('/home/aprendiz/')
+    ? '~' + cwd.slice('/home/aprendiz'.length)
+    : cwd;
 
 function initialState(lab: TerminalLab): TerminalState {
   try {
@@ -43,11 +48,7 @@ function TerminalLabRun({ lab }: { lab: TerminalLab }) {
   const [state, setState] = useState<TerminalState>(() => initialState(lab));
   const [command, setCommand] = useState('');
   const completed = isTerminalLabComplete(lab.id, state);
-  const pathLabel = state.cwd === '/home/aprendiz'
-    ? '~'
-    : state.cwd.startsWith('/home/aprendiz/')
-      ? '~' + state.cwd.slice('/home/aprendiz'.length)
-      : state.cwd;
+  const pathLabel = formatPath(state.cwd);
 
   useEffect(() => {
     try {
@@ -108,7 +109,7 @@ function TerminalLabRun({ lab }: { lab: TerminalLab }) {
               <p className="font-mono text-sm font-semibold">Terminal Linux</p>
               <p className="truncate font-mono text-[11px] text-[#a7b9ae]">aprendiz@cronicas:{pathLabel}</p>
             </div>
-            <span className="rounded-md border border-[#789c7d]/50 px-2 py-1 font-mono text-[10px] text-[#b8d7bc]">LAB LOCAL</span>
+            <span className="rounded-md border border-[#789c7d]/50 px-2 py-1 font-mono text-[10px] text-[#b8d7bc]">VIRTUAL</span>
           </div>
 
           <div className="space-y-3 p-3 sm:p-4" role="log" aria-live="polite" aria-label="Histórico de comandos">
@@ -122,7 +123,7 @@ function TerminalLabRun({ lab }: { lab: TerminalLab }) {
               state.history.map((entry) => (
                 <div key={entry.id} className="space-y-1.5 font-mono text-xs leading-relaxed">
                   <p className="break-words text-[#9ed7aa]">
-                    <span className="text-[#7e9b87]">aprendiz@cronicas:{pathLabel}$</span> {entry.command}
+                    <span className="text-[#7e9b87]">aprendiz@cronicas:{formatPath(entry.cwd ?? state.cwd)}$</span> {entry.command}
                   </p>
                   {entry.output && (
                     <pre className={\`whitespace-pre-wrap break-words pl-1 \${entry.exitCode === 0 ? 'text-[#d4ded7]' : 'text-[#ffb3a9]'}\`}>{entry.output}</pre>
