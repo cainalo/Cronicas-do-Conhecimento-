@@ -36,6 +36,9 @@ import { TrailPage } from '@/pages/Trail';
 import { TrailVideoPage } from '@/pages/TrailVideo';
 import { CustomizePage } from '@/pages/Customize';
 import { ScenarioListPage, ScenarioPage } from '@/pages/Scenarios';
+import { WorldPage } from '@/pages/World';
+import { TerminalLabPage } from '@/pages/TerminalLab';
+import { CodeLabPage } from '@/pages/CodeLab';
 import { TeachersRoomPage } from '@/pages/TeachersRoom';
 import { NarratedPage } from '@/pages/Narrated';
 
@@ -66,7 +69,10 @@ export function AppRoutes() {
         <Route path="simulador" element={<ScenarioListPage />} />
         <Route path="simulador/:id" element={<ScenarioPage />} />
         <Route path="sala" element={<TeachersRoomPage />} />
-        <Route path="escritorio" element={<Navigate to="/simulador" replace />} />
+        <Route path="escritorio" element={<WorldPage />} />
+        <Route path="laboratorios" element={<TerminalLabPage />} />
+        <Route path="laboratorio/:id" element={<TerminalLabPage />} />
+        <Route path="laboratorio-codigo" element={<CodeLabPage />} />
         <Route path="aula-narrada/:id" element={<NarratedPage />} />
         <Route path="pratica/:chapterId/:sectionId" element={<PracticePage />} />
         <Route path="licao/:id" element={<LessonPage />} />

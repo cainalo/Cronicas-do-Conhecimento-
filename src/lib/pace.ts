@@ -11,7 +11,7 @@ export const REVIEW_DAYS = 7;
 
 export interface Unit {
   key: string;
-  kind: 'aprender' | 'narrada' | 'video' | 'professores' | 'praticar' | 'missao' | 'flashcards' | 'desafio';
+  kind: 'aprender' | 'narrada' | 'video' | 'professores' | 'praticar' | 'missao' | 'flashcards' | 'desafio' | 'laboratorio' | 'escritorio';
   chapterId: string;
   sectionId?: string;
   title: string;
@@ -34,6 +34,8 @@ export interface TrailExtras {
   postsLessonFor?: (chapterId: string, sectionId: string) => string | undefined;
   /** O capítulo tem cartões de memorização. */
   hasCards?: (chapterId: string) => boolean;
+  /** Laboratórios e fases do jogo que entram na sequência oficial da trilha. */
+  practicalFor?: (chapterId: string, sectionId: string) => { id: string; title: string; kind: 'laboratorio' | 'escritorio'; to: string }[];
 }
 
 /** Atividades que só pedem para abrir e acompanhar: concluídas ao abrir pela trilha (`?u=chave`). */
@@ -87,6 +89,11 @@ export function courseUnits(
       out.push({ key: practiceId(c.id, s.id), kind: 'praticar', chapterId: c.id, sectionId: s.id, title: `Praticar: ${t}`, to: `/pratica/${c.id}/${s.id}` });
       const m = missions.find((x) => x.chapterId === c.id && x.sectionId === s.id);
       if (m) out.push({ key: missionKey(m.id), kind: 'missao', chapterId: c.id, sectionId: s.id, title: `Caso prático: ${m.title}`, to: `/missao/${m.id}` });
+      // Atividades práticas adicionais aparecem no ponto didático associado ao conteúdo.
+      for (const activity of extras.practicalFor?.(c.id, s.id) ?? []) {
+        const key = activity.kind + ':' + activity.id;
+        out.push({ key, kind: activity.kind, chapterId: c.id, sectionId: s.id, title: activity.title, to: withVisit(activity.to, key) });
+      }
     }
     if (extras.hasCards?.(c.id)) {
       const key = `flashcards:${c.id}`;
@@ -108,6 +115,7 @@ export function unitDone(data: StudyData, u: Unit): string | true | undefined {
     if (log) return log;
     return data.reading[u.chapterId]?.sectionsRead.includes(u.sectionId!) ? true : undefined;
   }
+  if (u.kind === 'laboratorio' || u.kind === 'escritorio') return data.unitLog?.[u.key];
   return data.lessons[u.key]?.firstCompletedAt;
 }
 

@@ -533,4 +533,26 @@ export const trailExtras: TrailExtras = {
     return first && feedPostsOf(first.id).length ? first.id : undefined;
   },
   hasCards: (chapterId) => flashcards.some((f) => f.chapterId === chapterId),
+  practicalFor: (chapterId, sectionId) => {
+    if (chapterId === 'cap.dev.03' && sectionId === 'logica') return [
+      { id: 'codigo', kind: 'laboratorio' as const, title: 'Laboratório de código: variáveis e decisões', to: '/laboratorio-codigo' },
+    ];
+    if (chapterId !== 'cap.infra.03') return [];
+    if (sectionId === 'processos') return [
+      { id: 'triagem', kind: 'escritorio' as const, title: 'Escritório de TI · Fase 1: triagem', to: '/escritorio?fase=triagem' },
+      { id: 'processos', kind: 'laboratorio' as const, title: 'Laboratório: processos e recursos', to: '/laboratorio/processos' },
+    ];
+    if (sectionId === 'arquivos') return [
+      { id: 'arquivos', kind: 'laboratorio' as const, title: 'Laboratório: arquivos e logs', to: '/laboratorio/arquivos' },
+    ];
+    if (sectionId === 'shell') return [
+      { id: 'shell', kind: 'laboratorio' as const, title: 'Laboratório: shell e permissões', to: '/laboratorio/shell' },
+      { id: 'diagnostico', kind: 'escritorio' as const, title: 'Escritório de TI · Fase 2: diagnóstico', to: '/escritorio?fase=diagnostico' },
+    ];
+    if (sectionId === 'diretorio') return [
+      { id: 'rede', kind: 'laboratorio' as const, title: 'Laboratório: rede e serviços', to: '/laboratorio/rede' },
+      { id: 'resolucao', kind: 'escritorio' as const, title: 'Escritório de TI · Fase 3: resolução do chamado', to: '/escritorio?fase=resolucao' },
+    ];
+    return [];
+  },
 };

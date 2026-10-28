@@ -93,6 +93,9 @@ export function StudiesPage() {
           />
           <Tile to="/slides" icon="cartas" color="rgb(var(--gold))" title="Slides de revisão" text="Revise os conceitos em lâminas visuais por capítulo; imprima ou salve em PDF." />
           <Tile to="/simulador" icon="play" color="rgb(var(--teal))" title="Casos práticos" text="Treine decisões em situações realistas de TI." />
+          <Tile wide to="/laboratorios" icon="tela" color="rgb(var(--teal))" title="Laboratórios práticos" text="Abra um terminal Linux virtual, navegue por arquivos, observe processos e investigue serviços com comandos reais." />
+          <Tile to="/laboratorio-codigo" icon="dados" color="rgb(var(--gold))" title="Laboratório de programação" text="Escreva JavaScript, execute o código e veja como variáveis, expressões e decisões funcionam." />
+          <Tile wide to="/escritorio" icon="mapa" color="rgb(var(--gold))" title="Escritório de TI em mapa" text="Ande pelo ambiente de trabalho, converse com a equipe, examine evidências e resolva o chamado 2318." />
           <Tile to="/sala" icon="balao" color="rgb(var(--azure))" title="Sala dos Professores" text="Dicas, pegadinhas e mini-desafios." />
         </TileGrid>
       </section>

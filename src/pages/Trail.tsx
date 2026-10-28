@@ -151,9 +151,15 @@ Object.assign(KIND_LABEL, {
   professores: 'Posts dos professores',
   flashcards: 'Cartões de memorização',
 });
+Object.assign(KIND_LABEL, {
+  laboratorio: 'Laboratório prático',
+  escritorio: 'Escritório de TI',
+});
 Object.assign(KIND_ICON, {
   narrada: 'alaude',
   video: 'play',
   professores: 'balao',
   flashcards: 'cartas',
+  laboratorio: 'tela',
+  escritorio: 'mapa',
 });
