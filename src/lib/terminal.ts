@@ -457,6 +457,9 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
     } else if (!isDirectory(target.slice(0, target.lastIndexOf('/')) || '/', directories)) {
       output = 'Diretório de destino não existe. Crie a pasta antes de gravar.';
       exitCode = 1;
+    } else if (files[target] !== undefined && !hasPermission(target, { ...state, cwd, files, directories, permissions, processes, history: state.history, completedTasks: state.completedTasks, nextEntryId: state.nextEntryId }, 'w')) {
+      output = 'Permissão negada: o usuário aprendiz não tem escrita neste arquivo.';
+      exitCode = 1;
     } else {
       files[target] = append ? (files[target] ?? '') + content + '\n' : content + '\n';
       output = 'Arquivo atualizado: ' + target;
