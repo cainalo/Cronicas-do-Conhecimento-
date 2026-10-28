@@ -1333,3 +1333,13 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
   .ccv-mindmap-content *, .ccv-mindmap-content *::before, .ccv-mindmap-content *::after,
   .ccv-caption-line { animation: none !important; transition: none !important; }
 }
+
+
+/* The historical mind map uses the full width of the film stage. */
+.ccv-film-scene.is-mindmap-mode .ccv-film-content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(.3rem, .85vh, .7rem);
+  padding-bottom: 0;
+}

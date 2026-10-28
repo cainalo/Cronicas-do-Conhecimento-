@@ -835,16 +835,9 @@ type SaberioMindMapBranch = {
   nodes: SaberioMindMapNode[];
 };
 
-/**
- * First-lesson art direction: the map grows from the narrated beats. New facts are
- * drawn into the board instead of replacing the entire picture; the current fact is highlighted.
- */
 const SABERIO_MIND_MAP_BRANCHES: SaberioMindMapBranch[] = [
   {
-    id: 'contar',
-    title: 'Ferramentas de cálculo',
-    startAt: 1,
-    color: '#c8402a',
+    id: 'contar', title: 'Ferramentas de cálculo', startAt: 1, color: '#c8402a',
     nodes: [
       { id: 'abaco', revealAt: 2, date: 'ORIGENS', title: 'Ábaco', summary: 'Contas móveis', art: 'abaco' },
       { id: 'pascalina', revealAt: 4, date: '1642', title: 'Pascalina', summary: 'Rodas dentadas', art: 'engrenagem' },
@@ -852,10 +845,7 @@ const SABERIO_MIND_MAP_BRANCHES: SaberioMindMapBranch[] = [
     ],
   },
   {
-    id: 'programar',
-    title: 'Instruções e dados',
-    startAt: 8,
-    color: '#1f5c7a',
+    id: 'programar', title: 'Instruções e dados', startAt: 8, color: '#1f5c7a',
     nodes: [
       { id: 'babbage', revealAt: 8, date: '1830s', title: 'Máquina Analítica', summary: 'Cálculo + armazenamento', art: 'computador' },
       { id: 'ada', revealAt: 10, date: '1843', title: 'Ada Lovelace', summary: 'Algoritmo publicado', art: 'alvo' },
@@ -863,33 +853,24 @@ const SABERIO_MIND_MAP_BRANCHES: SaberioMindMapBranch[] = [
     ],
   },
   {
-    id: 'eletronica',
-    title: 'Era eletrônica',
-    startAt: 14,
-    color: '#6e3b5c',
+    id: 'eletronica', title: 'Era eletrônica', startAt: 14, color: '#6e3b5c',
     nodes: [
       { id: 'eniac', revealAt: 14, date: '1945–46', title: 'ENIAC', summary: 'Válvulas eletrônicas', art: 'suporte' },
       { id: 'programadoras', revealAt: 16, date: 'DÉCADA DE 1940', title: 'Programadoras', summary: 'A equipe também programava', art: 'rede' },
       { id: 'transistor', revealAt: 17, date: '1947', title: 'Transistor', summary: 'Menor e mais eficiente', art: 'engrenagem' },
-      { id: 'integrado', revealAt: 18, date: '1958–59', title: 'Circuito integrado', summary: 'Vários componentes em um chip', art: 'dados' },
+      { id: 'integrado', revealAt: 18, date: '1958–59', title: 'Circuito integrado', summary: 'Componentes num chip', art: 'dados' },
     ],
   },
   {
-    id: 'compactar',
-    title: 'Computação no bolso',
-    startAt: 19,
-    color: '#9e6a14',
+    id: 'compactar', title: 'Computação no bolso', startAt: 19, color: '#9e6a14',
     nodes: [
       { id: 'microprocessador', revealAt: 19, date: '1971', title: 'Microprocessador', summary: 'A CPU em um chip', art: 'computador' },
-      { id: 'pc', revealAt: 20, date: '1977–81', title: 'PC pessoal', summary: 'Computadores em casa e no trabalho', art: 'computador' },
+      { id: 'pc', revealAt: 20, date: '1977–81', title: 'PC pessoal', summary: 'Computadores para todos', art: 'computador' },
       { id: 'smartphone', revealAt: 21, date: '2007+', title: 'Smartphone', summary: 'Computação no bolso', art: 'computador' },
     ],
   },
   {
-    id: 'sistema',
-    title: 'O que todo computador faz',
-    startAt: 23,
-    color: '#346834',
+    id: 'sistema', title: 'O que todo computador faz', startAt: 23, color: '#346834',
     nodes: [
       { id: 'entrada', revealAt: 23, date: '01', title: 'Entrada', summary: 'Receber dados e instruções', art: 'rede' },
       { id: 'processamento', revealAt: 24, date: '02', title: 'Processamento', summary: 'Executar instruções', art: 'engrenagem' },
@@ -912,7 +893,6 @@ function SaberioMindMap({
   const allNodes = SABERIO_MIND_MAP_BRANCHES.flatMap((branch) => branch.nodes);
   const revealedNodes = allNodes.filter((node) => node.revealAt <= globalStep);
   const activeNode = [...revealedNodes].sort((a, b) => b.revealAt - a.revealAt)[0];
-  const rootActive = !activeNode;
 
   return (
     <section
@@ -922,20 +902,15 @@ function SaberioMindMap({
       data-step={globalStep}
       data-revealed-count={revealedNodes.length}
     >
-      <div className={'ccv-mindmap-root' + (rootActive ? ' is-active' : '')} data-testid="narrada-mindmap-root">
-        <span className="ccv-mindmap-root__eyebrow">SABERIO · MAPA MENTAL</span>
-        <strong>Do ábaco ao celular</strong>
+      <div className={'ccv-mindmap-root' + (!activeNode ? ' is-active' : '')} data-testid="narrada-mindmap-root">
+        <div className="ccv-mindmap-root__brand">
+          <span className="ccv-mindmap-root__eyebrow">SABERIO · MAPA MENTAL</span>
+          <strong>Do ábaco ao celular</strong>
+        </div>
         <span className="ccv-mindmap-root__subtitle">As ideias se conectam e transformam o jeito de calcular.</span>
       </div>
-
       <div className="ccv-mindmap-map">
-        <div className="ccv-mindmap-trunk" aria-hidden="true">
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
-        </div>
+        <div className="ccv-mindmap-trunk" aria-hidden="true"><span /><span /><span /><span /><span /></div>
         <div className="ccv-mindmap-grid">
           {SABERIO_MIND_MAP_BRANCHES.filter((branch) => branch.startAt <= globalStep).map((branch, branchIndex) => (
             <section
@@ -945,8 +920,7 @@ function SaberioMindMap({
               data-testid={'narrada-mindmap-branch-' + branch.id}
             >
               <h3 className="ccv-mindmap-branch__title">
-                <span>{String(branchIndex + 1).padStart(2, '0')}</span>
-                {branch.title}
+                <span>{String(branchIndex + 1).padStart(2, '0')}</span>{branch.title}
               </h3>
               <div className="ccv-mindmap-nodes">
                 {branch.nodes.filter((node) => node.revealAt <= globalStep).map((node) => {
@@ -975,7 +949,6 @@ function SaberioMindMap({
           ))}
         </div>
       </div>
-
       <div className="ccv-mindmap-current" data-testid="narrada-mindmap-current">
         <span className="ccv-mindmap-current__pulse" aria-hidden="true" />
         <div className="ccv-mindmap-current__copy">
@@ -1096,18 +1069,19 @@ function CinematicScene({
       </header>
 
       <div className={"ccv-film-content" + (cutawayVisible ? " has-cutaway" : "")}>
-        <section className="ccv-film-copy">
-          {isMindMapMode ? (
-        <SaberioMindMap
-          globalStep={globalStep}
-          sceneIndex={sceneIndex}
-          sceneCount={sceneCount}
-          currentTitle={headline}
-          currentDetail={support}
-          dateOrStep={dateOrStep}
-        />
-      ) : (
-        <div className="ccv-film-copy__take" key={scene.id + ':' + beatIndex} data-testid="narrada-corte-texto">
+        {isMindMapMode ? (
+          <SaberioMindMap
+            globalStep={globalStep}
+            sceneIndex={sceneIndex}
+            sceneCount={sceneCount}
+            currentTitle={headline}
+            currentDetail={support}
+            dateOrStep={dateOrStep}
+          />
+        ) : (
+          <>
+          <section className="ccv-film-copy">
+            <div className="ccv-film-copy__take" key={scene.id + ':' + beatIndex} data-testid="narrada-corte-texto">
               <p className="ccv-film-eyebrow"><span />{eyebrow}</p>
               {dateOrStep && <p className="ccv-film-date">{dateOrStep}</p>}
               <h2 className="ccv-film-headline">{headline}</h2>
@@ -1163,16 +1137,15 @@ function CinematicScene({
               <p className="ccv-film-support">{support}</p>
             </section>
           )}
-        </div>
-  
-        <footer className="ccv-film-footer">
-          <span>VER · ENTENDER · APLICAR</span>
-          <span className="ccv-film-footer__l
-      )}
+          </>
+        )}
+      </div>
 
       {showCaptions && <CaptionLine text={captionText} activeWordIndex={captionWordIndex} highlightWord={highlightCaptionWord} />}
 
-ine" />
+      <footer className="ccv-film-footer">
+        <span>VER · ENTENDER · APLICAR</span>
+        <span className="ccv-film-footer__line" />
         <span>ÁUDIO E IMAGEM SINCRONIZADOS</span>
       </footer>
 
