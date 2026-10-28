@@ -130,6 +130,18 @@ describe('tela do escritório (tela cheia)', () => {
     expect(await screen.findByTestId('mundo-conversa')).toHaveTextContent(/primeiro chamado/);
   });
 
+  it('o terminal da Marta abre o laboratório de comandos do chamado', async () => {
+    const user = userEvent.setup();
+    renderWorld();
+    await user.click(screen.getByRole('button', { name: 'Ir até' }));
+    await user.click(screen.getByRole('button', { name: /terminal na mesa da Marta/i }));
+    expect(await screen.findByTestId('mundo-objeto')).toHaveTextContent(/saída do top/i);
+    expect(screen.getByRole('link', { name: /investigar com comandos no terminal/i })).toHaveAttribute(
+      'href',
+      '/laboratorio/processos-linux?origem=escritorio',
+    );
+  });
+
   it('teclado anda uma casa e vira o personagem; Esc fecha o painel', async () => {
     const user = userEvent.setup();
     renderWorld();
