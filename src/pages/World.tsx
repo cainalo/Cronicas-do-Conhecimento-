@@ -109,7 +109,7 @@ function WorldPlay({ w, s }: { w: World; s: Scenario }) {
       if (st.closed) next = logUnit(next, 'escritorio:fechamento');
       return next;
     });
-  }, [st.scenario.nodeId, st.closed, update]);
+  }, [st.scenario.nodeId, st.examined, st.closed, update]);
   const [path, setPath] = useState<Tile[]>([]);
   const [after, setAfter] = useState<Panel>(null);
   const [panel, setPanel] = useState<Panel>(null);
