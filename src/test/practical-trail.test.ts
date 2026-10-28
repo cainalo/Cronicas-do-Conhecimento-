@@ -34,6 +34,15 @@ describe('laboratórios e Escritório de TI integrados à trilha', () => {
 
   it('reserva as fases do escritório ao capítulo de sistemas operacionais', () => {
     expect(units.filter((unit) => unit.kind === 'escritorio').every((unit) => unit.chapterId === 'cap.infra.03')).toBe(true);
-    expect(units.filter((unit) => unit.kind === 'laboratorio' && unit.key !== 'laboratorio:codigo').every((unit) => unit.chapterId === 'cap.infra.03')).toBe(true);
+    expect(units.filter((unit) => unit.kind === 'laboratorio' && !['laboratorio:codigo', 'laboratorio:git'].includes(unit.key)).every((unit) => unit.chapterId === 'cap.infra.03')).toBe(true);
+  });
+
+  it('liga a prática de Git ao assunto de versionamento e pull requests', () => {
+    expect(units.find((unit) => unit.key === 'laboratorio:git')).toMatchObject({
+      kind: 'laboratorio',
+      chapterId: 'cap.devops.01',
+      sectionId: 'git',
+      to: '/laboratorio/git?u=laboratorio%3Agit',
+    });
   });
 });
