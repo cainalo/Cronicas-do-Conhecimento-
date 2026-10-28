@@ -59,10 +59,10 @@ Login/cadastro/recuperação e sincronização HTTP com o Supabase (rede do cont
 ## Laboratórios de terminal e mapa — adicionados em 28/10/2026
 
 Testes de regressão incluídos:
-- `src/test/terminal.test.ts`: navegação e arquivos, busca nos logs, leitura de processos/memória, alteração de JavaScript, Git e bloqueios de comandos destrutivos.
-- `src/test/trail-extras.test.ts`: posição dos cinco laboratórios e das três fases do Escritório, além do registro de conclusão.
+- `src/test/terminal.test.ts`: navegação e arquivos, busca nos logs, permissões Unix (`ls -l`, `stat`, `chmod`), leitura de processos/memória, alteração de JavaScript, Git e bloqueios de comandos destrutivos.
+- `src/test/trail-extras.test.ts`: posição dos seis laboratórios e das três fases do Escritório, além do registro de conclusão.
 - `src/test/world.test.tsx`: encaminhamento do objeto de terminal no mapa para o laboratório.
 
-O roteiro E2E também visita `/laboratorio/primeiros-passos`, `/laboratorio/processos-linux` e `/escritorio` em 360×640 e 390×844.
+O roteiro E2E visita `/laboratorio/primeiros-passos`, `/laboratorio/arquivos-logs`, `/laboratorio/permissoes`, `/laboratorio/processos-linux`, `/laboratorio/javascript`, `/laboratorio/git` e `/escritorio?fase=diagnostico` em 360×640 e 390×844.
 
-**Status desta rodada:** os testes foram escritos, mas não executados nesta sessão. Antes de aprovar a branch, rode `npm test`, `npm run build` e `npm run test:e2e`; confira a UI em 360×640 e 390×844. Não marcar como aprovado com base apenas na presença dos testes.
+**Status desta rodada:** os testes foram escritos. Os runs durante a edição foram cancelados por novas atualizações da branch, portanto o estado final ainda não foi aprovado. Antes de mesclar/publicar, aguarde um run verde de `npm test`, `npm run build` e `npm run test:e2e`; confira a UI em 360×640 e 390×844.
