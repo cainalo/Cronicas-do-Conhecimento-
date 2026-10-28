@@ -34,6 +34,7 @@ import {
 } from '@/lib/world';
 import { Icon } from '@/components/Icon';
 import { PageHeader } from '@/components/Page';
+import { logUnit } from '@/lib/pace';
 import { ScenarioClosing } from './Scenarios';
 
 /** Unidade de desenho de uma casa (o mapa é escalado para a tela). */
@@ -95,7 +96,11 @@ function useViewport() {
 
 function WorldPlay({ w, s }: { w: World; s: Scenario }) {
   const navigate = useNavigate();
+  const { update } = useStudy();
   const [st, setSt] = useState<WorldState>(() => load(w, s) ?? fresh(w, s));
+  useEffect(() => {
+    if (st.closed && w.id === 'escritorio-ti') update((data) => logUnit(data, 'escritorio:processos-linux'));
+  }, [st.closed, update, w.id]);
   const [path, setPath] = useState<Tile[]>([]);
   const [after, setAfter] = useState<Panel>(null);
   const [panel, setPanel] = useState<Panel>(null);
@@ -440,6 +445,14 @@ function InteractionPanel({ w, s, st, setSt, panel, onRestart }: { w: World; s: 
               </div>
             ))}
             <p className="text-xs text-muted">Anotado no caderno.</p>
+          </div>
+        )}
+        {o.id === 'terminal' && (
+          <div className="mt-4 border-t border-line pt-3">
+            <Link to="/laboratorio/processos-linux?origem=escritorio" className="btn-primary w-full">
+              Investigar com comandos no terminal <Icon name="avancar" size={18} />
+            </Link>
+            <p className="mt-2 text-xs leading-relaxed text-muted">Abra o laboratório, execute comandos Linux e volte ao mapa para concluir o chamado.</p>
           </div>
         )}
       </section>
