@@ -29,6 +29,6 @@
 
 ## Incremento em revisão — 28/10/2026
 
-- 🟡 Laboratórios de comandos no terminal virtual: navegação e arquivos, análise de logs, processos/memória, JavaScript/Node e Git. Critério: tarefas executam com semântica previsível, estado isolado e sem executar comandos no dispositivo; testes automatizados verdes.
-- 🟡 Escritório de TI no mapa: manter o mapa atual e ligar o terminal interativo ao chamado; dividir triagem, diagnóstico e fechamento em marcos separados na trilha. Critério: evidência e escolhas determinam o avanço; estados persistem; regressão do mapa e navegação móvel verdes.
-- ⬜ Antes de mesclar ou publicar: executar `npm test`, `npm run build` e `npm run test:e2e`; revisar no navegador em 360×640 e 390×844; só então pedir aprovação para integração.
+- 🟡 Seis laboratórios no terminal virtual: navegação/arquivos, análise de logs, permissões Unix (`ls -l`, `stat`, `chmod`), processos/memória, JavaScript/Node e Git. Critério: tarefas executam com semântica previsível, estado isolado e sem executar comandos no dispositivo; testes automatizados verdes.
+- 🟡 Escritório de TI no mapa: manter o mapa atual e ligar o terminal interativo ao chamado; exigir a conclusão do laboratório de processos para liberar as evidências e dividir triagem, diagnóstico e fechamento em marcos separados na trilha. Critério: evidência e escolhas determinam o avanço; estados persistem; regressão do mapa e navegação móvel verdes.
+- ⬜ Antes de mesclar ou publicar: executar `npm test`, `npm run build` e `npm run test:e2e`; revisar no navegador em 360×640 e 390×844; só então pedir aprovação para integração. O Linux real com v86 e a execução real de Node com WebContainers ficam como etapa técnica posterior.
