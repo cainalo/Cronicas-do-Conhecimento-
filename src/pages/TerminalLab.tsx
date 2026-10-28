@@ -49,6 +49,15 @@ function TerminalLabRun({ lab }: { lab: TerminalLab }) {
   const [command, setCommand] = useState('');
   const completed = isTerminalLabComplete(lab.id, state);
   const pathLabel = formatPath(state.cwd);
+  const directoryPrefix = state.cwd === '/' ? '/' : state.cwd + '/';
+  const fileBrowserEntries = [
+    ...state.directories
+      .filter((path) => path !== state.cwd && path.startsWith(directoryPrefix) && !path.slice(directoryPrefix.length).includes('/'))
+      .map((path) => ({ path, label: path.split('/').pop() + '/', kind: 'directory' as const, command: 'cd ' + path })),
+    ...Object.keys(state.files)
+      .filter((path) => path.startsWith(directoryPrefix) && !path.slice(directoryPrefix.length).includes('/'))
+      .map((path) => ({ path, label: path.split('/').pop() ?? path, kind: 'file' as const, command: 'cat ' + (path.startsWith(directoryPrefix) ? path.slice(directoryPrefix.length) : path) })),
+  ].sort((a, b) => a.label.localeCompare(b.label));
 
   useEffect(() => {
     try {
@@ -197,6 +206,37 @@ function TerminalLabRun({ lab }: { lab: TerminalLab }) {
                 );
               })}
             </ol>
+          </section>
+
+          <section className="rounded-2xl border border-line bg-surface p-4">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="font-semibold">Explorador de arquivos</h2>
+              <span className="font-mono text-[10px] text-muted">VIRTUAL</span>
+            </div>
+            <p className="mt-1 break-all font-mono text-[11px] text-muted">{state.cwd}</p>
+            <p className="mt-1 text-xs leading-relaxed text-muted">Explore a pasta visualmente. Toque em um item para preencher um comando; pressione Executar para ver o resultado no terminal.</p>
+            <ul className="mt-3 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+              {state.cwd !== '/' && (
+                <li>
+                  <button type="button" onClick={() => setCommand('cd ..')} className="w-full rounded-lg border border-line bg-raised/60 px-2.5 py-2 text-left font-mono text-xs hover:border-[#52875c]">
+                    <span className="mr-2 text-muted">↰</span> .. subir pasta
+                  </button>
+                </li>
+              )}
+              {fileBrowserEntries.map((entry) => (
+                <li key={entry.path}>
+                  <button
+                    type="button"
+                    onClick={() => setCommand(entry.command)}
+                    className="w-full break-all rounded-lg border border-line bg-raised/60 px-2.5 py-2 text-left font-mono text-xs hover:border-[#52875c]"
+                    title={entry.path}
+                  >
+                    <span className="mr-2" aria-hidden="true">{entry.kind === 'directory' ? '📁' : '📄'}</span>{entry.label}
+                  </button>
+                </li>
+              ))}
+              {fileBrowserEntries.length === 0 && <li className="text-xs text-muted">Esta pasta está vazia.</li>}
+            </ul>
           </section>
 
           <section className="rounded-2xl border border-line bg-raised/60 p-4">
