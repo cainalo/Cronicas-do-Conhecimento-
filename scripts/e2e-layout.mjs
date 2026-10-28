@@ -17,7 +17,7 @@ const VIEWPORTS = [
 ];
 const PAGES = [
   '/', '/trilha', '/explorar', '/biblioteca', '/grimorio/grim.primeiros', '/capitulo/cap.prim.01', '/revisar', '/progresso',
-  '/aprender/cap.prim.01/computador/prim.computador.1', '/pratica/cap.prim.01/computador', '/sala', '/simulado', '/plano', '/conta', '/conta/dados', '/video/yt-YJyY6A_MOQc', '/sala?aula=prim.computador.1', '/flashcards?capitulo=cap.prim.01', '/aula-narrada/narrada.prim.historia',
+  '/aprender/cap.prim.01/computador/prim.computador.1', '/pratica/cap.prim.01/computador', '/laboratorios', '/laboratorio/processos', '/laboratorio/arquivos', '/laboratorio/shell', '/laboratorio/rede', '/laboratorio/git', '/laboratorio-codigo', '/escritorio?fase=diagnostico', '/sala', '/simulado', '/plano', '/conta', '/conta/dados', '/video/yt-YJyY6A_MOQc', '/sala?aula=prim.computador.1', '/flashcards?capitulo=cap.prim.01', '/aula-narrada/narrada.prim.historia',
 ];
 const LESSON = '/aprender/cap.prim.01/computador/prim.computador.1';
 const GUIDE_LESSON = '/aprender/cap.infra.03/arquivos';

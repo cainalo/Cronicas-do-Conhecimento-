@@ -534,6 +534,9 @@ export const trailExtras: TrailExtras = {
   },
   hasCards: (chapterId) => flashcards.some((f) => f.chapterId === chapterId),
   practicalFor: (chapterId, sectionId) => {
+    if (chapterId === 'cap.devops.01' && sectionId === 'git') return [
+      { id: 'git', kind: 'laboratorio' as const, title: 'Laboratório prático: Git e histórico', to: '/laboratorio/git' },
+    ];
     if (chapterId === 'cap.dev.03' && sectionId === 'logica') return [
       { id: 'codigo', kind: 'laboratorio' as const, title: 'Laboratório de código: variáveis e decisões', to: '/laboratorio-codigo' },
     ];

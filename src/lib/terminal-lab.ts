@@ -12,6 +12,16 @@ export interface TerminalState {
   files: Record<string, VirtualEntry>;
   commands: string[];
   transcript: TerminalLine[];
+  git?: VirtualGitState;
+}
+
+export interface VirtualGitCommit { id: string; message: string; }
+export interface VirtualGitState {
+  root: string;
+  branch: string;
+  staged: Record<string, string>;
+  baseline: Record<string, string>;
+  history: VirtualGitCommit[];
 }
 export interface LabStep {
   id: string;
@@ -21,7 +31,7 @@ export interface LabStep {
   doneWhen: (state: TerminalState) => boolean;
 }
 export interface TerminalLabDefinition {
-  id: 'processos' | 'arquivos' | 'shell' | 'rede';
+  id: 'processos' | 'arquivos' | 'shell' | 'rede' | 'git';
   title: string;
   eyebrow: string;
   summary: string;
@@ -36,6 +46,9 @@ const seed: Record<string, VirtualEntry> = {
   '/home': { kind: 'dir', mode: '755', owner: 'root' },
   '/home/aluno': { kind: 'dir', mode: '755', owner: 'aluno' },
   '/home/aluno/projetos': { kind: 'dir', mode: '755', owner: 'aluno' },
+  '/home/aluno/projetos/portal': { kind: 'dir', mode: '755', owner: 'aluno' },
+  '/home/aluno/projetos/portal/README.md': { kind: 'file', mode: '644', owner: 'aluno', content: '# Portal de suporte\nProjeto didático do laboratório Git.\n' },
+  '/home/aluno/projetos/portal/index.js': { kind: 'file', mode: '644', owner: 'aluno', content: "const status = 'em manutenção'; console.log(status);" },
   '/home/aluno/relatorios': { kind: 'dir', mode: '755', owner: 'aluno' },
   '/home/aluno/scripts': { kind: 'dir', mode: '755', owner: 'aluno' },
   '/var': { kind: 'dir', mode: '755', owner: 'root' },
@@ -60,12 +73,25 @@ const seed: Record<string, VirtualEntry> = {
   '/opt/relat-api/README.txt': { kind: 'file', mode: '644', owner: 'root', content: 'Serviço fictício relat-api. A aplicação consulta o banco e entrega os relatórios internos.' },
 };
 const HOME = '/home/aluno';
+const GIT_ROOT = '/home/aluno/projetos/portal';
+const GIT_TRACKED = ['README.md', 'index.js'] as const;
+
+function createVirtualGitState(): VirtualGitState {
+  return {
+    root: GIT_ROOT,
+    branch: 'main',
+    staged: {},
+    baseline: Object.fromEntries(GIT_TRACKED.map((name) => [name, seed[GIT_ROOT + '/' + name].content ?? ''])),
+    history: [{ id: 'a1b2c3d', message: 'Cria portal de suporte' }],
+  };
+}
 
 export function createTerminalState(): TerminalState {
   return {
     cwd: HOME,
     files: Object.fromEntries(Object.entries(seed).map(([path, entry]) => [path, { ...entry }])),
     commands: [],
+    git: createVirtualGitState(),
     transcript: [{ command: '', cwd: HOME, output: 'Pórtico Lab OS 24.04 · terminal virtual\nAmbiente isolado para prática. Digite help para ver os comandos disponíveis.\n' }],
   };
 }
@@ -152,9 +178,44 @@ const helpText = [
   'Conteúdo: echo "texto" > arquivo, echo "texto" >> arquivo, chmod 640 arquivo',
   'Sistema: whoami, hostname, uname -a, uptime, ps aux, top, vmstat 2, free -h, df -h, kill PID',
   'Rede e serviços: ip addr, ping -c 4 10.0.0.12, systemctl status relat-api, journalctl -u relat-api',
+  'Git didático: git status, git diff, git add index.js, git commit -m "mensagem", git log --oneline',
   'Ajuda: help, man <comando>, history, clear',
   'Aviso: sistema de arquivos virtual. Nenhum comando é executado no seu aparelho.',
 ].join('\n');
+
+function virtualGitStatus(state: TerminalState, repo: VirtualGitState): string {
+  const staged = Object.keys(repo.staged).filter((name) => repo.staged[name] !== repo.baseline[name]);
+  const unstaged = Object.keys(repo.baseline).filter((name) => {
+    const entry = state.files[repo.root + '/' + name];
+    const current = entry?.kind === 'file' ? entry.content ?? '' : '';
+    const reference = Object.prototype.hasOwnProperty.call(repo.staged, name) ? repo.staged[name] : repo.baseline[name];
+    return current !== reference;
+  });
+  if (!staged.length && !unstaged.length) return 'On branch ' + repo.branch + '\nnothing to commit, working tree clean';
+  const lines = ['On branch ' + repo.branch];
+  if (staged.length) lines.push('', 'Changes to be committed:', ...staged.map((name) => '  modified: ' + name));
+  if (unstaged.length) lines.push('', 'Changes not staged for commit:', ...unstaged.map((name) => '  modified: ' + name));
+  return lines.join('\n');
+}
+
+function virtualGitDiff(state: TerminalState, repo: VirtualGitState): string {
+  const changes: string[] = [];
+  for (const name of Object.keys(repo.baseline)) {
+    const entry = state.files[repo.root + '/' + name];
+    const current = entry?.kind === 'file' ? entry.content ?? '' : '';
+    const reference = Object.prototype.hasOwnProperty.call(repo.staged, name) ? repo.staged[name] : repo.baseline[name];
+    if (current === reference) continue;
+    changes.push(
+      'diff --git a/' + name + ' b/' + name,
+      '--- a/' + name,
+      '+++ b/' + name,
+      '@@',
+      ...reference.split('\n').map((line) => '-' + line),
+      ...current.split('\n').map((line) => '+' + line),
+    );
+  }
+  return changes.join('\n');
+}
 
 export function executeTerminalCommand(previous: TerminalState, raw: string): TerminalResult {
   const original = raw.trim();
@@ -171,6 +232,7 @@ export function executeTerminalCommand(previous: TerminalState, raw: string): Te
     cwd: previous.cwd,
     files: { ...previous.files },
     commands,
+    git: previous.git ? { ...previous.git, staged: { ...previous.git.staged }, baseline: { ...previous.git.baseline }, history: [...previous.git.history] } : createVirtualGitState(),
     transcript: [...previous.transcript],
   };
   const path = (input: string) => normalizeVirtualPath(input, state.cwd);
@@ -383,6 +445,60 @@ export function executeTerminalCommand(previous: TerminalState, raw: string): Te
     else if (!state.files[target].mode.includes('7') && !state.files[target].mode.includes('5') && !state.files[target].mode.includes('1')) output = 'bash: ' + command + ': Permission denied (use chmod +x para tornar executável)';
     else if (command.endsWith('healthcheck.sh')) output = 'Verificando relat-api...\nActive: active (running)\nMemória usada: 92% — atenção recomendada';
     else output = 'Script executado no ambiente virtual.';
+  } else if (command === 'git') {
+    const repo = state.git!;
+    if (!(state.cwd === repo.root || state.cwd.startsWith(repo.root + '/'))) {
+      output = 'fatal: not a git repository (ou qualquer um dos diretórios pai): .git';
+    } else {
+      const subcommand = args[0] ?? '';
+      if (subcommand === 'status') {
+        output = virtualGitStatus(state, repo);
+      } else if (subcommand === 'diff') {
+        output = virtualGitDiff(state, repo);
+      } else if (subcommand === 'branch') {
+        output = '* ' + repo.branch;
+      } else if (subcommand === 'log' && args.includes('--oneline')) {
+        output = [...repo.history].reverse().map((entry) => entry.id + ' ' + entry.message).join('\n');
+      } else if (subcommand === 'add') {
+        const requested = args.slice(1);
+        if (!requested.length) output = 'Nothing specified, nothing added.';
+        else {
+          const names = requested.includes('.')
+            ? [...Object.keys(repo.baseline)]
+            : requested.map((input) => {
+                const absolute = normalizeVirtualPath(input, state.cwd);
+                return absolute.startsWith(repo.root + '/') ? absolute.slice(repo.root.length + 1) : '';
+              });
+          const invalid = names.find((name) => !name || !Object.prototype.hasOwnProperty.call(repo.baseline, name) || state.files[repo.root + '/' + name]?.kind !== 'file');
+          if (invalid !== undefined) output = "fatal: pathspec '" + (requested.includes('.') ? invalid : requested[names.indexOf(invalid)]) + "' did not match any files";
+          else {
+            for (const name of names) repo.staged[name] = state.files[repo.root + '/' + name].content ?? '';
+            state.git = repo;
+            output = '';
+          }
+        }
+      } else if (subcommand === 'commit') {
+        const messageIndex = args.indexOf('-m');
+        const message = messageIndex >= 0 ? args[messageIndex + 1] : '';
+        const changed = Object.entries(repo.staged).filter(([name, content]) => repo.baseline[name] !== content);
+        if (!message) output = 'error: use git commit -m "mensagem" para descrever a alteração.';
+        else if (!changed.length) output = 'nothing to commit, working tree clean';
+        else {
+          const nextId = (0xabc000 + repo.history.length).toString(16).slice(-7);
+          const baseline = { ...repo.baseline };
+          for (const [name, content] of changed) baseline[name] = content;
+          state.git = {
+            ...repo,
+            baseline,
+            staged: {},
+            history: [...repo.history, { id: nextId, message }],
+          };
+          output = '[' + repo.branch + ' ' + nextId + '] ' + message + '\n' + changed.length + ' file(s) changed';
+        }
+      } else {
+        output = 'Uso didático: git status | git diff | git add ARQUIVO | git commit -m "mensagem" | git log --oneline';
+      }
+    }
   } else if (command === 'sudo' || command === 'su') {
     output = 'Este laboratório não concede privilégios administrativos reais. Pratique primeiro comandos de leitura e confirme a evidência antes de planejar uma alteração.';
   } else {
@@ -423,6 +539,16 @@ const shellSteps: LabStep[] = [
   { id: 'chmod', title: 'Defina uma permissão mínima', instruction: 'Deixe o arquivo legível pelo dono e pelo grupo, sem acesso para os demais.', hint: 'chmod 640 /home/aluno/backup/relat-01.log', doneWhen: (s) => fileHasMode(s, '/home/aluno/backup/relat-01.log', '640') },
   { id: 'verify', title: 'Confira o resultado', instruction: 'Mostre a listagem detalhada para confirmar a permissão aplicada.', hint: 'ls -l /home/aluno/backup', doneWhen: (s) => ran(s, /^ls\s+-l\s+\/home\/aluno\/backup$/) },
 ];
+const gitSteps: LabStep[] = [
+  { id: 'enter', title: 'Entre no projeto versionado', instruction: 'Acesse a pasta do Portal de suporte que já tem um histórico Git didático.', hint: 'cd /home/aluno/projetos/portal', doneWhen: (s) => s.cwd === GIT_ROOT },
+  { id: 'status', title: 'Confira o estado inicial', instruction: 'Veja a branch atual e confirme que não há mudanças pendentes.', hint: 'git status', doneWhen: (s) => s.cwd === GIT_ROOT && ran(s, /^git status$/) },
+  { id: 'edit', title: 'Altere o arquivo do projeto', instruction: 'Atualize a variável status para pronto sem remover a chamada console.log.', hint: 'echo "const status = pronto; console.log(status);" > index.js', doneWhen: (s) => (s.files[GIT_ROOT + '/index.js']?.content ?? '').includes('status = pronto') },
+  { id: 'diff', title: 'Inspecione sua mudança', instruction: 'Confira exatamente o que mudou antes de preparar o commit.', hint: 'git diff', doneWhen: (s) => ran(s, /^git diff$/) && s.transcript.some((line) => line.command === 'git diff' && line.output.includes('+const status = pronto; console.log(status);')) },
+  { id: 'stage', title: 'Prepare apenas o arquivo alterado', instruction: 'Coloque index.js na área de preparação do Git.', hint: 'git add index.js', doneWhen: (s) => !!s.git && (Object.prototype.hasOwnProperty.call(s.git.staged, 'index.js') || s.git.history.length > 1) },
+  { id: 'commit', title: 'Registre o commit', instruction: 'Salve a alteração com uma mensagem curta e clara.', hint: 'git commit -m "Corrige status"', doneWhen: (s) => (s.git?.history.length ?? 0) > 1 },
+  { id: 'log', title: 'Confirme o histórico', instruction: 'Veja o commit novo e o commit inicial em ordem cronológica inversa.', hint: 'git log --oneline', doneWhen: (s) => (s.git?.history.length ?? 0) > 1 && ran(s, /^git log --oneline$/) },
+];
+
 const networkSteps: LabStep[] = [
   { id: 'ip', title: 'Confira a configuração da rede', instruction: 'Localize o endereço IPv4 da interface ativa.', hint: 'ip addr', doneWhen: (s) => ran(s, /^ip\s+(addr|a)$/) },
   { id: 'ping', title: 'Teste a conectividade', instruction: 'Envie quatro testes para o equipamento da rede de relatórios.', hint: 'ping -c 4 10.0.0.12', doneWhen: (s) => ran(s, /^ping\s+(?:-c\s+4\s+)?10\.0\.0\.12$/) },
@@ -435,6 +561,7 @@ export const TERMINAL_LABS: TerminalLabDefinition[] = [
   { id: 'arquivos', title: 'Arquivos e logs', eyebrow: 'Laboratório 02', summary: 'Navegue no sistema de arquivos, leia logs e filtre mensagens.', goal: 'Encontre as mensagens de erro no log do servidor sem modificar arquivos do sistema.', duration: '10–15 min', steps: fileSteps },
   { id: 'shell', title: 'Shell, cópias e permissões', eyebrow: 'Laboratório 03', summary: 'Crie diretórios, copie um arquivo e aplique permissões.', goal: 'Prepare uma cópia de evidências com permissões mínimas e confirme o resultado.', duration: '10–15 min', steps: shellSteps },
   { id: 'rede', title: 'Rede e serviços', eyebrow: 'Laboratório 04', summary: 'Inspecione interfaces, teste conectividade e consulte serviços/logs.', goal: 'Diferencie problema de rede de problema do serviço usando evidências.', duration: '10–15 min', steps: networkSteps },
+  { id: 'git', title: 'Git e histórico', eyebrow: 'Laboratório 05', summary: 'Edite um arquivo, compare diferenças e registre uma versão do projeto.', goal: 'Pratique o ciclo de trabalho local do Git: status, diff, add, commit e log.', duration: '8–12 min', steps: gitSteps },
 ];
 
 export function getTerminalLab(id: string | undefined): TerminalLabDefinition | undefined {

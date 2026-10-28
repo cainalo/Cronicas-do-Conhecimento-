@@ -97,6 +97,21 @@ describe('terminal Linux virtual e isolado', () => {
     expect(getTerminalLab('desconhecido')).toBeUndefined();
   });
 
+  it('simula um ciclo Git completo sem acessar o sistema real', () => {
+    const shell = session();
+    expect(shell.run('git status')).toContain('not a git repository');
+    expect(shell.run('cd /home/aluno/projetos/portal')).toBe('');
+    expect(shell.run('git status')).toContain('working tree clean');
+    expect(shell.run('echo "const status = pronto; console.log(status);" > index.js')).toBe('');
+    expect(shell.run('git diff')).toContain('+const status = pronto; console.log(status);');
+    expect(shell.run('git add index.js')).toBe('');
+    expect(shell.run('git status')).toContain('Changes to be committed');
+    expect(shell.run('git commit -m "Corrige status"')).toContain('Corrige status');
+    expect(shell.run('git status')).toContain('working tree clean');
+    expect(shell.run('git log --oneline')).toContain('Corrige status');
+    expect(terminalLabProgress(getTerminalLab('git')!, shell.state)).toMatchObject({ completed: 7, total: 7, done: true });
+  });
+
   it('clear limpa somente a saída, não a história de comandos nem os arquivos virtuais', () => {
     const shell = session();
     shell.run('touch anotacao.txt');
