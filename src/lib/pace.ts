@@ -11,7 +11,7 @@ export const REVIEW_DAYS = 7;
 
 export interface Unit {
   key: string;
-  kind: 'aprender' | 'narrada' | 'video' | 'professores' | 'praticar' | 'missao' | 'flashcards' | 'desafio' | 'laboratorio';
+  kind: 'aprender' | 'narrada' | 'video' | 'professores' | 'praticar' | 'missao' | 'flashcards' | 'desafio' | 'laboratorio' | 'escritorio';
   chapterId: string;
   sectionId?: string;
   title: string;
@@ -34,6 +34,8 @@ export interface TrailExtras {
   postsLessonFor?: (chapterId: string, sectionId: string) => string | undefined;
   /** Laboratórios interativos que entram depois da prática do trecho. */
   labsFor?: (chapterId: string, sectionId: string) => { id: string; title: string }[];
+  /** Fases do jogo com mapa, encaixadas na trilha após a prática e o laboratório. */
+  officeFor?: (chapterId: string, sectionId: string) => { id: string; title: string }[];
   /** O capítulo tem cartões de memorização. */
   hasCards?: (chapterId: string) => boolean;
 }
@@ -91,6 +93,10 @@ export function courseUnits(
         const key = `laboratorio:${lab.id}`;
         out.push({ key, kind: 'laboratorio', chapterId: c.id, sectionId: s.id, title: `Laboratório prático: ${lab.title}`, to: `/laboratorio/${lab.id}?u=${encodeURIComponent(key)}` });
       }
+      for (const stage of extras.officeFor?.(c.id, s.id) ?? []) {
+        const key = `escritorio:${stage.id}`;
+        out.push({ key, kind: 'escritorio', chapterId: c.id, sectionId: s.id, title: `Escritório de TI: ${stage.title}`, to: `/escritorio?fase=${encodeURIComponent(stage.id)}&u=${encodeURIComponent(key)}` });
+      }
       const m = missions.find((x) => x.chapterId === c.id && x.sectionId === s.id);
       if (m) out.push({ key: missionKey(m.id), kind: 'missao', chapterId: c.id, sectionId: s.id, title: `Caso prático: ${m.title}`, to: `/missao/${m.id}` });
     }
@@ -109,7 +115,7 @@ export function courseUnits(
 /** Data em que a atividade foi concluída pela primeira vez (ou true, se concluída sem data guardada). */
 export function unitDone(data: StudyData, u: Unit): string | true | undefined {
   if (VISIT_KINDS.includes(u.kind)) return data.unitLog?.[u.key];
-  if (u.kind === 'laboratorio') return data.unitLog?.[u.key];
+  if (u.kind === 'laboratorio' || u.kind === 'escritorio') return data.unitLog?.[u.key];
   if (u.kind === 'aprender') {
     const log = data.unitLog?.[u.key];
     if (log) return log;
