@@ -1,0 +1,40 @@
+name: Verificar laboratórios práticos (sem publicar)
+
+on:
+  push:
+    branches:
+      - feat/laboratorios-terminal-trilha
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verificar-laboratorios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-build-layout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Obter código
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Instalar dependências travadas
+        run: npm ci
+      - name: Executar testes unitários
+        run: npm test
+      - name: Verificar TypeScript e compilar
+        run: npm run build
+      - name: Instalar Chromium para testes de layout
+        run: npx playwright install --with-deps chromium
+      - name: Verificar layout em telas móveis
+        run: npm run test:e2e
