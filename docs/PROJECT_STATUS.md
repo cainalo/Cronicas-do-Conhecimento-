@@ -1,5 +1,13 @@
 # Estado do projeto (atualizado em 2026-10-26)
 
+## Pórtico — laboratórios de TI (28/10/2026, branch em revisão)
+
+- **Implementado no branch de trabalho, não mesclado/publicado:** seis laboratórios do terminal virtual (navegação/arquivos, logs, permissões Unix, processos, JavaScript e Git); explorador visual de arquivos; ligação terminal↔caso do Escritório; três marcos do jogo no mapa dentro da trilha.
+- **Terminal virtual:** `ls -l`, `stat` e `chmod` passam a atuar em modos de arquivo mantidos no sistema de arquivos didático. As saídas de processos e rede continuam sendo amostras simuladas. Nenhum comando é executado no dispositivo nem no servidor de hospedagem.
+- **Execução real futura:** ver `docs/ARQUITETURA_LABORATORIO_REAL.md` (v86 para um Linux emulado; avaliar WebContainers para Node.js). Não declarar um sistema Linux real até imagem/licença/artefatos, boot, isolamento e testes no site e APK estarem verificados.
+- **CI:** criado `.github/workflows/verify-practical-labs.yml` para testar sem publicar. Os runs disparados durante commits rápidos foram cancelados por concorrência; a rodada final ainda precisa terminar verde. `npm test`, `npm run build`, `npm run test:e2e` e revisão visual continuam como critérios de aceite.
+
+
 
 ## Implementação em andamento — 28/10/2026 (branch de laboratório)
 
