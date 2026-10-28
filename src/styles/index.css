@@ -1128,11 +1128,11 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 
 /* O conteúdo imersivo reserva o recorte da câmera/notch antes dos controles da aula. */
 main.safe-top-content {
-  padding-top: calc(env(safe-area-inset-top, 0px) + 1rem) !important;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 1.5rem) !important;
 }
 .activity-progress-sticky {
-  top: calc(env(safe-area-inset-top, 0px) + .75rem);
-  scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 5rem);
+  top: calc(env(safe-area-inset-top, 0px) + 1rem);
+  scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 5.5rem);
 }
 
 /* Navegação do site recolhe ao rolar para baixo e reaparece ao subir. */
