@@ -135,7 +135,7 @@ function TerminalLabRun({ lab }: { lab: TerminalLab }) {
                     <span className="text-[#7e9b87]">aprendiz@cronicas:{formatPath(entry.cwd ?? state.cwd)}$</span> {entry.command}
                   </p>
                   {entry.output && (
-                    <pre className={\`whitespace-pre-wrap break-words pl-1 \${entry.exitCode === 0 ? 'text-[#d4ded7]' : 'text-[#ffb3a9]'}\`}>{entry.output}</pre>
+                    <pre className={`whitespace-pre-wrap break-words pl-1 ${entry.exitCode === 0 ? 'text-[#d4ded7]' : 'text-[#ffb3a9]'}`}>{entry.output}</pre>
                   )}
                   {entry.exitCode !== 0 && <p className="text-[10px] text-[#ffb3a9]">Código de saída: {entry.exitCode}</p>}
                 </div>
@@ -184,19 +184,19 @@ function TerminalLabRun({ lab }: { lab: TerminalLab }) {
               <h2 className="font-semibold">Etapas do exercício</h2>
               <span className="text-xs tabular-nums text-muted">{state.completedTasks.length}/{lab.tasks.length}</span>
             </div>
-            <div className="mt-3 h-2 overflow-hidden rounded-full bg-raised" aria-label={\`Progresso \${Math.round(state.completedTasks.length / lab.tasks.length * 100)}%\`}>
-              <div className="h-full rounded-full bg-[#52875c] transition-[width]" style={{ width: \`\${state.completedTasks.length / lab.tasks.length * 100}%\` }} />
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-raised" aria-label={`Progresso ${Math.round(state.completedTasks.length / lab.tasks.length * 100)}%`}>
+              <div className="h-full rounded-full bg-[#52875c] transition-[width]" style={{ width: `${state.completedTasks.length / lab.tasks.length * 100}%` }} />
             </div>
             <ol className="mt-4 space-y-3">
               {lab.tasks.map((task, index) => {
                 const done = state.completedTasks.includes(task.id);
                 return (
                   <li key={task.id} className="flex items-start gap-3">
-                    <span className={\`grid h-7 w-7 shrink-0 place-items-center rounded-full border text-xs font-semibold \${done ? 'border-[#52875c] bg-[#dce9dc] text-[#234f35]' : 'border-line text-muted'}\`} aria-label={done ? 'Concluída' : 'Pendente'}>
+                    <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full border text-xs font-semibold ${done ? 'border-[#52875c] bg-[#dce9dc] text-[#234f35]' : 'border-line text-muted'}`} aria-label={done ? 'Concluída' : 'Pendente'}>
                       {done ? '✓' : index + 1}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className={\`text-sm leading-snug \${done ? 'font-semibold' : ''}\`}>{task.title}</p>
+                      <p className={`text-sm leading-snug ${done ? 'font-semibold' : ''}`}>{task.title}</p>
                       <details className="mt-1">
                         <summary className="cursor-pointer text-xs font-semibold text-muted underline underline-offset-2">Ver dica</summary>
                         <p className="mt-1 text-xs leading-relaxed text-muted">{task.hint}</p>
