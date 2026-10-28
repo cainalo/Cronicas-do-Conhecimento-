@@ -164,7 +164,18 @@ describe('tela do escritório (tela cheia)', () => {
     );
   });
 
-  it('a URL de uma fase do jogo mostra seu objetivo e permite voltar à trilha', async () => {
+  it('bloqueia uma fase do escritório quando a etapa anterior não foi concluída', () => {
+    renderWorld('/escritorio?fase=diagnostico');
+    expect(screen.getByTestId('mundo-etapa-bloqueada')).toHaveTextContent(/Conclua a etapa anterior primeiro/);
+    expect(screen.getByRole('link', { name: /Continuar: Coletar evidências/ })).toHaveAttribute('href', '/escritorio?fase=triagem');
+  });
+
+  it('a URL de uma fase concluída mostra seu objetivo e permite voltar à trilha', async () => {
+    saveData('visitante', {
+      ...emptyData(),
+      reading: { 'cap.infra.03': { chapterId: 'cap.infra.03', sectionsRead: ['processos'], updatedAt: '2026-10-25T10:00:00.000Z' } },
+      unitLog: { 'escritorio:triagem': '2026-10-28T10:00:00.000Z' },
+    });
     const user = userEvent.setup();
     renderWorld('/escritorio?fase=diagnostico');
     expect(screen.getByTestId('mundo-etapa-trilha')).toHaveTextContent(/Etapa 2 de 3/);
