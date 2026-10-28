@@ -24,7 +24,7 @@ const CHAPTERS = [
   'cap.devops.01', 'cap.devops.02', 'cap.ingles.01', 'cap.ingles.02', 'cap.port.01', 'cap.port.02',
   'cap.inst.01', 'cap.inst.02', 'cap.mat.01', 'cap.mat.02',
 ];
-const ROUTES = [
+const FULL_ROUTES = [
   '/', '/trilha', '/explorar', '/biblioteca', '/estudos', '/revisar', '/progresso', '/edital',
   '/conta', '/conta/acesso', '/conta/sincronizacao', '/conta/aparencia', '/conta/sons', '/conta/dados', '/conta/sobre', '/conta/tela',
   '/personalizar', '/plano', '/treino', '/simulado', '/discursiva', '/flashcards', '/relampago', '/historico', '/revisao',
@@ -35,6 +35,24 @@ const ROUTES = [
   '/conta/dados?qa=1',
   ...CHAPTERS.map((id) => '/capitulo/' + id),
 ];
+
+const ROUTES = process.env.VISUAL_AUDIT_PROFILE === 'smoke'
+  ? [
+      '/',
+      '/trilha',
+      '/explorar',
+      '/conta/aparencia',
+      '/personalizar',
+      '/revisar',
+      '/progresso',
+      '/simulado',
+      '/download',
+      '/aprender/cap.prim.01/computador/prim.computador.1',
+      '/aula-narrada/narrada.prim.historia',
+      '/capitulo/cap.prim.01',
+      '/capitulo/cap.dev.01',
+    ]
+  : FULL_ROUTES;
 
 const slug = (s) => s.replace(/[^a-zA-Z0-9-]+/g, '-').replace(/^-|-$/g, '').slice(0, 110) || 'home';
 const failures = [];

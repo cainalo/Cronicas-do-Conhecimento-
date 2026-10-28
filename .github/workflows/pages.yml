@@ -61,6 +61,8 @@ jobs:
       - name: Verificação de layout no navegador
         run: npm run test:e2e
       - name: Auditoria visual das rotas e capítulos
+        env:
+          VISUAL_AUDIT_PROFILE: ${{ github.event_name == 'workflow_dispatch' && 'full' || 'smoke' }}
         run: npm run test:visual
       - name: Guardar relatório e capturas da auditoria
         if: always()
