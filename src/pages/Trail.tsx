@@ -21,6 +21,7 @@ const KIND_LABEL: Record<string, string> = {
   aprender: 'Aprender',
   praticar: 'Praticar',
   laboratorio: 'Laboratório no terminal',
+  escritorio: 'Jogo no mapa do escritório',
   missao: 'Caso prático',
   desafio: 'Desafio',
 };
@@ -28,6 +29,7 @@ const KIND_ICON: Record<string, IconName> = {
   aprender: 'grimorio',
   praticar: 'chama',
   laboratorio: 'tela',
+  escritorio: 'mapa',
   missao: 'mapa',
   desafio: 'escudo',
 };
