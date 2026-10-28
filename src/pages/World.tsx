@@ -99,7 +99,7 @@ function WorldPlay({ w, s }: { w: World; s: Scenario }) {
   const { update } = useStudy();
   const [st, setSt] = useState<WorldState>(() => load(w, s) ?? fresh(w, s));
   useEffect(() => {
-    if (st.closed && w.id === 'escritorio-ti') update((data) => logUnit(data, 'escritorio:processos-linux'));
+    if (st.closed) update((data) => logUnit(data, 'escritorio:processos-linux'));
   }, [st.closed, update, w.id]);
   const [path, setPath] = useState<Tile[]>([]);
   const [after, setAfter] = useState<Panel>(null);
