@@ -98,9 +98,18 @@ function WorldPlay({ w, s }: { w: World; s: Scenario }) {
   const navigate = useNavigate();
   const { update } = useStudy();
   const [st, setSt] = useState<WorldState>(() => load(w, s) ?? fresh(w, s));
+  // Cada etapa do chamado vira uma unidade própria da trilha: triagem, diagnóstico e fechamento.
+  // Como o cenário é retomável, abrir o mapa novamente também sincroniza as etapas já alcançadas.
   useEffect(() => {
-    if (st.closed) update((data) => logUnit(data, 'escritorio:processos-linux'));
-  }, [st.closed, update, w.id]);
+    const nodeId = st.scenario.nodeId;
+    update((data) => {
+      let next = data;
+      if (nodeId !== 'n.inicio' || st.closed) next = logUnit(next, 'escritorio:triagem');
+      if (nodeId === 'n.acao' || nodeId === 'n.fim' || st.closed) next = logUnit(next, 'escritorio:diagnostico');
+      if (st.closed) next = logUnit(next, 'escritorio:fechamento');
+      return next;
+    });
+  }, [st.scenario.nodeId, st.closed, update]);
   const [path, setPath] = useState<Tile[]>([]);
   const [after, setAfter] = useState<Panel>(null);
   const [panel, setPanel] = useState<Panel>(null);
