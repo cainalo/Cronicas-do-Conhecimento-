@@ -102,6 +102,31 @@ export function WorldPage() {
       </div>
     );
   }
+  const requiredPriorStage: OfficeStageId | undefined =
+    stageId === 'diagnostico' && !data.unitLog?.['escritorio:triagem']
+      ? 'triagem'
+      : stageId === 'fechamento' && !data.unitLog?.['escritorio:diagnostico']
+        ? 'diagnostico'
+        : undefined;
+  if (requiredPriorStage) {
+    const prior = OFFICE_STAGES[requiredPriorStage];
+    return (
+      <div className="space-y-4">
+        <PageHeader area="explorar" title="Escritório de TI" subtitle="As etapas são liberadas em sequência, conforme as evidências do chamado." art="suporte" />
+        <section className="card p-5" data-testid="mundo-etapa-bloqueada">
+          <p className="kicker">{prior.eyebrow}</p>
+          <h2 className="mt-1 text-lg">Conclua a etapa anterior primeiro</h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            {prior.description} Esta etapa seguinte fica bloqueada até que você registre a conclusão da etapa anterior no jogo.
+          </p>
+          <Link to={`/escritorio?fase=${requiredPriorStage}`} className="btn-primary mt-4 w-full">
+            Continuar: {prior.title} <Icon name="avancar" size={18} />
+          </Link>
+          <Link to="/trilha" className="btn-ghost mt-2 w-full">Voltar à trilha</Link>
+        </section>
+      </div>
+    );
+  }
   return <WorldPlay w={escritorio} s={s} stageId={stageId} />;
 }
 
