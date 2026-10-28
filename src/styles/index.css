@@ -1174,4 +1174,6 @@ main.safe-top-content {
   overflow-y: auto;
   overscroll-behavior: contain;
 }
-\n/* Texto de aula e material de referência mantêm a leitura editorial justificada. */\n.learn-text, .reference-reading { text-align: justify; text-justify: inter-word; hyphens: auto; }\n.reference-reading :is(p, li, blockquote, dd) { text-align: justify; text-justify: inter-word; }\n
+/* Texto de aula e material de referência mantêm a leitura editorial justificada. */
+.learn-text, .reference-reading { text-align: justify; text-justify: inter-word; hyphens: auto; }
+.reference-reading :is(p, li, blockquote, dd) { text-align: justify; text-justify: inter-word; }
