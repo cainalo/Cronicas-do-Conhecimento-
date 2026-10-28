@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
@@ -143,6 +143,10 @@ describe('tela do escritório (tela cheia)', () => {
     await user.click(screen.getByRole('button', { name: 'Ir até' }));
     await user.click(screen.getByRole('button', { name: /Quadro de chamados do Suporte/ }));
     expect(await screen.findByTestId('mundo-objeto')).toHaveTextContent(/2318/);
+    await waitFor(() => {
+      const saved = JSON.parse(localStorage.getItem('cronicas:v1:visitante')!);
+      expect(saved.unitLog?.['escritorio:triagem']).toBeTruthy();
+    });
     expect(screen.getByTestId('mundo-sala')).toHaveTextContent('Suporte');
     await user.click(screen.getByRole('button', { name: 'Fechar o painel' }));
     await user.click(screen.getByRole('button', { name: 'Ir até' }));
@@ -160,7 +164,7 @@ describe('tela do escritório (tela cheia)', () => {
     expect(panel).not.toHaveTextContent(/saída do top/i);
     expect(screen.getByRole('link', { name: /iniciar laboratório de comandos/i })).toHaveAttribute(
       'href',
-      '/laboratorio/processos?origem=escritorio',
+      '/laboratorio/processos?origem=escritorio&fase=diagnostico',
     );
   });
 
@@ -182,7 +186,7 @@ describe('tela do escritório (tela cheia)', () => {
     expect(panel).toHaveTextContent(/Investigue antes de formular a hipótese/i);
     expect(screen.getByRole('link', { name: /revisar laboratório de comandos/i })).toHaveAttribute(
       'href',
-      '/laboratorio/processos?origem=escritorio',
+      '/laboratorio/processos?origem=escritorio&fase=diagnostico',
     );
   });
 
@@ -216,9 +220,9 @@ describe('tela do escritório (tela cheia)', () => {
   });
 
   it('oferece retorno ao mapa ao abrir o laboratório a partir do escritório', () => {
-    renderWorld('/laboratorio/processos?origem=escritorio');
+    renderWorld('/laboratorio/processos?origem=escritorio&fase=diagnostico');
     expect(screen.getByTestId('return-office-map')).toHaveTextContent(/Voltar ao mapa do Escritório de TI/);
-    expect(screen.getByRole('link', { name: /Voltar ao mapa do Escritório de TI/ })).toHaveAttribute('href', '/escritorio');
+    expect(screen.getByRole('link', { name: /Voltar ao mapa do Escritório de TI/ })).toHaveAttribute('href', '/escritorio?fase=diagnostico');
   });
 
   it('teclado anda uma casa e vira o personagem; Esc fecha o painel', async () => {

@@ -95,6 +95,7 @@ function TerminalWorkbench({ labId }: { labId: string }) {
   const lab = getTerminalLab(labId)!;
   const [searchParams] = useSearchParams();
   const returnToOffice = searchParams.get('origem') === 'escritorio';
+  const officeReturnHref = returnToOffice && searchParams.get('fase') === 'diagnostico' ? '/escritorio?fase=diagnostico' : '/escritorio';
   const { data, update } = useStudy();
   const [state, setState] = useState<TerminalState>(() => loadState(labId));
   const [command, setCommand] = useState('');
@@ -153,7 +154,7 @@ function TerminalWorkbench({ labId }: { labId: string }) {
       {returnToOffice && (
         <div className="rounded-2xl border border-teal/30 bg-surface p-3" data-testid="return-office-map">
           <p className="text-sm text-muted">Quando concluir a prática, volte ao mapa para continuar a investigação com a Marta.</p>
-          <Link to="/escritorio" className="mt-2 inline-flex min-h-10 items-center gap-2 rounded-xl border border-line bg-raised px-3 py-2 text-sm font-semibold">
+          <Link to={officeReturnHref} className="mt-2 inline-flex min-h-10 items-center gap-2 rounded-xl border border-line bg-raised px-3 py-2 text-sm font-semibold">
             Voltar ao mapa do Escritório de TI <Icon name="voltar" size={16} />
           </Link>
         </div>

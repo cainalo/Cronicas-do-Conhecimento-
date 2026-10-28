@@ -565,7 +565,7 @@ function InteractionPanel({
             <p className="rounded-lg border border-line bg-raised/60 p-3 text-xs leading-relaxed text-muted">
               Observe processos, interprete memória e swap, encerre o processo fictício com segurança e verifique a recuperação. Apenas abrir o laboratório não conclui a tarefa.
             </p>
-            <Link to="/laboratorio/processos?origem=escritorio" className="btn-primary w-full" data-testid="iniciar-laboratorio-escritorio">
+            <Link to="/laboratorio/processos?origem=escritorio&fase=diagnostico" className="btn-primary w-full" data-testid="iniciar-laboratorio-escritorio">
               Iniciar laboratório de comandos <Icon name="avancar" size={18} />
             </Link>
           </div>
@@ -574,7 +574,7 @@ function InteractionPanel({
             <p className="mt-2 text-sm text-muted">{terminalMode === 'diagnostico' ? 'Investigue antes de formular a hipótese: rode os comandos e leia a saída do sistema.' : 'Execute a decisão tomada e confira se a memória se recuperou e o serviço continua ativo.'}</p>
             <OfficeTerminal mode={terminalMode} state={terminalState} setState={setTerminalState} evidenceRecorded={evidenceRecorded} expectedAction={expectedAction} onComplete={() => onTerminalComplete(o.id as 'terminal' | 'console')} />
             {terminalMode === 'diagnostico' && (
-              <Link to="/laboratorio/processos?origem=escritorio" className="mt-3 inline-flex text-sm font-semibold text-teal underline underline-offset-4">
+              <Link to="/laboratorio/processos?origem=escritorio&fase=diagnostico" className="mt-3 inline-flex text-sm font-semibold text-teal underline underline-offset-4">
                 Revisar laboratório de comandos
               </Link>
             )}
