@@ -231,6 +231,7 @@ export function restoreTerminalState(labId: TerminalLabId, saved: unknown): Term
   return {
     ...createTerminalState(labId),
     ...s,
+    permissions: s.permissions && typeof s.permissions === 'object' ? { ...BASE_MODES, ...s.permissions } : { ...BASE_MODES },
     history: s.history.slice(-100),
     completedTasks: Array.isArray(s.completedTasks) ? s.completedTasks.filter((x): x is string => typeof x === 'string') : [],
     nextEntryId: typeof s.nextEntryId === 'number' ? s.nextEntryId : s.history.length + 1,
@@ -270,6 +271,35 @@ function words(raw: string): string[] {
   let match: RegExpExecArray | null;
   while ((match = re.exec(raw))) result.push((match[1] ?? match[2] ?? match[3] ?? '').replace(/\\(["'])/g, '$1'));
   return result;
+}
+
+function modeString(path: string, state: TerminalState): string {
+  const isDir = state.directories.includes(path);
+  const mode = (state.permissions[path] ?? (isDir ? '755' : '644')).padStart(3, '0').slice(-3);
+  const letters = mode.split('').map((digit) => {
+    const n = Number.parseInt(digit, 8) || 0;
+    return (n & 4 ? 'r' : '-') + (n & 2 ? 'w' : '-') + (n & 1 ? 'x' : '-');
+  }).join('');
+  return (isDir ? 'd' : '-') + letters;
+}
+
+function changeMode(current: string, spec: string): string | undefined {
+  if (/^[0-7]{3,4}$/.test(spec)) return spec.slice(-3);
+  const match = spec.match(/^([ugoa]*)([+-])([rwx]+)$/);
+  if (!match) return undefined;
+  const scopes = match[1] || 'a';
+  const operator = match[2];
+  const perms = match[3];
+  const digits = current.padStart(3, '0').slice(-3).split('').map((digit) => Number.parseInt(digit, 8) || 0);
+  const slots = [1, 2, 4]; // dono, grupo, outros
+  const scopeBits: Record<string, number> = { u: 4, g: 2, o: 1, a: 7 };
+  const permBits: Record<string, number> = { r: 4, w: 2, x: 1 };
+  for (let i = 0; i < 3; i++) {
+    if (![...scopes].some((scope) => (scopeBits[scope] ?? 0) & slots[i])) continue;
+    const bits = [...perms].reduce((n, perm) => n | permBits[perm], 0);
+    digits[i] = operator === '+' ? digits[i] | bits : digits[i] & ~bits;
+  }
+  return digits.map((digit) => digit.toString(8)).join('');
 }
 
 function childNames(path: string, state: TerminalState): string[] {
