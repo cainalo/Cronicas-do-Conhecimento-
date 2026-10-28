@@ -147,15 +147,15 @@ class Parser {
       this.match(';');
       return { type: 'log', args, line };
     }
+    if (['for', 'while', 'do', 'function', 'class', 'return', 'import', 'export', 'new', 'await', 'throw', 'try'].includes(this.t.value)) {
+      throw new CodeSyntaxError('"' + this.t.value + '" ainda não faz parte deste laboratório. Use variáveis, expressões, console.log e if/else.', line);
+    }
     if (this.t.kind === 'identifier') {
       const name = this.take();
       this.need('=');
       const value = this.expression();
       this.match(';');
       return { type: 'assign', name: name.value, value, line };
-    }
-    if (['for', 'while', 'do', 'function', 'class', 'return', 'import', 'export', 'new', 'await', 'throw', 'try'].includes(this.t.value)) {
-      throw new CodeSyntaxError('"' + this.t.value + '" ainda não faz parte deste laboratório. Use variáveis, expressões, console.log e if/else.', line);
     }
     throw new CodeSyntaxError('Instrução não reconhecida perto de "' + (this.t.value || 'fim do código') + '".', line);
   }
