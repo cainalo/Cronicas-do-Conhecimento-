@@ -141,16 +141,16 @@ const HOME = '/home/aprendiz';
 const PROJECT = HOME + '/projeto';
 const DEMO = HOME + '/projetos/demo';
 const BASE_FILES: Record<string, string> = {
-  [HOME + '/README.md']: 'Terminal de treinamento\\n\\nEste ambiente é virtual e isolado.\\n',
-  [HOME + '/.bashrc']: '# Preferências locais do shell de treinamento\\n',
-  [DEMO + '/README.md']: 'Projeto demo\\n\\n1. Leia o arquivo antes de executar qualquer programa.\\n2. Registre o que encontrou.\\n',
-  [PROJECT + '/README.md']: '# Projeto de exemplo\\n\\nAplicação pequena para aprender comandos, código e Git.\\n',
-  [PROJECT + '/app.js']: 'console.log("Sistema pronto");\\n',
-  [PROJECT + '/package.json']: '{\\n  "name": "projeto-de-estudo",\\n  "version": "1.0.0",\\n  "private": true\\n}\\n',
-  '/var/log/app.log': '2026-10-28T08:30:11Z INFO  serviço inicializado\\n2026-10-28T08:31:04Z WARN  fila de relatórios crescendo\\n2026-10-28T08:32:17Z ERROR conexão esgotada ao consultar relat-01\\n2026-10-28T08:32:20Z ERROR nova tentativa excedeu o tempo limite\\n2026-10-28T08:34:01Z INFO  nova tentativa agendada\\n2026-10-28T08:35:40Z ERROR consulta excedeu 120 segundos\\n',
-  '/var/log/syslog': 'Oct 28 08:30:12 relat-01 kernel: memória livre abaixo do limite de alerta\\nOct 28 08:32:18 relat-01 reports-api: tempo de resposta acima de 120s\\nOct 28 08:35:41 relat-01 reports-api: requisição encerrada por timeout\\n',
-  '/etc/os-release': 'NAME="Debian GNU/Linux"\\nVERSION="12 (bookworm)"\\nID=debian\\n',
-  '/srv/relatorios/status.txt': 'Serviço de relatórios: degradado\\nHost: relat-01\\nÚltima coleta: 08:35 UTC\\n',
+  [HOME + '/README.md']: 'Terminal de treinamento\n\nEste ambiente é virtual e isolado.\n',
+  [HOME + '/.bashrc']: '# Preferências locais do shell de treinamento\n',
+  [DEMO + '/README.md']: 'Projeto demo\n\n1. Leia o arquivo antes de executar qualquer programa.\n2. Registre o que encontrou.\n',
+  [PROJECT + '/README.md']: '# Projeto de exemplo\n\nAplicação pequena para aprender comandos, código e Git.\n',
+  [PROJECT + '/app.js']: 'console.log("Sistema pronto");\n',
+  [PROJECT + '/package.json']: '{\n  "name": "projeto-de-estudo",\n  "version": "1.0.0",\n  "private": true\n}\n',
+  '/var/log/app.log': '2026-10-28T08:30:11Z INFO  serviço inicializado\n2026-10-28T08:31:04Z WARN  fila de relatórios crescendo\n2026-10-28T08:32:17Z ERROR conexão esgotada ao consultar relat-01\n2026-10-28T08:32:20Z ERROR nova tentativa excedeu o tempo limite\n2026-10-28T08:34:01Z INFO  nova tentativa agendada\n2026-10-28T08:35:40Z ERROR consulta excedeu 120 segundos\n',
+  '/var/log/syslog': 'Oct 28 08:30:12 relat-01 kernel: memória livre abaixo do limite de alerta\nOct 28 08:32:18 relat-01 reports-api: tempo de resposta acima de 120s\nOct 28 08:35:41 relat-01 reports-api: requisição encerrada por timeout\n',
+  '/etc/os-release': 'NAME="Debian GNU/Linux"\nVERSION="12 (bookworm)"\nID=debian\n',
+  '/srv/relatorios/status.txt': 'Serviço de relatórios: degradado\nHost: relat-01\nÚltima coleta: 08:35 UTC\n',
 };
 const BASE_DIRECTORIES = [
   '/', '/home', HOME, HOME + '/projetos', DEMO, PROJECT, '/var', '/var/log',
@@ -226,7 +226,7 @@ function exists(path: string, state: TerminalState): boolean {
 
 function words(raw: string): string[] {
   const result: string[] = [];
-  const re = /"((?:\\.|[^"])*)"|'((?:\\.|[^'])*)'|(\\S+)/g;
+  const re = /"((?:\\.|[^"])*)"|'((?:\\.|[^'])*)'|(\S+)/g;
   let match: RegExpExecArray | null;
   while ((match = re.exec(raw))) result.push((match[1] ?? match[2] ?? match[3] ?? '').replace(/\\(["'])/g, '$1'));
   return result;
@@ -253,15 +253,15 @@ function safeWritable(path: string): boolean {
 }
 
 function baseCommand(command: string): string {
-  return command.trim().replace(/^\\.\\//, '');
+  return command.trim().replace(/^\.\//, '');
 }
 
 function nodeOutput(code: string): string {
   const output: string[] = [];
-  const strings = /console\\.log\\(\\s*(['"])(.*?)\\1\\s*\\)/g;
+  const strings = /console\.log\(\s*(['"])(.*?)\1\s*\)/g;
   let match: RegExpExecArray | null;
-  while ((match = strings.exec(code))) output.push(match[2].replace(/\\\\n/g, '\\n'));
-  const arithmetic = /console\\.log\\(\\s*(-?\\d+(?:\\.\\d+)?)\\s*([+*/-])\\s*(-?\\d+(?:\\.\\d+)?)\\s*\\)/g;
+  while ((match = strings.exec(code))) output.push(match[2].replace(/\\\n/g, '\n'));
+  const arithmetic = /console\.log\(\s*(-?\d+(?:\.\d+)?)\s*([+*/-])\s*(-?\d+(?:\.\d+)?)\s*\)/g;
   while ((match = arithmetic.exec(code))) {
     const a = Number(match[1]);
     const b = Number(match[3]);
@@ -269,14 +269,14 @@ function nodeOutput(code: string): string {
     if (Number.isFinite(v)) output.push(String(v));
   }
   if (!output.length) return 'O laboratório reconhece console.log com texto literal e contas numéricas simples. Não executou código arbitrário.';
-  return output.join('\\n');
+  return output.join('\n');
 }
 
 function processTable(processes: TerminalProcess[]): string {
   const active = processes.filter((p) => !p.terminated);
   return ['USER       PID %CPU %MEM COMMAND', ...active.map((p) =>
     p.user.padEnd(10) + ' ' + String(p.pid).padStart(4) + ' ' + p.cpu.toFixed(1).padStart(4) + ' ' + p.mem.toFixed(1).padStart(4) + ' ' + p.command,
-  )].join('\\n');
+  )].join('\n');
 }
 
 function taskUpdates(
@@ -316,7 +316,7 @@ function taskUpdates(
     if (cmd === 'cd' && after.cwd === PROJECT) mark('cd-project');
     if (cmd === 'cat' && before.cwd === PROJECT && args.includes('app.js') && valid(output)) mark('cat-code');
     if (cmd === 'node' && args[0] === 'app.js' && before.cwd === PROJECT && output.includes('Sistema pronto')) mark('run-original');
-    if ((cmd === 'echo' && output.includes('app.js foi atualizado')) || (after.files[PROJECT + '/app.js'] !== BASE_FILES[PROJECT + '/app.js'] && command.startsWith('echo '))) mark('edit-code');
+    if (cmd === 'echo' && output.includes(PROJECT + '/app.js') && after.files[PROJECT + '/app.js'] !== BASE_FILES[PROJECT + '/app.js']) mark('edit-code');
     if (cmd === 'node' && args[0] === 'app.js' && before.cwd === PROJECT && after.files[PROJECT + '/app.js'] !== BASE_FILES[PROJECT + '/app.js'] && output.length > 0) mark('run-updated');
     if (cmd === 'node' && args[0] === '--check' && args[1] === 'app.js' && before.cwd === PROJECT && valid(output)) mark('check-code');
   }
@@ -342,7 +342,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
   let exitCode: 0 | 1 = 0;
   let command = '';
   let args: string[] = [];
-  const redirection = commandText.match(/^echo\\s+(?:"([^"]*)"|'([^']*)'|(.+?))\\s*(>>|>)\\s*(\\S+)\\s*$/);
+  const redirection = commandText.match(/^echo\s+(?:"([^"]*)"|'([^']*)'|(.+?))\s*(>>|>)\s*(\S+)\s*$/);
   if (redirection) {
     command = 'echo';
     const content = redirection[1] ?? redirection[2] ?? redirection[3] ?? '';
@@ -355,7 +355,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
       output = 'Diretório de destino não existe. Crie a pasta antes de gravar.';
       exitCode = 1;
     } else {
-      files[target] = append ? (files[target] ?? '') + content + '\\n' : content + '\\n';
+      files[target] = append ? (files[target] ?? '') + content + '\n' : content + '\n';
       output = 'Arquivo atualizado: ' + target;
       args = [content, redirection[4], redirection[5]];
     }
@@ -364,10 +364,9 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
     command = baseCommand(tokens[0] ?? '');
     args = tokens.slice(1);
     const firstPath = args.find((a) => !a.startsWith('-'));
-    const pathArg = (idx = 0) => resolvePath(cwd, args[idx]);
-    const fileAt = (p: string) => files[p];
+        const fileAt = (p: string) => files[p];
     const fail = (msg: string) => { output = msg; exitCode = 1; };
-    const linesFor = (p: string) => fileAt(p)?.replace(/\\n$/, '').split('\\n') ?? [];
+    const linesFor = (p: string) => fileAt(p)?.replace(/\n$/, '').split('\n') ?? [];
     switch (command) {
       case 'help':
         output = [
@@ -376,7 +375,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
           'whoami, uname -a, free -h, top, ps aux, vmstat 1 3, kill PID, df -h, du -sh, ip addr, ping',
           'node, node --check, npm, git status, git log, git diff.',
           'Alguns comandos são amostras simuladas; nada é executado fora deste laboratório.',
-        ].join('\\n');
+        ].join('\n');
         break;
       case 'pwd':
         output = cwd;
@@ -426,7 +425,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
             const n = nIndex >= 0 ? Math.max(1, Math.min(100, Number(args[nIndex + 1]) || 10)) : 10;
             if (command === 'head') lines = lines.slice(0, n);
             if (command === 'tail') lines = lines.slice(-n);
-            output = lines.join('\\n');
+            output = lines.join('\n');
           }
         }
         break;
@@ -447,7 +446,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
               if (haystack.includes(needle)) matches.push((args.some((a) => a.includes('n')) ? String(i + 1) + ':' : '') + line);
             });
           }
-          if (exitCode === 0) output = matches.join('\\n') || 'Nenhuma linha corresponde ao padrão.';
+          if (exitCode === 0) output = matches.join('\n') || 'Nenhuma linha corresponde ao padrão.';
         }
         break;
       }
@@ -463,7 +462,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
             if (pattern.startsWith('*.')) return name.endsWith(pattern.slice(1));
             return name === pattern;
           }) : all;
-          output = filtered.sort().join('\\n');
+          output = filtered.sort().join('\n');
         }
         break;
       }
@@ -534,8 +533,6 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
         }
         break;
       }
-      case 'grep':
-        break;
       case 'free':
         if (!args.includes('-h')) fail('Neste exercício, use free -h para ver unidades legíveis.');
         else {
@@ -544,7 +541,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
             '               total        used        free      shared  buff/cache   available',
             'Mem:            7.6Gi       ' + (alive ? '7.4Gi' : '2.1Gi') + '       ' + (alive ? '96Mi' : '5.4Gi') + '       128Mi       1.3Gi       ' + (alive ? '128Mi' : '5.1Gi'),
             'Swap:           2.0Gi       ' + (alive ? '1.9Gi' : '0.1Gi') + '       ' + (alive ? '118Mi' : '1.9Gi'),
-          ].join('\\n');
+          ].join('\n');
         }
         break;
       case 'top': {
@@ -557,7 +554,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
           'MiB Swap: 2048 total, ' + (alive ? '1930 used, 118 free' : '100 used, 1948 free'),
           '',
           processTable(processes),
-        ].join('\\n');
+        ].join('\n');
         break;
       }
       case 'ps':
@@ -572,7 +569,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
           alive ? ' 1  6 1976320  98500  4120  3980' : ' 1  0  102400 5520000     0     0',
           alive ? ' 0  7 1977100  96100  4310  4050' : ' 0  0  102400 5512000     0     0',
           alive ? ' 1  6 1976800  97300  4005  4120' : ' 0  0  102400 5508000     0     0',
-        ].join('\\n');
+        ].join('\n');
         break;
       }
       case 'kill': {
@@ -592,14 +589,14 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
       }
       case 'df':
         output = args.includes('-h')
-          ? 'Filesystem      Size  Used Avail Use% Mounted on\\n/dev/vda1        40G   18G   20G  48% /\\ntmpfs           3.8G    0   3.8G   0% /tmp'
+          ? 'Filesystem      Size  Used Avail Use% Mounted on\n/dev/vda1        40G   18G   20G  48% /\ntmpfs           3.8G    0   3.8G   0% /tmp'
           : 'Use df -h para ver os tamanhos em unidades legíveis.';
         break;
       case 'du':
         output = args.includes('-sh') ? '124M  ' + resolvePath(cwd, firstPath) : 'Use du -sh CAMINHO para estimar o tamanho.';
         break;
       case 'ip':
-        output = args.includes('addr') ? 'lo: 127.0.0.1/8\\neth0: 192.0.2.24/24 (endereço reservado para documentação)' : 'Experimente ip addr.';
+        output = args.includes('addr') ? 'lo: 127.0.0.1/8\neth0: 192.0.2.24/24 (endereço reservado para documentação)' : 'Experimente ip addr.';
         break;
       case 'ping':
         output = args.includes('relat-01') || args.some((a) => a === 'example.com')
@@ -607,10 +604,10 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
           : 'PING (amostra simulada): use ping -c 3 relat-01';
         break;
       case 'systemctl':
-        output = '● reports-api.service - API de relatórios\\n   Loaded: loaded (/etc/systemd/system/reports-api.service; enabled)\\n   Active: active (running) · saída demonstrativa';
+        output = '● reports-api.service - API de relatórios\n   Loaded: loaded (/etc/systemd/system/reports-api.service; enabled)\n   Active: active (running) · saída demonstrativa';
         break;
       case 'journalctl':
-        output = 'Oct 28 08:32:18 relat-01 reports-api: tempo de resposta acima de 120s\\nOct 28 08:35:41 relat-01 reports-api: requisição encerrada por timeout';
+        output = 'Oct 28 08:32:18 relat-01 reports-api: tempo de resposta acima de 120s\nOct 28 08:35:41 relat-01 reports-api: requisição encerrada por timeout';
         break;
       case 'node': {
         const fileArg = args.find((a) => a.endsWith('.js'));
@@ -623,7 +620,7 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
             const open = (code.match(/[({[]/g) ?? []).length;
             const close = (code.match(/[)}\\]]/g) ?? []).length;
             if (open !== close || !code.includes('console.log')) fail('SyntaxError: verifique parênteses, chaves e console.log no exemplo.');
-            else output = '';
+            else output = 'Syntax OK';
           }
         } else if (!fileArg) fail('Uso: node ARQUIVO.js ou node --check ARQUIVO.js');
         else {
@@ -652,10 +649,10 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
         if (args[0] === 'status') {
           const changed = files[PROJECT + '/README.md'] !== BASE_FILES[PROJECT + '/README.md'] || files[PROJECT + '/app.js'] !== BASE_FILES[PROJECT + '/app.js'];
           output = args.includes('--short')
-            ? (files[PROJECT + '/README.md'] !== BASE_FILES[PROJECT + '/README.md'] ? ' M README.md\\n' : '') + (files[PROJECT + '/app.js'] !== BASE_FILES[PROJECT + '/app.js'] ? ' M app.js\\n' : '')
-            : 'On branch main\\n' + (changed ? 'Changes not staged for commit:\\n  modified: ' + (files[PROJECT + '/README.md'] !== BASE_FILES[PROJECT + '/README.md'] ? 'README.md' : 'app.js') : 'nothing to commit, working tree clean');
+            ? (files[PROJECT + '/README.md'] !== BASE_FILES[PROJECT + '/README.md'] ? ' M README.md\n' : '') + (files[PROJECT + '/app.js'] !== BASE_FILES[PROJECT + '/app.js'] ? ' M app.js\n' : '')
+            : 'On branch main\n' + (changed ? 'Changes not staged for commit:\n  modified: ' + (files[PROJECT + '/README.md'] !== BASE_FILES[PROJECT + '/README.md'] ? 'README.md' : 'app.js') : 'nothing to commit, working tree clean');
           if (!output.trim()) output = 'working tree clean';
-        } else if (args[0] === 'log') output = 'a13f7c2 (HEAD -> main) exemplo: estrutura inicial\\n8b42d10 exemplo: cria app.js';
+        } else if (args[0] === 'log') output = 'a13f7c2 (HEAD -> main) exemplo: estrutura inicial\n8b42d10 exemplo: cria app.js';
         else if (args[0] === 'branch') output = '* main';
         else if (args[0] === 'diff') {
           const targetArg = args.find((a) => a === 'README.md' || a === 'app.js') ?? 'README.md';
@@ -664,10 +661,10 @@ export function runTerminalCommand(state: TerminalState, rawCommand: string): Te
           const afterText = files[target] ?? '';
           if (beforeText === afterText) output = '';
           else {
-            const oldLines = beforeText.replace(/\\n$/, '').split('\\n');
-            const newLines = afterText.replace(/\\n$/, '').split('\\n');
+            const oldLines = beforeText.replace(/\n$/, '').split('\n');
+            const newLines = afterText.replace(/\n$/, '').split('\n');
             const added = newLines.filter((line) => !oldLines.includes(line));
-            output = 'diff --git a/' + targetArg + ' b/' + targetArg + '\\n--- a/' + targetArg + '\\n+++ b/' + targetArg + '\\n' + added.map((line) => '+' + line).join('\\n');
+            output = 'diff --git a/' + targetArg + ' b/' + targetArg + '\n--- a/' + targetArg + '\n+++ b/' + targetArg + '\n' + added.map((line) => '+' + line).join('\n');
           }
         } else fail('Experimente git status, git log --oneline, git branch ou git diff -- README.md.');
         break;
