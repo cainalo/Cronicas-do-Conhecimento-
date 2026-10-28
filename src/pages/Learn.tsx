@@ -57,8 +57,9 @@ function SimpleLearnPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapterId, sectionId]);
 
+  // A aula usa o texto integral da seção como leitura principal; vocabulário e questões continuam como etapas próprias.
   const totalStages = simple
-    ? 1 + simple.pages.length + (simple.words.length ? 1 : 0) + (simple.checks.length ? 1 : 0) + 1
+    ? 1 + (simple.words.length ? 1 : 0) + (simple.checks.length ? 1 : 0) + 1
     : 1;
 
   useEffect(() => {
@@ -127,15 +128,16 @@ function SimpleLearnPage() {
           <p className="mt-3 text-sm leading-relaxed text-muted">Siga as etapas em sequência. O texto, as palavras importantes e as verificações ficam na mesma leitura; role para continuar.</p>
         </section>
 
-        {simple.pages.map((page, index) => (
-          <section key={page.title + index} {...stageProps()} aria-label={`Etapa ${index + 1}: ${page.title}`}>
-            <p className="kicker">Etapa {index + 1} de {simple.pages.length}</p>
-            <h2 className="mt-1 text-xl leading-snug">{page.title}</h2>
-            <div className="prose-content learn-text mt-3">
-              <Markdown>{page.text}</Markdown>
-            </div>
-          </section>
-        ))}
+        <section {...stageProps()} aria-label="Texto completo da matéria">
+          <p className="kicker">Leitura principal · texto de referência</p>
+          <h2 className="mt-1 text-xl leading-snug">{section.title.replace(/^\\d+\\.\\s*/, '')}</h2>
+          <div className="prose-content learn-text reference-reading mt-3">
+            <Markdown>{section.body}</Markdown>
+          </div>
+          <p className="mt-4 border-t border-line pt-3 text-sm text-muted">
+            Depois da leitura integral, revise o vocabulário e responda às questões para consolidar os conceitos.
+          </p>
+        </section>
 
         {simple.words.length > 0 && (
           <section {...stageProps()} aria-label="Palavras importantes">

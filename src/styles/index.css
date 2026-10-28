@@ -181,7 +181,7 @@ a { text-underline-offset: 3px; }
 /* Fio que corre da esquerda para a direita */
 .rule { display: block; height: 1px; background: rgb(var(--ink) / 0.85); transform-origin: left; animation: rule-in 0.9s var(--ease-out) both; }
 .rule-soft { background: rgb(var(--line)); }
-.learn-text { font-size: calc(1.18rem * var(--font-scale)); line-height: var(--leading, 1.6); }
+.learn-text { font-size: calc(1.18rem * var(--font-scale)); line-height: var(--leading, 1.7); }
 .learn-text strong { color: rgb(var(--ink)); font-weight: 650; box-shadow: inset 0 -0.38em 0 rgb(var(--sun) / 0.32); }
 
 /* Inclinação 3D desligada: o movimento agora é só subir um pouco. */
@@ -1174,3 +1174,4 @@ main.safe-top-content {
   overflow-y: auto;
   overscroll-behavior: contain;
 }
+\n/* Texto de aula e material de referência mantêm a leitura editorial justificada. */\n.learn-text, .reference-reading { text-align: justify; text-justify: inter-word; hyphens: auto; }\n.reference-reading :is(p, li, blockquote, dd) { text-align: justify; text-justify: inter-word; }\n
