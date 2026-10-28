@@ -150,7 +150,7 @@ const helpText = [
   'COMANDOS DISPONÍVEIS NO LABORATÓRIO',
   'Arquivos: pwd, ls -la, cd, cat, head, tail, grep, find, touch, mkdir -p, cp, mv, rm',
   'Conteúdo: echo "texto" > arquivo, echo "texto" >> arquivo, chmod 640 arquivo',
-  'Sistema: whoami, hostname, uname -a, uptime, ps aux, top, free -h, df -h',
+  'Sistema: whoami, hostname, uname -a, uptime, ps aux, top, vmstat 2, free -h, df -h, kill PID',
   'Rede e serviços: ip addr, ping -c 4 10.0.0.12, systemctl status relat-api, journalctl -u relat-api',
   'Ajuda: help, man <comando>, history, clear',
   'Aviso: sistema de arquivos virtual. Nenhum comando é executado no seu aparelho.',
@@ -174,6 +174,9 @@ export function executeTerminalCommand(previous: TerminalState, raw: string): Te
     transcript: [...previous.transcript],
   };
   const path = (input: string) => normalizeVirtualPath(input, state.cwd);
+  const stoppedCommand = (value: string) => /^kill\s+(?:-9\s+)?4127$/i.test(value.trim());
+  const importerWasStopped = previous.commands.some(stoppedCommand);
+  const importerStopped = commands.some(stoppedCommand);
   let output = '';
 
   if (command === 'help' || (command === 'man' && !args.length)) output = helpText;
@@ -186,7 +189,9 @@ export function executeTerminalCommand(previous: TerminalState, raw: string): Te
       cat: 'cat ARQUIVO — imprime o conteúdo do arquivo.',
       grep: 'grep PADRÃO ARQUIVO — imprime linhas que contêm o padrão.',
       find: 'find CAMINHO -name "PADRÃO" — procura caminhos por nome.',
-      ps: 'ps aux — mostra a fotografia dos processos em execução; top atualiza a observação continuamente.',
+      ps: 'ps aux — mostra uma fotografia dos processos em execução; top permite acompanhar a carga do sistema.',
+      vmstat: 'vmstat 2 — mostra amostras de processos, memória, swap e espera de I/O no ambiente de treinamento.',
+      kill: 'kill PID — envia SIGTERM para pedir que um processo encerre de forma graciosa. No laboratório, use o PID fictício 4127.',
       chmod: 'chmod MODO ARQUIVO — altera permissões no laboratório. Exemplo: chmod 640 relatorio.txt.',
       systemctl: 'systemctl status SERVIÇO — mostra o estado do serviço simulado.',
       journalctl: 'journalctl -u SERVIÇO — consulta os registros do serviço simulado.',
@@ -320,13 +325,35 @@ export function executeTerminalCommand(previous: TerminalState, raw: string): Te
     }
   } else if (command === 'echo' || command === 'printf') {
     output = args.join(' ') + (command === 'echo' ? '\n' : '');
+  } else if (command === 'kill') {
+    const pid = args.find((value) => /^\d+$/.test(value));
+    const force = args.includes('-9');
+    if (!pid) output = 'kill: uso: kill [-sinal] PID';
+    else if (pid !== '4127') output = 'bash: kill: (' + pid + ') - No such process no cenário atual';
+    else if (importerWasStopped) output = 'bash: kill: (4127) - No such process';
+    else output = force
+      ? 'Enviado SIGKILL ao PID 4127 (importador). Processo encerrado à força; não teve chance de finalizar de forma graciosa.'
+      : 'Enviado SIGTERM ao PID 4127 (importador). Pedido de encerramento enviado; o processo saiu sem precisar de SIGKILL.';
   } else if (command === 'ps') {
-    output = '    PID TTY          TIME CMD\n      1 ?        00:00:03 systemd\n    418 ?        00:00:16 relat-api\n    602 ?        00:00:08 postgres\n    811 pts/0    00:00:00 bash\n    846 pts/0    00:00:00 ps';
+    output = '    PID TTY          TIME CMD\n      1 ?        00:00:03 systemd\n    418 ?        00:00:16 relat-api\n    602 ?        00:00:08 postgres\n' +
+      (importerStopped ? '' : '   4127 ?        00:02:41 importador\n') +
+      '    811 pts/0    00:00:00 bash\n    846 pts/0    00:00:00 ps';
   } else if (command === 'top') {
-    output = 'top - 08:31:12 up 12 days, 4:33, 2 users, load average: 2.41, 2.08, 1.92\nTasks: 126 total, 2 running, 124 sleeping, 0 stopped, 0 zombie\n%Cpu(s): 22.0 us, 11.0 sy, 0.0 ni, 60.0 id, 7.0 wa\nMiB Mem: 4096.0 total, 3780.0 used, 316.0 free\n\n PID USER  PR NI   VIRT   RES S %CPU %MEM COMMAND\n 418 relat 20  0 1200m 640m R  78.4 15.6 relat-api\n 602 postgres 20 0 980m 220m S 12.1 5.4 postgres\n 811 aluno 20 0 4m 3m S 0.0 0.1 bash';
+    output = importerStopped
+      ? 'top - 08:33:12 up 12 days, 4:35, 2 users, load average: 0.74, 1.10, 1.60\nTasks: 125 total, 1 running, 124 sleeping, 0 stopped, 0 zombie\n%Cpu(s): 7.1 us, 2.3 sy, 0.0 ni, 70.0 id, 1.0 wa\nMiB Mem : 7820.0 total, 2048.0 used, 5500.0 free\nMiB Swap: 2048.0 total, 1948.0 free, 100.0 used\n\n PID USER     %CPU %MEM COMMAND\n  912 postgres  6.2  9.0 postgres\n 1034 www-data  1.1  2.3 nginx'
+      : 'top - 08:31:12 up 12 days, 4:33, 2 users, load average: 2.41, 2.08, 1.92\nTasks: 126 total, 2 running, 124 sleeping, 0 stopped, 0 zombie\n%Cpu(s): 12.0 us, 4.1 sy, 0.0 ni, 9.6 id, 74.3 wa\nMiB Mem : 7820.0 total, 96.2 free, 7590.4 used\nMiB Swap: 2048.0 total, 118.0 free, 1930.0 used\n\n PID USER     %CPU %MEM COMMAND\n 4127 relat     9.8 71.5 importador\n  912 postgres  6.2  9.0 postgres\n 1034 www-data  1.1  2.3 nginx';
+  } else if (command === 'vmstat') {
+    output = importerStopped
+      ? 'procs  ----memory----   ---swap--\n r  b   swpd   free     si    so\n 0  0 102400 5500000 0 0\n 0  0 102400 5500000 0 0\n 0  0 102400 5500000 0 0'
+      : 'procs  ----memory----   ---swap--\n r  b   swpd   free     si    so\n 1  6 1976320  98500  4120  3980\n 0  7 1977100  96100  4310  4050\n 1  6 1976800  97300  4005  4120';
+    if (args[0] !== undefined && args[0] !== '2') output = 'Uso: vmstat 2 (este terminal mostra três amostras didáticas).';
   } else if (command === 'free') {
-    output = '              total        used        free      shared  buff/cache   available\nMem:           4.0Gi       3.7Gi       316Mi       82Mi       420Mi       290Mi\nSwap:          2.0Gi       1.6Gi       420Mi';
-    if (!args.includes('-h')) output = '              total        used        free      shared  buff/cache   available\nMem:        4194304     3891200      323584       83968      430080      296960\nSwap:       2097152     1677721      419431';
+    output = importerStopped
+      ? '              total        used        free      shared  buff/cache   available\nMem:           7.6Gi       2.0Gi       5.4Gi       82Mi       420Mi       5.3Gi\nSwap:          2.0Gi       0.1Gi       1.9Gi'
+      : '              total        used        free      shared  buff/cache   available\nMem:           7.6Gi       7.4Gi        96Mi       82Mi       320Mi       140Mi\nSwap:          2.0Gi       1.9Gi       118Mi';
+    if (!args.includes('-h')) output = importerStopped
+      ? '              total        used        free      shared  buff/cache   available\nMem:        7969177     2097152     5662310       83968      430080     5557452\nSwap:       2097152      102400     1994752'
+      : '              total        used        free      shared  buff/cache   available\nMem:        7969177     7762340       98304       83968      327680      143360\nSwap:       2097152     1976320      121832';
   } else if (command === 'df') {
     output = 'Filesystem      Size  Used Avail Use% Mounted on\n/dev/vda1        40G   31G  7.0G  82% /\ntmpfs           2.0G  4.0M  2.0G   1% /run\n/dev/vdb1       100G   47G   53G  48% /dados';
   } else if (command === 'ip') {
@@ -379,8 +406,10 @@ const fileHasMode = (state: TerminalState, path: string, mode: string) => state.
 const processSteps: LabStep[] = [
   { id: 'pwd', title: 'Descubra onde você está', instruction: 'Veja o diretório de trabalho antes de iniciar a investigação.', hint: 'pwd', doneWhen: (s) => ran(s, /^pwd$/) },
   { id: 'ps', title: 'Liste os processos', instruction: 'Identifique o PID e o processo que consome mais recursos.', hint: 'ps aux', doneWhen: (s) => ran(s, /^ps(?:\s|$)/) },
-  { id: 'top', title: 'Observe a carga ao vivo', instruction: 'Use o monitor de processos e localize o uso elevado de CPU e memória.', hint: 'top', doneWhen: (s) => ran(s, /^top$/) },
-  { id: 'memory', title: 'Confira memória e disco', instruction: 'Leia o uso da RAM e a ocupação dos volumes.', hint: 'free -h  e  df -h', doneWhen: (s) => ran(s, /^free\s+-h$/) && ran(s, /^df\s+-h$/) },
+  { id: 'top', title: 'Observe a carga ao vivo', instruction: 'Use o monitor de processos e localize o consumo de RAM e a espera por disco (wa).', hint: 'top', doneWhen: (s) => ran(s, /^top$/) },
+  { id: 'vmstat', title: 'Confirme a pressão de memória', instruction: 'Leia si e so para descobrir se o sistema troca páginas constantemente com o swap.', hint: 'vmstat 2', doneWhen: (s) => ran(s, /^vmstat\s+2$/) },
+  { id: 'kill', title: 'Peça o encerramento do processo não crítico', instruction: 'Depois de observar as evidências, envie SIGTERM ao importador fictício. O comando só altera o ambiente virtual.', hint: 'kill 4127', doneWhen: (s) => ran(s, /^kill\s+4127$/) && ran(s, /^top$/) && ran(s, /^vmstat\s+2$/) },
+  { id: 'memory', title: 'Confira a recuperação', instruction: 'Compare a memória livre e o swap e confira o espaço do disco.', hint: 'free -h  e  df -h', doneWhen: (s) => ran(s, /^free\s+-h$/) && ran(s, /^df\s+-h$/) },
 ];
 const fileSteps: LabStep[] = [
   { id: 'list', title: 'Explore o diretório inicial', instruction: 'Liste os arquivos com permissões e arquivos ocultos.', hint: 'ls -la', doneWhen: (s) => ran(s, /^ls\s+.*-l.*-a|^ls\s+-la|^ls\s+-al/) },

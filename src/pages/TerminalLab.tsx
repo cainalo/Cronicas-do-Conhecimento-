@@ -18,10 +18,10 @@ const STORE = (id: string) => 'cronicas:terminal-lab:v1:' + id;
 type LabTab = 'terminal' | 'arquivos' | 'processos';
 const LAB_ICON: Record<string, IconName> = { processos: 'dados', arquivos: 'lista', shell: 'tela', rede: 'rede' };
 const PROCESS_ROWS = [
-  { pid: '1', user: 'root', cpu: '0.1%', mem: '0.4%', status: 'systemd', color: 'text-ok' },
-  { pid: '418', user: 'relat', cpu: '78.4%', mem: '15.6%', status: 'relat-api', color: 'text-bad' },
-  { pid: '602', user: 'postgres', cpu: '12.1%', mem: '5.4%', status: 'postgres', color: 'text-gold' },
-  { pid: '811', user: 'aluno', cpu: '0.0%', mem: '0.1%', status: 'bash', color: 'text-muted' },
+  { pid: '4127', user: 'relat', cpu: '9.8%', mem: '71.5%', status: 'importador', color: 'text-bad' },
+  { pid: '912', user: 'postgres', cpu: '6.2%', mem: '9.0%', status: 'postgres', color: 'text-gold' },
+  { pid: '1034', user: 'www-data', cpu: '1.1%', mem: '2.3%', status: 'nginx', color: 'text-ok' },
+  { pid: '418', user: 'relat', cpu: '0.4%', mem: '1.2%', status: 'relat-api', color: 'text-muted' },
 ];
 
 function loadState(id: string): TerminalState {

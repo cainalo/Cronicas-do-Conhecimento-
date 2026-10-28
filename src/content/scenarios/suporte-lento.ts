@@ -5,7 +5,7 @@ import type { Scenario } from '@/lib/scenario';
 
 export const cenarioSuporteLento: Scenario = {
   id: 'cen.suporte-lento',
-  version: 1,
+  version: 2,
   title: 'Primeiro dia no suporte: o servidor lento',
   summary: 'O servidor de relatórios ficou lento. Colha sinais, forme a hipótese certa e resolva sem estragar nada.',
   setting: 'Sala de suporte de TI, segunda-feira, 9h10',
@@ -90,7 +90,6 @@ export const cenarioSuporteLento: Scenario = {
       speakerId: 'marta',
       objective: 'Formar a hipótese.',
       dialogue: 'Esta é a tela do top. Junto, rodei o vmstat por alguns segundos. Qual é a sua hipótese?',
-      evidenceIds: ['ev.top', 'ev.vmstat'],
       decisions: [
         {
           id: 'd.thrashing',
@@ -156,7 +155,6 @@ export const cenarioSuporteLento: Scenario = {
       speakerId: 'marta',
       terminal: true,
       dialogue: 'O importador terminou, a memória voltou e os relatórios abrem de novo. Chamado resolvido. Vamos combinar com o João de rodar a carga à noite.',
-      evidenceIds: ['ev.depois'],
     },
   ],
   principle:

@@ -211,7 +211,11 @@ export function examine(w: World, s: Scenario, st: WorldState, objectId: string,
   const order = s.nodes.map((n) => n.id);
   const available = !o.availableFrom || order.indexOf(st.scenario.nodeId) >= order.indexOf(o.availableFrom);
   if (!available || st.examined.includes(objectId)) return { state: st, available };
-  return { state: { ...st, examined: [...st.examined, objectId], updatedAt: now }, available };
+  const addedEvidence = o.evidenceIds.filter((id) => !st.scenario.evidence.includes(id));
+  const scenario = addedEvidence.length
+    ? { ...st.scenario, evidence: [...st.scenario.evidence, ...addedEvidence], updatedAt: now }
+    : st.scenario;
+  return { state: { ...st, examined: [...st.examined, objectId], scenario, updatedAt: now }, available };
 }
 
 /** Objetivo atual, em uma frase. */

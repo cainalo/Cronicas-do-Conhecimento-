@@ -12,7 +12,7 @@ const wallWithDoors = (doors: number[]) => [...'#'.repeat(24)].map((c, x) => (do
 
 export const escritorio: World = {
   id: 'mundo.escritorio',
-  version: 2,
+  version: 3,
   title: 'Escritório de TI',
   grid: [
     '#'.repeat(24),

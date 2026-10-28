@@ -50,13 +50,31 @@ describe('terminal Linux virtual e isolado', () => {
   it('apresenta processos, memória, rede, serviço e logs como saídas didáticas consistentes', () => {
     const shell = session();
     expect(shell.run('ps aux')).toContain('relat-api');
-    expect(shell.run('top')).toContain('78.4');
+    expect(shell.run('top')).toContain('71.5');
+    expect(shell.run('vmstat 2')).toContain('4120');
     expect(shell.run('free -h')).toContain('Swap:');
     expect(shell.run('df -h')).toContain('/dev/vda1');
     expect(shell.run('ip addr')).toContain('10.0.0.24/24');
     expect(shell.run('ping -c 4 10.0.0.12')).toContain('0% packet loss');
     expect(shell.run('systemctl status relat-api')).toContain('active (running)');
     expect(shell.run('journalctl -u relat-api')).toContain('pool de conexões esgotado');
+  });
+
+  it('faz o processo virtual mudar depois de SIGTERM e recupera RAM/swap sem reiniciar o serviço', () => {
+    const shell = session();
+    expect(shell.run('top')).toContain('importador');
+    expect(shell.run('vmstat 2')).toContain('4120');
+    expect(shell.run('kill 4127')).toContain('SIGTERM');
+    expect(shell.run('ps aux')).not.toContain('importador');
+    expect(shell.run('free -h')).toContain('5.4Gi');
+    expect(shell.run('free -h')).toContain('1.9Gi');
+    expect(shell.run('systemctl status relat-api')).toContain('active (running)');
+  });
+  it('distingue o encerramento forçado SIGKILL e preserva outros processos do sistema simulado', () => {
+    const shell = session();
+    expect(shell.run('kill -9 4127')).toContain('SIGKILL');
+    expect(shell.run('ps aux')).toContain('relat-api');
+    expect(shell.run('ps aux')).not.toContain('importador');
   });
 
   it('não executa comandos administrativos nem permite remover diretórios de sistema', () => {

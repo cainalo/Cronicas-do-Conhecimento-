@@ -43,10 +43,13 @@ describe('escritório 2D', () => {
     expect(talk(escritorio, w, 'joao').kind).toBe('conversa');
     expect(talk(escritorio, w, 'marta').kind).toBe('node');
     w = { ...w, scenario: advance(s, choose(s, w.scenario, 'd.top')) };
-    // A hipótese só abre depois de examinar o terminal.
+    // O estado só ganha evidências quando o objeto de terminal é examinado depois dos comandos.
+    expect(w.scenario.evidence).not.toContain('ev.top');
     expect(talk(escritorio, w, 'marta')).toEqual({ kind: 'falta', objectIds: ['terminal'] });
     expect(currentObjective(escritorio, w)).toMatch(/terminal/);
     w = examine(escritorio, s, w, 'terminal').state;
+    expect(w.scenario.evidence).toContain('ev.top');
+    expect(w.scenario.evidence).toContain('ev.vmstat');
     expect(talk(escritorio, w, 'marta').kind).toBe('node');
     // Hipótese errada volta à mesma etapa; a certa leva ao João.
     w = { ...w, scenario: advance(s, choose(s, w.scenario, 'd.cpu')) };
@@ -57,9 +60,11 @@ describe('escritório 2D', () => {
     expect(examine(escritorio, s, w, 'console').available).toBe(false);
     w = { ...w, scenario: advance(s, choose(s, w.scenario, 'd.term')) };
     expect(talk(escritorio, w, 'marta')).toEqual({ kind: 'falta', objectIds: ['console'] });
+    expect(w.scenario.evidence).not.toContain('ev.depois');
     const ex = examine(escritorio, s, w, 'console');
     expect(ex.available).toBe(true);
     w = ex.state;
+    expect(w.scenario.evidence).toContain('ev.depois');
     expect(talk(escritorio, w, 'marta').kind).toBe('node');
     w = { ...w, closed: true };
     expect(currentObjective(escritorio, w)).toMatch(/resolvida/);
