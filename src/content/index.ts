@@ -476,6 +476,7 @@ export const narratedFor = (lessonId: string) => narratedLessons.find((n) => n.l
 // Feed didático (pacote v4, etapa 4): as aulas em texto, na ordem da trilha, viram posts.
 import { postsOfLesson, type FeedPost } from '@/lib/feed';
 import type { TrailExtras } from '@/lib/pace';
+import { terminalLabs } from '@/lib/terminal';
 import { teacherPosts as _tips } from './teachers';
 import { curatedVideos as _videos } from './estudos/materiais';
 import { feedImages } from './estudos/imagens';
@@ -532,5 +533,8 @@ export const trailExtras: TrailExtras = {
     const first = microSeries(chapterId, sectionId)[0];
     return first && feedPostsOf(first.id).length ? first.id : undefined;
   },
+  labsFor: (chapterId, sectionId) => terminalLabs
+    .filter((lab) => lab.chapterId === chapterId && lab.sectionId === sectionId)
+    .map((lab) => ({ id: lab.id, title: lab.title })),
   hasCards: (chapterId) => flashcards.some((f) => f.chapterId === chapterId),
 };
