@@ -156,7 +156,7 @@ function useViewport() {
   return v;
 }
 
-function WorldPlay({ w, s, phase, unitKey }: { w: World; s: Scenario; phase?: string; unitKey?: string }) {
+function WorldPlay({ w, s, phase, unitKey }: { w: World; s: Scenario; phase?: OfficePhaseId; unitKey?: string }) {
   const navigate = useNavigate();
   const { data, update } = useStudy();
   const phaseInfo = phase ? OFFICE_PHASES[phase] : undefined;
