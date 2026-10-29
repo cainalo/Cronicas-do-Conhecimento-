@@ -473,7 +473,11 @@ function PracticeRun() {
 
             {act.kind === 'mcq' && (
               <>
-                <p className="text-sm font-semibold text-muted">Questão no estilo da prova</p>
+                <p className="text-sm font-semibold text-muted">
+                  {act.question.origin === 'gerada-nao-revisada'
+                    ? 'Questão de treino gerada do glossário · ainda não revisada'
+                    : 'Questão no estilo da prova'}
+                </p>
                 <QuestionStem text={act.question.stem} className="mb-4 mt-2" />
                 <Choices
                   options={act.question.options.map((o) => o.key)}

@@ -82,6 +82,20 @@ describe('variação das atividades de prática', () => {
     expect(build.words.length).toBeGreaterThan(build.answer.length);
     expect(build.answer.every((word) => build.words.includes(word))).toBe(true);
   });
+  it('amplia o banco com questões de treino do glossário, claramente não revisadas', () => {
+    const activities = buildPractice(chapter, 'fundamentos', [], undefined, () => 0.4);
+    const mcqs = activities.filter((activity) => activity.kind === 'mcq');
+    expect(mcqs).toHaveLength(3);
+    expect(mcqs.every((activity) => activity.kind === 'mcq' && activity.question.origin === 'gerada-nao-revisada')).toBe(true);
+    for (const activity of mcqs) {
+      if (activity.kind !== 'mcq') continue;
+      expect(activity.question.review).toBe('nao-revisado');
+      const answer = activity.question.options.find((option) => option.key === activity.question.answer);
+      expect(answer?.text).toBeTruthy();
+      expect(activity.question.explanation).toContain(answer?.text ?? 'conceito-inexistente');
+    }
+  });
+
   it('prioriza questões não usadas na visita anterior sem aumentar a rodada', () => {
     const bank = [
       question,

@@ -52,6 +52,54 @@ function shuffleQuestionAnswers(q: Question, rand: () => number): Question {
   };
 }
 
+/**
+ * Banco complementar: uma questão objetiva por conceito do glossário.
+ * Estas questões são identificadas como geradas e não revisadas — não são oficiais.
+ */
+function glossaryPracticeQuestions(
+  chapter: Chapter,
+  sectionId: string,
+  glossary: { term: string; definition: string }[],
+  contestId: string,
+): Question[] {
+  const terms = glossary.filter((g) => g.term.trim() && g.definition.trim());
+  if (terms.length < 4) return [];
+  const used = new Set<string>();
+  const uniqueTerms = terms.filter((g) => {
+    const term = g.term.trim().toLocaleLowerCase('pt-BR');
+    if (used.has(term)) return false;
+    used.add(term);
+    return true;
+  });
+  return uniqueTerms.map((g, index) => {
+    const distractors = uniqueTerms.filter((x) => x.term !== g.term);
+    const offset = index % Math.max(1, distractors.length);
+    const rotated = [...distractors.slice(offset), ...distractors.slice(0, offset)];
+    const options = [g, ...rotated.slice(0, 4)].map((item, i) => ({
+      key: String.fromCharCode(65 + i),
+      text: item.term,
+      comment: item.term === g.term
+        ? 'Corresponde à definição apresentada no glossário.'
+        : 'Este termo representa outro conceito; compare a definição no capítulo.',
+    }));
+    const slug = g.term.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    return {
+      id: chapter.id + ':' + sectionId + ':glossario:' + slug,
+      contestId,
+      topicId: chapter.topicIds[0] ?? 'treino-glossario',
+      chapterId: chapter.id,
+      sectionId,
+      origin: 'gerada-nao-revisada' as const,
+      review: 'nao-revisado' as const,
+      difficulty: 1,
+      stem: 'Qual termo corresponde a esta definição?\n\n> ' + g.definition,
+      options,
+      answer: 'A',
+      explanation: g.term + ': ' + g.definition,
+    };
+  });
+}
+
 /** Monta a rodada de prática de uma seção (cerca de 8 a 12 atividades, tipos intercalados). */
 export function buildPractice(
   chapter: Chapter,
@@ -154,15 +202,15 @@ export function buildPractice(
   }
 
   const sectionQuestions = bank.filter((q) => q.chapterId === chapter.id && q.sectionId === sectionId);
+  const contestId = sectionQuestions[0]?.contestId ?? bank[0]?.contestId ?? 'treino-glossario';
+  const generatedQuestions = glossaryPracticeQuestions(chapter, sectionId, glossary, contestId);
   const recent = new Set(recentQuestionIds);
-  const unseenQuestions = shuffle(sectionQuestions.filter((q) => !recent.has(q.id)), rand);
-  const seenQuestions = shuffle(sectionQuestions.filter((q) => recent.has(q.id)), rand);
-  const targetQuestionCount = Math.min(simple ? 2 : 3, sectionQuestions.length);
-  // Se houver alternativas suficientes, a visita evita as questões recentes. Quando o banco se esgota,
-  // mistura o que sobrou com as anteriores para manter a quantidade planejada de atividades.
-  const questionPool = unseenQuestions.length >= targetQuestionCount
-    ? unseenQuestions
-    : [...unseenQuestions, ...seenQuestions];
+  const unseenOfficial = shuffle(sectionQuestions.filter((q) => !recent.has(q.id)), rand);
+  const unseenGenerated = shuffle(generatedQuestions.filter((q) => !recent.has(q.id) && !sectionQuestions.some((existing) => existing.id === q.id)), rand);
+  const seenOfficial = shuffle(sectionQuestions.filter((q) => recent.has(q.id)), rand);
+  const seenGenerated = shuffle(generatedQuestions.filter((q) => recent.has(q.id) && !sectionQuestions.some((existing) => existing.id === q.id)), rand);
+  // Questões oficiais/autoriais disponíveis mantêm precedência; o glossário amplia o conjunto para as próximas visitas.
+  const questionPool = [...unseenOfficial, ...unseenGenerated, ...seenOfficial, ...seenGenerated];
   const mcqs: Activity[] = questionPool
     .slice(0, 3)
     .map((q) => ({ kind: 'mcq' as const, id: q.id, question: shuffleQuestionAnswers(q, rand) }));
