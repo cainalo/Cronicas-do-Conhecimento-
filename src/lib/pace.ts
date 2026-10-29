@@ -82,7 +82,7 @@ export function courseUnits(
       const postsLesson = extras.postsLessonFor?.(c.id, s.id);
       if (postsLesson) {
         const key = `professores:${c.id}:${s.id}`;
-        out.push({ key, kind: 'professores', chapterId: c.id, sectionId: s.id, title: `Professores: ${t}`, to: withVisit(`/sala?aula=${postsLesson}`, key) });
+        out.push({ key, kind: 'professores', chapterId: c.id, sectionId: s.id, title: `Professores: ${t}`, to: withVisit(`/trilha-post/${c.id}/${s.id}`, key) });
       }
       out.push({ key: practiceId(c.id, s.id), kind: 'praticar', chapterId: c.id, sectionId: s.id, title: `Praticar: ${t}`, to: `/pratica/${c.id}/${s.id}` });
       const m = missions.find((x) => x.chapterId === c.id && x.sectionId === s.id);
