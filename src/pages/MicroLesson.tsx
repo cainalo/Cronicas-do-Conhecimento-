@@ -5,8 +5,7 @@
 import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { MicroLesson } from '@/content/types';
-import type { FeedPost } from '@/lib/feed';
-import { curatedVideos, feedPostsOf, getChapter, getQuestion, teacherForChapter } from '@/content';
+import { curatedVideos, getChapter, getQuestion } from '@/content';
 import { VideoEmbed } from '@/components/VideoEmbed';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
@@ -21,6 +20,9 @@ import { Illustration } from '@/components/Illustration';
 import { StepGuide } from '@/components/StepGuide';
 import { ActivityView } from '@/components/activities/ActivityView';
 import { ReferenceText } from '@/components/ReferenceText';
+import { TeacherAvatar } from '@/components/TeacherAvatar';
+import { teacherInsightForChapter } from '@/content/teacher-insights';
+import { goBack } from '@/lib/navigation';
 
 type Phase =
   | { k: 'abertura' }
@@ -66,8 +68,9 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   const chapter = getChapter(lesson.chapterId)!;
   // A aula narrada possui unidade própria na trilha; aqui ficam somente videoaulas externas conferidas.
   const videos = curatedVideos.filter((v) => v.lessonId === lesson.id && v.status === 'conferido');
-  const relatedTips = useMemo(() => feedPostsOf(lesson.id).filter((post) => post.kind === 'dica'), [lesson.id]);
-  const hasMedia = videos.length > 0;
+  const teacherInsight = teacherInsightForChapter(lesson.chapterId);
+  // Toda microaula tem uma perspectiva profissional complementar antes da prática.
+  const hasMedia = true;
   const n = lesson.steps.length;
   // Em série, cada aula tem o seu ponto salvo; sozinha, usa a chave do trecho (como antes).
   const key = series ? seriesKey(lesson.chapterId, lesson.sectionId, lesson.id) : learnKey(lesson.chapterId, lesson.sectionId);
@@ -158,7 +161,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
     // Altura fixa da tela: nada rola para baixo. O que não cabe vai para a parte seguinte, ao lado.
     <div className="-mt-2 flex flex-col overflow-hidden" style={{ height: 'calc(100dvh - 1.75rem - env(safe-area-inset-top, 0px))' }}>
       <div className="mb-2 flex items-center gap-3">
-        <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => navigate('/trilha')} aria-label="Sair (o lugar fica salvo)">
+        <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => goBack(navigate, '/trilha')} aria-label="Voltar à página anterior (o lugar fica salvo)">
           <Icon name="errado" size={22} />
         </button>
         <div className="h-3 flex-1 overflow-hidden rounded-full bg-raised" aria-label={`Progresso: ${slot} de ${totalSlots}`}>
@@ -250,12 +253,13 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
           <div className="mb-3 shrink-0">
             <p className="kicker">Antes de praticar</p>
             <h1 className="mt-0.5 text-2xl leading-tight">Veja de outro jeito</h1>
-            <p className="mt-1 text-sm text-muted">Videoaulas complementares do assunto; carregam só quando você tocar.</p>
+            <p className="mt-1 text-sm text-muted">Uma perspectiva profissional nova e, quando houver, videoaulas complementares.</p>
           </div>
           <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain">
+            <TeacherInsightCard insight={teacherInsight} />
             {videos.map((v) => <VideoEmbed key={v.id} url={v.url} title={v.title} meta={[v.channel, v.duration].filter(Boolean).join(' · ')} />)}
+            {videos.length === 0 && <p className="text-xs text-muted">Ainda não há videoaula externa conferida para este trecho. A perspectiva do professor continua disponível.</p>}
           </div>
-          <RelatedProfessionalPosts posts={relatedTips} />
           <button className="btn-primary mt-2 w-full shrink-0" onClick={() => set(lesson.consolidation.length ? { k: 'praticar', i: 0 } : lesson.exam.length ? { k: 'prova', i: 0 } : { k: 'sintese' })} data-testid="midia-continuar">
             Continuar para a prática <Icon name="avancar" size={16} />
           </button>
@@ -335,49 +339,18 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   );
 }
 
-/** Posts profissionais de apoio aparecem na mesma etapa da trilha e expandem no próprio lugar. */
-function RelatedProfessionalPosts({ posts }: { posts: FeedPost[] }) {
-  const tips = posts.filter((post) => post.kind === 'dica' && post.tip);
-  if (!tips.length) return null;
-  return (
-    <section className="shrink-0 border-t border-line pt-1.5" aria-label="Perspectivas profissionais">
-      <p className="mb-1 text-[0.65rem] font-semibold uppercase tracking-wide text-muted">Perspectiva profissional · {tips.length}</p>
-      <div className="max-h-24 space-y-1 overflow-y-auto overscroll-contain">
-        {tips.map((post) => {
-          const tip = post.tip!;
-          const teacher = teacherForChapter(tip.chapterId);
-          return (
-            <details key={post.id} className="rounded-lg border border-line bg-surface">
-              <summary className="flex cursor-pointer list-none items-center gap-2 px-2 py-1.5">
-                {post.image && (
-                  <img
-                    src={post.image.src}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    className="h-9 w-9 shrink-0 rounded object-cover"
-                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                  />
-                )}
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-xs font-semibold">{post.title}</span>
-                  <span className="block truncate text-[0.65rem] text-muted">{teacher.name} · dica profissional</span>
-                </span>
-                <Icon name="seta" size={14} className="shrink-0 text-muted" />
-              </summary>
-              <div className="space-y-1.5 px-2 pb-2 text-xs leading-snug">
-                <Markdown>{tip.body}</Markdown>
-                {post.image && (
-                  <p className="text-[0.65rem] text-muted">
-                    {post.image.credit} · <a href={post.image.sourceUrl} target="_blank" rel="noreferrer" className="underline">Fonte</a>
-                    {post.image.licenseUrl && <> · <a href={post.image.licenseUrl} target="_blank" rel="noreferrer" className="underline">{post.image.license}</a></>}
-                  </p>
-                )}
-              </div>
-            </details>
-          );
-        })}
-      </div>
-    </section>
-  );
+
+/** Perspectiva contextual do professor: caso, cautela e pergunta extra, sem recontar a aula. */
+function TeacherInsightCard({ insight }: { insight: ReturnType<typeof teacherInsightForChapter> }) {
+  const [showAnswer, setShowAnswer] = useState(false);
+  const { teacher, content } = insight;
+  return <article className="rounded-2xl border border-line bg-surface p-3 sm:p-4" aria-label="Perspectiva profissional">
+    <header className="flex items-center gap-3"><TeacherAvatar t={teacher} size={46}/><div className="min-w-0 flex-1"><p className="kicker">Uma ideia além da aula</p><p className="text-sm font-semibold">{teacher.name}</p></div><span className="rounded-full bg-raised px-2 py-1 text-[0.65rem] text-muted">Contexto</span></header>
+    <h2 className="mt-3 font-title text-xl leading-tight">{content.title}</h2><p className="mt-2 text-sm leading-relaxed">{content.lead}</p>
+    <div className="mt-3 rounded-xl border-l-2 border-gold bg-raised/45 p-3"><p className="kicker">Exemplo aplicado</p><p className="mt-1 text-sm leading-relaxed">{content.practical}</p></div>
+    <div className="mt-3 rounded-xl border border-line p-3"><p className="text-sm font-semibold">Pense nisso</p><p className="mt-1 text-sm">{content.question}</p>
+      {showAnswer && <p className="mt-2 border-t border-line pt-2 text-sm leading-relaxed text-muted">{content.answer}</p>}
+      <button type="button" className="btn-ghost mt-2 w-full text-sm" aria-expanded={showAnswer} onClick={() => setShowAnswer((value) => !value)}>{showAnswer ? 'Ocultar resposta' : 'Ver uma possível resposta'}</button>
+    </div>
+  </article>;
 }
