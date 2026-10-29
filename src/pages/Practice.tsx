@@ -491,7 +491,7 @@ function PracticeRun() {
             </div>
           )}
           {verdict && (
-            <div className={"anim-toast-in fixed inset-x-0 bottom-0 z-40 max-h-[55dvh] overflow-y-auto rounded-t-[1.6rem] px-4 pt-3 shadow-[0_-12px_30px_-12px_rgba(0,0,0,0.45)] sm:px-6 " + (verdict.ok ? 'bg-[#d9eadf] text-[#173d29]' : 'bg-[#f3dcd5] text-[#5c1d12'])} style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }} role="status">
+            <div className={"anim-toast-in fixed inset-x-0 bottom-0 z-40 max-h-[55dvh] overflow-y-auto rounded-t-[1.6rem] px-4 pt-3 shadow-[0_-12px_30px_-12px_rgba(0,0,0,0.45)] sm:px-6 " + (verdict.ok ? 'bg-[#d9eadf] text-[#173d29]' : 'bg-[#f3dcd5] text-[#5c1d12]')} style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }} role="status">
               <div className="mx-auto max-w-3xl">
                 <p className="flex items-center gap-2 text-lg font-bold">
                   <Icon name={verdict.ok ? 'certo' : 'errado'} size={22} strokeWidth={2.6} /> {verdict.title}
