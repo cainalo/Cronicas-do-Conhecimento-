@@ -32,9 +32,12 @@ describe('laboratórios e Escritório de TI integrados à trilha', () => {
     });
   });
 
-  it('reserva as fases do escritório ao capítulo de sistemas operacionais', () => {
+  it('mantém o escritório no capítulo de SO e distribui laboratórios por seus assuntos técnicos', () => {
     expect(units.filter((unit) => unit.kind === 'escritorio').every((unit) => unit.chapterId === 'cap.infra.03')).toBe(true);
-    expect(units.filter((unit) => unit.kind === 'laboratorio' && !['laboratorio:codigo', 'laboratorio:git'].includes(unit.key)).every((unit) => unit.chapterId === 'cap.infra.03')).toBe(true);
+    const additionalLabs = units.filter((unit) => unit.kind === 'laboratorio' && !['laboratorio:codigo', 'laboratorio:git'].includes(unit.key) && unit.chapterId !== 'cap.infra.03');
+    expect(additionalLabs.length).toBeGreaterThan(0);
+    expect(additionalLabs.every((unit) => unit.chapterId.startsWith('cap.prim.') || unit.chapterId.startsWith('cap.infra.'))).toBe(true);
+    expect(new Set(units.map((unit) => unit.key)).size).toBe(units.length);
   });
 
   it('liga a prática de Git ao assunto de versionamento e pull requests', () => {

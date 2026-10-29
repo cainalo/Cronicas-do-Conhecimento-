@@ -103,7 +103,7 @@ function TerminalWorkbench({ labId }: { labId: string }) {
   const [selectedFile, setSelectedFile] = useState('/var/log/relat-01.log');
   const transcriptRef = useRef<HTMLDivElement>(null);
   const progress = useMemo(() => terminalLabProgress(lab, state), [lab, state]);
-  const unitKey = 'laboratorio:' + lab.id;
+  const unitKey = searchParams.get('u') ?? 'laboratorio:' + lab.id;
 
   useEffect(() => {
     try { localStorage.setItem(STORE(labId), JSON.stringify(state)); } catch { /* a sessão continua em memória */ }
