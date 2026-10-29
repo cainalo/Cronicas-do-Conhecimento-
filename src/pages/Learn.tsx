@@ -16,6 +16,7 @@ import { Markdown } from '@/components/Markdown';
 import { ReferenceText } from '@/components/ReferenceText';
 import { Icon } from '@/components/Icon';
 import { TrueFalseCheck } from '@/components/TrueFalseCheck';
+import { goBack } from '@/lib/navigation';
 
 export function LearnPage() {
   const { chapterId = '', sectionId = '' } = useParams();
