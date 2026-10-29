@@ -5,6 +5,7 @@ import { teachers, teacherPosts, type FictionalTeacher } from '@/content/teacher
 import { Icon } from '@/components/Icon';
 import { TeacherAvatar } from '@/components/TeacherAvatar';
 import { PageHeader } from '@/components/Page';
+import { Markdown } from '@/components/Markdown';
 
 type CommunityPost = {
   id: string; teacherId: string; title: string; body: string; publishedAt: string;
@@ -13,6 +14,12 @@ type CommunityPost = {
 type LocalPost = CommunityPost & { liked?: boolean };
 const STORAGE = 'portico:sala-social:v1';
 const MUSIC = ['Lo-fi para concentrar · instrumental', 'Jazz de biblioteca · instrumental', 'Piano de fim de tarde · instrumental', 'Batida leve para estudar · instrumental'];
+const STORY_LINKS: Record<string, { label: string; url: string }> = {
+  'prof.clara': { label: 'Explore porcentagens com exemplos', url: 'https://pt.khanacademy.org/math/arithmetic/arith-review-percentages' },
+  'prof.lia': { label: 'Manual do comando top', url: 'https://man7.org/linux/man-pages/man1/top.1.html' },
+  'prof.davi': { label: 'Leia a especificação do DNS', url: 'https://www.rfc-editor.org/rfc/rfc1034' },
+  'prof.iara': { label: 'Veja os riscos OWASP Top 10', url: 'https://owasp.org/www-project-top-ten/' },
+};
 const STORY_COPY: Record<string, string[]> = {
   'prof.clara': ['Uma questão de porcentagem pode ser uma história sobre uma promoção.', 'Meu desafio de hoje: explique a regra sem usar a fórmula.'],
   'prof.lia': ['Dica de laboratório: antes de encerrar um processo, descubra o que ele está fazendo.', 'Terminal aberto, café ao lado e uma pergunta: o que mudou desde o último comando?'],
@@ -33,6 +40,7 @@ export function SocialFeedPage() {
   const [image, setImage] = useState<string | undefined>();
   const [filter, setFilter] = useState<'todos' | 'professores' | 'comunidade'>('todos');
   const [story, setStory] = useState<FictionalTeacher | null>(null);
+  const [profile, setProfile] = useState<FictionalTeacher | null>(null);
   const [storyIndex, setStoryIndex] = useState(0);
   const [commentsFor, setCommentsFor] = useState<string | null>(null);
   const [comment, setComment] = useState('');
@@ -105,9 +113,9 @@ export function SocialFeedPage() {
     <div className="space-y-4">
       {feed.map((p) => {
         const isMember = p.kind === 'member'; const t = isMember ? null : teacherFor(p.teacherId);
-        return <article key={p.id} className="card overflow-hidden p-0">
+        return <article key={p.id} className="card overflow-hidden p-0" aria-label={p.title}>
           <header className="flex items-center gap-3 p-4">
-            {t ? <button onClick={() => { setStory(t); setStoryIndex(0); }}><TeacherAvatar t={t} size={44}/></button> : <span className="grid h-11 w-11 place-items-center rounded-full bg-ink text-bg text-xs font-bold">Você</span>}
+            {t ? <button onClick={() => setProfile(t)} aria-label={'Ver perfil de ' + t.name}><TeacherAvatar t={t} size={44}/></button> : <span className="grid h-11 w-11 place-items-center rounded-full bg-ink text-bg text-xs font-bold">Você</span>}
             <div className="min-w-0 flex-1"><p className="truncate font-semibold">{t?.name ?? 'Você'} <span className="text-xs font-normal text-muted">{t ? '@'+t.handle : '@comunidade'}</span></p><p className="text-xs text-muted">{t?.expertiseLabel ?? 'Comunidade Pórtico'} · {relativeLabel(p.publishedAt)}</p></div>
             {t && <span className="rounded-full bg-gold/10 px-2 py-1 text-xs text-gold">Professor</span>}
           </header>
@@ -133,12 +141,19 @@ export function SocialFeedPage() {
         <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full border-[22px] border-white/10"/><div className="absolute -bottom-10 -left-8 h-40 w-40 rotate-12 rounded-3xl bg-[#d4a017]/30"/>
         <p className="relative text-xs uppercase tracking-[.2em] opacity-70">Caderno de {story.name.split(' ').at(-1)}</p>
         <p className="relative mt-6 font-title text-3xl leading-tight">{storyItems[storyIndex]}</p>
-        <div className="relative mt-8 rounded-xl border border-white/20 bg-black/15 p-3"><p className="text-xs">Trilha sonora sugerida</p><p className="mt-1 text-sm">{MUSIC[(teachers.findIndex((x) => x.id === story.id) + storyIndex) % MUSIC.length]}</p><button className="mt-2 rounded-full border border-white/30 px-3 py-1 text-xs" onClick={() => setPlayingMusic(!playingMusic)}>{playingMusic ? 'Pausar indicação musical' : 'Selecionar música'}</button><p className="mt-1 text-[10px] opacity-60">A plataforma sugere uma faixa; não reproduz áudio protegido.</p></div>
+        <a href={STORY_LINKS[story.id]?.url} target="_blank" rel="noreferrer" className="relative mt-6 inline-flex max-w-full items-center gap-2 self-start rounded-full bg-[#f7eedf] px-4 py-2 text-sm font-semibold text-[#0f4c5c] underline-offset-2 hover:underline">
+          <Icon name="link" size={16}/>{STORY_LINKS[story.id]?.label}
+        </a>
+        <div className="relative mt-5 rounded-xl border border-white/20 bg-black/15 p-3"><p className="text-xs">Trilha sonora sugerida</p><p className="mt-1 text-sm">{MUSIC[(teachers.findIndex((x) => x.id === story.id) + storyIndex) % MUSIC.length]}</p><button className="mt-2 rounded-full border border-white/30 px-3 py-1 text-xs" onClick={() => setPlayingMusic(!playingMusic)}>{playingMusic ? 'Pausar indicação musical' : 'Selecionar música'}</button><p className="mt-1 text-[10px] opacity-60">A plataforma sugere uma faixa; não reproduz áudio protegido.</p></div>
         <p className="relative mt-4 text-xs opacity-80">Perfil fictício · conteúdo demonstrativo</p>
       </div>
       <div className="flex gap-3 py-4"><button className="btn-ghost flex-1 border-white/30 text-[#f7eedf]" onClick={() => setStoryIndex(Math.max(0, storyIndex-1))} disabled={storyIndex===0}>Anterior</button><button className="btn-primary flex-1" onClick={() => storyIndex+1 < storyItems.length ? setStoryIndex(storyIndex+1) : setStory(null)}>{storyIndex+1 < storyItems.length ? 'Próximo story' : 'Concluir'}</button></div>
+      <button className="mx-auto mb-2 flex items-center gap-2 rounded-full border border-white/25 px-4 py-2 text-sm" onClick={() => { setProfile(story); setStory(null); }}>
+        <Icon name="pessoa" size={16}/> Ver perfil e publicações de {story.name.split(' ').at(-1)}
+      </button>
     </div>, document.body
     )}
+    {profile && <TeacherProfileModal teacher={profile} onClose={() => setProfile(null)} />}
     <div className="text-center text-xs text-muted"><Link to="/trilha" className="underline">Voltar à trilha</Link> · Feed de demonstração com personagens fictícios</div>
   </div>;
 }
