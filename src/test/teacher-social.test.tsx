@@ -52,7 +52,7 @@ it('permite seguir um professor e filtrar por quem está sendo seguido', async (
   const follow = screen.getAllByRole('button', { name: 'Seguir', exact: true })[0];
   await user.click(follow);
 
-  const filter = screen.getByRole('button', { name: 'Seguindo', exact: true });
+  const filter = screen.getAllByRole('button', { name: 'Seguindo', exact: true })[0];
   await user.click(filter);
   expect(filter).toHaveAttribute('aria-pressed', 'true');
 });
