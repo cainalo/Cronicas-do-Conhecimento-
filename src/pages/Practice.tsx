@@ -1,7 +1,7 @@
 // Prática de um trecho, no estilo Duolingo: atividades curtas e variadas, painel de resposta embaixo,
 // erros voltam para o fim da fila e o Bubo abre e fecha a rodada com a cena da história.
 import { Portal } from '@/components/Portal';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
@@ -144,7 +144,7 @@ export function PracticePage() {
       </section>
     );
   }
-  return <PracticeRun />;
+  return <PracticeRun key={`${chapterId}:${sectionId}`} />;
 }
 
 function PracticeRun() {
@@ -164,16 +164,37 @@ function PracticeRun() {
     const taught = taughtConcepts(data, learningUnits);
     return concepts.filter((c) => unit.conceptIds.includes(c.id) && taught.has(c.id)).map((c) => ({ term: c.term, definition: c.definition }));
   }, [chapterId, sectionId]); // eslint-disable-line react-hooks/exhaustive-deps
+  const questionHistoryKey = `cronicas:questoes-pratica:${chapterId}:${sectionId}`;
+  const recentQuestionIds = useMemo<string[]>(() => {
+    try {
+      const parsed: unknown = JSON.parse(localStorage.getItem(questionHistoryKey) ?? '[]');
+      return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
+    } catch {
+      return [];
+    }
+  }, [questionHistoryKey]);
   const initial = useMemo(
-    () => (chapter ? buildPractice(chapter, sectionId, questionsForContest(DEFAULT_CONTEST_ID), extras, Math.random, simple, glossary) : []),
-    [chapter, sectionId, extras, simple, glossary],
+    () => (chapter ? buildPractice(chapter, sectionId, questionsForContest(DEFAULT_CONTEST_ID), extras, Math.random, simple, glossary, recentQuestionIds) : []),
+    [chapter, sectionId, extras, simple, glossary, recentQuestionIds],
   );
+  useEffect(() => {
+    const selected = initial.filter((activity) => activity.kind === 'mcq').map((activity) => activity.kind === 'mcq' ? activity.question.id : '');
+    if (!selected.length) return;
+    try {
+      const previous: unknown = JSON.parse(localStorage.getItem(questionHistoryKey) ?? '[]');
+      const previousIds = Array.isArray(previous) ? previous.filter((id): id is string => typeof id === 'string') : [];
+      localStorage.setItem(questionHistoryKey, JSON.stringify([...selected, ...previousIds.filter((id) => !selected.includes(id))].slice(0, 18)));
+    } catch {
+      // Sem armazenamento, a rodada segue variando normalmente em memória.
+    }
+  }, [initial, questionHistoryKey]);
   // Fila, fase e acertos guardados: ao voltar, a prática continua na mesma atividade.
   type Saved = { queue: Activity[]; phase: 'intro' | 'play' | 'done'; firstTry: Record<string, boolean>; total: number };
   const session = useSession<Saved>(
     practiceId(chapterId, sectionId),
     () => ({ queue: initial, phase: 'intro', firstTry: {}, total: initial.length }),
     (s) => (s.phase === 'play' ? `Praticar: atividade ${s.total - s.queue.length + 1} de ${s.total}` : 'Praticar'),
+    { resume: false },
   );
   const { queue, phase } = session.state;
   const firstTry = session.state.firstTry;

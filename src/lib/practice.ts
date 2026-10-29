@@ -62,6 +62,8 @@ export function buildPractice(
   simple?: SimpleSection,
   /** Glossário permitido (reformulação: só conceitos já ensinados). Padrão: o glossário do capítulo. */
   glossary: { term: string; definition: string }[] = chapter.glossary,
+  /** IDs de questões usadas recentemente; as novas são priorizadas sem aumentar a rodada. */
+  recentQuestionIds: string[] = [],
 ): Activity[] {
   const section = chapter.sections.find((s) => s.id === sectionId);
   if (!section) return [];
@@ -151,10 +153,17 @@ export function buildPractice(
     });
   }
 
-  const mcqs: Activity[] = shuffle(
-    bank.filter((q) => q.chapterId === chapter.id && q.sectionId === sectionId),
-    rand,
-  )
+  const sectionQuestions = bank.filter((q) => q.chapterId === chapter.id && q.sectionId === sectionId);
+  const recent = new Set(recentQuestionIds);
+  const unseenQuestions = shuffle(sectionQuestions.filter((q) => !recent.has(q.id)), rand);
+  const seenQuestions = shuffle(sectionQuestions.filter((q) => recent.has(q.id)), rand);
+  const targetQuestionCount = Math.min(simple ? 2 : 3, sectionQuestions.length);
+  // Se houver alternativas suficientes, a visita evita as questões recentes. Quando o banco se esgota,
+  // mistura o que sobrou com as anteriores para manter a quantidade planejada de atividades.
+  const questionPool = unseenQuestions.length >= targetQuestionCount
+    ? unseenQuestions
+    : [...unseenQuestions, ...seenQuestions];
+  const mcqs: Activity[] = questionPool
     .slice(0, 3)
     .map((q) => ({ kind: 'mcq' as const, id: q.id, question: shuffleQuestionAnswers(q, rand) }));
 

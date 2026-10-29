@@ -1,10 +1,7 @@
-// Videoaula carregada só quando a pessoa pede: antes do clique nada vem do YouTube (economiza dados no
-// celular e não rastreia). Mesmo depois de carregar, o vídeo não toca sozinho. Sempre há o link para
-// o original, que é o caminho quando o vídeo não abre aqui dentro.
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Icon } from '@/components/Icon';
 
-/** Identificador do vídeo em endereços do YouTube (watch, youtu.be, embed, shorts). */
+/** Identificador do vídeo em endereços do YouTube (watch, youtu.be, embed, shorts e live). */
 export function youTubeId(url: string): string | undefined {
   try {
     const u = new URL(url.trim());
@@ -20,19 +17,40 @@ export function youTubeId(url: string): string | undefined {
   }
 }
 
-export function VideoEmbed({ url, title, meta }: { url: string; title: string; meta?: string }) {
+export function VideoEmbed({
+  url, title, meta, autoLoad = false, autoPlay = false,
+}: {
+  url: string;
+  title: string;
+  meta?: string;
+  /** Carrega o player ao abrir o componente, sem exigir toque no pôster. */
+  autoLoad?: boolean;
+  /** Tenta iniciar o vídeo automaticamente. O player fica mudo para respeitar as políticas dos navegadores. */
+  autoPlay?: boolean;
+}) {
   const id = youTubeId(url);
-  const [on, setOn] = useState(false);
+  const [on, setOn] = useState(autoLoad);
+  useEffect(() => setOn(autoLoad), [id, autoLoad]);
+
+  const query = new URLSearchParams({
+    rel: '0',
+    playsinline: '1',
+    controls: '1',
+    autoplay: autoPlay ? '1' : '0',
+    mute: autoPlay ? '1' : '0',
+  });
+
   return (
     <figure className="card overflow-hidden">
       {id && on ? (
         <div className="relative aspect-video w-full bg-black">
           <iframe
             className="absolute inset-0 h-full w-full"
-            src={`https://www.youtube-nocookie.com/embed/${id}?rel=0`}
+            src={'https://www.youtube-nocookie.com/embed/' + id + '?' + query.toString()}
             title={title}
-            loading="lazy"
-            allow="encrypted-media; picture-in-picture; fullscreen"
+            loading={autoLoad ? 'eager' : 'lazy'}
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen; clipboard-write; web-share"
+            allowFullScreen
             referrerPolicy="strict-origin-when-cross-origin"
           />
         </div>
@@ -41,7 +59,7 @@ export function VideoEmbed({ url, title, meta }: { url: string; title: string; m
           type="button"
           onClick={() => setOn(true)}
           className="grid aspect-video w-full place-items-center bg-raised text-ink transition hover:bg-surface"
-          aria-label={`Carregar o vídeo: ${title}`}
+          aria-label={'Carregar o vídeo: ' + title}
         >
           <span className="flex flex-col items-center gap-2 px-4 text-center">
             <span className="grid h-14 w-14 place-items-center rounded-full bg-ember text-white">
@@ -51,11 +69,15 @@ export function VideoEmbed({ url, title, meta }: { url: string; title: string; m
             <span className="text-xs text-muted">
               {typeof navigator !== 'undefined' && navigator.onLine === false
                 ? 'Sem internet agora: o vídeo precisa de conexão. As aulas em texto funcionam sem rede.'
-                : 'Só carrega ao tocar e não começa sozinho.'}
+                : 'O vídeo será carregado quando você tocar.'}
             </span>
           </span>
         </button>
-      ) : null}
+      ) : (
+        <div className="grid aspect-video place-items-center bg-raised px-4 text-center text-sm text-muted">
+          Este endereço não parece ser um vídeo do YouTube compatível.
+        </div>
+      )}
       <figcaption className="p-3">
         <p className="font-semibold leading-snug">{title}</p>
         {meta && <p className="text-sm text-muted">{meta}</p>}
@@ -65,8 +87,13 @@ export function VideoEmbed({ url, title, meta }: { url: string; title: string; m
           rel="noopener noreferrer"
           className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-gold underline-offset-2 hover:underline"
         >
-          {id ? 'Não abriu? Ver no site original' : 'Abrir no site original'} <Icon name="seta" size={14} />
+          Abrir no YouTube <Icon name="seta" size={14} />
         </a>
+        {autoPlay && on && (
+          <p className="mt-1 text-xs text-muted">
+            O início automático depende do navegador e da conexão. O vídeo é iniciado sem som; use os controles para ativar o áudio.
+          </p>
+        )}
       </figcaption>
     </figure>
   );

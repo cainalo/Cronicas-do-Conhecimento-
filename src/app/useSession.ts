@@ -5,10 +5,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useStudy } from '@/app/StudyProvider';
 import { clearProgress, readProgress, saveProgress } from '@/lib/checkpoint';
 
-export function useSession<T>(key: string, initial: () => T, label?: (s: T) => string) {
+export function useSession<T>(key: string, initial: () => T, label?: (s: T) => string, options: { resume?: boolean } = {}) {
   const { data, update } = useStudy();
-  const [state, setState] = useState<T>(() => readProgress<T>(data, key) ?? initial());
-  const resumed = useRef(!!readProgress<T>(data, key));
+  const [state, setState] = useState<T>(() => options.resume === false ? initial() : readProgress<T>(data, key) ?? initial());
+  const resumed = useRef(options.resume !== false && !!readProgress<T>(data, key));
   const done = useRef(false);
   const labelRef = useRef(label);
   labelRef.current = label;

@@ -20,6 +20,11 @@ public class MainActivity extends BridgeActivity {
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(ImmersivePlugin.class);
         super.onCreate(savedInstanceState);
+        // Permite a tentativa de autoplay dos vídeos já silenciados no player YouTube.
+        // O navegador ainda pode aplicar suas próprias políticas de reprodução.
+        if (getBridge() != null && getBridge().getWebView() != null) {
+            getBridge().getWebView().getSettings().setMediaPlaybackRequiresUserGesture(false);
+        }
         // Faz o WebView desenhar de borda a borda; com o modo imersivo ativo,
         // o conteúdo ocupa o espaço das barras do sistema, que reaparecem só por gesto.
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
