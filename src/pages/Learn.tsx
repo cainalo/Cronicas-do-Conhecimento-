@@ -2,7 +2,7 @@
 // vocabulário essencial, verificações de compreensão e convite para praticar. O conteúdo completo
 // fica disponível em leitura contínua para aprofundamento.
 import { useEffect, useRef } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { usePrefs } from '@/app/prefs';
 import { useFx } from '@/app/fx';
@@ -41,6 +41,7 @@ function MicroOrSimple() {
 }
 
 function SimpleLearnPage() {
+  const navigate = useNavigate();
   const { chapterId = '', sectionId = '' } = useParams();
   const chapter = getChapter(chapterId);
   const sectionIndex = chapter?.sections.findIndex((section) => section.id === sectionId) ?? -1;
