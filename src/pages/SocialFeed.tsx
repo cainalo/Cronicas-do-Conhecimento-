@@ -36,6 +36,8 @@ export function SocialFeedPage() {
   const [commentsFor, setCommentsFor] = useState<string | null>(null);
   const [comment, setComment] = useState('');
   const [playingMusic, setPlayingMusic] = useState(false);
+  const [teacherLikes, setTeacherLikes] = useState<Record<string, boolean>>({});
+  const [teacherComments, setTeacherComments] = useState<Record<string, { author: string; text: string }[]>>({});
   const teacherFeed: LocalPost[] = teacherPosts.map((p) => ({
     id: p.id, teacherId: p.teacherId, title: p.title, body: p.body,
     publishedAt: p.publishedAt, kind: 'teacher', likes: 12 + p.title.length * 3,
@@ -66,9 +68,11 @@ export function SocialFeedPage() {
     reader.readAsDataURL(file);
   };
   const toggleLike = (id: string) => persist(localPosts.map((p) => p.id === id ? { ...p, liked: !p.liked, likes: Math.max(0, p.likes + (p.liked ? -1 : 1)) } : p));
-  const addComment = (id: string) => {
+  const addComment = (id: string, isMember: boolean) => {
     if (!comment.trim()) return;
-    persist(localPosts.map((p) => p.id === id ? { ...p, comments: [...p.comments, { author: 'Você', text: comment.trim() }] } : p));
+    const item = { author: 'Você', text: comment.trim() };
+    if (isMember) persist(localPosts.map((p) => p.id === id ? { ...p, comments: [...p.comments, item] } : p));
+    else setTeacherComments((old) => ({ ...old, [id]: [...(old[id] ?? []), item] }));
     setComment(''); setCommentsFor(null);
   };
   const storyItems = STORY_COPY[story?.id ?? ''] ?? [];
@@ -109,13 +113,13 @@ export function SocialFeedPage() {
           <div className="space-y-2 px-4 pb-4"><h2 className="font-title text-xl">{p.title}</h2><p className="whitespace-pre-wrap text-sm leading-relaxed">{p.body}</p></div>
           {p.image && <img src={p.image} alt="Imagem compartilhada pela comunidade" className="max-h-[28rem] w-full object-cover"/>}
           <footer className="flex flex-wrap items-center gap-2 border-t border-line p-3">
-            <button className={p.liked ? 'btn-primary text-sm' : 'btn-ghost text-sm'} onClick={() => isMember ? toggleLike(p.id) : setLocalPosts((old) => old)}><Icon name="coracao" size={16}/> {p.likes + (p.liked ? 0 : 0)} · Curtir</button>
-            <button className="btn-ghost text-sm" onClick={() => setCommentsFor(commentsFor === p.id ? null : p.id)}><Icon name="balao" size={16}/> Comentar ({p.comments.length})</button>
+            <button className={(isMember ? p.liked : teacherLikes[p.id]) ? 'btn-primary text-sm' : 'btn-ghost text-sm'} onClick={() => isMember ? toggleLike(p.id) : setTeacherLikes((old) => ({ ...old, [p.id]: !old[p.id] }))}><Icon name="coracao" size={16}/> {p.likes + ((isMember ? p.liked : teacherLikes[p.id]) ? 1 : 0)} · Curtir</button>
+            <button className="btn-ghost text-sm" onClick={() => setCommentsFor(commentsFor === p.id ? null : p.id)}><Icon name="balao" size={16}/> Comentar ({p.comments.length + (teacherComments[p.id]?.length ?? 0)})</button>
             <span className="flex-1"/>
             <button className="btn-ghost text-sm" onClick={() => navigator.clipboard?.writeText(p.title + '\n' + p.body)}><Icon name="fita" size={16}/> Copiar</button>
           </footer>
-          {p.comments.length > 0 && <div className="space-y-2 px-4 pb-3">{p.comments.slice(-3).map((c,i) => <p key={i} className="rounded-lg bg-raised/60 px-3 py-2 text-sm"><strong>{c.author}</strong> {c.text}</p>)}</div>}
-          {commentsFor === p.id && <div className="flex gap-2 px-4 pb-4"><input className="input min-w-0 flex-1" value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Escreva um comentário…" maxLength={400}/><button className="btn-primary" onClick={() => addComment(p.id)}>Enviar</button></div>}
+          {p.comments.length > 0 && <div className="space-y-2 px-4 pb-3">{[...p.comments, ...(teacherComments[p.id] ?? [])].slice(-3).map((c,i) => <p key={i} className="rounded-lg bg-raised/60 px-3 py-2 text-sm"><strong>{c.author}</strong> {c.text}</p>)}</div>}
+          {commentsFor === p.id && <div className="flex gap-2 px-4 pb-4"><input className="input min-w-0 flex-1" value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Escreva um comentário…" maxLength={400}/><button className="btn-primary" onClick={() => addComment(p.id, isMember)}>Enviar</button></div>}
         </article>;
       })}
       {feed.length === 0 && <div className="card p-6 text-center text-sm text-muted">Ainda não há publicações neste filtro.</div>}
