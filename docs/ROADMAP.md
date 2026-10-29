@@ -26,3 +26,15 @@
 ## Roteiro da auditoria (24/10/2026, docs/auditoria/09_ROADMAP_FASEADO.md)
 - ✅ Fase 0 baseline · ✅ Fase 1 trilha única e retomada · ✅ Fase 2 piloto Processos (aguarda aprovação) · ✅ Fase 4 livro sem rolagem
 - 🔄 Fase 3 migração por lotes (grimório de Infraestrutura completo em microaulas; próximos: Segurança e Dados) · ✅ Fase 5 página Estudos e vídeos (curadoria de vídeos pendente de conferência) · ✅ P1-14 ordem do dia na trilha única · ✅ página não encontrada e Conta em modo local · ✅ volumes separados · ✅ recuperação adaptativa na Prática · ⬜ Fase 6 polimento visual/áudio · ⬜ Fase 7 auditoria total de conteúdo e release
+
+
+## Pórtico — professores, trilha e vídeo (29/10/2026)
+- [x] Substituir a página principal da Sala dos Professores por um feed social simulado.
+- [x] Criar perfis/personagens de oito docentes, stories com música sugerida e referências externas, e posts de texto/foto/carrossel/vídeo.
+- [x] Inserir uma perspectiva profissional complementar dentro de cada microaula antes da prática.
+- [x] Expandir a videoaula com resumo, caderno, marcas temporais digitadas, reflexão e exportação Markdown.
+- [x] Aplicar recortes rasterizados da identidade original do Pórtico no cabeçalho.
+- [x] Corrigir saídas prioritárias para retornar ao histórico anterior do app.
+- [ ] Confirmar build, suíte de testes e E2E visual depois do último commit.
+- [ ] Validar o emblema em ícones do PWA e do Android, em várias densidades.
+- [ ] Tornar o feed multiusuário com backend, autenticação e RLS; até lá, manter a simulação local explicitamente identificada.
