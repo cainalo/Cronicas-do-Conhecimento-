@@ -11,6 +11,7 @@ import { beatIndexOf, narrationPositions, nextBeat, positionAtBeat, revealOf, tr
 import { Icon } from '@/components/Icon';
 import { PorticoWordmark } from '@/components/Logo';
 import { Illustration, type IllustrationName } from '@/components/Illustration';
+import { goBack } from '@/lib/navigation';
 
 const RATES = [0.8, 1, 1.2] as const;
 const VOICE_LABEL = { gemini: 'voz neural Gemini · áudio gerado por IA', nativa: 'voz pt-BR priorizada do aparelho (neural/natural quando instalada)', navegador: 'voz pt-BR priorizada do navegador (neural/natural quando disponível)', nenhuma: 'sem voz neste aparelho: legendas no tempo de leitura' } as const;
@@ -45,7 +46,7 @@ export function NarratedPage() {
   if (!l) {
     return <div className="p-5"><h1 className="text-xl">Aula narrada não encontrada</h1><Link to="/trilha" className="btn-ghost mt-3 w-full">Voltar à trilha</Link></div>;
   }
-  return <NarratedPlayer key={l.id} l={l} embedded onClose={() => navigate('/trilha')} exitLabel="Voltar à trilha" />;
+  return <NarratedPlayer key={l.id} l={l} embedded onClose={() => goBack(navigate, '/trilha')} exitLabel="Voltar à página anterior" />;
 }
 
 export function NarratedPlayer({
