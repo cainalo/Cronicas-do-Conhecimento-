@@ -1,6 +1,7 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useStudy } from '@/app/StudyProvider';
+import { goBack } from '@/lib/navigation';
 import { logUnit } from '@/lib/pace';
 import { AREAS, areaOf, isAreaHome, type AreaKey } from '@/app/areas';
 import { useCheckpoint } from '@/app/useCheckpoint';
@@ -121,7 +122,7 @@ export function Layout() {
             {inner ? (
               <button
                 type="button"
-                onClick={() => (window.history.length > 1 ? navigate(-1) : navigate(AREAS[areaOf(pathname)].to))}
+                onClick={() => goBack(navigate, AREAS[areaOf(pathname)].to)}
                 className="-ml-2 grid h-10 w-10 shrink-0 place-items-center rounded-full text-ink transition hover:bg-ink/5"
                 aria-label="Voltar"
               >
@@ -173,7 +174,7 @@ export function Layout() {
           ))}
         </nav>
       </header>}
-      <main className={standaloneNarration ? 'h-dvh min-h-0 w-full overflow-hidden p-0' : `mx-auto w-full flex-1 px-4 sm:px-6 ${/^\/(capitulo|aprender)\//.test(pathname) ? 'max-w-3xl lg:max-w-6xl' : 'max-w-3xl'} ${immersive ? 'pb-3 pt-4 safe-top-content' : 'pb-32 pt-5 lg:pb-12'}`}>
+      <main className={standaloneNarration ? 'h-dvh min-h-0 w-full overflow-hidden p-0' : `mx-auto w-full flex-1 px-4 sm:px-6 ${/^\/(capitulo|aprender)\//.test(pathname) ? 'max-w-3xl lg:max-w-6xl' : /^\/video\//.test(pathname) ? 'max-w-6xl' : 'max-w-3xl'} ${immersive ? 'pb-3 pt-4 safe-top-content' : 'pb-32 pt-5 lg:pb-12'}`}>
         <div key={pathname} className={standaloneNarration ? 'h-full min-h-0 w-full' : 'page-enter'}>
           <Outlet />
         </div>
