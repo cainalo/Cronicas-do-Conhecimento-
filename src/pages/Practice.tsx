@@ -1,6 +1,6 @@
 // Prática de um trecho: atividades curtas e variadas, correção explicada e recuperação dos erros.
 import { Portal } from '@/components/Portal';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
@@ -27,7 +27,7 @@ function shuffle<T>(a: T[]): T[] {
 
 const choiceCls = (state: 'idle' | 'sel' | 'ok' | 'bad' | 'dim') =>
   ({
-    idle: 'border-line bg-surface hover:bg-raised/60',
+    idle: 'border-line bg-surface hover:border-gold/60 hover:bg-raised/60',
     sel: 'border-[#2c5f6e] bg-[#2c5f6e]/10 shadow-[inset_0_0_0_1px_#2c5f6e]',
     ok: 'border-ok bg-ok/10',
     bad: 'border-bad bg-bad/10',
@@ -118,6 +118,14 @@ function Pairs({ a, onDone }: { a: Extract<Activity, { kind: 'pairs' }>; onDone:
   );
 }
 
+const RECENT_KEY = (chapterId: string, sectionId: string) => 'cronicas:pratica:questoes-recentes:' + chapterId + ':' + sectionId;
+function loadRecentQuestionIds(key: string): string[] {
+  try {
+    const value: unknown = JSON.parse(localStorage.getItem(key) ?? '[]');
+    return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+  } catch { return []; }
+}
+
 /** Gate da trilha (reformulação, Fase 3): a Prática só abre depois do Aprender do mesmo trecho. */
 export function PracticePage() {
   const { chapterId = '', sectionId = '' } = useParams();
@@ -162,16 +170,23 @@ function PracticeRun() {
     const taught = taughtConcepts(data, learningUnits);
     return concepts.filter((c) => unit.conceptIds.includes(c.id) && taught.has(c.id)).map((c) => ({ term: c.term, definition: c.definition }));
   }, [chapterId, sectionId]); // eslint-disable-line react-hooks/exhaustive-deps
+  const recentKey = RECENT_KEY(chapterId, sectionId);
+  const previousQuestionIds = useMemo(() => loadRecentQuestionIds(recentKey), [recentKey]);
   const initial = useMemo(
-    () => (chapter ? buildPractice(chapter, sectionId, questionsForContest(DEFAULT_CONTEST_ID), Math.random, simple, glossary) : []),
-    [chapter, sectionId, simple, glossary],
+    () => (chapter ? buildPractice(chapter, sectionId, questionsForContest(DEFAULT_CONTEST_ID), Math.random, simple, glossary, previousQuestionIds) : []),
+    [chapter, sectionId, simple, glossary, previousQuestionIds],
   );
+  useEffect(() => {
+    const ids = initial.flatMap((item) => item.kind === 'mcq' ? [item.question.id] : []);
+    try { localStorage.setItem(recentKey, JSON.stringify(ids)); } catch { /* a rotação aleatória continua funcionando */ }
+  }, [initial, recentKey]);
   // Fila, fase e acertos guardados: ao voltar, a prática continua na mesma atividade.
   type Saved = { queue: Activity[]; phase: 'intro' | 'play' | 'done'; firstTry: Record<string, boolean>; total: number };
   const session = useSession<Saved>(
     practiceId(chapterId, sectionId),
     () => ({ queue: initial, phase: 'intro', firstTry: {}, total: initial.length }),
     (s) => (s.phase === 'play' ? `Praticar: atividade ${s.total - s.queue.length + 1} de ${s.total}` : 'Praticar'),
+    { resume: false },
   );
   const { queue, phase } = session.state;
   const firstTry = session.state.firstTry;
@@ -343,7 +358,7 @@ function PracticeRun() {
                     <span key={i}>
                       {part}
                       {i < arr.length - 1 && (
-                        <span className={`mx-1 inline-block min-w-[4rem] rounded-lg border-b-2 px-2 text-center ${value ? 'border-[#2c5f6e] text-[#2c5f6e]' : 'border-muted text-transparent'}`}>{value ?? '____'}</span>
+                        <span className={`mx-1 inline-block min-w-[4rem] rounded-lg border-b-2 px-2 text-center ${value ? 'border-gold text-gold' : 'border-muted text-transparent'}`}>{value ?? '____'}</span>
                       )}
                     </span>
                   ))}
@@ -413,7 +428,7 @@ function PracticeRun() {
                           type="button"
                           disabled={!!verdict}
                           onClick={() => setSentenceIndexes((current) => current.filter((_, i) => i !== slot))}
-                          className="rounded-lg bg-[#2e7182] px-2.5 py-2 text-sm font-semibold text-white shadow-sm"
+                          className="rounded-lg bg-gold px-2.5 py-2 text-sm font-semibold text-ink shadow-sm"
                           aria-label={`Remover palavra ${act.words[wordIndex]}`}
                         >
                           {act.words[wordIndex]} <span aria-hidden="true" className="ml-1 opacity-70">×</span>
@@ -431,7 +446,7 @@ function PracticeRun() {
                         type="button"
                         disabled={selected || !!verdict}
                         onClick={() => setSentenceIndexes((current) => [...current, i])}
-                        className={`min-h-11 rounded-xl border-2 px-2 py-2 text-left text-sm font-medium transition ${selected ? 'border-line bg-raised/50 opacity-35' : 'border-line bg-surface hover:border-[#c8402a] hover:bg-[#f3d7ca]/50'}`}
+                        className={`min-h-11 rounded-xl border-2 px-2 py-2 text-left text-sm font-medium transition ${selected ? 'border-line bg-raised/50 opacity-35' : 'border-line bg-surface hover:border-gold hover:bg-gold/10'}`}
                       >
                         {word}
                       </button>
@@ -439,7 +454,7 @@ function PracticeRun() {
                   })}
                 </div>
                 {sentenceIndexes.length > 0 && !verdict && (
-                  <button type="button" className="mt-3 text-sm font-semibold text-[#c8402a] underline" onClick={() => setSentenceIndexes([])}>
+                  <button type="button" className="mt-3 text-sm font-semibold text-gold underline" onClick={() => setSentenceIndexes([])}>
                     Recomeçar frase
                   </button>
                 )}
@@ -448,7 +463,14 @@ function PracticeRun() {
 
             {act.kind === 'mcq' && (
               <>
-                <p className="text-sm font-semibold text-muted">Questão no estilo da prova</p>
+                <p className="text-sm font-semibold text-muted">
+                  {act.question.origin === 'gerada-nao-revisada'
+                    ? 'Questão de fixação gerada automaticamente'
+                    : act.question.origin === 'oficial'
+                      ? 'Questão oficial'
+                      : 'Questão autoral no estilo da prova'}
+                </p>
+                {act.question.origin === 'gerada-nao-revisada' && <p className="mb-2 text-xs text-muted">Item derivado do glossário do trecho; ainda não revisado por especialista.</p>}
                 <QuestionStem text={act.question.stem} className="mb-4 mt-2" />
                 <Choices
                   options={act.question.options.map((o) => o.key)}

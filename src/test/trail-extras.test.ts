@@ -61,3 +61,13 @@ describe('trilha com todos os materiais', () => {
     expect(unitDone(logUnit(emptyData(), u.key), u)).toBeTruthy();
   });
 });
+
+
+it('distribui laboratório de código, laboratório de terminal e fases do escritório em pontos relevantes da trilha', () => {
+  expect(units.some((u) => u.kind === 'laboratorio' && u.to.startsWith('/laboratorio-codigo'))).toBe(true);
+  expect(units.some((u) => u.kind === 'laboratorio' && u.to.startsWith('/laboratorio/rede'))).toBe(true);
+  expect(units.some((u) => u.kind === 'laboratorio' && u.to.startsWith('/laboratorio/processos'))).toBe(true);
+  expect(units.some((u) => u.kind === 'escritorio' && u.to.includes('fase=triagem'))).toBe(true);
+  expect(units.some((u) => u.kind === 'escritorio' && u.to.includes('fase=diagnostico'))).toBe(true);
+  expect(units.some((u) => u.kind === 'escritorio' && u.to.includes('fase=resolucao'))).toBe(true);
+});

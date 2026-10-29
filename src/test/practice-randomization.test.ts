@@ -83,3 +83,18 @@ describe('variação das atividades de prática', () => {
     expect(build.answer.every((word) => build.words.includes(word))).toBe(true);
   });
 });
+
+
+it('amplia o banco candidato com itens de fixação e prioriza questões ainda não vistas', () => {
+  const first = buildPractice(chapter, 'fundamentos', [], Math.random);
+  const firstIds = first.flatMap((activity) => activity.kind === 'mcq' ? [activity.question.id] : []);
+  expect(firstIds).toHaveLength(3);
+  expect(new Set(firstIds).size).toBe(3);
+  expect(first.some((activity) => activity.kind === 'mcq' && activity.question.origin === 'gerada-nao-revisada')).toBe(true);
+
+  const second = buildPractice(chapter, 'fundamentos', [], Math.random, undefined, undefined, firstIds);
+  const secondIds = second.flatMap((activity) => activity.kind === 'mcq' ? [activity.question.id] : []);
+  expect(secondIds).toHaveLength(3);
+  expect(secondIds.some((id) => firstIds.includes(id))).toBe(false);
+  expect(secondIds.length).toBe(firstIds.length);
+});

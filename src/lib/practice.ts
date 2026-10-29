@@ -61,6 +61,7 @@ export function buildPractice(
   simple?: SimpleSection,
   /** Glossário permitido (reformulação: só conceitos já ensinados). Padrão: o glossário do capítulo. */
   glossary: { term: string; definition: string }[] = chapter.glossary,
+  previousQuestionIds: string[] = [],
 ): Activity[] {
   const section = chapter.sections.find((s) => s.id === sectionId);
   if (!section) return [];
@@ -142,11 +143,41 @@ export function buildPractice(
     });
   }
 
-  const mcqs: Activity[] = shuffle(
-    bank.filter((q) => q.chapterId === chapter.id && q.sectionId === sectionId),
-    rand,
-  )
-    .slice(0, 3)
+  // Banco de revisão ampliado com itens de fixação derivados do glossário (marcados como não revisados).
+  const uniqueTerms = Array.from(new Map(
+    glossary.filter((item) => item.term.trim() && item.definition.trim())
+      .map((item) => [item.term.trim().toLocaleLowerCase('pt-BR'), { term: item.term.trim(), definition: item.definition.trim() }]),
+  ).values());
+  const letters = ['A', 'B', 'C', 'D', 'E'] as const;
+  const contestId = bank[0]?.contestId ?? 'concurso-local';
+  const generated: Question[] = uniqueTerms.flatMap((target) => [0, 1, 2].map((variant) => {
+    const distractors = shuffle(uniqueTerms.filter((item) => item.term !== target.term), rand).slice(0, 4);
+    const choices = shuffle([target, ...distractors], rand);
+    const options = choices.map((item, index) => ({
+      key: letters[index] as Question['options'][number]['key'],
+      text: item.term,
+      comment: item.term === target.term ? 'Correto. ' + target.definition : 'Este termo significa: ' + item.definition,
+    }));
+    const answer = options.find((option) => option.text === target.term)?.key ?? 'A';
+    const slug = target.term.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    return {
+      id: 'auto:' + chapter.id + ':' + sectionId + ':' + slug + ':' + variant,
+      contestId, topicId: chapter.topicIds[0] ?? 'geral', chapterId: chapter.id, sectionId,
+      origin: 'gerada-nao-revisada', review: 'nao-revisado',
+      difficulty: variant === 0 ? 1 : variant === 1 ? 2 : 3,
+      stem: (variant === 0 ? 'Qual termo corresponde à definição abaixo?' : variant === 1 ? 'Que conceito melhor descreve esta ideia?' : 'Escolha o conceito correspondente à descrição:') + '\n\n' + target.definition,
+      options, answer,
+      explanation: 'A definição descreve ' + target.term + ': ' + target.definition,
+    } as Question;
+  }));
+  const original = shuffle(bank.filter((q) => q.chapterId === chapter.id && q.sectionId === sectionId), rand);
+  const candidates = [...original, ...shuffle(generated, rand)];
+  const recent = new Set(previousQuestionIds);
+  const pool = recent.size
+    ? [...shuffle(candidates.filter((q) => !recent.has(q.id)), rand), ...shuffle(candidates.filter((q) => recent.has(q.id)), rand)]
+    : candidates;
+  const questionCount = simple ? 2 : 3;
+  const mcqs: Activity[] = pool.slice(0, questionCount)
     .map((q) => ({ kind: 'mcq' as const, id: q.id, question: shuffleQuestionAnswers(q, rand) }));
 
   // Aquecimento bem fácil, tirado da explicação simples: verdadeiro ou falso e palavras novas.

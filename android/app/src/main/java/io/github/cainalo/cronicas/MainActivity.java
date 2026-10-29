@@ -20,6 +20,10 @@ public class MainActivity extends BridgeActivity {
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(ImmersivePlugin.class);
         super.onCreate(savedInstanceState);
+        // Permite que o player das videoaulas tente autoplay sem som dentro do WebView.
+        if (bridge != null && bridge.getWebView() != null) {
+            bridge.getWebView().getSettings().setMediaPlaybackRequiresUserGesture(false);
+        }
         // Faz o WebView desenhar de borda a borda; com o modo imersivo ativo,
         // o conteúdo ocupa o espaço das barras do sistema, que reaparecem só por gesto.
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);

@@ -45,7 +45,7 @@ export function NarratedPage() {
   if (!l) {
     return <div className="p-5"><h1 className="text-xl">Aula narrada não encontrada</h1><Link to="/trilha" className="btn-ghost mt-3 w-full">Voltar à trilha</Link></div>;
   }
-  return <NarratedPlayer key={l.id} l={l} embedded onClose={() => navigate('/aprender/' + l.chapterId + '/' + l.sectionId + '/' + l.lessonId)} exitLabel="Voltar ao Aprender" />;
+  return <NarratedPlayer key={l.id} l={l} embedded onClose={() => navigate('/trilha')} exitLabel="Voltar à trilha" />;
 }
 
 export function NarratedPlayer({

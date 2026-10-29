@@ -534,6 +534,17 @@ export const trailExtras: TrailExtras = {
   },
   hasCards: (chapterId) => flashcards.some((f) => f.chapterId === chapterId),
   practicalFor: (chapterId, sectionId) => {
+    // Aplicações práticas em outros trechos de fundamentos e infraestrutura.
+    if (chapterId === 'cap.prim.01' && /program|computador/i.test(sectionId)) return [
+      { id: 'codigo-fundamentos', kind: 'laboratorio' as const, title: 'Laboratório de código: primeiros passos', to: '/laboratorio-codigo' },
+    ];
+    if (/^cap\.(prim\.02|infra\.01)/.test(chapterId) && /(rede|tcp|ip|prot|servic)/i.test(sectionId)) return [
+      { id: 'rede-' + sectionId, kind: 'laboratorio' as const, title: 'Laboratório: rede e serviços', to: '/laboratorio/rede' },
+    ];
+    if (/^cap\.(prim|infra)/.test(chapterId) && /(process|arquiv|shell|diretorio|permiss)/i.test(sectionId) && chapterId !== 'cap.infra.03') {
+      const labId = /process/i.test(sectionId) ? 'processos' : /arquiv/i.test(sectionId) ? 'arquivos' : /diretorio|servic|rede/i.test(sectionId) ? 'rede' : 'shell';
+      return [{ id: labId + '-' + chapterId, kind: 'laboratorio' as const, title: 'Laboratório prático: ' + ({ processos: 'processos e recursos', arquivos: 'arquivos e logs', rede: 'rede e serviços', shell: 'shell e permissões' }[labId]), to: '/laboratorio/' + labId }];
+    }
     if (chapterId === 'cap.devops.01' && sectionId === 'git') return [
       { id: 'git', kind: 'laboratorio' as const, title: 'Laboratório prático: Git e histórico', to: '/laboratorio/git' },
     ];
