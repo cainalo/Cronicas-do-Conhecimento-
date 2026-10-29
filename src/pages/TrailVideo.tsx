@@ -71,7 +71,7 @@ function VideoStudyPage({ video, checkpointTo }: { video: (typeof curatedVideos)
   const addMoment = () => {
     const text = momentDraft.trim();
     if (!text || !/^\d{1,2}:\d{2}$/.test(timeDraft.trim())) return;
-    const [minutes, seconds] = timeDraft.trim().split(':').map(Number);
+    const seconds = Number(timeDraft.trim().split(':')[1]);
     if (seconds > 59) return;
     setMoments((old) => [...old, { id: String(Date.now()), time: timeDraft.trim(), text }].sort((a, b) => timeInSeconds(a.time) - timeInSeconds(b.time)));
     setMomentDraft('');

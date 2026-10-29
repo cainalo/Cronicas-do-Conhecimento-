@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getChapter, teacherPosts, teachers } from '@/content';
-import type { TeacherPost, FictionalTeacher } from '@/content/teachers';
+import type { FictionalTeacher } from '@/content/teachers';
 import { PageHeader } from '@/components/Page';
 import { TeacherAvatar } from '@/components/TeacherAvatar';
 import { Markdown } from '@/components/Markdown';
@@ -46,7 +46,6 @@ export function TrailTeacherPostPage() {
   const teacher = teacherFor(post.teacherId);
   const liked = state.liked.includes(post.id);
   const saved = state.saved.includes(post.id);
-  const answered = post.challenge ? state.answers[post.id] === post.challenge.answer : false;
   const chooseAnswer = (value: boolean) => {
     setAnswer(value);
     setState((old) => ({ ...old, answers: { ...old.answers, [post.id]: value } }));
