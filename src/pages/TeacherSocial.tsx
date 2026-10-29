@@ -44,15 +44,17 @@ const daily: Array<{authorId:string;text:string;art:IllustrationName;tags:string
  {authorId:'prof.joana',text:'Antes de escrever SQL, formule a pergunta em linguagem comum: quais linhas quero, quais condições devem cumprir e como vou ordenar o resultado? Depois transforme cada decisão numa cláusula.',art:'computador',tags:['SQL','Dados']},
 ];
 const dayKey = (d:Date) => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-function dailyPost(date:Date,offset:number):Post {
- const dayNumber=Math.floor(date.getTime()/86400000); const idx=((dayNumber%daily.length)+daily.length)%daily.length; const seed=daily[idx];
- return {id:'daily:'+dayKey(date),authorId:seed.authorId,createdAt:new Date(date.getFullYear(),date.getMonth(),date.getDate(),8+offset%4,15+(offset*7)%40).toISOString(),kind:'texto',text:seed.text,art:seed.art,tags:seed.tags,likes:12+offset*5,liked:false,comments:[]};
+function dailyPost(date:Date,offset:number,slot:number):Post {
+ const dayNumber=Math.floor(date.getTime()/86400000);
+ const idx=((dayNumber+slot*3)%daily.length+daily.length)%daily.length;
+ const seed=daily[idx];
+ return {id:'daily:'+dayKey(date)+':'+slot,authorId:seed.authorId,createdAt:new Date(date.getFullYear(),date.getMonth(),date.getDate(),8+slot*3,15+(offset*7+slot*11)%40).toISOString(),kind:'texto',text:seed.text,art:seed.art,tags:seed.tags,likes:12+offset*5+slot*3,liked:false,comments:[]};
 }
 function readState():FeedState {
  let saved:FeedState|undefined;
  try { const value=JSON.parse(localStorage.getItem(STORAGE)??'null') as Partial<FeedState>|null; if(value&&Array.isArray(value.posts)&&Array.isArray(value.following)) saved={posts:value.posts,following:value.following}; } catch { /* inicia feed */ }
  const posts=saved?.posts??[]; const ids=new Set(posts.map((x)=>x.id)); const now=new Date();
- for(let offset=7;offset>=0;offset--){const date=new Date(now.getFullYear(),now.getMonth(),now.getDate()-offset,8);const id='daily:'+dayKey(date);if(!ids.has(id))posts.push(dailyPost(date,offset));}
+ for(let offset=7;offset>=0;offset--){const date=new Date(now.getFullYear(),now.getMonth(),now.getDate()-offset,8);for(let slot=0;slot<3;slot++){const id='daily:'+dayKey(date)+':'+slot;if(!ids.has(id))posts.push(dailyPost(date,offset,slot));}}
  return {posts,following:saved?.following??[]};
 }
 function timeAgo(iso:string){const m=Math.max(0,Math.floor((Date.now()-new Date(iso).getTime())/60000));if(m<1)return 'agora';if(m<60)return 'há '+m+' min';if(m<1440)return 'há '+Math.floor(m/60)+' h';const d=Math.floor(m/1440);return d===1?'ontem':'há '+d+' dias';}
