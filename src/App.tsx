@@ -37,6 +37,7 @@ import { TrailVideoPage } from '@/pages/TrailVideo';
 import { CustomizePage } from '@/pages/Customize';
 import { ScenarioListPage, ScenarioPage } from '@/pages/Scenarios';
 import { TeachersRoomPage } from '@/pages/TeachersRoom';
+import { SocialFeedPage } from '@/pages/SocialFeed';
 import { WorldPage } from '@/pages/World';
 import { ProgrammingLabPage } from '@/pages/ProgrammingLab';
 import { NarratedPage } from '@/pages/Narrated';
@@ -61,7 +62,7 @@ export function AppRoutes() {
         <Route path="personalizar" element={<CustomizePage />} />
         <Route path="simulador" element={<ScenarioListPage />} />
         <Route path="simulador/:id" element={<ScenarioPage />} />
-        <Route path="sala" element={<TeachersRoomPage />} />
+        <Route path="sala" element={<SocialFeedPage />} />
         <Route path="escritorio" element={<WorldPage />} />
         <Route path="laboratorio-codigo" element={<ProgrammingLabPage />} />
         <Route path="laboratorio-programacao" element={<ProgrammingLabPage />} />
