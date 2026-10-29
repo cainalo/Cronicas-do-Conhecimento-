@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
-import { AppRoutes } from '@/App';
+import { TeachersRoomPage } from '@/pages/TeachersRoom';
 import { feedLessons, feedPostsOf, microLessons } from '@/content';
 import { emptyFeed, lessonAnswered, lessonUnlocked } from '@/lib/feed';
 import { loadData, saveData } from '@/lib/storage';
@@ -18,7 +18,7 @@ function renderAt(path: string) {
     <PrefsProvider>
       <StudyProvider>
         <MemoryRouter initialEntries={[path]}>
-          <AppRoutes />
+          <TeachersRoomPage />
         </MemoryRouter>
       </StudyProvider>
     </PrefsProvider>,
