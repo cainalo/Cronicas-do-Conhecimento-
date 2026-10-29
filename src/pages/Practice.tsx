@@ -281,6 +281,7 @@ function PracticeRun() {
         <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={exit} aria-label="Sair da prática">
           <Icon name="errado" size={22} />
         </button>
+        <TeacherAvatar t={teacherForChapter(chapterId)} size={32} />
         <div className="h-3.5 flex-1 overflow-hidden rounded-full bg-raised">
           <div className="h-full rounded-full bg-ok transition-all duration-500" style={{ width: `${progress * 100}%` }} />
         </div>
