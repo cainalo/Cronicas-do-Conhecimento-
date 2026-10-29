@@ -22,6 +22,7 @@ it('carrega o player da videoaula dedicada automaticamente e permite anotações
   expect(iframe?.getAttribute('src')).toContain('autoplay=1');
   expect(iframe?.getAttribute('src')).toContain('mute=1');
   expect(screen.getByRole('heading', { name: 'O que observar' })).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: 'Anotações' }));
   await user.type(screen.getByLabelText('Anotações desta videoaula'), 'Rever os conceitos principais.');
   await waitFor(() => expect(localStorage.getItem('cronicas:video-notas:yt-JdSTF0iYYhI-cap-prim-01')).toBe('Rever os conceitos principais.'));
   await user.click(screen.getByRole('button', { name: 'Marcar como assistida' }));
