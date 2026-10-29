@@ -84,3 +84,10 @@
 .ccv-film-header {
   padding-right: clamp(3.25rem, 5vw, 3.75rem);
 }
+
+/* Em telas baixas, reserva altura extra para separar a legenda dos controles de reprodução. */
+@media (max-height: 640px) {
+  .ccv-film-scene {
+    padding-bottom: calc(9rem + env(safe-area-inset-bottom, 0px));
+  }
+}
