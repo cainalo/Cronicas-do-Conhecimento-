@@ -409,7 +409,16 @@ mark.search-hit { background: rgb(var(--sun) / 0.35); color: inherit; border-rad
 .term-link { font-weight: 650; color: rgb(var(--teal)); text-decoration: underline; text-decoration-style: dotted; text-decoration-thickness: 1.5px; text-underline-offset: 4px; border-radius: 3px; padding: 0 1px; transition: background-color 0.2s ease; }
 .term-link:hover { background: rgb(var(--teal) / 0.1); }
 
-/* ---------- Barras de navegação (nomes antigos mantidos) ---------- */
+
+/* Barra de navegação Pórtico: marca vetorial centralizada, perfil à direita e menu inferior. */
+.app-bar { background-color: rgb(var(--bg) / 0.94); color: rgb(var(--ink)); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.app-bar-top { border-bottom: 1px solid rgb(var(--line)); }
+.app-bar-bottom { border-top: 1px solid rgb(var(--line)); }
+.app-bar-top, .app-bar-bottom { transition: transform 240ms cubic-bezier(.2,.7,.2,1), opacity 180ms ease; will-change: transform; }
+.app-bar-top.is-scroll-hidden { transform: translate3d(0,-110%,0); opacity: 0; pointer-events: none; }
+.app-bar-bottom.is-scroll-hidden { transform: translate3d(0,110%,0); opacity: 0; pointer-events: none; }
+main.safe-top-content { padding-top: calc(env(safe-area-inset-top, 0px) + 1.5rem) !important; }
+\n/* ---------- Barras de navegação (nomes antigos mantidos) ---------- */
 .wood-bar { background-color: rgb(var(--bg) / 0.92); color: rgb(var(--ink)); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .wood-bar-top { border-bottom: 1px solid rgb(var(--line)); }
 .wood-bar-bottom { border-top: 1px solid rgb(var(--line)); }

@@ -1,202 +1,212 @@
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
-import { DEFAULT_CONTEST_ID, flashcards, getContest, missions, questionsForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, chapters, flashcards, getContest, missions, questionsForContest } from '@/content';
 import { missionDone, missionsDue } from '@/lib/mission';
-import { computePace, daysUntilExam, type Pace } from '@/lib/pace';
 import { reviewQueue } from '@/lib/study';
-import { trailUnits, useCheckpoint } from '@/app/useCheckpoint';
+import { useCheckpoint } from '@/app/useCheckpoint';
 import { dueCards, unlockedCardIds } from '@/lib/training';
 import { isDone, settingsOf } from '@/lib/planner';
-import { characterSheet } from '@/lib/game';
 import { usePlanOfToday } from '@/app/usePlanOfToday';
 import { areaColor } from '@/app/areas';
 import { DisciplineSummary } from './Progress';
-import { ProgressRing } from '@/components/ProgressRing';
-import { FeasibilityCard } from '@/components/FeasibilityCard';
 import { AppDownload } from '@/components/AppDownload';
 import { Icon } from '@/components/Icon';
 import { SyncBadge } from '@/components/Layout';
 import { SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
-import { useCountUp } from '@/app/useCountUp';
 
-const longDate = (iso: string, year = false) => {
-  const [y, m, d] = iso.split('-').map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', ...(year ? { year: 'numeric' } : {}) });
-};
+function CompactStat({ label, value, hint, to, color, icon }: { label: string; value: number; hint: string; to: string; color: string; icon: 'chama' | 'cartas' | 'certo' }) {
+  const dark = useIsDark();
+  const foreground = dark ? 'rgb(var(--bg))' : '#ffffff';
 
-/** Ritmo até a prova: meta de hoje, total do curso e quanto falta. */
-export function PaceCard({ pace, examDate }: { pace: Pace; examDate: string }) {
-  const today = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-  const pips = Math.min(pace.perDay, 12);
   return (
-    <section className="card p-4 sm:p-5" aria-label="Ritmo até a prova">
-      <p className="text-sm text-muted first-letter:uppercase">
-        {today}. Faltam <b className="text-ink">{pace.daysLeft} dias</b> para a prova ({longDate(examDate, true)}).
-      </p>
-      <h2 className="mt-2 text-xl leading-snug">
-        {pace.remaining === 0 ? 'Todo o curso foi feito. Agora é revisão e simulado.' : pace.leftToday === 0 ? 'Meta de hoje cumprida' : `Meta de hoje: ${pace.perDay} atividade${pace.perDay > 1 ? 's' : ''}`}
-      </h2>
-      {pace.remaining > 0 && (
-        <>
-          <div className="mt-2 flex flex-wrap gap-1.5" aria-label={`${pace.doneToday} de ${pace.perDay} feitas hoje`}>
-            {Array.from({ length: pips }, (_, i) => (
-              <span key={i} className={`h-3 flex-1 rounded-full ${i < pace.doneToday ? 'bg-gold' : 'bg-raised'}`} style={{ minWidth: 14 }} />
-            ))}
-          </div>
-          <p className="mt-1 text-sm">
-            Hoje você fez <b>{pace.doneToday}</b> de {pace.perDay}.{pace.leftToday > 0 ? ` Faltam ${pace.leftToday}.` : ' Se quiser adiantar, o amanhã fica mais leve.'}
-          </p>
-          <p className="mt-3 text-sm text-muted">
-            O curso inteiro tem <b className="text-ink">{pace.total} atividades</b> (cada trecho tem Aprender e Praticar; cada capítulo tem Desafio; há casos práticos). Você já fez {pace.done} e faltam{' '}
-            {pace.remaining}. Para terminar tudo até {longDate(pace.finishBy)}
-            {pace.studyDays < pace.daysLeft ? ' e usar a última semana para revisão e simulados' : ''}, são {pace.perDay} por dia. Se pular um dia, a meta dos próximos sobe um pouco.
-          </p>
-        </>
-      )}
-    </section>
+    <Link
+      to={to}
+      data-testid={label === 'Questões hoje' ? 'dashboard-stat-questions' : label === 'Para revisar' ? 'dashboard-stat-review' : 'dashboard-stat-flashcards'}
+      className="group min-w-0 rounded-2xl border border-transparent p-3 transition hover:-translate-y-0.5 hover:brightness-95 sm:p-4"
+      style={{ background: color, color: foreground }}
+    >
+      <span className="flex items-center justify-between gap-2">
+        <span className="text-xs font-semibold leading-snug opacity-90">{label}</span>
+        <Icon name={icon} size={17} className="shrink-0 opacity-95" />
+      </span>
+      <span className="mt-2 block text-3xl font-semibold leading-none tabular-nums">{value}</span>
+      <span className="mt-2 block text-xs leading-snug opacity-90">{hint}</span>
+    </Link>
   );
 }
 
 export function Dashboard() {
   const { data, session } = useStudy();
   const dark = useIsDark();
-  const c = (k: Parameters<typeof areaColor>[0]) => areaColor(k, dark);
+  const color = (key: Parameters<typeof areaColor>[0]) => areaColor(key, dark);
+  const foreground = dark ? 'rgb(var(--bg))' : '#ffffff';
   const contest = getContest(DEFAULT_CONTEST_ID)!;
   const bank = questionsForContest(contest.id);
-  const cp = useCheckpoint();
-  const sheet = characterSheet(data);
-  const queue = reviewQueue(data, bank);
+  const checkpoint = useCheckpoint();
+  const questionsToReview = reviewQueue(data, bank).length;
   const cardsDue = dueCards(data, unlockedCardIds(data, flashcards)).length;
-  const localDay = (iso: string) => new Date(iso).toLocaleDateString('sv');
-  const today = localDay(new Date().toISOString());
-  const answeredToday = data.attempts.filter((a) => localDay(a.answeredAt) === today).length;
   const dailyGoal = settingsOf(data).dailyQuestionGoal;
-  const days = daysUntilExam(contest.examDate);
-  const shownDays = useCountUp(days);
-  const pace = computePace(data, trailUnits(), contest.examDate);
+  const today = new Date().toDateString();
+  const answeredToday = data.attempts.filter((attempt) => new Date(attempt.answeredAt).toDateString() === today).length;
   const { plan } = usePlanOfToday();
-  const pending = plan.items.filter((i) => !isDone(i, data, plan.day));
-  const hour = new Date().getHours();
-  const greet = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
+  const pending = plan.items.filter((item) => !isDone(item, data, plan.day));
   const dateLine = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-  // "Você sabia?": um termo de glossário por dia, sempre o mesmo durante o dia.
-  const dayNum = Math.floor(Date.now() / 86400000);
-  const fact = flashcards[dayNum % flashcards.length];
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
+  const flashcard = flashcards.length ? flashcards[Math.floor(Date.now() / 86400000) % flashcards.length] : undefined;
+  const dueMission = (() => {
+    const due = missionsDue(data);
+    return missions.find((mission) => due.includes(mission.id) && missionDone(data, mission.id));
+  })();
+  const totalSections = chapters.reduce((sum, chapter) => sum + chapter.sections.length, 0);
+  const sectionsRead = chapters.reduce((sum, chapter) => sum + Math.min(chapter.sections.length, data.reading[chapter.id]?.sectionsRead.length ?? 0), 0);
+  const progressPercent = totalSections ? Math.round((sectionsRead / totalSections) * 100) : 0;
 
   return (
-    <div className="stagger space-y-8">
-      {/* Cabeçalho editorial: data, saudação e a contagem até a prova em números grandes */}
-      <header aria-label="Saudação" className="border-b border-ink pb-5">
-        <p className="kicker first-letter:uppercase">{dateLine}</p>
-        <div className="mt-1 flex items-end justify-between gap-4">
-          <h1 className="text-[2.2rem] leading-[1.02] sm:text-[2.8rem]">{greet}.</h1>
-          <span className="sm:hidden">
-            <SyncBadge />
-          </span>
+    <div className="stagger space-y-6 pb-4 sm:space-y-8">
+      <header className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="kicker first-letter:uppercase">{dateLine}</p>
+          <h1 className="mt-1 text-[2rem] leading-tight sm:text-[2.6rem]">{greeting}.</h1>
+          <p className="mt-1 text-sm text-muted">Um passo de cada vez. Vamos continuar seus estudos?</p>
         </div>
-        <p className="mt-4 flex items-baseline gap-3">
-          <span className="font-display text-[3.4rem] leading-none tabular-nums text-gold">{shownDays}</span>
-          <span className="text-[0.95rem] leading-snug text-muted">
-            dias até a prova
-            <br />
-            {contest.name}, {longDate(contest.examDate, true)}
-          </span>
-        </p>
-        <p className="mt-3 text-sm text-muted">
-          {sheet.streak ? `${sheet.streak} dia${sheet.streak > 1 ? 's' : ''} seguido${sheet.streak > 1 ? 's' : ''} de estudo` : 'Um pouco de estudo hoje já conta'} · {sheet.xp} pontos
-        </p>
+        <span className="shrink-0 pt-1 sm:hidden"><SyncBadge /></span>
+        <div className="hidden shrink-0 rounded-xl border border-line bg-surface px-3 py-2 sm:block"><SyncBadge /></div>
       </header>
 
-      {/* Próximo passo da trilha: a mesma fonte do Continuar do topo */}
-      <section aria-label="Próximo passo">
-        <p className="kicker">{cp.resuming ? 'Você parou aqui' : cp.action === 'Começar' ? 'Primeiro passo' : 'Próximo passo da trilha'}</p>
-        <h2 className="mt-1 text-[1.5rem] leading-snug">{cp.title}</h2>
-        <p className="mt-1 text-sm text-muted">{cp.context}</p>
-        <Link to={cp.to} className="btn-primary mt-4 w-full sm:w-auto" data-testid="continuar-torre">
-          {cp.action} <Icon name="avancar" size={18} />
-        </Link>
-      </section>
-
-      <PaceCard pace={pace} examDate={contest.examDate} />
-
-      <FeasibilityCard />
-
-      {/* Caso prático com revisão marcada para hoje */}
-      {(() => {
-        const due = missionsDue(data);
-        const m = missions.find((x) => due.includes(x.id) && missionDone(data, x.id));
-        if (!m) return null;
-        return (
-          <Link to={`/missao/${m.id}`} className="card flex items-center gap-4 border-l-2 border-l-gold p-4">
-            <span className="min-w-0 flex-1">
-              <span className="kicker block">Revisão do caso prático marcada para hoje</span>
-              <span className="block font-display text-lg leading-snug">{m.title}</span>
-              <span className="block text-sm text-muted">Objetivos, laboratório de consultas e revisão · {m.minutes} min</span>
-            </span>
-            <Icon name="seta" size={18} />
+      <section
+        className="relative overflow-hidden rounded-3xl border border-transparent p-5 sm:p-6"
+        style={{ background: color('torre'), color: foreground }}
+        aria-label="Continuar estudando"
+        data-testid="dashboard-continuar"
+      >
+        <div className="pointer-events-none absolute -right-6 -top-8 h-36 w-36 rounded-full border-[18px] opacity-20" style={{ borderColor: foreground }} />
+        <p className="kicker" style={{ color: foreground }}>{checkpoint.resuming ? 'Retome de onde parou' : checkpoint.action === 'Começar' ? 'Seu primeiro passo' : 'Próxima atividade'}</p>
+        <h2 className="relative mt-2 max-w-2xl text-2xl font-semibold leading-tight sm:text-3xl" style={{ color: foreground }}>{checkpoint.title}</h2>
+        <p className="relative mt-2 max-w-xl text-sm leading-relaxed opacity-90">{checkpoint.context}</p>
+        <div className="relative mt-5 flex flex-wrap items-center gap-3">
+          <Link
+            to={checkpoint.to}
+            className="btn-primary inline-flex min-h-[46px] items-center justify-center gap-2 px-5"
+            style={{ background: foreground, color: color('torre'), borderColor: foreground }}
+            data-testid="continuar-torre"
+          >
+            <Icon name="play" size={17} fill="currentColor" /> {checkpoint.action} <Icon name="avancar" size={17} />
           </Link>
-        );
-      })()}
+          <Link to="/trilha" className="inline-flex min-h-[42px] items-center gap-1 text-sm font-semibold underline-offset-4 hover:underline opacity-90" style={{ color: foreground }}>
+            Ver trilha <Icon name="avancar" size={15} />
+          </Link>
+        </div>
+      </section>
 
-      {/* Números do dia */}
-      <section aria-label="Números do dia" className="grid grid-cols-3 border-y border-line">
-        <Link to="/plano" className="flex flex-col items-start gap-2 py-4 pr-3">
-          <ProgressRing value={answeredToday / dailyGoal} size={52}>
-            <span className="font-display text-base tabular-nums">{answeredToday}</span>
-          </ProgressRing>
-          <span className="text-xs leading-snug text-muted">
-            de {dailyGoal} questões hoje{plan.restDay ? ' · descanso' : pending.length ? ` · ${pending.length} na ordem do dia` : ''}
-          </span>
+      <section aria-label="Resumo de hoje" className="space-y-3">
+        <div className="flex items-end justify-between gap-3">
+          <h2 className="text-xl font-semibold">Seu dia de estudo</h2>
+          <Link to="/plano" className="text-sm font-semibold text-muted underline-offset-4 hover:underline">Plano completo</Link>
+        </div>
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+          <CompactStat label="Questões hoje" value={answeredToday} hint={`Meta: ${dailyGoal}`} to="/historico" color={color('torre')} icon="certo" />
+          <CompactStat label="Para revisar" value={questionsToReview} hint={questionsToReview ? 'Erros para retomar' : 'Tudo em dia'} to="/revisao" color={color('grimorios')} icon="chama" />
+          <CompactStat label="Cartões de hoje" value={cardsDue} hint={cardsDue ? 'Revisão espaçada' : 'Nenhum pendente'} to="/flashcards" color={color('explorar')} icon="cartas" />
+        </div>
+        <Link
+          to="/plano"
+          className="block rounded-2xl border border-transparent p-4 transition hover:-translate-y-0.5 hover:brightness-95"
+          style={{ background: color('grimorios'), color: foreground }}
+          data-testid="dashboard-plano"
+        >
+          <div className="flex items-center justify-between gap-3">
+            <span className="font-semibold">Plano de hoje</span>
+            <span className="text-sm opacity-90">{plan.restDay ? 'Dia de descanso' : pending.length ? `${pending.length} pendente(s)` : 'Concluído'}</span>
+          </div>
+          <div className="mt-3 h-2 overflow-hidden rounded-full" style={{ background: dark ? 'rgb(0 0 0 / 0.18)' : 'rgb(255 255 255 / 0.24)' }}>
+            <div className="h-full rounded-full transition-[width] duration-500" style={{ width: `${plan.items.length ? Math.round(((plan.items.length - pending.length) / plan.items.length) * 100) : 100}%`, background: foreground }} />
+          </div>
+          <div className="mt-2 flex items-center justify-between gap-2 text-xs opacity-90">
+            <span>{plan.items.length - pending.length} de {plan.items.length} atividades feitas</span>
+            <span className="inline-flex items-center gap-1 font-semibold">Abrir plano <Icon name="avancar" size={14} /></span>
+          </div>
         </Link>
-        <Stat to="/revisao" label="erros a revisar" value={queue.length} />
-        <Stat to="/flashcards" label="cartões para hoje" value={cardsDue} />
       </section>
 
-      <section>
-        <SectionTitle>Atalhos</SectionTitle>
-        <TileGrid>
-          <Tile to="/estudos" icon="livro" color={c('grimorios')} title="Estudos" text="Trilha, livros, atividades rápidas, vídeos e materiais." />
-          <Tile to="/plano" icon="calendario" color={c('treino')} title="Ordem do dia" text="O que estudar hoje, no seu ritmo." badge={plan.restDay ? undefined : `${plan.items.length - pending.length}/${plan.items.length}`} />
-          <Tile to="/simulado" icon="relogio" color={c('treino')} title="Simulado" text="Questões sorteadas com tempo e boletim." />
-          <Tile to="/progresso" icon="progresso" color={c('reino')} title="Progresso" text="Seu domínio em cada disciplina e trecho." />
-        </TileGrid>
-      </section>
-
-      {fact && (
-        <Link to="/flashcards" className="block border-l-2 border-l-gold pl-4">
-          <p className="kicker">Você sabia?</p>
-          <p className="mt-1 font-display text-lg leading-snug">{fact.front}</p>
-          <p className="mt-1 text-sm text-muted">{fact.back}</p>
+      {dueMission && (
+        <Link to={`/missao/${dueMission.id}`} className="flex items-center gap-3 rounded-2xl border border-line bg-surface p-4 transition hover:border-ink/20">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-azure/10 text-azure"><Icon name="trilha" size={23} /></span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-xs font-semibold text-muted">Revisão prática para hoje</span>
+            <span className="mt-1 block font-semibold">{dueMission.title}</span>
+            <span className="mt-1 block text-sm text-muted">Caso aplicado · {dueMission.minutes} min</span>
+          </span>
+          <Icon name="avancar" size={18} className="shrink-0 text-muted" />
         </Link>
       )}
 
-      {!session && (
-        <Link to="/conta/acesso" className="card flex items-center gap-3 p-4">
-          <Icon name="nuvem" size={20} className="shrink-0 text-gold" />
-          <span className="flex-1 text-[0.95rem]">
-            <span className="block font-semibold">Você está como visitante</span>
-            <span className="block text-sm text-muted">Crie uma conta para guardar o progresso no servidor e usar em outros aparelhos.</span>
+
+      <section
+        aria-label="Seu avanço nas matérias"
+        data-testid="dashboard-progress"
+        className="overflow-hidden rounded-2xl border border-transparent p-4 sm:p-5"
+        style={{ background: color('explorar'), color: foreground }}
+      >
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-semibold opacity-90">Sua evolução</p>
+            <h2 className="mt-1 text-lg font-semibold">Você já avançou em {progressPercent}% do conteúdo</h2>
+          </div>
+          <span
+            className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-base font-bold tabular-nums"
+            style={{ background: dark ? 'rgb(0 0 0 / 0.18)' : 'rgb(255 255 255 / 0.22)', color: foreground }}
+          >{progressPercent}%</span>
+        </div>
+        <div className="mt-4 h-2.5 overflow-hidden rounded-full" style={{ background: dark ? 'rgb(0 0 0 / 0.18)' : 'rgb(255 255 255 / 0.24)' }} role="progressbar" aria-label="Conteúdo lido" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progressPercent}>
+          <div className="h-full rounded-full transition-[width] duration-700" style={{ width: `${progressPercent}%`, background: foreground }} />
+        </div>
+        <div className="mt-2 flex items-center justify-between gap-3 text-xs opacity-90">
+          <span>{sectionsRead} de {totalSections} trechos estudados</span>
+          <Link to="/progresso" className="font-semibold underline-offset-4 hover:underline" style={{ color: foreground }}>Ver detalhes <Icon name="avancar" size={13} /></Link>
+        </div>
+      </section>
+
+      <section>
+        <SectionTitle>Continue por aqui</SectionTitle>
+        <TileGrid>
+          <Tile to="/estudos" icon="lista" color={color('explorar')} title="Matérias e materiais" text="Conteúdo por disciplina, vídeos e aulas narradas." index={0} />
+          <Tile to="/simulado" icon="relogio" color={color('treino')} title="Simulado" text="Treine com tempo e veja seu resultado." index={1} />
+          <Tile to="/progresso" icon="progresso" color={color('reino')} title="Progresso" text="Acompanhe o domínio por disciplina." index={2} />
+          <Tile to="/relampago" icon="chama" color={color('grimorios')} title="Rodada rápida" text="Cinco questões para revisar em poucos minutos." index={3} />
+        </TileGrid>
+      </section>
+
+      {flashcard && (
+        <Link to="/flashcards" className="flex items-start gap-3 rounded-2xl border border-line bg-surface p-4 transition hover:border-ink/20">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gold/10 text-gold"><Icon name="estrela" size={20} /></span>
+          <span className="min-w-0 flex-1">
+            <span className="kicker">Uma ideia para levar</span>
+            <span className="mt-1 block font-semibold leading-snug">{flashcard.front}</span>
+            <span className="mt-1 block text-sm leading-relaxed text-muted">{flashcard.back}</span>
           </span>
-          <Icon name="seta" size={18} className="text-muted" />
+          <Icon name="avancar" size={16} className="mt-1 shrink-0 text-muted" />
+        </Link>
+      )}
+
+      <details className="rounded-2xl border border-line bg-surface p-4">
+        <summary className="cursor-pointer font-semibold">Ver domínio por disciplina</summary>
+        <div className="mt-4"><DisciplineSummary /></div>
+      </details>
+
+      {!session && (
+        <Link to="/conta/acesso" className="flex items-center gap-3 rounded-2xl border border-line bg-surface p-4 transition hover:border-ink/20">
+          <Icon name="nuvem" size={21} className="shrink-0 text-gold" />
+          <span className="min-w-0 flex-1">
+            <span className="block font-semibold">Salvar o progresso em outros aparelhos</span>
+            <span className="mt-1 block text-sm text-muted">Crie uma conta para sincronizar seu estudo.</span>
+          </span>
+          <Icon name="avancar" size={17} className="shrink-0 text-muted" />
         </Link>
       )}
 
       <AppDownload compact />
-
-      <section>
-        <SectionTitle action={<Link to="/progresso" className="link-grow text-gold">ver tópicos</Link>}>Domínio por disciplina</SectionTitle>
-        <DisciplineSummary />
-      </section>
+      <p className="text-center text-xs text-muted">Leitura registrada · {sectionsRead} de {totalSections} trechos ({progressPercent}%)</p>
     </div>
-  );
-}
-
-function Stat({ to, label, value }: { to: string; label: string; value: number }) {
-  const n = useCountUp(value);
-  return (
-    <Link to={to} className="flex flex-col justify-between gap-2 border-l border-line py-4 pl-3">
-      <span className="font-display text-[2rem] leading-none tabular-nums">{n}</span>
-      <span className="text-xs leading-snug text-muted">{label}</span>
-    </Link>
   );
 }
