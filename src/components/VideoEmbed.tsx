@@ -32,13 +32,11 @@ export function VideoEmbed({
   const [on, setOn] = useState(autoLoad);
   useEffect(() => setOn(autoLoad), [id, autoLoad]);
 
-  const query = new URLSearchParams({
-    rel: '0',
-    playsinline: '1',
-    controls: '1',
-    autoplay: autoPlay ? '1' : '0',
-    mute: autoPlay ? '1' : '0',
-  });
+  const query = new URLSearchParams({ rel: '0', playsinline: '1', controls: '1' });
+  if (autoPlay) {
+    query.set('autoplay', '1');
+    query.set('mute', '1');
+  }
 
   return (
     <figure className="card overflow-hidden">

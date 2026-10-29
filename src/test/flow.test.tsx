@@ -231,7 +231,7 @@ it('retomada exata: Aprender e Missão voltam ao mesmo ponto depois de sair', as
   expect(screen.getByText('Descoberta 2 de 4')).toBeInTheDocument();
 });
 
-it('retomada exata: Desafio e Prática continuam na mesma questão/atividade', async () => {
+it('retomada exata do Desafio e início de uma nova rodada ao reentrar em Prática', async () => {
   const user = userEvent.setup();
   const lesson = getLesson('lic.seg.01.a')!;
   const a = renderAt(`/licao/${lesson.id}`);
@@ -254,8 +254,10 @@ it('retomada exata: Desafio e Prática continuam na mesma questão/atividade', a
   expect(screen.getByRole('button', { name: 'Sair da prática' })).toBeInTheDocument();
   c.unmount();
   renderAt('/pratica/cap.seg.01/fundamentos');
-  // Volta direto para a atividade, sem a tela de abertura.
-  expect(screen.queryByRole('heading', { name: /Prática:/ })).toBeNull();
+  // A prática não restaura a rodada anterior: inicia uma nova visita pela abertura.
+  expect(screen.getByRole('heading', { name: /Prática:/ })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Verificar' })).toBeNull();
+  await user.click(screen.getByRole('button', { name: /Começar/ }));
   expect(screen.getByRole('button', { name: 'Verificar' })).toBeInTheDocument();
 });
 

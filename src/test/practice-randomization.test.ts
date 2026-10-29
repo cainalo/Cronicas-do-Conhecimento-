@@ -82,4 +82,18 @@ describe('variação das atividades de prática', () => {
     expect(build.words.length).toBeGreaterThan(build.answer.length);
     expect(build.answer.every((word) => build.words.includes(word))).toBe(true);
   });
+  it('prioriza questões não usadas na visita anterior sem aumentar a rodada', () => {
+    const bank = [
+      question,
+      { ...question, id: 'q.teste.002', stem: 'Qual conceito gerencia memória?' },
+      { ...question, id: 'q.teste.003', stem: 'Qual conceito mantém dados persistentes?' },
+      { ...question, id: 'q.teste.004', stem: 'Qual conceito coordena processos?' },
+    ];
+    const activities = buildPractice(chapter, 'fundamentos', bank, undefined, () => 0.4, undefined, chapter.glossary, ['q.teste.001']);
+    const ids = activities.filter((activity) => activity.kind === 'mcq').map((activity) => activity.kind === 'mcq' ? activity.question.id : '');
+    expect(ids).toHaveLength(3);
+    expect(ids).not.toContain('q.teste.001');
+    expect(new Set(ids).size).toBe(3);
+  });
+
 });

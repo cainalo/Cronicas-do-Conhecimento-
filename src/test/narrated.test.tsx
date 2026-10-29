@@ -86,8 +86,7 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
   vi.useRealTimers();
 });
 
-it('sequência única: a aula narrada abre automaticamente em tela inteira e segue para a prática', async () => {
-  const user = userEvent.setup();
+it('não insere a aula narrada dentro do Aprender quando há um ponto salvo de mídia', () => {
   const key = 'aprender:cap.prim.01:computador#prim.computador.1';
   localStorage.setItem(
     'cronicas:v1:visitante',
@@ -102,11 +101,8 @@ it('sequência única: a aula narrada abre automaticamente em tela inteira e seg
       </StudyProvider>
     </PrefsProvider>,
   );
-  expect(screen.getByRole('dialog', { name: /Aula narrada: Do ábaco ao celular/ })).toBeInTheDocument();
-  expect(screen.getByTestId('narrada-seek')).toBeInTheDocument();
-  expect(screen.queryByTestId('midia-narrada')).toBeNull();
-  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/não foi inventado de uma vez/);
-  await user.click(screen.getByRole('button', { name: 'Ir para a prática' }));
   expect(screen.queryByRole('dialog', { name: /Aula narrada/ })).toBeNull();
-  expect(screen.getByText(/Organize a linha do tempo/)).toBeInTheDocument();
+  expect(screen.queryByTestId('narrada-seek')).toBeNull();
+  // A tela de aula continua funcional; o player narrado é exercitado separadamente na rota própria.
+  expect(screen.getByRole('button', { name: 'Verificar' })).toBeInTheDocument();
 });

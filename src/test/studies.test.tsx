@@ -38,7 +38,7 @@ describe('página Estudos', () => {
     expect(screen.getByRole('link', { name: /Lei nº 13.709\/2018/ })).toHaveAttribute('target', '_blank');
   });
 
-  it('guarda uma videoaula própria e só carrega o vídeo quando a pessoa pede', async () => {
+  it('guarda uma videoaula própria e mantém o autoplay desativado fora da página de videoaula', async () => {
     const user = userEvent.setup();
     renderAt('/estudos');
     await user.type(screen.getByLabelText(/Endereço do vídeo/), 'https://exemplo.com/video');
@@ -53,6 +53,17 @@ describe('página Estudos', () => {
     expect(iframe.src).toContain('youtube-nocookie.com/embed/abcdefghijk');
     expect(iframe.src).not.toContain('autoplay');
     expect(JSON.parse(localStorage.getItem('cronicas:videos-proprios')!)).toHaveLength(1);
+  });
+
+  it('abre uma videoaula da trilha com carregamento automático e autoplay silenciado', () => {
+    const video = curatedVideos.find((v) => v.status === 'conferido');
+    expect(video).toBeDefined();
+    if (!video) throw new Error('Não há videoaula conferida para o teste');
+    renderAt('/video/' + video.id);
+    const iframe = document.querySelector('iframe');
+    expect(iframe).not.toBeNull();
+    expect(iframe?.src).toContain('autoplay=1');
+    expect(iframe?.src).toContain('mute=1');
   });
 
   it('reconhece endereços do YouTube e a curadoria não tem vídeo sem dados conferidos', () => {
