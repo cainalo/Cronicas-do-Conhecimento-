@@ -50,7 +50,9 @@ describe('Sala dos Professores — feed social', () => {
   it('permite curtir e comentar um post de professor sem redirecionar para fora do feed', async () => {
     const user = userEvent.setup();
     renderAt();
-    const post = screen.getByRole('article', { name: 'Foto ou vídeo?' });
+    const post = screen.getAllByRole('article').find((article) => within(article).queryByRole('heading', { name: 'Foto ou vídeo?' }));
+    expect(post).toBeTruthy();
+    if (!post) throw new Error('Publicação editorial não encontrada no feed');
     const like = within(post).getByRole('button', { name: /Curtir/ });
     const before = Number(like.textContent?.match(/\d+/)?.[0] ?? 0);
     await user.click(like);
