@@ -1,6 +1,6 @@
 // Sala dos Professores (reformulação, Fase 6; spec 22): posts editoriais curtos, versionados, ligados
-// a um trecho da trilha. Os professores são personagens fictícios, sem credenciais reais, e não são
-// fonte de autoridade: cada post só repete, de outro jeito, o que a aula do trecho já ensina.
+// a um trecho da trilha. Cada post deve acrescentar um ângulo novo — caso, diagnóstico, curiosidade
+// ou decisão profissional — em vez de reescrever a explicação principal. Personagens são fictícios.
 // Revisão editorial humana: pendente.
 
 export interface FictionalTeacher {
@@ -327,6 +327,59 @@ export const teacherPosts: TeacherPost[] = [
     topicIds: ['ti.seguranca.criptografia'],
     estimatedMinutes: 1,
   }),
+
+  P({
+    id: 'post.lia.memoria-pressao',
+    teacherId: 'prof.lia',
+    publishedAt: '2026-10-29',
+    kind: 'caso',
+    title: 'O servidor está lento: memória cheia é a causa?',
+    body: 'No plantão, a equipe vê RAM quase esgotada e quer reiniciar tudo. Eu começaria por três evidências: se há swap sendo usada, se o sistema está lendo/escrevendo nela continuamente e qual processo cresceu. **Memória ocupada não prova, sozinha, que existe thrashing.** O diagnóstico vem do conjunto de sinais e da evolução ao longo do tempo.',
+    chapterId: 'cap.infra.03',
+    sectionId: 'processos',
+    topicIds: ['ti.infra.so'],
+    estimatedMinutes: 2,
+    challenge: {
+      statement: 'Se a RAM está em 95% de uso, reiniciar o servidor é sempre a primeira ação correta.',
+      answer: false,
+      why: 'Antes de uma ação disruptiva, colete evidências, identifique o processo e avalie impacto. Uso alto pode ser cache útil ou uma carga esperada; pressão persistente e paginação intensa contam uma história diferente.',
+    },
+  }),
+  P({
+    id: 'post.davi-dns-investigacao',
+    teacherId: 'prof.davi',
+    publishedAt: '2026-10-28',
+    kind: 'caso',
+    title: 'O site abre pelo IP, mas não pelo nome',
+    body: 'Esse sintoma é uma pista: a conectividade até o servidor pode estar funcionando, enquanto a resolução de nomes falha. Compare a resposta do resolvedor configurado com uma consulta a outro resolvedor autorizado, confira o registro e o TTL, e lembre que um resultado em cache pode continuar aparecendo depois de uma mudança. Não altere a zona inteira antes de descobrir onde a resposta diverge.',
+    chapterId: 'cap.infra.01',
+    sectionId: 'servicos',
+    topicIds: ['ti.infra.redes'],
+    estimatedMinutes: 2,
+    challenge: {
+      statement: 'Se o site abre pelo IP, isso prova que o DNS está funcionando corretamente.',
+      answer: false,
+      why: 'Acessar pelo IP contorna a resolução de nomes. O teste ajuda a separar conectividade e serviço web de um possível problema de DNS, mas ainda é necessário investigar a causa.',
+    },
+  }),
+  P({
+    id: 'post.iara-backup-restore',
+    teacherId: 'prof.iara',
+    publishedAt: '2026-10-27',
+    kind: 'caso',
+    title: 'Backup concluído não significa recuperação garantida',
+    body: 'Num incidente, a pergunta decisiva não é só “temos backup?”, mas “conseguimos restaurar dentro do tempo necessário e com dados íntegros?”. Uma rotina de backup pode terminar com sucesso e ainda produzir cópias incompletas, credenciais indisponíveis ou um tempo de recuperação incompatível com o negócio. Marque testes de restauração e registre o resultado — evidência é melhor que esperança.',
+    chapterId: 'cap.seg.01',
+    sectionId: 'fundamentos',
+    topicIds: ['ti.seguranca.criptografia'],
+    estimatedMinutes: 2,
+    challenge: {
+      statement: 'Uma tarefa de backup com status “sucesso” garante que a organização conseguirá recuperar o serviço no prazo esperado.',
+      answer: false,
+      why: 'Só um teste de restauração valida, na prática, a integridade da cópia, o procedimento e o tempo necessário. Defina objetivos de recuperação e teste-os periodicamente.',
+    },
+  }),
+
 ];
 
 /** Quem assina os posts de cada capítulo no feed didático. */

@@ -4,6 +4,8 @@ Este documento é o ponto de continuidade técnico para a próxima sessão de de
 
 ## Estado implementado nesta etapa
 
+- Em 29/10/2026, foram adicionados três posts editoriais de aplicação profissional (diagnóstico de pressão de memória, investigação de DNS e teste de restauração de backup), cada um com cenário e mini-desafio próprios. Isso amplia a variedade, mas não substitui revisão editorial humana nem torna o feed multiusuário.
+
 - A rota `/sala` agora abre uma experiência de feed social em `src/pages/SocialFeed.tsx`.
 - O feed reúne publicações editoriais dos professores e publicações locais do estudante; oferece filtros, curtidas em publicações locais, comentários, composição de texto, anexação de imagem e stories visuais.
 - As publicações criadas pelo estudante são armazenadas no navegador. **Ainda não são sincronizadas entre usuários/dispositivos**; não apresentar o protótipo local como rede social multiusuário.
