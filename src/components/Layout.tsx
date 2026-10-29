@@ -1,6 +1,7 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useStudy } from '@/app/StudyProvider';
+import { useCheckpoint } from '@/app/useCheckpoint';
 import { returnToPreviousPage } from '@/lib/navigation';
 import { logUnit } from '@/lib/pace';
 import { AREAS, areaOf, isAreaHome, type AreaKey } from '@/app/areas';
@@ -53,6 +54,21 @@ function Tab({ area, variant }: { area: AreaKey; variant: 'bottom' | 'top' }) {
       {active && <span className="nav-mark top-0" aria-hidden="true" />}
       <Icon name={a.icon} size={22} strokeWidth={active ? 1.8 : 1.5} />
       <span>{a.label}</span>
+    </Link>
+  );
+}
+
+function ContinueButton({ variant }: { variant: 'compact' | 'pill' }) {
+  const next = useCheckpoint();
+  return (
+    <Link
+      to={next.to}
+      className={`btn-primary !min-h-[40px] text-sm ${variant === 'pill' ? '!px-4 !py-2' : '!px-3 !py-2'}`}
+      title={`${next.title} · ${next.context}`}
+      aria-label={`${next.action}: ${next.title}`}
+      data-testid={variant === 'pill' ? 'continuar-topo' : 'continuar-menu'}
+    >
+      {next.action} <Icon name="avancar" size={16} />
     </Link>
   );
 }
@@ -127,6 +143,8 @@ export function Layout() {
           </Link>
 
           <div className="flex min-w-0 items-center justify-end gap-2">
+            {!immersive && <span className="hidden lg:inline-flex"><ContinueButton variant="pill" /></span>}
+            {!immersive && <span className="hidden sm:inline-flex lg:hidden"><ContinueButton variant="compact" /></span>}
             <Link
               to="/conta"
               aria-label="Conta e configurações"

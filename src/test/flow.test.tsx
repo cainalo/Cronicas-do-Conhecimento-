@@ -188,15 +188,19 @@ it('caso prático de SQL: objetivos (sem cena de jogo), descoberta e laboratóri
   expect(screen.getByText('Consulta certa')).toBeInTheDocument();
 });
 
-it('torre: mostra os dias até a prova e a meta de hoje para terminar o curso a tempo', () => {
-  renderAt('/');
-  const card = screen.getByRole('region', { name: 'Ritmo até a prova' });
-  expect(card).toHaveTextContent(/Faltam \d+ dias para a prova/);
-  expect(card).toHaveTextContent(/Meta de hoje: \d+ atividade/);
-  expect(card).toHaveTextContent(/O curso inteiro tem \d+ atividades/);
-});
+it('torre: apresenta os cards coloridos e não exibe contagem regressiva nem sequência de dias', () => {
+   renderAt('/');
+   expect(screen.getByTestId('dashboard-continuar')).toBeInTheDocument();
+   expect(screen.getByRole('region', { name: 'Resumo de hoje' })).toBeInTheDocument();
+   expect(screen.getByTestId('dashboard-stat-questions')).toBeInTheDocument();
+   expect(screen.getByTestId('dashboard-stat-review')).toBeInTheDocument();
+   expect(screen.getByTestId('dashboard-stat-flashcards')).toBeInTheDocument();
+   expect(screen.queryByRole('region', { name: 'Ritmo até a prova' })).not.toBeInTheDocument();
+   expect(screen.queryByText(/dias até a prova/i)).not.toBeInTheDocument();
+   expect(screen.queryByText(/dia[s]? seguido[s]? de estudo/i)).not.toBeInTheDocument();
+ });
 
-it('um só destino: Torre, cabeçalho e menu levam ao mesmo passo', () => {
+ it('um só destino: Torre, cabeçalho e menu levam ao mesmo passo', () => {
   renderAt('/');
   const torre = screen.getByTestId('continuar-torre').getAttribute('href');
   expect(screen.getByTestId('continuar-topo').getAttribute('href')).toBe(torre);
