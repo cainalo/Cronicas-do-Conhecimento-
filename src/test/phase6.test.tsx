@@ -152,8 +152,9 @@ describe('telas da fase 6', () => {
     saveData('visitante', before);
     const cp0 = getLearningCheckpoint(before, trailUnits());
     const r = renderAt('/sala');
-    await user.click(screen.getAllByRole('button', { name: 'Guardar' })[0]);
-    await user.click(screen.getByTestId('feed-proximo'));
+    await user.click(screen.getByRole('button', { name: /Criar publicação/i }));
+    await user.type(screen.getByLabelText('Sua publicação'), 'Teste de persistência do feed.');
+    await user.click(screen.getByRole('button', { name: 'Publicar no meu feed' }));
     r.unmount();
     renderAt('/simulador/cen.suporte-lento');
     await user.click(screen.getByRole('button', { name: /Abrir o top/ }));
