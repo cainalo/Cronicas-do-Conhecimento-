@@ -112,9 +112,9 @@ function SimpleLearnPage() {
   return (
     <div className="space-y-4 pb-8" style={{ ['--font-scale' as string]: prefs.fontScale }}>
       <div className="flex items-center gap-3">
-        <Link to={`/grimorio/${chapter.grimoireId}`} aria-label="Sair de Aprender" className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-muted hover:bg-raised">
-          <Icon name="sair" size={22} />
-        </Link>
+        <button type="button" onClick={() => goBack(navigate, '/trilha')} aria-label="Voltar à página anterior" className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-muted hover:bg-raised">
+          <Icon name="voltar" size={22} />
+        </button>
         <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-raised" role="progressbar" aria-label="Progresso de Aprender" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round((Math.min(session.state + 1, stageTotal) / stageTotal) * 100)}>
           <div className="h-full rounded-full bg-gold transition-[width] duration-300" style={{ width: `${(Math.min(session.state + 1, stageTotal) / stageTotal) * 100}%` }} />
         </div>
