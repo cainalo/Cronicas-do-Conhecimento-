@@ -529,8 +529,11 @@ export const trailExtras: TrailExtras = {
     );
   },
   postsLessonFor: (chapterId, sectionId) => {
+    // Na trilha entram somente posts editoriais escritos para o assunto; nunca reaproveitamos
+    // automaticamente a explicação do Aprender como se fosse uma publicação de professor.
     const first = microSeries(chapterId, sectionId)[0];
-    return first && feedPostsOf(first.id).length ? first.id : undefined;
+    const hasEditorialPost = _tips.some((post) => post.chapterId === chapterId && post.sectionId === sectionId);
+    return first && hasEditorialPost ? first.id : undefined;
   },
   hasCards: (chapterId) => flashcards.some((f) => f.chapterId === chapterId),
 };
