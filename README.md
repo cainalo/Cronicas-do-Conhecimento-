@@ -6,7 +6,7 @@ Plataforma de estudos gamificada (RPG medieval + trilha estilo Duolingo + grimó
 - Ler o grimório **O Códice das Sete Chaves**, cap. 1 — *Criptografia* (6 seções, glossário, referências), com sumário, busca, marcadores, retomada, ajuste de fonte e tema claro/escuro.
 - Fazer 2 lições (cartões + 10 questões autorais comentadas cada).
 - Revisar questões erradas até acertá-las; consultar histórico com filtros.
-- Acompanhar progresso por tópico, XP e nível; recomendação da próxima atividade com justificativa.
+- Acompanhar progresso por tópico, XP e nível; recomendação da próxima atividade com justificativa.\n- Explorar a Sala dos Professores em formato de feed social com stories, publicação local de texto/imagem, curtidas e comentários. A publicação nesta etapa é local ao aparelho, não uma rede multiusuário sincronizada.
 - Estudar como visitante (dados no aparelho) ou com conta (Supabase Auth), com sincronização entre dispositivos.
 
 ## Requisitos
@@ -29,4 +29,4 @@ Ao publicar o build em hospedagem estática, configure *fallback* de SPA (todas 
 Para os links de confirmação/recuperação de senha funcionarem fora do `localhost`, cadastre a URL do site em Supabase → Authentication → URL Configuration.
 
 ## Documentação
-Comece por `CLAUDE.md` e `docs/SESSION_HANDOFF.md`.
+Comece por `CLAUDE.md` e `docs/SESSION_HANDOFF.md`. O plano atualizado de continuidade, critérios de aceite e próximas etapas do produto Pórtico está em `docs/PORTICO_IMPLEMENTATION_PLAN.md`.
