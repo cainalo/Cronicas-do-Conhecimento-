@@ -61,6 +61,7 @@ describe('laboratório Linux virtual', () => {
 
     await user.click(screen.getByRole('button', { name: /Falta RAM/ }));
     expect(screen.getByRole('status')).toHaveTextContent('Diagnóstico correto');
+    expect(JSON.parse(localStorage.getItem('cronicas:escritorio:terminal:2318') ?? '{}')).toMatchObject({ callId: '2318', diagnosis: 'thrashing' });
     expect(screen.getByRole('progressbar', { name: 'Progresso do chamado' })).toHaveAttribute('aria-valuenow', '6');
   });
 

@@ -8,7 +8,7 @@
 - Cobertura de testes adicionada para feed e workspace de vídeo. O workflow do commit `26ff415dcfbf` passou em testes, build web e E2E e publicou o site. Na `main`, o APK foi preservado em vez de recompilado sem keystore estável (versão publicada mantida em `0.1.521`).
 - A implementação desta rodada é parcial: o feed é local-only, ainda não sincroniza entre usuários; os próximos passos estão em `docs/PORTICO_IMPLEMENTATION_PLAN.md`.
 
-- **Laboratório Linux virtual:** chamado 2318 compartilhado com o escritório 2D. Seis verificações sobre `top`, `free -h`, `vmstat 2` e `ps aux | grep importador` levam ao diagnóstico de thrashing. O terminal é um sistema virtual, não uma shell real do dispositivo.
+- **Laboratório Linux virtual:** chamado 2318 integrado com o escritório 2D. Seis verificações sobre `top`, `free -h`, `vmstat 2` e `ps aux | grep importador` levam ao diagnóstico de thrashing; o resultado fica em armazenamento local e, ao retornar ao mapa, a investigação é marcada e o estudante avança para a decisão sobre o PID 4127. O terminal não é uma shell real do dispositivo.
 
 ## Funciona e foi testado
 - **25/10 (noite):** série piloto com história em cap.prim.01 / computador; aula narrada e vídeo dentro da aula; feed com perfis, revisões rápidas e comentários; Escritório 2D em tela cheia (mapa novo, 4 direções). Testes automáticos e capturas em 390 e 1280 px.

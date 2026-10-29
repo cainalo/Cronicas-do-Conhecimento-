@@ -40,11 +40,32 @@ import { ScenarioClosing } from './Scenarios';
 const T = 48;
 const STEP_MS = 170;
 const KEY = (id: string) => `cronicas:mundo:${id}`;
+const OFFICE_REPORT_KEY = 'cronicas:escritorio:terminal:2318';
 const reduced = () => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 function load(w: World, s: Scenario): WorldState | undefined {
   try {
-    return restoreWorld(w, s, JSON.parse(localStorage.getItem(KEY(w.id)) ?? 'null') ?? undefined);
+    const saved = restoreWorld(w, s, JSON.parse(localStorage.getItem(KEY(w.id)) ?? 'null') ?? undefined);
+    const report = JSON.parse(localStorage.getItem(OFFICE_REPORT_KEY) ?? 'null') as { callId?: string; diagnosis?: string; completedAt?: string } | null;
+    if (!report || report.callId !== '2318' || report.diagnosis !== 'thrashing') return saved;
+
+    // A investigação foi concluída fora do mapa. Retome o chamado na próxima decisão humana,
+    // usando as mesmas transições do cenário, em vez de pedir que a pessoa repita top/vmstat.
+    const base = saved ?? fresh(w, s);
+    let scenario = base.scenario;
+    const at = report.completedAt ?? new Date().toISOString();
+    if (scenario.scenarioId === s.id && scenario.version === s.version && !scenario.finishedAt) {
+      if (scenario.pending) scenario = advance(s, scenario, at);
+      if (scenario.nodeId === 'n.inicio') {
+        scenario = advance(s, choose(s, scenario, 'd.top', at), at);
+      }
+      if (scenario.nodeId === 'n.top') {
+        scenario = advance(s, choose(s, scenario, 'd.thrashing', at), at);
+      }
+    }
+    const examined = base.examined.includes('terminal') ? base.examined : [...base.examined, 'terminal'];
+    localStorage.removeItem(OFFICE_REPORT_KEY);
+    return { ...base, scenario, examined, updatedAt: at };
   } catch {
     return undefined;
   }

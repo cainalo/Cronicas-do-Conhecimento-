@@ -144,9 +144,23 @@ describe('tela do escritório (tela cheia)', () => {
     await user.click(launch);
     expect(await screen.findByRole('heading', { name: 'Laboratório de programação' })).toBeInTheDocument();
     expect(screen.getByText(/Aberto pelo terminal da Marta no mapa/)).toBeInTheDocument();
+
+    for (const command of ['pwd', 'ls', 'top', 'free -h', 'vmstat 2', 'ps aux | grep importador']) {
+      await user.click(screen.getByRole('button', { name: 'Preencher comando ' + command }));
+      await user.click(screen.getByRole('button', { name: 'Executar comando' }));
+    }
+    await user.click(screen.getByRole('button', { name: /Falta RAM/ }));
+    expect(JSON.parse(localStorage.getItem('cronicas:escritorio:terminal:2318') ?? '{}')).toMatchObject({ callId: '2318', diagnosis: 'thrashing' });
+
     await user.click(screen.getByRole('button', { name: 'Voltar ao escritório 2D' }));
     expect(await screen.findByTestId('mundo')).toBeInTheDocument();
     expect(screen.getByTestId('mundo-sala')).toHaveTextContent('Suporte');
+    expect(screen.getByTestId('mundo-objetivo')).toHaveTextContent('Resolver sem estragar nada');
+
+    await user.click(screen.getByRole('button', { name: 'Ir até' }));
+    await user.click(screen.getByRole('button', { name: /João, Suporte/ }));
+    expect(await screen.findByTestId('mundo-conversa')).toHaveTextContent(/O processo que está ocupando 71,5% da memória/);
+    expect(screen.getByRole('button', { name: /Pedir o término com kill 4127/ })).toBeInTheDocument();
   });
   it('teclado anda uma casa e vira o personagem; Esc fecha o painel', async () => {
     const user = userEvent.setup();

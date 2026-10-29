@@ -322,6 +322,8 @@ function terminalCommand(input: string, state: TerminalState): TerminalResult {
 }
 
 type IncidentStep = { id: string; title: string; command: string; explanation: string };
+const OFFICE_REPORT_KEY = 'cronicas:escritorio:terminal:2318';
+
 const INCIDENT_STEPS: IncidentStep[] = [
   { id: 'location', title: 'Confirme em qual diretório você está', command: 'pwd', explanation: 'pwd mostra o diretório de trabalho atual.' },
   { id: 'files', title: 'Localize os registros do chamado', command: 'ls', explanation: 'ls encontrou a pasta logs, que guarda os registros do serviço.' },
@@ -370,6 +372,16 @@ export function ProgrammingLabPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const fromOffice = new URLSearchParams(location.search).get('origem') === 'escritorio';
+  const chooseDiagnosis = (value: Diagnosis) => {
+    setDiagnosis(value);
+    try {
+      if (value === 'thrashing') {
+        localStorage.setItem(OFFICE_REPORT_KEY, JSON.stringify({ callId: '2318', diagnosis: value, completedAt: new Date().toISOString() }));
+      } else {
+        localStorage.removeItem(OFFICE_REPORT_KEY);
+      }
+    } catch { /* o diagnóstico permanece visível mesmo se o navegador bloquear o armazenamento */ }
+  };
   const workerRef = useRef<Worker | null>(null);
   const workerUrlRef = useRef<string | null>(null);
   const timeoutRef = useRef<number | undefined>(undefined);
@@ -525,9 +537,9 @@ export function ProgrammingLabPage() {
             <h4 className="font-semibold">Qual é a causa mais provável?</h4>
             <p className="mt-1 text-sm text-muted">Cruze os sinais do top, free e vmstat antes de decidir.</p>
             <div className="mt-3 space-y-2">
-              <button type="button" className={diagnosis === 'cpu' ? 'btn-primary w-full !justify-start text-left' : 'btn-ghost w-full !justify-start text-left'} onClick={() => setDiagnosis('cpu')} aria-pressed={diagnosis === 'cpu'}>A CPU está saturada por um único processo.</button>
-              <button type="button" className={diagnosis === 'thrashing' ? 'btn-primary w-full !justify-start text-left' : 'btn-ghost w-full !justify-start text-left'} onClick={() => setDiagnosis('thrashing')} aria-pressed={diagnosis === 'thrashing'}>Falta RAM; o sistema está trocando páginas com o swap sem parar (thrashing).</button>
-              <button type="button" className={diagnosis === 'zombie' ? 'btn-primary w-full !justify-start text-left' : 'btn-ghost w-full !justify-start text-left'} onClick={() => setDiagnosis('zombie')} aria-pressed={diagnosis === 'zombie'}>Um processo zumbi está bloqueando o servidor.</button>
+              <button type="button" className={diagnosis === 'cpu' ? 'btn-primary w-full !justify-start text-left' : 'btn-ghost w-full !justify-start text-left'} onClick={() => chooseDiagnosis('cpu')} aria-pressed={diagnosis === 'cpu'}>A CPU está saturada por um único processo.</button>
+              <button type="button" className={diagnosis === 'thrashing' ? 'btn-primary w-full !justify-start text-left' : 'btn-ghost w-full !justify-start text-left'} onClick={() => chooseDiagnosis('thrashing')} aria-pressed={diagnosis === 'thrashing'}>Falta RAM; o sistema está trocando páginas com o swap sem parar (thrashing).</button>
+              <button type="button" className={diagnosis === 'zombie' ? 'btn-primary w-full !justify-start text-left' : 'btn-ghost w-full !justify-start text-left'} onClick={() => chooseDiagnosis('zombie')} aria-pressed={diagnosis === 'zombie'}>Um processo zumbi está bloqueando o servidor.</button>
             </div>
             {diagnosis && <p role="status" className={'mt-3 rounded-lg p-3 text-sm ' + (diagnosis === 'thrashing' ? 'bg-ok/10 text-ok' : 'bg-bad/10 text-bad')}>
               {diagnosis === 'thrashing'

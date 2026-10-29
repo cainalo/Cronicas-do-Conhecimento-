@@ -10,7 +10,7 @@ Este documento é o ponto de continuidade técnico para a próxima sessão de de
 - Stories têm progressão manual, identidade visual própria e indicação de trilha sonora. Não reproduzem música protegida.
 - O componente anterior `src/pages/TeachersRoom.tsx` foi preservado como referência de estudo e para evitar perda de funcionalidades didáticas já existentes.
 - O laboratório de programação contém um chamado guiado de suporte coerente com `src/content/scenarios/suporte-lento.ts`: as saídas de `top`, `free -h`, `vmstat 2` e `ps aux | grep importador` permitem reconhecer thrashing no chamado 2318. O terminal aceita comandos e pipelines didáticos sobre sistema de arquivos em memória; nunca acessa o sistema operacional real.
-- O objeto terminal da Marta em `/escritorio` liga à rota `/laboratorio-codigo?origem=escritorio&chamado=2318`; o botão de retorno usa o histórico e o estado do mapa fica salvo localmente.
+- O objeto terminal da Marta em `/escritorio` liga à rota `/laboratorio-codigo?origem=escritorio&chamado=2318`; o laboratório grava o diagnóstico correto no armazenamento local, e o mapa usa esse relatório para seguir até a decisão sobre terminar o PID 4127, sem repetir a investigação.
 - O workflow `pages.yml` publica o site em toda a `main`; sem a chave estável, preserva `download/` da branch `gh-pages` em vez de gerar um APK incompatível. A recompilação do APK segue restrita ao branch de trabalho ou quando a keystore de release estiver configurada.
 
 ## Próximas etapas — executar nesta ordem

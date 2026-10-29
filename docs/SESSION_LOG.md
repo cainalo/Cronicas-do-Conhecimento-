@@ -148,3 +148,9 @@
 - O workflow 40959217123 passou em testes, build web e E2E e executou o deploy de gh-pages. Como a main não dispõe de keystore de release, manteve intacto o APK público 0.1.521; não foi reconstruído com outra assinatura.
 - O terminal guiado foi alinhado ao chamado 2318 do escritório: observação com top, verificação com free -h, confirmação com vmstat 2 e identificação do importador PID 4127. A resposta correta explica thrashing e pressão de memória, não saturação de CPU nem zumbi.
 - O objeto terminal na mesa da Marta passa a abrir a mesma experiência com contexto origem=escritorio; a navegação de volta usa o histórico para retomar o mapa salvo. Adicionados testes de rota e retorno, e páginas relevantes ao E2E de layout.
+
+
+## Integração de progresso do chamado 2318 (29/10/2026)
+- O diagnóstico correto no laboratório é registrado na chave local `cronicas:escritorio:terminal:2318`.
+- Ao retornar ao escritório, o cenário aplica as transições já verificadas (top e thrashing), marca o terminal como examinado no caderno e continua para a decisão humana sobre o processo 4127. O estado só é consumido se o relatório corresponde ao chamado 2318 e ao diagnóstico thrashing; nenhum comando é executado no sistema real.
+- Teste E2E de navegação: escritório → terminal → seis verificações → diagnóstico → volta ao mesmo mapa → conversa com João.
