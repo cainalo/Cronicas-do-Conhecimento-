@@ -14,6 +14,16 @@ export interface FictionalTeacher {
   handle?: string;
   /** Assuntos que a pessoa costuma postar (aparecem no perfil). */
   topics?: string[];
+  /** Direção de arte e vestuário do personagem, usados na ficha pública. */
+  personalStyle?: string;
+  /** Interesses humanos além da disciplina, para dar identidade ao personagem. */
+  interests?: string[];
+  /** Referências públicas para quem quiser aprofundar os assuntos. */
+  references?: { label: string; url: string }[];
+  /** Frase curta recorrente do personagem. */
+  motto?: string;
+  /** Ritmo, tom e abordagem didática característicos. */
+  speakingStyle?: string;
 }
 
 export interface TeacherPost {
@@ -41,7 +51,12 @@ export const teachers: FictionalTeacher[] = [
     topics: ['Matemática', 'Raciocínio lógico', 'Primeiros passos'],
     name: 'Professora Clara',
     expertiseLabel: 'Matemática e raciocínio lógico',
-    biography: 'Personagem fictícia. Começa sempre por um exemplo de dinheiro, fila ou pizza antes da regra.',
+    biography: 'Clara é uma professora fictícia de matemática aplicada. Antes de escrever uma fórmula, procura uma situação cotidiana que faça a pessoa perceber o padrão por conta própria. É curiosa, acolhedora e transforma erros em pistas para a próxima tentativa.',
+    personalStyle: 'Blazer terracota, camisa creme, brincos geométricos pequenos e um caderno com marcações coloridas; visual urbano, criativo e organizado.',
+    interests: ['desafios de lógica', 'cafés e livrarias', 'ilustração científica', 'jogos de tabuleiro'],
+    references: [{ label: 'Porcentagens — Khan Academy', url: 'https://pt.khanacademy.org/math/arithmetic/arith-review-percentages' }],
+    motto: 'A fórmula fica mais fácil quando a ideia faz sentido.',
+    speakingStyle: 'Fala com energia e paciência; usa exemplos de preços, filas e receitas, pergunta antes de explicar e evita tratar uma dúvida como erro bobo.',
     tone: 'ember',
     fictional: true,
   },
@@ -51,7 +66,12 @@ export const teachers: FictionalTeacher[] = [
     topics: ['Primeiros passos', 'Sistemas operacionais', 'Linha de comando'],
     name: 'Professora Lia',
     expertiseLabel: 'Sistemas operacionais e linha de comando',
-    biography: 'Personagem fictícia. Gosta de comparar o computador com um cartório bem organizado.',
+    biography: 'Lia é uma engenheira de sistemas fictícia que adora descobrir o que acontece por trás da interface. Organiza o raciocínio em etapas e ensina a investigar antes de executar um comando — especialmente quando uma máquina está sob pressão.',
+    personalStyle: 'Jaqueta verde-petróleo, camiseta preta, calça funcional, tênis e coque alto; leva um terminal portátil e um caderno de anotações.',
+    interests: ['Linux e software livre', 'consertar computadores antigos', 'café forte', 'mapas de metrô'],
+    references: [{ label: 'Manual do comando ps', url: 'https://man7.org/linux/man-pages/man1/ps.1.html' }, { label: 'Manual do comando top', url: 'https://man7.org/linux/man-pages/man1/top.1.html' }],
+    motto: 'Observe primeiro. Comande depois.',
+    speakingStyle: 'Direta, metódica e bem-humorada; descreve comandos passo a passo, explica o risco e sempre pergunta qual evidência confirma a hipótese.',
     tone: 'teal',
     fictional: true,
   },
@@ -61,7 +81,12 @@ export const teachers: FictionalTeacher[] = [
     topics: ['Redes', 'Internet', 'Serviços'],
     name: 'Professor Davi',
     expertiseLabel: 'Redes e serviços',
-    biography: 'Personagem fictício. Explica rede como se fosse o serviço dos Correios.',
+    biography: 'Davi é um professor fictício de redes que enxerga a internet como uma cidade em movimento: endereços, rotas, protocolos e serviços trabalhando juntos. Gosta de desmontar ideias aparentemente mágicas até revelar a infraestrutura.',
+    personalStyle: 'Camisa azul-marinho com detalhes ocre, jaqueta leve, barba curta e mochila com adesivos de conferências de tecnologia.',
+    interests: ['rádio amador', 'ciclismo urbano', 'histórias da internet', 'fotografia de arquitetura'],
+    references: [{ label: 'DNS — RFC 1034', url: 'https://www.rfc-editor.org/rfc/rfc1034' }, { label: 'DNS — RFC 1035', url: 'https://www.rfc-editor.org/rfc/rfc1035' }],
+    motto: 'Toda mensagem precisa de um caminho.',
+    speakingStyle: 'Conversador e visual; usa analogias com Correios e mapas, desenha o caminho dos pacotes e gosta de perguntar onde a comunicação pode falhar.',
     tone: 'azure',
     fictional: true,
   },
@@ -71,7 +96,12 @@ export const teachers: FictionalTeacher[] = [
     topics: ['Segurança', 'Criptografia', 'Nuvem'],
     name: 'Professora Iara',
     expertiseLabel: 'Segurança e nuvem',
-    biography: 'Personagem fictícia. Sempre pergunta: "o que acontece se esta peça quebrar?".',
+    biography: 'Iara é uma especialista fictícia em segurança e nuvem que começa pelo impacto para as pessoas. Prefere ameaças concretas e decisões justificadas a alarmismo, e lembra que segurança é um processo contínuo, não um botão mágico.',
+    personalStyle: 'Cabelo cacheado volumoso, camisa ameixa sob jaqueta verde-oliva, acessórios discretos e uma bolsa com etiquetas de laboratórios e conferências.',
+    interests: ['segurança por design', 'privacidade digital', 'documentários', 'jardinagem'],
+    references: [{ label: 'OWASP Top 10', url: 'https://owasp.org/www-project-top-ten/' }, { label: 'OWASP Cheat Sheet Series', url: 'https://cheatsheetseries.owasp.org/' }],
+    motto: 'Confiança precisa de evidências.',
+    speakingStyle: 'Calma, criteriosa e investigativa; apresenta ameaças sem dramatizar, diferencia risco de certeza e sempre sugere uma forma de verificar a proteção.',
     tone: 'pink',
     fictional: true,
   },
