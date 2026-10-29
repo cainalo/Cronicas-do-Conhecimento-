@@ -39,7 +39,7 @@ import { ScenarioListPage, ScenarioPage } from '@/pages/Scenarios';
 import { WorldPage } from '@/pages/World';
 import { TerminalLabPage } from '@/pages/TerminalLab';
 import { CodeLabPage } from '@/pages/CodeLab';
-import { TeachersRoomPage } from '@/pages/TeachersRoom';
+import { TeacherSocialPage } from '@/pages/TeacherSocial';
 import { NarratedPage } from '@/pages/Narrated';
 
 function LegacySubjectRedirect() {
@@ -68,7 +68,7 @@ export function AppRoutes() {
         <Route path="personalizar" element={<CustomizePage />} />
         <Route path="simulador" element={<ScenarioListPage />} />
         <Route path="simulador/:id" element={<ScenarioPage />} />
-        <Route path="sala" element={<TeachersRoomPage />} />
+        <Route path="sala" element={<TeacherSocialPage />} />
         <Route path="escritorio" element={<WorldPage />} />
         <Route path="laboratorios" element={<TerminalLabPage />} />
         <Route path="laboratorio/:id" element={<TerminalLabPage />} />
