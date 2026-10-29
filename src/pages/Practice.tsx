@@ -3,6 +3,7 @@ import { Portal } from '@/components/Portal';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
+import { teacherForChapter } from '@/content';
 import { useFx } from '@/app/fx';
 import { DEFAULT_CONTEST_ID, concepts, getChapter, getLearningUnit, getSimpleSection, learningUnits, questionsForContest } from '@/content';
 import { practiceUnlocked, taughtConcepts } from '@/lib/engine';
@@ -13,6 +14,8 @@ import { Icon } from '@/components/Icon';
 import { StepGuide } from '@/components/StepGuide';
 import { Mascot, SpeechBubble } from '@/components/Mascot';
 import { QuestionStem } from '@/components/QuestionCard';
+import { TeacherAvatar } from '@/components/TeacherAvatar';
+import { goBack } from '@/lib/navigation';
 
 type Verdict = { ok: boolean; title: string; detail?: string; recovery?: Activity };
 
@@ -269,7 +272,7 @@ function PracticeRun() {
 
   // Sair explicitamente encerra só a sessão incompleta; a próxima abertura sorteia outra rodada.
   // As conclusões e o histórico de respostas já registrados continuam salvos.
-  const exit = () => { session.finish(); navigate('/trilha'); };
+  const exit = () => { session.finish(); goBack(navigate, '/trilha'); };
 
   return (
     <div className="-mt-2 flex min-h-0 flex-col overflow-hidden" style={{ height: "calc(100dvh - 1.75rem - env(safe-area-inset-top, 0px))" }}>
