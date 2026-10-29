@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { teachers, teacherPosts, type FictionalTeacher } from '@/content/teachers';
 import { Icon } from '@/components/Icon';
@@ -80,7 +81,7 @@ export function SocialFeedPage() {
     <PageHeader area="explorar" title="Sala dos Professores" subtitle="Ideias, bastidores e descobertas da comunidade Pórtico." />
     <section className="card p-4">
       <div className="flex gap-4 overflow-x-auto pb-1" aria-label="Stories dos professores">
-        {teachers.map((t, i) => <button key={t.id} className="flex w-[76px] shrink-0 flex-col items-center gap-2 text-center" onClick={() => { setStory(t); setStoryIndex(0); setPlayingMusic(false); }}>
+        {teachers.map((t) => <button key={t.id} className="flex w-[76px] shrink-0 flex-col items-center gap-2 text-center" onClick={() => { setStory(t); setStoryIndex(0); setPlayingMusic(false); }}>
           <span className="rounded-full bg-gradient-to-br from-[#d4a017] via-[#c8402a] to-[#6b3a6e] p-[3px]"><span className="block rounded-full bg-surface p-[2px]"><TeacherAvatar t={t} size={54}/></span></span>
           <span className="w-full truncate text-xs">{t.name.replace('Professora ', '').replace('Professor ', '')}</span>
           <span className="text-[10px] text-muted">Story</span>
@@ -124,7 +125,8 @@ export function SocialFeedPage() {
       })}
       {feed.length === 0 && <div className="card p-6 text-center text-sm text-muted">Ainda não há publicações neste filtro.</div>}
     </div>
-    {story && <div className="fixed inset-0 z-[90] flex flex-col bg-[#0f4c5c] p-4 text-[#f7eedf]" role="dialog" aria-modal="true" aria-label={`Stories de ${story.name}`}>
+    {story && createPortal(
+    <div className="fixed inset-0 z-[90] flex flex-col bg-[#0f4c5c] p-4 text-[#f7eedf]" role="dialog" aria-modal="true" aria-label={`Stories de ${story.name}`}>
       <div className="flex gap-1">{storyItems.map((_,i) => <span key={i} className={`h-1 flex-1 rounded-full ${i <= storyIndex ? 'bg-[#f7eedf]' : 'bg-[#f7eedf]/30'}`}/>)}</div>
       <header className="flex items-center gap-3 py-4"><TeacherAvatar t={story} size={42}/><div className="flex-1"><p className="font-semibold">{story.name}</p><p className="text-xs opacity-70">@{story.handle}</p></div><button onClick={() => setStory(null)} aria-label="Fechar stories"><Icon name="errado" size={24}/></button></header>
       <div className="relative flex flex-1 flex-col justify-center overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-br from-[#164e63] via-[#2c6870] to-[#6b3a6e] p-6">
@@ -135,7 +137,8 @@ export function SocialFeedPage() {
         <p className="relative mt-4 text-xs opacity-80">Perfil fictício · conteúdo demonstrativo</p>
       </div>
       <div className="flex gap-3 py-4"><button className="btn-ghost flex-1 border-white/30 text-[#f7eedf]" onClick={() => setStoryIndex(Math.max(0, storyIndex-1))} disabled={storyIndex===0}>Anterior</button><button className="btn-primary flex-1" onClick={() => storyIndex+1 < storyItems.length ? setStoryIndex(storyIndex+1) : setStory(null)}>{storyIndex+1 < storyItems.length ? 'Próximo story' : 'Concluir'}</button></div>
-    </div>}
+    </div>, document.body
+    )}
     <div className="text-center text-xs text-muted"><Link to="/trilha" className="underline">Voltar à trilha</Link> · Feed de demonstração com personagens fictícios</div>
   </div>;
 }
