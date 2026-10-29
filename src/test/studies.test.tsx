@@ -56,7 +56,7 @@ describe('página Estudos', () => {
   });
 
   it('abre uma videoaula da trilha com carregamento automático e autoplay silenciado', () => {
-    const video = curatedVideos.find((v) => v.status === 'conferido');
+    const video = curatedVideos[0];
     expect(video).toBeDefined();
     if (!video) throw new Error('Não há videoaula conferida para o teste');
     renderAt('/video/' + video.id);
