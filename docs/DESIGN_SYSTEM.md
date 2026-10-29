@@ -4,7 +4,7 @@ A identidade vigente é **Pórtico** (29/10/2026). As decisões antigas abaixo s
 
 ## Identidade vigente — Pórtico (29/10/2026)
 
-Usar a wordmark e o ícone recortados da prancha original em `public/brand/`; não reconstruir a palavra usando uma fonte parecida. A paleta aprovada é:
+A marca atualmente é desenhada em SVG inline em `src/components/Logo.tsx`: o símbolo reúne portal, estrela-guia e degraus; a wordmark usa tipografia vetorial e o arco decorativo. Não usar capturas ou recortes rasterizados da prancha como logo. Os JPEGs antigos de referência foram removidos. A paleta aprovada é:
 
 | Elemento | HEX | Token |
 |---|---|---|

@@ -4,7 +4,6 @@ import { useStudy } from '@/app/StudyProvider';
 import { returnToPreviousPage } from '@/lib/navigation';
 import { logUnit } from '@/lib/pace';
 import { AREAS, areaOf, isAreaHome, type AreaKey } from '@/app/areas';
-import { useCheckpoint } from '@/app/useCheckpoint';
 import { Icon } from '@/components/Icon';
 import { LogoMark, PorticoWordmark } from '@/components/Logo';
 
@@ -58,22 +57,6 @@ function Tab({ area, variant }: { area: AreaKey; variant: 'bottom' | 'top' }) {
   );
 }
 
-function ContinueButton({ variant }: { variant: 'compact' | 'pill' }) {
-  // Mesmo destino de Hoje, da Trilha e do cartão de ritmo (fonte única: lib/checkpoint.ts).
-  const next = useCheckpoint();
-  return (
-    <Link
-      to={next.to}
-      className={`btn-primary !min-h-[40px] text-sm ${variant === 'pill' ? '!px-4 !py-2' : '!px-3 !py-2'}`}
-      title={`${next.title} · ${next.context}`}
-      aria-label={`${next.action}: ${next.title}`}
-      data-testid={variant === 'pill' ? 'continuar-topo' : 'continuar-menu'}
-    >
-      {next.action} <Icon name="avancar" size={16} />
-    </Link>
-  );
-}
-
 // Materiais abertos pela trilha (aula narrada, vídeo, posts, cartões) chegam com ?u=chave: abrir já
 // conta como concluído, para a trilha seguir para a próxima atividade.
 function useTrailVisit() {
@@ -86,7 +69,7 @@ function useTrailVisit() {
 }
 
 export function Layout() {
-  const { pathname } = useLocation();
+  const { pathname, key } = useLocation();
   const navigate = useNavigate();
   const [chromeVisible, setChromeVisible] = useState(true);
   useTrailVisit();
