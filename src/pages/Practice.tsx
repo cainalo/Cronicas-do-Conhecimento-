@@ -28,7 +28,7 @@ function shuffle<T>(a: T[]): T[] {
 const choiceCls = (state: 'idle' | 'sel' | 'ok' | 'bad' | 'dim') =>
   ({
     idle: 'border-line bg-surface hover:border-gold/60 hover:bg-raised/60',
-    sel: 'border-[#2c5f6e] bg-[#2c5f6e]/10 shadow-[inset_0_0_0_1px_#2c5f6e]',
+    sel: 'border-gold bg-gold/10 shadow-[inset_0_0_0_1px_rgb(var(--gold))]',
     ok: 'border-ok bg-ok/10',
     bad: 'border-bad bg-bad/10',
     dim: 'border-line bg-surface opacity-60',
@@ -46,9 +46,8 @@ function Choices({ options, answer, locked, value, onPick, labels }: { options: 
               type="button"
               disabled={locked}
               onClick={() => onPick(o)}
-              className={`flex w-full items-center gap-3 rounded-2xl border-2 p-3 text-left text-[0.98rem] shadow-[0_3px_0_rgb(var(--line))] transition active:translate-y-[2px] active:shadow-none ${choiceCls(state)}`}
+              className={`flex w-full items-start gap-2 rounded-2xl border-2 px-3 py-2.5 text-left text-[0.95rem] leading-snug transition active:scale-[0.99] ${choiceCls(state)}`}
             >
-              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-line text-xs font-bold text-muted">{i + 1}</span>
               <span className="flex-1">{labels?.[o] ?? o}</span>
             </button>
           </li>
@@ -292,6 +291,8 @@ function PracticeRun() {
         </span>
       </div>
 
+      {phase !== 'done' && <div className="mb-3 shrink-0"><StepGuide chapterId={chapterId} sectionId={sectionId} current="praticar" compact /></div>}
+
       {help && simple && (
         <Portal>
         <div className="fixed inset-0 z-50 flex justify-center overflow-y-auto bg-black/40 p-3" onClick={() => setHelp(false)}>
@@ -317,9 +318,6 @@ function PracticeRun() {
 
       {phase === 'intro' && (
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain">
-          <div className="mb-3">
-            <StepGuide chapterId={chapterId} sectionId={sectionId} current="praticar" compact />
-          </div>
           <p className="rubric text-sm font-semibold">{chapter.title}</p>
           <h1 className="text-2xl leading-tight">Prática: {section.title.replace(/^\d+\.\s*/, '')}</h1>
           <div className="mt-6 flex items-end gap-2">
@@ -342,7 +340,7 @@ function PracticeRun() {
 
       {phase === 'play' && act && (
         <div className="flex min-h-0 flex-1 flex-col">
-          <div key={act.id + queue.length} className="anim-tile-in min-h-0 flex-1 overflow-y-auto overscroll-contain pb-2">
+          <div key={act.id + queue.length} className={`anim-tile-in min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-2xl border border-line bg-surface/70 px-3 py-4 sm:px-4 ${verdict ? "pb-40" : "pb-2"}`}>
             {act.kind === 'tf' && (
               <>
                 <p className="text-sm font-semibold text-muted">Verdadeiro ou falso?</p>
@@ -493,19 +491,21 @@ function PracticeRun() {
             </div>
           )}
           {verdict && (
-            <div className={`anim-toast-in -mx-4 mt-4 shrink-0 rounded-t-[1.6rem] px-4 pb-4 pt-4 sm:-mx-6 sm:px-6 ${verdict.ok ? 'bg-[#dcefd8] text-[#1f4d1c]' : 'bg-[#f6d9d2] text-[#6b1f12]'}`} role="status">
-              <p className="flex items-center gap-2 text-lg font-bold">
-                <Icon name={verdict.ok ? 'certo' : 'errado'} size={22} strokeWidth={2.6} /> {verdict.title}
-              </p>
-              {verdict.detail && <p className="mt-1 text-sm leading-snug">{verdict.detail}</p>}
-              {!verdict.ok && (
-                <p className="mt-1 text-sm font-semibold leading-snug">
-                  {verdict.recovery ? 'Logo adiante vem uma parecida, com outro exemplo, para firmar a ideia.' : 'Esta volta no fim da rodada para você tentar de novo.'}
+            <div className={"anim-toast-in fixed inset-x-0 bottom-0 z-40 max-h-[55dvh] overflow-y-auto rounded-t-[1.6rem] px-4 pt-3 shadow-[0_-12px_30px_-12px_rgba(0,0,0,0.45)] sm:px-6 " + (verdict.ok ? 'bg-[#d9eadf] text-[#173d29]' : 'bg-[#f3dcd5] text-[#5c1d12'])} style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }} role="status">
+              <div className="mx-auto max-w-3xl">
+                <p className="flex items-center gap-2 text-lg font-bold">
+                  <Icon name={verdict.ok ? 'certo' : 'errado'} size={22} strokeWidth={2.6} /> {verdict.title}
                 </p>
-              )}
-              <button className={`mt-3 w-full rounded-full px-5 py-3 font-bold text-white shadow-md ${verdict.ok ? 'bg-[#3d7d42]' : 'bg-[#aa3d2a]'}`} onClick={next}>
-                Continuar
-              </button>
+                {verdict.detail && <p className="mt-1 text-sm leading-snug">{verdict.detail}</p>}
+                {!verdict.ok && (
+                  <p className="mt-1 text-sm font-semibold leading-snug">
+                    {verdict.recovery ? 'Logo adiante vem uma parecida, com outro exemplo, para firmar a ideia.' : 'Esta volta no fim da rodada para você tentar de novo.'}
+                  </p>
+                )}
+                <button className={"mt-3 w-full rounded-full px-5 py-3 font-bold text-white shadow-md " + (verdict.ok ? 'bg-[#28744a]' : 'bg-[#a6372a]')} onClick={next}>
+                  Continuar
+                </button>
+              </div>
             </div>
           )}
         </div>
