@@ -151,7 +151,7 @@ describe('telas da fase 6', () => {
     const before = readAt(emptyData(), 'cap.infra.03', 'processos');
     saveData('visitante', before);
     const cp0 = getLearningCheckpoint(before, trailUnits());
-    const r = renderAt('/sala');
+    const r = renderAt('/feed-aulas');
     await user.click(screen.getAllByRole('button', { name: 'Guardar' })[0]);
     await user.click(screen.getByTestId('feed-proximo'));
     r.unmount();
