@@ -135,3 +135,10 @@
 - Videoaula ganhou resumo editável, anotações com marcadores temporais, checklist de revisão e cópia das notas; não há alegação de transcrição automática.
 - A wordmark e o ícone foram recortados da prancha fornecida e vinculados ao componente de marca.
 - Cobertura adicionada em `social-feed.test.tsx`, `trail-teacher-post.test.tsx` e `video-workspace.test.tsx`; incluir rota curricular nova no teste E2E de layout. Confirmar o estado de CI do commit mais recente antes de publicar.
+
+
+## Continuação Pórtico — laboratório prático e release (29/10/2026)
+- O workflow do commit `ea58121021` passou em testes, compilação web, E2E de layout e Gradle APK. A publicação Pages foi ignorada porque `CAN_PUBLISH=false` na `main`.
+- O laboratório ganhou a missão guiada `Chamado 2318`: descobrir um alerta de autenticação usando `pwd`, `ls`, `cat` e `grep`. As etapas só avançam quando o comando produz evidência compatível.
+- O terminal virtual agora aceita aspas, `grep -n/-i/-v`, `ls -la`, `head`, `tail`, `wc -l`, `find`, pipes, redirecionamento `>`/`>>`, escrita de arquivos no ambiente virtual, além de saídas didáticas para `ps`/`top`. Continua sem executar comandos no dispositivo ou num servidor real.
+- O workflow está sendo atualizado para separar a publicação do site da atualização de APK: a `main` publica o app web e restaura o diretório `download/` da versão já publicada quando a chave estável não estiver disponível. Confirmar CI e site publicado antes de declarar release concluído.

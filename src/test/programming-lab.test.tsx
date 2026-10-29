@@ -32,7 +32,7 @@ describe('laboratório Linux virtual', () => {
     const user = userEvent.setup();
     renderAt();
     expect(screen.getByRole('heading', { name: 'Investigue uma tentativa sem autenticação' })).toBeInTheDocument();
-    expect(screen.getByText(/A saída é executada neste sistema virtual|saída.*didática/i)).toBeInTheDocument();
+    expect(screen.getByText(/A saída é simulada/i)).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Preencher comando pwd' }));
     await user.click(screen.getByRole('button', { name: 'Executar comando' }));

@@ -26,76 +26,298 @@ function pathFrom(cwd: string, path: string) {
   return '/' + out.join('/');
 }
 
-function terminalCommand(input: string, state: TerminalState): { state: TerminalState; output: string[]; clear?: boolean } {
+type TerminalResult = { state: TerminalState; output: string[]; clear?: boolean };
+
+/** Tokenizador didático: entende espaços, aspas simples/duplas e escape com barra invertida. */
+function shellWords(input: string): string[] | null {
+  const words: string[] = [];
+  let current = '';
+  let quote: "'" | '"' | null = null;
+  let escaped = false;
+  let started = false;
+  for (const char of input) {
+    if (escaped) { current += char; escaped = false; started = true; continue; }
+    if (char === '\\' && quote !== "'") { escaped = true; started = true; continue; }
+    if (quote) {
+      if (char === quote) quote = null;
+      else current += char;
+      started = true;
+      continue;
+    }
+    if (char === "'" || char === '"') { quote = char; started = true; continue; }
+    if (/\s/.test(char)) {
+      if (started) { words.push(current); current = ''; started = false; }
+      continue;
+    }
+    current += char;
+    started = true;
+  }
+  if (quote || escaped) return null;
+  if (started) words.push(current);
+  return words;
+}
+
+function directEntries(directory: string, state: TerminalState) {
+  const prefix = directory === '/' ? '/' : directory + '/';
+  const dirs = state.directories
+    .filter((dir) => dir.startsWith(prefix) && dir !== directory)
+    .map((dir) => dir.slice(prefix.length))
+    .filter((name) => name && !name.includes('/'))
+    .map((name) => name + '/');
+  const files = Object.keys(state.files)
+    .filter((file) => file.startsWith(prefix))
+    .map((file) => file.slice(prefix.length))
+    .filter((name) => name && !name.includes('/'));
+  return [...dirs, ...files].sort();
+}
+
+function terminalCommandSingle(input: string, state: TerminalState, stdin?: string[]): TerminalResult {
   const raw = input.trim();
-  if (!raw) return { state, output: [] };
-  const [cmd, ...args] = raw.split(/\s+/);
+  if (!raw) return { state, output: stdin ?? [] };
+
+  // Implementa redirecionamento comum de shell sem permitir escrita fora da máquina virtual.
+  const redirect = raw.match(/^(echo|printf)\s+(.+?)\s*(>>|>)\s*(\S+)$/);
+  if (redirect) {
+    const before = shellWords(redirect[1] + ' ' + redirect[2]);
+    const targetName = shellWords(redirect[4])?.[0];
+    if (!before || !targetName) return { state, output: ['bash: erro de sintaxe próximo ao redirecionamento'] };
+    const target = pathFrom(state.cwd, targetName);
+    const parent = pathFrom(target, '..');
+    if (!state.directories.includes(parent)) {
+      return { state, output: ['bash: ' + targetName + ': diretório de destino não encontrado'] };
+    }
+    let value = before.slice(1).join(' ');
+    if (redirect[1] === 'echo') value += '\n';
+    else value = value.replace(/\\n/g, '\n').replace(/\\t/g, '\t');
+    const previous = state.files[target] ?? '';
+    const nextValue = redirect[3] === '>>' ? previous + value : value;
+    return {
+      state: { ...state, files: { ...state.files, [target]: nextValue } },
+      output: [redirect[3] === '>>' ? 'texto acrescentado ao arquivo (simulado)' : 'texto gravado no arquivo (simulado)'],
+    };
+  }
+
+  const parsed = shellWords(raw);
+  if (!parsed) return { state, output: ['bash: aspas ou escape sem fechamento'] };
+  const [cmd, ...args] = parsed;
   const rest = args.join(' ');
   const unavailable = (name: string) => ['bash: ' + name + ': operação não disponível no simulador didático.'];
+
   if (cmd === 'clear') return { state, output: [], clear: true };
   if (cmd === 'help') return { state, output: [
-    'Comandos: help, pwd, whoami, uname -a, ls, cd, cat, grep, touch, mkdir, echo, node --version, python --version, git status, git log --oneline, tree, clear',
-    'Dica: use cat logs/app.log e grep WARN logs/app.log para investigar o registro.',
-    'Limite: terminal virtual; os comandos não alteram o Android nem um servidor real.',
+    'Comandos didáticos: pwd, whoami, uname -a, ls [-la] [caminho], cd, cat, grep [-iniv], head, tail, wc -l, find, tree, echo, printf, touch, mkdir [-p], ps, top, git status, git log --oneline, node --version, python --version, clear.',
+    'Pipelines: cat logs/app.log | grep WARN  ·  grep WARN logs/app.log | wc -l',
+    'O vocabulário e a sintaxe são inspirados em Linux/Bash. A saída é executada neste sistema virtual, sem alterar o Android, o computador ou um servidor real.',
   ] };
   if (cmd === 'pwd') return { state, output: [state.cwd] };
   if (cmd === 'whoami') return { state, output: ['aluno'] };
-  if (cmd === 'uname') return { state, output: ['Linux portico-lab 6.1.0-edu #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux (saída simulada)'] };
-  if (cmd === 'node' && rest === '--version') return { state, output: ['v22.0.0 (versão didática simulada)'] };
-  if (cmd === 'python' && (rest === '--version' || rest === '-V')) return { state, output: ['Python 3.12.0 (versão didática simulada)'] };
+  if (cmd === 'uname') return rest === '-a'
+    ? { state, output: ['Linux portico-lab 6.1.0-edu #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux (sistema virtual)'] }
+    : { state, output: ['Uso: uname -a'] };
+  if (cmd === 'node' && rest === '--version') return { state, output: ['v22.0.0 (runtime didático simulado)'] };
+  if (cmd === 'python' && (rest === '--version' || rest === '-V')) return { state, output: ['Python 3.12.0 (runtime didático simulado)'] };
+  if (cmd === 'command' && args[0] === '-v' && args[1] === 'node') return { state, output: ['/usr/bin/node'] };
+
   if (cmd === 'ls') {
-    const prefix = state.cwd === '/' ? '/' : state.cwd + '/';
-    const dirs = state.directories.filter((d) => d.startsWith(prefix) && d !== state.cwd).map((d) => d.slice(prefix.length)).filter((s) => s && !s.includes('/')).map((s) => s + '/');
-    const files = Object.keys(state.files).filter((f) => f.startsWith(prefix)).map((f) => f.slice(prefix.length)).filter((s) => s && !s.includes('/'));
-    return { state, output: [...dirs, ...files].sort() };
+    const flags = args.filter((arg) => arg.startsWith('-'));
+    const targetArg = args.find((arg) => !arg.startsWith('-'));
+    const target = targetArg ? pathFrom(state.cwd, targetArg === '~' ? '/home/aluno' : targetArg) : state.cwd;
+    if (!state.directories.includes(target)) return { state, output: ['ls: não foi possível acessar ' + (targetArg ?? target) + ': arquivo ou diretório não encontrado'] };
+    const entries = directEntries(target, state);
+    if (flags.some((flag) => flag.includes('a'))) entries.unshift('..', '.');
+    const output = flags.some((flag) => flag.includes('l'))
+      ? ['total ' + entries.length, ...entries.map((entry) => {
+          const path = pathFrom(target, entry.replace(/\/$/, ''));
+          const isDir = entry.endsWith('/');
+          const size = isDir ? 4096 : (state.files[path] ?? '').length;
+          return (isDir ? 'drwxr-xr-x' : '-rw-r--r--') + '  1 aluno aluno ' + String(size).padStart(5) + ' out 29 08:00 ' + entry;
+        })]
+      : entries;
+    return { state, output };
   }
+
   if (cmd === 'cd') {
-    const next = pathFrom(state.cwd, args[0] ?? '/home/aluno');
-    if (state.directories.includes(next)) return { state: { ...state, cwd: next }, output: [] };
-    return { state, output: ['bash: cd: ' + (args[0] ?? '') + ': diretório não encontrado'] };
+    const requested = args[0] ?? '/home/aluno';
+    const target = pathFrom(state.cwd, requested === '~' ? '/home/aluno' : requested);
+    if (state.directories.includes(target)) return { state: { ...state, cwd: target }, output: [] };
+    return { state, output: ['bash: cd: ' + requested + ': diretório não encontrado'] };
   }
+
   if (cmd === 'cat') {
-    const target = pathFrom(state.cwd, args[0] ?? '');
-    return { state, output: target in state.files ? state.files[target].split('\n') : ['cat: ' + (args[0] ?? '') + ': arquivo não encontrado'] };
-  }
-  if (cmd === 'grep') {
-    const needle = args[0];
-    const target = pathFrom(state.cwd, args[1] ?? '');
-    if (!needle || !(target in state.files)) return { state, output: ['Uso: grep TEXTO arquivo'] };
-    const matches = state.files[target].split('\n').filter((line) => line.includes(needle));
-    return { state, output: matches.length ? matches : [] };
-  }
-  if (cmd === 'mkdir' || cmd === 'touch') {
-    const name = args[0];
-    if (!name) return { state, output: ['Uso: ' + cmd + ' nome'] };
-    const target = pathFrom(state.cwd, name);
-    if (cmd === 'mkdir') {
-      if (state.directories.includes(target) || target in state.files) return { state, output: ['mkdir: ' + name + ': já existe'] };
-      return { state: { ...state, directories: [...state.directories, target] }, output: ['diretório criado: ' + target] };
+    if (args.length === 0 && stdin) return { state, output: stdin };
+    if (!args.length) return { state, output: ['Uso: cat arquivo'] };
+    const output: string[] = [];
+    for (const name of args) {
+      const target = pathFrom(state.cwd, name);
+      if (target in state.files) output.push(...state.files[target].split('\n'));
+      else output.push('cat: ' + name + ': arquivo não encontrado');
     }
-    if (target in state.files || state.directories.includes(target)) return { state, output: ['touch: ' + name + ': já existe'] };
+    return { state, output };
+  }
+
+  if (cmd === 'grep') {
+    let lineNumbers = false;
+    let insensitive = false;
+    let invert = false;
+    const positionals: string[] = [];
+    for (const arg of args) {
+      if (arg === '-n') lineNumbers = true;
+      else if (arg === '-i') insensitive = true;
+      else if (arg === '-v') invert = true;
+      else if (arg === '--') continue;
+      else if (arg.startsWith('-') && arg.length > 1 && /^[^-]+$/.test(arg.slice(1)) && [...arg.slice(1)].every((c) => 'niv'.includes(c))) {
+        lineNumbers ||= arg.includes('n');
+        insensitive ||= arg.includes('i');
+        invert ||= arg.includes('v');
+      } else positionals.push(arg);
+    }
+    const needle = positionals[0];
+    const fileName = positionals[1];
+    if (!needle || (!fileName && !stdin)) return { state, output: ['Uso: grep [-n] TEXTO arquivo (ou receba texto por pipeline)'] };
+    const file = fileName ? pathFrom(state.cwd, fileName) : '';
+    if (fileName && !(file in state.files)) return { state, output: ['grep: ' + fileName + ': arquivo não encontrado'] };
+    const source = fileName ? (state.files[file] ?? '').split('\n') : (stdin ?? []);
+    const targetNeedle = insensitive ? needle.toLocaleLowerCase('pt-BR') : needle;
+    const matches = source.flatMap((line, index) => {
+      const haystack = insensitive ? line.toLocaleLowerCase('pt-BR') : line;
+      const contains = haystack.includes(targetNeedle);
+      return (invert ? !contains : contains) ? [(lineNumbers ? (index + 1) + ':' : '') + line] : [];
+    });
+    return { state, output: matches };
+  }
+
+  if (cmd === 'head' || cmd === 'tail') {
+    let count = 10;
+    let fileName: string | undefined;
+    for (let i = 0; i < args.length; i++) {
+      if (args[i] === '-n') { count = Math.max(0, Math.min(100, Number(args[i + 1]) || 10)); i++; }
+      else if (/^-\d+$/.test(args[i])) count = Math.max(0, Math.min(100, Number(args[i].slice(1))));
+      else if (!args[i].startsWith('-')) fileName = args[i];
+    }
+    if (!fileName && !stdin) return { state, output: ['Uso: ' + cmd + ' [-n quantidade] arquivo (ou receba texto por pipeline)'] };
+    if (fileName && !(pathFrom(state.cwd, fileName) in state.files)) return { state, output: [cmd + ': ' + fileName + ': arquivo não encontrado'] };
+    const lines = fileName ? (state.files[pathFrom(state.cwd, fileName)] ?? '').split('\n') : (stdin ?? []);
+    return { state, output: cmd === 'head' ? lines.slice(0, count) : lines.slice(Math.max(0, lines.length - count)) };
+  }
+
+  if (cmd === 'wc' && args.includes('-l')) {
+    const fileName = args.find((arg) => !arg.startsWith('-'));
+    if (!fileName && !stdin) return { state, output: ['Uso: wc -l arquivo (ou receba texto por pipeline)'] };
+    if (fileName && !(pathFrom(state.cwd, fileName) in state.files)) return { state, output: ['wc: ' + fileName + ': arquivo não encontrado'] };
+    const lines = fileName ? (state.files[pathFrom(state.cwd, fileName)] ?? '').split('\n') : (stdin ?? []);
+    return { state, output: [String(lines.length) + (fileName ? ' ' + fileName : '')] };
+  }
+
+  if (cmd === 'find') {
+    const baseArg = args.find((arg) => !arg.startsWith('-')) ?? '.';
+    const base = pathFrom(state.cwd, baseArg);
+    if (!state.directories.includes(base) && !(base in state.files)) return { state, output: ['find: ' + baseArg + ': arquivo ou diretório não encontrado'] };
+    const typeIndex = args.indexOf('-type');
+    const kind = typeIndex >= 0 ? args[typeIndex + 1] : '';
+    const allFiles = Object.keys(state.files).filter((file) => file === base || file.startsWith(base === '/' ? '/' : base + '/'));
+    const allDirs = state.directories.filter((dir) => dir === base || dir.startsWith(base === '/' ? '/' : base + '/'));
+    const prefix = state.cwd === '/' ? '/' : state.cwd + '/';
+    const relative = (path: string) => path === state.cwd ? '.' : path.startsWith(prefix) ? './' + path.slice(prefix.length) : path;
+    return { state, output: [
+      ...((!kind || kind === 'f') ? allFiles : []).map(relative),
+      ...((!kind || kind === 'd') ? allDirs.filter((dir) => dir !== base) : []).map((dir) => relative(dir) + '/'),
+    ].sort() };
+  }
+
+  if (cmd === 'mkdir') {
+    const recursive = args.includes('-p');
+    const name = args.find((arg) => !arg.startsWith('-'));
+    if (!name) return { state, output: ['Uso: mkdir [-p] diretório'] };
+    const target = pathFrom(state.cwd, name);
+    if (state.directories.includes(target)) return { state, output: recursive ? [] : ['mkdir: ' + name + ': já existe'] };
+    if (target in state.files) return { state, output: ['mkdir: ' + name + ': já existe um arquivo com esse nome'] };
+    const parent = pathFrom(target, '..');
+    if (!state.directories.includes(parent) && !recursive) return { state, output: ['mkdir: ' + name + ': diretório pai não existe'] };
+    const additions: string[] = [];
+    if (recursive) {
+      const parts = target.split('/').filter(Boolean);
+      let cursor = '';
+      for (const part of parts) { cursor += '/' + part; if (!state.directories.includes(cursor)) additions.push(cursor); }
+    } else additions.push(target);
+    return { state: { ...state, directories: [...state.directories, ...additions] }, output: ['diretório criado: ' + target] };
+  }
+
+  if (cmd === 'touch') {
+    const name = args[0];
+    if (!name) return { state, output: ['Uso: touch arquivo'] };
+    const target = pathFrom(state.cwd, name);
+    const parent = pathFrom(target, '..');
+    if (!state.directories.includes(parent)) return { state, output: ['touch: ' + name + ': diretório pai não existe'] };
+    if (state.directories.includes(target)) return { state, output: ['touch: ' + name + ': é um diretório'] };
+    if (target in state.files) return { state, output: ['timestamps atualizados: ' + target] };
     return { state: { ...state, files: { ...state.files, [target]: '' } }, output: ['arquivo criado: ' + target] };
   }
-  if (cmd === 'echo') {
-    const redirect = raw.match(/^echo\s+(.+?)\s*>\s*(\S+)$/);
-    if (redirect) {
-      const target = pathFrom(state.cwd, redirect[2]);
-      if (!(target in state.files)) return { state, output: ['bash: ' + redirect[2] + ': crie o arquivo primeiro com touch'] };
-      return { state: { ...state, files: { ...state.files, [target]: redirect[1].replace(/^['"]|['"]$/g, '') } }, output: ['texto gravado no arquivo (simulado)'] };
-    }
-    return { state, output: [raw.slice(5).replace(/^['"]|['"]$/g, '')] };
+
+  if (cmd === 'echo' || cmd === 'printf') {
+    const value = args.join(' ');
+    return { state, output: [cmd === 'echo' ? value : value.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/%s/g, args[1] ?? '')] };
   }
+
+  if (cmd === 'ps') return { state, output: [
+    '  PID TTY          TIME CMD',
+    '  101 pts/0    00:00:00 bash',
+    '  248 pts/0    00:00:01 node (processo didático)',
+    '  301 pts/0    00:00:00 ps',
+  ] };
+  if (cmd === 'top') return { state, output: [
+    'top - 08:06:12 up 4 days,  2 users,  load average: 0.72, 0.64, 0.51 (simulado)',
+    'Tasks: 84 total, 1 running, 83 sleeping',
+    '  PID USER  %CPU %MEM COMMAND',
+    '  248 aluno 18.2  7.4 node',
+    '  301 aluno  0.0  0.1 top',
+  ] };
   if (cmd === 'git' && rest === 'status') return { state, output: [
     'On branch main (repositório fictício)',
-    'Changes not staged for commit: use o laboratório de Git guiado para praticar staging e commits.',
+    'Changes not staged for commit: README.md',
     'nothing was altered in a real repository',
   ] };
   if (cmd === 'git' && rest.startsWith('log')) return { state, output: ['a81c104 feat: adiciona exercícios', 'b3270ef docs: registra a atividade', '0f19d7a init: cria projeto de treino'] };
-  if (cmd === 'tree') return { state, output: ['/home/aluno/', '├── README.md', '├── atividade.js', '├── logs/', '│   └── app.log', '└── projetos/'] };
-  if (cmd === 'npm' && rest === 'test') return { state, output: ['Test suite simulada: 8 testes aprovados, 0 falhas.', 'Saída ilustrativa; nenhum teste real foi executado neste terminal.'] };
-  if (cmd === 'npm' && rest === 'run build') return { state, output: ['Build simulado: dist/ criado sem erros.', 'Saída ilustrativa; nenhum build real foi executado neste terminal.'] };
-  if (['sudo', 'rm', 'curl', 'wget', 'ssh', 'scp', 'shutdown', 'reboot', 'dd'].includes(cmd)) return { state, output: unavailable(cmd) };
+  if (cmd === 'tree') {
+    const entries = directEntries(state.cwd, state);
+    return { state, output: [state.cwd + '/', ...entries.map((entry) => (entry.endsWith('/') ? '├── ' + entry : '├── ' + entry))] };
+  }
+  if (cmd === 'npm' && rest === 'test') return { state, output: ['Test suite didática simulada: 8 testes aprovados, 0 falhas.', 'Saída ilustrativa; nenhum teste real foi executado neste terminal.'] };
+  if (cmd === 'npm' && rest === 'run build') return { state, output: ['Build didático simulado: dist/ criado sem erros.', 'Saída ilustrativa; nenhum build real foi executado neste terminal.'] };
+  if (['sudo', 'rm', 'curl', 'wget', 'ssh', 'scp', 'shutdown', 'reboot', 'dd', 'kill', 'chmod', 'chown', 'mount', 'umount'].includes(cmd)) return { state, output: unavailable(cmd) };
   return { state, output: ['bash: ' + cmd + ': comando não encontrado. Digite help.'] };
+}
+
+/** Interpreta pipes da esquerda para a direita. Apenas a saída textual flui entre comandos. */
+function terminalCommand(input: string, state: TerminalState): TerminalResult {
+  const segments = input.split('|').map((segment) => segment.trim());
+  if (segments.length === 1) return terminalCommandSingle(input, state);
+  if (segments.some((segment) => !segment)) return { state, output: ['bash: sintaxe inválida no pipeline'] };
+  let currentState = state;
+  let output: string[] = [];
+  for (const segment of segments) {
+    const result = terminalCommandSingle(segment, currentState, output);
+    if (result.clear) return result;
+    currentState = result.state;
+    output = result.output;
+  }
+  return { state: currentState, output };
+}
+
+type IncidentStep = { id: string; title: string; command: string; explanation: string };
+const INCIDENT_STEPS: IncidentStep[] = [
+  { id: 'location', title: 'Confirme em qual diretório você está', command: 'pwd', explanation: 'pwd mostra o diretório de trabalho atual.' },
+  { id: 'files', title: 'Localize a pasta de registros', command: 'ls', explanation: 'ls lista os arquivos e diretórios visíveis no local atual.' },
+  { id: 'read-log', title: 'Leia o registro do aplicativo', command: 'cat logs/app.log', explanation: 'cat exibe o conteúdo do arquivo para inspeção.' },
+  { id: 'filter-warning', title: 'Isole o alerta relevante', command: 'grep WARN logs/app.log', explanation: 'grep filtra as linhas que contêm WARN.' },
+];
+
+function terminalStepMatches(id: string, raw: string, result: TerminalResult): boolean {
+  const command = raw.trim().replace(/\s+/g, ' ');
+  if (id === 'location') return /^pwd$/.test(command) && result.output.includes('/home/aluno');
+  if (id === 'files') return /^(?:ls|ls -l|ls -a|ls -la|ls -al)(?: \.)?$/.test(command) && result.output.some((line) => line.includes('logs/'));
+  if (id === 'read-log') return /^cat (?:logs\/app\.log|\/home\/aluno\/logs\/app\.log)$/.test(command) && result.output.some((line) => line.includes('WARN 08:05 tentativa sem autenticação'));
+  if (id === 'filter-warning') return /^(?:grep (?:-n )?WARN (?:logs\/app\.log|\/home\/aluno\/logs\/app\.log)|cat logs\/app\.log \| grep WARN)$/.test(command) && result.output.some((line) => line.includes('WARN 08:05 tentativa sem autenticação'));
+  return false;
 }
 
 // Worker descartável: sem DOM, rede ou acesso ao sistema de arquivos do aparelho; é encerrado em 1,5 s.
@@ -119,7 +341,8 @@ export function ProgrammingLabPage() {
   const [running, setRunning] = useState(false);
   const [command, setCommand] = useState('');
   const [terminalState, setTerminalState] = useState<TerminalState>(INITIAL_TERMINAL);
-  const [terminalOutput, setTerminalOutput] = useState<string[]>(['Terminal didático pronto. Digite help para começar.']);
+  const [terminalOutput, setTerminalOutput] = useState<string[]>(['Terminal didático pronto. Digite help para listar os comandos.']);
+  const [completedIncidentSteps, setCompletedIncidentSteps] = useState<string[]>([]);
   const workerRef = useRef<Worker | null>(null);
   const workerUrlRef = useRef<string | null>(null);
   const timeoutRef = useRef<number | undefined>(undefined);
@@ -179,6 +402,16 @@ export function ProgrammingLabPage() {
     setTerminalState(result.state);
     if (result.clear) setTerminalOutput([]);
     else setTerminalOutput((lines) => [...lines, 'aluno@portico:' + terminalState.cwd + '$ ' + raw, ...result.output].slice(-120));
+    setCompletedIncidentSteps((old) => {
+      const next = [...old];
+      for (let i = 0; i < INCIDENT_STEPS.length; i++) {
+        const step = INCIDENT_STEPS[i];
+        if (next.includes(step.id)) continue;
+        if (i > 0 && !INCIDENT_STEPS.slice(0, i).every((previous) => next.includes(previous.id))) continue;
+        if (terminalStepMatches(step.id, raw, result)) next.push(step.id);
+      }
+      return next;
+    });
     setCommand('');
   };
 
@@ -231,24 +464,53 @@ export function ProgrammingLabPage() {
           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-ember/15 text-ember"><Icon name="tela" size={20} /></span>
           <div>
             <h2 id="terminal-lab-title" className="text-lg font-semibold">2. Terminal Linux didático</h2>
-            <p className="text-sm text-muted">O terminal imita um pequeno sistema de arquivos. Os comandos não são enviados ao Android, ao servidor ou a uma shell real.</p>
+            <p className="text-sm text-muted">Pratique a sintaxe de Bash/Linux num sistema de arquivos virtual persistente durante esta sessão. A saída é simulada; nada é executado no Android, no computador ou num servidor real.</p>
           </div>
         </div>
+        <section className="rounded-xl border border-line bg-raised/40 p-3" aria-label="Chamado guiado: investigar log">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="kicker">Chamado 2318 · laboratório de suporte</p>
+              <h3 className="mt-1 font-semibold">Investigue uma tentativa sem autenticação</h3>
+              <p className="mt-1 text-sm text-muted">Siga os passos usando os comandos do terminal. As tarefas só são marcadas quando o comando correto produz a evidência esperada.</p>
+            </div>
+            <span className="shrink-0 rounded-full border border-line px-2 py-1 text-xs font-semibold">{completedIncidentSteps.length}/{INCIDENT_STEPS.length}</span>
+          </div>
+          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-line" role="progressbar" aria-label="Progresso do chamado" aria-valuemin={0} aria-valuemax={INCIDENT_STEPS.length} aria-valuenow={completedIncidentSteps.length}>
+            <div className="h-full bg-teal transition-[width]" style={{ width: (completedIncidentSteps.length / INCIDENT_STEPS.length * 100) + '%' }} />
+          </div>
+          <ol className="mt-3 space-y-2">
+            {INCIDENT_STEPS.map((step, index) => {
+              const done = completedIncidentSteps.includes(step.id);
+              const unlocked = index === 0 || INCIDENT_STEPS.slice(0, index).every((previous) => completedIncidentSteps.includes(previous.id));
+              return <li key={step.id} data-testid={'terminal-step-' + step.id} className="flex items-start gap-2 rounded-lg border border-line bg-surface/70 p-2.5">
+                <span className={'mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full text-xs font-bold ' + (done ? 'bg-ok/15 text-ok' : 'bg-raised text-muted')}>{done ? '✓' : index + 1}</span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold">{step.title}</p>
+                  <p className="mt-0.5 text-xs text-muted">{done ? step.explanation : unlocked ? 'Próxima ação: ' + step.command : 'Conclua a etapa anterior para desbloquear.'}</p>
+                </div>
+                <button type="button" className="btn-ghost !min-h-8 !px-2 text-xs" disabled={done || !unlocked} onClick={() => setCommand(step.command)} aria-label={'Preencher comando ' + step.command}>Usar comando</button>
+              </li>;
+            })}
+          </ol>
+          {completedIncidentSteps.length === INCIDENT_STEPS.length && <p className="mt-3 rounded-lg border border-ok/40 bg-ok/10 p-3 text-sm" role="status">Chamado investigado: o log confirma uma tentativa sem autenticação às 08:05. Você encontrou a evidência; no trabalho real, o próximo passo seria correlacionar o registro com a política de autenticação e os demais logs.</p>}
+          <button type="button" className="btn-ghost mt-3 text-xs" onClick={() => { setTerminalState(INITIAL_TERMINAL); setCompletedIncidentSteps([]); setCommand(''); setTerminalOutput(['Terminal virtual reiniciado. O sistema real não foi alterado.']); }}>Reiniciar terminal e chamado</button>
+        </section>
         <div className="overflow-hidden rounded-xl border border-line bg-[#111714]">
           <div className="flex items-center justify-between gap-2 border-b border-white/10 px-3 py-2 text-xs text-[#b3c8b8]">
-            <span>aluno@portico</span><span>simulador · sem acesso ao sistema</span>
+            <span>aluno@portico</span><span>Linux virtual · sem acesso ao sistema real</span>
           </div>
-          <div className="max-h-64 space-y-1 overflow-y-auto p-3 font-mono text-xs leading-relaxed text-[#d8e7dc]" aria-live="polite">
+          <div role="log" aria-label="Saída do terminal" className="max-h-64 space-y-1 overflow-y-auto p-3 font-mono text-xs leading-relaxed text-[#d8e7dc]" aria-live="polite">
             {terminalOutput.map((line, index) => <pre key={index} className="whitespace-pre-wrap break-words">{line}</pre>)}
           </div>
           <form onSubmit={runTerminal} className="flex items-center gap-2 border-t border-white/10 px-3 py-2 font-mono text-xs">
             <label htmlFor="terminal-command" className="shrink-0 text-[#8dd5a7]">$</label>
-            <input id="terminal-command" value={command} onChange={(event) => setCommand(event.target.value)} autoCapitalize="off" autoCorrect="off" spellCheck={false} placeholder="help" className="min-w-0 flex-1 bg-transparent py-1 text-[#f3fff5] outline-none placeholder:text-[#748d7c]" />
-            <button type="submit" className="rounded-lg bg-[#24553b] px-3 py-2 font-bold text-white">Enter</button>
+            <input id="terminal-command" aria-label="Comando do terminal" value={command} onChange={(event) => setCommand(event.target.value)} autoCapitalize="off" autoCorrect="off" spellCheck={false} placeholder="help" className="min-w-0 flex-1 bg-transparent py-1 text-[#f3fff5] outline-none placeholder:text-[#748d7c]" />
+            <button type="submit" className="rounded-lg bg-[#24553b] px-3 py-2 font-bold text-white" aria-label="Executar comando">Enter</button>
           </form>
         </div>
         <div className="flex flex-wrap gap-2 text-xs">
-          {['help', 'pwd', 'ls', 'cat logs/app.log', 'grep WARN logs/app.log', 'git status'].map((example) => (
+          {['help', 'pwd', 'ls -la', 'cat logs/app.log', 'grep -n WARN logs/app.log', 'cat logs/app.log | grep WARN', 'grep WARN logs/app.log | wc -l', 'ps', 'top'].map((example) => (
             <button key={example} type="button" className="btn-ghost !min-h-[34px] !px-2.5 font-mono" onClick={() => setCommand(example)}>{example}</button>
           ))}
         </div>

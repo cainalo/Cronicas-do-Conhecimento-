@@ -6,11 +6,12 @@
 ## Pórtico — implementação de 29/10/2026
 - `/sala` foi transformada em feed social demonstrativo, com stories, filtros, criação local de texto/imagem, curtidas, comentários e perfil completo dos professores. Stories incluem referências externas e indicação musical; a música não é reproduzida pela plataforma.
 - A antiga experiência didática permanece em `/feed-aulas`; a rota dedicada permite preservar testes e utilidades curriculares.
+- O laboratório `/laboratorio-codigo` recebeu um chamado guiado de análise de logs, suporte a opções comuns do Linux (`grep -n`, `ls -la`, `head`, `tail`, `wc -l`, `find`), pipelines simples e escrita de arquivos no sistema virtual. O terminal continua didático: os comandos não são executados no Android ou num servidor real.
 - Publicações editoriais selecionadas entram na trilha em `/trilha-post/:chapterId/:sectionId`; não são redirecionadas para o feed principal nem montadas automaticamente a partir do texto de Aprender. Mini-desafios, reações e marcações ficam no aparelho.
 - A página `/video/:id` ganhou workspace de estudo com player em destaque, resumo editável, anotações, marcadores de tempo, checklist e exportação para clipboard. O resumo não é transcrição automática do YouTube. Em desktop, o container ganha largura adicional.
 - Os assets `public/brand/portico-wordmark.jpg` e `public/brand/portico-app-icon.jpg` são recortes da prancha de identidade visual enviada; `src/components/Logo.tsx` passa a utilizá-los.
 - Fichas dos quatro professores incluem estilo pessoal, interesses, referências, bordões e forma de ensinar. O feed segue como demonstração local: ainda não é uma rede social multiusuário em tempo real.
-- **Release atual:** validar o workflow do SHA mais recente antes de considerar publicado. O último build identificado encontrou imports/variáveis TypeScript não usados; correções foram enviadas em `f649edff`. A verificação de release após essas correções continua pendente.
+- **Validação confirmada em 29/10:** o workflow do commit `ea58121021` terminou com testes, build web, verificação de layout e APK bem-sucedidos. A etapa de Pages foi ignorada por `CAN_PUBLISH=false` em `main`; o workflow foi ajustado nesta rodada para publicar o site da `main` preservando o `download/` já publicado se a assinatura estável não puder ser reconstruída. O novo deploy ainda precisa ser confirmado no Actions.
 - Plano de continuidade detalhado: `docs/PORTICO_IMPLEMENTATION_PLAN.md`.
 
 ## Situação atual

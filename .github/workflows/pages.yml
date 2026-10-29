@@ -9,17 +9,17 @@ permissions:
   contents: write
 
 concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  # Site e APK publicam na mesma branch gh-pages: serializar branches evita corrida de deploy.
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     env:
-      # Com a chave de release nos segredos, qualquer branch pode publicar. Sem ela, a chave de
-      # assinatura vem do cache do Actions, que é separado por branch: publicar de dois branches
-      # alternaria a chave e o Android recusaria a atualização ("conflito com pacote existente").
-      # Por isso, sem a chave de release, só o branch de trabalho publica.
+      # Sem keystore de release, a main atualiza o site e preserva o APK já publicado, evitando
+      # trocar a assinatura instalada no Android. O APK só é reconstruído/publicado no branch
+      # de trabalho ou quando os segredos ANDROID_KEYSTORE_* estão configurados.
       CAN_PUBLISH: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' || github.ref_name == 'claude/cronicas-conhecimento-estudos-jgbofo' }}
       APP_VERSION_CODE: ${{ github.run_number }}
       APP_VERSION_NAME: 0.1.${{ github.run_number }}
@@ -48,21 +48,27 @@ jobs:
         run: npx playwright install chromium
       - name: Verificação de layout no navegador
         run: npm run test:e2e
-      - run: npx cap sync android
+      - name: Preparar projeto Android
+        if: env.CAN_PUBLISH == 'true'
+        run: npx cap sync android
       - uses: actions/setup-java@v4
+        if: env.CAN_PUBLISH == 'true'
         with:
           distribution: temurin
           java-version: 21
       - uses: gradle/actions/setup-gradle@v4
+        if: env.CAN_PUBLISH == 'true'
       # Assinatura: usa os segredos ANDROID_KEYSTORE_* se existirem; senão, uma chave de
       # depuração mantida no cache do Actions (nunca no repositório), para que as
       # atualizações instalem por cima da versão anterior.
       - name: Restaurar chave de assinatura
+        if: env.CAN_PUBLISH == 'true'
         uses: actions/cache@v4
         with:
           path: ~/.android/debug.keystore
           key: android-signing-v1
       - name: Preparar chave de assinatura
+        if: env.CAN_PUBLISH == 'true'
         env:
           KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -84,11 +90,14 @@ jobs:
               -dname "CN=Cronicas do Conhecimento,O=Cronicas,C=BR"
           fi
       - name: Compilar APK
+        if: env.CAN_PUBLISH == 'true'
         working-directory: android
         run: |
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon
-      - run: cp android/app/build/outputs/apk/release/app-release.apk "$RUNNER_TEMP/cronicas-do-conhecimento.apk"
+      - name: Guardar APK gerado
+        if: env.CAN_PUBLISH == 'true'
+        run: cp android/app/build/outputs/apk/release/app-release.apk "$RUNNER_TEMP/cronicas-do-conhecimento.apk"
 
       # ---------- Site (GitHub Pages) ----------
       - run: npm run build
@@ -97,6 +106,7 @@ jobs:
       # Fallback de SPA: rotas como /capitulo/... abrem o app em vez de 404
       - run: cp dist/index.html dist/404.html
       - name: Incluir o APK no site
+        if: env.CAN_PUBLISH == 'true'
         run: |
           mkdir -p dist/download
           cp "$RUNNER_TEMP/cronicas-do-conhecimento.apk" dist/download/
@@ -105,8 +115,22 @@ jobs:
           SIGNING=$([ -n "${ANDROID_KEYSTORE_PATH:-}" ] && echo release || echo debug)
           printf '{"versionName":"%s","versionCode":%s,"size":%s,"sha256":"%s","signing":"%s","builtAt":"%s","commit":"%s"}\n' \
             "$APP_VERSION_NAME" "$APP_VERSION_CODE" "$SIZE" "$SHA" "$SIGNING" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "${GITHUB_SHA::7}" > dist/download/version.json
+      - name: Preservar o APK estável quando a assinatura não está disponível
+        if: env.CAN_PUBLISH != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPO_URL="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git ls-remote --exit-code "$REPO_URL" refs/heads/gh-pages >/dev/null 2>&1; then
+            git clone --depth 1 --branch gh-pages "$REPO_URL" "$RUNNER_TEMP/previous-gh-pages"
+            if [ -d "$RUNNER_TEMP/previous-gh-pages/download" ]; then
+              mkdir -p dist/download
+              cp -a "$RUNNER_TEMP/previous-gh-pages/download/." dist/download/
+            fi
+          else
+            echo "Branch gh-pages sem pacote anterior; site será publicado sem APK até a primeira publicação de app."
+          fi
       - uses: peaceiris/actions-gh-pages@v4
-        if: env.CAN_PUBLISH == 'true'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist

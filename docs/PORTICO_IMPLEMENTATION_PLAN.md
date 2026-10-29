@@ -9,6 +9,8 @@ Este documento é o ponto de continuidade técnico para a próxima sessão de de
 - As publicações criadas pelo estudante são armazenadas no navegador. **Ainda não são sincronizadas entre usuários/dispositivos**; não apresentar o protótipo local como rede social multiusuário.
 - Stories têm progressão manual, identidade visual própria e indicação de trilha sonora. Não reproduzem música protegida.
 - O componente anterior `src/pages/TeachersRoom.tsx` foi preservado como referência de estudo e para evitar perda de funcionalidades didáticas já existentes.
+- O laboratório de programação contém um chamado guiado de suporte, usa comandos Bash/Linux frequentes e executa pipelines simples sobre um sistema de arquivos em memória. A interface sinaliza que a saída é simulada e não acessa o sistema operacional do aparelho.
+- O workflow `pages.yml` publica o site em toda a `main`; sem a chave estável, preserva `download/` da branch `gh-pages` em vez de gerar um APK incompatível. A recompilação do APK segue restrita ao branch de trabalho ou quando a keystore de release estiver configurada.
 
 ## Próximas etapas — executar nesta ordem
 
