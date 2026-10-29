@@ -41,7 +41,7 @@ describe('laboratório Linux virtual', () => {
 
     await user.click(screen.getByRole('button', { name: 'Preencher comando ls' }));
     await user.click(screen.getByRole('button', { name: 'Executar comando' }));
-    expect(screen.getByTestId('terminal-step-files')).toHaveTextContent('ls lista os arquivos');
+    expect(screen.getByTestId('terminal-step-files')).toHaveTextContent('ls encontrou a pasta logs');
 
     await user.click(screen.getByRole('button', { name: 'Preencher comando top' }));
     await user.click(screen.getByRole('button', { name: 'Executar comando' }));

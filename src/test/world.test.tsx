@@ -146,7 +146,7 @@ describe('tela do escritório (tela cheia)', () => {
     expect(screen.getByText(/Aberto pelo terminal da Marta no mapa/)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Voltar ao escritório 2D' }));
     expect(await screen.findByTestId('mundo')).toBeInTheDocument();
-    expect(screen.getByTestId('mundo-sala')).toHaveTextContent('Recepção');
+    expect(screen.getByTestId('mundo-sala')).toHaveTextContent('Suporte');
   });
   it('teclado anda uma casa e vira o personagem; Esc fecha o painel', async () => {
     const user = userEvent.setup();
