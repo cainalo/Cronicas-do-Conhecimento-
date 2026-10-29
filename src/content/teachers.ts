@@ -75,6 +75,30 @@ export const teachers: FictionalTeacher[] = [
     tone: 'pink',
     fictional: true,
   },
+  {
+    id: 'prof.helena', handle: 'helena.palavras', topics: ['Português', 'Interpretação', 'Escrita'],
+    name: 'Professora Helena', expertiseLabel: 'Língua portuguesa e interpretação',
+    biography: 'Personagem fictícia. Observa como contexto, pontuação e escolha de palavras mudam a interpretação.',
+    tone: 'pink', fictional: true,
+  },
+  {
+    id: 'prof.caio', handle: 'caio.incontext', topics: ['Inglês', 'Vocabulário', 'Leitura'],
+    name: 'Professor Caio', expertiseLabel: 'Inglês instrumental',
+    biography: 'Personagem fictício. Ensina a inferir significados pelo contexto sem traduzir cada palavra.',
+    tone: 'azure', fictional: true,
+  },
+  {
+    id: 'prof.tomas', handle: 'tomas.processos', topics: ['Governança', 'Engenharia de software', 'Gestão pública'],
+    name: 'Professor Tomás', expertiseLabel: 'Governança e engenharia de software',
+    biography: 'Personagem fictício. Organiza problemas em objetivos, papéis, riscos e evidências.',
+    tone: 'leaf', fictional: true,
+  },
+  {
+    id: 'prof.joana', handle: 'joana.dados', topics: ['Banco de dados', 'SQL', 'Modelagem'],
+    name: 'Professora Joana', expertiseLabel: 'Banco de dados e SQL',
+    biography: 'Personagem fictícia. Encontra padrões em tabelas e traduz perguntas em consultas.',
+    tone: 'teal', fictional: true,
+  },
 ];
 
 const P = (p: Omit<TeacherPost, 'version' | 'review'>): TeacherPost => ({ version: 1, review: 'nao-revisado', ...p });
@@ -299,8 +323,15 @@ export const teacherPosts: TeacherPost[] = [
   }),
 ];
 
-/** Quem assina os posts de cada capítulo no feed didático. */
+/** Quem assina os posts de cada capítulo: o elenco acompanha as disciplinas da trilha. */
 export function teacherForChapter(chapterId: string): FictionalTeacher {
-  const id = chapterId.startsWith('cap.mat') ? 'prof.clara' : chapterId === 'cap.infra.01' ? 'prof.davi' : chapterId.startsWith('cap.seg') || chapterId === 'cap.infra.02' ? 'prof.iara' : 'prof.lia';
-  return teachers.find((t) => t.id === id)!;
+  let id = 'prof.lia';
+  if (chapterId.startsWith('cap.mat')) id = 'prof.clara';
+  else if (chapterId.startsWith('cap.port')) id = 'prof.helena';
+  else if (chapterId.startsWith('cap.ingles')) id = 'prof.caio';
+  else if (chapterId.startsWith('cap.dados')) id = 'prof.joana';
+  else if (chapterId.startsWith('cap.gov') || chapterId.startsWith('cap.es') || chapterId.startsWith('cap.leg') || chapterId.startsWith('cap.inst')) id = 'prof.tomas';
+  else if (chapterId === 'cap.infra.01' || chapterId === 'cap.prim.02') id = 'prof.davi';
+  else if (chapterId.startsWith('cap.seg') || chapterId.startsWith('cap.ia') || chapterId === 'cap.infra.02') id = 'prof.iara';
+  return teachers.find((t) => t.id === id) ?? teachers[0];
 }
