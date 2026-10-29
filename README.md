@@ -1,6 +1,6 @@
-# Crônicas do Conhecimento
+# Pórtico
 
-Plataforma de estudos gamificada (RPG medieval + trilha estilo Duolingo + grimórios didáticos) para concursos públicos de TI. Primeiro concurso: **TCE-GO 2026 — Técnico de Controle Externo, Tecnologia da Informação (FCC)**.
+Pórtico é uma plataforma de estudos gamificada (RPG medieval + trilha estilo Duolingo + grimórios didáticos) para concursos públicos de TI. Primeiro concurso: **TCE-GO 2026 — Técnico de Controle Externo, Tecnologia da Informação (FCC)**.
 
 ## O que já dá para fazer
 - Ler o grimório **O Códice das Sete Chaves**, cap. 1 — *Criptografia* (6 seções, glossário, referências), com sumário, busca, marcadores, retomada, ajuste de fonte e tema claro/escuro.
@@ -27,6 +27,9 @@ O cliente já aponta para o projeto Supabase `cronicas-do-conhecimento` usando a
 Ao publicar o build em hospedagem estática, configure *fallback* de SPA (todas as rotas → `index.html`), pois o app usa rotas reais (`/capitulo/...`).
 
 Para os links de confirmação/recuperação de senha funcionarem fora do `localhost`, cadastre a URL do site em Supabase → Authentication → URL Configuration.
+
+## Identidade visual
+A marca Pórtico é desenhada em SVG inline no componente `src/components/Logo.tsx`; o favicon também é vetorial em `public/icon.svg`. Não usar recortes rasterizados da prancha de referência.
 
 ## Documentação
 Comece por `CLAUDE.md` e `docs/SESSION_HANDOFF.md`. O plano atualizado de continuidade, critérios de aceite e próximas etapas do produto Pórtico está em `docs/PORTICO_IMPLEMENTATION_PLAN.md`.

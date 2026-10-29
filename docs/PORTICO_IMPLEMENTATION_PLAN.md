@@ -57,8 +57,8 @@ Este documento é o ponto de continuidade técnico para a próxima sessão de de
 - Não quebrar o botão Voltar do Android nem a navegação do navegador.
 
 ### 7. Identidade visual Pórtico
-- Usar os arquivos-mestres aprovados de logo, wordmark, ícone, slogans e elementos gráficos. A referência visual recebida apresenta azul-petróleo `#0F4C5C`, terracota `#C8402A`, ocre `#D4A017`, ameixa `#6B3A6E`, verde-oliva `#556B2F` e papel `#F7EEDF`.
-- Não redesenhar a marca como texto com uma fonte parecida quando o asset original estiver disponível.
+- Preservar a marca vetorial já implementada em `src/components/Logo.tsx` e `public/icon.svg`. A referência visual recebida apresenta azul-petróleo `#0F4C5C`, terracota `#C8402A`, ocre `#D4A017`, ameixa `#6B3A6E`, verde-oliva `#556B2F` e papel `#F7EEDF`.
+- A marca vigente está implementada por SVG inline em `src/components/Logo.tsx`: símbolo arquitetônico com arco/portal, estrela ocre, degraus terracota e wordmark com arco decorativo. Não inserir recortes da imagem de referência nem recriar a marca usando JPEG/PNG. O `public/icon.svg` também é vetorial.
 - Exportar variantes para fundo claro/escuro, favicon, app icon e telas de carregamento; validar contraste e tamanhos pequenos.
 - A imagem de referência por si só não substitui os arquivos vetoriais/PNG originais de alta resolução. Confirmar e armazenar os assets finais em `public/brand/`.
 
