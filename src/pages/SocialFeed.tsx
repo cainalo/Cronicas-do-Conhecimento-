@@ -157,3 +157,68 @@ export function SocialFeedPage() {
     <div className="text-center text-xs text-muted"><Link to="/trilha" className="underline">Voltar à trilha</Link> · Feed de demonstração com personagens fictícios</div>
   </div>;
 }
+
+
+function TeacherProfileModal({ teacher, onClose }: { teacher: FictionalTeacher; onClose: () => void }) {
+  const authored = teacherPosts.filter((post) => post.teacherId === teacher.id).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-end justify-center bg-ink/60 p-0 sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-label={'Perfil de ' + teacher.name}>
+      <section className="max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-surface text-ink shadow-2xl sm:rounded-2xl">
+        <header className="relative overflow-hidden bg-[#0f4c5c] p-5 text-[#f7eedf] sm:p-7">
+          <div className="absolute -right-10 -top-16 h-48 w-48 rounded-full border-[24px] border-white/10"/>
+          <button className="absolute right-3 top-3 grid h-10 w-10 place-items-center rounded-full hover:bg-white/10" onClick={onClose} aria-label="Fechar perfil"><Icon name="errado" size={22}/></button>
+          <div className="relative flex items-center gap-4">
+            <span className="rounded-full bg-[#f7eedf] p-1.5"><TeacherAvatar t={teacher} size={84}/></span>
+            <div className="min-w-0">
+              <p className="text-xs opacity-70">PERSONAGEM DE PÓRTICO</p>
+              <h2 className="mt-1 font-title text-2xl leading-tight sm:text-3xl">{teacher.name}</h2>
+              <p className="mt-1 text-sm opacity-85">@{teacher.handle} · {teacher.expertiseLabel}</p>
+            </div>
+          </div>
+          {teacher.motto && <p className="relative mt-5 font-title text-xl italic">“{teacher.motto}”</p>}
+        </header>
+        <div className="space-y-5 p-4 sm:p-6">
+          <section>
+            <h3 className="font-title text-xl">A pessoa por trás das aulas</h3>
+            <p className="mt-2 text-sm leading-relaxed">{teacher.biography}</p>
+            {teacher.personalStyle && <div className="mt-3 rounded-xl border border-line bg-raised/40 p-3">
+              <p className="text-xs font-semibold text-muted">ESTILO E PRESENÇA</p>
+              <p className="mt-1 text-sm leading-relaxed">{teacher.personalStyle}</p>
+            </div>}
+          </section>
+          {teacher.speakingStyle && <section>
+            <h3 className="font-title text-xl">Como ensina</h3>
+            <p className="mt-2 text-sm leading-relaxed">{teacher.speakingStyle}</p>
+          </section>}
+          {teacher.interests && <section>
+            <h3 className="font-title text-xl">Fora da sala de aula</h3>
+            <div className="mt-2 flex flex-wrap gap-2">{teacher.interests.map((interest) => <span key={interest} className="rounded-full border border-line px-3 py-1 text-xs">{interest}</span>)}</div>
+          </section>}
+          {teacher.topics && <section>
+            <h3 className="font-title text-xl">Assuntos que acompanha</h3>
+            <div className="mt-2 flex flex-wrap gap-2">{teacher.topics.map((topic) => <span key={topic} className="rounded-full bg-gold/10 px-3 py-1 text-xs text-gold">#{topic.replace(/\s+/g, '')}</span>)}</div>
+          </section>}
+          {teacher.references && <section>
+            <h3 className="font-title text-xl">Referências recomendadas</h3>
+            <div className="mt-2 space-y-2">{teacher.references.map((reference) => <a key={reference.url} href={reference.url} target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 rounded-xl border border-line p-3 text-sm hover:bg-raised/40">
+              <span>{reference.label}</span><Icon name="link" size={16}/>
+            </a>)}</div>
+          </section>}
+          <section>
+            <div className="flex items-end justify-between gap-3">
+              <div><h3 className="font-title text-xl">Publicações</h3><p className="mt-1 text-sm text-muted">{authored.length} posts de {teacher.name}</p></div>
+              <span className="text-xs text-muted">Conteúdo demonstrativo</span>
+            </div>
+            <div className="mt-3 space-y-3">{authored.map((post) => <article key={post.id} className="rounded-xl border border-line p-3">
+              <div className="flex items-center justify-between gap-3"><span className="text-xs capitalize text-gold">{post.kind.replace('-', ' ')}</span><time className="text-xs text-muted">{post.publishedAt}</time></div>
+              <h4 className="mt-1 font-semibold">{post.title}</h4>
+              <div className="prose-manuscript mt-2 text-sm leading-relaxed"><Markdown>{post.body}</Markdown></div>
+            </article>)}</div>
+          </section>
+          <button className="btn-primary w-full" onClick={onClose}>Voltar ao feed</button>
+        </div>
+      </section>
+    </div>,
+    document.body,
+  );
+}
