@@ -37,6 +37,7 @@ import { TrailVideoPage } from '@/pages/TrailVideo';
 import { CustomizePage } from '@/pages/Customize';
 import { ScenarioListPage, ScenarioPage } from '@/pages/Scenarios';
 import { SocialFeedPage } from '@/pages/SocialFeed';
+import { TeachersRoomPage } from '@/pages/TeachersRoom';
 import { WorldPage } from '@/pages/World';
 import { ProgrammingLabPage } from '@/pages/ProgrammingLab';
 import { NarratedPage } from '@/pages/Narrated';
