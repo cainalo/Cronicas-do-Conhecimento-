@@ -75,8 +75,9 @@ function glossaryPracticeQuestions(
     const distractors = uniqueTerms.filter((x) => x.term !== g.term);
     const offset = index % Math.max(1, distractors.length);
     const rotated = [...distractors.slice(offset), ...distractors.slice(0, offset)];
+    const letters = ['A', 'B', 'C', 'D', 'E'] as const;
     const options = [g, ...rotated.slice(0, 4)].map((item, i) => ({
-      key: String.fromCharCode(65 + i),
+      key: letters[i],
       text: item.term,
       comment: item.term === g.term
         ? 'Corresponde à definição apresentada no glossário.'
