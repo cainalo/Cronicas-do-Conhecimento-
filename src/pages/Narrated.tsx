@@ -1,7 +1,8 @@
 // Aula visual narrada com player de tela inteira, cena animada e linha do tempo arrastável.
 // A busca é estimada por fala: a voz do aparelho não fornece uma duração exata de vídeo.
 import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { returnToPreviousPage } from '@/lib/navigation';
 import { getNarrated } from '@/content';
 import type { NarratedLesson, NumberLineState, Scene } from '@/content/narrated/types';
 import { getVoice, readingMs } from '@/app/voice';
@@ -31,11 +32,12 @@ function wordIndexAtChar(text: string, charIndex: number): number {
 export function NarratedPage() {
   const { id = '' } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const l = getNarrated(id);
   if (!l) {
     return <div className="p-5"><h1 className="text-xl">Aula narrada não encontrada</h1><Link to="/trilha" className="btn-ghost mt-3 w-full">Voltar à trilha</Link></div>;
   }
-  return <NarratedPlayer key={l.id} l={l} embedded onClose={() => navigate('/aprender/' + l.chapterId + '/' + l.sectionId + '/' + l.lessonId)} exitLabel="Voltar ao Aprender" />;
+  return <NarratedPlayer key={l.id} l={l} embedded onClose={() => returnToPreviousPage(navigate, location.key, '/trilha')} exitLabel="Voltar" />;
 }
 
 export function NarratedPlayer({

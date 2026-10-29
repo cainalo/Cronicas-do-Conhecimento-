@@ -5,7 +5,8 @@
 // O ponto salvo é a etapa (stepId), na mesma chave do Aprender, então o Continuar volta aqui.
 import { Portal } from '@/components/Portal';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { returnToPreviousPage } from '@/lib/navigation';
 import type { Concept, LearningUnit } from '@/content/learning';
 import { concepts as allConcepts, getChapter, getQuestion } from '@/content';
 import { useStudy } from '@/app/StudyProvider';
@@ -99,6 +100,7 @@ function TermSheet({ concept, onClose }: { concept: Concept; onClose: () => void
 
 export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { update } = useStudy();
   const { sfx } = useFx();
   const chapter = getChapter(unit.chapterId)!;
@@ -155,7 +157,7 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
   return (
     <div className="mx-auto max-w-3xl pb-10">
       <div className="sticky top-14 z-20 -mx-4 mb-4 flex items-center gap-3 border-b border-line bg-bg/95 px-4 py-2 backdrop-blur sm:-mx-6 sm:px-6">
-        <button className="grid h-10 w-10 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => navigate('/trilha')} aria-label="Sair (o lugar fica salvo)">
+        <button className="grid h-10 w-10 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => returnToPreviousPage(navigate, location.key, '/trilha')} aria-label="Sair (o lugar fica salvo)">
           <Icon name="errado" size={20} />
         </button>
         <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-raised" aria-hidden="true">

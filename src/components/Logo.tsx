@@ -23,6 +23,7 @@ export function LogoMark({ size = 28, className = '' }: { size?: number; accent?
 export function Logo({ full = false }: { full?: boolean }) {
   return (
     <Link to="/" className="group flex min-w-0 items-center gap-2 text-ink" aria-label="Pórtico — conhecimento é o nosso ponto de partida">
+      <LogoMark size={full ? 40 : 32} className="transition-transform duration-300 group-hover:-translate-y-px"/>
       <img
         src={wordmarkSrc}
         alt="Pórtico — conhecimento é o nosso ponto de partida"

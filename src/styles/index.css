@@ -13,29 +13,29 @@
   sem brilho, sem bolhas. Linhas finas organizam a página; o movimento é preciso e curto (entrada
   das peças, traço que se desenha, setas que avançam).
   Os nomes de token antigos continuam (componentes e o painel de personalização os usam):
-  --gold = destaque principal (vermelhão), --ember = destaque escuro, --azure = ameixa,
-  --teal = petróleo, --leaf = ocre, --pink = framboesa, --sun = mostarda, --ok/--bad = acerto/erro.
+  --gold = terracota, --ember = terracota escuro, --azure/--pink = ameixa,
+  --teal = azul-petróleo, --leaf = verde-oliva, --sun = ocre, --ok/--bad = acerto/erro.
 */
 
 :root {
-  --bg: 244 240 232;
-  --surface: 251 249 244;
-  --raised: 236 230 218;
-  --line: 217 209 194;
-  --ink: 27 26 23;
-  --muted: 95 90 80;
+  --bg: 247 238 223;
+  --surface: 255 249 239;
+  --raised: 239 226 205;
+  --line: 217 201 175;
+  --ink: 15 76 92;
+  --muted: 82 100 106;
   --gold: 200 64 42;
   --ember: 160 48 28;
-  --azure: 110 59 92;
-  --teal: 31 92 122;
-  --leaf: 158 106 20;
-  --pink: 168 54 94;
-  --sun: 196 146 30;
-  --ok: 52 104 52;
-  --bad: 176 40 34;
-  --parchment: 251 249 244;
-  --leather: 27 26 23;
-  --sepia: 27 26 23;
+  --azure: 107 58 110;
+  --teal: 15 76 92;
+  --leaf: 85 107 47;
+  --pink: 107 58 110;
+  --sun: 212 160 23;
+  --ok: 85 107 47;
+  --bad: 174 47 36;
+  --parchment: 255 249 239;
+  --leather: 15 76 92;
+  --sepia: 15 76 92;
   --font-scale: 1;
   --radius-card: 10px;
   --radius-control: 8px;
@@ -55,24 +55,24 @@
   color-scheme: light;
 }
 :root[data-theme='dark'] {
-  --bg: 21 20 18;
-  --surface: 30 28 25;
-  --raised: 42 39 35;
-  --line: 58 54 49;
-  --ink: 239 234 224;
-  --muted: 171 163 149;
+  --bg: 16 40 46;
+  --surface: 20 56 64;
+  --raised: 29 70 80;
+  --line: 49 87 96;
+  --ink: 247 238 223;
+  --muted: 182 196 195;
   --gold: 236 112 88;
   --ember: 244 140 116;
-  --azure: 196 140 176;
-  --teal: 112 176 206;
-  --leaf: 222 172 86;
-  --pink: 226 128 160;
-  --sun: 232 196 98;
-  --ok: 128 190 120;
+  --azure: 190 144 193;
+  --teal: 110 173 185;
+  --leaf: 234 191 96;
+  --pink: 202 155 204;
+  --sun: 235 202 112;
+  --ok: 163 186 111;
   --bad: 240 120 108;
-  --parchment: 30 28 25;
-  --leather: 239 234 224;
-  --sepia: 239 234 224;
+  --parchment: 20 56 64;
+  --leather: 247 238 223;
+  --sepia: 247 238 223;
   --shadow-lift: 0 12px 26px -16px rgb(0 0 0 / 0.7);
   color-scheme: dark;
 }

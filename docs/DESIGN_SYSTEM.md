@@ -1,8 +1,24 @@
-# Design system: claro e organizado, no estilo do NutriConnect
+# Design system Pórtico
 
-Aprovado em 17/10/2026 (substitui o "medieval moderno" escuro). O usuário relatou dificuldade de se localizar e pediu o visual do NutriConnect (repositório `cainalo/nutriconnect-simple-site`, usado só como referência de linguagem visual).
+A identidade vigente é **Pórtico** (29/10/2026). As decisões antigas abaixo são mantidas como histórico estrutural do produto, mas qualquer orientação de cor ou marca contraditória é superada pela seção de identidade vigente.
 
-## Decisões do usuário (rodada de 17/10/2026)
+## Identidade vigente — Pórtico (29/10/2026)
+
+Usar a wordmark e o ícone recortados da prancha original em `public/brand/`; não reconstruir a palavra usando uma fonte parecida. A paleta aprovada é:
+
+| Elemento | HEX | Token |
+|---|---|---|
+| Azul-petróleo | `#0F4C5C` | `ink`, `teal` |
+| Terracota | `#C8402A` | `gold` |
+| Ocre | `#D4A017` | `sun` |
+| Ameixa | `#6B3A6E` | `azure`, `pink` |
+| Verde-oliva | `#556B2F` | `leaf`, `ok` |
+| Papel | `#F7EEDF` | `bg` |
+| Papel elevado | `#FFF9EF` | `surface` |
+
+A textura deve ser sutil, os contornos definidos e os cartões de cores chapadas. Não usar a identidade do NutriConnect nem o tema antigo como marca atual.
+
+## Decisões estruturais históricas (rodada de 17/10/2026)
 - Tema padrão **claro creme**; o escuro continua em Conta → Aparência.
 - Abas com **nomes medievais**: Torre, Grimórios, Treino, Reino (Conta vai para o avatar no canto do cabeçalho).
 - Medieval **leve**: capas de couro dos grimórios, selos, mapa do reino, cena da Torre e o pergaminho do leitor e das lições. O resto tem cara de app atual.
@@ -14,7 +30,7 @@ Aprovado em 17/10/2026 (substitui o "medieval moderno" escuro). O usuário relat
 - **Páginas centrais como grades de cartões** (`Tile`/`TileGrid`), agrupados por `SectionTitle` (ícone colorido + título + fio que se apaga), como a página Funções do NutriConnect.
 - Títulos claros em português (nada de "Exercitia", "Ordo diei").
 
-## Cores (tokens em `src/styles/index.css`, mesmos valores do NutriConnect)
+## Cores históricas anteriores à marca Pórtico (superadas pela paleta vigente no início deste arquivo)
 | Token | Claro | Escuro | Uso |
 |---|---|---|---|
 | bg / surface / raised | #FAF7F0 / #FFFDFA / #F0EBE1 | #1F1B15 / #27221B / #322C24 | Fundo creme, cartões, elementos internos |

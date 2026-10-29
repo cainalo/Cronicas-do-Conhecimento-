@@ -47,6 +47,6 @@ describe('espaço de estudo da videoaula', () => {
     await user.click(screen.getByLabelText('Consigo explicar o objetivo da aula.'));
     expect(localStorage.getItem('cronicas:video-checklist:' + video.id)).toContain('"objective":true');
     await user.click(screen.getByRole('button', { name: /Copiar resumo e anotações/ }));
-    expect(screen.getByRole('button', { name: /Copiar resumo e anotações/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Notas copiadas|Copiar resumo e anotações/ })).toBeInTheDocument();
   });
 });

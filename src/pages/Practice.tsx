@@ -2,7 +2,8 @@
 // erros voltam para o fim da fila e o Bubo abre e fecha a rodada com a cena da história.
 import { Portal } from '@/components/Portal';
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { returnToPreviousPage } from '@/lib/navigation';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
 import { DEFAULT_CONTEST_ID, concepts, getChapter, getLearningUnit, getSectionExtras, getSimpleSection, learningUnits, questionsForContest } from '@/content';
@@ -150,6 +151,7 @@ export function PracticePage() {
 function PracticeRun() {
   const { chapterId = '', sectionId = '' } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const chapter = getChapter(chapterId);
   const section = chapter?.sections.find((s) => s.id === sectionId);
   const extras = getSectionExtras(chapterId, sectionId);
@@ -278,7 +280,7 @@ function PracticeRun() {
 
   // Sair explicitamente encerra só a sessão incompleta; a próxima abertura sorteia outra rodada.
   // As conclusões e o histórico de respostas já registrados continuam salvos.
-  const exit = () => { session.finish(); navigate('/trilha'); };
+  const exit = () => { session.finish(); returnToPreviousPage(navigate, location.key, '/trilha'); };
 
   return (
     <div className="-mt-2 flex min-h-0 flex-col overflow-hidden" style={{ height: "calc(100dvh - 5.5rem - env(safe-area-inset-top, 0px))" }}>

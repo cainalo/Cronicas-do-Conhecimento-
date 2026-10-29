@@ -6,6 +6,7 @@ import { AREAS, areaOf, isAreaHome, type AreaKey } from '@/app/areas';
 import { useCheckpoint } from '@/app/useCheckpoint';
 import { Icon } from '@/components/Icon';
 import { Logo } from '@/components/Logo';
+import { returnToPreviousPage } from '@/lib/navigation';
 
 // Reformulação (Fase 1): cinco áreas, iguais no celular (menu de baixo) e no computador (topo).
 const TABS: AreaKey[] = ['torre', 'grimorios', 'explorar', 'treino', 'reino'];
@@ -29,7 +30,7 @@ export function SyncBadge() {
 }
 
 function Tab({ area, variant }: { area: AreaKey; variant: 'bottom' | 'top' }) {
-  const { pathname } = useLocation();
+  const { pathname, key } = useLocation();
   const a = AREAS[area];
   const active = areaOf(pathname) === area;
   if (variant === 'top') {
@@ -101,7 +102,7 @@ export function Layout() {
             {inner ? (
               <button
                 type="button"
-                onClick={() => (window.history.length > 1 ? navigate(-1) : navigate(AREAS[areaOf(pathname)].to))}
+                onClick={() => returnToPreviousPage(navigate, key, AREAS[areaOf(pathname)].to)}
                 className="-ml-2 grid h-10 w-10 place-items-center rounded-full text-ink transition hover:bg-ink/5"
                 aria-label="Voltar"
               >

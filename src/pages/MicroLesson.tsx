@@ -3,7 +3,8 @@
 // no estilo da prova e síntese. O ponto exato fica salvo (useSession), e o Continuar volta aqui.
 // Nenhuma tela rola para baixo: o que não cabe vira outra parte, ao lado (SwipePages).
 import { useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { returnToPreviousPage } from '@/lib/navigation';
 import type { MicroLesson } from '@/content/types';
 import type { FeedPost } from '@/lib/feed';
 import { curatedVideos, feedPostsOf, getChapter, getQuestion, teacherForChapter } from '@/content';
@@ -60,6 +61,7 @@ export function clampPhase(p: Phase | undefined, l: Pick<MicroLesson, 'steps' | 
 
 export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; series?: { index: number; total: number; next?: MicroLesson } }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { update } = useStudy();
   const { sfx, confetti } = useFx();
   const chapter = getChapter(lesson.chapterId)!;
@@ -157,7 +159,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
     // Altura fixa da tela: nada rola para baixo. O que não cabe vai para a parte seguinte, ao lado.
     <div className="-mt-2 flex flex-col overflow-hidden" style={{ height: 'calc(100dvh - 5.5rem - env(safe-area-inset-top, 0px))' }}>
       <div className="mb-2 flex items-center gap-3">
-        <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => navigate('/trilha')} aria-label="Sair (o lugar fica salvo)">
+        <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => returnToPreviousPage(navigate, location.key, '/trilha')} aria-label="Sair (o lugar fica salvo)">
           <Icon name="errado" size={22} />
         </button>
         <div className="h-3 flex-1 overflow-hidden rounded-full bg-raised" aria-label={`Progresso: ${slot} de ${totalSlots}`}>

@@ -2,7 +2,8 @@
 // poucas páginas curtas (uma ideia por página), as palavras novas, três verificações fáceis e,
 // no fim, o convite para praticar. O texto completo fica para depois, como aprofundamento.
 import { useEffect, useMemo } from 'react';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { returnToPreviousPage } from '@/lib/navigation';
 import { useStudy } from '@/app/StudyProvider';
 import { usePrefs } from '@/app/prefs';
 import { useFx } from '@/app/fx';
@@ -69,6 +70,7 @@ function MicroOrSimple() {
 function SimpleLearnPage() {
   const { chapterId = '', sectionId = '' } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const chapter = getChapter(chapterId);
   const idx = chapter?.sections.findIndex((s) => s.id === sectionId) ?? -1;
   const section = chapter?.sections[idx];
@@ -220,7 +222,7 @@ function SimpleLearnPage() {
   return (
     <div className="-mt-2 flex h-[calc(100dvh-5.5rem-env(safe-area-inset-top))] flex-col" style={{ ['--font-scale' as string]: prefs.fontScale }}>
       <div className="mb-2 flex shrink-0 items-center gap-3">
-        <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => navigate(`/grimorio/${chapter.grimoireId}`)} aria-label="Sair">
+        <button className="grid h-9 w-9 place-items-center rounded-full text-muted hover:bg-raised" onClick={() => returnToPreviousPage(navigate, location.key, '/trilha')} aria-label="Sair">
           <Icon name="errado" size={22} />
         </button>
         <div className="h-3 flex-1 overflow-hidden rounded-full bg-raised">
