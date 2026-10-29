@@ -40,11 +40,11 @@ describe('trilha com todos os materiais', () => {
     for (const p of posts) {
       const i = units.indexOf(p);
       expect(units[i + 1].kind).toBe('praticar');
-      expect(p.to).toMatch(/^\/sala\?aula=/);
+      expect(p.to).toMatch(/^\/trilha-post\//);
     }
   });
 
-  it('cartões de memorização fecham o capítulo, antes do Desafio', () => {
+  it('o bloco na trilha só inclui posts editoriais próprios, não a cópia do Aprender', () => {\n    expect(units.some((u) => u.key === 'professores:cap.infra.03:processos' && u.to.startsWith('/trilha-post/cap.infra.03/processos'))).toBe(true);\n    expect(units.some((u) => u.key === 'professores:cap.prim.01:computador')).toBe(false);\n  });\n\n  it('cartões de memorização fecham o capítulo, antes do Desafio', () => {
     const chapters = new Set(flashcards.map((f) => f.chapterId));
     for (const c of chapters) {
       const i = idx((u) => u.key === `flashcards:${c}`);
