@@ -153,3 +153,22 @@ O usuário escolheu a prancha de marca **Pórtico** enviada na conversa. Ela sub
 - Barra superior com wordmark centralizado, símbolo/voltar à esquerda e ações à direita.
 - A aula narrada “Do ábaco ao celular” permanece em modo mapa mental cumulativo, com legenda em uma faixa de layout reservada.
 - Nome/direito de marca/domínio ainda carecem de consulta formal; não afirmar que a marca está legalmente disponível.
+
+
+## Entrega Pórtico — feed social, personagens, identidade e videoaula (29/10/2026)
+
+- A rota `/sala` usa `src/pages/TeacherSocial.tsx`: feed cronológico simulado, perfis, stories visuais, links externos, música sugerida, publicação de texto/foto/carrossel/vídeo do YouTube, curtidas, comentários, favoritos e seguir.
+- Oito professores fictícios estão mapeados por disciplina em `src/content/teachers.ts`; os retratos são individualizados em `src/components/TeacherAvatar.tsx`.
+- Dentro da trilha de cada microaula há uma perspectiva profissional em `src/content/teacher-insights.ts` e `TeacherInsightCard`: aplicação, pergunta e resposta revelada, sem enviar o estudante ao feed social.
+- A página de videoaula tem painel lateral com Resumo, Anotações e Ferramentas, marca temporal manual, reflexão, referência textual e exportação Markdown.
+- O cabeçalho usa os recortes rasterizados extraídos da prancha original aprovada em `public/images/brand/`, incluindo emblema e wordmark; o slogan é preservado no lockup completo.
+- As rotas prioritárias de estudo usam `src/lib/navigation.ts` para voltar pelo índice real do histórico React Router e só recorrem ao fallback em deep links.
+- O feed é uma simulação local: ações e publicações criadas pelo estudante ficam no aparelho, não são publicadas para outras contas. Sincronização multiusuário exige etapa futura com Supabase/RLS/storage/moderação.
+- Testes novos: `src/test/teacher-social.test.tsx`; os testes do feed didático anterior exercitam `TeachersRoomPage` separadamente.
+
+### Próximas etapas
+1. Confirmar CI real após este lote (testes unitários, build/typecheck, E2E de layout e publicação).
+2. Conferir a marca em 360×640 e 390×844, tema claro/escuro, favicon/PWA e ícone nativo Android.
+3. Planejar o feed multiusuário com autenticação, RLS, armazenamento de mídia, moderação e privacidade.
+4. Expandir as perspectivas docentes para seções ainda sem microaulas e revisar o conteúdo editorial.
+5. Percorrer manualmente deep links e botões de voltar/fechar para confirmar o comportamento em aparelho.
