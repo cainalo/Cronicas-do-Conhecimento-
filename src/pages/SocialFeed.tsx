@@ -176,7 +176,7 @@ export function SocialFeedPage() {
         <p className="relative text-xs uppercase tracking-[.2em] opacity-70">Caderno de {story.name.split(' ').at(-1)}</p>
         <p className="relative mt-6 font-title text-3xl leading-tight">{storyItems[storyIndex]}</p>
         <a href={STORY_LINKS[story.id]?.url} target="_blank" rel="noreferrer" className="relative mt-6 inline-flex max-w-full items-center gap-2 self-start rounded-full bg-[#f7eedf] px-4 py-2 text-sm font-semibold text-[#0f4c5c] underline-offset-2 hover:underline">
-          <Icon name="link" size={16}/>{STORY_LINKS[story.id]?.label}
+          <Icon name="seta" size={16}/>{STORY_LINKS[story.id]?.label}
         </a>
         <div className="relative mt-5 rounded-xl border border-white/20 bg-black/15 p-3"><p className="text-xs">Trilha sonora sugerida</p><p className="mt-1 text-sm">{MUSIC[(teachers.findIndex((x) => x.id === story.id) + storyIndex) % MUSIC.length]}</p><button className="mt-2 rounded-full border border-white/30 px-3 py-1 text-xs" onClick={() => setPlayingMusic(!playingMusic)}>{playingMusic ? 'Pausar indicação musical' : 'Selecionar música'}</button><p className="mt-1 text-[10px] opacity-60">A plataforma sugere uma faixa; não reproduz áudio protegido.</p></div>
         <p className="relative mt-4 text-xs opacity-80">Perfil fictício · conteúdo demonstrativo</p>
@@ -235,7 +235,7 @@ function TeacherProfileModal({ teacher, onClose }: { teacher: FictionalTeacher; 
           {teacher.references && <section>
             <h3 className="font-title text-xl">Referências recomendadas</h3>
             <div className="mt-2 space-y-2">{teacher.references.map((reference) => <a key={reference.url} href={reference.url} target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 rounded-xl border border-line p-3 text-sm hover:bg-raised/40">
-              <span>{reference.label}</span><Icon name="link" size={16}/>
+              <span>{reference.label}</span><Icon name="seta" size={16}/>
             </a>)}</div>
           </section>}
           <section>

@@ -30,7 +30,7 @@ export function SyncBadge() {
 }
 
 function Tab({ area, variant }: { area: AreaKey; variant: 'bottom' | 'top' }) {
-  const { pathname, key } = useLocation();
+  const { pathname } = useLocation();
   const a = AREAS[area];
   const active = areaOf(pathname) === area;
   if (variant === 'top') {
@@ -86,7 +86,7 @@ function useTrailVisit() {
 }
 
 export function Layout() {
-  const { pathname } = useLocation();
+  const { pathname, key } = useLocation();
   const navigate = useNavigate();
   useTrailVisit();
   const inner = !isAreaHome(pathname);
