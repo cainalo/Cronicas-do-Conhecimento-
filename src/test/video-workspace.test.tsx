@@ -35,7 +35,7 @@ describe('espaço de estudo da videoaula', () => {
     expect(localStorage.getItem('cronicas:video-resumo:' + video.id)).toBe('O resumo que escrevi durante o estudo.');
 
     await user.click(screen.getByRole('tab', { name: 'Anotações' }));
-    await user.type(screen.getByLabelText('Anotações da videoaula'), 'Rever este conceito.');
+    await user.type(screen.getByRole('textbox', { name: 'Anotações da videoaula' }), 'Rever este conceito.');
     await user.clear(screen.getByLabelText('Tempo do vídeo'));
     await user.type(screen.getByLabelText('Tempo do vídeo'), '03:25');
     await user.type(screen.getByLabelText('Nota deste momento'), 'Exemplo importante.');
