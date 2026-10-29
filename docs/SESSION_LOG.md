@@ -126,3 +126,12 @@
 - Causa: `.github/workflows/pages.yml` só permite publicar a partir da `main` quando o segredo de keystore de release existe; sem esse segredo, apenas `claude/cronicas-conhecimento-estudos-jgbofo` publica para manter a assinatura estável do APK.
 - Integrei a versão atual da `main` na branch de publicação pelo PR #5, merge `783725a6e61f018fe115d93c50b89a5cf20f1c49`, preservando a branch que mantém a assinatura do Android.
 - O próximo build precisa passar por testes, build e E2E antes de atualizar `gh-pages`. Não considerar a publicação concluída até verificar o novo `download/version.json` e o bundle do site.
+
+
+## 29/10/2026 — Pórtico: sala social, professores, identidade e ferramentas de vídeo
+- A rota `/sala` agora usa `TeacherSocial.tsx`: feed diário simulado, stories, perfis, seguir, curtidas, comentários e criação de texto/foto/carrossel/vídeo com persistência local.
+- O elenco ganhou oito professores e cada microaula recebeu um bloco contextual do professor antes da prática.
+- A videoaula foi ampliada com resumo derivado do material, anotações, marcas temporais manuais, reflexão e exportação Markdown.
+- Os componentes da marca usam recortes rasterizados extraídos da referência original do Pórtico.
+- Adicionados testes para a nova Sala dos Professores e preservada a suíte didática legada testando seu componente diretamente.
+- A validação visual e a execução final da CI ainda determinam se a publicação pode ser considerada saudável; o feed é local-first, não uma rede multiusuário conectada.
