@@ -107,11 +107,10 @@ export function TrailTeacherPostPage() {
       </footer>
     </article>
 
-    <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2">
       <button className="btn-ghost flex-1" disabled={index === 0} onClick={previous}><Icon name="voltar" size={16}/> Anterior</button>
-      {index + 1 < posts.length
-        ? <button className="btn-primary flex-1" onClick={next}>Próxima publicação <Icon name="avancar" size={16}/></button>
-        : <Link to="/trilha" className="btn-primary flex-1">Continuar na trilha <Icon name="avancar" size={16}/></Link>}
+      {index + 1 < posts.length && <button className="btn-primary flex-1" onClick={next}>Próxima publicação <Icon name="avancar" size={16}/></button>}
+      <Link to="/trilha" className="btn-ghost w-full sm:flex-1">Continuar na trilha <Icon name="avancar" size={16}/></Link>
     </div>
     <p className="text-center text-xs text-muted">As publicações desta etapa complementam o Aprender. O feed completo continua na Sala dos Professores.</p>
   </div>;
