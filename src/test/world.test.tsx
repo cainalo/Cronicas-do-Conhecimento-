@@ -155,7 +155,7 @@ describe('tela do escritório (tela cheia)', () => {
     await user.click(screen.getByRole('button', { name: 'Voltar ao escritório 2D' }));
     expect(await screen.findByTestId('mundo')).toBeInTheDocument();
     expect(screen.getByTestId('mundo-sala')).toHaveTextContent('Suporte');
-    expect(screen.getByTestId('mundo-objetivo')).toHaveTextContent('Resolver sem estragar nada');
+    expect(screen.getByTestId('mundo-objetivo')).toHaveTextContent(/João/);
 
     await user.click(screen.getByRole('button', { name: 'Ir até' }));
     await user.click(screen.getByRole('button', { name: /João, Suporte/ }));
