@@ -5,10 +5,10 @@
 - Posts editoriais escolhidos dentro da trilha por `/trilha-post/:chapterId/:sectionId`; rota didática antiga preservada em `/feed-aulas`.
 - Workspace da videoaula com resumo, notas, timestamps e checklist persistidos localmente; o player continua em proporção 16:9 e a página recebe largura extra em telas grandes.
 - Identidade visual oficial aplicada por assets recortados de `public/brand/`.
-- Cobertura de testes adicionada para feed e workspace de vídeo. O workflow do commit `ea58121021` passou em testes, build, E2E e APK, mas não publicou Pages porque `CAN_PUBLISH` era falso na `main`. O workflow está sendo alterado para publicar o site e preservar o APK já publicado quando não há chave de assinatura disponível; confirmar a nova execução.
+- Cobertura de testes adicionada para feed e workspace de vídeo. O workflow do commit `26ff415dcfbf` passou em testes, build web e E2E e publicou o site. Na `main`, o APK foi preservado em vez de recompilado sem keystore estável (versão publicada mantida em `0.1.521`).
 - A implementação desta rodada é parcial: o feed é local-only, ainda não sincroniza entre usuários; os próximos passos estão em `docs/PORTICO_IMPLEMENTATION_PLAN.md`.
 
-- **Laboratório Linux virtual:** chamado 2318 para investigar um registro de autenticação, com quatro etapas avaliadas, comandos Linux comuns, opções, pipes, escrita simulada e testes de regressão. O terminal é um sistema virtual, não uma shell real do dispositivo.
+- **Laboratório Linux virtual:** chamado 2318 compartilhado com o escritório 2D. Seis verificações sobre `top`, `free -h`, `vmstat 2` e `ps aux | grep importador` levam ao diagnóstico de thrashing. O terminal é um sistema virtual, não uma shell real do dispositivo.
 
 ## Funciona e foi testado
 - **25/10 (noite):** série piloto com história em cap.prim.01 / computador; aula narrada e vídeo dentro da aula; feed com perfis, revisões rápidas e comentários; Escritório 2D em tela cheia (mapa novo, 4 direções). Testes automáticos e capturas em 390 e 1280 px.

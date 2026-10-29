@@ -142,3 +142,9 @@
 - O laboratório ganhou a missão guiada `Chamado 2318`: descobrir um alerta de autenticação usando `pwd`, `ls`, `cat` e `grep`. As etapas só avançam quando o comando produz evidência compatível.
 - O terminal virtual agora aceita aspas, `grep -n/-i/-v`, `ls -la`, `head`, `tail`, `wc -l`, `find`, pipes, redirecionamento `>`/`>>`, escrita de arquivos no ambiente virtual, além de saídas didáticas para `ps`/`top`. Continua sem executar comandos no dispositivo ou num servidor real.
 - O workflow está sendo atualizado para separar a publicação do site da atualização de APK: a `main` publica o app web e restaura o diretório `download/` da versão já publicada quando a chave estável não estiver disponível. Confirmar CI e site publicado antes de declarar release concluído.
+
+
+## Continuação Pórtico — terminal e Escritório integrados (29/10/2026)
+- O workflow 40959217123 passou em testes, build web e E2E e executou o deploy de gh-pages. Como a main não dispõe de keystore de release, manteve intacto o APK público 0.1.521; não foi reconstruído com outra assinatura.
+- O terminal guiado foi alinhado ao chamado 2318 do escritório: observação com top, verificação com free -h, confirmação com vmstat 2 e identificação do importador PID 4127. A resposta correta explica thrashing e pressão de memória, não saturação de CPU nem zumbi.
+- O objeto terminal na mesa da Marta passa a abrir a mesma experiência com contexto origem=escritorio; a navegação de volta usa o histórico para retomar o mapa salvo. Adicionados testes de rota e retorno, e páginas relevantes ao E2E de layout.

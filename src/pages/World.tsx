@@ -442,6 +442,12 @@ function InteractionPanel({ w, s, st, setSt, panel, onRestart }: { w: World; s: 
             <p className="text-xs text-muted">Anotado no caderno.</p>
           </div>
         )}
+        {o.id === 'terminal' && res.available && <div className="mt-4 border-t border-line pt-3">
+          <p className="text-sm text-muted">A evidência acima é um retrato do problema. Abra um terminal interativo para executar os comandos de diagnóstico do mesmo chamado.</p>
+          <Link to="/laboratorio-codigo?origem=escritorio&chamado=2318" className="btn-primary mt-3 w-full">
+            <Icon name="tela" size={17}/> Abrir terminal do chamado 2318
+          </Link>
+        </div>}
       </section>
     );
   }

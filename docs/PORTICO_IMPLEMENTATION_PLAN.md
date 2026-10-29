@@ -9,14 +9,15 @@ Este documento é o ponto de continuidade técnico para a próxima sessão de de
 - As publicações criadas pelo estudante são armazenadas no navegador. **Ainda não são sincronizadas entre usuários/dispositivos**; não apresentar o protótipo local como rede social multiusuário.
 - Stories têm progressão manual, identidade visual própria e indicação de trilha sonora. Não reproduzem música protegida.
 - O componente anterior `src/pages/TeachersRoom.tsx` foi preservado como referência de estudo e para evitar perda de funcionalidades didáticas já existentes.
-- O laboratório de programação contém um chamado guiado de suporte, usa comandos Bash/Linux frequentes e executa pipelines simples sobre um sistema de arquivos em memória. A interface sinaliza que a saída é simulada e não acessa o sistema operacional do aparelho.
+- O laboratório de programação contém um chamado guiado de suporte coerente com `src/content/scenarios/suporte-lento.ts`: as saídas de `top`, `free -h`, `vmstat 2` e `ps aux | grep importador` permitem reconhecer thrashing no chamado 2318. O terminal aceita comandos e pipelines didáticos sobre sistema de arquivos em memória; nunca acessa o sistema operacional real.
+- O objeto terminal da Marta em `/escritorio` liga à rota `/laboratorio-codigo?origem=escritorio&chamado=2318`; o botão de retorno usa o histórico e o estado do mapa fica salvo localmente.
 - O workflow `pages.yml` publica o site em toda a `main`; sem a chave estável, preserva `download/` da branch `gh-pages` em vez de gerar um APK incompatível. A recompilação do APK segue restrita ao branch de trabalho ou quando a keystore de release estiver configurada.
 
 ## Próximas etapas — executar nesta ordem
 
 ### 1. Validar compilação e fluxo de publicação
 - Executar `npm ci`, `npm run typecheck`, `npm test`, `npm run build` e `npm run test:e2e`.
-- Corrigir erros reais antes de publicar; verificar o workflow de Pages e a URL publicada.
+- O workflow do commit `26ff415dcfbf` passou e publicou `gh-pages`; confirmar manualmente a rota pública em celular após a integração do terminal com o escritório.
 - Fazer teste manual em celular: abrir `/sala`, navegar stories, publicar texto e foto, comentar, recarregar e conferir persistência.
 - Verificar limites de armazenamento local e fallback quando o navegador bloquear `localStorage`.
 

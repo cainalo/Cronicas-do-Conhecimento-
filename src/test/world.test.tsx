@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
@@ -130,6 +130,24 @@ describe('tela do escritório (tela cheia)', () => {
     expect(await screen.findByTestId('mundo-conversa')).toHaveTextContent(/primeiro chamado/);
   });
 
+  it('abre o terminal interativo do mesmo chamado e depois retoma o mapa do escritório', async () => {
+    const user = userEvent.setup();
+    renderWorld();
+
+    await user.click(screen.getByRole('button', { name: 'Ir até' }));
+    await user.click(screen.getByRole('button', { name: /Terminal na mesa da Marta/ }));
+    const terminalPanel = await screen.findByTestId('mundo-objeto');
+    expect(terminalPanel).toHaveTextContent('Saída do top');
+    const launch = within(terminalPanel).getByRole('link', { name: /Abrir terminal do chamado 2318/ });
+    expect(launch).toHaveAttribute('href', '/laboratorio-codigo?origem=escritorio&chamado=2318');
+
+    await user.click(launch);
+    expect(await screen.findByRole('heading', { name: 'Laboratório de programação' })).toBeInTheDocument();
+    expect(screen.getByText(/Aberto pelo terminal da Marta no mapa/)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Voltar ao escritório 2D' }));
+    expect(await screen.findByTestId('mundo')).toBeInTheDocument();
+    expect(screen.getByTestId('mundo-sala')).toHaveTextContent('Recepção');
+  });
   it('teclado anda uma casa e vira o personagem; Esc fecha o painel', async () => {
     const user = userEvent.setup();
     renderWorld();

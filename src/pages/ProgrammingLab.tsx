@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { returnToPreviousPage } from '@/lib/navigation';
 import { PageHeader } from '@/components/Page';
 import { Icon } from '@/components/Icon';
 
@@ -7,9 +8,9 @@ type OutputLine = { kind: 'log' | 'error'; text: string };
 type TerminalState = { cwd: string; files: Record<string, string>; directories: string[] };
 
 const START_FILES: Record<string, string> = {
-  '/home/aluno/README.md': 'Ambiente fictício de treinamento do Pórtico.\nUse help para listar os comandos disponíveis.',
+  '/home/aluno/README.md': 'Ambiente virtual de treinamento do Pórtico.\nChamado 2318: investigue por que o servidor relat-01 está lento.',
   '/home/aluno/atividade.js': 'console.log("Olá, laboratório!");',
-  '/home/aluno/logs/app.log': 'INFO 08:00 aplicação iniciada\nWARN 08:05 tentativa sem autenticação\nINFO 08:06 serviço normalizado',
+  '/home/aluno/logs/app.log': 'INFO 08:00 serviço de relatórios iniciado\nWARN 08:30 latência dos relatórios acima de 120 segundos\nWARN 08:31 memória livre 96 MiB; swap usado 1,9 GiB\nINFO 08:32 importador PID 4127 ocupando 71,5% da memória',
 };
 const START_DIRS = ['/', '/home', '/home/aluno', '/home/aluno/logs', '/home/aluno/projetos'];
 const INITIAL_TERMINAL: TerminalState = { cwd: '/home/aluno', files: START_FILES, directories: START_DIRS };
@@ -259,17 +260,34 @@ function terminalCommandSingle(input: string, state: TerminalState, stdin?: stri
   }
 
   if (cmd === 'ps') return { state, output: [
-    '  PID TTY          TIME CMD',
-    '  101 pts/0    00:00:00 bash',
-    '  248 pts/0    00:00:01 node (processo didático)',
-    '  301 pts/0    00:00:00 ps',
+    'USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND',
+    'relat     4127  9.8 71.5 2340000 558900 ?      Sl   08:22  0:18 /usr/bin/importador --arquivo mensal.csv',
+    'postgres   912  6.2  9.0  820000  70200 ?      Ssl  07:45  0:32 postgres',
+    'www-data  1034  1.1  2.3  210000  18000 ?      S    07:40  0:03 nginx',
+    'aluno     1301  0.0  0.1   18000   2200 pts/0 R+   09:10  0:00 ps',
   ] };
   if (cmd === 'top') return { state, output: [
-    'top - 08:06:12 up 4 days,  2 users,  load average: 0.72, 0.64, 0.51 (simulado)',
+    'top - 09:10:12 up 4 days,  2 users,  load average: 3.72, 3.64, 3.51 (simulado)',
     'Tasks: 84 total, 1 running, 83 sleeping',
-    '  PID USER  %CPU %MEM COMMAND',
-    '  248 aluno 18.2  7.4 node',
-    '  301 aluno  0.0  0.1 top',
+    '%Cpu(s): 12.0 us, 4.1 sy, 0.0 ni, 9.6 id, 74.3 wa',
+    'MiB Mem : 7820.0 total, 96.2 free, 7590.4 used',
+    'MiB Swap: 2048.0 total, 118.0 free, 1930.0 used',
+    '  PID USER     %CPU %MEM COMMAND',
+    ' 4127 relat     9.8 71.5 importador',
+    '  912 postgres  6.2  9.0 postgres',
+    ' 1034 www-data  1.1  2.3 nginx',
+  ] };
+  if (cmd === 'free' && args.includes('-h')) return { state, output: [
+    '              total        used        free      shared  buff/cache   available',
+    'Mem:           7.6Gi       7.4Gi        96Mi       128Mi       420Mi        96Mi',
+    'Swap:          2.0Gi       1.9Gi       118Mi',
+  ] };
+  if (cmd === 'vmstat') return { state, output: [
+    'procs  ----memory----   ---swap--',
+    ' r  b   swpd   free     si    so',
+    ' 1  6 1976320  98500  4120  3980',
+    ' 0  7 1977100  96100  4310  4050',
+    ' 1  6 1976800  97300  4005  4120',
   ] };
   if (cmd === 'git' && rest === 'status') return { state, output: [
     'On branch main (repositório fictício)',
@@ -306,20 +324,25 @@ function terminalCommand(input: string, state: TerminalState): TerminalResult {
 type IncidentStep = { id: string; title: string; command: string; explanation: string };
 const INCIDENT_STEPS: IncidentStep[] = [
   { id: 'location', title: 'Confirme em qual diretório você está', command: 'pwd', explanation: 'pwd mostra o diretório de trabalho atual.' },
-  { id: 'files', title: 'Localize a pasta de registros', command: 'ls', explanation: 'ls lista os arquivos e diretórios visíveis no local atual.' },
-  { id: 'read-log', title: 'Leia o registro do aplicativo', command: 'cat logs/app.log', explanation: 'cat exibe o conteúdo do arquivo para inspeção.' },
-  { id: 'filter-warning', title: 'Isole o alerta relevante', command: 'grep WARN logs/app.log', explanation: 'grep filtra as linhas que contêm WARN.' },
+  { id: 'files', title: 'Localize os registros do chamado', command: 'ls', explanation: 'ls encontrou a pasta logs, que guarda os registros do serviço.' },
+  { id: 'top', title: 'Observe CPU, memória e processos', command: 'top', explanation: 'O top mostrou 74,3% de espera por I/O (wa), quase nenhuma RAM livre e swap quase cheio.' },
+  { id: 'memory', title: 'Confira RAM e swap com free -h', command: 'free -h', explanation: 'A RAM disponível está em cerca de 96 MiB; aproximadamente 1,9 GiB de swap estão usados.' },
+  { id: 'vmstat', title: 'Confirme a troca intensa de páginas', command: 'vmstat 2', explanation: 'Valores persistentes de si/so indicam tráfego constante entre memória e swap.' },
+  { id: 'process', title: 'Identifique o processo que ocupa memória', command: 'ps aux | grep importador', explanation: 'A saída identifica o importador, PID 4127, com 71,5% de memória.' },
 ];
 
 function terminalStepMatches(id: string, raw: string, result: TerminalResult): boolean {
   const command = raw.trim().replace(/\s+/g, ' ');
   if (id === 'location') return /^pwd$/.test(command) && result.output.includes('/home/aluno');
   if (id === 'files') return /^(?:ls|ls -l|ls -a|ls -la|ls -al)(?: \.)?$/.test(command) && result.output.some((line) => line.includes('logs/'));
-  if (id === 'read-log') return /^cat (?:logs\/app\.log|\/home\/aluno\/logs\/app\.log)$/.test(command) && result.output.some((line) => line.includes('WARN 08:05 tentativa sem autenticação'));
-  if (id === 'filter-warning') return /^(?:grep (?:-n )?WARN (?:logs\/app\.log|\/home\/aluno\/logs\/app\.log)|cat logs\/app\.log \| grep WARN)$/.test(command) && result.output.some((line) => line.includes('WARN 08:05 tentativa sem autenticação'));
+  if (id === 'top') return /^top$/.test(command) && result.output.some((line) => line.includes('74.3 wa')) && result.output.some((line) => line.includes('4127'));
+  if (id === 'memory') return /^free -h$/.test(command) && result.output.some((line) => line.includes('96Mi')) && result.output.some((line) => line.includes('1.9Gi'));
+  if (id === 'vmstat') return /^vmstat 2$/.test(command) && result.output.some((line) => line.includes('4120')) && result.output.some((line) => line.includes('4050'));
+  if (id === 'process') return /^ps aux \| grep importador$/.test(command) && result.output.some((line) => line.includes('4127')) && result.output.some((line) => line.includes('importador'));
   return false;
 }
 
+type Diagnosis = 'cpu' | 'thrashing' | 'zombie';
 // Worker descartável: sem DOM, rede ou acesso ao sistema de arquivos do aparelho; é encerrado em 1,5 s.
 const WORKER_SOURCE = [
   "const deny = () => Promise.reject(new Error('Rede desativada neste laboratório.'));",
@@ -343,6 +366,10 @@ export function ProgrammingLabPage() {
   const [terminalState, setTerminalState] = useState<TerminalState>(INITIAL_TERMINAL);
   const [terminalOutput, setTerminalOutput] = useState<string[]>(['Terminal didático pronto. Digite help para listar os comandos.']);
   const [completedIncidentSteps, setCompletedIncidentSteps] = useState<string[]>([]);
+  const [diagnosis, setDiagnosis] = useState<Diagnosis | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const fromOffice = new URLSearchParams(location.search).get('origem') === 'escritorio';
   const workerRef = useRef<Worker | null>(null);
   const workerUrlRef = useRef<string | null>(null);
   const timeoutRef = useRef<number | undefined>(undefined);
@@ -467,12 +494,13 @@ export function ProgrammingLabPage() {
             <p className="text-sm text-muted">Pratique a sintaxe de Bash/Linux num sistema de arquivos virtual persistente durante esta sessão. A saída é simulada; nada é executado no Android, no computador ou num servidor real.</p>
           </div>
         </div>
-        <section className="rounded-xl border border-line bg-raised/40 p-3" aria-label="Chamado guiado: investigar log">
+        <section className="rounded-xl border border-line bg-raised/40 p-3" aria-label="Chamado guiado: investigar servidor lento">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="kicker">Chamado 2318 · laboratório de suporte</p>
-              <h3 className="mt-1 font-semibold">Investigue uma tentativa sem autenticação</h3>
-              <p className="mt-1 text-sm text-muted">Siga os passos usando os comandos do terminal. As tarefas só são marcadas quando o comando correto produz a evidência esperada.</p>
+              <p className="kicker">Chamado 2318 · Escritório de TI</p>
+              <h3 className="mt-1 font-semibold">Investigue o servidor de relatórios lento</h3>
+              <p className="mt-1 text-sm text-muted">O servidor relat-01 está lento. Use comandos de sistema para reunir evidências antes de escolher a causa. Cada etapa só é concluída quando a saída esperada aparece.</p>
+              {fromOffice && <p className="mt-2 rounded-lg bg-teal/10 p-2 text-xs text-teal">Aberto pelo terminal da Marta no mapa do escritório. Ao voltar, sua posição no mapa será retomada.</p>}
             </div>
             <span className="shrink-0 rounded-full border border-line px-2 py-1 text-xs font-semibold">{completedIncidentSteps.length}/{INCIDENT_STEPS.length}</span>
           </div>
@@ -493,10 +521,25 @@ export function ProgrammingLabPage() {
               </li>;
             })}
           </ol>
-          {completedIncidentSteps.length === INCIDENT_STEPS.length && <p className="mt-3 rounded-lg border border-ok/40 bg-ok/10 p-3 text-sm" role="status">Chamado investigado: o log confirma uma tentativa sem autenticação às 08:05. Você encontrou a evidência; no trabalho real, o próximo passo seria correlacionar o registro com a política de autenticação e os demais logs.</p>}
-          <button type="button" className="btn-ghost mt-3 text-xs" onClick={() => { setTerminalState(INITIAL_TERMINAL); setCompletedIncidentSteps([]); setCommand(''); setTerminalOutput(['Terminal virtual reiniciado. O sistema real não foi alterado.']); }}>Reiniciar terminal e chamado</button>
+          {completedIncidentSteps.length === INCIDENT_STEPS.length && <section className="mt-4 rounded-xl border border-line bg-surface p-3" aria-label="Diagnóstico do chamado">
+            <h4 className="font-semibold">Qual é a causa mais provável?</h4>
+            <p className="mt-1 text-sm text-muted">Cruze os sinais do top, free e vmstat antes de decidir.</p>
+            <div className="mt-3 space-y-2">
+              <button type="button" className={diagnosis === 'cpu' ? 'btn-primary w-full !justify-start text-left' : 'btn-ghost w-full !justify-start text-left'} onClick={() => setDiagnosis('cpu')} aria-pressed={diagnosis === 'cpu'}>A CPU está saturada por um único processo.</button>
+              <button type="button" className={diagnosis === 'thrashing' ? 'btn-primary w-full !justify-start text-left' : 'btn-ghost w-full !justify-start text-left'} onClick={() => setDiagnosis('thrashing')} aria-pressed={diagnosis === 'thrashing'}>Falta RAM; o sistema está trocando páginas com o swap sem parar (thrashing).</button>
+              <button type="button" className={diagnosis === 'zombie' ? 'btn-primary w-full !justify-start text-left' : 'btn-ghost w-full !justify-start text-left'} onClick={() => setDiagnosis('zombie')} aria-pressed={diagnosis === 'zombie'}>Um processo zumbi está bloqueando o servidor.</button>
+            </div>
+            {diagnosis && <p role="status" className={'mt-3 rounded-lg p-3 text-sm ' + (diagnosis === 'thrashing' ? 'bg-ok/10 text-ok' : 'bg-bad/10 text-bad')}>
+              {diagnosis === 'thrashing'
+                ? 'Diagnóstico correto. A RAM está quase esgotada, swap está quase cheio, si/so permanecem altos e a CPU passa 74,3% do tempo esperando I/O. Antes de agir, você já tem evidências. O próximo passo no escritório é pedir o término gracioso do importador (kill PID/SIGTERM) e conferir a memória.'
+                : diagnosis === 'cpu'
+                  ? 'Ainda não. O processo usa apenas 9,8% de CPU; 74,3% é espera por I/O. Releia free -h e vmstat 2.'
+                  : 'Ainda não. Nenhuma evidência aponta para zumbi; o problema é a pressão de memória e a troca constante com swap.'}
+            </p>}
+          </section>}
+          <button type="button" className="btn-ghost mt-3 text-xs" onClick={() => { setTerminalState(INITIAL_TERMINAL); setCompletedIncidentSteps([]); setDiagnosis(null); setCommand(''); setTerminalOutput(['Terminal virtual reiniciado. O sistema real não foi alterado.']); }}>Reiniciar terminal e chamado</button>
         </section>
-        <div className="overflow-hidden rounded-xl border border-line bg-[#111714]">
+                <div className="overflow-hidden rounded-xl border border-line bg-[#111714]">
           <div className="flex items-center justify-between gap-2 border-b border-white/10 px-3 py-2 text-xs text-[#b3c8b8]">
             <span>aluno@portico</span><span>Linux virtual · sem acesso ao sistema real</span>
           </div>
@@ -510,7 +553,7 @@ export function ProgrammingLabPage() {
           </form>
         </div>
         <div className="flex flex-wrap gap-2 text-xs">
-          {['help', 'pwd', 'ls -la', 'cat logs/app.log', 'grep -n WARN logs/app.log', 'cat logs/app.log | grep WARN', 'grep WARN logs/app.log | wc -l', 'ps', 'top'].map((example) => (
+          {['help', 'pwd', 'ls -la', 'top', 'free -h', 'vmstat 2', 'ps aux | grep importador', 'cat logs/app.log | grep WARN', 'grep WARN logs/app.log | wc -l'].map((example) => (
             <button key={example} type="button" className="btn-ghost !min-h-[34px] !px-2.5 font-mono" onClick={() => setCommand(example)}>{example}</button>
           ))}
         </div>
@@ -525,6 +568,7 @@ export function ProgrammingLabPage() {
         </ol>
         <div className="mt-3 flex flex-wrap gap-2">
           <Link to="/escritorio" className="btn-ghost text-sm">Abrir escritório de TI 2D</Link>
+          {fromOffice && <button type="button" className="btn-primary text-sm" onClick={() => returnToPreviousPage(navigate, location.key, '/escritorio')}>Voltar ao escritório 2D</button>}
           <Link to="/simulador" className="btn-ghost text-sm">Ver laboratórios práticos</Link>
         </div>
       </section>
