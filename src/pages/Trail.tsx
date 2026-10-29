@@ -85,6 +85,15 @@ export function TrailPage() {
                   <div className="h-full rounded-full transition-[width]" style={{ width: `${pct}%`, background: color }} />
                 </div>
 
+                <div className="mt-3 rounded-2xl border border-line bg-surface/60 p-3" aria-label={`Laboratórios práticos para ${chapter.title}`}>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">Aplicar o que você aprendeu</p>
+                  <div className="flex flex-wrap gap-2">
+                    <Link to="/escritorio" className="btn-ghost !min-h-[36px] !px-3 text-xs"><Icon name="mapa" size={14} /> Escritório de TI 2D</Link>
+                    <Link to="/laboratorio-codigo" className="btn-ghost !min-h-[36px] !px-3 text-xs"><Icon name="tela" size={14} /> Laboratório de programação</Link>
+                    <Link to="/laboratorios" className="btn-ghost !min-h-[36px] !px-3 text-xs"><Icon name="terminal" size={14} /> Laboratórios práticos</Link>
+                  </div>
+                </div>
+
                 <ol className="ledger mt-4" aria-label={`Atividades de ${chapter.title}`}>
                   {ch.units.map(({ unit, state }, index) => {
                     const body = (

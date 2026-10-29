@@ -92,7 +92,7 @@ function Pairs({ a, onDone }: { a: Extract<Activity, { kind: 'pairs' }>; onDone:
               type="button"
               disabled={matched.includes(t)}
               onClick={() => setSelL(t)}
-              className={`w-full rounded-2xl border-2 p-2.5 text-left text-sm font-semibold shadow-[0_3px_0_rgb(var(--line))] transition ${matched.includes(t) ? 'border-ok/50 bg-ok/10 text-ok opacity-60' : selL === t ? choiceCls('sel') : choiceCls('idle')}`}
+              className={`w-full rounded-2xl border-2 p-2.5 text-left text-sm font-semibold transition ${matched.includes(t) ? 'border-ok/50 bg-ok/10 text-ok opacity-60' : selL === t ? choiceCls('sel') : choiceCls('idle')}`}
             >
               {t}
             </button>
@@ -106,7 +106,7 @@ function Pairs({ a, onDone }: { a: Extract<Activity, { kind: 'pairs' }>; onDone:
               type="button"
               disabled={matchedDefs.includes(d)}
               onClick={() => pick(d)}
-              className={`w-full rounded-2xl border-2 p-2.5 text-left text-xs leading-snug shadow-[0_3px_0_rgb(var(--line))] transition ${matchedDefs.includes(d) ? 'border-ok/50 bg-ok/10 opacity-60' : wrong === d ? 'anim-shake border-bad bg-bad/10' : choiceCls('idle')}`}
+              className={`w-full rounded-2xl border-2 p-2.5 text-left text-xs leading-snug transition ${matchedDefs.includes(d) ? 'border-ok/50 bg-ok/10 opacity-60' : wrong === d ? 'anim-shake border-bad bg-bad/10' : choiceCls('idle')}`}
             >
               {d}
             </button>
@@ -384,7 +384,7 @@ function PracticeRun() {
                               next[i] = e.target.value;
                               return next;
                             })}
-                            className="max-w-[8rem] rounded-lg border-2 border-[#2e7182]/50 bg-[#d6e7e6] px-2 py-1 font-sans text-sm font-semibold text-[#172e34] focus:outline-none focus:ring-2 focus:ring-[#c8402a]"
+                            className="max-w-[8rem] rounded-xl border-2 border-line bg-surface px-2 py-1 font-sans text-sm font-semibold text-ink focus:outline-none focus:ring-2 focus:ring-gold"
                           >
                             <option value="">Escolher</option>
                             {act.options.map((option) => (
@@ -417,7 +417,7 @@ function PracticeRun() {
               <>
                 <p className="text-sm font-semibold text-muted">Montagem de frase</p>
                 <p className="mb-4 mt-2 font-display text-xl leading-snug">{act.prompt}</p>
-                <div className="min-h-20 rounded-2xl border-2 border-dashed border-[#2e7182]/50 bg-[#d6e7e6]/60 p-3" role="group" aria-label="Frase montada">
+                <div className="min-h-20 rounded-2xl border-2 border-dashed border-line bg-raised/40 p-3" role="group" aria-label="Frase montada">
                   {sentenceIndexes.length ? (
                     <div className="flex flex-wrap gap-2">
                       {sentenceIndexes.map((wordIndex, slot) => (
@@ -426,7 +426,7 @@ function PracticeRun() {
                           type="button"
                           disabled={!!verdict}
                           onClick={() => setSentenceIndexes((current) => current.filter((_, i) => i !== slot))}
-                          className="rounded-lg bg-gold px-2.5 py-2 text-sm font-semibold text-ink shadow-sm"
+                          className="rounded-xl bg-gold px-2.5 py-2 text-sm font-semibold text-ink"
                           aria-label={`Remover palavra ${act.words[wordIndex]}`}
                         >
                           {act.words[wordIndex]} <span aria-hidden="true" className="ml-1 opacity-70">×</span>
@@ -491,7 +491,7 @@ function PracticeRun() {
             </div>
           )}
           {verdict && (
-            <div className={"anim-toast-in fixed inset-x-0 bottom-0 z-40 max-h-[55dvh] overflow-y-auto rounded-t-[1.6rem] px-4 pt-3 shadow-[0_-12px_30px_-12px_rgba(0,0,0,0.45)] sm:px-6 " + (verdict.ok ? 'bg-[#d9eadf] text-[#173d29]' : 'bg-[#f3dcd5] text-[#5c1d12]')} style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }} role="status">
+            <div className={"anim-toast-in fixed inset-x-0 bottom-0 z-40 max-h-[55dvh] overflow-y-auto rounded-t-[1.6rem] border-t border-line px-4 pt-3 sm:px-6 " + (verdict.ok ? 'bg-ok/10 text-ok' : 'bg-bad/10 text-bad')} style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }} role="status">
               <div className="mx-auto max-w-3xl">
                 <p className="flex items-center gap-2 text-lg font-bold">
                   <Icon name={verdict.ok ? 'certo' : 'errado'} size={22} strokeWidth={2.6} /> {verdict.title}
@@ -502,7 +502,7 @@ function PracticeRun() {
                     {verdict.recovery ? 'Logo adiante vem uma parecida, com outro exemplo, para firmar a ideia.' : 'Esta volta no fim da rodada para você tentar de novo.'}
                   </p>
                 )}
-                <button className={"mt-3 w-full rounded-full px-5 py-3 font-bold text-white shadow-md " + (verdict.ok ? 'bg-[#28744a]' : 'bg-[#a6372a]')} onClick={next}>
+                <button className={"btn-primary mt-3 w-full " + (verdict.ok ? 'bg-ok' : 'bg-bad')} onClick={next}>
                   Continuar
                 </button>
               </div>
@@ -521,16 +521,16 @@ function PracticeRun() {
           </div>
           <h1 className="mt-2 text-2xl">Trecho praticado!</h1>
           <div className="mt-4 grid w-full grid-cols-3 gap-2">
-            <span className="rounded-2xl border-2 border-[#e8b13b] p-2">
-              <b className="block text-xl text-[#9a5b20]">+{totalXp(data) - startXp}</b>
+            <span className="rounded-2xl border-2 border-gold p-2">
+              <b className="block text-xl text-gold">+{totalXp(data) - startXp}</b>
               <span className="text-xs text-muted">pontos</span>
             </span>
             <span className="rounded-2xl border-2 border-ok p-2">
               <b className="block text-xl text-ok">{score}%</b>
               <span className="text-xs text-muted">de primeira</span>
             </span>
-            <span className="rounded-2xl border-2 border-[#2c5f6e] p-2">
-              <b className="block text-xl text-[#2c5f6e]">{total}</b>
+            <span className="rounded-2xl border-2 border-line p-2">
+              <b className="block text-xl text-ink">{total}</b>
               <span className="text-xs text-muted">atividades</span>
             </span>
           </div>
