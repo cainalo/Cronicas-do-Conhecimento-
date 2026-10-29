@@ -143,7 +143,7 @@ export function Layout() {
         </div>
       </header>}
 
-      <main className={standaloneNarration ? 'h-dvh min-h-0 w-full overflow-hidden p-0' : `mx-auto w-full flex-1 px-4 sm:px-6 ${/^\/(capitulo|aprender)\//.test(pathname) ? 'max-w-3xl lg:max-w-6xl' : 'max-w-3xl'} ${immersive ? 'pb-3 pt-4' : 'pb-32 pt-5 lg:pb-12'}`}>
+      <main className={standaloneNarration ? 'h-dvh min-h-0 w-full overflow-hidden p-0' : `mx-auto w-full flex-1 px-4 sm:px-6 ${/^\/(capitulo|aprender|video)\//.test(pathname) ? 'max-w-3xl lg:max-w-6xl' : 'max-w-3xl'} ${immersive ? 'pb-3 pt-4' : 'pb-32 pt-5 lg:pb-12'}`}>
         <div key={pathname} className={standaloneNarration ? 'h-full min-h-0 w-full' : 'page-enter'}>
           <Outlet />
         </div>

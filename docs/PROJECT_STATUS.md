@@ -1,4 +1,12 @@
-# Estado do projeto (atualizado em 2026-10-26)
+# Estado do projeto (atualizado em 2026-10-29)
+
+## Rodada Pórtico de 29/10 — estado a validar
+- Feed social demonstrativo na rota `/sala`, com stories, links de referência, perfis completos e posts de professores; publicações de estudante persistem apenas no aparelho.
+- Posts editoriais escolhidos dentro da trilha por `/trilha-post/:chapterId/:sectionId`; rota didática antiga preservada em `/feed-aulas`.
+- Workspace da videoaula com resumo, notas, timestamps e checklist persistidos localmente; o player continua em proporção 16:9 e a página recebe largura extra em telas grandes.
+- Identidade visual oficial aplicada por assets recortados de `public/brand/`.
+- Cobertura de testes adicionada para feed e workspace de vídeo. O build detectou itens TypeScript não utilizados e eles foram corrigidos no commit `f649edff`; **não declarar release aprovado até o workflow completo concluir com sucesso**.
+- A implementação desta rodada é parcial: o feed é local-only, ainda não sincroniza entre usuários; os próximos passos estão em `docs/PORTICO_IMPLEMENTATION_PLAN.md`.
 
 ## Funciona e foi testado
 - **25/10 (noite):** série piloto com história em cap.prim.01 / computador; aula narrada e vídeo dentro da aula; feed com perfis, revisões rápidas e comentários; Escritório 2D em tela cheia (mapa novo, 4 direções). Testes automáticos e capturas em 390 e 1280 px.

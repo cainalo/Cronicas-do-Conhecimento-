@@ -69,4 +69,18 @@ describe('Sala dos Professores — feed social', () => {
     expect(screen.getByRole('button', { name: 'Publicar' })).toBeInTheDocument();
     expect(screen.queryByTestId('feed-proximo')).not.toBeInTheDocument();
   });
+  it('abre o perfil completo do professor a partir dos stories', async () => {
+    const user = userEvent.setup();
+    renderAt();
+    await user.click(screen.getAllByRole('button', { name: /Story/ })[0]);
+    await user.click(screen.getByRole('button', { name: 'Ver perfil e publicações de Clara' }));
+    const profile = screen.getByRole('dialog', { name: 'Perfil de Professora Clara' });
+    expect(profile).toHaveTextContent('@clara.numeros');
+    expect(profile).toHaveTextContent('ESTILO E PRESENÇA');
+    expect(profile).toHaveTextContent('Fora da sala de aula');
+    expect(profile).toHaveTextContent('Publicações');
+    await user.click(within(profile).getByRole('button', { name: 'Voltar ao feed' }));
+    expect(screen.getByRole('heading', { name: 'Sala dos Professores' })).toBeInTheDocument();
+  });
+
 });

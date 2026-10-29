@@ -99,7 +99,7 @@
 - **Modais e correção:** a animação `.page-enter` (fill `both`) deixava um transform no contêiner da página, e o estilo de cartões "vidro" usa backdrop-filter; os dois prendiam os overlays `position: fixed` à coluna, deixando margem clara. Agora a animação usa `backwards`, os modais vão para o body por `Portal`, e o cartão de certo ou errado fica fixo na base, de borda a borda, com a área segura do Android. Conferido em 390×844 e 360×640.
 
 ## 26/10/2026: trilha integrada (fase 1)
-- A trilha passou a incluir, em ordem lógica, todo o material existente: a aula narrada logo depois da aula em texto que ela acompanha; as videoaulas curadas depois da aula (ou do trecho); os posts dos professores depois das aulas do trecho, antes do Praticar; os cartões de memorização no fim do capítulo, antes do Desafio. Abrir pela trilha (`?u=chave`) conta como feito. Nova página /video/:id; /sala?aula= e /flashcards?capitulo= abrem direto no lugar certo.
+- A trilha passou a incluir, em ordem lógica, todo o material existente: a aula narrada logo depois da aula em texto que ela acompanha; as videoaulas curadas depois da aula (ou do trecho); os posts dos professores depois das aulas do trecho, antes do Praticar; os cartões de memorização no fim do capítulo, antes do Desafio. Abrir pela trilha (`?u=chave`) conta como feito. Nova página /video/:id; /feed-aulas?aula= e /flashcards?capitulo= abrem direto no lugar certo.
 - Testes: `trail-extras.test.ts` (5), 2115 no total; test:e2e com as novas páginas; capturas da trilha conferidas em 390×844.
 - **Fase 2:** a primeira aula de cada trecho (a da história) ganhou uma aula narrada gerada do próprio texto da aula (`lib/narrate.ts`): fala sem marcação, cartões para listas, linha do tempo para os marcos datados e o resumo no fim. Entram na trilha logo depois da aula. Testes em `narrate.test.ts` (inclusive: só frases que estão na aula). 2234 testes.
 
@@ -126,3 +126,12 @@
 - Causa: `.github/workflows/pages.yml` só permite publicar a partir da `main` quando o segredo de keystore de release existe; sem esse segredo, apenas `claude/cronicas-conhecimento-estudos-jgbofo` publica para manter a assinatura estável do APK.
 - Integrei a versão atual da `main` na branch de publicação pelo PR #5, merge `783725a6e61f018fe115d93c50b89a5cf20f1c49`, preservando a branch que mantém a assinatura do Android.
 - O próximo build precisa passar por testes, build e E2E antes de atualizar `gh-pages`. Não considerar a publicação concluída até verificar o novo `download/version.json` e o bundle do site.
+
+
+## Sessão Pórtico — 2026-10-29
+- Criada a Sala dos Professores social em `/sala`; a sequência curricular foi preservada em `/feed-aulas`.
+- Stories ganharam links externos de referência e ação para abrir a ficha do professor; perfis apresentam personalidade, estilo, interesses, referências e posts publicados pelo personagem.
+- Os blocos didáticos dos professores da trilha agora abrem `/trilha-post/:chapterId/:sectionId` e somente são inseridos quando existe conteúdo editorial próprio para a seção, evitando duplicar Aprender.
+- Videoaula ganhou resumo editável, anotações com marcadores temporais, checklist de revisão e cópia das notas; não há alegação de transcrição automática.
+- A wordmark e o ícone foram recortados da prancha fornecida e vinculados ao componente de marca.
+- Cobertura adicionada em `social-feed.test.tsx`, `trail-teacher-post.test.tsx` e `video-workspace.test.tsx`; incluir rota curricular nova no teste E2E de layout. Confirmar o estado de CI do commit mais recente antes de publicar.

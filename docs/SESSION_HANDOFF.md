@@ -1,7 +1,17 @@
 # Handoff de sessão
 
-**Última atualização:** 2026-10-26
+**Última atualização:** 2026-10-29
 **Fase:** reformulação "Arquivo Real" (kit em `docs/kit/`, auditoria em `docs/AUDITORIA_REFORMULACAO.md`): fases 0 a 5 do kit feitas para o piloto; expansão pendente.
+
+## Pórtico — implementação de 29/10/2026
+- `/sala` foi transformada em feed social demonstrativo, com stories, filtros, criação local de texto/imagem, curtidas, comentários e perfil completo dos professores. Stories incluem referências externas e indicação musical; a música não é reproduzida pela plataforma.
+- A antiga experiência didática permanece em `/feed-aulas`; a rota dedicada permite preservar testes e utilidades curriculares.
+- Publicações editoriais selecionadas entram na trilha em `/trilha-post/:chapterId/:sectionId`; não são redirecionadas para o feed principal nem montadas automaticamente a partir do texto de Aprender. Mini-desafios, reações e marcações ficam no aparelho.
+- A página `/video/:id` ganhou workspace de estudo com player em destaque, resumo editável, anotações, marcadores de tempo, checklist e exportação para clipboard. O resumo não é transcrição automática do YouTube. Em desktop, o container ganha largura adicional.
+- Os assets `public/brand/portico-wordmark.jpg` e `public/brand/portico-app-icon.jpg` são recortes da prancha de identidade visual enviada; `src/components/Logo.tsx` passa a utilizá-los.
+- Fichas dos quatro professores incluem estilo pessoal, interesses, referências, bordões e forma de ensinar. O feed segue como demonstração local: ainda não é uma rede social multiusuário em tempo real.
+- **Release atual:** validar o workflow do SHA mais recente antes de considerar publicado. O último build identificado encontrou imports/variáveis TypeScript não usados; correções foram enviadas em `f649edff`. A verificação de release após essas correções continua pendente.
+- Plano de continuidade detalhado: `docs/PORTICO_IMPLEMENTATION_PLAN.md`.
 
 ## Situação atual
 - **Rodada de 25/10/2026 (noite): pedidos do usuário. Decisões em PRODUCT_DECISIONS.md, seção "ritmo das aulas, sequência única, feed e Escritório".**
