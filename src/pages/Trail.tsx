@@ -90,7 +90,7 @@ export function TrailPage() {
                   <div className="flex flex-wrap gap-2">
                     <Link to="/escritorio" className="btn-ghost !min-h-[36px] !px-3 text-xs"><Icon name="mapa" size={14} /> Escritório de TI 2D</Link>
                     <Link to="/laboratorio-codigo" className="btn-ghost !min-h-[36px] !px-3 text-xs"><Icon name="tela" size={14} /> Laboratório de programação</Link>
-                    <Link to="/laboratorios" className="btn-ghost !min-h-[36px] !px-3 text-xs"><Icon name="terminal" size={14} /> Laboratórios práticos</Link>
+                    <Link to="/laboratorios" className="btn-ghost !min-h-[36px] !px-3 text-xs"><Icon name="tela" size={14} /> Laboratórios práticos</Link>
                   </div>
                 </div>
 
