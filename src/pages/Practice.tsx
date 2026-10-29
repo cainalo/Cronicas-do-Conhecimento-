@@ -38,7 +38,7 @@ const choiceCls = (state: 'idle' | 'sel' | 'ok' | 'bad' | 'dim') =>
 function Choices({ options, answer, locked, value, onPick, labels }: { options: string[]; answer: string; locked: boolean; value?: string; onPick: (v: string) => void; labels?: Record<string, string> }) {
   return (
     <ul className="space-y-2">
-      {options.map((o, i) => {
+      {options.map((o) => {
         const state = !locked ? (value === o ? 'sel' : 'idle') : o === answer ? 'ok' : value === o ? 'bad' : 'dim';
         return (
           <li key={o}>
