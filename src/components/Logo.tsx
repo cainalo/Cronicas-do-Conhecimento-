@@ -1,24 +1,35 @@
-// Marca da identidade editorial: um "C" em arco aberto com o ponto final em vermelhão, a mesma
-// assinatura dos ícones. A palavra "Crônicas" vem em Fraunces.
 import { Link } from 'react-router-dom';
 
-export function LogoMark({ size = 28, accent = 'rgb(var(--gold))', className = '' }: { size?: number; accent?: string; className?: string }) {
+/**
+ * Assets-mestres recortados diretamente da prancha de identidade visual aprovada pelo usuário.
+ * Não reconstruir a wordmark usando uma fonte aproximada; os arquivos ficam em public/brand.
+ */
+const markSrc = `${import.meta.env.BASE_URL}brand/portico-app-icon.jpg`;
+const wordmarkSrc = `${import.meta.env.BASE_URL}brand/portico-wordmark.jpg`;
+
+export function LogoMark({ size = 28, className = '' }: { size?: number; accent?: string; className?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true" focusable="false" className={className}>
-      <path d="M23.7 9.6A10 10 0 1 0 23.7 22.4" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="butt" />
-      <circle cx="25.6" cy="16" r="2.5" fill={accent} />
-    </svg>
+    <img
+      src={markSrc}
+      width={size}
+      height={size}
+      alt=""
+      aria-hidden="true"
+      className={`shrink-0 rounded-[23%] object-contain ${className}`}
+    />
   );
 }
 
 export function Logo({ full = false }: { full?: boolean }) {
   return (
-    <Link to="/" className="group flex items-center gap-2 text-ink" aria-label="Crônicas do Conhecimento, início">
-      <LogoMark size={26} className="transition-transform duration-500 ease-out group-hover:-rotate-12" />
-      <span className="whitespace-nowrap font-title text-[1.18rem] font-semibold leading-none tracking-[-0.02em]">
-        Crônicas
-        {full && <span className="font-normal italic text-muted"> do Conhecimento</span>}
-      </span>
+    <Link to="/" className="group flex min-w-0 items-center gap-2 text-ink" aria-label="Pórtico — conhecimento é o nosso ponto de partida">
+      <img
+        src={wordmarkSrc}
+        alt="Pórtico — conhecimento é o nosso ponto de partida"
+        width={full ? 160 : 128}
+        height={full ? 74 : 59}
+        className={`block h-auto ${full ? 'w-32 sm:w-40' : 'w-24 sm:w-32'} object-contain transition-transform duration-300 group-hover:-translate-y-px`}
+      />
     </Link>
   );
 }
