@@ -64,7 +64,7 @@ it('feed na tela: um post por vez, ações salvas, e a aula só conclui depois d
   const user = userEvent.setup();
   const first = feedLessons[0];
   const posts = feedPostsOf(first.id);
-  renderAt('/sala');
+  renderAt('/feed-aulas');
   expect(screen.getAllByRole('article')).toHaveLength(1);
   // Ações privadas e reais.
   const p0 = screen.getByTestId(`post-${posts[0].id}`);
@@ -100,7 +100,7 @@ it('concluir a aula no feed registra na trilha a mesma aula (e libera a próxima
   const posts = feedPostsOf(first.id);
   const answers = Object.fromEntries(posts.filter((p) => p.kind === 'atividade').map((p) => [p.id, true]));
   localStorage.setItem('cronicas:feed:v1', JSON.stringify({ ...emptyFeed(), answers, cursor: { [first.id]: posts.length - 1 } }));
-  renderAt('/sala');
+  renderAt('/feed-aulas');
   await user.click(screen.getByTestId('feed-concluir'));
   const log = loadData('visitante').unitLog ?? {};
   expect(Object.keys(log).some((k) => k.includes(first.chapterId) && k.includes(first.sectionId))).toBe(true);
@@ -112,7 +112,7 @@ it('rede social do feed: perfil do professor, curtir guardado e revisão rápida
   const first = feedLessons[0];
   // Aula 1 concluída na trilha: aparece nas revisões rápidas.
   saveData('visitante', logUnit(emptyData(), `aprender:${first.chapterId}:${first.sectionId}#${first.id}`));
-  renderAt('/sala');
+  renderAt('/feed-aulas');
   // Perfil.
   await user.click(screen.getAllByRole('button', { name: /Ver o perfil de Professora Lia/ })[0]);
   const dlg = screen.getByRole('dialog', { name: 'Perfil de Professora Lia' });
