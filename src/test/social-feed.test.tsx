@@ -83,4 +83,23 @@ describe('Sala dos Professores — feed social', () => {
     expect(screen.getByRole('heading', { name: 'Sala dos Professores' })).toBeInTheDocument();
   });
 
+  it('publica um carrossel de fotos com vídeo do YouTube', async () => {
+    const user = userEvent.setup();
+    renderAt();
+    await user.type(screen.getByPlaceholderText(/Uma dúvida, uma curiosidade/), 'Veja este material de estudo.');
+    const files = [
+      new File(['foto-a'], 'foto-a.png', { type: 'image/png' }),
+      new File(['foto-b'], 'foto-b.png', { type: 'image/png' }),
+    ];
+    await user.upload(screen.getByLabelText('Adicionar até 3 fotos'), files);
+    await user.type(screen.getByPlaceholderText('https://www.youtube.com/watch?v=…'), 'https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+    await user.click(screen.getByRole('button', { name: 'Publicar' }));
+    const stored = JSON.parse(localStorage.getItem('portico:sala-social:v1') ?? '[]');
+    expect(stored[0].images).toHaveLength(2);
+    expect(stored[0].videoUrl).toContain('dQw4w9WgXcQ');
+    expect(screen.getByRole('button', { name: /Carregar o vídeo/ })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Próxima imagem do carrossel' }));
+    expect(screen.getByText('2 de 2')).toBeInTheDocument();
+  });
+
 });

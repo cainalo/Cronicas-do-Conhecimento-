@@ -6,10 +6,11 @@ import { Icon } from '@/components/Icon';
 import { TeacherAvatar } from '@/components/TeacherAvatar';
 import { PageHeader } from '@/components/Page';
 import { Markdown } from '@/components/Markdown';
+import { VideoEmbed, youTubeId } from '@/components/VideoEmbed';
 
 type CommunityPost = {
   id: string; teacherId: string; title: string; body: string; publishedAt: string;
-  kind: 'teacher' | 'member'; image?: string; likes: number; comments: { author: string; text: string }[];
+  kind: 'teacher' | 'member'; image?: string; images?: string[]; videoUrl?: string; likes: number; comments: { author: string; text: string }[];
 };
 type LocalPost = CommunityPost & { liked?: boolean };
 const STORAGE = 'portico:sala-social:v1';
@@ -37,7 +38,9 @@ function relativeLabel(date: string) {
 export function SocialFeedPage() {
   const [localPosts, setLocalPosts] = useState<LocalPost[]>(readPosts);
   const [draft, setDraft] = useState('');
-  const [image, setImage] = useState<string | undefined>();
+  const [images, setImages] = useState<string[]>([]);
+  const [videoUrlDraft, setVideoUrlDraft] = useState('');
+  const [mediaError, setMediaError] = useState<string | null>(null);
   const [filter, setFilter] = useState<'todos' | 'professores' | 'comunidade'>('todos');
   const [story, setStory] = useState<FictionalTeacher | null>(null);
   const [profile, setProfile] = useState<FictionalTeacher | null>(null);
@@ -61,20 +64,45 @@ export function SocialFeedPage() {
   };
   const publish = () => {
     const body = draft.trim();
-    if (!body && !image) return;
+    const videoUrl = videoUrlDraft.trim();
+    if (videoUrl && !youTubeId(videoUrl)) {
+      setMediaError('Use um link válido do YouTube para anexar um vídeo.');
+      return;
+    }
+    if (!body && images.length === 0 && !videoUrl) return;
     const post: LocalPost = {
       id: `membro-${Date.now()}`, teacherId: 'member', title: 'Uma publicação da comunidade',
-      body, publishedAt: new Date().toISOString(), kind: 'member', image, likes: 0, comments: [],
+      body, publishedAt: new Date().toISOString(), kind: 'member', images, videoUrl: videoUrl || undefined, likes: 0, comments: [],
     };
-    persist([post, ...localPosts]); setDraft(''); setImage(undefined);
+    persist([post, ...localPosts]); setDraft(''); setImages([]); setVideoUrlDraft(''); setMediaError(null);
   };
-  const chooseImage = (file?: File) => {
-    if (!file) return;
-    if (!file.type.startsWith('image/')) return;
-    if (file.size > 2_000_000) { alert('Escolha uma imagem de até 2 MB para manter o feed leve.'); return; }
-    const reader = new FileReader();
-    reader.onload = () => setImage(String(reader.result));
-    reader.readAsDataURL(file);
+  const chooseImages = async (files?: FileList | null) => {
+    if (!files?.length) return;
+    const chosen = Array.from(files);
+    if (chosen.some((file) => !file.type.startsWith('image/'))) {
+      setMediaError('Selecione somente arquivos de imagem.');
+      return;
+    }
+    if (chosen.length > 3) {
+      setMediaError('O carrossel aceita até três imagens por publicação.');
+      return;
+    }
+    if (chosen.reduce((sum, file) => sum + file.size, 0) > 1_500_000) {
+      setMediaError('As imagens devem somar até 1,5 MB para caber no armazenamento local.');
+      return;
+    }
+    try {
+      const dataUrls = await Promise.all(chosen.map((file) => new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result));
+        reader.onerror = () => reject(reader.error ?? new Error('Não foi possível ler a imagem.'));
+        reader.readAsDataURL(file);
+      })));
+      setImages(dataUrls);
+      setMediaError(null);
+    } catch {
+      setMediaError('Não foi possível ler uma das imagens. Tente outro arquivo.');
+    }
   };
   const toggleLike = (id: string) => persist(localPosts.map((p) => p.id === id ? { ...p, liked: !p.liked, likes: Math.max(0, p.likes + (p.liked ? -1 : 1)) } : p));
   const addComment = (id: string, isMember: boolean) => {
@@ -99,11 +127,17 @@ export function SocialFeedPage() {
     <section className="card space-y-3 p-4" aria-label="Criar publicação">
       <div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-full bg-ink text-bg text-xs font-bold">Você</span><span className="font-semibold">Compartilhe uma descoberta</span></div>
       <textarea className="input min-h-24 resize-y" value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Uma dúvida, uma curiosidade ou algo que você aprendeu hoje…" maxLength={1200}/>
-      {image && <div className="relative"><img src={image} alt="Prévia da imagem da publicação" className="max-h-64 w-full rounded-xl object-cover"/><button className="btn-ghost mt-2" onClick={() => setImage(undefined)}>Remover imagem</button></div>}
+      {images.length > 0 && <div className="space-y-2">
+        <div className="grid grid-cols-2 gap-2">{images.map((src, index) => <img key={src.slice(0, 48) + index} src={src} alt={'Prévia da imagem ' + (index + 1)} className="max-h-48 w-full rounded-xl border border-line object-cover"/>)}</div>
+        <p className="text-xs text-muted">Carrossel com {images.length} imagem(ns).</p>
+        <button className="btn-ghost text-sm" onClick={() => setImages([])}>Remover imagens</button>
+      </div>}
+      <label className="block text-sm"><span className="font-semibold">Vídeo do YouTube (opcional)</span><input type="url" className="input mt-1 w-full" value={videoUrlDraft} onChange={(e) => { setVideoUrlDraft(e.target.value); setMediaError(null); }} placeholder="https://www.youtube.com/watch?v=…"/></label>
+      {mediaError && <p role="alert" className="text-sm text-bad">{mediaError}</p>}
       <div className="flex flex-wrap items-center gap-2">
-        <label className="btn-ghost cursor-pointer text-sm"><Icon name="livro" size={16}/> Adicionar foto<input type="file" accept="image/*" className="sr-only" onChange={(e) => chooseImage(e.target.files?.[0])}/></label>
+        <label className="btn-ghost cursor-pointer text-sm"><Icon name="livro" size={16}/> Adicionar até 3 fotos<input type="file" accept="image/*" multiple className="sr-only" onChange={(e) => { void chooseImages(e.target.files); e.currentTarget.value = ''; }}/></label>
         <span className="flex-1"/>
-        <button className="btn-primary" onClick={publish} disabled={!draft.trim() && !image}>Publicar</button>
+        <button className="btn-primary" onClick={publish} disabled={!draft.trim() && images.length === 0 && !videoUrlDraft.trim()}>Publicar</button>
       </div>
       <p className="text-xs text-muted">As publicações deste protótipo ficam salvas neste aparelho. Ainda não são compartilhadas entre contas.</p>
     </section>
@@ -120,7 +154,7 @@ export function SocialFeedPage() {
             {t && <span className="rounded-full bg-gold/10 px-2 py-1 text-xs text-gold">Professor</span>}
           </header>
           <div className="space-y-2 px-4 pb-4"><h2 className="font-title text-xl">{p.title}</h2><p className="whitespace-pre-wrap text-sm leading-relaxed">{p.body}</p></div>
-          {p.image && <img src={p.image} alt="Imagem compartilhada pela comunidade" className="max-h-[28rem] w-full object-cover"/>}
+          <PostMedia post={p}/>
           <footer className="flex flex-wrap items-center gap-2 border-t border-line p-3">
             <button className={(isMember ? p.liked : teacherLikes[p.id]) ? 'btn-primary text-sm' : 'btn-ghost text-sm'} onClick={() => isMember ? toggleLike(p.id) : setTeacherLikes((old) => ({ ...old, [p.id]: !old[p.id] }))}><Icon name="coracao" size={16}/> {p.likes + ((isMember ? p.liked : teacherLikes[p.id]) ? 1 : 0)} · Curtir</button>
             <button className="btn-ghost text-sm" onClick={() => setCommentsFor(commentsFor === p.id ? null : p.id)}><Icon name="balao" size={16}/> Comentar ({p.comments.length + (teacherComments[p.id]?.length ?? 0)})</button>
@@ -221,4 +255,22 @@ function TeacherProfileModal({ teacher, onClose }: { teacher: FictionalTeacher; 
     </div>,
     document.body,
   );
+}
+
+
+function PostMedia({ post }: { post: CommunityPost }) {
+  const [active, setActive] = useState(0);
+  const images = post.images?.length ? post.images : post.image ? [post.image] : [];
+  const current = images[Math.min(active, Math.max(0, images.length - 1))];
+  return <>
+    {post.videoUrl && <div className="border-y border-line"><VideoEmbed url={post.videoUrl} title={post.title} meta="Vídeo compartilhado pela comunidade" /></div>}
+    {current && <figure className="relative border-y border-line bg-raised/30">
+      <img src={current} alt={'Imagem ' + (active + 1) + ' da publicação'} className="max-h-[32rem] w-full object-contain" loading="lazy" decoding="async"/>
+      {images.length > 1 && <figcaption className="flex items-center justify-between gap-3 p-2">
+        <button className="btn-ghost !min-h-9 !px-3" onClick={() => setActive((old) => (old - 1 + images.length) % images.length)} aria-label="Imagem anterior do carrossel"><Icon name="voltar" size={16}/></button>
+        <span className="text-xs text-muted">{active + 1} de {images.length}</span>
+        <button className="btn-ghost !min-h-9 !px-3" onClick={() => setActive((old) => (old + 1) % images.length)} aria-label="Próxima imagem do carrossel"><Icon name="avancar" size={16}/></button>
+      </figcaption>}
+    </figure>}
+  </>;
 }
