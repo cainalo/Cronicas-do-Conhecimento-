@@ -62,6 +62,7 @@ export function AppRoutes() {
         <Route path="simulador" element={<ScenarioListPage />} />
         <Route path="simulador/:id" element={<ScenarioPage />} />
         <Route path="sala" element={<SocialFeedPage />} />
+        <Route path="feed-aulas" element={<TeachersRoomPage />} />
         <Route path="escritorio" element={<WorldPage />} />
         <Route path="laboratorio-codigo" element={<ProgrammingLabPage />} />
         <Route path="laboratorio-programacao" element={<ProgrammingLabPage />} />
