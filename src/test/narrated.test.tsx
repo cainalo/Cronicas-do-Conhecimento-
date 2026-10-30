@@ -50,7 +50,7 @@ it('validador acusa revelação fora do alcance e número fora da reta', () => {
   expect(errs).toMatch(/9 fora da reta/);
 });
 
-it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcrição; checagem no fim', async () => {
+it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcrição; última cena', async () => {
   vi.useFakeTimers({ shouldAdvanceTime: true });
   const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
   const l = narratedLessons.find((x) => x.id === 'narrada.mat.somar-inteiros')!;
@@ -90,8 +90,8 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
   await user.click(screen.getByRole('button', { name: 'Transcrição' }));
   expect(screen.getByRole('region', { name: 'Transcrição' })).toHaveTextContent(/subtrair um número equivale a somar o oposto/i);
   // Avança até a última fala da última cena e confirma o estado real de conclusão.
-  await user.click(screen.getByRole('button', { name: /Ir para a cena 8/ }));
   const finalScene = l.scenes[l.scenes.length - 1];
+  await user.click(screen.getByRole('button', { name: `Ir para a cena ${l.scenes.length}: ${finalScene.heading}` }));
   for (let i = 1; i < finalScene.beats.length; i++) {
     await user.click(screen.getByRole('button', { name: 'Avançar uma fala' }));
   }
