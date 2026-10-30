@@ -7,7 +7,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { returnToPreviousPage } from '@/lib/navigation';
 import type { MicroLesson } from '@/content/types';
 import type { FeedPost } from '@/lib/feed';
-import { curatedVideos, feedPostsOf, getChapter, getQuestion, teacherForChapter } from '@/content';
+import { curatedVideos, feedPostsOf, getChapter, getQuestion, narratedFor, teacherForChapter } from '@/content';
+import { NarratedPlayer } from './Narrated';
 import { VideoEmbed } from '@/components/VideoEmbed';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
@@ -81,10 +82,11 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   const chapter = getChapter(lesson.chapterId)!;
   const section = chapter.sections.find((item) => item.id === lesson.sectionId);
   const teacher = teacherForChapter(lesson.chapterId);
+  const narrated = narratedFor(lesson.id);
   // Só videoaulas conferidas entram na sequência; as "a conferir" ficam na biblioteca de vídeos.
   const videos = curatedVideos.filter((v) => v.lessonId === lesson.id && v.status === 'conferido');
   const relatedTips = useMemo(() => feedPostsOf(lesson.id).filter((post) => post.kind === 'dica'), [lesson.id]);
-  const hasMedia = videos.length > 0;
+  const hasMedia = !!narrated || videos.length > 0;
   const [showFullMaterial, setShowFullMaterial] = useState(false);
   const n = lesson.steps.length;
   // Em série, cada aula tem o seu ponto salvo; sozinha, usa a chave do trecho (como antes).
@@ -301,7 +303,16 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
         </section>
       )}
 
-      {phase.k === 'midia' && videos.length > 0 && (
+      {phase.k === 'midia' && narrated && (
+        <NarratedPlayer
+          l={narrated}
+          embedded
+          exitLabel="Ir para a prática"
+          onClose={() => set(lesson.consolidation.length ? { k: 'praticar', i: 0 } : lesson.exam.length ? { k: 'prova', i: 0 } : { k: 'sintese' })}
+        />
+      )}
+
+      {phase.k === 'midia' && !narrated && videos.length > 0 && (
         <section className="flex min-h-0 flex-1 flex-col overflow-hidden" aria-label="Veja de outro jeito">
           <div className="mb-3 shrink-0">
             <p className="kicker">Antes de praticar</p>
