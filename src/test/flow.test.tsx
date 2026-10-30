@@ -210,15 +210,15 @@ it('torre: apresenta os cards coloridos e não exibe contagem regressiva nem seq
 
  it('abre o material integral da matéria sem sair da atividade da trilha', async () => {
    const user = userEvent.setup();
-   renderAt('/aprender/cap.infra.03/processos');
-   expect(screen.getByRole('button', { name: /Cada execução em andamento, separadamente/ })).toBeInTheDocument();
-   await user.click(screen.getByRole('button', { name: /Cada execução em andamento, separadamente/ }));
+   renderAt('/aprender/cap.ia.01/rag');
+   expect(screen.getByRole('button', { name: /Sim: buscar primeiro e responder depois/ })).toBeInTheDocument();
+   await user.click(screen.getByRole('button', { name: /Sim: buscar primeiro e responder depois/ }));
    await user.click(screen.getByRole('button', { name: 'Verificar' }));
    await user.click(screen.getByRole('button', { name: 'Continuar' }));
    await user.click(screen.getByTestId('material-integral-toggle'));
    const material = screen.getByTestId('material-integral');
-   expect(material).toHaveTextContent('Processos, memória e serviços');
-   expect(material).toHaveTextContent('O sistema operacional');
+   expect(material).toHaveTextContent('Modelos de Linguagem, Contexto e RAG');
+   expect(material).toHaveTextContent('RAG');
    expect(screen.queryByTestId('portico-wordmark-center')).not.toBeInTheDocument();
    await user.click(screen.getByTestId('material-integral-toggle'));
    expect(screen.queryByTestId('material-integral')).not.toBeInTheDocument();

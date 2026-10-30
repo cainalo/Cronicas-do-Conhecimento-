@@ -490,7 +490,7 @@ export const teacherPosts: TeacherPost[] = [
     body: 'Uma equipe conectou um assistente a documentos internos e comemorou: agora ele “consulta a fonte”. Na primeira revisão, porém, o sistema recuperou um trecho antigo e respondeu com segurança. O cuidado não é só recuperar: é verificar atualidade, relevância, permissão de acesso e se a resposta realmente decorre do trecho citado. **Fonte recuperada não é sinônimo de conclusão correta.**',
     chapterId: 'cap.ia.01',
     sectionId: 'rag',
-    topicIds: ['ti.ia.rag'],
+    topicIds: ['ti.ia-eng.llm'],
     estimatedMinutes: 2,
     challenge: {
       statement: 'Um sistema RAG sempre produz respostas corretas porque consulta documentos externos ao modelo.',
