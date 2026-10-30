@@ -14,7 +14,7 @@ import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
 import { ActivityView, type ActivityOutcome } from '@/components/activities/ActivityView';
 import { SqlLab, TableView } from '@/components/activities/SqlLab';
-import { TeacherCue } from '@/components/TeacherCharacter';
+import { TeacherScene } from '@/components/TeacherCharacter';
 
 type Step = 'objetivos' | 'descoberta' | 'laboratorio' | 'treino' | 'prova' | 'revisao';
 /** Etapas antigas (cena, desfecho) caem na etapa equivalente. */
@@ -124,9 +124,7 @@ export function MissionPage() {
       <p className="guide-bar -mt-2 mb-4 rounded-md px-3 py-2 text-sm" role="note">
         <b>Etapa {idx + 1} de {STEPS.length}: {STEP_LABEL[step]}.</b> {STEP_NOW[step]}
       </p>
-      <TeacherCue teacher={teacher} pose={step === 'revisao' ? 'celebrating' : step === 'prova' || step === 'treino' ? 'thinking' : 'presenting'} size={88} className="mb-4">
-        {STEP_NOW[step]}
-      </TeacherCue>
+      <TeacherScene teacher={teacher} pose={step === 'revisao' ? 'celebrating' : step === 'prova' || step === 'treino' ? 'thinking' : 'presenting'} size={150} eyebrow="PROFESSOR NO CASO PRÁTICO" heading={STEP_LABEL[step]} message={STEP_NOW[step]} className="mb-4" />
 
       {step === 'objetivos' && (
         <section className="flex flex-1 flex-col" aria-label="Objetivos">

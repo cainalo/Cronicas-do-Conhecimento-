@@ -13,7 +13,7 @@ import { useSession } from '@/app/useSession';
 import { recordAnswer, totalXp } from '@/lib/study';
 import { Icon } from '@/components/Icon';
 import { StepGuide } from '@/components/StepGuide';
-import { TeacherCue } from '@/components/TeacherCharacter';
+import { TeacherScene } from '@/components/TeacherCharacter';
 import { QuestionStem } from '@/components/QuestionCard';
 
 type Verdict = { ok: boolean; title: string; detail?: string; recovery?: Activity };
@@ -333,11 +333,7 @@ function PracticeRun() {
           </div>
           <p className="rubric text-sm font-semibold">{chapter.title}</p>
           <h1 className="text-2xl leading-tight">Prática: {section.title.replace(/^\d+\.\s*/, '')}</h1>
-          <div className="mt-5">
-            <TeacherCue teacher={teacher} pose="greeting" size={104}>
-              {extras?.scene?.length ? extras.scene[extras.scene.length - 1].text : 'Vamos ver o que ficou deste trecho. Errou? A pergunta volta no fim até você acertar.'}
-            </TeacherCue>
-          </div>
+          <TeacherScene teacher={teacher} pose="greeting" size={154} eyebrow="ABERTURA DA PRÁTICA" heading="Vamos praticar juntos" message={extras?.scene?.length ? extras.scene[extras.scene.length - 1].text : 'Vamos ver o que ficou deste trecho. Errou? A pergunta volta no fim até você acertar.'} className="mt-5" />
           <p className="text-sm text-muted">{total} atividades curtas. Começa fácil e vai ficando mais difícil. Errou? A atividade volta no fim.</p>
           <div className="mt-auto pt-6">
             <button className="btn-primary w-full" onClick={() => setPhase('play')} disabled={!total}>
@@ -353,9 +349,7 @@ function PracticeRun() {
       {phase === 'play' && act && (
         <div className="flex min-h-0 flex-1 flex-col">
           <div key={act.id + queue.length} className="anim-tile-in min-h-0 flex-1 overflow-y-auto overscroll-contain pb-2">
-            <TeacherCue teacher={teacher} pose={verdict ? (verdict.ok ? 'celebrating' : 'thinking') : 'presenting'} size={68} compact className="mb-3">
-              {verdict ? (verdict.ok ? 'Boa! Repare no raciocínio e leve a ideia para a próxima questão.' : 'Vamos descobrir onde o raciocínio mudou de direção.') : teacher.speakingStyle}
-            </TeacherCue>
+            <TeacherScene teacher={teacher} pose={verdict ? (verdict.ok ? 'celebrating' : 'thinking') : 'presenting'} size={138} eyebrow={verdict ? (verdict.ok ? 'RESPOSTA CORRETA' : 'VAMOS REVISAR') : 'ATIVIDADE EM ANDAMENTO'} heading={verdict ? (verdict.ok ? 'Muito bem! Por que deu certo?' : 'Vamos encontrar o detalhe') : 'Pense em voz alta'} message={verdict ? (verdict.ok ? 'Boa! Repare no raciocínio e leve a ideia para a próxima questão.' : 'Vamos descobrir onde o raciocínio mudou de direção.') : teacher.speakingStyle} className="mb-3" />
             {act.kind === 'tf' && (
               <>
                 <p className="text-sm font-semibold text-muted">Verdadeiro ou falso?</p>
@@ -524,9 +518,7 @@ function PracticeRun() {
       {phase === 'done' && (
         <div className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto overscroll-contain text-center">
           <div className="w-full">
-            <TeacherCue teacher={teacher} pose="celebrating" size={128}>
-              {extras?.outro ?? (score >= 70 ? 'Muito bem! A névoa recua deste trecho.' : 'Os erros voltaram até você acertar. Isso também é aprender.')}
-            </TeacherCue>
+            <TeacherScene teacher={teacher} pose="celebrating" size={160} eyebrow="PRÁTICA CONCLUÍDA" heading="Você avançou nesta matéria!" message={extras?.outro ?? (score >= 70 ? 'Muito bem! A névoa recua deste trecho.' : 'Os erros voltaram até você acertar. Isso também é aprender.')} />
           </div>
           <h1 className="mt-2 text-2xl">Trecho praticado!</h1>
           <div className="mt-4 grid w-full grid-cols-3 gap-2">

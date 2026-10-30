@@ -20,7 +20,7 @@ import { PageDots, SwipePages, type PageItem } from '@/components/SwipePages';
 import { splitMarkdown } from '@/lib/book';
 import { Icon } from '@/components/Icon';
 import { Illustration, type IllustrationName } from '@/components/Illustration';
-import { TeacherCue, TeacherScene } from '@/components/TeacherCharacter';
+import { TeacherScene } from '@/components/TeacherCharacter';
 import { StepGuide } from '@/components/StepGuide';
 import { ActivityView } from '@/components/activities/ActivityView';
 

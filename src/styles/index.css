@@ -1122,8 +1122,8 @@ main.safe-top-content { padding-top: calc(env(safe-area-inset-top, 0px) + 1.5rem
 
 
 /* O professor da matéria é o apresentador visível durante cada cena. */
-.ccv-film-host { display: inline-flex; width: 2rem; height: 2.25rem; flex: 0 0 auto; align-items: flex-end; justify-content: center; overflow: visible; }
-.ccv-film-host > * { width: 2.65rem; max-width: none; }
+.ccv-film-host { display: inline-flex; width: 4rem; height: 4.7rem; flex: 0 0 auto; align-items: flex-end; justify-content: center; overflow: visible; }
+.ccv-film-host > * { width: 3.4rem; height: auto; max-width: none; }
 .ccv-film-brand { gap: .5rem; }
 
 
