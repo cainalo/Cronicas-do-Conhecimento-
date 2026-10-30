@@ -10,7 +10,7 @@ import { Icon, type IconName } from '@/components/Icon';
 import { PageHeader, useIsDark } from '@/components/Page';
 import { areaColor } from '@/app/areas';
 import { BookCover } from '@/components/BookCover';
-import { TeacherCue } from '@/components/TeacherCharacter';
+import { TeacherScene } from '@/components/TeacherCharacter';
 import { roman } from '@/lib/roman';
 
 const STATE_LABEL: Record<UnitState, string> = {
@@ -122,9 +122,7 @@ export function TrailPage() {
                 </div>
 
                 <div className="mt-3">
-                  <TeacherCue teacher={teacher} pose="presenting" size={66} compact>
-                    {teacher.motto}
-                  </TeacherCue>
+                  <TeacherScene teacher={teacher} pose="presenting" size={140} eyebrow="PROFESSOR DA MATÉRIA" heading={`Vamos estudar ${grimoire.title} juntos`} message={teacher.motto} />
                 </div>
 
                 <div className="mt-4 space-y-4">
