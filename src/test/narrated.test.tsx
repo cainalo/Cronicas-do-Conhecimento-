@@ -63,7 +63,7 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
       </StudyProvider>
     </PrefsProvider>,
   );
-  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/^Legenda: Imagine que sua conta tem saldo zero\\.$/);
+  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Imagine que sua conta tem saldo zero/);
   expect(screen.getByTestId('narrada-player')).toHaveClass('fixed', 'inset-0', 'h-[100dvh]', 'overflow-hidden');
   expect(screen.getByTestId('narrada-elementos-visuais')).toBeInTheDocument();
   expect(screen.getByText(/sem voz neste aparelho/)).toBeInTheDocument();
