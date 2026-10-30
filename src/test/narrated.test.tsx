@@ -89,11 +89,15 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
   expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/cinco menos oito/);
   await user.click(screen.getByRole('button', { name: 'Transcrição' }));
   expect(screen.getByRole('region', { name: 'Transcrição' })).toHaveTextContent(/subtrair um número equivale a somar o oposto/i);
-  // Vai à última cena e deixa terminar: aparece a checagem opcional.
+  // Avança até a última fala da última cena e confirma o estado real de conclusão.
   await user.click(screen.getByRole('button', { name: /Ir para a cena 8/ }));
+  const finalScene = l.scenes[l.scenes.length - 1];
+  for (let i = 1; i < finalScene.beats.length; i++) {
+    await user.click(screen.getByRole('button', { name: 'Avançar uma fala' }));
+  }
   await user.click(screen.getByTestId('narrada-tocar'));
-  for (let i = 0; i < 6; i++) await act(async () => void vi.advanceTimersByTime(8000));
-  expect(screen.getByRole('region', { name: 'Checagem' })).toHaveTextContent('Quanto é −4 + 9?');
+  await act(async () => void vi.advanceTimersByTime(20000));
+  expect(screen.getByTestId('narrada-tocar')).toHaveAttribute('aria-label', 'Assistir novamente');
   vi.useRealTimers();
 });
 
