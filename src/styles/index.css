@@ -1125,3 +1125,22 @@ main.safe-top-content { padding-top: calc(env(safe-area-inset-top, 0px) + 1.5rem
 .ccv-film-host { display: inline-flex; width: 2rem; height: 2.25rem; flex: 0 0 auto; align-items: flex-end; justify-content: center; overflow: visible; }
 .ccv-film-host > * { width: 2.65rem; max-width: none; }
 .ccv-film-brand { gap: .5rem; }
+
+
+/* Páginas de leitura dentro das unidades interativas. */
+.interactive-material-page {
+  border: 1px solid rgb(var(--line) / .8);
+  border-radius: 1.15rem;
+  background: rgb(var(--surface) / .62);
+  padding: clamp(.9rem, 3.2vw, 1.35rem);
+}
+.interactive-material-page--featured {
+  border-color: rgb(var(--gold) / .45);
+  background: linear-gradient(135deg, rgb(var(--gold) / .12), rgb(var(--surface) / .88) 68%);
+  box-shadow: inset 4px 0 0 rgb(var(--gold) / .78);
+}
+.material-integral-sheet {
+  background: color-mix(in srgb, rgb(var(--surface)) 88%, rgb(var(--gold)) 12%);
+  border: 1px solid rgb(var(--gold) / .26);
+  box-shadow: 0 10px 30px rgb(0 0 0 / .07);
+}

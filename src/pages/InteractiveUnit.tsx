@@ -105,6 +105,7 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
   const { update } = useStudy();
   const { sfx } = useFx();
   const chapter = getChapter(unit.chapterId)!;
+  const section = chapter.sections.find((item) => item.id === unit.sectionId);
   const teacher = teacherForChapter(unit.chapterId);
   const n = unit.steps.length;
   const session = useSession<UnitSession>(learnKey(unit.chapterId, unit.sectionId), () => START, (s) =>
@@ -118,6 +119,7 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
     return id in cur.results ? cur : { ...cur, results: { ...cur.results, [id]: ok } };
   });
   const [term, setTerm] = useState<Concept>();
+  const [fullMaterialOpen, setFullMaterialOpen] = useState(false);
   const closeTerm = useCallback(() => setTerm(undefined), []);
   const stepRefs = useRef<(HTMLElement | null)[]>([]);
 
@@ -136,7 +138,7 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
     );
   };
   const md = (text: string) => (
-    <div className="prose-manuscript [&>*:first-child]:!mt-0">
+    <div className="prose-manuscript lesson-material [&>*:first-child]:!mt-0">
       <Markdown strong={strong}>{text}</Markdown>
     </div>
   );
@@ -191,6 +193,28 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
       >
         {st.stage === 'sintese' ? 'Boa etapa! Retenha as ideias centrais e siga para a prática.' : st.stage === 'pratica' ? 'Agora experimente usar o conceito. Eu acompanho seu raciocínio.' : st.stage === 'prova' ? 'Vamos testar se você transfere a ideia para um contexto novo.' : teacher.motto}
       </TeacherCue>
+
+      {section && (
+        <section className="mb-5" aria-label="Material integral da matéria">
+          <button
+            type="button"
+            className="flex min-h-11 w-full items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-3 text-left text-sm font-semibold"
+            aria-expanded={fullMaterialOpen}
+            aria-controls="material-integral-unidade"
+            onClick={() => setFullMaterialOpen((open) => !open)}
+            data-testid="material-integral-toggle"
+          >
+            <span>{fullMaterialOpen ? 'Ocultar material integral' : 'Ler material integral'}</span>
+            <Icon name={fullMaterialOpen ? 'menos' : 'mais'} size={17} />
+          </button>
+          {fullMaterialOpen && (
+            <article id="material-integral-unidade" className="material-integral-sheet lesson-material mt-3 rounded-2xl px-4 py-5 sm:px-6" data-testid="material-integral">
+              <p className="mb-3 text-xs font-bold uppercase tracking-[.12em] text-gold">Texto completo · {chapter.title}</p>
+              <Markdown>{section.body}</Markdown>
+            </article>
+          )}
+        </section>
+      )}
 
       {st.stage === 'abertura' && (
         <section className="card p-4 sm:p-5" aria-label="Pergunta de abertura">
