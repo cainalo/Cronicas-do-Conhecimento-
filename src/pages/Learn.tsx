@@ -18,7 +18,7 @@ import { roman } from '@/lib/roman';
 import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
 import { StepGuide } from '@/components/StepGuide';
-import { TeacherCue } from '@/components/TeacherCharacter';
+import { TeacherScene } from '@/components/TeacherCharacter';
 import { LeatherBook, Leaf, useSpread, visiblePages } from '@/components/LeatherBook';
 import { Pegadinha } from './Book';
 
@@ -131,7 +131,7 @@ function SimpleLearnPage() {
               <p className="kicker">Trecho {idx + 1}</p>
               <h1 className="mt-1 text-[1.6rem] leading-tight">{title}</h1>
             </div>
-            <TeacherCue teacher={teacher} pose="greeting" size={80} compact className="mt-4">{teacher.motto}</TeacherCue>
+            <TeacherScene teacher={teacher} pose="greeting" size={142} heading="Vamos começar juntos" message={teacher.motto} className="mt-4" />
             <p className="mt-4 border-l-2 border-gold pl-3 text-[0.98rem]">Vamos começar do começo, uma ideia por página. Vire a página quando estiver pronto.</p>
             <p className="mt-auto pt-3 text-center text-xs text-muted">
               {textTotal} páginas curtas · explicação do zero <Icon name="seta" size={12} className="inline" />
@@ -146,7 +146,7 @@ function SimpleLearnPage() {
               {p.i + 1} de {textTotal}
             </p>
             <h2 className="mt-1 text-[1.4rem] leading-snug">{pg.title}</h2>
-            <TeacherCue teacher={teacher} pose="presenting" size={58} compact className="mt-2">{teacher.speakingStyle}</TeacherCue>
+            <TeacherScene teacher={teacher} pose="presenting" size={132} eyebrow="EXPLICAÇÃO DA MATÉRIA" heading="Uma ideia por vez" message={teacher.speakingStyle} className="mt-2" />
             <div className="prose-manuscript lesson-material learn-text mt-3">
               <div className={p.i === 0 ? 'illuminated' : ''}>
                 <Markdown>{pg.text}</Markdown>
@@ -154,7 +154,7 @@ function SimpleLearnPage() {
             </div>
             {p.i === textTotal - 1 ? (
               <div className="mt-auto pt-2">
-                <TeacherCue teacher={teacher} pose="celebrating" size={60} compact>Agora vamos guardar as palavras novas.</TeacherCue>
+                <TeacherScene teacher={teacher} pose="celebrating" size={132} eyebrow="FECHANDO A EXPLICAÇÃO" heading="Guarde esta ideia" message="Agora vamos guardar as palavras novas." />
               </div>
             ) : (
               <Vignette i={p.i} />
@@ -165,7 +165,7 @@ function SimpleLearnPage() {
       case 'words':
         return (
           <div className="prose-manuscript">
-            <TeacherCue teacher={teacher} pose="presenting" size={58} compact className="mb-3">Estas palavras vão aparecer de novo nas atividades.</TeacherCue>
+            <TeacherScene teacher={teacher} pose="presenting" size={132} eyebrow="VOCABULÁRIO DA MATÉRIA" heading="Palavras para levar com você" message="Estas palavras vão aparecer de novo nas atividades." className="mb-3" />
             <h3 className="!mt-0">Palavras novas</h3>
             <dl className="space-y-2.5">
               {simple.words.map((w) => (
@@ -180,7 +180,7 @@ function SimpleLearnPage() {
       case 'checks':
         return (
           <div className="prose-manuscript !text-[0.95em]">
-            <TeacherCue teacher={teacher} pose="thinking" size={62} compact className="mb-3">Vamos conferir sem pressão. Leia cada frase com atenção.</TeacherCue>
+            <TeacherScene teacher={teacher} pose="thinking" size={132} eyebrow="CHECAGEM RÁPIDA" heading="Vamos conferir juntos" message="Leia cada frase com atenção. Não vale nota; é uma oportunidade de perceber o que já ficou claro." className="mb-3" />
             <h3 className="!mt-0">Você entendeu?</h3>
             <p className="!mb-2 text-sm text-muted">Toque em verdadeiro ou falso. Não vale nota.</p>
             <ul className="!m-0 !list-none space-y-2 !pl-0 [&>li]:before:!content-none">
@@ -194,7 +194,7 @@ function SimpleLearnPage() {
         const done = practiceDone(data, chapterId, sectionId);
         return (
           <div className="flex h-full flex-col items-center justify-center text-center">
-            <TeacherCue teacher={teacher} pose="celebrating" size={112}>{teacher.motto}</TeacherCue>
+            <TeacherScene teacher={teacher} pose="celebrating" size={160} eyebrow="TRECHO CONCLUÍDO" heading="Você aprendeu este trecho!" message={teacher.motto} />
             <h2 className="mt-2 text-[1.5rem]">Trecho aprendido!</h2>
             <p className="mt-1 max-w-xs text-sm text-muted">{extras?.outro ?? 'Agora pratique um pouco para não esquecer.'}</p>
             <Link to={`/pratica/${chapterId}/${sectionId}`} className="btn-primary mt-5 w-full max-w-xs" data-testid={`praticar-${sectionId}`}>
