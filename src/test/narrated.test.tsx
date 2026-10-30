@@ -7,6 +7,7 @@ import { AppRoutes } from '@/App';
 import { microLessons, narratedLessons } from '@/content';
 import { nextBeat, prevScene, revealOf, transcript, validateNarrated } from '@/lib/narration';
 import { emptyData } from '@/lib/model';
+import { splitCaptionLines } from '@/pages/Narrated';
 
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
 beforeEach(() => localStorage.clear());
@@ -29,6 +30,16 @@ describe.each(narratedLessons.map((n) => [n.id, n] as const))('aula narrada %s',
     expect(prevScene(l, { scene: 2, beat: 0 })).toEqual({ scene: 1, beat: 0 });
     expect(revealOf(l.scenes[0], 0)).toBe(1);
   });
+});
+
+it('legenda divide a fala em linhas estáveis de até sete palavras', () => {
+  const text = 'Uma primeira frase curta para acompanhar. Depois vem a segunda parte da explicação com mais algumas palavras.';
+  const lines = splitCaptionLines(text);
+  expect(lines.length).toBeGreaterThan(1);
+  expect(lines.every((line) => line.end > line.start && line.text.length > 0)).toBe(true);
+  expect(lines.every((line) => line.end - line.start <= 7)).toBe(true);
+  expect(lines.map((line) => line.text).join(' ')).toBe(text);
+  expect(lines.some((line) => line.text.includes('…'))).toBe(false);
 });
 
 it('validador acusa revelação fora do alcance e número fora da reta', () => {
@@ -86,7 +97,8 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
   vi.useRealTimers();
 });
 
-it('não insere a aula narrada dentro do Aprender quando há um ponto salvo de mídia', () => {
+it('sequência única: a aula narrada abre em tela cheia e segue para a prática', async () => {
+  const user = userEvent.setup();
   const key = 'aprender:cap.prim.01:computador#prim.computador.1';
   localStorage.setItem(
     'cronicas:v1:visitante',
@@ -101,8 +113,14 @@ it('não insere a aula narrada dentro do Aprender quando há um ponto salvo de m
       </StudyProvider>
     </PrefsProvider>,
   );
-  expect(screen.queryByRole('dialog', { name: /Aula narrada/ })).toBeNull();
-  expect(screen.queryByTestId('narrada-seek')).toBeNull();
-  // A tela de aula continua funcional; o player narrado é exercitado separadamente na rota própria.
-  expect(screen.getByRole('button', { name: 'Verificar' })).toBeInTheDocument();
+  const player = screen.getByTestId('narrada-player');
+  expect(player).toHaveClass('fixed', 'inset-0', 'h-[100dvh]', 'overflow-hidden', 'w-full');
+  expect(player.style.width).toBe('100%');
+  expect(player.style.height).toBe('100dvh');
+  expect(screen.getByTestId('narrada-seek')).toBeInTheDocument();
+  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Pegue o celular que está na sua/);
+  expect(screen.queryByRole('link', { name: 'Conta e configurações' })).toBeNull();
+  await user.click(screen.getByTestId('narrada-sair'));
+  expect(screen.queryByTestId('narrada-player')).toBeNull();
+  expect(screen.getByRole('region', { name: 'Prática final' })).toBeInTheDocument();
 });
