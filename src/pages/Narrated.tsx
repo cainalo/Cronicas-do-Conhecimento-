@@ -1,20 +1,19 @@
 // Aula visual narrada com player de tela inteira, cena animada e linha do tempo arrastável.
 // A busca é estimada por fala: a voz do aparelho não fornece uma duração exata de vídeo.
-import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { returnToPreviousPage } from '@/lib/navigation';
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
+import { createPortal } from 'react-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getNarrated, teacherForChapter } from '@/content';
+import { TeacherCharacter } from '@/components/TeacherCharacter';
 import type { NarratedLesson, NumberLineState, Scene } from '@/content/narrated/types';
-import { getVoice, readingMs } from '@/app/voice';
+import { GEMINI_TTS_VOICES, getGeminiTtsApiKey, getGeminiTtsVoice, getVoice, saveGeminiTtsApiKey, saveGeminiTtsVoice, type VoiceAudioTrack } from '@/app/voice';
 import { soundscape } from '@/app/soundscape';
 import { beatIndexOf, narrationPositions, nextBeat, positionAtBeat, revealOf, transcript, type NarrationPos } from '@/lib/narration';
 import { Icon } from '@/components/Icon';
-import { Illustration } from '@/components/Illustration';
-import { TeacherCharacter } from '@/components/TeacherCharacter';
-import { ActivityView } from '@/components/activities/ActivityView';
+import { Illustration, type IllustrationName } from '@/components/Illustration';
 
 const RATES = [0.8, 1, 1.2] as const;
-const VOICE_LABEL = { nativa: 'voz do aparelho', navegador: 'voz do navegador', nenhuma: 'sem voz neste aparelho: legendas no tempo de leitura' } as const;
+const VOICE_LABEL = { gemini: 'voz neural Gemini · áudio gerado por IA', nativa: 'voz pt-BR priorizada do aparelho (neural/natural quando instalada)', navegador: 'voz pt-BR priorizada do navegador (neural/natural quando disponível)', nenhuma: 'sem voz neste aparelho: legendas no tempo de leitura' } as const;
 const formatTime = (ms: number) => {
   const total = Math.max(0, Math.floor(ms / 1000));
   return String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
@@ -30,15 +29,23 @@ function wordIndexAtChar(text: string, charIndex: number): number {
   return words.length - 1;
 }
 
+function cueDurationMs(text: string, rate = 1): number {
+  const normalized = text.trim();
+  const words = normalized.split(/\s+/).filter(Boolean).length;
+  const commas = (normalized.match(/[,;:]/g) ?? []).length;
+  const sentenceStops = (normalized.match(/[.!?…]/g) ?? []).length;
+  const endingPause = /[,;:]$/.test(normalized) ? 90 : /[.!?…]$/.test(normalized) ? 230 : 0;
+  return Math.max(750, (words / 2.15) * 1000 + commas * 85 + sentenceStops * 145 + endingPause) / rate;
+}
+
 export function NarratedPage() {
   const { id = '' } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
   const l = getNarrated(id);
   if (!l) {
     return <div className="p-5"><h1 className="text-xl">Aula narrada não encontrada</h1><Link to="/trilha" className="btn-ghost mt-3 w-full">Voltar à trilha</Link></div>;
   }
-  return <NarratedPlayer key={l.id} l={l} embedded onClose={() => returnToPreviousPage(navigate, location.key, '/trilha')} exitLabel="Voltar" />;
+  return <NarratedPlayer key={l.id} l={l} embedded onClose={() => navigate('/aprender/' + l.chapterId + '/' + l.sectionId + '/' + l.lessonId)} exitLabel="Voltar ao Aprender" />;
 }
 
 export function NarratedPlayer({
@@ -49,36 +56,99 @@ export function NarratedPlayer({
   embedded?: boolean;
   exitLabel?: string;
 }) {
+  const teacher = teacherForChapter(l.chapterId);
   const [pos, setPos] = useState<NarrationPos>({ scene: 0, beat: 0 });
   const [playing, setPlaying] = useState(false);
   const [rate, setRate] = useState<(typeof RATES)[number]>(1);
   const [showTranscript, setShowTranscript] = useState(false);
+  const [showCaptions, setShowCaptions] = useState(true);
   const [done, setDone] = useState(false);
   const [beatElapsed, setBeatElapsed] = useState(0);
   const [voiceStarted, setVoiceStarted] = useState(false);
   const [speechWordIndex, setSpeechWordIndex] = useState<number>();
   const [controlsVisible, setControlsVisible] = useState(true);
+  const [showVoiceSettings, setShowVoiceSettings] = useState(false);
+  const [geminiKeyDraft, setGeminiKeyDraft] = useState(() => getGeminiTtsApiKey());
+  const [geminiVoiceDraft, setGeminiVoiceDraft] = useState(() => getGeminiTtsVoice());
+  const [voiceStatus, setVoiceStatus] = useState('');
+  const [testingVoice, setTestingVoice] = useState(false);
+  const [preparingTrack, setPreparingTrack] = useState(false);
+  const [generatedTrack, setGeneratedTrack] = useState<VoiceAudioTrack | null>(null);
+  const [trackDurationMs, setTrackDurationMs] = useState(0);
+  const [mediaElapsedMs, setMediaElapsedMs] = useState(0);
   const hideControlsTimer = useRef<number | undefined>(undefined);
+  const controlsInteractionActive = useRef(false);
+  const trackRef = useRef<VoiceAudioTrack | null>(null);
+  const trackRequest = useRef(0);
+  const activeCueRef = useRef(0);
   const elapsedRef = useRef(0);
   const resumeAfterSeek = useRef(false);
+  const seekOffsetRef = useRef(0);
   const token = useRef(0);
   const voice = getVoice();
   const positions = useMemo(() => narrationPositions(l), [l]);
   const beatIndex = beatIndexOf(l, pos);
-  const durations = useMemo(() => positions.map((p) => readingMs(l.scenes[p.scene].beats[p.beat].say, rate)), [l, positions, rate]);
-  const totalMs = durations.reduce((sum, value) => sum + value, 0);
+  // Cada marca usa peso aproximado pela fala, sem o mínimo artificial de 2,6 s por frase.
+  // Com a faixa neural, os pesos são normalizados pela duração real do áudio.
+  const durations = useMemo(() => positions.map((p) => cueDurationMs(l.scenes[p.scene].beats[p.beat].say, rate)), [l, positions, rate]);
+  const estimatedTotalMs = durations.reduce((sum, value) => sum + value, 0);
+  const trackDurations = useMemo(() => positions.map((p) => cueDurationMs(l.scenes[p.scene].beats[p.beat].say)), [l, positions]);
+  const estimatedTrackTotalMs = trackDurations.reduce((sum, value) => sum + value, 0);
+  // Uma faixa por aula, com fala contínua dentro de cada cena e pausa apenas entre cenas.
+  const script = useMemo(() => l.scenes.map((item) => item.beats.map((beat) => beat.say.trim()).join(' ')).join('\n\n'), [l]);
+  const hasGeneratedTrack = voice.kind === 'gemini' && !!generatedTrack;
+  const totalMs = hasGeneratedTrack && trackDurationMs > 0 ? trackDurationMs : estimatedTotalMs;
   const beforeMs = durations.slice(0, beatIndex).reduce((sum, value) => sum + value, 0);
-  const currentMs = Math.min(totalMs, beforeMs + beatElapsed);
+  const currentMs = Math.min(totalMs, hasGeneratedTrack ? mediaElapsedMs : beforeMs + beatElapsed);
   const scene = l.scenes[pos.scene];
   const say = scene.beats[pos.beat].say;
-  const teacher = teacherForChapter(l.chapterId);
+  const captionClockDuration = (hasGeneratedTrack ? trackDurations[beatIndex] : durations[beatIndex]) ?? 2200;
+  const captionEstimatedWord = wordIndexAtChar(say, Math.floor((beatElapsed / Math.max(1, captionClockDuration)) * say.length));
+  const captionWordIndex = Math.max(0, Math.min((say.match(/\S+\s*/g) ?? [say]).length - 1, speechWordIndex ?? captionEstimatedWord));
+  // O B-roll é calculado pela duração da cena inteira, não pela frase isolada.
+  // Assim ele entra uma única vez no meio da sequência e não abre/fecha a cada legenda.
+  const sceneCueDurations = scene.beats.map((beat) => cueDurationMs(beat.say, hasGeneratedTrack ? 1 : rate));
+  const sceneDurationMs = sceneCueDurations.reduce((sum, value) => sum + value, 0);
+  const sceneElapsedMs = sceneCueDurations.slice(0, pos.beat).reduce((sum, value) => sum + value, 0)
+    + Math.min(sceneCueDurations[pos.beat] ?? 0, beatElapsed);
+  const sceneProgress = Math.min(1, sceneElapsedMs / Math.max(1, sceneDurationMs));
+  const supportsCutaway = scene.beats.length > 1 && sceneDurationMs >= 9500 && scene.visual.kind !== 'title';
+  // Visibilidade baseada na posição do filme, não no estado instantâneo da voz:
+  // a síntese local faz pequenas pausas entre frases, mas o plano não deve piscar nelas.
+  // Isso também mantém o mesmo quadro quando a pessoa pausa ou arrasta a linha do tempo.
+  const cutawayVisible = supportsCutaway && sceneProgress >= 0.34 && sceneProgress < 0.68;
 
   const stop = useCallback(() => {
     token.current += 1;
     voice.stop();
   }, [voice]);
 
-  useEffect(() => () => stop(), [stop]);
+  useEffect(() => () => {
+    trackRequest.current += 1;
+    trackRef.current?.dispose();
+    trackRef.current = null;
+    stop();
+  }, [stop]);
+  // Carrega em segundo plano as fotos históricas desta aula para que uma troca de plano
+  // não mostre um retângulo vazio enquanto a imagem é baixada durante a narração.
+  useEffect(() => {
+    const images: HTMLImageElement[] = [];
+    for (const item of l.scenes) {
+      if (item.visual.kind !== 'timeline') continue;
+      for (const entry of item.visual.items) {
+        const photo = historicalVisualFor(entry.title + ' ' + entry.text);
+        if (!photo) continue;
+        const image = new Image();
+        image.decoding = 'async';
+        image.src = photo.src;
+        images.push(image);
+      }
+    }
+    return () => {
+      for (const image of images) { image.onload = null; image.onerror = null; }
+    };
+  }, [l]);
+
   // A composição cobre a viewport, então a página por trás não deve continuar rolando no toque.
   useEffect(() => {
     const bodyOverflow = document.body.style.overflow;
@@ -90,54 +160,145 @@ export function NarratedPlayer({
       document.documentElement.style.overflow = rootOverflow;
     };
   }, []);
-  // Como em um player de vídeo, a interface desaparece por inatividade tanto
-  // durante a reprodução quanto quando a aula está pausada. Um toque a revela.
+  const clearControlsHideTimer = useCallback(() => {
+    if (hideControlsTimer.current !== undefined) window.clearTimeout(hideControlsTimer.current);
+    hideControlsTimer.current = undefined;
+  }, []);
+
+  // O prazo conta a partir da última interação; uma cena mudar não reinicia o contador.
+  // Enquanto o dedo ou o mouse estiver pressionado sobre um controle, a interface não some.
   const revealControls = useCallback(() => {
     setControlsVisible(true);
-    if (hideControlsTimer.current !== undefined) window.clearTimeout(hideControlsTimer.current);
+    clearControlsHideTimer();
+    if (controlsInteractionActive.current) return;
     hideControlsTimer.current = window.setTimeout(() => {
       hideControlsTimer.current = undefined;
-      setControlsVisible(false);
+      if (!controlsInteractionActive.current) setControlsVisible(false);
     }, 3800);
-  }, []);
+  }, [clearControlsHideTimer]);
+
+  const beginControlsInteraction = useCallback(() => {
+    controlsInteractionActive.current = true;
+    clearControlsHideTimer();
+    setControlsVisible(true);
+  }, [clearControlsHideTimer]);
+
+  const endControlsInteraction = useCallback(() => {
+    if (!controlsInteractionActive.current) return;
+    controlsInteractionActive.current = false;
+    revealControls();
+  }, [revealControls]);
+
+  // Also catches pointer releases outside the control row (e.g. dragging the seek bar).
+  useEffect(() => {
+    const finishInteraction = () => endControlsInteraction();
+    window.addEventListener('pointerup', finishInteraction);
+    window.addEventListener('pointercancel', finishInteraction);
+    return () => {
+      window.removeEventListener('pointerup', finishInteraction);
+      window.removeEventListener('pointercancel', finishInteraction);
+    };
+  }, [endControlsInteraction]);
+
   const togglePlayerControls = useCallback(() => {
     if (controlsVisible) {
-      if (hideControlsTimer.current !== undefined) window.clearTimeout(hideControlsTimer.current);
-      hideControlsTimer.current = undefined;
+      clearControlsHideTimer();
       setControlsVisible(false);
     } else {
       revealControls();
     }
-  }, [controlsVisible, revealControls]);
+  }, [controlsVisible, revealControls, clearControlsHideTimer]);
 
   useEffect(() => {
-    if (hideControlsTimer.current !== undefined) {
-      window.clearTimeout(hideControlsTimer.current);
-      hideControlsTimer.current = undefined;
+    if (controlsVisible) {
+      if (!controlsInteractionActive.current) revealControls();
+    } else {
+      clearControlsHideTimer();
     }
-    if (!controlsVisible) return;
-    hideControlsTimer.current = window.setTimeout(() => {
-      hideControlsTimer.current = undefined;
-      setControlsVisible(false);
-    }, 3800);
-    return () => {
-      if (hideControlsTimer.current !== undefined) {
-        window.clearTimeout(hideControlsTimer.current);
-        hideControlsTimer.current = undefined;
-      }
-    };
-  }, [controlsVisible, pos]);
+    return clearControlsHideTimer;
+  }, [controlsVisible, revealControls, clearControlsHideTimer]);
+
+  useEffect(() => () => {
+    controlsInteractionActive.current = false;
+    clearControlsHideTimer();
+  }, [clearControlsHideTimer]);
 
   useEffect(() => {
     soundscape.duck(playing && voice.kind !== 'nenhuma');
     return () => soundscape.duck(false);
   }, [playing, voice]);
 
+  // O áudio neural é uma única faixa para a aula toda: o usuário pode buscar qualquer segundo
+  // real da gravação, e o conteúdo visual acompanha a posição sem reiniciar o áudio a cada frase.
   useEffect(() => {
-    if (!playing || !positions.length) return;
+    if (!generatedTrack) return;
+    const audio = generatedTrack.audio;
+    const updatePosition = () => {
+      const realDuration = Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration * 1000 : trackDurationMs;
+      if (realDuration > 0 && realDuration !== trackDurationMs) setTrackDurationMs(realDuration);
+      const mediaMs = Math.min(realDuration || estimatedTotalMs, Math.max(0, audio.currentTime * 1000));
+      setMediaElapsedMs(mediaMs);
+      const projectedMs = realDuration > 0 ? (mediaMs / realDuration) * estimatedTrackTotalMs : mediaMs;
+      let cursor = 0;
+      let nextIndex = Math.max(0, trackDurations.length - 1);
+      for (let i = 0; i < trackDurations.length; i++) {
+        if (projectedMs < cursor + trackDurations[i] || i === trackDurations.length - 1) { nextIndex = i; break; }
+        cursor += trackDurations[i];
+      }
+      if (activeCueRef.current !== nextIndex) {
+        activeCueRef.current = nextIndex;
+        setPos(positionAtBeat(l, nextIndex));
+        setSpeechWordIndex(undefined);
+      }
+      const localElapsed = Math.max(0, Math.min(trackDurations[nextIndex] ?? 0, projectedMs - cursor));
+      elapsedRef.current = localElapsed;
+      setBeatElapsed(localElapsed);
+      setVoiceStarted(!audio.paused && !audio.ended);
+    };
+    const onEnded = () => {
+      updatePosition();
+      setPlaying(false);
+      setDone(true);
+      setVoiceStarted(false);
+    };
+    audio.addEventListener('timeupdate', updatePosition);
+    audio.addEventListener('loadedmetadata', updatePosition);
+    audio.addEventListener('play', updatePosition);
+    audio.addEventListener('pause', updatePosition);
+    audio.addEventListener('ended', onEnded);
+    audio.playbackRate = rate;
+    if (playing) {
+      updatePosition();
+      void audio.play().catch((error) => {
+        setPlaying(false);
+        setVoiceStatus(error instanceof Error ? error.message : 'Não foi possível reproduzir o áudio.');
+      });
+    } else {
+      audio.pause();
+      updatePosition();
+    }
+    return () => {
+      audio.removeEventListener('timeupdate', updatePosition);
+      audio.removeEventListener('loadedmetadata', updatePosition);
+      audio.removeEventListener('play', updatePosition);
+      audio.removeEventListener('pause', updatePosition);
+      audio.removeEventListener('ended', onEnded);
+    };
+  }, [generatedTrack, playing, l, trackDurations, rate, estimatedTrackTotalMs, trackDurationMs]);
+
+  useEffect(() => {
+    if (!playing || !positions.length || (voice.kind === 'gemini' && voice.createAudioTrack)) return;
     const ticket = ++token.current;
     const duration = durations[beatIndex] ?? 1800;
     const text = l.scenes[pos.scene].beats[pos.beat].say;
+    const requestedOffset = Math.min(duration, Math.max(0, seekOffsetRef.current));
+    const requestedChar = requestedOffset > 0 ? Math.min(text.length - 1, Math.floor((requestedOffset / Math.max(1, duration)) * text.length)) : 0;
+    const wordStarts = Array.from(text.matchAll(/\S+/g)).map((match) => match.index ?? 0);
+    const startChar = wordStarts.reduce((nearest, candidate) =>
+      Math.abs(candidate - requestedChar) < Math.abs(nearest - requestedChar) ? candidate : nearest, 0);
+    const startOffset = text.length ? (startChar / text.length) * duration : 0;
+    seekOffsetRef.current = 0;
+    const spokenText = text.slice(startChar).trim() || text;
     let watchdog: number | undefined;
     let advanceTimer: number | undefined;
     const advance = () => {
@@ -145,6 +306,7 @@ export function NarratedPlayer({
       const next = nextBeat(l, pos);
       if (next) {
         elapsedRef.current = 0;
+        seekOffsetRef.current = 0;
         setBeatElapsed(0);
         setVoiceStarted(false);
         setSpeechWordIndex(undefined);
@@ -171,26 +333,34 @@ export function NarratedPlayer({
         }, Math.max(duration * 2.3, 5000));
       };
       armWatchdog();
-      void voice.speak(text, rate, {
+      void voice.speak(spokenText, rate, {
         onStart: () => {
           if (token.current !== ticket) return;
-          elapsedRef.current = 0;
-          setBeatElapsed(0);
+          elapsedRef.current = startOffset;
+          setBeatElapsed(startOffset);
           setVoiceStarted(true);
           armWatchdog();
         },
         onBoundary: (charIndex) => {
           if (token.current !== ticket) return;
-          setSpeechWordIndex(wordIndexAtChar(text, charIndex));
+          setSpeechWordIndex(wordIndexAtChar(text, startChar + charIndex));
         },
       }).then(() => {
         if (token.current !== ticket) return;
         if (watchdog !== undefined) window.clearTimeout(watchdog);
         advanceTimer = window.setTimeout(advance, Math.max(300, Math.min(900, duration * 0.16)));
-      }).catch(() => {
+      }).catch((error) => {
         if (token.current !== ticket) return;
+        if (error instanceof DOMException && error.name === 'AbortError') return;
         if (watchdog !== undefined) window.clearTimeout(watchdog);
-        advanceTimer = window.setTimeout(advance, Math.max(900, duration));
+        setVoiceStatus(error instanceof Error ? error.message : 'Não foi possível gerar a voz. Confira a conexão e as preferências.');
+        if (voice.kind === 'gemini') {
+          setShowVoiceSettings(true);
+          setControlsVisible(true);
+          setPlaying(false);
+        } else {
+          advanceTimer = window.setTimeout(advance, Math.max(900, duration));
+        }
       });
     }
     return () => {
@@ -217,7 +387,24 @@ export function NarratedPlayer({
   }, [playing, voiceStarted, beatIndex, durations]);
 
   const jump = (p: NarrationPos) => {
+    const targetIndex = beatIndexOf(l, p);
+    if (trackRef.current && Number.isFinite(trackRef.current.audio.duration) && trackRef.current.audio.duration > 0) {
+      const estimatedPosition = trackDurations.slice(0, targetIndex).reduce((sum, value) => sum + value, 0);
+      const targetMs = estimatedTrackTotalMs > 0 ? (estimatedPosition / estimatedTrackTotalMs) * trackRef.current.audio.duration * 1000 : 0;
+      trackRef.current.audio.currentTime = targetMs / 1000;
+      activeCueRef.current = targetIndex;
+      setMediaElapsedMs(targetMs);
+      setPos(p);
+      setBeatElapsed(0);
+      elapsedRef.current = 0;
+      setSpeechWordIndex(undefined);
+      setVoiceStarted(!trackRef.current.audio.paused);
+      setDone(false);
+      return;
+    }
     stop();
+    activeCueRef.current = targetIndex;
+    seekOffsetRef.current = 0;
     elapsedRef.current = 0;
     setBeatElapsed(0);
     setVoiceStarted(false);
@@ -229,15 +416,45 @@ export function NarratedPlayer({
   const startSeek = () => {
     resumeAfterSeek.current = playing;
     if (playing) {
-      stop();
-      setPlaying(false);
-      setVoiceStarted(false);
-      setSpeechWordIndex(undefined);
+      if (trackRef.current) {
+        trackRef.current.audio.pause();
+        setPlaying(false);
+        setVoiceStarted(false);
+      } else {
+        stop();
+        setPlaying(false);
+        setVoiceStarted(false);
+        setSpeechWordIndex(undefined);
+      }
     }
   };
 
   const seekTo = (rawValue: number) => {
     const target = Math.max(0, Math.min(totalMs, rawValue));
+    if (trackRef.current && Number.isFinite(trackRef.current.audio.duration) && trackRef.current.audio.duration > 0) {
+      const audio = trackRef.current.audio;
+      const clamped = Math.min(audio.duration * 1000, target);
+      audio.currentTime = clamped / 1000;
+      setMediaElapsedMs(clamped);
+      const projectedMs = (clamped / Math.max(1, audio.duration * 1000)) * estimatedTrackTotalMs;
+      let cursor = 0;
+      let targetIndex = Math.max(0, trackDurations.length - 1);
+      for (let i = 0; i < trackDurations.length; i++) {
+        if (projectedMs < cursor + trackDurations[i] || i === trackDurations.length - 1) { targetIndex = i; break; }
+        cursor += trackDurations[i];
+      }
+      activeCueRef.current = targetIndex;
+      setPos(positionAtBeat(l, targetIndex));
+      const localOffset = Math.max(0, Math.min(trackDurations[targetIndex] ?? 0, projectedMs - cursor));
+      seekOffsetRef.current = localOffset;
+      elapsedRef.current = localOffset;
+      setBeatElapsed(localOffset);
+      setVoiceStarted(!audio.paused && !audio.ended);
+      setSpeechWordIndex(undefined);
+      setDone(false);
+      return;
+    }
+
     let cursor = 0;
     let targetIndex = Math.max(0, positions.length - 1);
     for (let i = 0; i < durations.length; i++) {
@@ -247,9 +464,13 @@ export function NarratedPlayer({
       }
       cursor += durations[i];
     }
+    const targetOffset = Math.max(0, target - cursor);
+    const localOffset = Math.min(durations[targetIndex] ?? 0, targetOffset);
+    activeCueRef.current = targetIndex;
     setPos(positionAtBeat(l, targetIndex));
-    elapsedRef.current = 0;
-    setBeatElapsed(0);
+    seekOffsetRef.current = localOffset;
+    elapsedRef.current = localOffset;
+    setBeatElapsed(localOffset);
     setVoiceStarted(false);
     setSpeechWordIndex(undefined);
     setDone(false);
@@ -262,337 +483,688 @@ export function NarratedPlayer({
     }
   };
 
+  const discardGeneratedTrack = () => {
+    trackRequest.current += 1;
+    trackRef.current?.dispose();
+    trackRef.current = null;
+    setGeneratedTrack(null);
+    setTrackDurationMs(0);
+    setMediaElapsedMs(0);
+    setPreparingTrack(false);
+  };
+
   const togglePlayback = () => {
     if (playing) {
+      if (trackRef.current) {
+        trackRef.current.audio.pause();
+        setPlaying(false);
+        setVoiceStarted(false);
+        return;
+      }
       stop();
       setPlaying(false);
+      seekOffsetRef.current = 0;
       elapsedRef.current = 0;
       setBeatElapsed(0);
       setVoiceStarted(false);
       setSpeechWordIndex(undefined);
-    } else {
-      if (done) {
+      return;
+    }
+
+    if (done) {
+      if (trackRef.current) {
+        trackRef.current.audio.currentTime = 0;
+        setMediaElapsedMs(0);
+      }
+      activeCueRef.current = 0;
+      setPos({ scene: 0, beat: 0 });
+      seekOffsetRef.current = 0;
+      elapsedRef.current = 0;
+      setBeatElapsed(0);
+      setVoiceStarted(false);
+      setSpeechWordIndex(undefined);
+    }
+    setDone(false);
+
+    if (voice.kind === 'gemini' && voice.createAudioTrack) {
+      if (trackRef.current) {
+        setPlaying(true);
+        return;
+      }
+      if (preparingTrack) return;
+      const requestId = ++trackRequest.current;
+      setPreparingTrack(true);
+      setVoiceStatus('Gerando uma única faixa contínua de áudio para esta aula…');
+      void voice.createAudioTrack(script, rate).then((track) => {
+        if (requestId !== trackRequest.current) {
+          track.dispose();
+          return;
+        }
+        trackRef.current = track;
+        setGeneratedTrack(track);
+        setTrackDurationMs(track.durationMs);
+        setMediaElapsedMs(0);
+        activeCueRef.current = 0;
         setPos({ scene: 0, beat: 0 });
-        elapsedRef.current = 0;
         setBeatElapsed(0);
         setVoiceStarted(false);
-        setSpeechWordIndex(undefined);
-      }
-      setDone(false);
-      setPlaying(true);
+        setVoiceStatus('');
+        setPlaying(true);
+      }).catch((error) => {
+        if (requestId !== trackRequest.current || (error instanceof DOMException && error.name === 'AbortError')) return;
+        setVoiceStatus(error instanceof Error ? error.message : 'Não foi possível gerar o áudio. Confira a chave e a conexão.');
+        setShowVoiceSettings(true);
+        setControlsVisible(true);
+        setPlaying(false);
+      }).finally(() => {
+        if (requestId === trackRequest.current) setPreparingTrack(false);
+      });
+      return;
     }
+
+    setPlaying(true);
   };
 
   // O palco visual ocupa a viewport inteira. Cabeçalho, legenda e controles são camadas
   // flutuantes com margens seguras; nunca empurram o vídeo nem ficam colados às bordas.
-  const shell = 'fixed inset-0 z-[100] isolate h-[100dvh] max-h-[100dvh] w-screen max-w-none overflow-hidden rounded-none bg-bg text-ink';
+  const shell = 'fixed inset-0 z-[2147483000] isolate h-[100dvh] min-h-[100dvh] max-h-[100dvh] w-full min-w-0 max-w-none overflow-hidden rounded-none bg-[#c8402a] text-ink';
   const visibleClass = controlsVisible ? 'opacity-100 translate-y-0 pointer-events-auto' : 'pointer-events-none translate-y-2 opacity-0';
   const stopOverlayClick = (event: MouseEvent) => event.stopPropagation();
 
-  return (
+  return createPortal((
     <div
       className={shell}
+      style={{ position: 'fixed', inset: 0, width: '100%', minWidth: 0, maxWidth: 'none', height: '100dvh', minHeight: '100dvh', maxHeight: '100dvh', margin: 0, padding: 0, border: 0, boxSizing: 'border-box', backgroundColor: '#c8402a', overflow: 'hidden' }}
       data-embedded={embedded ? 'true' : undefined}
       data-testid="narrada-player"
       onClick={togglePlayerControls}
-      onPointerMove={(event) => { if (event.pointerType === 'mouse') revealControls(); }}
+      onPointerMove={(event) => { if (event.pointerType === 'mouse' && (event.movementX !== 0 || event.movementY !== 0)) revealControls(); }}
       onKeyDown={revealControls}
     >
-      <section className="absolute inset-0 overflow-hidden bg-bg" aria-label="Aula em vídeo narrado" data-testid="narrada-stage">
-        <div className="absolute inset-0" aria-hidden="true">
-          <div className="absolute -left-20 top-[18%] h-48 w-48 rounded-full bg-[#2e7182]/10 blur-3xl" />
-          <div className="absolute -right-16 bottom-[26%] h-52 w-52 rounded-full bg-[#c8402a]/10 blur-3xl" />
-        </div>
+      <section className="absolute inset-0 overflow-hidden bg-[#c8402a]" aria-label="Aula em vídeo narrado" data-testid="narrada-stage" onClick={(event) => { event.stopPropagation(); togglePlayerControls(); }}>
         <div
-          className={`absolute inset-0 grid place-items-center transition-[padding] duration-300 ${controlsVisible ? 'px-4 pb-[14.5rem] pt-28 sm:px-10 sm:pb-[15rem] sm:pt-32' : 'px-4 pb-8 pt-8 sm:px-10'}`}
+          className="absolute inset-0 grid place-items-center"
           data-testid="narrada-cena"
         >
-          <div className="anim-tile-in relative flex h-full max-h-full w-full flex-col items-center justify-center gap-3" key={scene.id}>
-            <SceneView scene={scene} reveal={revealOf(scene, pos.beat)} />
-            {scene.visual.kind !== 'cards' && <SceneMotionStrip key={scene.id + ':' + pos.beat} scene={scene} say={say} />}
+          <div className="relative flex h-full max-h-full w-full items-center justify-center" data-testid="narrada-elementos-visuais">
+            <CinematicSceneMemo
+              scene={scene}
+              teacher={teacher}
+              teacherPose={playing ? 'presenting' : done ? 'celebrating' : 'listening'}
+              reveal={revealOf(scene, pos.beat)}
+              sceneIndex={pos.scene}
+              sceneCount={l.scenes.length}
+              beatIndex={pos.beat}
+              controlsVisible={controlsVisible}
+              cutawayVisible={cutawayVisible}
+              showCaptions={showCaptions}
+              captionText={say}
+              captionWordIndex={captionWordIndex}
+              highlightCaptionWord={playing && voiceStarted}
+            />
           </div>
         </div>
       </section>
 
-      <header
-        className={`absolute left-4 right-4 top-[max(0.85rem,env(safe-area-inset-top))] z-20 mx-auto flex max-w-5xl items-start gap-3 rounded-2xl border border-line/70 bg-bg/85 p-3 shadow-[0_8px_28px_rgb(27_26_23_/_0.08)] backdrop-blur-md transition-all duration-300 sm:left-7 sm:right-7 sm:p-4 ${visibleClass}`}
+      <button type="button" className={`absolute right-3 top-[max(0.85rem,env(safe-area-inset-top))] z-40 grid h-11 w-11 place-items-center rounded-full border border-white/25 bg-[#171b1b]/80 text-white shadow-lg backdrop-blur-md transition-all duration-300 ${visibleClass}`}
+        onClick={(event) => { event.stopPropagation(); stop(); setPlaying(false); if (onClose) onClose(); }}
+        aria-label={exitLabel} title={exitLabel} data-testid="narrada-sair">
+        <Icon name="sair" size={19} />
+      </button>
+      <div className={`absolute bottom-[calc(4.7rem+env(safe-area-inset-bottom))] left-4 right-4 z-30 mx-auto max-w-2xl transition-all duration-300 ${visibleClass}`}
         onClick={stopOverlayClick}
-        aria-hidden={!controlsVisible}
-        data-testid="narrada-cabecalho-flutuante"
-      >
-        <div className="flex h-14 w-12 shrink-0 items-end justify-center overflow-hidden sm:h-[4.25rem] sm:w-14">
-          <TeacherCharacter teacher={teacher} pose={playing ? 'presenting' : done ? 'celebrating' : 'listening'} size={68} />
+        onPointerDown={beginControlsInteraction}
+        onPointerUp={endControlsInteraction}
+        onPointerCancel={endControlsInteraction}
+        aria-hidden={!controlsVisible} data-testid="narrada-seek-panel">
+        <div className="rounded-xl border border-white/20 bg-[#171b1b]/82 px-3 py-2 text-white shadow-lg backdrop-blur-lg">
+          <div className="mb-1 flex items-center justify-between gap-3 text-[0.62rem] font-semibold tabular-nums text-white/75">
+            <span>{formatTime(currentMs)}</span><span>{formatTime(totalMs)} · {hasGeneratedTrack ? 'faixa de áudio' : 'tempo estimado'}</span>
+          </div>
+          <input type="range" min={0} max={Math.max(1, totalMs)} step={100} value={Math.min(totalMs, currentMs)}
+            onPointerDown={startSeek} onPointerUp={finishSeek} onPointerCancel={finishSeek}
+            onChange={(e) => seekTo(Number(e.target.value))} aria-label="Barra de progresso da aula"
+            aria-valuetext={'Posição ' + formatTime(currentMs) + ' de ' + formatTime(totalMs)}
+            className="block h-5 w-full cursor-pointer accent-[#f0bf69]" data-testid="narrada-seek" />
         </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-muted">Estúdio de aulas · {teacher.name}</p>
-          <h1 className="mt-0.5 text-base font-semibold leading-tight sm:text-xl">{l.title}</h1>
-          <p className="mt-1 truncate text-xs text-muted sm:text-sm">Apresentada por {teacher.name} · {scene.heading} · Cena {pos.scene + 1} de {l.scenes.length}</p>
-        </div>
+      </div>
+      <div className={`absolute bottom-[max(0.35rem,env(safe-area-inset-bottom))] left-2 right-2 z-30 mx-auto flex max-w-xl items-center justify-center gap-1.5 px-1 transition-all duration-300 sm:bottom-[max(0.85rem,env(safe-area-inset-bottom))] sm:gap-3 ${visibleClass}`}
+        onClick={stopOverlayClick}
+        onPointerDown={beginControlsInteraction}
+        onPointerUp={endControlsInteraction}
+        onPointerCancel={endControlsInteraction}
+        aria-hidden={!controlsVisible} data-testid="narrada-controles-flutuantes">
+        <span className="sr-only">{VOICE_LABEL[voice.kind]}</span>
+        <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => jump(positionAtBeat(l, Math.max(0, beatIndex - 1)))} aria-label="Voltar uma fala"><Icon name="voltar" size={17} /></button>
+        <button type="button" className="grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-white/25 bg-[#c8402a] text-white shadow-xl transition hover:bg-[#a0301c]" onClick={togglePlayback} disabled={preparingTrack} aria-label={preparingTrack ? 'Preparando a narração' : playing ? 'Pausar aula' : done ? 'Assistir novamente' : 'Reproduzir aula'} data-testid="narrada-tocar">{preparingTrack ? <Icon name="ampulheta" size={19} /> : playing ? <span aria-hidden="true" className="text-xl leading-none">Ⅱ</span> : <Icon name="play" size={19} />}</button>
+        <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => jump(positionAtBeat(l, Math.min(positions.length - 1, beatIndex + 1)))} aria-label="Avançar uma fala"><Icon name="seta" size={17} /></button>
+        <label className="shrink-0" onClick={stopOverlayClick}><span className="sr-only">Velocidade da voz</span>
+          <select className="h-10 max-w-[3.6rem] rounded-full border border-white/20 bg-[#171b1b]/88 px-2 text-xs font-bold text-white shadow-lg backdrop-blur-md sm:max-w-[4.2rem]" value={rate} onChange={(e) => setRate(Number(e.target.value) as (typeof RATES)[number])} aria-label="Velocidade da voz" data-testid="narrada-velocidade">
+            {RATES.map((r) => <option key={r} value={r}>{r.toLocaleString('pt-BR')}×</option>)}
+          </select>
+        </label>
+        <button type="button" className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 text-white shadow-lg backdrop-blur-md transition ${voice.kind === 'gemini' ? 'bg-[#6e3b5c]' : 'bg-[#171b1b]/82 hover:bg-[#6e3b5c]'}`} onClick={() => { setShowTranscript(false); setShowVoiceSettings((v) => !v); setVoiceStatus(''); }} aria-label="Preferências de voz" aria-expanded={showVoiceSettings} data-testid="narrada-preferencias-voz"><Icon name="alaude" size={17} /></button>
         <button
           type="button"
-          className="grid min-h-10 min-w-10 shrink-0 place-items-center rounded-full border border-line bg-surface text-ink transition hover:bg-raised sm:min-h-11 sm:min-w-11"
-          onClick={() => { stop(); setPlaying(false); if (onClose) onClose(); }}
-          aria-label={exitLabel}
-          title={exitLabel}
-          data-testid="narrada-sair"
-        >
-          <Icon name="sair" size={19} />
-        </button>
+          className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border text-xs font-black tracking-tight text-white shadow-lg transition ${showCaptions ? 'border-white/45 bg-[#1f5c7a]' : 'border-white/20 bg-[#171b1b]/82 hover:bg-[#1f5c7a]'}`}
+          onClick={() => setShowCaptions((value) => !value)}
+          aria-label={showCaptions ? 'Desativar legendas' : 'Ativar legendas'}
+          aria-pressed={showCaptions}
+          title={showCaptions ? 'Desativar legendas' : 'Ativar legendas'}
+          data-testid="narrada-legendas-toggle"
+        >CC</button>
+        <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-[#171b1b]/82 text-white shadow-lg backdrop-blur-md transition hover:bg-[#1f5c7a]" onClick={() => { setShowVoiceSettings(false); setShowTranscript((v) => !v); }} aria-label={showTranscript ? 'Ocultar transcrição' : 'Transcrição'} aria-expanded={showTranscript} data-testid="narrada-transcricao"><Icon name="livro" size={17} /></button>
+      </div>
+      <div
+        className={`absolute bottom-[calc(7.1rem+env(safe-area-inset-bottom))] left-1/2 z-30 flex -translate-x-1/2 items-center justify-center gap-2 transition-all duration-300 ${visibleClass}`}
+        onClick={stopOverlayClick}
+        onPointerDown={beginControlsInteraction}
+        onPointerUp={endControlsInteraction}
+        onPointerCancel={endControlsInteraction}
+        aria-hidden={!controlsVisible}
+        aria-label="Ir para uma cena da aula"
+        data-testid="narrada-marcadores-cena"
+      >
+        {l.scenes.map((item, i) => (
+          <button
+            key={item.id}
+            type="button"
+            className={`h-2 rounded-full transition-all duration-500 ${i === pos.scene ? 'w-7 bg-[#f0bf69]' : i < pos.scene ? 'w-2 bg-white/65' : 'w-2 bg-white/25 hover:bg-white/65'}`}
+            aria-label={'Ir para a cena ' + (i + 1) + ': ' + item.heading}
+            aria-current={i === pos.scene ? 'step' : undefined}
+            onClick={() => jump({ scene: i, beat: 0 })}
+          />
+        ))}
+      </div>
+
+      {showVoiceSettings && controlsVisible && (
+        <section className="absolute bottom-[calc(9.5rem+env(safe-area-inset-bottom))] left-3 right-3 z-40 mx-auto max-h-[calc(100dvh-12rem)] max-w-xl overflow-y-auto rounded-2xl border border-white/20 bg-[#171b1b]/96 p-4 text-white shadow-2xl backdrop-blur-xl" onClick={stopOverlayClick} onPointerDown={beginControlsInteraction} onPointerUp={endControlsInteraction} onPointerCancel={endControlsInteraction} aria-label="Configurações da voz" data-testid="narrada-painel-voz">
+          <div className="flex items-start justify-between gap-3"><div><h2 className="font-display text-xl font-semibold">Voz da narração</h2><p className="mt-1 text-xs leading-relaxed text-white/70">Para uma narração mais natural, use a voz neural Gemini. Ela gera uma faixa de áudio contínua para a aula inteira; precisa de internet e de uma chave pessoal.</p>
+            <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs font-bold">
+              <a className="text-[#ffbb8c] underline underline-offset-2" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">Criar ou copiar chave no AI Studio ↗</a>
+              <a className="text-white/70 underline underline-offset-2" href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener noreferrer">Ver cotas e preços ↗</a>
+            </div>
+            <p className="mt-2 text-[0.65rem] leading-relaxed text-white/55">A chave fica salva neste navegador/aparelho e é enviada diretamente à API do Google quando o áudio é gerado. Confira as cotas antes de usar.</p></div>
+            <button type="button" onClick={() => setShowVoiceSettings(false)} aria-label="Fechar preferências de voz" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/10">×</button>
+          </div>
+          <label className="mt-3 block text-sm font-semibold">Voz neural Gemini
+            <select className="mt-1 h-10 w-full rounded-lg border border-white/20 bg-[#282725] px-3 text-sm text-white" value={geminiVoiceDraft} onChange={(e) => setGeminiVoiceDraft(e.target.value)} data-testid="narrada-gemini-voice">{GEMINI_TTS_VOICES.map((v) => <option key={v.id} value={v.id}>{v.label}</option>)}</select>
+          </label>
+          <label className="mt-3 block text-sm font-semibold">Chave de API do Gemini
+            <input className="mt-1 h-10 w-full rounded-lg border border-white/20 bg-[#282725] px-3 text-sm text-white placeholder:text-white/40" type="password" autoComplete="off" spellCheck={false} placeholder="Cole sua chave do AI Studio" value={geminiKeyDraft} onChange={(e) => setGeminiKeyDraft(e.target.value)} data-testid="narrada-gemini-key" />
+          </label>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <button type="button" className="rounded-full bg-[#c8402a] px-4 py-2 text-sm font-bold text-white" onClick={() => { discardGeneratedTrack(); stop(); setPlaying(false); saveGeminiTtsApiKey(geminiKeyDraft); saveGeminiTtsVoice(geminiVoiceDraft); setVoiceStatus(geminiKeyDraft.trim() ? 'Preferência guardada neste dispositivo. Toque em Testar voz.' : 'Chave removida. A voz local do aparelho será usada.'); }} data-testid="narrada-salvar-voz">Salvar preferência</button>
+            <button type="button" disabled={testingVoice || !geminiKeyDraft.trim()} className="rounded-full border border-white/25 px-4 py-2 text-sm font-bold disabled:opacity-40" onClick={async () => {
+              setTestingVoice(true); setVoiceStatus('Gerando uma amostra de voz…'); discardGeneratedTrack(); stop(); setPlaying(false); saveGeminiTtsApiKey(geminiKeyDraft); saveGeminiTtsVoice(geminiVoiceDraft);
+              try { await getVoice().speak('Olá! Esta é uma amostra da voz neural da sua aula. Vamos aprender com calma, clareza e exemplos.', 0.95); setVoiceStatus('Amostra concluída. A voz neural está pronta para as aulas.'); }
+              catch (error) { setVoiceStatus(error instanceof Error ? error.message : 'Não foi possível gerar a amostra. Confira a chave e a conexão.'); }
+              finally { setTestingVoice(false); }
+            }} data-testid="narrada-testar-voz">{testingVoice ? 'Gerando…' : 'Testar voz'}</button>
+            <a className="text-xs font-semibold text-[#ffbb8c] underline underline-offset-2" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Obter chave no AI Studio</a>
+          </div>
+          <p className="mt-2 text-[0.68rem] leading-relaxed text-white/55">A chave fica no armazenamento local deste aparelho e é enviada ao Google para gerar o áudio; não é enviada ao repositório. A API pode ter limites ou custos conforme sua conta.</p>
+          {voiceStatus && <p className="mt-2 rounded-lg bg-white/10 p-2 text-xs leading-relaxed" role="status">{voiceStatus}</p>}
+        </section>
+      )}
+      {showTranscript && controlsVisible && (
+        <section className="absolute bottom-[calc(9.5rem+env(safe-area-inset-bottom))] left-3 right-3 z-40 mx-auto max-h-[calc(100dvh-12rem)] max-w-xl overflow-y-auto rounded-2xl border border-white/20 bg-[#171b1b]/96 p-4 text-white shadow-2xl backdrop-blur-xl" onClick={stopOverlayClick} onPointerDown={beginControlsInteraction} onPointerUp={endControlsInteraction} onPointerCancel={endControlsInteraction} aria-label="Transcrição" data-testid="narrada-transcricao-painel">
+          <h2 className="font-display text-xl font-semibold">Transcrição completa</h2>
+          {transcript(l).map((t) => <div key={t.heading} className="mb-3 last:mb-0"><h3 className="font-semibold text-[#ffbb8c]">{t.heading}</h3><p className="mt-1 text-sm leading-relaxed text-white/85">{t.lines.join(' ')}</p></div>)}
+        </section>
+      )}
+      {!controlsVisible && <button type="button" className="absolute inset-0 z-10 cursor-pointer" aria-label="Mostrar controles da aula" onClick={(event) => { event.stopPropagation(); togglePlayerControls(); }} data-testid="narrada-mostrar-controles" />}
+
+    </div>
+  ), document.body);
+}
+
+/**
+ * Direção de arte da aula: cenas compostas a partir dos dados didáticos existentes.
+ * O palco permanece montado durante a fala. Só o conteúdo da cena muda quando a narração
+ * avança para outra frase; não há alternância de componentes por porcentagem do relógio.
+ */
+type CinemaPalette = { background: string; accent: string; secondary: string; name: string };
+const CINEMA_PALETTES: CinemaPalette[] = [
+  { background: '#c8402a', accent: '#f0bf69', secondary: '#1b1a17', name: 'vermelhão editorial' },
+  { background: '#1f5c7a', accent: '#ffbb8c', secondary: '#111f2a', name: 'azul petróleo' },
+  { background: '#6e3b5c', accent: '#f0bf69', secondary: '#241521', name: 'ameixa' },
+  { background: '#a8365e', accent: '#f3d7ca', secondary: '#351723', name: 'framboesa' },
+  { background: '#9e6a14', accent: '#fff1c9', secondary: '#2c1e07', name: 'ocre' },
+];
+
+function illustrationForText(value: string): IllustrationName {
+  const text = value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if (/dado|memoria|arquivo|armazen|guardar|banco|informacao/.test(text)) return 'dados';
+  if (/rede|internet|servidor|roteador|protocolo|pacote|conexao/.test(text)) return 'rede';
+  if (/computador|processador|hardware|maquina|cpu|chip/.test(text)) return 'computador';
+  if (/nuvem|cloud|online/.test(text)) return 'nuvem';
+  if (/conta|soma|numero|reta|positivo|negativo|oposto|subtrair/.test(text)) return 'degraus';
+  if (/tempo|ano|historia|data|origem|evolucao/.test(text)) return 'calendario';
+  if (/cartao|teclado|entrada|saida|interruptor/.test(text)) return 'teclado';
+  if (/lei|regra|direito|norma|controle/.test(text)) return 'balanca';
+  return 'livro';
+}
+
+type HistoricalVisual = { src: string; alt: string; caption: string; source: string; sourceUrl: string };
+function historicalVisualFor(value: string): HistoricalVisual | undefined {
+  const text = value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if (/ada lovelace|ada king|lovelace/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ada_Lovelace_portrait.jpg?width=900',
+    alt: 'Retrato em aquarela de Ada Lovelace, de cerca de 1840',
+    caption: 'Ada Lovelace · matemática e autora de notas sobre a Máquina Analítica',
+    source: 'Retrato de domínio público · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Ada_Lovelace_portrait.jpg',
+  };
+  if (/pascaline|maquina de pascal|blaise pascal/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Arts_et_Metiers_Pascaline_dsc03869.jpg?width=1200',
+    alt: 'Pascalina de 1642, calculadora mecânica com discos e engrenagens',
+    caption: 'Pascalina · máquina mecânica de cálculo construída por Blaise Pascal',
+    source: 'David.Monniaux · CC BY-SA 3.0 · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Arts_et_Metiers_Pascaline_dsc03869.jpg',
+  };
+  if (/maquina analitica|analytical engine|babbage/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Analytical_engine_trial_model%2C_Charles_Babbage%2C_1834-1871_-_Science_Museum%2C_London_-_DSC05565.jpg?width=1200',
+    alt: 'Modelo de teste da Máquina Analítica de Charles Babbage em exposição no Science Museum de Londres',
+    caption: 'Máquina Analítica · o projeto de Babbage unia cálculo e armazenamento',
+    source: 'Daderot · CC0 1.0 · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Analytical_engine_trial_model,_Charles_Babbage,_1834-1871_-_Science_Museum,_London_-_DSC05565.jpg',
+  };
+  if (/jacquard|cartoes perfurados|cartões perfurados/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Jacquard.loom.cards.jpg?width=900',
+    alt: 'Close de cartões perfurados usados em um tear Jacquard',
+    caption: 'Cartões perfurados · as instruções controlavam o padrão tecido',
+    source: 'Ghw · domínio público · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Jacquard.loom.cards.jpg',
+  };
+  if (/hollerith|censo/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/1902_Hollerith_electric_tabulating_machine.jpg?width=900',
+    alt: 'Funcionário demonstrando a máquina tabuladora elétrica de Herman Hollerith',
+    caption: 'Tabuladora de Hollerith · cartões perfurados ajudavam a contar o censo',
+    source: 'U.S. Census Bureau · domínio público · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:1902_Hollerith_electric_tabulating_machine.jpg',
+  };
+  if (/4004|microprocessador|microprocessor/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Intel_4004_open.jpg?width=1200',
+    alt: 'Microprocessador Intel 4004 de 1971 aberto, mostrando o circuito interno',
+    caption: 'Intel 4004 · um dos primeiros microprocessadores comerciais em um único chip',
+    source: 'Science Museum Group · CC BY 4.0 · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Intel_4004_open.jpg',
+  };
+  if (/apple ii|computador pessoal|ibm pc/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Apple_II_Computer.jpg?width=900',
+    alt: 'Computador Apple II, exemplo de computador pessoal do fim dos anos 1970',
+    caption: 'Apple II · o computador pessoal chega a casas e escritórios',
+    source: 'Maksym Kozlenko · CC BY-SA 4.0 · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Apple_II_Computer.jpg',
+  };
+  if (/\beniac\b/.test(text)) return {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/ENIAC.jpg?width=1000',
+    alt: 'Painéis do computador eletrônico ENIAC em exposição',
+    caption: 'ENIAC · computador eletrônico pioneiro, instalado em grandes painéis',
+    source: 'Imagem CC BY-SA 4.0 · Wikimedia Commons',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:ENIAC.jpg',
+  };
+  return undefined;
+}
+
+function HistoricalPhoto({ photo, variant = 'scene' }: { photo: HistoricalVisual; variant?: 'scene' | 'slide' }) {
+  return <figure className={'ccv-historical-photo ccv-historical-photo--' + variant} data-testid="historical-photo">
+    <img src={photo.src} alt={photo.alt} loading="eager" decoding="async" />
+    <figcaption><strong>{photo.caption}</strong><a href={photo.sourceUrl} target="_blank" rel="noopener noreferrer">{photo.source}</a></figcaption>
+  </figure>;
+}
+
+/**
+ * Cena audiovisual estável: um único assunto em foco, não uma pilha de cartões.
+ * O palco inteiro persiste entre falas; só o plano de apoio recebe uma transição suave
+ * quando a fala/etapa muda. Não existem pulsos, flashes ou animações repetidas por render.
+ */
+function CinematicScene({
+  scene, teacher, teacherPose, reveal, sceneIndex, sceneCount, beatIndex, controlsVisible, cutawayVisible,
+  showCaptions, captionText, captionWordIndex, highlightCaptionWord,
+}: {
+  scene: Scene;
+  teacher: ReturnType<typeof teacherForChapter>;
+  teacherPose: 'presenting' | 'celebrating' | 'listening';
+  reveal: number;
+  sceneIndex: number;
+  sceneCount: number;
+  beatIndex: number;
+  controlsVisible: boolean;
+  cutawayVisible: boolean;
+  showCaptions: boolean;
+  captionText: string;
+  captionWordIndex: number;
+  highlightCaptionWord: boolean;
+}) {
+  const visual = scene.visual;
+  const palette = CINEMA_PALETTES[sceneIndex % CINEMA_PALETTES.length];
+  const activeIndex = (length: number) => Math.max(0, Math.min(length - 1, reveal - 1));
+  let headline = scene.heading;
+  let support = '';
+  let eyebrow = 'IDEIA EM FOCO';
+  let art: IllustrationName = illustrationForText(scene.heading);
+  let dateOrStep = '';
+  let equation: string | undefined;
+  let historicalPhoto: HistoricalVisual | undefined;
+  let numberline: { from: number; to: number; state: NumberLineState } | undefined;
+  let progressCount = 1;
+  let progressIndex = 0;
+
+  if (visual.kind === 'title') {
+    headline = visual.title;
+    support = visual.subtitle ?? '';
+    art = visual.art ?? illustrationForText(visual.title);
+    eyebrow = 'ABERTURA';
+  } else if (visual.kind === 'cards') {
+    const index = activeIndex(visual.cards.length);
+    const item = visual.cards[index];
+    if (item) {
+      headline = item.title;
+      support = item.text;
+      art = illustrationForText(item.title + ' ' + item.text);
+      dateOrStep = String(index + 1).padStart(2, '0');
+    }
+    eyebrow = 'CONCEITO EM FOCO';
+    progressCount = visual.cards.length;
+    progressIndex = index;
+  } else if (visual.kind === 'timeline') {
+    const index = activeIndex(visual.items.length);
+    const item = visual.items[index];
+    if (item) {
+      headline = item.title;
+      support = item.text;
+      dateOrStep = item.year;
+      art = illustrationForText(item.title + ' ' + item.text);
+      historicalPhoto = historicalVisualFor(item.title + ' ' + item.text);
+    }
+    eyebrow = 'MARCO HISTÓRICO';
+    progressCount = visual.items.length;
+    progressIndex = index;
+  } else if (visual.kind === 'equation') {
+    const index = activeIndex(visual.lines.length);
+    equation = visual.lines[index] ?? visual.lines[0] ?? '';
+    headline = equation;
+    support = visual.note ?? '';
+    dateOrStep = 'PASSO ' + (index + 1);
+    art = illustrationForText(headline + ' ' + support);
+    eyebrow = 'RACIOCÍNIO PASSO A PASSO';
+    progressCount = visual.lines.length;
+    progressIndex = index;
+  } else if (visual.kind === 'numberline') {
+    const index = Math.min(visual.states.length - 1, Math.max(0, reveal));
+    const state = visual.states[index] ?? visual.states[0] ?? {};
+    const jump = state.jumps?.[0];
+    headline = jump ? (jump.to > jump.from ? 'Avance para a direita' : 'Volte para a esquerda') : 'Encontre a posição';
+    support = jump ? `Partimos de ${jump.from} e chegamos a ${jump.to}.` : 'Observe a posição do número em relação ao zero.';
+    eyebrow = 'MOVIMENTO NA RETA NUMÉRICA';
+    dateOrStep = jump ? `${jump.from} → ${jump.to}` : 'RETA NUMÉRICA';
+    numberline = { from: visual.from, to: visual.to, state };
+    progressCount = visual.states.length;
+    progressIndex = index;
+  }
+
+  if (!historicalPhoto && visual.kind === 'timeline') historicalPhoto = historicalVisualFor(headline + ' ' + support);
+
+  // Cada frase realiza um corte editorial por máscara e deslocamento, sem fade de opacidade.
+  // O plano de fundo, a paleta e as formas decorativas permanecem vivos e estáveis.
+  return (
+    <article
+      className={'ccv-film-scene ' + (controlsVisible ? 'has-controls' : 'controls-hidden')}
+      style={{ '--ccv-background': palette.background, '--ccv-accent': palette.accent, '--ccv-secondary': palette.secondary } as CSSProperties}
+      aria-label={scene.heading}
+      data-testid="narrada-cena-cinematica"
+      data-beat={beatIndex}
+    >
+      <div className="ccv-film-grain" aria-hidden="true" />
+      <div className="ccv-film-orbit ccv-film-orbit--one" aria-hidden="true" />
+      <div className="ccv-film-orbit ccv-film-orbit--two" aria-hidden="true" />
+
+      <header className="ccv-film-header">
+        <span className="ccv-film-brand"><span className="ccv-film-host"><TeacherCharacter teacher={teacher} pose={teacherPose} size={48} /></span><span>ESTÚDIO · {teacher.name.toUpperCase()}</span><i /><span>CRÔNICAS</span></span>
+        <span className="ccv-film-counter">{String(sceneIndex + 1).padStart(2, '0')} / {String(sceneCount).padStart(2, '0')}</span>
       </header>
 
-      <p
-        className={`absolute left-5 right-5 z-10 mx-auto max-w-3xl rounded-xl bg-[#171b1b]/90 px-4 py-3 text-center text-sm font-medium leading-relaxed text-white shadow-lg backdrop-blur-sm transition-[bottom] duration-300 sm:left-10 sm:right-10 sm:px-6 sm:py-3.5 sm:text-base ${controlsVisible ? 'bottom-[calc(14rem+env(safe-area-inset-bottom))] sm:bottom-[calc(15rem+env(safe-area-inset-bottom))]' : 'bottom-8'}`}
-        aria-live="polite"
-        data-testid="narrada-legenda"
-      >
+      {showCaptions && <CaptionLine text={captionText} activeWordIndex={captionWordIndex} highlightWord={highlightCaptionWord} />}
+
+      <div className={"ccv-film-content" + (cutawayVisible ? " has-cutaway" : "")}>
+        <section className="ccv-film-copy">
+          <div className="ccv-film-copy__take" key={scene.id + ':' + beatIndex} data-testid="narrada-corte-texto">
+            <p className="ccv-film-eyebrow"><span />{eyebrow}</p>
+            {dateOrStep && <p className="ccv-film-date">{dateOrStep}</p>}
+            <h2 className="ccv-film-headline">{headline}</h2>
+            <div className="ccv-film-progress" aria-hidden="true">
+              {Array.from({ length: Math.max(1, progressCount) }, (_, index) => (
+                <span key={index} className={index < progressIndex ? 'is-past' : index === progressIndex ? 'is-current' : ''} />
+              ))}
+            </div>
+            <p className="ccv-film-footnote">{scene.heading}</p>
+          </div>
+        </section>
+
+        <section className="ccv-film-art" aria-label="Demonstração visual" data-testid="narrada-cena-visual">
+          <div className="ccv-film-art__rings" aria-hidden="true"><span /><span /><span /></div>
+          <div key={scene.id + ':' + beatIndex} className="ccv-film-cut is-cue-cut" data-testid="narrada-corte-suave">
+            {numberline ? (
+              <div className="ccv-film-numberline">
+                <CinematicNumberLine from={numberline.from} to={numberline.to} state={numberline.state} />
+              </div>
+            ) : historicalPhoto ? (
+              <HistoricalPhoto photo={historicalPhoto} />
+            ) : visual.kind === 'title' ? (
+              <div className="ccv-film-hero">
+                <Illustration name={art} accent={palette.accent} animate={false} className="ccv-film-illustration" label={headline} />
+                <span className="ccv-film-symbol" aria-hidden="true">↗</span>
+              </div>
+            ) : visual.kind === 'equation' ? (
+              <div className="ccv-film-equation">
+                {progressIndex > 0 && <p className="ccv-film-equation__previous">{visual.lines[progressIndex - 1]}</p>}
+                <span className="ccv-film-equation__rule" aria-hidden="true" />
+                <strong>{equation}</strong>
+                {progressIndex < visual.lines.length - 1 && <span className="ccv-film-equation__next" aria-hidden="true">↓</span>}
+              </div>
+            ) : visual.kind === 'timeline' ? (
+              <div className="ccv-film-event">
+                <div className="ccv-film-event__date">{dateOrStep}</div>
+                <div className="ccv-film-event__illustration">
+                  <Illustration name={art} accent={palette.accent} animate={false} className="ccv-film-illustration" label={headline} />
+                </div>
+                <div className="ccv-film-event__caption">{headline}</div>
+              </div>
+            ) : (
+              <div className="ccv-film-concept">
+                <span className="ccv-film-concept__number">{dateOrStep}</span>
+                <Illustration name={art} accent={palette.accent} animate={false} className="ccv-film-illustration" label={headline} />
+                <span className="ccv-film-concept__baseline">{scene.heading}</span>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {support && (
+          <section key={scene.id + ':' + beatIndex} className="ccv-film-details" aria-label="Explicação do conceito" data-testid="narrada-explicacao-cena">
+            <p className="ccv-film-support">{support}</p>
+          </section>
+        )}
+      </div>
+
+      <footer className="ccv-film-footer">
+        <span>VER · ENTENDER · APLICAR</span>
+        <span className="ccv-film-footer__line" />
+        <span>ÁUDIO E IMAGEM SINCRONIZADOS</span>
+      </footer>
+
+      <CinematicCutaway scene={scene} reveal={reveal} visible={cutawayVisible} palette={palette} />
+    </article>
+  );
+}
+
+/**
+ * Inserção de apoio com o assunto real da cena: uma foto de arquivo, uma conta, um
+ * movimento na reta ou o conceito tratado na fala. O palco principal não desmonta.
+ */
+function CinematicCutaway({
+  scene, reveal, visible, palette,
+}: { scene: Scene; reveal: number; visible: boolean; palette: CinemaPalette }) {
+  const visual = scene.visual;
+  const activeIndex = (length: number) => Math.max(0, Math.min(length - 1, reveal - 1));
+  let title = scene.heading;
+  let detail = '';
+  let label = 'PLANO DE APOIO';
+  let art: IllustrationName = illustrationForText(scene.heading);
+  let photo: HistoricalVisual | undefined;
+  let numberline: { from: number; to: number; state: NumberLineState } | undefined;
+  let equation: string | undefined;
+  let previousEquation: string | undefined;
+
+  if (visual.kind === 'title') {
+    title = visual.title;
+    detail = visual.subtitle ?? '';
+    art = visual.art ?? illustrationForText(visual.title);
+    label = 'ABERTURA · DETALHE';
+  } else if (visual.kind === 'cards') {
+    const item = visual.cards[activeIndex(visual.cards.length)];
+    if (item) {
+      title = item.title;
+      detail = item.text;
+      art = illustrationForText(item.title + ' ' + item.text);
+    }
+    label = 'EXEMPLO EM FOCO';
+  } else if (visual.kind === 'timeline') {
+    const item = visual.items[activeIndex(visual.items.length)];
+    if (item) {
+      title = item.title;
+      detail = item.text;
+      label = item.year;
+      art = illustrationForText(item.title + ' ' + item.text);
+      photo = historicalVisualFor(item.title + ' ' + item.text);
+    }
+  } else if (visual.kind === 'equation') {
+    const index = activeIndex(visual.lines.length);
+    equation = visual.lines[index] ?? visual.lines[0] ?? '';
+    previousEquation = index > 0 ? visual.lines[index - 1] : undefined;
+    title = equation;
+    detail = visual.note ?? '';
+    label = 'PASSO DO CÁLCULO';
+    art = illustrationForText(equation + ' ' + detail);
+  } else if (visual.kind === 'numberline') {
+    const index = Math.min(visual.states.length - 1, Math.max(0, reveal));
+    const state = visual.states[index] ?? visual.states[0] ?? {};
+    const jump = state.jumps?.[0];
+    title = jump ? `${jump.from} → ${jump.to}` : 'Posição na reta numérica';
+    detail = jump
+      ? (jump.to > jump.from ? 'O ponto avança para a direita.' : 'O ponto volta para a esquerda.')
+      : 'Observe a relação entre o número e o zero.';
+    label = 'MOVIMENTO EM FOCO';
+    art = 'degraus';
+    numberline = { from: visual.from, to: visual.to, state };
+  }
+
+  return (
+    <aside
+      className={'ccv-cutaway' + (visible ? ' is-visible' : '')}
+      aria-hidden={!visible}
+      data-testid="narrada-insercao-visual"
+      data-visible={visible ? 'true' : 'false'}
+    >
+      <div className="ccv-cutaway__media" style={{ '--ccv-insert-accent': palette.accent } as CSSProperties}>
+        {numberline ? (
+          <div className="ccv-cutaway__numberline"><CinematicNumberLine from={numberline.from} to={numberline.to} state={numberline.state} /></div>
+        ) : photo ? (
+          <img className="ccv-cutaway__photo" src={photo.src} alt={photo.alt} loading="eager" decoding="async" />
+        ) : equation ? (
+          <div className="ccv-cutaway__equation">
+            {previousEquation && <span>{previousEquation}</span>}
+            <i aria-hidden="true" />
+            <strong>{equation}</strong>
+          </div>
+        ) : (
+          <Illustration name={art} accent={palette.accent} animate={false} className="ccv-cutaway__illustration" label={title} />
+        )}
+        <span className="ccv-cutaway__frame" aria-hidden="true" />
+      </div>
+      <div className="ccv-cutaway__copy">
+        <p className="ccv-cutaway__eyebrow"><span />{label}</p>
+        <h3>{title}</h3>
+        {detail && <p className="ccv-cutaway__detail">{detail}</p>}
+        <p className="ccv-cutaway__source">CRÔNICAS DO CONHECIMENTO</p>
+      </div>
+    </aside>
+  );
+}
+
+export function splitCaptionLines(text: string): Array<{ start: number; end: number; text: string }> {
+  const words = text.match(/\S+\s*/g) ?? [text];
+  const lines: Array<{ start: number; end: number; text: string }> = [];
+  let start = 0;
+  let charCount = 0;
+
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i].trimEnd();
+    charCount += words[i].length;
+    const wordCount = i - start + 1;
+    const naturalStop = /[.!?…;:]$/.test(word) && wordCount >= 4;
+    const limitReached = wordCount >= 7 || charCount >= 40;
+    if (i === words.length - 1 || naturalStop || limitReached) {
+      lines.push({ start, end: i + 1, text: words.slice(start, i + 1).join('').trim() });
+      start = i + 1;
+      charCount = 0;
+    }
+  }
+
+  return lines;
+}
+
+function CaptionLine({ text, activeWordIndex, highlightWord }: { text: string; activeWordIndex: number; highlightWord: boolean }) {
+  const words = text.match(/\S+\s*/g) ?? [text];
+  const lines = splitCaptionLines(text);
+  const activeLine = lines.find((line) => activeWordIndex >= line.start && activeWordIndex < line.end) ?? lines[0];
+  const visibleWords = words.slice(activeLine.start, activeLine.end);
+
+  return (
+    <div className="ccv-caption-line flex w-full shrink-0 items-center justify-center px-1"
+      role="status" aria-label="Legenda da fala atual" aria-live="polite" aria-atomic="true" data-testid="narrada-legenda">
+      <p className="w-full max-w-full overflow-hidden whitespace-nowrap rounded-md bg-[#171b1b]/90 px-2 py-1 text-center text-[0.7rem] font-medium leading-5 text-white shadow-sm sm:px-3 sm:text-sm">
         <span className="sr-only">Legenda: </span>
-        <span data-testid="narrada-legenda-texto">
-          {(say.match(/\S+\s*/g) ?? [say]).map((word, i, words) => {
-            const estimatedWord = voiceStarted
-              ? Math.min(words.length - 1, Math.floor((beatElapsed / Math.max(1, durations[beatIndex] ?? 1800)) * words.length))
-              : -1;
-            const activeWord = playing && voiceStarted ? (speechWordIndex ?? estimatedWord) : -1;
-            return <span key={`${i}-${word}`} className={i === activeWord ? 'rounded bg-[#f0bf69]/25 px-0.5 font-bold text-[#ffd38a] transition-colors duration-150' : i < activeWord ? 'text-white/65 transition-colors duration-150' : 'text-white transition-colors duration-150'}>{word}</span>;
+        <span data-testid="narrada-legenda-texto" data-caption-start={activeLine.start} data-caption-end={activeLine.end}>
+          {visibleWords.map((word, offset) => {
+            const index = activeLine.start + offset;
+            const active = highlightWord && index === activeWordIndex;
+            return <span key={`${index}-${word}`} className={active ? 'rounded bg-[#f0bf69]/25 text-[#ffd38a]' : 'text-white'}>{word}</span>;
           })}
         </span>
       </p>
-
-      <div
-        className={`absolute bottom-[max(0.85rem,env(safe-area-inset-bottom))] left-4 right-4 z-20 mx-auto max-w-3xl transition-all duration-300 sm:bottom-[max(1.25rem,env(safe-area-inset-bottom))] sm:left-8 sm:right-8 ${visibleClass}`}
-        onClick={stopOverlayClick}
-        aria-hidden={!controlsVisible}
-        data-testid="narrada-controles-flutuantes"
-      >
-        <div className="rounded-2xl border border-line/80 bg-bg/90 p-3 shadow-[0_14px_36px_rgb(27_26_23_/_0.16)] backdrop-blur-xl sm:p-4">
-          <div className="mb-2 flex items-center justify-between gap-3 text-[0.68rem] font-medium tabular-nums text-muted sm:text-xs">
-            <span>{formatTime(currentMs)}</span>
-            <span>{formatTime(totalMs)} · tempo estimado</span>
-          </div>
-          <input
-            type="range" min={0} max={Math.max(1, totalMs)} step={250} value={Math.min(totalMs, currentMs)}
-            onPointerDown={startSeek} onPointerUp={finishSeek} onPointerCancel={finishSeek}
-            onChange={(e) => seekTo(Number(e.target.value))}
-            aria-label="Barra de progresso da aula"
-            aria-valuetext={'Fala ' + (beatIndex + 1) + ' de ' + positions.length + ' · tempo estimado'}
-            className="mb-3 block h-5 w-full cursor-pointer accent-[#c8402a]" data-testid="narrada-seek"
-          />
-          <div className="flex items-center justify-center gap-2 sm:gap-3">
-            <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line bg-surface transition hover:bg-raised sm:h-11 sm:w-11" onClick={() => jump(positionAtBeat(l, Math.max(0, beatIndex - 1)))} aria-label="Voltar uma fala">
-              <Icon name="voltar" size={18} />
-            </button>
-            <button
-              type="button"
-              className="flex min-h-11 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-[#c8402a] px-4 font-semibold text-white transition hover:bg-[#a0301c] sm:max-w-xs sm:text-base"
-              onClick={togglePlayback}
-              data-testid="narrada-tocar"
-            >
-              {playing ? <span aria-hidden="true" className="text-lg leading-none">Ⅱ</span> : <Icon name="play" size={19} />}
-              {playing ? 'Pausar aula' : done ? 'Assistir novamente' : beatIndex === 0 ? 'Começar aula' : 'Continuar aula'}
-            </button>
-            <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line bg-surface transition hover:bg-raised sm:h-11 sm:w-11" onClick={() => jump(positionAtBeat(l, Math.min(positions.length - 1, beatIndex + 1)))} aria-label="Avançar uma fala">
-              <Icon name="seta" size={18} />
-            </button>
-            <label className="shrink-0">
-              <span className="sr-only">Velocidade da voz</span>
-              <select className="h-10 max-w-[4.8rem] rounded-full border border-line bg-surface px-2 text-xs font-semibold sm:h-11" value={rate} onChange={(e) => setRate(Number(e.target.value) as (typeof RATES)[number])} aria-label="Velocidade da voz">
-                {RATES.map((r) => <option key={r} value={r}>{r.toLocaleString('pt-BR')}×</option>)}
-              </select>
-            </label>
-          </div>
-          <div className="mt-3 flex items-center justify-between gap-2 border-t border-line/70 pt-2">
-            <span className="min-w-0 truncate text-[0.67rem] text-muted">Narração: {VOICE_LABEL[voice.kind]}.</span>
-            <button type="button" className="shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-[#c8402a] hover:bg-[#c8402a]/10" aria-expanded={showTranscript} onClick={() => setShowTranscript((v) => !v)}>
-              {showTranscript ? 'Ocultar transcrição' : 'Transcrição'}
-            </button>
-          </div>
-          <div className="mt-2 flex flex-wrap justify-center gap-2" aria-label="Cenas">
-            {l.scenes.map((item, i) => (
-              <button
-                key={item.id}
-                type="button"
-                className={`h-1.5 w-5 rounded-full transition-all ${i < pos.scene ? 'bg-[#2e7182]' : i === pos.scene ? 'w-8 bg-[#c8402a]' : 'bg-line'}`}
-                aria-label={'Ir para a cena ' + (i + 1) + ': ' + item.heading}
-                aria-current={i === pos.scene ? 'step' : undefined}
-                onClick={() => jump({ scene: i, beat: 0 })}
-              />
-            ))}
-          </div>
-          {showTranscript && (
-            <section className="mt-3 max-h-40 overflow-y-auto rounded-xl border border-line bg-surface p-3 text-xs leading-relaxed sm:text-sm" aria-label="Transcrição">
-              {transcript(l).map((t) => <div key={t.heading} className="mb-3 last:mb-0"><h2 className="font-semibold text-[#2e7182]">{t.heading}</h2><p className="mt-1">{t.lines.join(' ')}</p></div>)}
-            </section>
-          )}
-        </div>
-      </div>
-
-      {!controlsVisible && (
-        <button
-          type="button"
-          className="absolute inset-0 z-10 cursor-pointer"
-          aria-label="Mostrar controles da aula"
-          onClick={(event) => { event.stopPropagation(); togglePlayerControls(); }}
-          data-testid="narrada-mostrar-controles"
-        />
-      )}
-
-      {done && l.check && (
-        <div className="absolute inset-x-4 bottom-28 z-30 mx-auto max-w-xl rounded-2xl border border-line bg-bg/95 p-4 shadow-xl backdrop-blur-xl sm:bottom-32" role="region" aria-label="Checagem">
-          <p className="font-semibold">Confira o que viu (opcional)</p>
-          <div className="mt-2 max-h-48 overflow-y-auto"><ActivityView a={l.check} onNext={() => undefined} /></div>
-        </div>
-      )}
     </div>
   );
 }
 
-function SceneMotionStrip({ scene, say }: { scene: Scene; say: string }) {
-  const stopWords = new Set(['para', 'pela', 'pelo', 'como', 'isso', 'essa', 'esse', 'estas', 'estes', 'quando', 'onde', 'entre', 'sobre', 'muito', 'mais', 'menos', 'também', 'porque', 'então', 'depois', 'antes', 'ainda', 'cada', 'que', 'com', 'sem', 'uma', 'uns', 'umas', 'dos', 'das', 'por', 'não', 'são', 'ser', 'tem', 'ter', 'foi', 'vai', 'aos', 'nas', 'nos']);
-  const keywords = Array.from(new Set((say + ' ' + scene.heading)
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, ' ').split(/\s+/)
-    .filter((word) => word.length >= 4 && !stopWords.has(word))))
-    .slice(0, 3);
-  const palettes = [
-    'border-[#2e7182]/30 bg-[#d6e7e6] text-[#172e34]',
-    'border-[#c8402a]/30 bg-[#f3d7ca] text-[#3a211c]',
-    'border-[#9e6a14]/30 bg-[#f0e3bd] text-[#3b2c12]',
-  ];
-  const artFor = (word: string) => /dado|memoria|arquivo|valor|guardar|variavel/.test(word)
-    ? 'dados'
-    : /rede|internet|servidor|protocolo|pacote/.test(word)
-      ? 'rede'
-      : /nuvem|cloud|online/.test(word)
-        ? 'nuvem'
-        : /computador|processador|hardware|maquina/.test(word)
-          ? 'computador'
-          : (['livro', 'teclado', 'dados'] as const)[word.length % 3];
-  if (!keywords.length) return null;
+const CinematicSceneMemo = memo(CinematicScene);
+
+function CinematicNumberLine({ from, to, state }: { from: number; to: number; state: NumberLineState }) {
+  const width = 680;
+  const pad = 26;
+  const y = 122;
+  const x = (value: number) => pad + ((value - from) / (to - from)) * (width - pad * 2);
+  const points = state.points ?? [];
+  const jump = state.jumps?.[0];
+  const current = points.length ? points[points.length - 1] : 0;
   return (
-    <div className="flex w-full max-w-lg flex-wrap items-center justify-center gap-2 px-1" aria-hidden="true" data-testid="narrada-elementos-visuais">
-      {keywords.map((word, i) => (
-        <div
-          key={scene.id + ':' + word}
-          className={`anim-tile-in flex min-w-0 max-w-[45%] items-center gap-1.5 rounded-xl border px-2 py-1.5 shadow-sm transition-all duration-300 sm:gap-2 sm:px-3 sm:py-2 ${palettes[i % palettes.length]} `}
-          style={{ animationDelay: `${i * 90}ms` }}
-        >
-          <span className="anim-bob grid h-7 w-8 shrink-0 place-items-center sm:h-9 sm:w-10"><Illustration name={artFor(word)} animate className="h-7 w-8 sm:h-9 sm:w-10" /></span>
-          <span className="min-w-0 truncate text-xs font-bold sm:text-sm">{word}</span>
-          <span className="hidden text-[0.58rem] font-bold uppercase tracking-wider opacity-65 sm:inline">{['IDEIA', 'LIGAÇÃO', 'EXEMPLO'][i]}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function SceneView({ scene, reveal }: { scene: Scene; reveal: number }) {
-  const v = scene.visual;
-  if (v.kind === 'title')
-    return (
-      <div className="flex w-full max-w-lg flex-col items-center text-center">
-        {v.art && <Illustration name={v.art} animate className="h-28 w-36 text-ink" />}
-        <h2 className="anim-tile-in mt-2 text-[1.9rem] leading-tight sm:text-[2.3rem]">{v.title}</h2>
-        {v.subtitle && reveal >= 2 && <p className="anim-tile-in mt-2 font-title text-lg italic text-muted">{v.subtitle}</p>}
-      </div>
-    );
-  if (v.kind === 'timeline')
-    return (
-      <ol className="relative w-full max-w-xl border-l-2 border-line pl-5">
-        {v.items.map((it, i) => (
-          <li
-            key={it.year + it.title}
-            className={`relative pb-3 transition-all duration-500 last:pb-0 ${i === reveal - 1 ? 'anim-tile-in' : ''} ${i < reveal ? 'translate-x-0 opacity-100' : 'translate-x-2 opacity-20'}`}
-          >
-            <span className={`absolute -left-[1.72rem] top-1.5 h-3 w-3 rounded-full border-2 ${i < reveal ? 'border-gold bg-gold' : 'border-line bg-bg'}`} aria-hidden="true" />
-            <p className="font-title text-sm tabular-nums text-gold">{it.year}</p>
-            <p className={`font-title leading-tight ${i === reveal - 1 ? 'text-lg' : 'text-base'}`}>{it.title}</p>
-            {i === reveal - 1 && <p className="anim-tile-in mt-0.5 text-sm text-muted">{it.text}</p>}
-          </li>
+    <div className="ccv-numberline">
+      <svg viewBox={`0 0 ${width} 210`} role="img" aria-label="Reta numérica animada">
+        <path d={`M${pad} ${y} H${width - pad}`} className="ccv-numberline__base" />
+        {Array.from({ length: to - from + 1 }, (_, index) => from + index).map((number) => (
+          <g key={number}>
+            <path d={`M${x(number)} ${y - 14} V${y + 14}`} className="ccv-numberline__tick" />
+            <text x={x(number)} y={y + 43} textAnchor="middle" className="ccv-numberline__label">{number}</text>
+          </g>
         ))}
-      </ol>
-    );
-  if (v.kind === 'numberline') return <NumberLine from={v.from} to={v.to} state={v.states[reveal] ?? {}} />;
-  if (v.kind === 'cards')
-    return (
-      <div className={`grid w-full gap-3 ${v.cards.length > 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2'}`}>
-        {v.cards.map((c, i) => {
-          const subject = (c.title + ' ' + c.text).toLowerCase();
-          const art = /computador|processador|\\bcpu\\b|hardware|máquina/.test(subject)
-            ? 'computador'
-            : /rede|servidor|roteador|\\bip\\b/.test(subject)
-              ? 'rede'
-              : /dado|memória|arquivo|banco|guardar/.test(subject)
-                ? 'dados'
-                : /nuvem|internet/.test(subject)
-                  ? 'nuvem'
-                  : (['livro', 'teclado', 'computador', 'dados'] as const)[i % 4];
-          return (
-            <div
-              key={c.title}
-              className={`rounded-2xl border p-4 transition-all duration-500 sm:p-5 ${i === reveal - 1 ? 'anim-tile-in' : ''} ${['border-[#2e7182]/35 bg-[#d6e7e6] text-[#172e34]','border-[#c8402a]/30 bg-[#f3d7ca] text-[#3a211c]','border-[#9e6a14]/30 bg-[#f0e3bd] text-[#3b2c12]','border-[#a8365e]/30 bg-[#edd6e0] text-[#3c2030]'][i % 4]} ${i < reveal ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-25'} ${i === reveal - 1 ? 'scale-[1.02] shadow-lg ring-2 ring-[#c8402a]/35' : ''}`}
-            >
-              <div className="mb-2 flex items-center gap-2">
-                <Illustration name={art} animate className="h-10 w-12 shrink-0" />
-                <p className="font-title text-lg leading-tight">{c.title}</p>
-              </div>
-              <p className="text-sm leading-relaxed">{c.text}</p>
-            </div>
-          );
-        })}
-      </div>
-    );
-  return (
-    <div className="w-full max-w-md">
-      <div className="space-y-1 text-center font-title text-[1.8rem] tabular-nums sm:text-[2.2rem]">
-        {v.lines.map((line, i) =>
-          i < reveal ? (
-            <p key={line} className={`anim-tile-in leading-tight ${i === reveal - 1 ? 'text-ink' : 'text-muted'}`}>
-              {line}
-              {i === reveal - 1 && <span className="ml-2 inline-block h-2 w-2 rounded-full bg-gold align-middle" aria-hidden="true" />}
-            </p>
-          ) : null,
-        )}
-      </div>
-      {v.note && reveal >= v.lines.length && <p className="anim-tile-in mx-auto mt-4 w-fit border-l-2 border-gold pl-3 text-sm">{v.note}</p>}
+        {jump && <path key={`${jump.from}-${jump.to}`} d={`M${x(jump.from)} ${y - 12} Q${(x(jump.from) + x(jump.to)) / 2} 18 ${x(jump.to)} ${y - 12}`} className="ccv-numberline__jump" pathLength="1" />}
+        {points.map((number, index) => (
+          <circle key={number + ':' + index} cx={x(number)} cy={y} r={index === points.length - 1 ? 12 : 7} className={index === points.length - 1 ? 'ccv-numberline__point is-current' : 'ccv-numberline__point'} />
+        ))}
+      </svg>
+      <div className="ccv-numberline__readout"><span>POSIÇÃO</span><strong>{current > 0 ? '+' + current : String(current)}</strong>{jump && <em>{jump.from} → {jump.to}</em>}</div>
     </div>
-  );
-}
-
-/** Reta numérica: marcas, números, pontos e saltos em arco que se desenham. */
-function NumberLine({ from, to, state }: { from: number; to: number; state: NumberLineState }) {
-  const W = 640;
-  const pad = 30;
-  const step = (W - 2 * pad) / (to - from);
-  const X = (n: number) => pad + (n - from) * step;
-  const y = 110;
-  const nums = Array.from({ length: to - from + 1 }, (_, i) => from + i);
-  return (
-    <svg viewBox={`0 0 ${W} 160`} className="h-auto w-full max-w-2xl" role="img" aria-label="Reta numérica">
-      <line x1={pad - 14} y1={y} x2={W - pad + 14} y2={y} stroke="currentColor" strokeWidth="1.6" />
-      {nums.map((n) => (
-        <g key={n}>
-          <line x1={X(n)} y1={y - 6} x2={X(n)} y2={y + 6} stroke="currentColor" strokeWidth={n === 0 ? 2 : 1.2} />
-          <text x={X(n)} y={y + 26} textAnchor="middle" fontSize="15" fill="currentColor" fontFamily="var(--font-text)" className="tabular-nums">
-            {n < 0 ? `−${-n}` : n}
-          </text>
-        </g>
-      ))}
-      <g className="draw">
-        {(state.jumps ?? []).map((j) => {
-          const x1 = X(j.from);
-          const x2 = X(j.to);
-          const h = Math.min(70, 18 + Math.abs(x2 - x1) * 0.25);
-          const dir = x2 > x1 ? 1 : -1;
-          return (
-            <g key={`${j.from}-${j.to}`}>
-              <path pathLength={1} d={`M${x1} ${y - 8} Q${(x1 + x2) / 2} ${y - 8 - h * 2} ${x2} ${y - 8}`} fill="none" stroke="rgb(var(--gold))" strokeWidth="2.4" />
-              <path pathLength={1} d={`M${x2 - dir * 9} ${y - 18} L${x2} ${y - 8} L${x2 - dir * 1} ${y - 21}`} fill="none" stroke="rgb(var(--gold))" strokeWidth="2.4" />
-            </g>
-          );
-        })}
-      </g>
-      {(state.points ?? []).map((n, i) => (
-        <circle key={`${n}-${i}`} cx={X(n)} cy={y} r={7} fill={i === (state.points ?? []).length - 1 ? 'rgb(var(--gold))' : 'rgb(var(--ink))'} className="anim-tile-in" />
-      ))}
-    </svg>
   );
 }
