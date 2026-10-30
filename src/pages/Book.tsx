@@ -86,7 +86,7 @@ function BlockView({ b, chapterId, measuring }: { b: BookBlock; chapterId: strin
       );
     case 'md':
       return (
-        <div className="prose-manuscript">
+        <div className="prose-manuscript lesson-material">
           <div className={b.first ? 'illuminated' : ''}>
             <Markdown>{b.md}</Markdown>
           </div>
@@ -164,7 +164,7 @@ function ContinuousReading({ blocks, chapterId, onEnd }: { blocks: BookBlock[]; 
     return () => io.disconnect();
   }, [blocks]);
   return (
-    <div ref={ref} className="manuscript parchment-aged flex-1 rounded-[1.4rem] px-5 py-4" role="article" aria-label="Leitura contínua">
+    <div ref={ref} className="manuscript parchment-aged lesson-material flex-1 rounded-[1.4rem] px-5 py-4" role="article" aria-label="Leitura contínua">
       <div className="mx-auto max-w-[42rem] space-y-3">
         {blocks.map((b, i) => (
           <div key={i} data-end={b.kind === 'end' ? b.sectionId : undefined}>

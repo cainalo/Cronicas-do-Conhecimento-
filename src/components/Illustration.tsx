@@ -311,6 +311,135 @@ const ART = {
     ),
     accent: <rect x="130" y="12" width="8" height="8" />,
   },
+
+  processador: {
+    draw: (
+      <>
+        <rect {...L} x="48" y="27" width="64" height="64" rx="7" />
+        <rect {...L} x="63" y="42" width="34" height="34" rx="3" />
+        <path {...L} d="M58 27V15M72 27V15M86 27V15M100 27V15M58 103V91M72 103V91M86 103V91M100 103V91M48 39H34M48 53H34M48 67H34M48 81H34M126 39H112M126 53H112M126 67H112M126 81H112" />
+        <path {...L} d="M19 111H141M78 42v34M63 59h34" />
+      </>
+    ),
+    accent: <rect x="76" y="54" width="8" height="10" rx="2" />,
+  },
+  processo: {
+    draw: (
+      <>
+        <rect {...L} x="22" y="25" width="116" height="78" rx="6" />
+        <path {...L} d="M22 41h116M34 33h2M43 33h2M52 33h2" />
+        <rect {...L} x="34" y="54" width="36" height="9" rx="2" />
+        <rect {...L} x="34" y="70" width="56" height="7" rx="2" />
+        <rect {...L} x="34" y="84" width="75" height="7" rx="2" />
+        <path {...L} d="M105 55h20M115 55v32M105 87h20" />
+      </>
+    ),
+    accent: <circle cx="121" cy="55" r="4" />,
+  },
+  identificador: {
+    draw: (
+      <>
+        <path {...L} d="M80 14L136 35V70Q132 104 80 116Q28 104 24 70V35Z" />
+        <circle {...L} cx="80" cy="55" r="17" />
+        <path {...L} d="M49 91Q53 74 80 74Q107 74 111 91M59 101h42" />
+        <path {...L} d="M42 42l-9-7M118 42l9-7" />
+      </>
+    ),
+    accent: <path d="M80 31L85 40L95 45L85 50L80 60L75 50L65 45L75 40Z" />,
+  },
+  threads: {
+    draw: (
+      <>
+        <rect {...L} x="16" y="20" width="128" height="85" rx="8" />
+        <path {...L} d="M31 39H129M31 55H129M31 71H129M31 87H129" />
+        <path {...L} d="M45 31v16M76 47v16M106 63v16M61 79v16M120 31v16" />
+        <circle {...L} cx="45" cy="39" r="4" />
+        <circle {...L} cx="76" cy="55" r="4" />
+        <circle {...L} cx="106" cy="71" r="4" />
+        <circle {...L} cx="61" cy="87" r="4" />
+      </>
+    ),
+    accent: <circle cx="120" cy="39" r="5" />,
+  },
+  'estados-processo': {
+    draw: (
+      <>
+        <rect {...L} x="8" y="47" width="42" height="29" rx="7" />
+        <rect {...L} x="59" y="12" width="42" height="29" rx="7" />
+        <rect {...L} x="110" y="47" width="42" height="29" rx="7" />
+        <path {...L} d="M50 55L64 36M101 36l14 19M129 76v18H29V76" />
+        <path {...L} d="M57 45l7-9 3 12M105 37l10 3-2 10M23 86l6 8 6-8" />
+      </>
+    ),
+    accent: <circle cx="80" cy="27" r="5" />,
+  },
+  escalonador: {
+    draw: (
+      <>
+        <path {...L} d="M18 104H142M28 88H132M38 72H122M48 56H112" />
+        <rect {...L} x="23" y="26" width="28" height="14" rx="3" />
+        <rect {...L} x="66" y="26" width="28" height="14" rx="3" />
+        <rect {...L} x="109" y="26" width="28" height="14" rx="3" />
+        <path {...L} d="M37 40v14M80 40v14M123 40v14M80 56v16" />
+        <path {...L} d="M71 65l9 9 9-9" />
+      </>
+    ),
+    accent: <rect x="67" y="83" width="26" height="8" rx="3" />,
+  },
+  'dns-consulta': {
+    draw: (
+      <>
+        <rect {...L} x="9" y="43" width="35" height="32" rx="5" />
+        <rect {...L} x="63" y="15" width="34" height="32" rx="5" />
+        <rect {...L} x="116" y="43" width="35" height="32" rx="5" />
+        <path {...L} d="M44 52L63 38M97 38l19 14M80 47v42M62 89h36" />
+        <path {...L} d="M74 83l6 7 6-7M19 54h15M19 63h15M72 27h16M72 35h16M126 54h15M126 63h15" />
+      </>
+    ),
+    accent: <circle cx="80" cy="99" r="5" />,
+  },
+  'cripto-roda': {
+    draw: (
+      <>
+        <circle {...L} cx="80" cy="62" r="43" />
+        <circle {...L} cx="80" cy="62" r="28" />
+        <circle {...L} cx="80" cy="62" r="9" />
+        <path {...L} d="M80 11v10M80 103v10M29 62h10M121 62h10M44 26l7 7M109 91l7 7M44 98l7-7M109 33l7-7" />
+        <path {...L} d="M80 19V8M72 16h16" />
+      </>
+    ),
+    accent: <path d="M80 46L85 57L97 62L85 67L80 79L75 67L63 62L75 57Z" />,
+  },
+  'rede-neural': {
+    draw: (
+      <>
+        <path {...L} d="M33 27L80 48M33 62L80 62M33 97L80 76M80 48L127 27M80 62L127 62M80 76L127 97" />
+        <circle {...L} cx="25" cy="27" r="9" />
+        <circle {...L} cx="25" cy="62" r="9" />
+        <circle {...L} cx="25" cy="97" r="9" />
+        <circle {...L} cx="80" cy="48" r="10" />
+        <circle {...L} cx="80" cy="62" r="10" />
+        <circle {...L} cx="80" cy="76" r="10" />
+        <circle {...L} cx="135" cy="27" r="9" />
+        <circle {...L} cx="135" cy="62" r="9" />
+        <circle {...L} cx="135" cy="97" r="9" />
+      </>
+    ),
+    accent: <circle cx="80" cy="62" r="5" />,
+  },
+  'modelo-relacional': {
+    draw: (
+      <>
+        <rect {...L} x="13" y="18" width="53" height="88" rx="4" />
+        <rect {...L} x="94" y="18" width="53" height="88" rx="4" />
+        <path {...L} d="M13 37h53M94 37h53M25 49h28M25 62h28M25 75h28M106 49h28M106 62h28M106 75h28" />
+        <path {...L} d="M66 60h28M85 52l9 8-9 8" />
+        <path {...L} d="M22 27h12M103 27h12" />
+      </>
+    ),
+    accent: <rect x="25" y="49" width="28" height="8" rx="2" />,
+  },
+
 } satisfies Record<string, Art>;
 
 export type IllustrationName = keyof typeof ART;

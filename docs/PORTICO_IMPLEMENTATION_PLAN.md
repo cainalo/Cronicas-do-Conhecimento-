@@ -79,3 +79,12 @@ Este documento é o ponto de continuidade técnico para a próxima sessão de de
 - Voltar/fechar retorna à origem real da navegação.
 - Marca usa assets oficiais, não uma aproximação tipográfica.
 - Build e testes passam; release é verificado, não presumido.
+
+
+## Adendo pedagógico — 30/10/2026
+- **Aulas imersivas:** as telas internas da trilha não recebem barra superior nem navegação global; apenas X, progresso e controles de etapa.
+- **Texto completo:** no Aprender, oferecer a explicação guiada e uma alternância para ler o texto integral da seção da matéria; não substituir uma forma pela outra.
+- **Ênfase editorial:** negritos sublinhados com filete ocre e marcação explícita `++termo++`; usar `.lesson-material` para leitura de apostila, com hierarquia de títulos, tabelas, exemplos e citações.
+- **Personagens professores:** usar `TeacherCharacter` (corpo inteiro) e `TeacherCue` em pontos didáticos; atribuir capítulo ao professor correto pelo mapa em `teacherForChapter`. A narração deve identificar o professor-apresentador.
+- **Aulas no estúdio:** perfis de professores mostram as narradas atribuídas a cada docente; continuar a criar aulas autorais adicionais, sem alegar vídeos reais quando se tratar de narração local do app.
+- **Ilustrações:** acrescentar diagramas SVG únicos por conceito em `Illustration.tsx`; não reciclar um desenho genérico para tópicos diferentes. Verificar acessibilidade e contraste.

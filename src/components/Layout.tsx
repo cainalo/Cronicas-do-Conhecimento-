@@ -92,7 +92,7 @@ export function Layout() {
   const inner = !isAreaHome(pathname);
   // Leitura/prática ocultam a navegação inferior; aula narrada standalone ocupa a viewport inteira.
   const standaloneNarration = /^\/aula-narrada\//.test(pathname);
-  const immersive = standaloneNarration || /^\/(capitulo|aprender|pratica|licao|missao)\//.test(pathname);
+  const immersive = standaloneNarration || /^\\/(capitulo|aprender|pratica|licao|missao|video|trilha-post)\\//.test(pathname);
   const onAccount = areaOf(pathname) === 'conta';
 
   // As barras desaparecem ao ler para baixo e voltam quando o usuário sobe.
@@ -113,7 +113,7 @@ export function Layout() {
   }, [pathname]);
   return (
     <div className={standaloneNarration ? "h-dvh overflow-hidden" : "flex min-h-dvh flex-col"}>
-      {!standaloneNarration && <header className={`app-bar app-bar-top safe-top sticky top-0 z-30 ${chromeVisible || immersive ? '' : 'is-scroll-hidden'}`}>
+      {!standaloneNarration && !immersive && <header className={`app-bar app-bar-top safe-top sticky top-0 z-30 ${chromeVisible || immersive ? '' : 'is-scroll-hidden'}`}>
         <div className="relative mx-auto grid h-14 max-w-5xl grid-cols-[minmax(2.5rem,1fr)_auto_minmax(2.5rem,1fr)] items-center gap-3 px-4 sm:px-6">
           <div className="flex min-w-0 items-center gap-1.5">
             <Link to="/" className="-ml-1 grid h-10 w-10 shrink-0 place-items-center rounded-xl transition hover:bg-ink/5" aria-label="Pórtico, início">

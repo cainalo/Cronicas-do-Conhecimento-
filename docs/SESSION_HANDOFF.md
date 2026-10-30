@@ -107,3 +107,13 @@ Antes: `npm test` 792/792; `tsc -b` OK; build OK; capturas 390×844 (claro/escur
 2. Quando o usuário enviar os PDFs, ampliar `legislacao/cap02-normas/02-goias-tce.md` e `institucional/cap02-goias/*` e suas questões.
 3. Narrativa: falas extras por marco (nível, selos) se o usuário quiser.
 4. Ideias pendentes: virada de página no leitor, ilustrações nas margens.
+
+
+## Decisão pedagógica reforçada — 30/10/2026
+- As rotas de Aprender, Praticar, lição, missão, videoaula e post didático são imersivas: não exibir o cabeçalho global nem o menu global; manter apenas o X, progresso e controles próprios da atividade.
+- Aprender precisa parecer material didático completo: explicação guiada em partes e opção de abrir o texto integral da seção/capítulo no mesmo fluxo. Negritos do material aparecem sublinhados em estilo editorial; a sintaxe de sublinhado explícito é `++termo++` e usa a classe `term-underline`.
+- A tipografia `.lesson-material` é compartilhada entre leitura integral do capítulo e o painel de material integral dentro do Aprender.
+- Elenco ampliado de docentes por disciplina, com sistema vetorial `TeacherCharacter` e `TeacherCue`: cada docente tem aparência, vestuário, objeto, pose, personalidade, interesses e referências. O perfil do professor inclui o “Estúdio de aulas”, com aulas narradas associadas ao docente.
+- Microaulas e Praticar passam a apresentar o professor da matéria nas aberturas, explicações, checagens, prática, questão e conclusão. A aula narrada também identifica seu professor apresentador.
+- Novas ilustrações vetoriais técnicas próprias em `Illustration.tsx`: processador, processo, identificador, threads, estados de processo, escalonador, consulta DNS, roda criptográfica, rede neural e modelo relacional. Cada arte tem nome semântico próprio e desenho único.
+- Ao alterar o shell global, não mudar as decisões de navegação imersiva das aulas. Confirmar testes de ausência do cabeçalho global nas rotas da trilha.

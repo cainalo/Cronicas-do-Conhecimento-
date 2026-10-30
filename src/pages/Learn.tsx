@@ -9,7 +9,7 @@ import { usePrefs } from '@/app/prefs';
 import { useFx } from '@/app/fx';
 import { useSession } from '@/app/useSession';
 import { learnKey, seriesKey } from '@/lib/pace';
-import { getChapter, getLearningUnit, getSectionExtras, getSimpleSection, microSeries } from '@/content';
+import { getChapter, getLearningUnit, getSectionExtras, getSimpleSection, microSeries, teacherForChapter } from '@/content';
 import { InteractiveUnitPage } from '@/pages/InteractiveUnit';
 import { MicroLessonPage } from './MicroLesson';
 import { markSectionRead, setLastSection } from '@/lib/study';
@@ -18,7 +18,7 @@ import { roman } from '@/lib/roman';
 import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
 import { StepGuide } from '@/components/StepGuide';
-import { Mascot } from '@/components/Mascot';
+import { TeacherCue } from '@/components/TeacherCharacter';
 import { LeatherBook, Leaf, useSpread, visiblePages } from '@/components/LeatherBook';
 import { Pegadinha } from './Book';
 
@@ -72,6 +72,7 @@ function SimpleLearnPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const chapter = getChapter(chapterId);
+  const teacher = teacherForChapter(chapterId);
   const idx = chapter?.sections.findIndex((s) => s.id === sectionId) ?? -1;
   const section = chapter?.sections[idx];
   const simple = getSimpleSection(chapterId, sectionId);
@@ -130,7 +131,8 @@ function SimpleLearnPage() {
               <p className="kicker">Trecho {idx + 1}</p>
               <h1 className="mt-1 text-[1.6rem] leading-tight">{title}</h1>
             </div>
-            <p className="mt-6 border-l-2 border-gold pl-3 text-[0.98rem]">Vamos começar do começo, uma ideia por página. Vire a página quando estiver pronto.</p>
+            <TeacherCue teacher={teacher} pose="greeting" size={80} compact className="mt-4">{teacher.motto}</TeacherCue>
+            <p className="mt-4 border-l-2 border-gold pl-3 text-[0.98rem]">Vamos começar do começo, uma ideia por página. Vire a página quando estiver pronto.</p>
             <p className="mt-auto pt-3 text-center text-xs text-muted">
               {textTotal} páginas curtas · explicação do zero <Icon name="seta" size={12} className="inline" />
             </p>
@@ -144,15 +146,15 @@ function SimpleLearnPage() {
               {p.i + 1} de {textTotal}
             </p>
             <h2 className="mt-1 text-[1.4rem] leading-snug">{pg.title}</h2>
-            <div className="prose-manuscript learn-text mt-3">
+            <TeacherCue teacher={teacher} pose="presenting" size={58} compact className="mt-2">{teacher.speakingStyle}</TeacherCue>
+            <div className="prose-manuscript lesson-material learn-text mt-3">
               <div className={p.i === 0 ? 'illuminated' : ''}>
                 <Markdown>{pg.text}</Markdown>
               </div>
             </div>
             {p.i === textTotal - 1 ? (
-              <div className="mt-auto flex items-end gap-2 pt-2">
-                <Mascot mood="cheer" size={52} />
-                <span className="mb-4 text-sm text-muted">Agora as palavras novas.</span>
+              <div className="mt-auto pt-2">
+                <TeacherCue teacher={teacher} pose="celebrating" size={60} compact>Agora vamos guardar as palavras novas.</TeacherCue>
               </div>
             ) : (
               <Vignette i={p.i} />
@@ -163,6 +165,7 @@ function SimpleLearnPage() {
       case 'words':
         return (
           <div className="prose-manuscript">
+            <TeacherCue teacher={teacher} pose="presenting" size={58} compact className="mb-3">Estas palavras vão aparecer de novo nas atividades.</TeacherCue>
             <h3 className="!mt-0">Palavras novas</h3>
             <dl className="space-y-2.5">
               {simple.words.map((w) => (
@@ -177,6 +180,7 @@ function SimpleLearnPage() {
       case 'checks':
         return (
           <div className="prose-manuscript !text-[0.95em]">
+            <TeacherCue teacher={teacher} pose="thinking" size={62} compact className="mb-3">Vamos conferir sem pressão. Leia cada frase com atenção.</TeacherCue>
             <h3 className="!mt-0">Você entendeu?</h3>
             <p className="!mb-2 text-sm text-muted">Toque em verdadeiro ou falso. Não vale nota.</p>
             <ul className="!m-0 !list-none space-y-2 !pl-0 [&>li]:before:!content-none">
@@ -190,7 +194,7 @@ function SimpleLearnPage() {
         const done = practiceDone(data, chapterId, sectionId);
         return (
           <div className="flex h-full flex-col items-center justify-center text-center">
-            <Mascot mood="cheer" size={92} />
+            <TeacherCue teacher={teacher} pose="celebrating" size={112}>{teacher.motto}</TeacherCue>
             <h2 className="mt-2 text-[1.5rem]">Trecho aprendido!</h2>
             <p className="mt-1 max-w-xs text-sm text-muted">{extras?.outro ?? 'Agora pratique um pouco para não esquecer.'}</p>
             <Link to={`/pratica/${chapterId}/${sectionId}`} className="btn-primary mt-5 w-full max-w-xs" data-testid={`praticar-${sectionId}`}>

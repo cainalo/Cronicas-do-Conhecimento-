@@ -105,6 +105,106 @@ export const teachers: FictionalTeacher[] = [
     tone: 'pink',
     fictional: true,
   },
+  {
+    id: 'prof.nina', handle: 'nina.inteligencia', topics: ['Inteligência artificial', 'Modelos de linguagem', 'Ética em IA'],
+    name: 'Professora Nina', expertiseLabel: 'Inteligência artificial e modelos de linguagem',
+    biography: 'Nina é uma pesquisadora fictícia de IA que gosta de separar demonstração impressionante de evidência. Faz perguntas sobre dados, contexto, limites e impacto antes de aceitar uma resposta gerada por um modelo.',
+    personalStyle: 'Corte bob azul-escuro, óculos redondos, jaqueta ameixa com pequenos pins de conferências e tablet cheio de esquemas.',
+    interests: ['linguagem e cognição', 'museus de ciência', 'visualização de dados', 'xadrez'],
+    references: [{ label: 'NIST AI Risk Management Framework', url: 'https://www.nist.gov/itl/ai-risk-management-framework' }],
+    motto: 'Uma resposta convincente ainda precisa de verificação.',
+    speakingStyle: 'Investigativa e curiosa; compara exemplos, pede evidências e mostra como avaliar limitações e riscos sem demonizar a tecnologia.',
+    tone: 'azure', fictional: true,
+  },
+  {
+    id: 'prof.ravi', handle: 'ravi.codigo', topics: ['Programação', 'Algoritmos', 'Engenharia de software'],
+    name: 'Professor Ravi', expertiseLabel: 'Desenvolvimento de software e algoritmos',
+    biography: 'Ravi é um desenvolvedor fictício que ensina a pensar em etapas pequenas. Gosta de transformar problemas confusos em entradas, regras, saídas e testes que qualquer pessoa da equipe consegue revisar.',
+    personalStyle: 'Cabelo baixo nas laterais e cacheado no topo, jaqueta verde-oliva, camiseta clara e pulseira de tecido de eventos de tecnologia.',
+    interests: ['programação competitiva', 'música instrumental', 'bicicletas', 'projetos open source'],
+    references: [{ label: 'The Twelve-Factor App', url: 'https://12factor.net/' }],
+    motto: 'Código bom é aquele que outra pessoa consegue entender.',
+    speakingStyle: 'Prático e colaborativo; desenha fluxos, faz perguntas de depuração e mostra como testar cada hipótese antes de mudar várias coisas.',
+    tone: 'leaf', fictional: true,
+  },
+  {
+    id: 'prof.mateus', handle: 'mateus.dados', topics: ['Banco de dados', 'SQL', 'Modelagem'],
+    name: 'Professor Mateus', expertiseLabel: 'Banco de dados e análise de dados',
+    biography: 'Mateus é um analista fictício de dados que enxerga tabelas como registros de uma história. Ensina a modelar antes de consultar, conferir a qualidade dos dados e explicar o resultado para quem tomou a decisão.',
+    personalStyle: 'Óculos retangulares, cabelo castanho curto, jaqueta azul-petróleo, caderno quadriculado e cartões de relacionamento entre tabelas.',
+    interests: ['estatística aplicada', 'mapas', 'quebra-cabeças', 'café coado'],
+    references: [{ label: 'PostgreSQL — documentação SQL', url: 'https://www.postgresql.org/docs/current/sql.html' }],
+    motto: 'Antes de perguntar aos dados, organize a pergunta.',
+    speakingStyle: 'Preciso e paciente; usa tabelas pequenas, exemplos concretos e compara o resultado esperado com o resultado obtido.',
+    tone: 'teal', fictional: true,
+  },
+  {
+    id: 'prof.marina', handle: 'marina.gestao', topics: ['Governança', 'Gestão de TI', 'Serviços'],
+    name: 'Professora Marina', expertiseLabel: 'Governança e gestão de tecnologia',
+    biography: 'Marina é uma gestora fictícia que conecta tecnologia a objetivos públicos e organizacionais. Gosta de mostrar quem decide, quem executa, como se mede resultado e como se presta contas.',
+    personalStyle: 'Trança lateral, blazer verde-oliva, camisa creme, relógio discreto e uma pasta de mapas de processos.',
+    interests: ['gestão de projetos', 'arquitetura de serviços', 'jardinagem', 'fotografia urbana'],
+    references: [{ label: 'COBIT — ISACA', url: 'https://www.isaca.org/resources/cobit' }],
+    motto: 'Tecnologia precisa entregar valor que possa ser demonstrado.',
+    speakingStyle: 'Organizada e estratégica; monta quadros de responsabilidade, relaciona decisões com evidências e evita siglas sem explicar o papel de cada uma.',
+    tone: 'leaf', fictional: true,
+  },
+  {
+    id: 'prof.beatriz', handle: 'bia.normas', topics: ['Legislação', 'Direito público', 'Controle externo'],
+    name: 'Professora Beatriz', expertiseLabel: 'Legislação e administração pública',
+    biography: 'Beatriz é uma professora fictícia de direito público que ensina a ler normas sem decorar frases isoladas. Primeiro identifica competência, sujeito, condição e consequência; depois compara artigos e exceções.',
+    personalStyle: 'Coque baixo, óculos finos, blazer ameixa, camisa de gola alta e marcador de texto ocre preso ao caderno.',
+    interests: ['história institucional', 'arquivos públicos', 'literatura brasileira', 'debates'],
+    references: [{ label: 'Constituição Federal — Portal da Legislação', url: 'https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm' }],
+    motto: 'Leia a regra inteira antes de concluir o que ela permite.',
+    speakingStyle: 'Clara e criteriosa; separa regra, exceção e competência, sempre pedindo que o estudante encontre o fundamento no texto.',
+    tone: 'pink', fictional: true,
+  },
+  {
+    id: 'prof.sofia', handle: 'sofia.reads', topics: ['Inglês', 'Leitura técnica', 'Vocabulário'],
+    name: 'Professora Sofia', expertiseLabel: 'Língua inglesa e leitura técnica',
+    biography: 'Sofia é uma professora fictícia de inglês que ensina a ler primeiro pelo contexto. Ajuda a reconhecer cognatos, conectores, referência pronominal e a ideia central antes de traduzir palavra por palavra.',
+    personalStyle: 'Cabelo ruivo ondulado com faixa verde, jaqueta terracota, camiseta clara e cartões de vocabulário ilustrados.',
+    interests: ['cinema', 'literatura de viagem', 'línguas', 'música ao vivo'],
+    references: [{ label: 'British Council — LearnEnglish', url: 'https://learnenglish.britishcouncil.org/' }],
+    motto: 'Entenda a ideia antes de caçar cada palavra.',
+    speakingStyle: 'Animada e acolhedora; lê trechos em voz alta, destaca conectores e mostra como o contexto muda o sentido.',
+    tone: 'ember', fictional: true,
+  },
+  {
+    id: 'prof.helena', handle: 'helena.textos', topics: ['Português', 'Interpretação', 'Gramática'],
+    name: 'Professora Helena', expertiseLabel: 'Língua portuguesa e interpretação',
+    biography: 'Helena é uma professora fictícia de português que aproxima gramática e leitura real. Gosta de mostrar como a pontuação, a escolha de palavras e a organização das ideias mudam o sentido de um texto.',
+    personalStyle: 'Cabelo longo escuro com faixa ocre, jaqueta azul-petróleo, caderno de capa ilustrada e canetas de várias cores.',
+    interests: ['crônicas', 'teatro', 'clubes de leitura', 'revisão editorial'],
+    references: [{ label: 'ABL — Academia Brasileira de Letras', url: 'https://www.academia.org.br/' }],
+    motto: 'A forma também constrói o sentido.',
+    speakingStyle: 'Expressiva e cuidadosa; lê exemplos em voz alta, compara versões de frases e estimula a justificar interpretações com pistas do texto.',
+    tone: 'teal', fictional: true,
+  },
+  {
+    id: 'prof.augusto', handle: 'augusto.instituicoes', topics: ['Instituições públicas', 'Constituição', 'Tribunais de contas'],
+    name: 'Professor Augusto', expertiseLabel: 'Instituições e organização do Estado',
+    biography: 'Augusto é um professor fictício de organização institucional que conecta órgãos, competências e controles. Prefere desenhar relações entre instituições a apresentar listas de nomes para decorar.',
+    personalStyle: 'Cabelo grisalho curto, óculos discretos, paletó azul-petróleo, camisa clara e pasta de documentos com abas coloridas.',
+    interests: ['história política', 'arquitetura cívica', 'xadrez', 'memória institucional'],
+    references: [{ label: 'Constituição do Estado de Goiás — Assembleia Legislativa', url: 'https://portal.al.go.leg.br/' }],
+    motto: 'Uma instituição se entende pelo que pode fazer e por quem a controla.',
+    speakingStyle: 'Sereno e didático; usa organogramas, exemplos de competências e perguntas de comparação para evitar confundir órgãos e funções.',
+    tone: 'teal', fictional: true,
+  },
+  {
+    id: 'prof.caio', handle: 'caio.plataforma', topics: ['Computação em nuvem', 'DevOps', 'Infraestrutura'],
+    name: 'Professor Caio', expertiseLabel: 'Nuvem, infraestrutura e DevOps',
+    biography: 'Caio é um engenheiro fictício de plataforma que acompanha o caminho do código até o serviço em produção. Ensina a pensar em automação, observabilidade, capacidade, recuperação e responsabilidade operacional.',
+    personalStyle: 'Cabelo escuro em degradê, headset leve, jaqueta azul-petróleo com detalhes ocre e um pequeno tablet de monitoramento.',
+    interests: ['automação residencial', 'laboratórios caseiros', 'trilhas', 'hardware'],
+    references: [{ label: 'DORA — Accelerate State of DevOps', url: 'https://dora.dev/' }],
+    motto: 'Entregar é só o começo; manter funcionando também é engenharia.',
+    speakingStyle: 'Objetivo e experimental; desenha pipelines, demonstra etapas de implantação e pergunta como saberemos se a mudança funcionou.',
+    tone: 'azure', fictional: true,
+  },
+
 ];
 
 const P = (p: Omit<TeacherPost, 'version' | 'review'>): TeacherPost => ({ version: 1, review: 'nao-revisado', ...p });
@@ -380,10 +480,174 @@ export const teacherPosts: TeacherPost[] = [
     },
   }),
 
+
+  P({
+    id: 'post.nina-rag-evidencia',
+    teacherId: 'prof.nina',
+    publishedAt: '2026-10-29',
+    kind: 'caso',
+    title: 'RAG melhora a resposta, mas não a torna infalível',
+    body: 'Uma equipe conectou um assistente a documentos internos e comemorou: agora ele “consulta a fonte”. Na primeira revisão, porém, o sistema recuperou um trecho antigo e respondeu com segurança. O cuidado não é só recuperar: é verificar atualidade, relevância, permissão de acesso e se a resposta realmente decorre do trecho citado. **Fonte recuperada não é sinônimo de conclusão correta.**',
+    chapterId: 'cap.ia.01',
+    sectionId: 'rag',
+    topicIds: ['ti.ia.rag'],
+    estimatedMinutes: 2,
+    challenge: {
+      statement: 'Um sistema RAG sempre produz respostas corretas porque consulta documentos externos ao modelo.',
+      answer: false,
+      why: 'A recuperação pode trazer documentos incompletos, antigos ou pouco relevantes. A geração ainda pode interpretar mal a evidência. Avaliação e rastreabilidade continuam necessárias.',
+    },
+  }),
+  P({
+    id: 'post.ravi-retries-api',
+    teacherId: 'prof.ravi',
+    publishedAt: '2026-10-29',
+    kind: 'caso',
+    title: 'A API caiu? Antes de repetir a requisição, pense no efeito',
+    body: 'Imagine que um cliente envia uma solicitação para criar um pagamento. A conexão cai antes de chegar a resposta. Repetir a chamada sem controle pode criar duas operações. Uma chave de idempotência permite reconhecer tentativas que representam a mesma intenção. **O tratamento de repetição precisa considerar o efeito da operação, não apenas o código HTTP.**',
+    chapterId: 'cap.dev.01',
+    sectionId: 'rest',
+    topicIds: ['ti.dev.api'],
+    estimatedMinutes: 2,
+    challenge: {
+      statement: 'Repetir automaticamente qualquer requisição POST após um timeout é sempre seguro.',
+      answer: false,
+      why: 'O servidor pode ter concluído a primeira operação mesmo que a resposta não tenha chegado. Para operações com efeito, use idempotência ou um mecanismo equivalente de deduplicação.',
+    },
+  }),
+  P({
+    id: 'post.mateus-modelagem',
+    teacherId: 'prof.mateus',
+    publishedAt: '2026-10-28',
+    kind: 'caso',
+    title: 'O mesmo endereço aparece em vinte registros',
+    body: 'Uma equipe guarda cliente, endereço e pedido na mesma tabela. Quando o cliente muda de endereço, alguém atualiza quinze linhas e esquece cinco. O resultado é uma inconsistência difícil de explicar. A pergunta de modelagem é: quais fatos pertencem a cada entidade e qual chave permite relacioná-las sem copiar o mesmo dado sem necessidade?',
+    chapterId: 'cap.dados.01',
+    sectionId: 'modelagem',
+    topicIds: ['ti.dados.modelagem'],
+    estimatedMinutes: 2,
+    challenge: {
+      statement: 'Separar cliente e pedido em tabelas relacionadas pode reduzir atualização duplicada e anomalias.',
+      answer: true,
+      why: 'A decomposição coerente evita repetir atributos do cliente em cada pedido, desde que as relações e chaves sejam modeladas corretamente.',
+    },
+  }),
+  P({
+    id: 'post.marina-indicador-governanca',
+    teacherId: 'prof.marina',
+    publishedAt: '2026-10-28',
+    kind: 'caso',
+    title: 'Um painel tem vinte indicadores e nenhuma decisão',
+    body: 'O comitê recebe um painel enorme, mas ninguém sabe qual decisão cada gráfico deveria apoiar. Comece pelo objetivo: que resultado se busca, quem responde por ele, qual evidência será observada e que ação muda quando o indicador sai da faixa esperada? **Métrica sem responsável e sem consequência vira decoração.**',
+    chapterId: 'cap.gov.01',
+    sectionId: 'governanca',
+    topicIds: ['ti.governanca.estrategia'],
+    estimatedMinutes: 2,
+    challenge: {
+      statement: 'Um indicador de governança é útil mesmo quando não existe responsável nem decisão associada.',
+      answer: false,
+      why: 'A medição precisa estar ligada a objetivos, responsabilidades e decisões; caso contrário, não orienta a gestão.',
+    },
+  }),
+  P({
+    id: 'post.beatriz-minimizacao-lgpd',
+    teacherId: 'prof.beatriz',
+    publishedAt: '2026-10-27',
+    kind: 'pegadinha',
+    title: '“Vai que um dia precisamos”: precisamos guardar todos os dados?',
+    body: 'Um formulário pede nome, documento, endereço, data de nascimento e informações que não têm relação com o serviço oferecido. A equipe diz que talvez esses dados sejam úteis no futuro. A pergunta jurídica e de projeto é mais simples: qual finalidade concreta justifica cada campo, por quanto tempo ele precisa existir e quem realmente precisa acessá-lo?',
+    chapterId: 'cap.leg.01',
+    sectionId: 'lgpd',
+    topicIds: ['ti.legislacao.lgpd'],
+    estimatedMinutes: 2,
+    challenge: {
+      statement: 'Coletar dados pessoais sem necessidade definida pode contrariar o princípio da necessidade.',
+      answer: true,
+      why: 'A coleta deve se limitar ao mínimo necessário para finalidades legítimas, específicas e informadas, observadas as bases legais aplicáveis.',
+    },
+  }),
+  P({
+    id: 'post.sofia-skimming-scanning',
+    teacherId: 'prof.sofia',
+    publishedAt: '2026-10-27',
+    kind: 'dica',
+    title: 'Você não precisa traduzir o manual inteiro',
+    body: 'Quando chegar um manual técnico em inglês, faça duas leituras diferentes. Primeiro, passe os olhos pelo título, subtítulos e primeira frase dos parágrafos para localizar a ideia geral. Depois, procure o dado específico que a tarefa pede: versão, parâmetro, aviso ou etapa. **Skimming procura a visão geral; scanning caça uma informação pontual.**',
+    chapterId: 'cap.ingles.01',
+    sectionId: 'estrategias',
+    topicIds: ['ti.ingles.leitura'],
+    estimatedMinutes: 1,
+  }),
+  P({
+    id: 'post.helena-pontuacao',
+    teacherId: 'prof.helena',
+    publishedAt: '2026-10-26',
+    kind: 'caso',
+    title: 'A vírgula mudou o responsável',
+    body: 'Compare: “Os servidores que concluíram o treinamento receberão acesso” e “Os servidores, que concluíram o treinamento, receberão acesso”. Na primeira frase, a oração delimita um grupo; na segunda, a informação aparece como explicação sobre o grupo inteiro. A pontuação não é enfeite: ela organiza a relação entre as ideias.',
+    chapterId: 'cap.port.01',
+    sectionId: 'interpretacao',
+    topicIds: ['ti.portugues.interpretacao'],
+    estimatedMinutes: 2,
+    challenge: {
+      statement: 'Em qualquer frase, inserir vírgulas em uma oração relativa mantém exatamente o mesmo sentido.',
+      answer: false,
+      why: 'A pontuação pode mudar o valor restritivo ou explicativo da oração e, portanto, alterar o alcance da informação.',
+    },
+  }),
+  P({
+    id: 'post.augusto-competencia',
+    teacherId: 'prof.augusto',
+    publishedAt: '2026-10-26',
+    kind: 'caso',
+    title: 'Quem pode fiscalizar não é necessariamente quem executa',
+    body: 'Num processo público, a unidade executora realiza uma atividade, a autoridade competente decide dentro de suas atribuições e o controle externo examina a legalidade e os resultados conforme a Constituição. Desenhar o fluxo de responsabilidades ajuda a separar execução, decisão, fiscalização e prestação de contas — funções que não devem ser confundidas.',
+    chapterId: 'cap.inst.01',
+    sectionId: 'administracao-publica',
+    topicIds: ['cg.legislacao.cf'],
+    estimatedMinutes: 2,
+    challenge: {
+      statement: 'Execução administrativa e controle externo são funções institucionais distintas.',
+      answer: true,
+      why: 'A Administração executa políticas e serviços; o controle externo atua nos termos constitucionais e legais para fiscalizar a gestão pública.',
+    },
+  }),
+  P({
+    id: 'post.caio-cicd-rollback',
+    teacherId: 'prof.caio',
+    publishedAt: '2026-10-25',
+    kind: 'caso',
+    title: 'Pipeline verde, serviço indisponível: o que faltou?',
+    body: 'O código passou nos testes e a imagem foi construída, mas a nova versão falhou depois do deploy. O pipeline não deve ser avaliado apenas pelo último selo verde: precisa incluir validação após a implantação, observabilidade e um plano de recuperação. Antes da mudança, defina como detectar impacto e quem decide interromper ou reverter a versão.',
+    chapterId: 'cap.devops.01',
+    sectionId: 'cicd',
+    topicIds: ['ti.devops.cicd'],
+    estimatedMinutes: 2,
+    challenge: {
+      statement: 'O sucesso da etapa de build garante, por si só, que a versão funcionará corretamente em produção.',
+      answer: false,
+      why: 'Build e testes prévios não substituem validação no ambiente, monitoramento e procedimentos de rollback.',
+    },
+  }),
+
 ];
 
 /** Quem assina os posts de cada capítulo no feed didático. */
 export function teacherForChapter(chapterId: string): FictionalTeacher {
-  const id = chapterId.startsWith('cap.mat') ? 'prof.clara' : chapterId === 'cap.infra.01' ? 'prof.davi' : chapterId.startsWith('cap.seg') || chapterId === 'cap.infra.02' ? 'prof.iara' : 'prof.lia';
-  return teachers.find((t) => t.id === id)!;
+  const prefix = chapterId.split('.')[1] ?? '';
+  const id =
+    prefix === 'mat' ? 'prof.clara' :
+    prefix === 'prim' ? (chapterId === 'cap.prim.02' ? 'prof.davi' : 'prof.lia') :
+    prefix === 'infra' ? (chapterId === 'cap.infra.01' ? 'prof.davi' : chapterId === 'cap.infra.02' ? 'prof.caio' : 'prof.lia') :
+    prefix === 'seg' ? 'prof.iara' :
+    prefix === 'ia' ? 'prof.nina' :
+    prefix === 'dev' || prefix === 'es' ? 'prof.ravi' :
+    prefix === 'dados' ? 'prof.mateus' :
+    prefix === 'gov' ? 'prof.marina' :
+    prefix === 'leg' ? 'prof.beatriz' :
+    prefix === 'devops' ? 'prof.caio' :
+    prefix === 'ingles' ? 'prof.sofia' :
+    prefix === 'port' ? 'prof.helena' :
+    prefix === 'inst' ? 'prof.augusto' : 'prof.lia';
+  return teachers.find((teacher) => teacher.id === id) ?? teachers[0];
 }

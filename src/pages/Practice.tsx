@@ -6,14 +6,14 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { returnToPreviousPage } from '@/lib/navigation';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
-import { DEFAULT_CONTEST_ID, concepts, getChapter, getLearningUnit, getSectionExtras, getSimpleSection, learningUnits, questionsForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, concepts, getChapter, getLearningUnit, getSectionExtras, getSimpleSection, learningUnits, questionsForContest, teacherForChapter } from '@/content';
 import { practiceUnlocked, taughtConcepts } from '@/lib/engine';
 import { buildPractice, completePractice, isRecovery, nextQueue, practiceId, recoveryFor, type Activity } from '@/lib/practice';
 import { useSession } from '@/app/useSession';
 import { recordAnswer, totalXp } from '@/lib/study';
 import { Icon } from '@/components/Icon';
 import { StepGuide } from '@/components/StepGuide';
-import { Mascot, SpeechBubble } from '@/components/Mascot';
+import { TeacherCue } from '@/components/TeacherCharacter';
 import { QuestionStem } from '@/components/QuestionCard';
 
 type Verdict = { ok: boolean; title: string; detail?: string; recovery?: Activity };
@@ -153,6 +153,7 @@ function PracticeRun() {
   const navigate = useNavigate();
   const location = useLocation();
   const chapter = getChapter(chapterId);
+  const teacher = teacherForChapter(chapterId);
   const section = chapter?.sections.find((s) => s.id === sectionId);
   const extras = getSectionExtras(chapterId, sectionId);
   const simple = getSimpleSection(chapterId, sectionId);
@@ -332,13 +333,10 @@ function PracticeRun() {
           </div>
           <p className="rubric text-sm font-semibold">{chapter.title}</p>
           <h1 className="text-2xl leading-tight">Prática: {section.title.replace(/^\d+\.\s*/, '')}</h1>
-          <div className="mt-6 flex items-end gap-2">
-            <Mascot mood="talk" size={92} />
-            <SpeechBubble className="anim-toast-in mb-8 flex-1">
-              {extras?.scene?.length
-                ? `${extras.scene[extras.scene.length - 1].text}`
-                : 'Vamos ver o que ficou deste trecho. Errou? A pergunta volta no fim até você acertar.'}
-            </SpeechBubble>
+          <div className="mt-5">
+            <TeacherCue teacher={teacher} pose="greeting" size={104}>
+              {extras?.scene?.length ? extras.scene[extras.scene.length - 1].text : 'Vamos ver o que ficou deste trecho. Errou? A pergunta volta no fim até você acertar.'}
+            </TeacherCue>
           </div>
           <p className="text-sm text-muted">{total} atividades curtas. Começa fácil e vai ficando mais difícil. Errou? A atividade volta no fim.</p>
           <div className="mt-auto pt-6">
@@ -355,6 +353,9 @@ function PracticeRun() {
       {phase === 'play' && act && (
         <div className="flex min-h-0 flex-1 flex-col">
           <div key={act.id + queue.length} className="anim-tile-in min-h-0 flex-1 overflow-y-auto overscroll-contain pb-2">
+            <TeacherCue teacher={teacher} pose={verdict ? (verdict.ok ? 'celebrating' : 'thinking') : 'presenting'} size={68} compact className="mb-3">
+              {verdict ? (verdict.ok ? 'Boa! Repare no raciocínio e leve a ideia para a próxima questão.' : 'Vamos descobrir onde o raciocínio mudou de direção.') : teacher.speakingStyle}
+            </TeacherCue>
             {act.kind === 'tf' && (
               <>
                 <p className="text-sm font-semibold text-muted">Verdadeiro ou falso?</p>
@@ -522,11 +523,10 @@ function PracticeRun() {
 
       {phase === 'done' && (
         <div className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto overscroll-contain text-center">
-          <div className="flex items-end gap-2">
-            <Mascot mood={score >= 70 ? 'cheer' : 'talk'} size={104} />
-            <SpeechBubble className="anim-toast-in mb-10 max-w-[15rem] text-left">
+          <div className="w-full">
+            <TeacherCue teacher={teacher} pose="celebrating" size={128}>
               {extras?.outro ?? (score >= 70 ? 'Muito bem! A névoa recua deste trecho.' : 'Os erros voltaram até você acertar. Isso também é aprender.')}
-            </SpeechBubble>
+            </TeacherCue>
           </div>
           <h1 className="mt-2 text-2xl">Trecho praticado!</h1>
           <div className="mt-4 grid w-full grid-cols-3 gap-2">

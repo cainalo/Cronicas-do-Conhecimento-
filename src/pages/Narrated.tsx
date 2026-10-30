@@ -3,13 +3,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { returnToPreviousPage } from '@/lib/navigation';
-import { getNarrated } from '@/content';
+import { getNarrated, teacherForChapter } from '@/content';
 import type { NarratedLesson, NumberLineState, Scene } from '@/content/narrated/types';
 import { getVoice, readingMs } from '@/app/voice';
 import { soundscape } from '@/app/soundscape';
 import { beatIndexOf, narrationPositions, nextBeat, positionAtBeat, revealOf, transcript, type NarrationPos } from '@/lib/narration';
 import { Icon } from '@/components/Icon';
 import { Illustration } from '@/components/Illustration';
+import { TeacherCharacter } from '@/components/TeacherCharacter';
 import { ActivityView } from '@/components/activities/ActivityView';
 
 const RATES = [0.8, 1, 1.2] as const;
@@ -70,6 +71,7 @@ export function NarratedPlayer({
   const currentMs = Math.min(totalMs, beforeMs + beatElapsed);
   const scene = l.scenes[pos.scene];
   const say = scene.beats[pos.beat].say;
+  const teacher = teacherForChapter(l.chapterId);
 
   const stop = useCallback(() => {
     token.current += 1;
@@ -318,13 +320,13 @@ export function NarratedPlayer({
         aria-hidden={!controlsVisible}
         data-testid="narrada-cabecalho-flutuante"
       >
-        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#2e7182] text-white sm:h-11 sm:w-11">
-          <Icon name="livro" size={22} />
+        <div className="flex h-14 w-12 shrink-0 items-end justify-center overflow-hidden sm:h-[4.25rem] sm:w-14">
+          <TeacherCharacter teacher={teacher} pose={playing ? 'presenting' : done ? 'celebrating' : 'listening'} size={68} />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-muted">{embedded ? 'Aula visual narrada' : 'Aula narrada · cerca de ' + l.minutes + ' min'}</p>
+          <p className="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-muted">Estúdio de aulas · {teacher.name}</p>
           <h1 className="mt-0.5 text-base font-semibold leading-tight sm:text-xl">{l.title}</h1>
-          <p className="mt-1 truncate text-xs text-muted sm:text-sm">{scene.heading} <span className="mx-1 opacity-50">·</span> Cena {pos.scene + 1} de {l.scenes.length}</p>
+          <p className="mt-1 truncate text-xs text-muted sm:text-sm">Apresentada por {teacher.name} · {scene.heading} · Cena {pos.scene + 1} de {l.scenes.length}</p>
         </div>
         <button
           type="button"

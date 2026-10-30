@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
-import { getMission, getQuestion, topicTitle, DEFAULT_CONTEST_ID } from '@/content';
+import { getMission, getQuestion, topicTitle, DEFAULT_CONTEST_ID, teacherForChapter } from '@/content';
 import type { MissionActivity } from '@/lib/activities';
 import { completeMission, missionKey } from '@/lib/mission';
 import { useSession } from '@/app/useSession';
@@ -14,6 +14,7 @@ import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
 import { ActivityView, type ActivityOutcome } from '@/components/activities/ActivityView';
 import { SqlLab, TableView } from '@/components/activities/SqlLab';
+import { TeacherCue } from '@/components/TeacherCharacter';
 
 type Step = 'objetivos' | 'descoberta' | 'laboratorio' | 'treino' | 'prova' | 'revisao';
 /** Etapas antigas (cena, desfecho) caem na etapa equivalente. */
@@ -74,6 +75,7 @@ export function MissionPage() {
   const total = useMemo(() => (m ? m.training.length + m.discovery.length + 1 : 1), [m]);
 
   if (!m) return <p>Caso prático não encontrado.</p>;
+  const teacher = teacherForChapter(m.chapterId);
 
   const go = (s: Step) => {
     setStep(s);
@@ -122,6 +124,9 @@ export function MissionPage() {
       <p className="guide-bar -mt-2 mb-4 rounded-md px-3 py-2 text-sm" role="note">
         <b>Etapa {idx + 1} de {STEPS.length}: {STEP_LABEL[step]}.</b> {STEP_NOW[step]}
       </p>
+      <TeacherCue teacher={teacher} pose={step === 'revisao' ? 'celebrating' : step === 'prova' || step === 'treino' ? 'thinking' : 'presenting'} size={88} className="mb-4">
+        {STEP_NOW[step]}
+      </TeacherCue>
 
       {step === 'objetivos' && (
         <section className="flex flex-1 flex-col" aria-label="Objetivos">

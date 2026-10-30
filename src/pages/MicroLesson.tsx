@@ -2,7 +2,7 @@
 // vem outra explicação e um item equivalente com outros dados. Depois: prática cumulativa, questão
 // no estilo da prova e síntese. O ponto exato fica salvo (useSession), e o Continuar volta aqui.
 // Nenhuma tela rola para baixo: o que não cabe vira outra parte, ao lado (SwipePages).
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { returnToPreviousPage } from '@/lib/navigation';
 import type { MicroLesson } from '@/content/types';
@@ -18,9 +18,23 @@ import { Markdown } from '@/components/Markdown';
 import { PageDots, SwipePages, type PageItem } from '@/components/SwipePages';
 import { splitMarkdown } from '@/lib/book';
 import { Icon } from '@/components/Icon';
-import { Illustration } from '@/components/Illustration';
+import { Illustration, type IllustrationName } from '@/components/Illustration';
+import { TeacherCue } from '@/components/TeacherCharacter';
 import { StepGuide } from '@/components/StepGuide';
 import { ActivityView } from '@/components/activities/ActivityView';
+
+const STEP_ILLUSTRATIONS: Record<string, IllustrationName> = {
+  'cap.infra.03:computador': 'processador',
+  'cap.infra.03:programa-processo': 'processo',
+  'cap.infra.03:pid': 'identificador',
+  'cap.infra.03:thread': 'threads',
+  'cap.infra.03:estados': 'estados-processo',
+  'cap.infra.03:escalonador': 'escalonador',
+  'cap.infra.01:servicos': 'dns-consulta',
+  'cap.seg.01:fundamentos': 'cripto-roda',
+  'cap.ia.01:fundamentos': 'rede-neural',
+  'cap.dados.01:modelagem': 'modelo-relacional',
+};
 
 type Phase =
   | { k: 'abertura' }
@@ -65,10 +79,13 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   const { update } = useStudy();
   const { sfx, confetti } = useFx();
   const chapter = getChapter(lesson.chapterId)!;
+  const section = chapter.sections.find((item) => item.id === lesson.sectionId);
+  const teacher = teacherForChapter(lesson.chapterId);
   // Só videoaulas conferidas entram na sequência; as "a conferir" ficam na biblioteca de vídeos.
   const videos = curatedVideos.filter((v) => v.lessonId === lesson.id && v.status === 'conferido');
   const relatedTips = useMemo(() => feedPostsOf(lesson.id).filter((post) => post.kind === 'dica'), [lesson.id]);
   const hasMedia = videos.length > 0;
+  const [showFullMaterial, setShowFullMaterial] = useState(false);
   const n = lesson.steps.length;
   // Em série, cada aula tem o seu ponto salvo; sozinha, usa a chave do trecho (como antes).
   const key = series ? seriesKey(lesson.chapterId, lesson.sectionId, lesson.id) : learnKey(lesson.chapterId, lesson.sectionId);
@@ -81,6 +98,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   const { first = {}, struggled = [] } = session.state;
   const set = (p: Phase, extra?: Partial<Saved>) => {
     session.setState((s) => ({ ...s, ...extra, phase: p }));
+    setShowFullMaterial(false);
     window.scrollTo?.({ top: 0 });
   };
   const note = (id: string, ok: boolean) => session.setState((s) => (id in s.first ? s : { ...s, first: { ...s.first, [id]: ok } }));
@@ -105,7 +123,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   };
 
   const renderMd = (md: string) => (
-    <div className="prose-manuscript !font-sans !text-[1.02rem] [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0 [&_table]:!text-sm">
+    <div className="prose-manuscript lesson-material [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0 [&_table]:!text-sm">
       <Markdown>{md}</Markdown>
     </div>
   );
@@ -115,7 +133,8 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
     if (!step) return [];
     const body = phase.k === 'explicar' ? step.explain : step.recovery.explain;
     const items: PageItem[] = splitMarkdown(body).map((md, k) => ({ key: `e${k}`, md }));
-    if (phase.k === 'explicar' && step.art) items.unshift({ key: 'art', node: <Illustration name={step.art} className="mx-auto h-24 w-auto text-ink" /> });
+    const art = step.art ?? STEP_ILLUSTRATIONS[lesson.chapterId + ':' + step.id];
+    if (phase.k === 'explicar' && art) items.unshift({ key: 'art', node: <Illustration name={art} className="mx-auto h-28 w-auto text-ink" label={step.title + ' — ilustração do conceito'} /> });
     if (phase.k === 'explicar' && step.example) {
       items.push({
         key: 'ex',
@@ -133,6 +152,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
 
   const summaryItems = (): PageItem[] => [
     { key: 'h', node: <h2 className="text-lg">O que você aprendeu</h2> },
+    { key: 'teacher', node: <TeacherCue teacher={teacher} pose="celebrating" size={86}>{teacher.motto}</TeacherCue> },
     ...lesson.summary.map((t, k) => ({
       key: `s${k}`,
       node: (
@@ -181,7 +201,8 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
 
       {phase.k === 'abertura' && (
         <section className="flex min-h-0 flex-1 flex-col" aria-label="Abertura">
-          <p className="mb-3 border-l-2 border-gold pl-3 text-sm text-muted">Antes de explicar, uma pergunta. Não vale nota: é só para você pensar no problema.</p>
+          <TeacherCue teacher={teacher} pose="greeting" size={84} compact>{teacher.motto}</TeacherCue>
+          <p className="mb-3 mt-3 border-l-2 border-gold pl-3 text-sm text-muted">Antes de explicar, uma pergunta. Não vale nota: é só para você pensar no problema.</p>
           <ActivityView key="abertura" fit a={lesson.opening} onNext={() => set({ k: 'explicar', i: 0 })} />
         </section>
       )}
@@ -193,41 +214,76 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
           </p>
           <h1 className="mt-0.5 text-2xl leading-tight">{phase.k === 'explicar' ? step.title : 'Vamos ver de outro jeito'}</h1>
           {phase.k === 'explicar' && <p className="mb-2 mt-0.5 text-sm text-muted">Objetivo: {step.goal}</p>}
-          <div className="mt-2 flex min-h-0 flex-1 flex-col">
-            <SwipePages
-              items={explainItems()}
-              layoutKey={`${phase.k}-${step.id}`}
-              renderMd={renderMd}
-              label="Explicação"
-              footer={({ page, total, go }) => (
-                <div className="pt-1">
-                  <PageDots page={page} total={total} go={go} />
-                  <div className="flex gap-2 pt-1">
-                    {(page > 0 || (phase.k === 'explicar' && phase.i > 0)) && (
-                      <button className="btn-ghost" onClick={() => (page > 0 ? go(page - 1) : set({ k: 'explicar', i: phase.i - 1 }))}>
-                        <Icon name="voltar" size={18} /> {page > 0 ? 'Parte anterior' : 'Anterior'}
-                      </button>
-                    )}
-                    {page < total - 1 ? (
-                      <button className="btn-primary flex-1" onClick={() => go(page + 1)}>
-                        Próxima parte <Icon name="seta" size={18} />
-                      </button>
-                    ) : (
-                      <button className="btn-primary flex-1" onClick={() => set({ k: phase.k === 'explicar' ? 'checar' : 'rechecar', i: phase.i })}>
-                        Entendi, quero conferir
-                      </button>
-                    )}
+          {phase.k === 'explicar' && (
+            <TeacherCue teacher={teacher} pose="presenting" size={72} compact className="mb-2">
+              {teacher.motto}
+            </TeacherCue>
+          )}
+          {phase.k === 'explicar' && section && (
+            <div className="mb-2 flex justify-end">
+              <button
+                type="button"
+                className="btn-ghost !min-h-9 !px-3 text-xs"
+                onClick={() => setShowFullMaterial((value) => !value)}
+                aria-expanded={showFullMaterial}
+                data-testid="material-integral-toggle"
+              >
+                {showFullMaterial ? 'Voltar à explicação guiada' : 'Ler material integral'}
+                <Icon name={showFullMaterial ? 'voltar' : 'grimorio'} size={15} />
+              </button>
+            </div>
+          )}
+          {showFullMaterial && section ? (
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-line bg-surface p-3 sm:p-4" data-testid="material-integral">
+              <div className="mb-2 shrink-0">
+                <p className="kicker">Material integral da matéria</p>
+                <h2 className="font-title text-xl leading-tight">{section.title.replace(/^\d+\.\s*/, '')}</h2>
+                <p className="mt-1 text-xs text-muted">{chapter.title} · texto completo de referência</p>
+              </div>
+              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1">
+                <article className="prose-manuscript lesson-material">
+                  <Markdown>{section.body}</Markdown>
+                </article>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-1 flex min-h-0 flex-1 flex-col">
+              <SwipePages
+                items={explainItems()}
+                layoutKey={phase.k + '-' + step.id}
+                renderMd={renderMd}
+                label="Explicação"
+                footer={({ page, total, go }) => (
+                  <div className="pt-1">
+                    <PageDots page={page} total={total} go={go} />
+                    <div className="flex gap-2 pt-1">
+                      {(page > 0 || (phase.k === 'explicar' && phase.i > 0)) && (
+                        <button className="btn-ghost" onClick={() => (page > 0 ? go(page - 1) : set({ k: 'explicar', i: phase.i - 1 }))}>
+                          <Icon name="voltar" size={18} /> {page > 0 ? 'Parte anterior' : 'Anterior'}
+                        </button>
+                      )}
+                      {page < total - 1 ? (
+                        <button className="btn-primary flex-1" onClick={() => go(page + 1)}>
+                          Próxima parte <Icon name="seta" size={18} />
+                        </button>
+                      ) : (
+                        <button className="btn-primary flex-1" onClick={() => set({ k: phase.k === 'explicar' ? 'checar' : 'rechecar', i: phase.i })}>
+                          Entendi, quero conferir
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
-            />
-          </div>
+                )}
+              />
+            </div>
+          )}
         </section>
       )}
 
       {step && (phase.k === 'checar' || phase.k === 'rechecar') && (
         <section className="flex min-h-0 flex-1 flex-col" aria-label="Checagem">
-          <p className="mb-1 text-xs font-semibold text-gold">
+          <TeacherCue teacher={teacher} pose="thinking" size={62} compact>{teacher.speakingStyle}</TeacherCue>
+          <p className="mb-1 mt-2 text-xs font-semibold text-gold">
             {phase.k === 'checar' ? 'Confira o que acabou de aprender' : 'Mais uma, com outro exemplo'} · etapa {phase.i + 1} de {n}
           </p>
           <ActivityView
@@ -251,6 +307,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
             <p className="kicker">Antes de praticar</p>
             <h1 className="mt-0.5 text-2xl leading-tight">Veja de outro jeito</h1>
             <p className="mt-1 text-sm text-muted">Videoaulas complementares do assunto. A aula narrada fica disponível na trilha, em sua página própria.</p>
+            <TeacherCue teacher={teacher} pose="presenting" size={66} compact className="mt-2">Observe a demonstração de {teacher.name}; compare a explicação com o caso mostrado.</TeacherCue>
           </div>
           <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain">
             {videos.map((v) => <VideoEmbed key={v.id} url={v.url} title={v.title} meta={[v.channel, v.duration].filter(Boolean).join(' · ')} />)}
@@ -263,7 +320,8 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
       )}
       {phase.k === 'praticar' && (
         <section className="flex min-h-0 flex-1 flex-col" aria-label="Prática final">
-          <p className="mb-1 text-xs font-semibold text-gold">
+          <TeacherCue teacher={teacher} pose="thinking" size={60} compact>Agora aplique a ideia sem olhar a explicação. Você consegue?</TeacherCue>
+          <p className="mb-1 mt-2 text-xs font-semibold text-gold">
             Prática com tudo o que você aprendeu · {phase.i + 1} de {lesson.consolidation.length}
           </p>
           <ActivityView
@@ -282,6 +340,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
 
       {phase.k === 'prova' && examQs[phase.i] && (
         <section className="flex min-h-0 flex-1 flex-col" aria-label="Questão de prova">
+          <TeacherCue teacher={teacher} pose="presenting" size={60} compact>Vamos transferir o que você aprendeu para uma questão no estilo da prova.</TeacherCue>
           <ActivityView
             key={lesson.exam[phase.i].id}
             fit

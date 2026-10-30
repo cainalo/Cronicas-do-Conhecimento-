@@ -460,3 +460,50 @@ main.safe-top-content { padding-top: calc(env(safe-area-inset-top, 0px) + 1.5rem
 .person.walking .arm-a { animation: arm-swing 0.3s ease-in-out 0.15s infinite; }
 .person.walking .arm-b { animation: arm-swing 0.3s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .person .torso, .person.walking .leg-a, .person.walking .leg-b, .person.walking .arm-a, .person.walking .arm-b { animation: none; } }
+
+
+/* Material didático integral: hierarquia de apostila, leitura confortável e ênfase sem excesso. */
+.lesson-material {
+  font-family: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+  font-size: clamp(1.02rem, 1.1vw + .78rem, 1.17rem);
+  line-height: 1.78;
+  letter-spacing: .002em;
+  color: rgb(var(--ink));
+}
+.lesson-material > * + * { margin-top: 1.05em; }
+.lesson-material h1, .lesson-material h2, .lesson-material h3 {
+  font-family: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+  color: rgb(var(--ink));
+  line-height: 1.22;
+  letter-spacing: -.02em;
+}
+.lesson-material h2 { margin-top: 1.5em; font-size: 1.34em; }
+.lesson-material h3 { margin-top: 1.35em; font-size: 1.16em; }
+.lesson-material strong {
+  color: rgb(var(--ink));
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgb(var(--gold) / .74);
+  text-decoration-thickness: .12em;
+  text-underline-offset: .19em;
+}
+.lesson-material em { color: rgb(var(--teal)); }
+.lesson-material blockquote {
+  border-left: 3px solid rgb(var(--gold));
+  margin: 1.2em 0;
+  padding: .55em 1em;
+  background: rgb(var(--gold) / .06);
+  border-radius: 0 .7rem .7rem 0;
+}
+.lesson-material ul, .lesson-material ol { padding-left: 1.35em; }
+.lesson-material li + li { margin-top: .35em; }
+.lesson-material code { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: .88em; }
+.term-underline {
+  text-decoration-line: underline;
+  text-decoration-color: rgb(var(--gold));
+  text-decoration-thickness: .16em;
+  text-underline-offset: .2em;
+  font-weight: 650;
+}
+.teacher-cue { box-shadow: inset 3px 0 0 rgb(var(--gold) / .65); }
+.teacher-cue svg { object-fit: contain; object-position: bottom center; }

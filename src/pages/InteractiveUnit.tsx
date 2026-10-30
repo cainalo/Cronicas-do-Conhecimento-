@@ -8,7 +8,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { returnToPreviousPage } from '@/lib/navigation';
 import type { Concept, LearningUnit } from '@/content/learning';
-import { concepts as allConcepts, getChapter, getQuestion } from '@/content';
+import { concepts as allConcepts, getChapter, getQuestion, teacherForChapter } from '@/content';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
 import { useSession } from '@/app/useSession';
@@ -18,6 +18,7 @@ import { conceptForTerm } from '@/lib/contentValidator';
 import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
 import { ActivityView } from '@/components/activities/ActivityView';
+import { TeacherCue } from '@/components/TeacherCharacter';
 
 type Stage = 'abertura' | 'etapas' | 'pratica' | 'prova' | 'sintese';
 
@@ -104,6 +105,7 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
   const { update } = useStudy();
   const { sfx } = useFx();
   const chapter = getChapter(unit.chapterId)!;
+  const teacher = teacherForChapter(unit.chapterId);
   const n = unit.steps.length;
   const session = useSession<UnitSession>(learnKey(unit.chapterId, unit.sectionId), () => START, (s) =>
     // Recuperação obrigatória: o Continuar mostra que é um reforço e volta ao mesmo ponto da etapa.
@@ -181,6 +183,15 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
         </p>
       </header>
 
+      <TeacherCue
+        teacher={teacher}
+        pose={st.stage === 'sintese' ? 'celebrating' : st.stage === 'pratica' || st.stage === 'prova' ? 'thinking' : st.stage === 'abertura' ? 'greeting' : 'presenting'}
+        size={88}
+        className="mb-5"
+      >
+        {st.stage === 'sintese' ? 'Boa etapa! Retenha as ideias centrais e siga para a prática.' : st.stage === 'pratica' ? 'Agora experimente usar o conceito. Eu acompanho seu raciocínio.' : st.stage === 'prova' ? 'Vamos testar se você transfere a ideia para um contexto novo.' : teacher.motto}
+      </TeacherCue>
+
       {st.stage === 'abertura' && (
         <section className="card p-4 sm:p-5" aria-label="Pergunta de abertura">
           <p className="mb-2 text-sm font-semibold text-leaf">Antes de começar · pergunta para pensar (não vale nota)</p>
@@ -196,6 +207,7 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
             const inRecovery = current && st.recovery === s.id;
             return (
               <li key={s.id} ref={(el) => (stepRefs.current[i] = el)} className="scroll-mt-28" aria-current={current ? 'step' : undefined}>
+                {current && <TeacherCue teacher={teacher} pose="presenting" size={66} compact className="mb-3">{teacher.speakingStyle}</TeacherCue>}
                 <p className="text-xs font-semibold text-gold">
                   {s.part} · etapa {i + 1} de {n}
                 </p>

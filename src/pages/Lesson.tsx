@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
-import { getLesson, getQuestion } from '@/content';
+import { getLesson, getQuestion, teacherForChapter } from '@/content';
 import { Markdown } from '@/components/Markdown';
 import { QuestionCard } from '@/components/QuestionCard';
 import { completeLesson, recordAnswer, totalXp } from '@/lib/study';
@@ -9,7 +9,7 @@ import { Icon } from '@/components/Icon';
 import { StepGuide } from '@/components/StepGuide';
 import { useSession } from '@/app/useSession';
 import { useFx } from '@/app/fx';
-import { Mascot, SpeechBubble } from '@/components/Mascot';
+import { TeacherCue } from '@/components/TeacherCharacter';
 
 type Phase = { k: 'cards'; i: number } | { k: 'q'; i: number } | { k: 'done' };
 
@@ -43,6 +43,7 @@ export function LessonPage() {
   const correct = Object.values(results).filter(Boolean).length;
   const score = qs.length ? Math.round((correct / qs.length) * 100) : 0;
   const progress = phase.k === 'cards' ? 0 : phase.k === 'q' ? phase.i / qs.length : 1;
+  const teacher = teacherForChapter(lesson.chapterId);
 
   return (
     <div className="space-y-4">
@@ -59,6 +60,7 @@ export function LessonPage() {
 
       {phase.k === 'cards' && (
         <section className="manuscript p-5">
+          <TeacherCue teacher={teacher} pose="presenting" size={68} compact className="mb-3">{teacher.motto}</TeacherCue>
           <p className="rubric font-display text-lg">
             {lesson.title} · {phase.i + 1}/{lesson.cards.length}
           </p>
@@ -88,6 +90,7 @@ export function LessonPage() {
           <p className="text-sm text-muted">
             Questão {phase.i + 1} de {qs.length}
           </p>
+          <TeacherCue teacher={teacher} pose="thinking" size={66} compact>{teacher.speakingStyle}</TeacherCue>
           <QuestionCard
             key={qs[phase.i].id}
             question={qs[phase.i]}
@@ -117,18 +120,15 @@ export function LessonPage() {
 
       {phase.k === 'done' && (
         <section className="card space-y-3 p-5 text-center">
-          <div className="flex items-end justify-center gap-2">
-            <Mascot mood={score >= 70 ? 'cheer' : score >= 40 ? 'talk' : 'sad'} size={92} />
-            <SpeechBubble className="mb-8 max-w-[14rem] text-left anim-toast-in">
-              {score === 100
-                ? 'Perfeito! Nem uma vírgula fora do lugar.'
-                : score >= 70
-                  ? 'Muito bem! O Tribunal ficaria orgulhoso.'
-                  : score >= 40
-                    ? 'Bom começo. Revise os erros e volte mais forte.'
-                    : 'Toda grande obra começa com rascunhos. Vamos revisar juntos?'}
-            </SpeechBubble>
-          </div>
+          <TeacherCue teacher={teacher} pose="celebrating" size={116}>
+            {score === 100
+              ? 'Perfeito! Nem uma vírgula fora do lugar.'
+              : score >= 70
+                ? 'Muito bem! O Tribunal ficaria orgulhoso.'
+                : score >= 40
+                  ? 'Bom começo. Revise os erros e volte mais forte.'
+                  : 'Toda grande obra começa com rascunhos. Vamos revisar juntos?'}
+          </TeacherCue>
           <p className="rubric text-sm font-semibold">Lição concluída</p>
           <h1 className="font-display text-5xl">{score}%</h1>
           <p className="text-muted">

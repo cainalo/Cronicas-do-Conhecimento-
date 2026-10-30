@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { teachers, teacherPosts, type FictionalTeacher } from '@/content/teachers';
+import { teachers, teacherPosts, teacherForChapter, type FictionalTeacher } from '@/content/teachers';
+import { narratedLessons } from '@/content';
+import { TeacherCharacter } from '@/components/TeacherCharacter';
 import { Icon } from '@/components/Icon';
 import { TeacherAvatar } from '@/components/TeacherAvatar';
 import { PageHeader } from '@/components/Page';
@@ -20,12 +22,30 @@ const STORY_LINKS: Record<string, { label: string; url: string }> = {
   'prof.lia': { label: 'Manual do comando top', url: 'https://man7.org/linux/man-pages/man1/top.1.html' },
   'prof.davi': { label: 'Leia a especificação do DNS', url: 'https://www.rfc-editor.org/rfc/rfc1034' },
   'prof.iara': { label: 'Veja os riscos OWASP Top 10', url: 'https://owasp.org/www-project-top-ten/' },
+  'prof.nina': { label: 'Consulte o NIST AI RMF', url: 'https://www.nist.gov/itl/ai-risk-management-framework' },
+  'prof.ravi': { label: 'Conheça os princípios Twelve-Factor', url: 'https://12factor.net/' },
+  'prof.mateus': { label: 'Consulte a documentação SQL', url: 'https://www.postgresql.org/docs/current/sql.html' },
+  'prof.marina': { label: 'Veja o framework COBIT', url: 'https://www.isaca.org/resources/cobit' },
+  'prof.beatriz': { label: 'Leia a Constituição Federal', url: 'https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm' },
+  'prof.sofia': { label: 'Pratique no LearnEnglish', url: 'https://learnenglish.britishcouncil.org/' },
+  'prof.helena': { label: 'Visite a Academia Brasileira de Letras', url: 'https://www.academia.org.br/' },
+  'prof.augusto': { label: 'Acesse a Assembleia Legislativa de Goiás', url: 'https://portal.al.go.leg.br/' },
+  'prof.caio': { label: 'Explore as métricas DORA', url: 'https://dora.dev/' },
 };
 const STORY_COPY: Record<string, string[]> = {
   'prof.clara': ['Uma questão de porcentagem pode ser uma história sobre uma promoção.', 'Meu desafio de hoje: explique a regra sem usar a fórmula.'],
   'prof.lia': ['Dica de laboratório: antes de encerrar um processo, descubra o que ele está fazendo.', 'Terminal aberto, café ao lado e uma pergunta: o que mudou desde o último comando?'],
   'prof.davi': ['A internet não é uma nuvem mágica: são redes, rotas e acordos.', 'Curiosidade de rede: o DNS é como uma agenda de contatos distribuída.'],
   'prof.iara': ['Segurança começa com boas perguntas, não com medo.', 'Antes de confiar num link, confira o domínio e o contexto.'],
+  'prof.nina': ['Um modelo pode soar seguro e ainda errar. Procure a fonte.', 'Hoje vou mostrar como uma boa pergunta reduz uma resposta vaga.'],
+  'prof.ravi': ['Antes de abrir o editor, escreva o que entra e o que deve sair.', 'Um teste pequeno costuma revelar mais que uma grande refatoração.'],
+  'prof.mateus': ['Uma tabela sem chave é uma história sem personagem principal.', 'Hoje: como descobrir por que uma consulta duplicou linhas.'],
+  'prof.marina': ['Indicador bom ajuda a decidir; indicador ruim só enfeita relatório.', 'Vamos separar responsabilidade, execução e evidência.'],
+  'prof.beatriz': ['A exceção também faz parte da regra: leia o artigo completo.', 'Traga a competência e o fundamento antes de concluir.'],
+  'prof.sofia': ['Não traduza cada palavra antes de descobrir a ideia do parágrafo.', 'Observe o conector: ele pode mudar todo o argumento.'],
+  'prof.helena': ['A pontuação organiza o raciocínio, não é só uma pausa.', 'Vamos comparar duas frases que parecem iguais, mas não dizem o mesmo.'],
+  'prof.augusto': ['Órgão, função e competência não são sinônimos.', 'Um organograma bem lido evita muita confusão em prova.'],
+  'prof.caio': ['Deploy não termina quando o botão fica verde: observe o serviço.', 'Hoje vamos acompanhar o caminho do código até produção.'],
 };
 function readPosts(): LocalPost[] {
   try { return JSON.parse(localStorage.getItem(STORAGE) ?? '[]') as LocalPost[]; } catch { return []; }
@@ -202,7 +222,7 @@ function TeacherProfileModal({ teacher, onClose }: { teacher: FictionalTeacher; 
           <div className="absolute -right-10 -top-16 h-48 w-48 rounded-full border-[24px] border-white/10"/>
           <button className="absolute right-3 top-3 grid h-10 w-10 place-items-center rounded-full hover:bg-white/10" onClick={onClose} aria-label="Fechar perfil"><Icon name="errado" size={22}/></button>
           <div className="relative flex items-center gap-4">
-            <span className="rounded-full bg-[#f7eedf] p-1.5"><TeacherAvatar t={teacher} size={84}/></span>
+            <span className="rounded-full bg-[#f7eedf] p-1.5"><TeacherCharacter teacher={teacher} size={132} pose="presenting"/></span>
             <div className="min-w-0">
               <p className="text-xs opacity-70">PERSONAGEM DE PÓRTICO</p>
               <h2 className="mt-1 font-title text-2xl leading-tight sm:text-3xl">{teacher.name}</h2>
@@ -238,6 +258,24 @@ function TeacherProfileModal({ teacher, onClose }: { teacher: FictionalTeacher; 
               <span>{reference.label}</span><Icon name="seta" size={16}/>
             </a>)}</div>
           </section>}
+          <section>
+            <div className="flex items-end justify-between gap-3">
+              <div><h3 className="font-title text-xl">Aulas do estúdio</h3><p className="mt-1 text-sm text-muted">Aulas apresentadas por {teacher.name}</p></div>
+              <span className="text-xs text-muted">Aulas narradas</span>
+            </div>
+            <div className="mt-3 space-y-2">
+              {narratedLessons.filter((lesson) => teacherForChapter(lesson.chapterId).id === teacher.id).map((lesson) => (
+                <Link key={lesson.id} to={`/aula-narrada/${lesson.id}`} className="flex items-center gap-3 rounded-xl border border-line p-3 hover:bg-raised/40">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ink text-bg"><Icon name="play" size={18}/></span>
+                  <span className="min-w-0 flex-1"><strong className="block text-sm">{lesson.title}</strong><span className="block text-xs text-muted">{lesson.minutes} min · {lesson.scenes.length} cenas</span></span>
+                  <Icon name="avancar" size={16}/>
+                </Link>
+              ))}
+              {narratedLessons.every((lesson) => teacherForChapter(lesson.chapterId).id !== teacher.id) && (
+                <p className="rounded-xl bg-raised/40 p-3 text-sm text-muted">Novas aulas narradas deste professor serão adicionadas à trilha.</p>
+              )}
+            </div>
+          </section>
           <section>
             <div className="flex items-end justify-between gap-3">
               <div><h3 className="font-title text-xl">Publicações</h3><p className="mt-1 text-sm text-muted">{authored.length} posts de {teacher.name}</p></div>

@@ -200,14 +200,31 @@ it('torre: apresenta os cards coloridos e não exibe contagem regressiva nem seq
    expect(screen.queryByText(/dia[s]? seguido[s]? de estudo/i)).not.toBeInTheDocument();
  });
 
- it('mantém o cabeçalho Pórtico e o estilo de navegação dentro das aulas', () => {
+ it('mantém as aulas da trilha imersivas, sem barra global do aplicativo', () => {
    renderAt('/aprender/cap.prim.01/computador/prim.computador.1');
-   expect(screen.getByRole('banner')).toBeInTheDocument();
-   expect(screen.getByTestId('portico-wordmark-center')).toBeInTheDocument();
-   expect(screen.getByRole('link', { name: 'Conta e configurações' })).toBeInTheDocument();
+   expect(screen.queryByTestId('portico-wordmark-center')).not.toBeInTheDocument();
+   expect(screen.queryByRole('link', { name: 'Conta e configurações' })).not.toBeInTheDocument();
+   expect(screen.queryByRole('navigation', { name: 'Navegação principal' })).not.toBeInTheDocument();
+   expect(screen.getByRole('button', { name: /Sair/ })).toBeInTheDocument();
  });
 
- it('um só destino: Torre, cabeçalho e menu levam ao mesmo passo', () => {
+ it('abre o material integral da matéria sem sair da atividade da trilha', async () => {
+   const user = userEvent.setup();
+   renderAt('/aprender/cap.infra.03/processos');
+   expect(screen.getByRole('button', { name: /Cada execução em andamento, separadamente/ })).toBeInTheDocument();
+   await user.click(screen.getByRole('button', { name: /Cada execução em andamento, separadamente/ }));
+   await user.click(screen.getByRole('button', { name: 'Verificar' }));
+   await user.click(screen.getByRole('button', { name: 'Continuar' }));
+   await user.click(screen.getByTestId('material-integral-toggle'));
+   const material = screen.getByTestId('material-integral');
+   expect(material).toHaveTextContent('Processos, memória e serviços');
+   expect(material).toHaveTextContent('O sistema operacional');
+   expect(screen.queryByTestId('portico-wordmark-center')).not.toBeInTheDocument();
+   await user.click(screen.getByTestId('material-integral-toggle'));
+   expect(screen.queryByTestId('material-integral')).not.toBeInTheDocument();
+ });
+
+  it('um só destino: Torre, cabeçalho e menu levam ao mesmo passo', () => {
   renderAt('/');
   const torre = screen.getByTestId('continuar-torre').getAttribute('href');
   expect(screen.getByTestId('continuar-topo').getAttribute('href')).toBe(torre);
