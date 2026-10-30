@@ -392,3 +392,18 @@ it('prática bloqueada antes do Aprender do trecho, com caminho para aprender', 
   expect(screen.getByRole('link', { name: /Ir para o Aprender/ })).toHaveAttribute('href', '/aprender/cap.infra.03/processos');
   expect(screen.queryByRole('button', { name: /Começar/ })).toBeNull();
 });
+
+
+it('unidade interativa: abre o material integral no mesmo fluxo de Aprender', async () => {
+  const user = userEvent.setup();
+  renderAt('/aprender/cap.infra.03/processos');
+  const toggle = screen.getByTestId('material-integral-toggle');
+  expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await user.click(toggle);
+  expect(screen.getByTestId('material-integral')).toBeInTheDocument();
+  expect(screen.getByTestId('material-integral')).toHaveTextContent(/processo/i);
+  expect(screen.getByTestId('material-integral')).toHaveClass('lesson-material');
+  await user.click(screen.getByTestId('material-integral-toggle'));
+  expect(screen.queryByTestId('material-integral')).toBeNull();
+});
+

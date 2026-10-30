@@ -205,7 +205,7 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
             data-testid="material-integral-toggle"
           >
             <span>{fullMaterialOpen ? 'Ocultar material integral' : 'Ler material integral'}</span>
-            <Icon name={fullMaterialOpen ? 'menos' : 'mais'} size={17} />
+            <Icon name={fullMaterialOpen ? 'seta' : 'livro'} size={17} />
           </button>
           {fullMaterialOpen && (
             <article id="material-integral-unidade" className="material-integral-sheet lesson-material mt-3 rounded-2xl px-4 py-5 sm:px-6" data-testid="material-integral">
@@ -229,6 +229,7 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
             const current = st.stage === 'etapas' && i === st.step;
             const check = s.blocks.find((b) => b.kind === 'inlineActivity');
             const inRecovery = current && st.recovery === s.id;
+            const firstParagraphId = s.blocks.find((block) => block.kind === 'paragraph')?.id;
             return (
               <li key={s.id} ref={(el) => (stepRefs.current[i] = el)} className="scroll-mt-28" aria-current={current ? 'step' : undefined}>
                 {current && <TeacherCue teacher={teacher} pose="presenting" size={66} compact className="mb-3">{teacher.speakingStyle}</TeacherCue>}
@@ -240,7 +241,7 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
                 <div className="mt-3 space-y-3">
                   {s.blocks.map((b) =>
                     b.kind === 'paragraph' ? (
-                      <div key={b.id}>{md(b.md)}</div>
+                      <div key={b.id} className={`interactive-material-page ${b.id === firstParagraphId ? 'interactive-material-page--featured' : ''}`}>{md(b.md)}</div>
                     ) : b.kind === 'workedExample' ? (
                       <div key={b.id} className="rounded-2xl border-l-4 border-leaf bg-leaf/10 px-4 py-3">
                         <p className="mb-1 text-sm font-bold text-ink">Exemplo</p>
