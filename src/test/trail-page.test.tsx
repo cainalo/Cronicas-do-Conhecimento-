@@ -35,6 +35,6 @@ describe('trilha organizada por matéria', () => {
     expect(miniTrails.length).toBeGreaterThan(0);
     expect(within(miniTrails[0]).getByRole('list', { name: /Atividades de/ })).toBeInTheDocument();
     expect(within(miniTrails[0]).getByRole('link', { name: /Texto completo/ })).toBeInTheDocument();
-    expect(within(firstSubject).getByText(/Aula com|Professora|Professor/)).toBeInTheDocument();
+    expect(within(firstSubject).getByLabelText(/Professor /)).toBeInTheDocument();
   });
 });

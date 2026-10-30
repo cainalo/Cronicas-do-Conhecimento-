@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { trailUnits, useCheckpoint } from '@/app/useCheckpoint';
-import { chapters, getChapter, grimoires } from '@/content';
+import { getChapter, grimoires } from '@/content';
 import { teacherForChapter } from '@/content';
 import { trailByChapter, type UnitState } from '@/lib/trail';
 import { Icon, type IconName } from '@/components/Icon';
