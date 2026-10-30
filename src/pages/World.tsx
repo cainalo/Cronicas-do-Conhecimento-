@@ -4,10 +4,11 @@
 // movimento suave, olha para as quatro direções e mexe pernas e braços; os colegas viram para quem se
 // aproxima. Setas/WASD, toque no destino ou direcional (segurar continua andando). Opcional: não mexe
 // no checkpoint da trilha. Posição e escolhas ficam salvas neste aparelho.
-import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type PointerEvent as RPointerEvent, type SetStateAction } from 'react';
 import { createPortal } from 'react-dom';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
+import { logUnit } from '@/lib/pace';
 import { getScenario } from '@/content';
 import { escritorio } from '@/content/world/escritorio';
 import { advance, choose, decisionOf, startScenario, type Scenario } from '@/lib/scenario';
@@ -16,6 +17,7 @@ import {
   currentObjective,
   decorTiles,
   examine,
+  scenarioForOfficeMap,
   facingOf,
   findPath,
   occupied,
@@ -35,46 +37,61 @@ import {
 import { Icon } from '@/components/Icon';
 import { PageHeader } from '@/components/Page';
 import { ScenarioClosing } from './Scenarios';
+import { OfficeTerminal, type OfficeTerminalMode } from '@/components/OfficeTerminal';
+import { createTerminalState, getTerminalLab, terminalLabProgress, type TerminalState } from '@/lib/terminal-lab';
 
 /** Unidade de desenho de uma casa (o mapa é escalado para a tela). */
 const T = 48;
 const STEP_MS = 170;
 const KEY = (id: string) => `cronicas:mundo:${id}`;
-const OFFICE_REPORT_KEY = 'cronicas:escritorio:terminal:2318';
+const OFFICE_TERMINAL_KEY = 'cronicas:office-terminal:v3';
+const PROCESS_LAB_KEY = 'cronicas:terminal-lab:v1:processos';
+type OfficePhaseId = 'triagem' | 'diagnostico' | 'resolucao';
+const OFFICE_PHASES: Record<OfficePhaseId, { step: string; title: string; goal: string }> = {
+  triagem: { step: 'Fase 1 de 3', title: 'Triagem do chamado', goal: 'Vá à recepção e examine o chamado 2318 para confirmar o sintoma.' },
+  diagnostico: { step: 'Fase 2 de 3', title: 'Diagnóstico com evidências', goal: 'Encontre o terminal da Marta e colete as evidências do processo e da memória.' },
+  resolucao: { step: 'Fase 3 de 3', title: 'Resolução e fechamento', goal: 'Siga o diagnóstico, avalie as decisões e feche o chamado com base nas evidências.' },
+};
+function parseOfficePhase(value: string | null): OfficePhaseId | undefined {
+  return value === 'triagem' || value === 'diagnostico' || value === 'resolucao' ? value : undefined;
+}
+function processLabIsComplete(): boolean {
+  try {
+    const raw = localStorage.getItem(PROCESS_LAB_KEY);
+    if (!raw) return false;
+    const state = JSON.parse(raw) as TerminalState;
+    if (!state || typeof state.cwd !== 'string' || !state.files || !Array.isArray(state.commands) || !Array.isArray(state.transcript)) return false;
+    const lab = getTerminalLab('processos');
+    return !!lab && terminalLabProgress(lab, state).done;
+  } catch {
+    return false;
+  }
+}
 const reduced = () => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 function load(w: World, s: Scenario): WorldState | undefined {
   try {
-    const saved = restoreWorld(w, s, JSON.parse(localStorage.getItem(KEY(w.id)) ?? 'null') ?? undefined);
-    const report = JSON.parse(localStorage.getItem(OFFICE_REPORT_KEY) ?? 'null') as { callId?: string; diagnosis?: string; completedAt?: string } | null;
-    if (!report || report.callId !== '2318' || report.diagnosis !== 'thrashing') return saved;
-
-    // A investigação foi concluída fora do mapa. Retome o chamado na próxima decisão humana,
-    // usando as mesmas transições do cenário, em vez de pedir que a pessoa repita top/vmstat.
-    const base = saved ?? fresh(w, s);
-    let scenario = base.scenario;
-    const at = report.completedAt ?? new Date().toISOString();
-    if (scenario.scenarioId === s.id && scenario.version === s.version && !scenario.finishedAt) {
-      if (scenario.pending) scenario = advance(s, scenario, at);
-      if (scenario.nodeId === 'n.inicio') {
-        scenario = advance(s, choose(s, scenario, 'd.top', at), at);
-      }
-      if (scenario.nodeId === 'n.top') {
-        scenario = advance(s, choose(s, scenario, 'd.thrashing', at), at);
-      }
-    }
-    const examined = base.examined.includes('terminal') ? base.examined : [...base.examined, 'terminal'];
-    localStorage.removeItem(OFFICE_REPORT_KEY);
-    return { ...base, scenario, examined, updatedAt: at };
+    return restoreWorld(w, s, JSON.parse(localStorage.getItem(KEY(w.id)) ?? 'null') ?? undefined);
   } catch {
     return undefined;
   }
 }
 const fresh = (w: World, s: Scenario): WorldState => ({ worldId: w.id, version: w.version, pos: w.start, facing: 'baixo', examined: [], scenario: startScenario(s), updatedAt: new Date().toISOString() });
 
+function loadOfficeTerminalState(): TerminalState {
+  try {
+    const saved = JSON.parse(localStorage.getItem(OFFICE_TERMINAL_KEY) ?? 'null') as TerminalState | null;
+    if (saved && typeof saved.cwd === 'string' && saved.files && Array.isArray(saved.commands) && Array.isArray(saved.transcript)) return saved;
+  } catch { /* uma sessão inválida não deve impedir a abertura do escritório */ }
+  return createTerminalState();
+}
+
 export function WorldPage() {
-  const s = getScenario(escritorio.scenarioId)!;
+  const s = useMemo(() => scenarioForOfficeMap(getScenario(escritorio.scenarioId)!), []);
   const { data } = useStudy();
+  const [searchParams] = useSearchParams();
+  const phase = parseOfficePhase(searchParams.get('fase'));
+  const unitKey = searchParams.get('u') ?? (phase ? 'escritorio:' + phase : undefined);
   const missing = s.requires.filter((r) => !data.reading[r.chapterId]?.sectionsRead.includes(r.sectionId));
   if (missing.length) {
     return (
@@ -96,7 +113,32 @@ export function WorldPage() {
       </div>
     );
   }
-  return <WorldPlay w={escritorio} s={s} />;
+  const requiredPreviousPhase: OfficePhaseId | undefined =
+    phase === 'diagnostico' && !data.unitLog?.['escritorio:triagem']
+      ? 'triagem'
+      : phase === 'resolucao' && !data.unitLog?.['escritorio:diagnostico']
+        ? 'diagnostico'
+        : undefined;
+  if (requiredPreviousPhase) {
+    const previous = OFFICE_PHASES[requiredPreviousPhase];
+    return (
+      <div className="space-y-4">
+        <PageHeader area="explorar" title="Escritório de TI" subtitle="As etapas são liberadas em sequência, conforme as evidências do chamado." art="suporte" />
+        <section className="card p-5" data-testid="mundo-etapa-bloqueada">
+          <p className="kicker">{previous.step}</p>
+          <h2 className="mt-1 text-lg">Conclua a etapa anterior primeiro</h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            {previous.title}: {previous.goal} Esta etapa seguinte só será liberada quando a conclusão anterior estiver registrada na trilha.
+          </p>
+          <Link to={`/escritorio?fase=${requiredPreviousPhase}`} className="btn-primary mt-4 w-full">
+            Continuar: {previous.title} <Icon name="avancar" size={18} />
+          </Link>
+          <Link to="/trilha" className="btn-ghost mt-2 w-full">Voltar à trilha</Link>
+        </section>
+      </div>
+    );
+  }
+  return <WorldPlay w={escritorio} s={s} phase={phase} unitKey={unitKey} />;
 }
 
 type Panel = { kind: 'actor'; id: string } | { kind: 'object'; id: string } | null;
@@ -114,9 +156,12 @@ function useViewport() {
   return v;
 }
 
-function WorldPlay({ w, s }: { w: World; s: Scenario }) {
+function WorldPlay({ w, s, phase, unitKey }: { w: World; s: Scenario; phase?: OfficePhaseId; unitKey?: string }) {
   const navigate = useNavigate();
+  const { data, update } = useStudy();
+  const phaseInfo = phase ? OFFICE_PHASES[phase] : undefined;
   const [st, setSt] = useState<WorldState>(() => load(w, s) ?? fresh(w, s));
+  const [terminalState, setTerminalState] = useState<TerminalState>(loadOfficeTerminalState);
   const [path, setPath] = useState<Tile[]>([]);
   const [after, setAfter] = useState<Panel>(null);
   const [panel, setPanel] = useState<Panel>(null);
@@ -148,6 +193,10 @@ function WorldPlay({ w, s }: { w: World; s: Scenario }) {
       /* sem armazenamento: o mapa continua, só não retoma */
     }
   }, [st, w.id]);
+
+  useEffect(() => {
+    try { localStorage.setItem(OFFICE_TERMINAL_KEY, JSON.stringify(terminalState)); } catch { /* sessão mantém-se em memória */ }
+  }, [terminalState]);
 
   // A página por baixo não rola enquanto o mapa ocupa a tela.
   useEffect(() => {
@@ -208,7 +257,9 @@ function WorldPlay({ w, s }: { w: World; s: Scenario }) {
 
   // Abrir um objeto já disponível o anota no caderno (o exame acontece aqui, fora da renderização).
   useEffect(() => {
-    if (panel?.kind === 'object') setSt((cur) => examine(w, s, cur, panel.id).state);
+    if (panel?.kind !== 'object' || panel.id === 'console') return;
+    if (panel.id === 'terminal' && !processLabIsComplete()) return;
+    setSt((cur) => examine(w, s, cur, panel.id).state);
   }, [panel, w, s]);
 
   const near = adjacentInteractable(w, st.pos);
@@ -294,11 +345,43 @@ function WorldPlay({ w, s }: { w: World; s: Scenario }) {
   const needObjects = tk.kind === 'falta' ? tk.objectIds : [];
   const room = roomAt(w, st.pos);
   const objective = currentObjective(w, st);
+  const phaseDone = Boolean(
+    phase === 'triagem' && st.examined.includes('chamado') ||
+    phase === 'diagnostico' && ['ev.top', 'ev.vmstat'].every((e) => st.scenario.evidence.includes(e)) ||
+    phase === 'resolucao' && st.closed,
+  );
+
+  useEffect(() => {
+    if (!phaseInfo || !unitKey || !phaseDone || data.unitLog?.[unitKey]) return;
+    update((current) => logUnit(current, unitKey));
+  }, [phaseInfo, unitKey, phaseDone, data.unitLog, update]);
+
+  // Registra marcos alcançados mesmo quando o mapa é retomado sem a query-string da trilha.
+  useEffect(() => {
+    update((current) => {
+      let next = current;
+      if (!next.unitLog?.['escritorio:triagem'] && st.examined.includes('chamado')) {
+        next = logUnit(next, 'escritorio:triagem');
+      }
+      if (!next.unitLog?.['escritorio:diagnostico'] && ['ev.top', 'ev.vmstat'].every((e) => st.scenario.evidence.includes(e))) {
+        next = logUnit(next, 'escritorio:diagnostico');
+      }
+      if (!next.unitLog?.['escritorio:resolucao'] && st.closed) {
+        next = logUnit(next, 'escritorio:resolucao');
+      }
+      return next;
+    });
+  }, [st.examined, st.scenario.evidence, st.closed, update]);
+
   const restart = () => {
     setSt(fresh(w, s));
+    setTerminalState(createTerminalState());
     setPanel(null);
     setPath([]);
   };
+  const recordOfficeEvidence = useCallback((objectId: 'terminal' | 'console') => {
+    setSt((current) => examine(w, s, current, objectId).state);
+  }, [w, s]);
 
   return createPortal(
     <div className="fixed inset-0 z-[70] overflow-hidden bg-[#2a2723] text-ink" data-testid="mundo">
@@ -340,7 +423,7 @@ function WorldPlay({ w, s }: { w: World; s: Scenario }) {
       {/* Barra do alto: sair, onde estou, objetivo, caderno e "ir até". */}
       <div className="pointer-events-none absolute inset-x-0 top-0 p-3" style={{ paddingTop: 'max(0.75rem, env(safe-area-inset-top))' }}>
         <div className="pointer-events-auto flex items-start gap-2">
-          <button className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-surface/95 shadow-md" onClick={() => navigate('/explorar')} aria-label="Sair do escritório (fica salvo)">
+          <button className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-surface/95 shadow-md" onClick={() => navigate(phase ? '/trilha' : '/explorar')} aria-label={phase ? "Voltar à trilha" : "Sair do escritório (fica salvo)"}>
             <Icon name="voltar" size={20} />
           </button>
           <div className="min-w-0 flex-1 rounded-2xl bg-surface/95 px-3 py-2 shadow-md">
@@ -358,6 +441,21 @@ function WorldPlay({ w, s }: { w: World; s: Scenario }) {
             <Icon name="mapa" size={20} />
           </button>
         </div>
+        {phaseInfo && (
+          <section className="pointer-events-auto mt-2 max-w-xl rounded-2xl border border-[#d4a017]/30 bg-surface/95 px-3 py-2 shadow-md" data-testid="mundo-fase">
+            <div className="flex items-start gap-2">
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#0f4c5c] text-xs font-bold text-white">{phase === 'triagem' ? '1' : phase === 'diagnostico' ? '2' : '3'}</span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-semibold uppercase tracking-[.12em] text-muted">{phaseInfo.step} · missão da trilha</p>
+                <p className="text-sm font-semibold leading-snug">{phaseInfo.title}</p>
+                <p className="mt-1 text-xs leading-snug text-muted">{phaseInfo.goal}</p>
+                <p className={'mt-1 text-xs font-semibold ' + (phaseDone ? 'text-ok' : 'text-[#0f4c5c]')}>
+                  {phaseDone ? 'Fase concluída e registrada na trilha' : 'Explore o mapa e interaja com as pessoas e objetos para concluir'}
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
       </div>
 
       {/* Painel por cima do mapa: conversa, objeto, caderno ou "ir até". */}
@@ -372,7 +470,7 @@ function WorldPlay({ w, s }: { w: World; s: Scenario }) {
             ) : sheet === 'ir' ? (
               <GoTo w={w} onGo={goNextTo} />
             ) : (
-              <InteractionPanel w={w} s={s} st={st} setSt={setSt} panel={panel} onRestart={restart} />
+              <InteractionPanel w={w} s={s} st={st} setSt={setSt} panel={panel} onRestart={restart} terminalState={terminalState} setTerminalState={setTerminalState} onTerminalComplete={recordOfficeEvidence} />
             )}
           </div>
         </div>
@@ -430,7 +528,14 @@ function GoTo({ w, onGo }: { w: World; onGo: (p: Panel) => void }) {
   );
 }
 
-function InteractionPanel({ w, s, st, setSt, panel, onRestart }: { w: World; s: Scenario; st: WorldState; setSt: (f: (x: WorldState) => WorldState) => void; panel: Panel; onRestart: () => void }) {
+function InteractionPanel({
+  w, s, st, setSt, panel, onRestart, terminalState, setTerminalState, onTerminalComplete,
+}: {
+  w: World; s: Scenario; st: WorldState; setSt: Dispatch<SetStateAction<WorldState>>;
+  panel: Panel; onRestart: () => void; terminalState: TerminalState;
+  setTerminalState: Dispatch<SetStateAction<TerminalState>>;
+  onTerminalComplete: (objectId: 'terminal' | 'console') => void;
+}) {
   if (st.closed)
     return (
       <div className="p-4 pr-12">
@@ -443,32 +548,51 @@ function InteractionPanel({ w, s, st, setSt, panel, onRestart }: { w: World; s: 
     const o = w.objects.find((x) => x.id === panel.id)!;
     const res = examine(w, s, st, o.id);
     const evs = s.evidence.filter((e) => o.evidenceIds.includes(e.id));
+    const terminalMode: OfficeTerminalMode | undefined = o.id === 'terminal' ? 'diagnostico' : o.id === 'console' ? 'resolucao' : undefined;
+    const expectedAction = [...st.scenario.choices].reverse().find((choice) => choice.nodeId === 'n.acao')?.decisionId === 'd.kill9' ? 'kill9' : 'term';
+    const evidenceRecorded = st.examined.includes(o.id);
     return (
       <section className="p-4" aria-live="polite" data-testid="mundo-objeto">
-        <p className="kicker">Examinando</p>
+        <p className="kicker">{terminalMode ? 'Computador interativo' : 'Examinando'}</p>
         <h2 className="mt-0.5 pr-8 text-lg first-letter:uppercase">{o.label}</h2>
         {!res.available ? (
           <p className="mt-2 text-sm">{o.locked}</p>
+        ) : terminalMode === 'diagnostico' && !processLabIsComplete() ? (
+          <div className="mt-3 space-y-3">
+            <p className="text-sm leading-relaxed">
+              A evidência deste terminal está vinculada ao exercício prático. Conclua os comandos Linux no laboratório para liberar os registros e continuar a investigação com a Marta.
+            </p>
+            <p className="rounded-lg border border-line bg-raised/60 p-3 text-xs leading-relaxed text-muted">
+              Observe processos, interprete memória e swap, encerre o processo fictício com segurança e verifique a recuperação. Apenas abrir o laboratório não conclui a tarefa.
+            </p>
+            <Link to="/laboratorio/processos?origem=escritorio" className="btn-primary w-full" data-testid="iniciar-laboratorio-escritorio">
+              Iniciar laboratório de comandos <Icon name="avancar" size={18} />
+            </Link>
+          </div>
+        ) : terminalMode ? (
+          <>
+            <p className="mt-2 text-sm text-muted">{terminalMode === 'diagnostico' ? 'Investigue antes de formular a hipótese: rode os comandos e leia a saída do sistema.' : 'Execute a decisão tomada e confira se a memória se recuperou e o serviço continua ativo.'}</p>
+            <OfficeTerminal mode={terminalMode} state={terminalState} setState={setTerminalState} evidenceRecorded={evidenceRecorded} expectedAction={expectedAction} onComplete={() => onTerminalComplete(o.id as 'terminal' | 'console')} />
+            {terminalMode === 'diagnostico' && (
+              <Link to="/laboratorio/processos?origem=escritorio" className="mt-3 inline-flex text-sm font-semibold text-teal underline underline-offset-4">
+                Revisar laboratório de comandos
+              </Link>
+            )}
+            {evidenceRecorded && (
+              <div className="mt-4 space-y-3 border-t border-line pt-3">
+                {evs.map((e) => <div key={e.id}><p className="text-sm font-semibold">{e.title}</p><pre className="mt-1 whitespace-pre-wrap break-words rounded-md border border-line bg-ink/5 p-3 font-mono text-[0.78rem] leading-relaxed">{e.body}</pre>{e.hint && <p className="mt-1 text-sm text-muted">{e.hint}</p>}</div>)}
+                <p className="text-xs font-semibold text-ok">Anotado no caderno de investigação.</p>
+              </div>
+            )}
+          </>
         ) : evs.length === 0 ? (
           <p className="mt-2 text-sm">{o.info}</p>
         ) : (
           <div className="mt-2 space-y-3">
-            {evs.map((e) => (
-              <div key={e.id}>
-                <p className="text-sm font-semibold">{e.title}</p>
-                <pre className="mt-1 whitespace-pre-wrap break-words rounded-md border border-line bg-ink/5 p-3 font-mono text-[0.78rem] leading-relaxed">{e.body}</pre>
-                {e.hint && <p className="mt-1 text-sm text-muted">{e.hint}</p>}
-              </div>
-            ))}
+            {evs.map((e) => <div key={e.id}><p className="text-sm font-semibold">{e.title}</p><pre className="mt-1 whitespace-pre-wrap break-words rounded-md border border-line bg-ink/5 p-3 font-mono text-[0.78rem] leading-relaxed">{e.body}</pre>{e.hint && <p className="mt-1 text-sm text-muted">{e.hint}</p>}</div>)}
             <p className="text-xs text-muted">Anotado no caderno.</p>
           </div>
         )}
-        {o.id === 'terminal' && res.available && <div className="mt-4 border-t border-line pt-3">
-          <p className="text-sm text-muted">A evidência acima é um retrato do problema. Abra um terminal interativo para executar os comandos de diagnóstico do mesmo chamado.</p>
-          <Link to="/laboratorio-codigo?origem=escritorio&chamado=2318" className="btn-primary mt-3 w-full">
-            <Icon name="tela" size={17}/> Abrir terminal do chamado 2318
-          </Link>
-        </div>}
       </section>
     );
   }

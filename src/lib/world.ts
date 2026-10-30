@@ -4,6 +4,21 @@
 // por um personagem, e alguns só se abrem depois de examinar o objeto certo. Funções puras.
 import type { Scenario, ScenarioState } from './scenario';
 
+/**
+ * O simulador independente pode apresentar saídas de referência junto do diálogo.
+ * No mapa jogável, o terminal deve ser usado antes de registrar essas evidências.
+ */
+export function scenarioForOfficeMap(scenario: Scenario): Scenario {
+  return {
+    ...scenario,
+    nodes: scenario.nodes.map((node) =>
+      node.id === 'n.top' || node.id === 'n.fim'
+        ? { ...node, evidenceIds: [] }
+        : node,
+    ),
+  };
+}
+
 export interface Tile {
   x: number;
   y: number;
@@ -211,7 +226,11 @@ export function examine(w: World, s: Scenario, st: WorldState, objectId: string,
   const order = s.nodes.map((n) => n.id);
   const available = !o.availableFrom || order.indexOf(st.scenario.nodeId) >= order.indexOf(o.availableFrom);
   if (!available || st.examined.includes(objectId)) return { state: st, available };
-  return { state: { ...st, examined: [...st.examined, objectId], updatedAt: now }, available };
+  const addedEvidence = o.evidenceIds.filter((id) => !st.scenario.evidence.includes(id));
+  const scenario = addedEvidence.length
+    ? { ...st.scenario, evidence: [...st.scenario.evidence, ...addedEvidence], updatedAt: now }
+    : st.scenario;
+  return { state: { ...st, examined: [...st.examined, objectId], scenario, updatedAt: now }, available };
 }
 
 /** Objetivo atual, em uma frase. */
