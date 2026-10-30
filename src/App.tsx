@@ -41,6 +41,8 @@ import { TeachersRoomPage } from '@/pages/TeachersRoom';
 import { TrailTeacherPostPage } from '@/pages/TrailTeacherPost';
 import { WorldPage } from '@/pages/World';
 import { ProgrammingLabPage } from '@/pages/ProgrammingLab';
+import { TerminalLabPage } from '@/pages/TerminalLab';
+import { CodeLabPage } from '@/pages/CodeLab';
 import { NarratedPage } from '@/pages/Narrated';
 
 export function AppRoutes() {
@@ -67,7 +69,9 @@ export function AppRoutes() {
         <Route path="feed-aulas" element={<TeachersRoomPage />} />
         <Route path="trilha-post/:chapterId/:sectionId" element={<TrailTeacherPostPage />} />
         <Route path="escritorio" element={<WorldPage />} />
-        <Route path="laboratorio-codigo" element={<ProgrammingLabPage />} />
+        <Route path="laboratorios" element={<TerminalLabPage />} />
+        <Route path="laboratorio/:id" element={<TerminalLabPage />} />
+        <Route path="laboratorio-codigo" element={<CodeLabPage />} />
         <Route path="laboratorio-programacao" element={<ProgrammingLabPage />} />
         <Route path="aula-narrada/:id" element={<NarratedPage />} />
         <Route path="pratica/:chapterId/:sectionId" element={<PracticePage />} />

@@ -177,6 +177,15 @@ export function Dashboard() {
         </TileGrid>
       </section>
 
+      <section aria-label="Prática de TI" className="space-y-3">
+        <SectionTitle>Entre nos ambientes de prática</SectionTitle>
+        <TileGrid>
+          <Tile wide to="/escritorio" icon="mapa" color={color('explorar')} title="Escritório de TI 2D" text="Explore o mapa, caminhe pelos setores, converse com a equipe e resolva o chamado 2318." index={4} />
+          <Tile to="/laboratorios" icon="tela" color={color('reino')} title="Laboratórios Linux" text="Pratique processos, arquivos, shell, rede e Git com comandos." index={5} />
+          <Tile to="/laboratorio-codigo" icon="dados" color={color('treino')} title="Bancada JavaScript" text="Escreva código, execute e veja a saída passo a passo." index={6} />
+        </TileGrid>
+      </section>
+
       {flashcard && (
         <Link to="/flashcards" className="flex items-start gap-3 rounded-2xl border border-line bg-surface p-4 transition hover:border-ink/20">
           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gold/10 text-gold"><Icon name="estrela" size={20} /></span>

@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
@@ -6,14 +6,32 @@ import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
 import { saveData } from '@/lib/storage';
 import { emptyData } from '@/lib/model';
+import { createTerminalState, executeTerminalCommand, getTerminalLab, terminalLabProgress } from '@/lib/terminal-lab';
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
 import { getScenario } from '@/content';
 import { escritorio } from '@/content/world/escritorio';
 import { advance, choose, startScenario } from '@/lib/scenario';
-import { adjacentInteractable, currentObjective, examine, facingOf, findPath, pathNextTo, restoreWorld, roomAt, talk, validateWorld, walkable, type WorldState } from '@/lib/world';
+import { adjacentInteractable, currentObjective, examine, scenarioForOfficeMap, facingOf, findPath, pathNextTo, restoreWorld, roomAt, talk, validateWorld, walkable, type WorldState } from '@/lib/world';
 
 const s = getScenario(escritorio.scenarioId)!;
 const start = (): WorldState => ({ worldId: escritorio.id, version: escritorio.version, pos: escritorio.start, facing: 'direita', examined: [], scenario: startScenario(s, 't0'), updatedAt: 't0' });
+
+describe('cenário especial para o mapa interativo', () => {
+  it('não injeta a saída do terminal automaticamente no mapa jogável', () => {
+    const mapScenario = scenarioForOfficeMap(s);
+    let state = startScenario(mapScenario, 't0');
+    state = advance(mapScenario, choose(mapScenario, state, 'd.reiniciar', 't1'), 't1');
+    for (const d of ['d.top', 'd.cpu']) state = advance(mapScenario, choose(mapScenario, state, d, 't2'), 't2');
+    expect(state.nodeId).toBe('n.top');
+    expect(state.evidence).not.toContain('ev.top');
+    expect(state.evidence).not.toContain('ev.vmstat');
+    state = advance(mapScenario, choose(mapScenario, state, 'd.thrashing', 't3'), 't3');
+    state = advance(mapScenario, choose(mapScenario, state, 'd.term', 't4'), 't4');
+    expect(state.nodeId).toBe('n.fim');
+    expect(state.evidence).not.toContain('ev.depois');
+    expect(s.nodes.find((node) => node.id === 'n.top')?.evidenceIds).toEqual(['ev.top', 'ev.vmstat']);
+  });
+});
 
 describe('escritório 2D', () => {
   it('mapa válido: grade regular, todos alcançáveis, cada nó com quem o apresenta', () => {
@@ -43,7 +61,8 @@ describe('escritório 2D', () => {
     expect(talk(escritorio, w, 'joao').kind).toBe('conversa');
     expect(talk(escritorio, w, 'marta').kind).toBe('node');
     w = { ...w, scenario: advance(s, choose(s, w.scenario, 'd.top')) };
-    // A hipótese só abre depois de examinar o terminal.
+    // O motor genérico do cenário conserva suas evidências de referência; o mapa usa scenarioForOfficeMap.
+    expect(w.scenario.evidence).toEqual(expect.arrayContaining(['ev.top', 'ev.vmstat']));
     expect(talk(escritorio, w, 'marta')).toEqual({ kind: 'falta', objectIds: ['terminal'] });
     expect(currentObjective(escritorio, w)).toMatch(/terminal/);
     w = examine(escritorio, s, w, 'terminal').state;
@@ -60,6 +79,7 @@ describe('escritório 2D', () => {
     const ex = examine(escritorio, s, w, 'console');
     expect(ex.available).toBe(true);
     w = ex.state;
+    expect(w.scenario.evidence).toContain('ev.depois');
     expect(talk(escritorio, w, 'marta').kind).toBe('node');
     w = { ...w, closed: true };
     expect(currentObjective(escritorio, w)).toMatch(/resolvida/);
@@ -98,11 +118,11 @@ describe('escritório: móveis, objetos de ambiente e direção', () => {
 });
 
 describe('tela do escritório (tela cheia)', () => {
-  const renderWorld = () =>
+  const renderWorld = (path = '/escritorio') =>
     render(
       <PrefsProvider>
         <StudyProvider>
-          <MemoryRouter initialEntries={['/escritorio']}>
+          <MemoryRouter initialEntries={[path]}>
             <AppRoutes />
           </MemoryRouter>
         </StudyProvider>
@@ -130,38 +150,77 @@ describe('tela do escritório (tela cheia)', () => {
     expect(await screen.findByTestId('mundo-conversa')).toHaveTextContent(/primeiro chamado/);
   });
 
-  it('abre o terminal interativo do mesmo chamado e depois retoma o mapa do escritório', async () => {
+  it('o terminal do mapa exige concluir o laboratório antes de liberar a evidência', async () => {
     const user = userEvent.setup();
     renderWorld();
-
     await user.click(screen.getByRole('button', { name: 'Ir até' }));
-    await user.click(screen.getByRole('button', { name: /Terminal na mesa da Marta/ }));
-    const terminalPanel = await screen.findByTestId('mundo-objeto');
-    expect(terminalPanel).toHaveTextContent('Saída do top');
-    const launch = within(terminalPanel).getByRole('link', { name: /Abrir terminal do chamado 2318/ });
-    expect(launch).toHaveAttribute('href', '/laboratorio-codigo?origem=escritorio&chamado=2318');
-
-    await user.click(launch);
-    expect(await screen.findByRole('heading', { name: 'Laboratório de programação' })).toBeInTheDocument();
-    expect(screen.getByText(/Aberto pelo terminal da Marta no mapa/)).toBeInTheDocument();
-
-    for (const command of ['pwd', 'ls', 'top', 'free -h', 'vmstat 2', 'ps aux | grep importador']) {
-      await user.click(screen.getByRole('button', { name: 'Preencher comando ' + command }));
-      await user.click(screen.getByRole('button', { name: 'Executar comando' }));
-    }
-    await user.click(screen.getByRole('button', { name: /Falta RAM/ }));
-    expect(JSON.parse(localStorage.getItem('cronicas:escritorio:terminal:2318') ?? '{}')).toMatchObject({ callId: '2318', diagnosis: 'thrashing' });
-
-    await user.click(screen.getByRole('button', { name: 'Voltar ao escritório 2D' }));
-    expect(await screen.findByTestId('mundo')).toBeInTheDocument();
-    expect(screen.getByTestId('mundo-sala')).toHaveTextContent('Suporte');
-    expect(screen.getByTestId('mundo-objetivo')).toHaveTextContent(/João/);
-
-    await user.click(screen.getByRole('button', { name: 'Ir até' }));
-    await user.click(screen.getByRole('button', { name: /João,/ }));
-    expect(await screen.findByTestId('mundo-conversa')).toHaveTextContent(/O processo que está ocupando 71,5% da memória/);
-    expect(screen.getByRole('button', { name: /Pedir o término com kill 4127/ })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /terminal na mesa da Marta/i }));
+    const panel = await screen.findByTestId('mundo-objeto');
+    expect(panel).toHaveTextContent(/conclua os comandos Linux no laboratório/i);
+    expect(panel).not.toHaveTextContent(/saída do top/i);
+    expect(screen.getByRole('link', { name: /iniciar laboratório de comandos/i })).toHaveAttribute(
+      'href',
+      '/laboratorio/processos?origem=escritorio',
+    );
   });
+
+  it('registra a evidência depois que todos os passos do laboratório foram concluídos', async () => {
+    let labState = createTerminalState();
+    for (const command of ['pwd', 'ps aux', 'top', 'vmstat 2', 'kill 4127', 'free -h', 'df -h']) {
+      labState = executeTerminalCommand(labState, command).state;
+    }
+    const labDefinition = getTerminalLab('processos')!;
+    expect(terminalLabProgress(labDefinition, labState).done).toBe(true);
+    localStorage.setItem('cronicas:terminal-lab:v1:processos', JSON.stringify(labState));
+
+    const user = userEvent.setup();
+    renderWorld();
+    await user.click(screen.getByRole('button', { name: 'Ir até' }));
+    await user.click(screen.getByRole('button', { name: /terminal na mesa da Marta/i }));
+    const panel = await screen.findByTestId('mundo-objeto');
+    expect(await screen.findByText(/Anotado no caderno de investigação/i)).toBeInTheDocument();
+    expect(panel).toHaveTextContent(/Investigue antes de formular a hipótese/i);
+    expect(screen.getByRole('link', { name: /revisar laboratório de comandos/i })).toHaveAttribute(
+      'href',
+      '/laboratorio/processos?origem=escritorio',
+    );
+  });
+
+  it('bloqueia o diagnóstico quando a triagem ainda não foi registrada', () => {
+    renderWorld('/escritorio?fase=diagnostico');
+    expect(screen.getByTestId('mundo-etapa-bloqueada')).toHaveTextContent(/Conclua a etapa anterior primeiro/);
+    expect(screen.getByRole('link', { name: /Continuar: Triagem do chamado/ })).toHaveAttribute(
+      'href',
+      '/escritorio?fase=triagem',
+    );
+  });
+
+  it('a resolução exige diagnóstico registrado e libera a fase anterior corretamente', () => {
+    renderWorld('/escritorio?fase=resolucao');
+    expect(screen.getByTestId('mundo-etapa-bloqueada')).toHaveTextContent(/Conclua a etapa anterior primeiro/);
+    expect(screen.getByRole('link', { name: /Continuar: Diagnóstico com evidências/ })).toHaveAttribute(
+      'href',
+      '/escritorio?fase=diagnostico',
+    );
+  });
+
+  it('mostra os objetivos da fase depois de registrar a etapa anterior', () => {
+    saveData('visitante', {
+      ...emptyData(),
+      reading: { 'cap.infra.03': { chapterId: 'cap.infra.03', sectionsRead: ['processos'], updatedAt: '2026-10-28T10:00:00.000Z' } },
+      unitLog: { 'escritorio:triagem': '2026-10-28T10:00:00.000Z' },
+    });
+    renderWorld('/escritorio?fase=diagnostico');
+    expect(screen.getByTestId('mundo-fase')).toHaveTextContent(/Fase 2 de 3/);
+    expect(screen.getByTestId('mundo-fase')).toHaveTextContent(/Diagnóstico com evidências/);
+  });
+
+  it('oferece retorno ao mapa ao abrir o laboratório a partir do escritório', () => {
+    renderWorld('/laboratorio/processos?origem=escritorio');
+    expect(screen.getByTestId('return-office-map')).toHaveTextContent(/Voltar ao mapa do Escritório de TI/);
+    expect(screen.getByRole('link', { name: /Voltar ao mapa do Escritório de TI/ })).toHaveAttribute('href', '/escritorio');
+  });
+
   it('teclado anda uma casa e vira o personagem; Esc fecha o painel', async () => {
     const user = userEvent.setup();
     renderWorld();

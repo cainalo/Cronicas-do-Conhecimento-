@@ -92,7 +92,9 @@ export function StudiesPage() {
             badge={wrong ? `${wrong} a revisar` : undefined}
           />
           <Tile to="/slides" icon="cartas" color="rgb(var(--gold))" title="Slides de revisão" text="Revise os conceitos em lâminas visuais por capítulo; imprima ou salve em PDF." />
-          <Tile to="/escritorio" icon="tela" color="rgb(var(--teal))" title="Escritório de TI" text="Ande pelo escritório, converse com a equipe e resolva um chamado." />
+          <Tile wide to="/laboratorios" icon="tela" color="rgb(var(--teal))" title="Laboratórios práticos" text="Use comandos Linux em cinco ambientes guiados: processos, arquivos, shell, rede e Git." />
+          <Tile to="/laboratorio-codigo" icon="dados" color="rgb(var(--gold))" title="Laboratório de programação" text="Escreva JavaScript, execute o código e observe variáveis, expressões e decisões." />
+          <Tile wide to="/escritorio" icon="mapa" color="rgb(var(--ember))" title="Escritório de TI 2D" text="Ande pelo mapa, converse com a equipe, investigue um chamado e use terminais no próprio ambiente." />
           <Tile to="/sala" icon="balao" color="rgb(var(--azure))" title="Sala dos Professores" text="Dicas, pegadinhas e mini-desafios." />
         </TileGrid>
       </section>
