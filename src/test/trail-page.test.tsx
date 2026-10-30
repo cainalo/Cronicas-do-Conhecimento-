@@ -8,8 +8,8 @@ import { AppRoutes } from '@/App';
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
 beforeEach(() => localStorage.clear());
 
-describe('apresentação da trilha', () => {
-  it('mostra cada capítulo como uma seção editorial com acesso ao texto e lista ledger', () => {
+describe('trilha organizada por matéria', () => {
+  it('agrupa capítulos em mini trilhas por disciplina e mostra o progresso real', () => {
     render(
       <PrefsProvider>
         <StudyProvider>
@@ -22,16 +22,19 @@ describe('apresentação da trilha', () => {
 
     expect(screen.getByRole('heading', { name: 'Trilha' })).toBeInTheDocument();
     expect(screen.getByTestId('continuar-trilha')).toBeInTheDocument();
-    expect(screen.getByRole('list', { name: 'Capítulos da trilha' })).toBeInTheDocument();
+    expect(screen.getByRole('list', { name: 'Matérias da trilha' })).toBeInTheDocument();
 
-    const chapters = screen.getAllByTestId(/^trilha-capitulo-/);
-    expect(chapters.length).toBeGreaterThan(0);
-    const firstChapter = chapters[0];
-    expect(within(firstChapter).getByRole('heading', { level: 2 })).toBeInTheDocument();
-    expect(within(firstChapter).getByRole('link', { name: /Texto completo/ })).toBeInTheDocument();
-    expect(within(firstChapter).getByRole('list', { name: /Atividades de/ })).toBeInTheDocument();
+    const subjects = screen.getAllByTestId(/^trilha-materia-/);
+    expect(subjects.length).toBeGreaterThan(1);
+    const firstSubject = subjects[0];
+    expect(within(firstSubject).getByRole('heading', { level: 2 })).toBeInTheDocument();
+    expect(within(firstSubject).getByRole('progressbar')).toBeInTheDocument();
+    expect(within(firstSubject).getByRole('link', { name: /Ver matéria/ })).toBeInTheDocument();
 
-    // A lista é aberta diretamente, sem cartões de capítulo que se expandem/recolhem.
-    expect(within(firstChapter).queryByRole('button')).toBeNull();
+    const miniTrails = within(firstSubject).getAllByTestId(/^mini-trilha-/);
+    expect(miniTrails.length).toBeGreaterThan(0);
+    expect(within(miniTrails[0]).getByRole('list', { name: /Atividades de/ })).toBeInTheDocument();
+    expect(within(miniTrails[0]).getByRole('link', { name: /Texto completo/ })).toBeInTheDocument();
+    expect(within(firstSubject).getByText(/Aula com|Professora|Professor/)).toBeInTheDocument();
   });
 });
