@@ -1,4 +1,4 @@
-O edital pede **números inteiros e racionais**, com as operações de adição, subtração, multiplicação, divisão e potenciação, **expressões numéricas**, **frações e operações com frações** e problemas. A FCC raramente cobra conta pela conta: o cálculo aparece dentro de uma situação (um saldo orçamentário, uma escala de servidores, a parcela de um contrato). O erro mais comum do candidato é de ordem das operações ou de sinal, e as alternativas erradas costumam ser exatamente esses resultados.
+O edital pede **++números inteiros++ e ++números racionais++**, com as operações de adição, subtração, multiplicação, divisão e potenciação, **++expressões numéricas++**, **++frações e operações com frações++** e problemas. A FCC raramente cobra conta pela conta: o cálculo aparece dentro de uma situação (um saldo orçamentário, uma escala de servidores, a parcela de um contrato). O erro mais comum do candidato é de ordem das operações ou de sinal, e as alternativas erradas costumam ser exatamente esses resultados.
 
 ### Conjuntos numéricos
 
@@ -8,7 +8,7 @@ O edital pede **números inteiros e racionais**, com as operações de adição,
 | Inteiros | ℤ | ..., −2, −1, 0, 1, 2, ... | Incluem os negativos (saldo devedor, déficit) |
 | Racionais | ℚ | 3/4, −0,5, 2, 0,333... | Todo número que pode ser escrito como a/b, com a e b inteiros e b ≠ 0 |
 
-Todo natural é inteiro e todo inteiro é racional (5 = 5/1). Decimais finitos e **dízimas periódicas** são racionais.
+Todo natural é inteiro e todo inteiro é racional (5 = 5/1). Decimais finitos e **++dízimas periódicas++** são racionais.
 
 ### Regras de sinais e ordem das operações
 

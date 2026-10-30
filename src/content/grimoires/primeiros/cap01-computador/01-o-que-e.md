@@ -1,4 +1,4 @@
-Antes de qualquer assunto de TI, vale entender o que um computador faz. A ideia é simples. Ele **recebe** informação, **trabalha** com ela, **guarda** o que precisa e **mostra** o resultado. Pense em uma cozinha: chegam os ingredientes, a cozinheira prepara, a geladeira guarda e o prato sai para a mesa.
+Antes de qualquer assunto de TI, vale entender o que um ++computador++ faz. A ideia é simples. Ele **recebe** informação, **trabalha** com ela, **guarda** o que precisa e **mostra** o resultado. Pense em uma cozinha: chegam os ingredientes, a cozinheira prepara, a geladeira guarda e o prato sai para a mesa.
 
 ### Como o computador surgiu
 
@@ -6,7 +6,7 @@ O computador não foi inventado de uma vez. Ele é o resultado de séculos de te
 
 - **Ábaco**: há milhares de anos, vários povos já usavam contas que deslizam em varetas para somar e subtrair. Quem fazia o trabalho ainda era a pessoa.
 - **1642, máquina de somar de Pascal**: o francês Blaise Pascal construiu uma máquina de engrenagens que somava sozinha. Era mecânica e fazia uma só coisa.
-- **1804, tear de Jacquard**: Joseph-Marie Jacquard criou um tear que seguia **cartões perfurados**. Trocando os cartões, o tear tecia outro desenho. Nascia a ideia de dar **instruções** a uma máquina.
+- **1804, tear de Jacquard**: Joseph-Marie Jacquard criou um tear que seguia **++cartões perfurados++**. Trocando os cartões, o tear tecia outro desenho. Nascia a ideia de dar **++instruções++** a uma máquina.
 - **Década de 1830, máquina analítica de Babbage**: o inglês Charles Babbage projetou uma máquina de calcular que seguiria cartões perfurados, com uma parte para fazer contas e outra para guardar números. Ela nunca foi terminada, mas já tinha as partes de um computador. Em **1843**, **Ada Lovelace** publicou instruções para essa máquina, considerado o primeiro programa de computador.
 - **1890, o censo dos Estados Unidos**: Herman Hollerith usou cartões perfurados e máquinas elétricas para contar a população muito mais rápido. A empresa dele deu origem à **IBM**.
 - **1946, ENIAC**: apresentado nos Estados Unidos, foi um dos primeiros computadores eletrônicos. Usava cerca de **18 mil válvulas**, pesava quase 30 toneladas e ocupava uma sala inteira.

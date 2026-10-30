@@ -1,12 +1,12 @@
-O sistema operacional é o software que administra o hardware e oferece serviços aos programas: ele decide quem usa a CPU, quanta memória cada programa recebe, como os arquivos são guardados e quem pode acessar o quê. O edital pede **administração básica** de Windows e Linux e o **gerenciamento de processos, memória e sistemas de arquivos**. Esta seção trata dos dois primeiros e dos serviços do sistema.
+O ++sistema operacional++ é o software que administra o hardware e oferece serviços aos programas: ele decide quem usa a CPU, quanta memória cada programa recebe, como os arquivos são guardados e quem pode acessar o quê. O edital pede **administração básica** de Windows e Linux e o **gerenciamento de processos, memória e sistemas de arquivos**. Esta seção trata dos dois primeiros e dos serviços do sistema.
 
 ### Programa, processo e thread
 
 | Conceito | O que é |
 |---|---|
 | **Programa** | Arquivo executável guardado em disco. É passivo. |
-| **Processo** | Um programa em execução, com espaço de memória próprio, identificador (**PID**), dono e estado. |
-| **Thread** | Linha de execução dentro de um processo. As threads de um mesmo processo **compartilham a memória** dele, o que torna a troca de dados mais rápida e exige cuidado com concorrência. |
+| **++Processo++** | Um programa em execução, com espaço de memória próprio, identificador (++PID++), dono e estado. |
+| **++Thread++** | Linha de execução dentro de um processo. As threads de um mesmo processo **compartilham a memória** dele, o que torna a troca de dados mais rápida e exige cuidado com concorrência. |
 
 Abrir duas vezes o mesmo editor de planilhas gera, em geral, dois processos distintos a partir de um único programa.
 
@@ -22,7 +22,7 @@ Um processo alterna entre estados ao longo da vida:
 | **Bloqueado** (em espera) | Aguarda um evento, como a leitura de disco ou a resposta de rede. |
 | Terminado | Encerrou e aguarda a liberação dos recursos. |
 
-O **escalonador** escolhe qual processo pronto vai para a CPU. Windows e Linux usam escalonamento **preemptivo**: o sistema pode retirar a CPU de um processo (por fim da fatia de tempo ou chegada de um processo mais prioritário) sem esperar que ele a libere. A troca de um processo por outro na CPU chama-se **troca de contexto**.
+O **++escalonador++** escolhe qual processo pronto vai para a CPU. Windows e Linux usam escalonamento **preemptivo**: o sistema pode retirar a CPU de um processo (por fim da fatia de tempo ou chegada de um processo mais prioritário) sem esperar que ele a libere. A troca de um processo por outro na CPU chama-se **troca de contexto**.
 
 No Linux, um processo **zumbi** (estado `Z` no `ps`) já terminou, mas o processo pai ainda não leu seu código de saída. Ele não consome CPU, só uma entrada na tabela de processos.
 

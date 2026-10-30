@@ -1,4 +1,4 @@
-**RAG** (*Retrieval-Augmented Generation*, geração aumentada por recuperação) combina uma etapa de **busca** com a **geração** do LLM. Antes de responder, o sistema recupera trechos relevantes de uma base de conhecimento e os coloca no contexto. O termo vem do artigo de Lewis e colegas, de 2020.
+**++RAG++** (*Retrieval-Augmented Generation*, geração aumentada por recuperação) combina uma etapa de **++busca++** com a **++geração++** do LLM. Antes de responder, o sistema recupera trechos relevantes de uma base de conhecimento e os coloca no contexto. O termo vem do artigo de Lewis e colegas, de 2020.
 
 ### Como o RAG surgiu
 
@@ -20,7 +20,7 @@
 1. **Coleta** dos documentos (PDFs, páginas, tabelas).
 2. **Divisão em trechos** (*chunking*): textos longos são quebrados em pedaços menores, às vezes com sobreposição entre eles.
 3. **Geração de embeddings**: cada trecho vira um vetor.
-4. **Armazenamento** dos vetores, com o texto e metadados, em um **banco vetorial**.
+4. **Armazenamento** dos vetores, com o texto e metadados, em um **++banco vetorial++**.
 
 **Fase de consulta (a cada pergunta):**
 
