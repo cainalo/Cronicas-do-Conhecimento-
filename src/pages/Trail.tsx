@@ -146,7 +146,7 @@ export function TrailPage() {
                           <div className="absolute bottom-5 left-[17px] top-5 w-[3px] rounded-full bg-raised" aria-hidden="true" />
                           <div className="absolute left-[17px] top-5 w-[3px] rounded-full" style={{ height: 'calc(' + pct + '% - 1.25rem)', background: color }} aria-hidden="true" />
                           <ol className="relative space-y-2" aria-label={'Atividades de ' + chapter.title}>
-                            {row.units.map(({ unit, state }, index) => {
+                            {row.units.map(({ unit, state }) => {
                               const title = unit.title.replace(/^[^:]+:\s*/, '');
                               const icon = KIND_ICON[unit.kind] ?? 'lista';
                               const contents = (

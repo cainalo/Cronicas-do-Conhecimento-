@@ -9,22 +9,27 @@ function underlineTerms() {
   return (tree: MarkdownNode) => {
     const visit = (parent: MarkdownNode) => {
       if (!parent.children) return;
-      parent.children = parent.children.flatMap((node) => {
+      const next: MarkdownNode[] = [];
+      for (const node of parent.children) {
         if (node.type === 'text' && typeof node.value === 'string' && node.value.includes('++')) {
-          return node.value.split(/(\+\+[^+\n]+?\+\+)/g).filter(Boolean).map((part) => {
+          const pieces = node.value.split(/(\\+\\+[^+\\n]+?\\+\\+)/g).filter(Boolean);
+          for (const part of pieces) {
             if (part.startsWith('++') && part.endsWith('++')) {
-              return {
+              next.push({
                 type: 'underline',
                 data: { hName: 'u', hProperties: { className: ['term-underline'] } },
                 children: [{ type: 'text', value: part.slice(2, -2) }],
-              };
+              });
+            } else {
+              next.push({ type: 'text', value: part });
             }
-            return { type: 'text', value: part };
-          });
+          }
+        } else {
+          visit(node);
+          next.push(node);
         }
-        visit(node);
-        return node;
-      });
+      }
+      parent.children = next;
     };
     visit(tree);
   };
