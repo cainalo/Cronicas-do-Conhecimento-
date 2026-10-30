@@ -507,7 +507,7 @@ export const teacherPosts: TeacherPost[] = [
     body: 'Imagine que um cliente envia uma solicitação para criar um pagamento. A conexão cai antes de chegar a resposta. Repetir a chamada sem controle pode criar duas operações. Uma chave de idempotência permite reconhecer tentativas que representam a mesma intenção. **O tratamento de repetição precisa considerar o efeito da operação, não apenas o código HTTP.**',
     chapterId: 'cap.dev.01',
     sectionId: 'rest',
-    topicIds: ['ti.dev.api'],
+    topicIds: ['ti.dev.apis'],
     estimatedMinutes: 2,
     challenge: {
       statement: 'Repetir automaticamente qualquer requisição POST após um timeout é sempre seguro.',
