@@ -78,7 +78,7 @@ export function TeacherCharacter({
           ? { left: 'M73 111Q57 130 65 158L82 173L94 143Z', right: 'M130 111Q149 130 141 158L124 173L112 143Z', leftHand: 'M67 162Q58 165 63 178L71 191Q80 193 84 182L79 169Z', rightHand: 'M139 162Q148 165 143 178L135 191Q126 193 122 182L127 169Z' }
           : { left: 'M73 110Q52 103 37 81L20 88Q26 128 67 146L83 137Z', right: 'M130 110Q153 103 168 81L185 88Q179 128 138 146L122 137Z', leftHand: 'M24 92Q15 91 14 81L13 68Q17 60 23 68L28 79Q31 69 37 75L39 91Q36 101 25 99Z', rightHand: 'M181 92Q190 91 191 81L192 68Q188 60 182 68L177 79Q174 69 168 75L166 91Q169 101 180 99Z' };
   return (
-    <svg viewBox="0 0 200 220" width={style.width} height={style.height} className={\`shrink-0 overflow-visible \${className}\`} role="img" aria-label={\`\${teacher.name}, personagem vetorial\`} focusable="false">
+    <svg viewBox="0 0 200 220" width={style.width} height={style.height} className={`shrink-0 overflow-visible ${className}`} role="img" aria-label={`${teacher.name}, personagem vetorial`} focusable="false">
       {/* Silhueta principal contínua: pernas, sapatos, tronco e braços preenchidos. */}
       <path d="M78 151Q103 161 129 151L126 190L117 202L107 190L101 202L91 190L79 200L74 190Z" fill={look.pants} stroke="#263D43" strokeWidth="2.5" strokeLinejoin="round"/>
       <path d="M77 190Q88 187 99 193L99 207H65Q61 201 69 195Z" fill="#233840" stroke="#172D34" strokeWidth="2"/>
@@ -127,7 +127,7 @@ export function TeacherScene({
   className?: string;
 }) {
   return (
-    <section className={\`teacher-scene \${className}\`} style={{ '--teacher-tone': \`rgb(var(--\${teacher.tone}))\` } as CSSProperties} aria-label={\`\${teacher.name} explicando: \${heading}\`}>
+    <section className={`teacher-scene ${className}`} style={{ '--teacher-tone': `rgb(var(--${teacher.tone}))` } as CSSProperties} aria-label={`${teacher.name} explicando: ${heading}`}>
       <div className="teacher-scene__portrait">
         <span className="teacher-scene__spotlight" aria-hidden="true"/>
         <TeacherCharacter teacher={teacher} pose={pose} size={size} className="teacher-scene__figure"/>
