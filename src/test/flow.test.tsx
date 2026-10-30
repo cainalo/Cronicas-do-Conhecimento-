@@ -200,6 +200,13 @@ it('torre: apresenta os cards coloridos e não exibe contagem regressiva nem seq
    expect(screen.queryByText(/dia[s]? seguido[s]? de estudo/i)).not.toBeInTheDocument();
  });
 
+ it('mantém o cabeçalho Pórtico e o estilo de navegação dentro das aulas', () => {
+   renderAt('/aprender/cap.prim.01/computador/prim.computador.1');
+   expect(screen.getByRole('banner')).toBeInTheDocument();
+   expect(screen.getByTestId('portico-wordmark-center')).toBeInTheDocument();
+   expect(screen.getByRole('link', { name: 'Conta e configurações' })).toBeInTheDocument();
+ });
+
  it('um só destino: Torre, cabeçalho e menu levam ao mesmo passo', () => {
   renderAt('/');
   const torre = screen.getByTestId('continuar-torre').getAttribute('href');
