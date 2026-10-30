@@ -587,7 +587,7 @@ export const teacherPosts: TeacherPost[] = [
     body: 'Compare: “Os servidores que concluíram o treinamento receberão acesso” e “Os servidores, que concluíram o treinamento, receberão acesso”. Na primeira frase, a oração delimita um grupo; na segunda, a informação aparece como explicação sobre o grupo inteiro. A pontuação não é enfeite: ela organiza a relação entre as ideias.',
     chapterId: 'cap.port.01',
     sectionId: 'interpretacao',
-    topicIds: ['ti.portugues.interpretacao'],
+    topicIds: ['cg.portugues.interpretacao'],
     estimatedMinutes: 2,
     challenge: {
       statement: 'Em qualquer frase, inserir vírgulas em uma oração relativa mantém exatamente o mesmo sentido.',

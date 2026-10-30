@@ -2,7 +2,7 @@ name: Publicar site e app Android
 
 on:
   push:
-    branches: [main, claude/cronicas-conhecimento-estudos-jgbofo]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -17,10 +17,9 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     env:
-      # Sem keystore de release, a main atualiza o site e preserva o APK já publicado, evitando
-      # trocar a assinatura instalada no Android. O APK só é reconstruído/publicado no branch
-      # de trabalho ou quando os segredos ANDROID_KEYSTORE_* estão configurados.
-      CAN_PUBLISH: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' || github.ref_name == 'claude/cronicas-conhecimento-estudos-jgbofo' }}
+      # O APK só é reconstruído quando a chave Android de release está configurada.
+      # Sem ela, a main atualiza o site e preserva o APK estável já publicado.
+      CAN_PUBLISH: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
       APP_VERSION_CODE: ${{ github.run_number }}
       APP_VERSION_NAME: 0.1.${{ github.run_number }}
     steps:
