@@ -18,7 +18,7 @@ import { conceptForTerm } from '@/lib/contentValidator';
 import { Markdown } from '@/components/Markdown';
 import { Icon } from '@/components/Icon';
 import { ActivityView } from '@/components/activities/ActivityView';
-import { TeacherCue } from '@/components/TeacherCharacter';
+import { TeacherScene } from '@/components/TeacherCharacter';
 
 type Stage = 'abertura' | 'etapas' | 'pratica' | 'prova' | 'sintese';
 
@@ -157,6 +157,17 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
   };
   const advanceStep = () => (st.step + 1 < n ? set({ step: st.step + 1, recovery: null }) : set({ stage: 'pratica', step: n, recovery: null, pi: 0 }));
   const doneSteps = st.stage === 'etapas' ? st.step : st.stage === 'abertura' ? 0 : n;
+  const activeStep = unit.steps[Math.min(st.step, n - 1)];
+  const teacherHeading = st.stage === 'abertura' ? 'Vamos começar juntos'
+    : st.stage === 'pratica' ? 'Agora é sua vez de aplicar'
+      : st.stage === 'prova' ? 'Desafio no estilo da prova'
+        : st.stage === 'sintese' ? 'Você concluiu esta aula'
+          : activeStep?.title ?? unit.title;
+  const teacherMessage = st.stage === 'abertura' ? teacher.motto
+    : st.stage === 'pratica' ? 'Tente resolver sem consultar o material. Estou acompanhando seu raciocínio.'
+      : st.stage === 'prova' ? 'Use o que aprendeu para analisar este novo contexto.'
+        : st.stage === 'sintese' ? 'Muito bem! Guarde as ideias centrais e continue sua jornada.'
+          : activeStep?.goal ?? teacher.speakingStyle;
 
   return (
     <div className="mx-auto max-w-3xl pb-10">
@@ -185,14 +196,7 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
         </p>
       </header>
 
-      <TeacherCue
-        teacher={teacher}
-        pose={st.stage === 'sintese' ? 'celebrating' : st.stage === 'pratica' || st.stage === 'prova' ? 'thinking' : st.stage === 'abertura' ? 'greeting' : 'presenting'}
-        size={88}
-        className="mb-5"
-      >
-        {st.stage === 'sintese' ? 'Boa etapa! Retenha as ideias centrais e siga para a prática.' : st.stage === 'pratica' ? 'Agora experimente usar o conceito. Eu acompanho seu raciocínio.' : st.stage === 'prova' ? 'Vamos testar se você transfere a ideia para um contexto novo.' : teacher.motto}
-      </TeacherCue>
+      <TeacherScene teacher={teacher} pose={st.stage === 'sintese' ? 'celebrating' : st.stage === 'pratica' || st.stage === 'prova' ? 'thinking' : st.stage === 'abertura' ? 'greeting' : 'presenting'} size={166} heading={teacherHeading} message={teacherMessage} className="mb-5" />
 
       {section && (
         <section className="mb-5" aria-label="Material integral da matéria">
@@ -232,7 +236,7 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
             const firstParagraphId = s.blocks.find((block) => block.kind === 'paragraph')?.id;
             return (
               <li key={s.id} ref={(el) => (stepRefs.current[i] = el)} className="scroll-mt-28" aria-current={current ? 'step' : undefined}>
-                {current && <TeacherCue teacher={teacher} pose="presenting" size={66} compact className="mb-3">{teacher.speakingStyle}</TeacherCue>}
+
                 <p className="text-xs font-semibold text-gold">
                   {s.part} · etapa {i + 1} de {n}
                 </p>

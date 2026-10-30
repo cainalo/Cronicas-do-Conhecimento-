@@ -20,7 +20,7 @@ import { PageDots, SwipePages, type PageItem } from '@/components/SwipePages';
 import { splitMarkdown } from '@/lib/book';
 import { Icon } from '@/components/Icon';
 import { Illustration, type IllustrationName } from '@/components/Illustration';
-import { TeacherCue } from '@/components/TeacherCharacter';
+import { TeacherCue, TeacherScene } from '@/components/TeacherCharacter';
 import { StepGuide } from '@/components/StepGuide';
 import { ActivityView } from '@/components/activities/ActivityView';
 
@@ -154,7 +154,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
 
   const summaryItems = (): PageItem[] => [
     { key: 'h', node: <h2 className="text-lg">O que você aprendeu</h2> },
-    { key: 'teacher', node: <TeacherCue teacher={teacher} pose="celebrating" size={86}>{teacher.motto}</TeacherCue> },
+    { key: 'teacher', node: <TeacherScene teacher={teacher} pose="celebrating" size={145} eyebrow="AULA CONCLUÍDA" heading="Muito bem! Você avançou." message={teacher.motto} /> },
     ...lesson.summary.map((t, k) => ({
       key: `s${k}`,
       node: (
@@ -203,7 +203,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
 
       {phase.k === 'abertura' && (
         <section className="flex min-h-0 flex-1 flex-col" aria-label="Abertura">
-          <TeacherCue teacher={teacher} pose="greeting" size={84} compact>{teacher.motto}</TeacherCue>
+          <TeacherScene teacher={teacher} pose="greeting" size={148} heading="Vamos começar juntos" message={teacher.motto} />
           <p className="mb-3 mt-3 border-l-2 border-gold pl-3 text-sm text-muted">Antes de explicar, uma pergunta. Não vale nota: é só para você pensar no problema.</p>
           <ActivityView key="abertura" fit a={lesson.opening} onNext={() => set({ k: 'explicar', i: 0 })} />
         </section>
@@ -217,9 +217,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
           <h1 className="mt-0.5 text-2xl leading-tight">{phase.k === 'explicar' ? step.title : 'Vamos ver de outro jeito'}</h1>
           {phase.k === 'explicar' && <p className="mb-2 mt-0.5 text-sm text-muted">Objetivo: {step.goal}</p>}
           {phase.k === 'explicar' && (
-            <TeacherCue teacher={teacher} pose="presenting" size={72} compact className="mb-2">
-              {teacher.motto}
-            </TeacherCue>
+            <TeacherScene teacher={teacher} pose="presenting" size={148} eyebrow={phase.k === 'recuperar' ? 'OUTRA EXPLICAÇÃO' : 'AULA EM ANDAMENTO'} heading={phase.k === 'explicar' ? step.title : 'Vamos ver de outro jeito'} message={phase.k === 'explicar' ? step.goal : teacher.speakingStyle} className="mb-2" />
           )}
           {phase.k === 'explicar' && section && (
             <div className="mb-2 flex justify-end">
@@ -284,7 +282,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
 
       {step && (phase.k === 'checar' || phase.k === 'rechecar') && (
         <section className="flex min-h-0 flex-1 flex-col" aria-label="Checagem">
-          <TeacherCue teacher={teacher} pose="thinking" size={62} compact>{teacher.speakingStyle}</TeacherCue>
+          <TeacherScene teacher={teacher} pose="thinking" size={132} eyebrow="HORA DE CONFERIR" heading="Vamos pensar juntos" message={teacher.speakingStyle} />
           <p className="mb-1 mt-2 text-xs font-semibold text-gold">
             {phase.k === 'checar' ? 'Confira o que acabou de aprender' : 'Mais uma, com outro exemplo'} · etapa {phase.i + 1} de {n}
           </p>
@@ -318,7 +316,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
             <p className="kicker">Antes de praticar</p>
             <h1 className="mt-0.5 text-2xl leading-tight">Veja de outro jeito</h1>
             <p className="mt-1 text-sm text-muted">Videoaulas complementares do assunto. A aula narrada fica disponível na trilha, em sua página própria.</p>
-            <TeacherCue teacher={teacher} pose="presenting" size={66} compact className="mt-2">Observe a demonstração de {teacher.name}; compare a explicação com o caso mostrado.</TeacherCue>
+            <TeacherScene teacher={teacher} pose="presenting" size={142} eyebrow="EXEMPLO EM CENA" heading="Veja o conceito em ação" message={`Observe esta demonstração comigo. Compare a explicação com o caso mostrado.`} />
           </div>
           <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain">
             {videos.map((v) => <VideoEmbed key={v.id} url={v.url} title={v.title} meta={[v.channel, v.duration].filter(Boolean).join(' · ')} />)}
@@ -331,7 +329,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
       )}
       {phase.k === 'praticar' && (
         <section className="flex min-h-0 flex-1 flex-col" aria-label="Prática final">
-          <TeacherCue teacher={teacher} pose="thinking" size={60} compact>Agora aplique a ideia sem olhar a explicação. Você consegue?</TeacherCue>
+          <TeacherScene teacher={teacher} pose="thinking" size={130} eyebrow="SUA VEZ" heading="Vamos aplicar o que aprendemos" message="Agora tente resolver sem consultar o texto. Eu vou acompanhar seu raciocínio." />
           <p className="mb-1 mt-2 text-xs font-semibold text-gold">
             Prática com tudo o que você aprendeu · {phase.i + 1} de {lesson.consolidation.length}
           </p>
@@ -351,7 +349,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
 
       {phase.k === 'prova' && examQs[phase.i] && (
         <section className="flex min-h-0 flex-1 flex-col" aria-label="Questão de prova">
-          <TeacherCue teacher={teacher} pose="presenting" size={60} compact>Vamos transferir o que você aprendeu para uma questão no estilo da prova.</TeacherCue>
+          <TeacherScene teacher={teacher} pose="presenting" size={130} eyebrow="DESAFIO DE PROVA" heading="Uma questão para pensar" message="Vamos transferir o que você aprendeu para uma situação no estilo da prova." />
           <ActivityView
             key={lesson.exam[phase.i].id}
             fit

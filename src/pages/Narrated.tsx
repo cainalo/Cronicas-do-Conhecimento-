@@ -922,7 +922,7 @@ function CinematicScene({
       <div className="ccv-film-orbit ccv-film-orbit--two" aria-hidden="true" />
 
       <header className="ccv-film-header">
-        <span className="ccv-film-brand"><span className="ccv-film-host"><TeacherCharacter teacher={teacher} pose={teacherPose} size={48} /></span><span>ESTÚDIO · {teacher.name.toUpperCase()}</span><i /><span>CRÔNICAS</span></span>
+        <span className="ccv-film-brand"><span className="ccv-film-host"><TeacherCharacter teacher={teacher} pose={teacherPose} size={82} /></span><span>ESTÚDIO · {teacher.name.toUpperCase()}</span><i /><span>CRÔNICAS</span></span>
         <span className="ccv-film-counter">{String(sceneIndex + 1).padStart(2, '0')} / {String(sceneCount).padStart(2, '0')}</span>
       </header>
 

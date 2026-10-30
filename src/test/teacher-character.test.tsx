@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { TeacherCharacter } from '@/components/TeacherCharacter';
+import { TeacherCharacter, TeacherScene } from '@/components/TeacherCharacter';
 import { Illustration, type IllustrationName } from '@/components/Illustration';
 import { teacherForChapter, teachers } from '@/content';
 
@@ -17,6 +17,26 @@ describe('personagens-professores vetoriais', () => {
     expect(new Set(labels).size).toBe(teachers.length);
     const drawings = portraits.map((portrait) => portrait.innerHTML);
     expect(new Set(drawings).size).toBe(teachers.length);
+  });
+
+
+  it('desenha silhuetas fechadas de corpo inteiro, com mãos visíveis e ligadas aos braços', () => {
+    const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} pose="presenting" size={180}/>)}</div>);
+    const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
+    expect(figures).toHaveLength(teachers.length);
+    for (const figure of figures) {
+      expect(figure.getAttribute('viewBox')).toBe('0 0 200 220');
+      expect(figure.querySelectorAll('path[fill]').length).toBeGreaterThan(8);
+      expect(figure.querySelectorAll('path[stroke]').length).toBeGreaterThan(5);
+    }
+  });
+
+  it('mostra o professor em uma cena de explicação, com fala contextual e presença visual grande', () => {
+    const { container, getByRole, getByText } = render(<TeacherScene teacher={teachers[0]} heading="Somar números inteiros" message="Vamos caminhar pela reta numérica juntos." size={180}/>);
+    expect(getByRole('region', { name: /explicando: Somar números inteiros/i })).toBeInTheDocument();
+    expect(getByText('Somar números inteiros')).toBeInTheDocument();
+    expect(getByText(/Vamos caminhar pela reta numérica juntos/)).toBeInTheDocument();
+    expect(container.querySelector('.teacher-scene__figure')).toBeInTheDocument();
   });
 
   it('atribui um professor coerente às principais disciplinas', () => {

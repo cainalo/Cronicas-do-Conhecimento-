@@ -59,7 +59,7 @@ function Prop({ look }: { look: Look }) {
 }
 
 export function TeacherCharacter({
-  teacher, pose = 'presenting', size = 112, className = '',
+  teacher, pose = 'presenting', size = 160, className = '',
 }: {
   teacher: FictionalTeacher;
   pose?: TeacherPose;
@@ -67,45 +67,83 @@ export function TeacherCharacter({
   className?: string;
 }) {
   const look = LOOKS[teacher.id] ?? LOOKS['prof.lia'];
-  const style: CSSProperties = { height: size, width: Math.round(size * 0.91) };
-  const arms = pose === 'celebrating'
-    ? 'M70 112Q42 93 35 65L27 69Q35 111 69 134 M129 112Q158 91 166 64L174 70Q165 114 130 135'
-    : pose === 'thinking'
-      ? 'M70 112Q51 89 67 80L78 88Q72 98 88 109 M129 112Q146 92 128 82L118 90Q126 102 111 108'
-      : pose === 'listening'
-        ? 'M70 112Q59 133 66 151L76 151L82 128 M129 112Q140 133 133 151L123 151L117 128'
-        : 'M70 112Q45 98 40 76L29 66Q28 100 68 132 M129 112Q149 130 157 113L164 95Q147 102 132 119';
+  const style: CSSProperties = { height: size, width: Math.round(size * .91) };
+  const arm = pose === 'celebrating'
+    ? { left: 'M73 111Q51 99 42 63L25 53Q15 91 57 137L77 143Z', right: 'M130 111Q153 98 163 63L180 53Q191 91 148 137L127 143Z', leftHand: 'M29 58Q18 59 16 47L9 32Q12 23 19 32L25 43Q24 27 31 27L37 48Q43 38 49 45L43 64Z', rightHand: 'M176 58Q187 59 189 47L196 32Q193 23 186 32L180 43Q181 27 174 27L168 48Q162 38 156 45L162 64Z' }
+    : pose === 'greeting'
+      ? { left: 'M73 111Q58 122 64 151L80 162L94 133Z', right: 'M130 108Q150 92 153 58L172 49L184 58Q181 105 149 133L131 127Z', leftHand: 'M66 151Q57 155 62 167L70 178Q79 181 83 170L78 156Z', rightHand: 'M172 55Q165 49 168 38L170 24Q175 16 180 25L179 36Q186 20 191 27L188 43Q196 32 201 40L194 57Q185 69 174 63Z' }
+      : pose === 'thinking'
+        ? { left: 'M73 111Q57 122 65 151L83 164L95 133Z', right: 'M130 109Q151 115 152 140L138 155Q122 143 119 126Z', leftHand: 'M66 153Q57 158 62 170L72 181Q81 181 84 170L78 156Z', rightHand: 'M139 153Q129 149 133 135L144 118Q152 112 157 121L153 137L164 128Q172 132 166 142L153 158Z' }
+        : pose === 'listening'
+          ? { left: 'M73 111Q57 130 65 158L82 173L94 143Z', right: 'M130 111Q149 130 141 158L124 173L112 143Z', leftHand: 'M67 162Q58 165 63 178L71 191Q80 193 84 182L79 169Z', rightHand: 'M139 162Q148 165 143 178L135 191Q126 193 122 182L127 169Z' }
+          : { left: 'M73 110Q52 103 37 81L20 88Q26 128 67 146L83 137Z', right: 'M130 110Q153 103 168 81L185 88Q179 128 138 146L122 137Z', leftHand: 'M24 92Q15 91 14 81L13 68Q17 60 23 68L28 79Q31 69 37 75L39 91Q36 101 25 99Z', rightHand: 'M181 92Q190 91 191 81L192 68Q188 60 182 68L177 79Q174 69 168 75L166 91Q169 101 180 99Z' };
   return (
-    <svg viewBox="0 0 200 220" width={style.width} height={style.height} className={`shrink-0 overflow-visible ${className}`} role="img" aria-label={`${teacher.name}, personagem vetorial`} focusable="false">
-      <ellipse cx="103" cy="210" rx="45" ry="7" fill="rgb(var(--ink) / .10)"/>
-      <path d="M79 154L74 196H94L102 163L110 196H131L126 154Z" fill={look.pants}/>
-      <path d="M74 193Q83 188 97 196L98 207H67Q66 199 74 193M110 196Q124 188 134 195Q142 199 139 207H108Z" fill="#233840"/>
-      <path d="M72 89Q100 76 130 90L142 157Q104 173 64 157Z" fill={look.jacket}/>
-      <path d="M92 88L103 102L116 88L119 160H88Z" fill={look.shirt}/>
-      <path d={arms} fill="none" stroke={look.jacket} strokeWidth="17" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d={arms} fill="none" stroke={look.shirt} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
-      {pose === 'celebrating' && <path d="M28 61l-8-11M37 57l-1-14M165 58l8-12M157 57l1-14" stroke={look.accent} strokeWidth="4" strokeLinecap="round"/>}
-      <path d="M92 72H114V94Q103 104 92 94Z" fill={look.skin}/>
-      <ellipse cx="103" cy="53" rx="31" ry="36" fill={look.skin}/>
+    <svg viewBox="0 0 200 220" width={style.width} height={style.height} className={\`shrink-0 overflow-visible \${className}\`} role="img" aria-label={\`\${teacher.name}, personagem vetorial\`} focusable="false">
+      {/* Silhueta principal contínua: pernas, sapatos, tronco e braços preenchidos. */}
+      <path d="M78 151Q103 161 129 151L126 190L117 202L107 190L101 202L91 190L79 200L74 190Z" fill={look.pants} stroke="#263D43" strokeWidth="2.5" strokeLinejoin="round"/>
+      <path d="M77 190Q88 187 99 193L99 207H65Q61 201 69 195Z" fill="#233840" stroke="#172D34" strokeWidth="2"/>
+      <path d="M108 193Q120 186 132 191L140 201Q143 208 135 208H106Z" fill="#233840" stroke="#172D34" strokeWidth="2"/>
+      <path d="M68 201h22M116 201h17" stroke="#F7EEDF" strokeWidth="2" strokeLinecap="round" opacity=".75"/>
+      <path d="M75 90Q103 77 131 90Q143 97 147 124L143 160Q104 172 61 160L59 125Q63 98 75 90Z" fill={look.jacket} stroke="#263D43" strokeWidth="2.8" strokeLinejoin="round"/>
+      <path d="M91 88L103 103L116 88L124 160H81Z" fill={look.shirt} stroke="#263D43" strokeWidth="1.8" strokeLinejoin="round"/>
+      <path d="M91 90L103 104L116 90" fill="none" stroke={look.accent} strokeWidth="3" strokeLinejoin="round"/>
+      <path d="M103 108v42" stroke={look.accent} strokeWidth="2" strokeDasharray="3 6"/>
+      <path d={arm.left} fill={look.jacket} stroke="#263D43" strokeWidth="2.6" strokeLinejoin="round"/>
+      <path d={arm.right} fill={look.jacket} stroke="#263D43" strokeWidth="2.6" strokeLinejoin="round"/>
+      <path d={arm.leftHand} fill={look.skin} stroke="#794B3A" strokeWidth="2" strokeLinejoin="round"/>
+      <path d={arm.rightHand} fill={look.skin} stroke="#794B3A" strokeWidth="2" strokeLinejoin="round"/>
+      <path d={pose === 'greeting' ? 'M176 43l-1-11M185 45l4-11M194 49l5-8' : pose === 'celebrating' ? 'M23 45l-5-10M184 45l5-10' : 'M22 81l-1-7M30 91l1-7M181 91l-1-7'} stroke="#794B3A" strokeWidth="1.7" strokeLinecap="round" fill="none"/>
+      <path d="M92 72H114V96Q103 105 92 96Z" fill={look.skin} stroke="#794B3A" strokeWidth="1.6"/>
+      <ellipse cx="103" cy="53" rx="31" ry="36" fill={look.skin} stroke="#794B3A" strokeWidth="2.3"/>
+      <ellipse cx="72" cy="67" rx="5" ry="8" fill={look.skin}/>
+      <ellipse cx="134" cy="67" rx="5" ry="8" fill={look.skin}/>
       <Hair look={look}/>
-      <path d="M88 53q5-4 10 0M111 53q5-4 10 0" stroke="#35251E" strokeWidth="2" fill="none" strokeLinecap="round"/>
-      <ellipse cx="93" cy="61" rx="2.3" ry="2.8" fill="#241D1B"/><ellipse cx="114" cy="61" rx="2.3" ry="2.8" fill="#241D1B"/>
-      <path d={pose === 'thinking' ? 'M98 76q5-4 10 0' : 'M96 76q7 7 14 0'} stroke="#71422F" strokeWidth="2" fill="none" strokeLinecap="round"/>
+      <path d="M88 53q5-4 10 0M111 53q5-4 10 0" stroke={look.hair} strokeWidth="2.2" fill="none" strokeLinecap="round"/>
+      <ellipse cx="93" cy="61" rx="2.5" ry="3" fill="#241D1B"/><ellipse cx="114" cy="61" rx="2.5" ry="3" fill="#241D1B"/>
+      <path d={pose === 'thinking' ? 'M98 76q5-4 10 0' : 'M96 76q7 7 14 0'} stroke="#71422F" strokeWidth="2.2" fill="none" strokeLinecap="round"/>
       {look.accessory === 'glasses' && <g stroke="#243940" strokeWidth="2.2" fill="none"><circle cx="92" cy="61" r="8"/><circle cx="115" cy="61" r="8"/><path d="M100 61h7"/></g>}
-      {look.accessory === 'round-glasses' && <g stroke="#C8402A" strokeWidth="2.5" fill="none"><circle cx="92" cy="61" r="9"/><circle cx="115" cy="61" r="9"/><path d="M101 61h5"/></g>}
+      {look.accessory === 'round-glasses' && <g stroke={look.accent} strokeWidth="2.5" fill="none"><circle cx="92" cy="61" r="9"/><circle cx="115" cy="61" r="9"/><path d="M101 61h5"/></g>}
       {look.accessory === 'headset' && <g stroke={look.accent} strokeWidth="4" fill="none"><path d="M70 59Q69 20 103 18Q138 20 136 59"/><path d="M69 55v18M136 55v18M136 72h-8"/></g>}
       {look.accessory === 'headband' && <path d="M73 42Q103 21 133 42" fill="none" stroke={look.accent} strokeWidth="5" strokeLinecap="round"/>}
       {look.accessory === 'earrings' && <g fill={look.accent}><circle cx="70" cy="69" r="3.2"/><circle cx="136" cy="69" r="3.2"/></g>}
       {look.accessory === 'tie' && <path d="M103 104l-7 12 7 27 8-27Z" fill={look.accent}/>}
-      {look.accessory === 'beard' && <path d="M76 67Q77 101 103 104Q129 101 130 67Q119 89 103 86Q87 89 76 67Z" fill={look.hair}/>}
+      {look.accessory === 'beard' && <path d="M76 67Q77 101 103 104Q129 101 130 67Q119 89 103 86Q87 89 76 67Z" fill={look.hair} stroke="#794B3A" strokeWidth="1"/>}
       {look.prop && <Prop look={look}/>}
-      <circle cx="103" cy="16" r="3" fill={look.accent} opacity={pose === 'celebrating' ? 1 : .45}/>
+      <ellipse cx="103" cy="214" rx="43" ry="5" fill="#162E34" opacity=".12"/>
     </svg>
   );
 }
 
+/** Cena didática: professor em destaque, enquadrado em uma bancada e falando diretamente com o aluno. */
+export function TeacherScene({
+  teacher, pose = 'presenting', size = 156, eyebrow = 'AULA COM SEU PROFESSOR', heading, message, className = '',
+}: {
+  teacher: FictionalTeacher;
+  pose?: TeacherPose;
+  size?: number;
+  eyebrow?: string;
+  heading: string;
+  message: ReactNode;
+  className?: string;
+}) {
+  return (
+    <section className={\`teacher-scene \${className}\`} style={{ '--teacher-tone': \`rgb(var(--\${teacher.tone}))\` } as CSSProperties} aria-label={\`\${teacher.name} explicando: \${heading}\`}>
+      <div className="teacher-scene__portrait">
+        <span className="teacher-scene__spotlight" aria-hidden="true"/>
+        <TeacherCharacter teacher={teacher} pose={pose} size={size} className="teacher-scene__figure"/>
+        <span className="teacher-scene__name">{teacher.name}</span>
+      </div>
+      <div className="teacher-scene__lesson">
+        <p className="teacher-scene__eyebrow">{eyebrow} · {teacher.expertiseLabel}</p>
+        <h2 className="teacher-scene__heading">{heading}</h2>
+        <div className="teacher-scene__speech"><span className="teacher-scene__quote" aria-hidden="true">“</span><div>{message}</div></div>
+      </div>
+    </section>
+  );
+}
+
 export function TeacherCue({
-  teacher, pose = 'presenting', size = 88, children, compact = false, className = '',
+  teacher, pose = 'presenting', size = 112, children, compact = false, className = '',
 }: {
   teacher: FictionalTeacher;
   pose?: TeacherPose;
