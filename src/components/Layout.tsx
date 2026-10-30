@@ -92,7 +92,7 @@ export function Layout() {
   const inner = !isAreaHome(pathname);
   // Leitura/prática ocultam a navegação inferior; aula narrada standalone ocupa a viewport inteira.
   const standaloneNarration = /^\/aula-narrada\//.test(pathname);
-  const immersive = standaloneNarration || /^\\/(capitulo|aprender|pratica|licao|missao|video|trilha-post)\\//.test(pathname);
+  const immersive = standaloneNarration || /^\/(capitulo|aprender|pratica|licao|missao|video|trilha-post)\//.test(pathname);
   const onAccount = areaOf(pathname) === 'conta';
 
   // As barras desaparecem ao ler para baixo e voltam quando o usuário sobe.
