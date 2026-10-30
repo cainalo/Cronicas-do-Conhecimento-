@@ -214,7 +214,7 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
           <p className="text-xs font-semibold text-gold">
             {step.part} · etapa {phase.i + 1} de {n}
           </p>
-          <h1 className="mt-0.5 text-2xl leading-tight">{phase.k === 'explicar' ? step.title : 'Vamos ver de outro jeito'}</h1>
+          <h1 className="mt-0.5 text-2xl leading-tight">{phase.k === 'explicar' ? step.title : 'Vamos tentar por outro caminho'}</h1>
           {phase.k === 'explicar' && <p className="mb-2 mt-0.5 text-sm text-muted">Objetivo: {step.goal}</p>}
           <TeacherScene teacher={teacher} pose="presenting" size={148} eyebrow={phase.k === 'recuperar' ? 'OUTRA EXPLICAÇÃO' : 'AULA EM ANDAMENTO'} heading={phase.k === 'explicar' ? 'Vamos entender esta ideia' : 'Vamos ver de outro jeito'} message={phase.k === 'explicar' ? `${step.title}. ${step.goal}` : teacher.speakingStyle} className="mb-2" />
           {phase.k === 'explicar' && section && (

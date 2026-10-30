@@ -27,7 +27,7 @@ describe('trilha organizada por matéria', () => {
     const subjects = screen.getAllByTestId(/^trilha-materia-/);
     expect(subjects.length).toBeGreaterThan(1);
     const firstSubject = subjects[0];
-    expect(within(firstSubject).getByRole('heading', { level: 2 })).toBeInTheDocument();
+    expect(within(firstSubject).getAllByRole('heading', { level: 2 }).length).toBeGreaterThan(1);
     expect(within(firstSubject).getByRole('progressbar')).toBeInTheDocument();
     expect(within(firstSubject).getByRole('link', { name: /Ver matéria/ })).toBeInTheDocument();
 
