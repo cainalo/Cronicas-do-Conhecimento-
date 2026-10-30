@@ -88,7 +88,7 @@ it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcr
   await user.click(screen.getByRole('button', { name: 'Ir para a cena 6: Subtrair é somar o oposto' }));
   expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/cinco menos oito/);
   await user.click(screen.getByRole('button', { name: 'Transcrição' }));
-  expect(screen.getByRole('region', { name: 'Transcrição' })).toHaveTextContent(/tirar menos dois/i);
+  expect(screen.getByRole('region', { name: 'Transcrição' })).toHaveTextContent(/subtrair um número equivale a somar o oposto/i);
   // Vai à última cena e deixa terminar: aparece a checagem opcional.
   await user.click(screen.getByRole('button', { name: /Ir para a cena 8/ }));
   await user.click(screen.getByTestId('narrada-tocar'));
