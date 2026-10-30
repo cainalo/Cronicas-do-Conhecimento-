@@ -12,17 +12,31 @@ function underlineTerms() {
       const next: MarkdownNode[] = [];
       for (const node of parent.children) {
         if (node.type === 'text' && typeof node.value === 'string' && node.value.includes('++')) {
-          const pieces = node.value.split(/(\\+\\+[^+\\n]+?\\+\\+)/g).filter(Boolean);
-          for (const part of pieces) {
-            if (part.startsWith('++') && part.endsWith('++')) {
+          const value = node.value;
+          let cursor = 0;
+          while (cursor < value.length) {
+            const open = value.indexOf('++', cursor);
+            if (open < 0) {
+              next.push({ type: 'text', value: value.slice(cursor) });
+              break;
+            }
+            if (open > cursor) next.push({ type: 'text', value: value.slice(cursor, open) });
+            const close = value.indexOf('++', open + 2);
+            if (close < 0) {
+              next.push({ type: 'text', value: value.slice(open) });
+              break;
+            }
+            const term = value.slice(open + 2, close);
+            if (!term.trim() || term.includes('\\n')) {
+              next.push({ type: 'text', value: value.slice(open, close + 2) });
+            } else {
               next.push({
                 type: 'underline',
                 data: { hName: 'u', hProperties: { className: ['term-underline'] } },
-                children: [{ type: 'text', value: part.slice(2, -2) }],
+                children: [{ type: 'text', value: term }],
               });
-            } else {
-              next.push({ type: 'text', value: part });
             }
+            cursor = close + 2;
           }
         } else {
           visit(node);
