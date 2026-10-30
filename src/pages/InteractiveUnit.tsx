@@ -162,12 +162,12 @@ export function InteractiveUnitPage({ unit }: { unit: LearningUnit }) {
     : st.stage === 'pratica' ? 'Agora é sua vez de aplicar'
       : st.stage === 'prova' ? 'Desafio no estilo da prova'
         : st.stage === 'sintese' ? 'Você concluiu esta aula'
-          : activeStep?.title ?? unit.title;
+          : 'Acompanhe esta explicação';
   const teacherMessage = st.stage === 'abertura' ? teacher.motto
     : st.stage === 'pratica' ? 'Tente resolver sem consultar o material. Estou acompanhando seu raciocínio.'
       : st.stage === 'prova' ? 'Use o que aprendeu para analisar este novo contexto.'
         : st.stage === 'sintese' ? 'Muito bem! Guarde as ideias centrais e continue sua jornada.'
-          : activeStep?.goal ?? teacher.speakingStyle;
+          : activeStep ? `${activeStep.title}. ${activeStep.goal}` : teacher.speakingStyle;
 
   return (
     <div className="mx-auto max-w-3xl pb-10">

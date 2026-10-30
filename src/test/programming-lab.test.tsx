@@ -68,6 +68,6 @@ describe('laboratórios Linux virtuais', () => {
     await runCommand(user, 'chmod 640 /home/aluno/backup/relat-01.log');
     await runCommand(user, 'ls -l /home/aluno/backup');
     expect(screen.getByTestId('terminal-output')).toHaveTextContent('rw-r-----');
-    expect(screen.getByText(/nada é executado no seu celular|não executa.*dispositivo/i)).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Ambiente de computador simulado' })).toBeInTheDocument();
   });
 });
