@@ -248,10 +248,10 @@ function Face({ look, pose }: { look: Look; pose: TeacherPose }) {
   const browWidth = look.brows === 'heavy' ? 7 : look.brows === 'soft' ? 4 : 5.5;
   const noses: Record<NoseStyle, ReactNode> = {
     none: null,
-    dot: <circle cx="120" cy={eyeY + 17} r="2.6" fill="#A86F58" opacity=".8"/>,
-    button: <ellipse cx="120" cy={eyeY + 17} rx="4.3" ry="3.2" fill="#B77960" opacity=".72"/>,
-    bridge: <path d={'M120 ' + (eyeY + 8) + ' Q115 ' + (eyeY + 20) + ' 120 ' + (eyeY + 21)} fill="none" stroke="#A86F58" strokeWidth="2.8" strokeLinecap="round"/>,
-    broad: <path d={'M114 ' + (eyeY + 18) + ' Q120 ' + (eyeY + 24) + ' 126 ' + (eyeY + 18)} fill="none" stroke="#A86F58" strokeWidth="3.5" strokeLinecap="round"/>,
+    dot: <circle cx="120" cy={eyeY + 12} r="2.6" fill="#A86F58" opacity=".8"/>,
+    button: <ellipse cx="120" cy={eyeY + 12} rx="4.3" ry="3.2" fill="#B77960" opacity=".72"/>,
+    bridge: <path d={'M120 ' + (eyeY + 5) + ' Q115 ' + (eyeY + 13) + ' 120 ' + (eyeY + 15)} fill="none" stroke="#A86F58" strokeWidth="2.8" strokeLinecap="round"/>,
+    broad: <path d={'M114 ' + (eyeY + 12) + ' Q120 ' + (eyeY + 18) + ' 126 ' + (eyeY + 12)} fill="none" stroke="#A86F58" strokeWidth="3.5" strokeLinecap="round"/>,
   };
   const cheeks: Record<CheekStyle, ReactNode> = {
     none: null,
@@ -335,6 +335,7 @@ export function TeacherCharacter({
     'one-hand-up': { left:'M88 164Q76 184 76 207', right:'M152 160Q178 127 184 88', lh:[76,207], rh:[184,88], hand:'open' },
   };
   const a = arms[characterPose];
+  const gesture = a.hand;
   const style: CSSProperties = portrait ? { width:size, height:size } : { width:Math.round(size * .92), height:size };
   return (
     <svg viewBox={portrait ? '40 12 160 160' : '0 0 240 270'} width={style.width} height={style.height}
