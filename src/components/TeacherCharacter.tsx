@@ -466,7 +466,7 @@ function Hand({ x, y, skin, gesture }: { x: number; y: number; skin: string; ges
 
 
 function CharacterBody({ look }: { look:Look }) {
-  if (look.species === 'human') return <CharacterBody look={look}/>;
+  if (look.species === 'human') return <path d={BODY_PATH[look.body]} fill={look.top}/>;
   const shapes: Record<Exclude<Species,'human'>,string> = {
     capybara: 'M81 145Q120 121 159 145Q176 164 166 211Q120 238 74 211Q64 164 81 145Z', beaver: 'M79 137Q120 119 161 137Q178 157 168 212Q120 235 72 212Q62 157 79 137Z', axolotl: 'M91 132Q120 118 149 132Q162 151 155 217Q120 239 85 217Q78 151 91 132Z',
     cat: 'M95 130Q120 116 145 130Q160 149 152 218Q120 234 88 218Q80 149 95 130Z', frog: 'M86 140Q120 119 154 140Q174 164 159 213Q120 242 81 213Q66 164 86 140Z', armadillo: 'M93 136Q120 122 147 136Q157 157 151 211Q120 231 89 211Q83 157 93 136Z',
