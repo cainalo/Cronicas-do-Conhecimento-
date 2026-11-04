@@ -156,7 +156,8 @@ try {
     console.log('Retomando uma transferência anterior.');
   }
 } catch {
-  // Não há sessão anterior válida; uma nova será criada abaixo.
+  // Sessão ausente/expirada; criar outra do zero.
+  uploadUrl = undefined;
 }
 
 if (!uploadUrl) {
