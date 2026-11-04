@@ -170,10 +170,6 @@ export function TeacherCharacter({
   );
 }
 
-function HairAccessory({ look }: { look: Look }) {
-  if (look.accessory === 'headband') return null;
-  return null;
-}
 
 export function TeacherScene({
   teacher, pose = 'presenting', size = 174, eyebrow = 'AULA COM SEU PROFESSOR', heading, message, className = '',
