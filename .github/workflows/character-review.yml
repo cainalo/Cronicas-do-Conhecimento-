@@ -2,9 +2,10 @@ name: Revisão visual dos personagens Pórtico
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'work/portico-character-design-v15']
     paths:
       - 'src/components/TeacherCharacter.tsx'
+      - 'src/components/TeacherCharacterV15.tsx'
       - 'src/pages/TeacherCharacterReview.tsx'
       - 'src/test/teacher-character.test.tsx'
       - 'src/content/teachers.ts'
