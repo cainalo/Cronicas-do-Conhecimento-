@@ -74,7 +74,7 @@ function Eye({
     >
       <g transform={'rotate(' + tilt + ' ' + x + ' ' + y + ')'}>
         {joyful
-          ? <path d={happyArc} fill="none" stroke={iris} strokeWidth={Math.max(2.8, eyeRx * .25)} strokeLinecap="round"/>
+          ? <path data-eye-closed="true" d={happyArc} fill="none" stroke={iris} strokeWidth={Math.max(2.8, eyeRx * .25)} strokeLinecap="round"/>
           : <>
               {shape === 'almond'
                 ? <path data-eye-base="true" d={almond} fill={WHITE}/>

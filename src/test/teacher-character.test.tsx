@@ -5,7 +5,7 @@ import { Illustration, type IllustrationName } from '@/components/Illustration';
 import { teacherForChapter, teachers } from '@/content';
 import { TeacherCharacterReviewPage } from '@/pages/TeacherCharacterReview';
 
-describe('elenco vetorial original do Pórtico — V20', () => {
+describe('elenco vetorial original do Pórtico — V21', () => {
   it('desenha um personagem completo e identificável para cada docente', () => {
     const { container } = render(
       <div>{teachers.map((teacher) => (
@@ -103,7 +103,8 @@ describe('elenco vetorial original do Pórtico — V20', () => {
     const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
     for (const figure of figures) {
       const eyeBases = Array.from(figure.querySelectorAll('[data-eye-base="true"]'));
-      expect(eyeBases.length).toBeGreaterThan(0);
+      const closedEyes = Array.from(figure.querySelectorAll('[data-eye-closed="true"]'));
+      expect(eyeBases.length + closedEyes.length).toBeGreaterThan(0);
       expect(eyeBases.every((eye) => !eye.hasAttribute('stroke'))).toBe(true);
       expect(figure.querySelectorAll('[data-eye-shape]').length).toBeGreaterThan(0);
       expect(figure.getAttribute('data-character-eye-shape')).toBeTruthy();
