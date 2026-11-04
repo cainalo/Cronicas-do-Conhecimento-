@@ -47,6 +47,14 @@ jobs:
         run: npx playwright install chromium
       - name: Verificação de layout no navegador
         run: npm run test:e2e
+      - name: Guardar capturas para revisão visual
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portico-visual-review
+          path: artifacts/visual-review/*.png
+          if-no-files-found: warn
+          retention-days: 7
       - name: Preparar projeto Android
         if: env.CAN_PUBLISH == 'true'
         run: npx cap sync android

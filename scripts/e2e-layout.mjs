@@ -7,6 +7,7 @@
 // tudo também com o estilo de cartões "vidro" (backdrop-filter), que já prendeu overlays antes.
 // Uso: npm run build && npm run test:e2e
 import { spawn } from 'node:child_process';
+import { mkdirSync } from 'node:fs';
 import { chromium } from 'playwright';
 
 const PORT = 4321;
@@ -22,6 +23,13 @@ const PAGES = [
 const LESSON = '/aprender/cap.prim.01/computador/prim.computador.1';
 const GUIDE_LESSON = '/aprender/cap.infra.03/arquivos';
 const TOL = 1.5;
+const SCREENSHOT_DIR = 'artifacts/visual-review';
+const REVIEW_SHOTS = [
+  { name: 'trilha', path: '/trilha' },
+  { name: 'aula-processos', path: '/aprender/cap.infra.03/processos' },
+  { name: 'aula-computador', path: '/aprender/cap.prim.01/computador/prim.computador.1' },
+  { name: 'explorar', path: '/explorar' },
+];
 
 const failures = [];
 const fail = (msg) => failures.push(msg);
@@ -85,6 +93,7 @@ async function setLook(page, cards) {
 }
 
 async function run() {
+  mkdirSync(SCREENSHOT_DIR, { recursive: true });
   const server = await startServer();
   const browser = await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});
   try {
@@ -104,6 +113,18 @@ async function run() {
           await go(path);
           await checkNoHorizontalScroll(page, `${tag} ${path}`);
           await checkFullScreenOverlays(page, `${tag} ${path}`);
+        }
+
+        // Capturas de tela reais das páginas centrais para auditoria visual em celular.
+        if (vp.width === 390 && cards === null) {
+          for (const shot of REVIEW_SHOTS) {
+            await go(shot.path);
+            await page.screenshot({
+              path: `${SCREENSHOT_DIR}/390x844-${shot.name}.png`,
+              fullPage: true,
+              animations: 'disabled',
+            });
+          }
         }
 
         // Cartão de certo ou errado.
