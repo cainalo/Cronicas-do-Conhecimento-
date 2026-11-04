@@ -51,7 +51,7 @@ type Look = {
 };
 
 /**
- * Pórtico — família de personagens V13.
+ * Pórtico — família de personagens V14.
  * Princípios: silhueta memorável antes dos detalhes; corpo como massa gráfica;
  * cabeça e tronco integrados; olhos expressivos; cintura e roupas com silhuetas próprias; braços simples; pés destacados.
  * A linguagem é original e não reproduz personagens, desenhos ou ativos do Duolingo.
@@ -295,11 +295,60 @@ function Face({ look, pose }: { look: Look; pose: TeacherPose }) {
 
 function AnimalEyes({ y, spacing, rx = 11.5, ry = 15, look }: { y:number; spacing:number; rx?:number; ry?:number; look:Look }) {
   const left=120-spacing, right=120+spacing, shift=look.pupilShift;
+  const eye=(x:number, side:'left'|'right')=>{
+    const adjust=side==='left' ? look.eyeAsymmetry : 2-look.eyeAsymmetry;
+    const height=ry*adjust;
+    const gaze=shift+(side==='left' ? -0.4 : 0.4);
+    const pupilX=x+gaze;
+    if (look.species==='cat') return <g key={side} transform={'rotate('+(side==='left'?-3:3)+' '+x+' '+y+')'}>
+      <path d={'M'+(x-rx)+' '+y+'Q'+(x-2)+' '+(y-ry-3)+' '+(x+rx)+' '+(y-1)+'Q'+x+' '+(y+ry+2)+' '+(x-rx)+' '+y+'Z'} fill="#F7EBD7"/>
+      <ellipse cx={pupilX} cy={y} rx={2.8} ry={height*.62} fill="#D69A32"/>
+      <ellipse cx={pupilX} cy={y} rx={1.35} ry={height*.57} fill="#20222B"/>
+      <circle cx={pupilX+2.5} cy={y-5} r="2" fill="#FFF"/>
+      <path d={'M'+(x-rx)+' '+(y-1)+'Q'+x+' '+(y-ry-4)+' '+(x+rx)+' '+(y-1)} fill="none" stroke={look.hair} strokeWidth="2.8" strokeLinecap="round"/>
+    </g>;
+    if (look.species==='turtle') return <g key={side}>
+      <ellipse cx={x} cy={y} rx={rx*.91} ry={height*.9} fill="#F5F0D9"/>
+      <ellipse cx={pupilX} cy={y+2} rx={rx*.42} ry={height*.48} fill="#2C3C34"/>
+      <circle cx={pupilX+2} cy={y-2} r="1.8" fill="#FFF"/>
+      <path d={'M'+(x-rx)+' '+(y-2)+'Q'+x+' '+(y-ry*.65)+' '+(x+rx)+' '+(y-2)} fill="none" stroke="#426B4B" strokeWidth="4" strokeLinecap="round"/>
+    </g>;
+    if (look.species==='parrot') return <g key={side}>
+      <ellipse cx={x} cy={y} rx={rx*.88} ry={height*.95} fill="#FFF7E7"/>
+      <ellipse cx={pupilX} cy={y+1} rx={rx*.56} ry={height*.7} fill="#D59B38"/>
+      <ellipse cx={pupilX} cy={y+1} rx={rx*.30} ry={height*.52} fill="#24252A"/>
+      <circle cx={pupilX+2.2} cy={y-4} r="2" fill="#FFF"/>
+      <path d={'M'+(x-rx*.8)+' '+(y-ry*.55)+'Q'+x+' '+(y-ry*.9)+' '+(x+rx*.8)+' '+(y-ry*.55)} fill="none" stroke="#9A5435" strokeWidth="2.2" strokeLinecap="round"/>
+    </g>;
+    if (look.species==='axolotl') return <g key={side}>
+      <ellipse cx={x} cy={y} rx={rx*1.04} ry={height*1.06} fill="#FFF8F7"/>
+      <ellipse cx={pupilX} cy={y+1} rx={rx*.47} ry={height*.57} fill="#343044"/>
+      <circle cx={pupilX+2.5} cy={y-4} r="2.8" fill="#FFF"/>
+      <circle cx={pupilX-2} cy={y+4} r="1.2" fill="#FFF"/>
+      <path d={'M'+(x-rx*.75)+' '+(y-ry*.82)+'q'+(rx*.35)+' -5 '+(rx*.7)+' 0'} fill="none" stroke="#D47E91" strokeWidth="2.4" strokeLinecap="round"/>
+    </g>;
+    if (look.species==='beaver') return <g key={side}>
+      <ellipse cx={x} cy={y} rx={rx*.9} ry={height*.8} fill="#FFF7E9"/>
+      <ellipse cx={pupilX} cy={y+1} rx={rx*.43} ry={height*.52} fill="#3B302C"/>
+      <circle cx={pupilX+2} cy={y-3} r="1.7" fill="#FFF"/>
+      <path d={'M'+(x-rx*.85)+' '+(y-ry*.75)+'Q'+x+' '+(y-ry*.98)+' '+(x+rx*.85)+' '+(y-ry*.75)} fill="none" stroke="#543A2F" strokeWidth="2.8" strokeLinecap="round"/>
+    </g>;
+    if (look.species==='armadillo') return <g key={side}>
+      <ellipse cx={x} cy={y} rx={rx*.78} ry={height*.78} fill="#F5EAD7"/>
+      <ellipse cx={pupilX} cy={y+1} rx={rx*.39} ry={height*.55} fill="#39302C"/>
+      <circle cx={pupilX+1.8} cy={y-3} r="1.5" fill="#FFF"/>
+      <path d={'M'+(x-rx*.7)+' '+(y-ry*.7)+'q'+(rx*.7)+' -5 '+(rx*1.4)+' 0'} fill="none" stroke="#75604D" strokeWidth="2" strokeLinecap="round"/>
+    </g>;
+    // Capivaras mantêm olhos simples e calmos, com pupilas pequenas.
+    return <g key={side}>
+      <ellipse cx={x} cy={y} rx={rx*.9} ry={height*.92} fill="#FFF7E9"/>
+      <ellipse cx={pupilX} cy={y+1} rx={rx*.38} ry={height*.54} fill="#302722"/>
+      <circle cx={pupilX+2} cy={y-4} r="1.8" fill="#FFF"/>
+    </g>;
+  };
   return <g>
-    <ellipse cx={left} cy={y} rx={rx} ry={ry} fill="#FFF"/><ellipse cx={right} cy={y} rx={rx} ry={ry} fill="#FFF"/>
-    <ellipse cx={left+shift} cy={y+2} rx={rx*.43} ry={ry*.56} fill="#27252B"/>
-    <ellipse cx={right+shift} cy={y+2} rx={rx*.43} ry={ry*.56} fill="#27252B"/>
-    <circle cx={left+shift+2} cy={y-2} r="2.1" fill="#FFF"/><circle cx={right+shift+2} cy={y-2} r="2.1" fill="#FFF"/>
+    {eye(left,'left')}
+    {eye(right,'right')}
   </g>;
 }
 
@@ -702,7 +751,7 @@ export function TeacherCharacter({
     <svg viewBox={portrait ? '40 12 160 160' : '0 0 240 270'} width={style.width} height={style.height}
       className={'shrink-0 ' + (portrait ? 'rounded-full overflow-hidden ' : 'overflow-visible ') + className}
       style={style} role="img" aria-label={teacher.name + ', personagem ilustrado do Pórtico'}
-      data-character-style="portico-friends-v13" data-character-anatomy={look.species === 'human' ? 'human' : 'species-specific'} data-character-body-species={look.species} data-character-limbs={LIMB_STYLE[look.species]} data-character-pose={characterPose} data-character-species={look.species} data-character-outfit={look.outfit} data-character-body={look.body} data-character-lower={look.lower} data-character-face={look.face} data-character-hair={look.hairStyle} data-character-eyes={look.eyes} data-character-mouth={look.mouth} data-character-nose={look.nose} data-character-brows={look.brows} data-character-spacing={look.eyeSpacing} focusable="false">
+      data-character-style="portico-friends-v14" data-character-anatomy={look.species === 'human' ? 'human' : 'species-specific'} data-character-body-species={look.species} data-character-limbs={LIMB_STYLE[look.species]} data-character-pose={characterPose} data-character-species={look.species} data-character-outfit={look.outfit} data-character-body={look.body} data-character-lower={look.lower} data-character-face={look.face} data-character-hair={look.hairStyle} data-character-eyes={look.eyes} data-character-eye-treatment={look.species} data-character-mouth={look.mouth} data-character-nose={look.nose} data-character-brows={look.brows} data-character-spacing={look.eyeSpacing} focusable="false">
       {portrait && <circle cx="120" cy="98" r="90" fill={'rgb(var(--' + teacher.tone + '))'}/>}
       {!portrait && <rect x="83" y="260" width="74" height="6" rx="3" fill="#243840" opacity=".14"/>}
 
