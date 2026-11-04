@@ -28,7 +28,7 @@ describe('personagens-professores vetoriais', () => {
       expect(figure.getAttribute('viewBox')).toBe('0 0 240 260');
       expect(figure.querySelectorAll('path[fill]').length).toBeGreaterThan(8);
       expect(figure.querySelectorAll('path[stroke]').length).toBeGreaterThan(5);
-      expect(figure.getAttribute('data-character-style')).toBe('portico-rounded-v1');
+      expect(figure.getAttribute('data-character-style')).toBe('portico-rounded-v2');
     }
   });
 
@@ -42,7 +42,7 @@ describe('personagens-professores vetoriais', () => {
 
   it('usa a mesma linguagem vetorial nas versões de avatar e corpo inteiro', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} portrait size={48}/>)}</div>);
-    expect(container.querySelectorAll('svg[data-character-style="portico-rounded-v1"]')).toHaveLength(teachers.length);
+    expect(container.querySelectorAll('svg[data-character-style="portico-rounded-v2"]')).toHaveLength(teachers.length);
   });
 
   it('atribui um professor coerente às principais disciplinas', () => {
