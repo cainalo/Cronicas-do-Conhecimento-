@@ -578,6 +578,19 @@ function CharacterLegs({ look }: { look:Look }) {
   </g>;
 }
 
+const LIMB_STYLE: Record<Species, string> = {
+  human: 'human hands and feet',
+  capybara: 'short paws with blunt nails',
+  beaver: 'broad webbed paws and claws',
+  axolotl: 'delicate webbed hands',
+  cat: 'soft feline paws and toe pads',
+  frog: 'webbed hands with rounded toe pads',
+  armadillo: 'four short armored legs and digging claws',
+  turtle: 'four splayed flipper-legs',
+  parrot: 'feathered wings and curved talons',
+  chameleon: 'gripping hands with split toes',
+};
+
 function CreatureArms({ look, left, right, leftHand, rightHand, gesture }: {
   look:Look; left:string; right:string; leftHand:[number,number]; rightHand:[number,number]; gesture:HandGesture;
 }) {
