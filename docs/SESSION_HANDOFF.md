@@ -1,5 +1,7 @@
 # Handoff de sessão
 
+> **Marca vigente (04/11/2026): Pórtico.** “Crônicas do Conhecimento” é nome histórico e não deve aparecer em novas telas, vídeos, narrações, capas ou materiais de divulgação. Preservar `appId` do Capacitor para não quebrar a compatibilidade das instalações Android existentes.
+
 **Última atualização:** 2026-10-29
 **Fase:** reformulação "Arquivo Real" (kit em `docs/kit/`, auditoria em `docs/AUDITORIA_REFORMULACAO.md`): fases 0 a 5 do kit feitas para o piloto; expansão pendente.
 

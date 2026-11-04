@@ -2,7 +2,8 @@
 
 ## Aprovadas pelo usuário
 | Data | Assunto | Decisão | Consequência |
-|---|---|---|---|
+|---|---|---|---| 
+| 2026-11-04 | Nome e identidade de marca | **Pórtico** é o nome oficial da plataforma. “Crônicas do Conhecimento” passa a ser somente uma referência histórica; não deve aparecer em novos vídeos ou materiais. | README, marca vetorial e título web já usam Pórtico; alinhar também o nome exibido pelo app Android e toda nova mídia. |
 | 2026-10-17 | Backend | Criar projeto Supabase novo e separado (`cronicas-do-conhecimento`, sa-east-1, custo $0 informado na criação). | Não usar o projeto NutriConnect. |
 | 2026-10-17 | Edital | O usuário vai liberar `concursosfcc.com.br` e `portal.tce.go.gov.br` na rede do ambiente. | Próxima sessão deve ler o edital oficial e trocar `fonte-secundaria` por `oficial-verificado` onde conferido. |
 | 2026-10-17 | Estética dos grimórios | **Manuscritos antigos**: pergaminho, iluminuras (capitulares) e ornamentos também durante a leitura. | Implementado com página de pergaminho, capitular dourada, divisores ✦. Legibilidade preservada (Literata, 17px, entrelinha 1.75). |

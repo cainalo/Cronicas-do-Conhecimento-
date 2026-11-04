@@ -5,13 +5,25 @@ import { Icon } from '@/components/Icon';
 export function youTubeId(url: string): string | undefined {
   try {
     const u = new URL(url.trim());
-    const host = u.hostname.replace(/^www\.|^m\./, '');
+    const host = u.hostname.replace(/^www\\.|^m\\./, '');
     let id: string | null | undefined;
     if (host === 'youtu.be') id = u.pathname.slice(1).split('/')[0];
     else if (host === 'youtube.com' || host === 'youtube-nocookie.com') {
-      id = u.searchParams.get('v') ?? u.pathname.match(/^\/(?:embed|shorts|live)\/([^/?#]+)/)?.[1];
+      id = u.searchParams.get('v') ?? u.pathname.match(/^\\/(?:embed|shorts|live)\\/([^/?#]+)/)?.[1];
     }
-    return id && /^[\w-]{11}$/.test(id) ? id : undefined;
+    return id && /^[\\w-]{11}$/.test(id) ? id : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Detecta arquivos de vídeo hospedados diretamente (por exemplo, Supabase Storage). */
+export function directVideoMime(url: string): string | undefined {
+  try {
+    const pathname = new URL(url.trim()).pathname.toLowerCase();
+    if (pathname.endsWith('.mp4')) return 'video/mp4';
+    if (pathname.endsWith('.webm')) return 'video/webm';
+    return undefined;
   } catch {
     return undefined;
   }
@@ -29,18 +41,35 @@ export function VideoEmbed({
   autoPlay?: boolean;
 }) {
   const id = youTubeId(url);
+  const mime = directVideoMime(url);
   const [on, setOn] = useState(autoLoad);
-  useEffect(() => setOn(autoLoad), [id, autoLoad]);
+  useEffect(() => setOn(autoLoad), [id, mime, autoLoad]);
 
   const query = new URLSearchParams({ rel: '0', playsinline: '1', controls: '1' });
-  if (autoPlay) {
+  if (autoPlay && id) {
     query.set('autoplay', '1');
     query.set('mute', '1');
   }
 
   return (
     <figure className="card overflow-hidden">
-      {id && on ? (
+      {mime && on ? (
+        <div className="flex w-full justify-center overflow-hidden bg-black">
+          <video
+            className="max-h-[78dvh] max-w-full bg-black object-contain"
+            style={{ height: 'min(78dvh, 820px)', width: 'auto' }}
+            controls
+            playsInline
+            preload={autoLoad ? 'metadata' : 'none'}
+            autoPlay={autoPlay}
+            muted={autoPlay}
+            aria-label={title}
+          >
+            <source src={url} type={mime} />
+            Seu navegador não conseguiu reproduzir este vídeo. Tente abri-lo em uma nova guia.
+          </video>
+        </div>
+      ) : id && on ? (
         <div className="relative aspect-video w-full bg-black">
           <iframe
             className="absolute inset-0 h-full w-full"
@@ -52,7 +81,7 @@ export function VideoEmbed({
             referrerPolicy="strict-origin-when-cross-origin"
           />
         </div>
-      ) : id ? (
+      ) : id || mime ? (
         <button
           type="button"
           onClick={() => setOn(true)}
@@ -73,7 +102,7 @@ export function VideoEmbed({
         </button>
       ) : (
         <div className="grid aspect-video place-items-center bg-raised px-4 text-center text-sm text-muted">
-          Este endereço não parece ser um vídeo do YouTube compatível.
+          Este endereço não parece ser um vídeo compatível.
         </div>
       )}
       <figcaption className="p-3">
@@ -85,7 +114,7 @@ export function VideoEmbed({
           rel="noopener noreferrer"
           className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-gold underline-offset-2 hover:underline"
         >
-          Abrir no YouTube <Icon name="seta" size={14} />
+          {mime ? 'Abrir vídeo em nova guia' : 'Abrir no YouTube'} <Icon name="seta" size={14} />
         </a>
         {autoPlay && on && (
           <p className="mt-1 text-xs text-muted">

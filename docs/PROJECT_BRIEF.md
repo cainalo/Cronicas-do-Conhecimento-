@@ -1,6 +1,6 @@
 # Visão do produto
 
-**Crônicas do Conhecimento** (nome provisório) é uma plataforma de estudos gamificada para concursos públicos de TI que combina:
+**Pórtico** (nome provisório) é uma plataforma de estudos gamificada para concursos públicos de TI que combina:
 - a facilidade e as sessões curtas de apps como o Duolingo (sem copiar elementos exclusivos);
 - a imersão de um RPG medieval original;
 - uma biblioteca de **grimórios** — livros didáticos completos e aprofundados;
