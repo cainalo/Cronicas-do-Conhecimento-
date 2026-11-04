@@ -1,15 +1,31 @@
-import { TeacherCharacter } from '@/components/TeacherCharacter';
+import { TeacherCharacter, type TeacherPose } from '@/components/TeacherCharacter';
 import { teachers } from '@/content';
+
+const REVIEW_POSES: Record<string, TeacherPose> = {
+  'prof.clara': 'presenting',
+  'prof.lia': 'hands-on-hips',
+  'prof.davi': 'listening',
+  'prof.iara': 'shrug',
+  'prof.nina': 'thinking',
+  'prof.ravi': 'celebrating',
+  'prof.mateus': 'arms-down',
+  'prof.marina': 'greeting',
+  'prof.beatriz': 'hands-on-hips',
+  'prof.sofia': 'celebrating',
+  'prof.helena': 'listening',
+  'prof.augusto': 'arms-down',
+  'prof.caio': 'greeting',
+};
 
 /** Galeria temporária de revisão visual; acesso direto, fora da navegação principal. */
 export function TeacherCharacterReviewPage() {
   return (
     <main className="mx-auto max-w-5xl space-y-5 px-4 py-6">
       <header className="space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V4</p>
+        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V5</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted">
-          Estudos de silhueta, rosto, cabelo e postura. Esta galeria é uma etapa de revisão,
+          Estudos de silhueta, proporção da cabeça, olhos, boca e gestos próprios. Esta galeria é uma etapa de revisão,
           ainda não representa uma família aprovada.
         </p>
       </header>
@@ -24,7 +40,7 @@ export function TeacherCharacterReviewPage() {
             <div className="flex h-48 w-full items-end justify-center overflow-hidden pt-3">
               <TeacherCharacter
                 teacher={teacher}
-                pose={index % 4 === 0 ? 'greeting' : index % 4 === 1 ? 'presenting' : index % 4 === 2 ? 'thinking' : 'celebrating'}
+                pose={REVIEW_POSES[teacher.id] ?? 'presenting'}
                 size={178}
               />
             </div>
@@ -43,7 +59,7 @@ export function TeacherCharacterReviewPage() {
           <li>Corpo e roupa como massas gráficas simples, sem anatomia realista em miniatura.</li>
           <li>Olhos expressivos, poucos traços faciais e gestos legíveis em celular.</li>
           <li>Pés destacados e proporções exageradas, mas coerentes entre o elenco.</li>
-          <li>Diferenças reais entre os professores: cabeça, cabelo, corpo, expressão e postura.</li>
+          <li>Diferenças reais entre os professores: cabeça, cabelo, corpo, olhos, boca e gesto-assinatura.</li>
         </ul>
       </section>
     </main>
