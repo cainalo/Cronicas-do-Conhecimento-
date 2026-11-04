@@ -17,7 +17,7 @@ const VIEWPORTS = [
   { width: 390, height: 844 },
 ];
 const PAGES = [
-  '/', '/trilha', '/explorar', '/biblioteca', '/grimorio/grim.primeiros', '/capitulo/cap.prim.01', '/revisar', '/progresso',
+  '/', '/revisao-personagens', '/trilha', '/explorar', '/biblioteca', '/grimorio/grim.primeiros', '/capitulo/cap.prim.01', '/revisar', '/progresso',
   '/aprender/cap.prim.01/computador/prim.computador.1', '/pratica/cap.prim.01/computador', '/sala', '/laboratorio-codigo?origem=escritorio&chamado=2318', '/escritorio', '/trilha-post/cap.infra.03/processos?u=professores%3Acap.infra.03%3Aprocessos', '/simulado', '/plano', '/conta', '/conta/dados', '/video/yt-YJyY6A_MOQc', '/feed-aulas?aula=prim.computador.1', '/flashcards?capitulo=cap.prim.01', '/aula-narrada/narrada.prim.historia',
 ];
 const LESSON = '/aprender/cap.prim.01/computador/prim.computador.1';
@@ -25,6 +25,7 @@ const GUIDE_LESSON = '/aprender/cap.infra.03/arquivos';
 const TOL = 1.5;
 const SCREENSHOT_DIR = 'artifacts/visual-review';
 const REVIEW_SHOTS = [
+  { name: 'personagens', path: '/revisao-personagens' },
   { name: 'trilha', path: '/trilha' },
   { name: 'aula-processos', path: '/aprender/cap.infra.03/processos' },
   { name: 'aula-computador', path: '/aprender/cap.prim.01/computador/prim.computador.1' },
