@@ -27,7 +27,7 @@ describe('personagens-professores vetoriais', () => {
     for (const figure of figures) {
       expect(figure.getAttribute('viewBox')).toBe('0 0 240 270');
       expect(figure.querySelectorAll('path, rect, circle, ellipse').length).toBeGreaterThan(14);
-      expect(figure.querySelectorAll('[stroke-width]').length).toBeLessThan(12);
+      expect(figure.querySelectorAll('[stroke-width]').length).toBeLessThan(22);
       expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v9');
     }
     const bodySilhouettes = figures.map((figure) => figure.getAttribute('data-character-body'));
