@@ -14,8 +14,12 @@ type NoseStyle = 'none' | 'dot' | 'button' | 'bridge' | 'broad';
 type BrowStyle = 'arched' | 'straight' | 'angled' | 'soft' | 'heavy' | 'sleepy' | 'raised';
 type CheekStyle = 'none' | 'freckles' | 'dimples' | 'flush' | 'spots';
 type HandGesture = 'open' | 'closed' | 'point';
+type Species = 'human' | 'capybara' | 'beaver' | 'axolotl' | 'cat' | 'frog' | 'armadillo' | 'turtle' | 'parrot' | 'chameleon';
+type OutfitStyle = 'scarf' | 'tech-jacket' | 'utility-vest' | 'field-cape' | 'lab-coat' | 'hoodie' | 'knit-sweater' | 'cardigan' | 'formal-coat' | 'language-scarf' | 'embroidered-tunic' | 'blazer' | 'tech-hoodie';
 
 type Look = {
+  species: Species;
+  outfit: OutfitStyle;
   skin: string;
   hair: string;
   top: string;
@@ -53,19 +57,19 @@ type Look = {
  * A linguagem é original e não reproduz personagens, desenhos ou ativos do Duolingo.
  */
 const LOOKS: Record<string, Look> = {
-  'prof.clara': { skin:'#E9B994', hair:'#34201C', top:'#F05A4F', bottom:'#304D76', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'ponytail', face:'wide', body:'pear', lower:'clara-skirt', eyes:'bright', mouth:'big-grin', headScaleX:1.08, headScaleY:1.02, torsoScaleX:1.05, torsoScaleY:1.00, accessory:'earrings', nose:'button', brows:'arched', cheeks:'freckles', eyeSpacing:20, eyeOffsetY:-1, eyeTilt:-2, eyeAsymmetry:1.04, pupilShift:0, headTilt:-3, torsoTilt:2 },
-  'prof.lia': { skin:'#C98E6A', hair:'#211B1B', top:'#009E9A', bottom:'#174C70', shoe:'#FFD13F', accent:'#FFD13F', hairStyle:'bun', face:'round', body:'tall', lower:'lia-slim', eyes:'focused', mouth:'neutral', headScaleX:0.95, headScaleY:1.05, torsoScaleX:0.86, torsoScaleY:1.12, accessory:'headset', nose:'none', brows:'straight', cheeks:'none', eyeSpacing:18, eyeOffsetY:1, eyeTilt:0, eyeAsymmetry:0.94, pupilShift:1, headTilt:2, torsoTilt:-2 },
-  'prof.davi': { skin:'#8D5A3F', hair:'#211B1B', top:'#3678D8', bottom:'#24445A', shoe:'#F4B52B', accent:'#F4B52B', hairStyle:'short', face:'square', body:'broad', lower:'davi-wide', eyes:'soft', mouth:'gentle-smile', headScaleX:1.00, headScaleY:1.08, torsoScaleX:1.18, torsoScaleY:0.98, facialHair:'mustache', nose:'broad', brows:'heavy', cheeks:'none', eyeSpacing:22, eyeOffsetY:0, eyeTilt:1, eyeAsymmetry:1.02, pupilShift:-1, headTilt:-2, torsoTilt:-1 },
-  'prof.iara': { skin:'#A86F4C', hair:'#2A1A12', top:'#8B5BC7', bottom:'#425C45', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'afro', face:'pear', body:'cape', lower:'iara-cape', eyes:'round', mouth:'open', headScaleX:1.16, headScaleY:1.02, torsoScaleX:1.20, torsoScaleY:1.00, accessory:'earrings', nose:'button', brows:'raised', cheeks:'dimples', eyeSpacing:24, eyeOffsetY:-2, eyeTilt:-1, eyeAsymmetry:1.08, pupilShift:0, headTilt:1, torsoTilt:2 },
-  'prof.nina': { skin:'#E4B99B', hair:'#30364B', top:'#E9A62B', bottom:'#354C78', shoe:'#7A55B6', accent:'#7A55B6', hairStyle:'bob', face:'square', body:'box', lower:'nina-straight', eyes:'sleepy', mouth:'smirk', headScaleX:0.98, headScaleY:0.98, torsoScaleX:1.00, torsoScaleY:1.04, accessory:'round-glasses', nose:'dot', brows:'sleepy', cheeks:'none', eyeSpacing:17, eyeOffsetY:2, eyeTilt:0, eyeAsymmetry:0.92, pupilShift:2, headTilt:0, torsoTilt:2 },
-  'prof.ravi': { skin:'#A96F4F', hair:'#241B18', top:'#2E9A65', bottom:'#25475A', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'fade', face:'long', body:'round', lower:'ravi-jogger', eyes:'wide', mouth:'big-grin', headScaleX:0.92, headScaleY:1.12, torsoScaleX:1.06, torsoScaleY:1.08, facialHair:'beard', nose:'broad', brows:'angled', cheeks:'spots', eyeSpacing:25, eyeOffsetY:-1, eyeTilt:2, eyeAsymmetry:1.07, pupilShift:0, headTilt:4, torsoTilt:-1 },
-  'prof.mateus': { skin:'#D4A17B', hair:'#513629', top:'#E17A36', bottom:'#43516A', shoe:'#F7C74B', accent:'#F7C74B', hairStyle:'sidepart', face:'round', body:'wide', lower:'mateus-round', eyes:'small', mouth:'tight-smile', headScaleX:0.96, headScaleY:0.92, torsoScaleX:1.22, torsoScaleY:0.92, accessory:'glasses', nose:'button', brows:'soft', cheeks:'dimples', eyeSpacing:16, eyeOffsetY:1, eyeTilt:-1, eyeAsymmetry:0.96, pupilShift:-1, headTilt:-2, torsoTilt:2 },
-  'prof.marina': { skin:'#B97855', hair:'#2C1D1B', top:'#339A75', bottom:'#344C45', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'braid', face:'oval', body:'dress', lower:'marina-a-line', eyes:'soft', mouth:'gentle-smile', headScaleX:0.92, headScaleY:1.10, torsoScaleX:0.90, torsoScaleY:1.14, accessory:'earrings', nose:'dot', brows:'arched', cheeks:'freckles', eyeSpacing:21, eyeOffsetY:0, eyeTilt:-2, eyeAsymmetry:1.03, pupilShift:1, headTilt:-3, torsoTilt:-2 },
-  'prof.beatriz': { skin:'#E8C2A4', hair:'#493126', top:'#8658C2', bottom:'#45436A', shoe:'#F8C34B', accent:'#F8C34B', hairStyle:'pixie', face:'long', body:'longcoat', lower:'beatriz-coat', eyes:'narrow', mouth:'frown', headScaleX:0.88, headScaleY:1.14, torsoScaleX:0.86, torsoScaleY:1.16, accessory:'glasses', nose:'bridge', brows:'straight', cheeks:'none', eyeSpacing:19, eyeOffsetY:1, eyeTilt:1, eyeAsymmetry:0.91, pupilShift:-2, headTilt:-1, torsoTilt:0 },
-  'prof.sofia': { skin:'#F0C6A5', hair:'#A64F2D', top:'#EE684F', bottom:'#315778', shoe:'#6FAE69', accent:'#6FAE69', hairStyle:'waves', face:'round', body:'flared', lower:'sofia-bell', eyes:'surprised', mouth:'open', headScaleX:1.03, headScaleY:0.96, torsoScaleX:1.10, torsoScaleY:1.00, accessory:'headband', nose:'button', brows:'raised', cheeks:'flush', eyeSpacing:23, eyeOffsetY:-1, eyeTilt:-2, eyeAsymmetry:1.05, pupilShift:1, headTilt:3, torsoTilt:-3 },
-  'prof.helena': { skin:'#D5A17B', hair:'#211E28', top:'#318AA7', bottom:'#514765', shoe:'#F5C84A', accent:'#F5C84A', hairStyle:'locs', face:'wide', body:'tunic', lower:'helena-wide', eyes:'sleepy', mouth:'neutral', headScaleX:1.14, headScaleY:0.94, torsoScaleX:1.02, torsoScaleY:1.12, nose:'dot', brows:'sleepy', cheeks:'spots', eyeSpacing:26, eyeOffsetY:0, eyeTilt:0, eyeAsymmetry:0.97, pupilShift:-1, headTilt:-2, torsoTilt:1 },
-  'prof.augusto': { skin:'#B77D5D', hair:'#D2C7B5', top:'#247D91', bottom:'#49434B', shoe:'#EFB64A', accent:'#EFB64A', hairStyle:'curls', face:'pear', body:'compact', lower:'augusto-shorts', eyes:'soft', mouth:'gentle-smile', headScaleX:0.92, headScaleY:0.94, torsoScaleX:0.96, torsoScaleY:0.90, accessory:'glasses', nose:'broad', brows:'soft', cheeks:'none', eyeSpacing:27, eyeOffsetY:1, eyeTilt:1, eyeAsymmetry:1.06, pupilShift:0, headTilt:2, torsoTilt:-1 },
-  'prof.caio': { skin:'#D09A76', hair:'#27222B', top:'#D99A26', bottom:'#294E59', shoe:'#4B9E9C', accent:'#4B9E9C', hairStyle:'spiky', face:'square', body:'hood', lower:'caio-tapered', eyes:'curious', mouth:'smirk', headScaleX:1.02, headScaleY:1.00, torsoScaleX:1.00, torsoScaleY:0.98, accessory:'headset', nose:'none', brows:'angled', cheeks:'dimples', eyeSpacing:28, eyeOffsetY:0, eyeTilt:-1, eyeAsymmetry:0.93, pupilShift:2, headTilt:3, torsoTilt:2 },
+  'prof.clara': { species:'capybara', outfit:'scarf', skin:'#E9B994', hair:'#34201C', top:'#F05A4F', bottom:'#304D76', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'ponytail', face:'wide', body:'pear', lower:'clara-skirt', eyes:'bright', mouth:'big-grin', headScaleX:1.08, headScaleY:1.02, torsoScaleX:1.05, torsoScaleY:1.00, accessory:'earrings', nose:'button', brows:'arched', cheeks:'freckles', eyeSpacing:20, eyeOffsetY:-1, eyeTilt:-2, eyeAsymmetry:1.04, pupilShift:0, headTilt:-3, torsoTilt:2 },
+  'prof.lia': { species:'human', outfit:'tech-jacket', skin:'#C98E6A', hair:'#211B1B', top:'#009E9A', bottom:'#174C70', shoe:'#FFD13F', accent:'#FFD13F', hairStyle:'bun', face:'round', body:'tall', lower:'lia-slim', eyes:'focused', mouth:'neutral', headScaleX:0.95, headScaleY:1.05, torsoScaleX:0.86, torsoScaleY:1.12, accessory:'headset', nose:'none', brows:'straight', cheeks:'none', eyeSpacing:18, eyeOffsetY:1, eyeTilt:0, eyeAsymmetry:0.94, pupilShift:1, headTilt:2, torsoTilt:-2 },
+  'prof.davi': { species:'beaver', outfit:'utility-vest', skin:'#8D5A3F', hair:'#211B1B', top:'#3678D8', bottom:'#24445A', shoe:'#F4B52B', accent:'#F4B52B', hairStyle:'short', face:'square', body:'broad', lower:'davi-wide', eyes:'soft', mouth:'gentle-smile', headScaleX:1.00, headScaleY:1.08, torsoScaleX:1.18, torsoScaleY:0.98, facialHair:'mustache', nose:'broad', brows:'heavy', cheeks:'none', eyeSpacing:22, eyeOffsetY:0, eyeTilt:1, eyeAsymmetry:1.02, pupilShift:-1, headTilt:-2, torsoTilt:-1 },
+  'prof.iara': { species:'axolotl', outfit:'field-cape', skin:'#A86F4C', hair:'#2A1A12', top:'#8B5BC7', bottom:'#425C45', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'afro', face:'pear', body:'cape', lower:'iara-cape', eyes:'round', mouth:'open', headScaleX:1.16, headScaleY:1.02, torsoScaleX:1.20, torsoScaleY:1.00, accessory:'earrings', nose:'button', brows:'raised', cheeks:'dimples', eyeSpacing:24, eyeOffsetY:-2, eyeTilt:-1, eyeAsymmetry:1.08, pupilShift:0, headTilt:1, torsoTilt:2 },
+  'prof.nina': { species:'cat', outfit:'lab-coat', skin:'#E4B99B', hair:'#30364B', top:'#E9A62B', bottom:'#354C78', shoe:'#7A55B6', accent:'#7A55B6', hairStyle:'bob', face:'square', body:'box', lower:'nina-straight', eyes:'sleepy', mouth:'smirk', headScaleX:0.98, headScaleY:0.98, torsoScaleX:1.00, torsoScaleY:1.04, accessory:'round-glasses', nose:'dot', brows:'sleepy', cheeks:'none', eyeSpacing:17, eyeOffsetY:2, eyeTilt:0, eyeAsymmetry:0.92, pupilShift:2, headTilt:0, torsoTilt:2 },
+  'prof.ravi': { species:'frog', outfit:'hoodie', skin:'#A96F4F', hair:'#241B18', top:'#2E9A65', bottom:'#25475A', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'fade', face:'long', body:'round', lower:'ravi-jogger', eyes:'wide', mouth:'big-grin', headScaleX:0.92, headScaleY:1.12, torsoScaleX:1.06, torsoScaleY:1.08, facialHair:'beard', nose:'broad', brows:'angled', cheeks:'spots', eyeSpacing:25, eyeOffsetY:-1, eyeTilt:2, eyeAsymmetry:1.07, pupilShift:0, headTilt:4, torsoTilt:-1 },
+  'prof.mateus': { species:'armadillo', outfit:'knit-sweater', skin:'#D4A17B', hair:'#513629', top:'#E17A36', bottom:'#43516A', shoe:'#F7C74B', accent:'#F7C74B', hairStyle:'sidepart', face:'round', body:'wide', lower:'mateus-round', eyes:'small', mouth:'tight-smile', headScaleX:0.96, headScaleY:0.92, torsoScaleX:1.22, torsoScaleY:0.92, accessory:'glasses', nose:'button', brows:'soft', cheeks:'dimples', eyeSpacing:16, eyeOffsetY:1, eyeTilt:-1, eyeAsymmetry:0.96, pupilShift:-1, headTilt:-2, torsoTilt:2 },
+  'prof.marina': { species:'turtle', outfit:'cardigan', skin:'#B97855', hair:'#2C1D1B', top:'#339A75', bottom:'#344C45', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'braid', face:'oval', body:'dress', lower:'marina-a-line', eyes:'soft', mouth:'gentle-smile', headScaleX:0.92, headScaleY:1.10, torsoScaleX:0.90, torsoScaleY:1.14, accessory:'earrings', nose:'dot', brows:'arched', cheeks:'freckles', eyeSpacing:21, eyeOffsetY:0, eyeTilt:-2, eyeAsymmetry:1.03, pupilShift:1, headTilt:-3, torsoTilt:-2 },
+  'prof.beatriz': { species:'human', outfit:'formal-coat', skin:'#E8C2A4', hair:'#493126', top:'#8658C2', bottom:'#45436A', shoe:'#F8C34B', accent:'#F8C34B', hairStyle:'pixie', face:'long', body:'longcoat', lower:'beatriz-coat', eyes:'narrow', mouth:'frown', headScaleX:0.88, headScaleY:1.14, torsoScaleX:0.86, torsoScaleY:1.16, accessory:'glasses', nose:'bridge', brows:'straight', cheeks:'none', eyeSpacing:19, eyeOffsetY:1, eyeTilt:1, eyeAsymmetry:0.91, pupilShift:-2, headTilt:-1, torsoTilt:0 },
+  'prof.sofia': { species:'parrot', outfit:'language-scarf', skin:'#F0C6A5', hair:'#A64F2D', top:'#EE684F', bottom:'#315778', shoe:'#6FAE69', accent:'#6FAE69', hairStyle:'waves', face:'round', body:'flared', lower:'sofia-bell', eyes:'surprised', mouth:'open', headScaleX:1.03, headScaleY:0.96, torsoScaleX:1.10, torsoScaleY:1.00, accessory:'headband', nose:'button', brows:'raised', cheeks:'flush', eyeSpacing:23, eyeOffsetY:-1, eyeTilt:-2, eyeAsymmetry:1.05, pupilShift:1, headTilt:3, torsoTilt:-3 },
+  'prof.helena': { species:'human', outfit:'embroidered-tunic', skin:'#D5A17B', hair:'#211E28', top:'#318AA7', bottom:'#514765', shoe:'#F5C84A', accent:'#F5C84A', hairStyle:'locs', face:'wide', body:'tunic', lower:'helena-wide', eyes:'sleepy', mouth:'neutral', headScaleX:1.14, headScaleY:0.94, torsoScaleX:1.02, torsoScaleY:1.12, nose:'dot', brows:'sleepy', cheeks:'spots', eyeSpacing:26, eyeOffsetY:0, eyeTilt:0, eyeAsymmetry:0.97, pupilShift:-1, headTilt:-2, torsoTilt:1 },
+  'prof.augusto': { species:'human', outfit:'blazer', skin:'#B77D5D', hair:'#D2C7B5', top:'#247D91', bottom:'#49434B', shoe:'#EFB64A', accent:'#EFB64A', hairStyle:'curls', face:'pear', body:'compact', lower:'augusto-shorts', eyes:'soft', mouth:'gentle-smile', headScaleX:0.92, headScaleY:0.94, torsoScaleX:0.96, torsoScaleY:0.90, accessory:'glasses', nose:'broad', brows:'soft', cheeks:'none', eyeSpacing:27, eyeOffsetY:1, eyeTilt:1, eyeAsymmetry:1.06, pupilShift:0, headTilt:2, torsoTilt:-1 },
+  'prof.caio': { species:'chameleon', outfit:'tech-hoodie', skin:'#D09A76', hair:'#27222B', top:'#D99A26', bottom:'#294E59', shoe:'#4B9E9C', accent:'#4B9E9C', hairStyle:'spiky', face:'square', body:'hood', lower:'caio-tapered', eyes:'curious', mouth:'smirk', headScaleX:1.02, headScaleY:1.00, torsoScaleX:1.00, torsoScaleY:0.98, accessory:'headset', nose:'none', brows:'angled', cheeks:'dimples', eyeSpacing:28, eyeOffsetY:0, eyeTilt:-1, eyeAsymmetry:0.93, pupilShift:2, headTilt:3, torsoTilt:2 },
 };
 
 export const TEACHER_SIGNATURE_POSES: Record<string, TeacherPose> = {
@@ -288,6 +292,159 @@ function Face({ look, pose }: { look: Look; pose: TeacherPose }) {
   </g>;
 }
 
+
+function AnimalEyes({ y, spacing, rx = 11.5, ry = 15, look }: { y:number; spacing:number; rx?:number; ry?:number; look:Look }) {
+  const left=120-spacing, right=120+spacing, shift=look.pupilShift;
+  return <g>
+    <ellipse cx={left} cy={y} rx={rx} ry={ry} fill="#FFF"/><ellipse cx={right} cy={y} rx={rx} ry={ry} fill="#FFF"/>
+    <ellipse cx={left+shift} cy={y+2} rx={rx*.43} ry={ry*.56} fill="#27252B"/>
+    <ellipse cx={right+shift} cy={y+2} rx={rx*.43} ry={ry*.56} fill="#27252B"/>
+    <circle cx={left+shift+2} cy={y-2} r="2.1" fill="#FFF"/><circle cx={right+shift+2} cy={y-2} r="2.1" fill="#FFF"/>
+  </g>;
+}
+
+function AnimalHead({ look, pose }: { look:Look; pose:TeacherPose }) {
+  const fur=look.hair, muzzle=look.skin;
+  const mouth=pose==='celebrating'
+    ? <ellipse cx="120" cy="122" rx="10" ry="12" fill="#593A36"/>
+    : pose==='thinking'
+      ? <path d="M113 124Q120 121 127 124" fill="none" stroke="#593A36" strokeWidth="3.5" strokeLinecap="round"/>
+      : <path d="M108 120Q120 132 132 120" fill="none" stroke="#593A36" strokeWidth="3.5" strokeLinecap="round"/>;
+  switch(look.species) {
+    case 'capybara': return <g>
+      <ellipse cx="81" cy="52" rx="12" ry="15" fill={fur}/><ellipse cx="159" cy="52" rx="12" ry="15" fill={fur}/>
+      <ellipse cx="81" cy="53" rx="5" ry="7" fill="#A96F55"/><ellipse cx="159" cy="53" rx="5" ry="7" fill="#A96F55"/>
+      <path d="M67 82Q67 37 120 36Q173 37 173 82Q172 129 145 143Q120 153 95 143Q68 129 67 82Z" fill={fur}/>
+      <path d="M82 94Q90 77 120 79Q150 77 158 94Q157 121 120 129Q83 121 82 94Z" fill={muzzle}/>
+      <AnimalEyes look={look} y={78} spacing={22} rx={10.5} ry={13.5}/>
+      <ellipse cx="120" cy="96" rx="8" ry="5.5" fill="#49302A"/>
+      <path d="M120 101Q116 109 108 109M120 101Q124 109 132 109" fill="none" stroke="#49302A" strokeWidth="3" strokeLinecap="round"/>{mouth}
+      <path d="M91 117q5 3 10 0M139 117q5 3 10 0" fill="none" stroke="#8B5544" strokeWidth="2.5" strokeLinecap="round"/>
+    </g>;
+    case 'beaver': return <g>
+      <circle cx="78" cy="61" r="13" fill={fur}/><circle cx="162" cy="61" r="13" fill={fur}/>
+      <circle cx="78" cy="61" r="6" fill="#C28B6C"/><circle cx="162" cy="61" r="6" fill="#C28B6C"/>
+      <path d="M70 81Q72 35 120 34Q168 35 170 81Q171 128 145 144Q120 154 95 144Q69 128 70 81Z" fill={fur}/>
+      <ellipse cx="103" cy="105" rx="23" ry="19" fill="#D6A47B"/><ellipse cx="137" cy="105" rx="23" ry="19" fill="#D6A47B"/>
+      <AnimalEyes look={look} y={77} spacing={22} rx={10} ry={14}/>
+      <ellipse cx="120" cy="99" rx="7" ry="5" fill="#3A2925"/>
+      <path d="M120 104Q118 113 109 114M120 104Q122 113 131 114" fill="none" stroke="#53332D" strokeWidth="3" strokeLinecap="round"/>
+      <rect x="111" y="119" width="8" height="12" rx="2" fill="#FFF1D7"/><rect x="121" y="119" width="8" height="12" rx="2" fill="#FFF1D7"/>
+    </g>;
+    case 'axolotl': return <g>
+      <path d="M79 81Q61 59 67 35Q84 40 91 63Q96 32 111 22Q122 42 119 63Q133 34 151 28Q157 52 139 76Z" fill="#EF8F9B"/>
+      <path d="M161 81Q179 59 173 35Q156 40 149 63Q144 32 129 22Q118 42 121 63Q107 34 89 28Q83 52 101 76Z" fill="#EF8F9B" opacity=".92"/>
+      <path d="M70 91Q68 39 120 38Q172 39 170 91Q167 136 120 145Q73 136 70 91Z" fill="#F4B0B3"/>
+      <path d="M87 104Q96 92 110 100M153 104Q144 92 130 100" fill="none" stroke="#D98291" strokeWidth="3" strokeLinecap="round"/>
+      <AnimalEyes look={look} y={83} spacing={23} rx={11} ry={15}/>
+      <ellipse cx="120" cy="105" rx="3.5" ry="2.5" fill="#B85F72"/>{mouth}
+      <circle cx="95" cy="115" r="2.2" fill="#D98291"/><circle cx="145" cy="115" r="2.2" fill="#D98291"/>
+    </g>;
+    case 'cat': return <g>
+      <path d="M72 76Q61 45 73 23Q96 29 103 51Q120 44 137 51Q145 29 167 23Q179 47 168 78Q177 118 145 142Q120 153 95 142Q63 118 72 76Z" fill={fur}/>
+      <path d="M80 54Q79 37 77 32Q91 37 96 56Z" fill="#E6A1A0"/><path d="M160 54Q161 37 163 32Q149 37 144 56Z" fill="#E6A1A0"/>
+      <path d="M87 103Q98 91 111 102Q120 109 129 102Q142 91 153 103Q147 126 120 132Q93 126 87 103Z" fill="#F5E6D3"/>
+      <AnimalEyes look={look} y={82} spacing={23} rx={10.5} ry={14}/>
+      <path d="M114 105Q120 100 126 105L120 111Z" fill="#C66B73"/>
+      <path d="M120 111Q116 119 109 118M120 111Q124 119 131 118" fill="none" stroke="#68423C" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M87 109L65 104M88 116L64 118M153 109L175 104M152 116L176 118" stroke="#F4E8D9" strokeWidth="2.5" strokeLinecap="round"/>{mouth}
+    </g>;
+    case 'frog': return <g>
+      <path d="M70 85Q69 47 120 46Q171 47 170 85Q167 132 120 143Q73 132 70 85Z" fill={fur}/>
+      <path d="M76 59Q69 15 94 22Q118 22 114 63Z" fill={fur}/><path d="M126 63Q122 22 146 22Q171 15 164 59Z" fill={fur}/>
+      <ellipse cx="94" cy="48" rx="16" ry="20" fill="#BDE9B7"/><ellipse cx="146" cy="48" rx="16" ry="20" fill="#BDE9B7"/>
+      <circle cx="96" cy="49" r="8" fill="#FFF"/><circle cx="144" cy="49" r="8" fill="#FFF"/>
+      <circle cx="98" cy="51" r="4.8" fill="#27252B"/><circle cx="142" cy="51" r="4.8" fill="#27252B"/>
+      <circle cx="100" cy="48" r="1.7" fill="#FFF"/><circle cx="144" cy="48" r="1.7" fill="#FFF"/>
+      <ellipse cx="120" cy="113" rx="34" ry="19" fill="#B7DF91" opacity=".75"/>
+      <path d="M91 112Q120 139 149 112" fill="none" stroke="#315E42" strokeWidth="4" strokeLinecap="round"/>
+      <circle cx="83" cy="93" r="4" fill="#245B40" opacity=".65"/><circle cx="157" cy="93" r="4" fill="#245B40" opacity=".65"/>
+    </g>;
+    case 'armadillo': return <g>
+      <ellipse cx="78" cy="68" rx="13" ry="15" fill={fur}/>
+      <path d="M68 82Q70 38 120 37Q170 38 172 82Q169 129 142 143Q120 151 98 143Q69 129 68 82Z" fill={fur}/>
+      <path d="M114 90Q140 82 165 99Q171 109 156 121Q138 133 113 119Z" fill="#B98A65"/>
+      <AnimalEyes look={look} y={77} spacing={22} rx={10} ry={14}/>
+      <ellipse cx="164" cy="107" rx="5" ry="4" fill="#43312C"/>
+      <path d="M105 122Q118 130 130 123" fill="none" stroke="#4A332B" strokeWidth="3" strokeLinecap="round"/>
+    </g>;
+    case 'turtle': return <g>
+      <path d="M79 90Q65 57 87 42Q104 32 120 38Q136 32 153 42Q175 57 161 90Q154 129 120 142Q86 129 79 90Z" fill={fur}/>
+      <path d="M82 112Q120 137 158 112" fill="none" stroke="#5D8C57" strokeWidth="6" strokeLinecap="round"/>
+      <path d="M109 112Q120 122 131 112Q120 133 109 112Z" fill="#F0CE83"/>
+      <AnimalEyes look={look} y={78} spacing={21} rx={10.5} ry={14}/>
+      <ellipse cx="95" cy="105" rx="5" ry="3.5" fill="#6C9B61"/><ellipse cx="145" cy="105" rx="5" ry="3.5" fill="#6C9B61"/>{mouth}
+      <path d="M84 61Q94 48 103 54M137 54Q146 48 156 61" fill="none" stroke="#477348" strokeWidth="3" strokeLinecap="round"/>
+    </g>;
+    case 'parrot': return <g>
+      <path d="M78 82Q69 43 94 28Q107 20 119 39Q134 18 147 33Q177 48 163 86Q162 129 120 145Q78 129 78 82Z" fill={fur}/>
+      <path d="M107 39Q92 17 104 11Q120 22 120 39Q134 12 147 19Q153 31 134 47Z" fill={look.accent}/>
+      <AnimalEyes look={look} y={78} spacing={22} rx={10.5} ry={14}/>
+      <path d="M117 88Q144 85 139 109Q134 126 115 121Q128 109 117 88Z" fill="#F2B33E"/>
+      <path d="M120 94Q128 100 118 112" fill="none" stroke="#A9602D" strokeWidth="2.5" strokeLinecap="round"/>
+      <path d="M92 123Q120 137 148 123" fill="none" stroke="#8F473B" strokeWidth="3" strokeLinecap="round"/>
+    </g>;
+    case 'chameleon': return <g>
+      <path d="M61 82Q67 46 111 49Q133 35 160 51Q182 64 168 96Q151 129 116 135Q79 134 61 108Z" fill={fur}/>
+      <path d="M75 53Q82 30 96 43Q107 56 94 69Z" fill={look.accent}/><path d="M132 53Q144 27 159 41Q168 55 151 70Z" fill={look.accent}/>
+      <ellipse cx="93" cy="72" rx="19" ry="21" fill="#D7E98C"/><ellipse cx="148" cy="69" rx="18" ry="20" fill="#D7E98C"/>
+      <circle cx="98" cy="73" r="8" fill="#FFF"/><circle cx="148" cy="70" r="8" fill="#FFF"/>
+      <circle cx="100" cy="75" r="4.7" fill="#27252B"/><circle cx="150" cy="72" r="4.7" fill="#27252B"/>
+      <path d="M122 91Q148 91 164 101Q152 115 126 111" fill="#A6CB65"/>
+      <path d="M124 111Q143 119 158 108" fill="none" stroke="#45633A" strokeWidth="3.2" strokeLinecap="round"/>
+      <circle cx="77" cy="94" r="3" fill="#47764A"/><circle cx="88" cy="110" r="3" fill="#47764A"/>
+    </g>;
+    case 'human': default: return <g><Face look={look} pose={pose}/><Hair look={look}/></g>;
+  }
+}
+
+function CreatureBack({ look }: { look:Look }) {
+  switch(look.species) {
+    case 'beaver': return <g><path d="M64 181Q42 188 46 215Q52 237 76 230Q96 219 83 194Z" fill="#75462F"/><path d="M59 195L75 222M68 191L84 213M51 207L71 229" stroke="#B27B54" strokeWidth="2.4" strokeLinecap="round"/></g>;
+    case 'axolotl': return <g><path d="M155 205Q184 202 197 218Q181 221 199 238Q178 232 164 251Q170 229 151 224Z" fill="#F09AA6"/><path d="M165 218L188 219M163 226L184 230M160 235L177 239" stroke="#D36F84" strokeWidth="2.5" strokeLinecap="round"/></g>;
+    case 'cat': return <path d="M151 194Q188 189 185 218Q181 241 207 233" fill="none" stroke={look.hair} strokeWidth="16" strokeLinecap="round"/>;
+    case 'armadillo': return <g><path d="M65 147Q67 119 104 121Q157 113 174 151L168 200Q120 221 72 200Z" fill="#9B785B"/><path d="M75 150Q118 130 166 150M72 164Q120 144 171 164M72 180Q120 159 169 180M78 195Q120 178 164 195" stroke="#D7B18A" strokeWidth="5" fill="none" strokeLinecap="round"/></g>;
+    case 'turtle': return <g><path d="M60 154Q64 119 120 120Q176 119 180 154Q179 211 120 218Q61 211 60 154Z" fill="#8C603B"/><path d="M70 157Q78 128 120 129Q162 128 170 157Q167 196 120 204Q73 196 70 157Z" fill="#B9824D"/><path d="M120 131L120 202M80 160L120 176L160 160M88 190L120 176L152 190" fill="none" stroke="#E0B56D" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"/></g>;
+    case 'parrot': return <g><path d="M151 181Q171 196 179 247Q162 238 151 221Z" fill="#2B9B78"/><path d="M141 181Q151 207 151 250Q136 233 133 211Z" fill="#E4B33D"/><path d="M130 184Q134 212 122 250Q111 225 119 205Z" fill="#E86A51"/></g>;
+    case 'chameleon': return <path d="M154 191Q185 183 188 210Q191 236 169 235Q151 234 157 218Q162 206 174 214" fill="none" stroke={look.hair} strokeWidth="13" strokeLinecap="round"/>;
+    default: return null;
+  }
+}
+
+function AnimalFeet({ look }: { look:Look }) {
+  switch(look.species) {
+    case 'human': return <g><rect x="86" y="245" width="31" height="12" rx="6" fill={look.shoe}/><rect x="123" y="245" width="31" height="12" rx="6" fill={look.shoe}/></g>;
+    case 'capybara': return <g fill="#614238"><rect x="87" y="244" width="29" height="14" rx="7"/><rect x="124" y="244" width="29" height="14" rx="7"/><path d="M96 248v6M104 248v6M133 248v6M141 248v6" stroke="#D6B18B" strokeWidth="1.6"/></g>;
+    case 'beaver': return <g fill="#9A6347"><ellipse cx="101" cy="249" rx="19" ry="9"/><ellipse cx="139" cy="249" rx="19" ry="9"/><path d="M88 248v7M96 247v8M126 247v8M134 248v7M142 248v7" stroke="#E1B68F" strokeWidth="1.8"/></g>;
+    case 'axolotl': return <g fill="#E88C9A"><ellipse cx="101" cy="250" rx="16" ry="8"/><ellipse cx="139" cy="250" rx="16" ry="8"/><circle cx="89" cy="247" r="3"/><circle cx="97" cy="244" r="3"/><circle cx="105" cy="244" r="3"/><circle cx="127" cy="244" r="3"/><circle cx="135" cy="244" r="3"/><circle cx="143" cy="247" r="3"/></g>;
+    case 'cat': return <g fill={look.hair}><ellipse cx="101" cy="250" rx="17" ry="9"/><ellipse cx="139" cy="250" rx="17" ry="9"/><path d="M92 244v5M101 242v6M110 244v5M130 244v5M139 242v6M148 244v5" stroke="#E9D9CD" strokeWidth="1.8"/></g>;
+    case 'frog': return <g fill="#B6DC72"><ellipse cx="100" cy="250" rx="21" ry="8"/><ellipse cx="140" cy="250" rx="21" ry="8"/><circle cx="84" cy="244" r="5"/><circle cx="95" cy="242" r="5"/><circle cx="106" cy="244" r="5"/><circle cx="134" cy="244" r="5"/><circle cx="145" cy="242" r="5"/><circle cx="156" cy="244" r="5"/></g>;
+    case 'armadillo': return <g fill="#A78A70"><ellipse cx="101" cy="250" rx="17" ry="8"/><ellipse cx="139" cy="250" rx="17" ry="8"/><path d="M94 248l-3 6M102 247l-2 7M110 248l-1 6M132 248l-1 6M140 247l2 7M148 248l3 6" stroke="#5A4B40" strokeWidth="2"/></g>;
+    case 'turtle': return <g fill="#6D9D5A"><ellipse cx="101" cy="250" rx="18" ry="9"/><ellipse cx="139" cy="250" rx="18" ry="9"/><path d="M91 246l-2 7M100 245v8M109 246l2 7M129 246l-2 7M139 245v8M149 246l2 7" stroke="#D0E3A3" strokeWidth="1.7"/></g>;
+    case 'parrot': return <g fill="#51483D"><path d="M91 244Q102 239 113 247L108 256H94Z"/><path d="M127 247Q138 239 149 244L146 256H132Z"/></g>;
+    case 'chameleon': return <g fill="#85B85A"><ellipse cx="101" cy="250" rx="18" ry="8"/><ellipse cx="139" cy="250" rx="18" ry="8"/><circle cx="86" cy="247" r="4"/><circle cx="94" cy="243" r="4"/><circle cx="107" cy="245" r="4"/><circle cx="133" cy="245" r="4"/><circle cx="146" cy="243" r="4"/><circle cx="154" cy="247" r="4"/></g>;
+  }
+}
+
+function OutfitDetails({ look }: { look:Look }) {
+  const a=look.accent;
+  switch(look.outfit) {
+    case 'scarf': return <g><path d="M91 132Q120 145 149 132L140 149Q120 159 100 149Z" fill={a}/><path d="M132 145L145 151L139 179L126 169Z" fill={a}/><path d="M96 137Q120 148 144 137" fill="none" stroke="#FFF1C8" strokeWidth="2.6"/><circle cx="120" cy="163" r="3" fill="#FFF1C8"/></g>;
+    case 'tech-jacket': return <g><path d="M96 133L112 145L120 159L128 145L144 133" fill="none" stroke="#C7F0E9" strokeWidth="5" strokeLinecap="round"/><path d="M120 149V218" stroke="#B8E2DC" strokeWidth="2.5"/><rect x="132" y="169" width="16" height="18" rx="3" fill="none" stroke={a} strokeWidth="2.5"/><circle cx="120" cy="176" r="2.3" fill={a}/><circle cx="120" cy="193" r="2.3" fill={a}/></g>;
+    case 'utility-vest': return <g><path d="M94 133L106 146L101 213L88 208L86 158ZM146 133L134 146L139 213L152 208L154 158Z" fill="#2D5C89"/><path d="M94 161H105V181H92ZM135 161H148V181H137Z" fill="#E6B64B"/><path d="M94 188H105M135 188H146" stroke="#F4D58A" strokeWidth="2.3"/></g>;
+    case 'field-cape': return <g><path d="M88 135Q120 157 152 135L166 211Q120 228 74 211Z" fill="#6A469D" opacity=".34"/><path d="M89 139Q120 158 151 139" fill="none" stroke={a} strokeWidth="5" strokeLinecap="round"/><path d="M120 151L132 164L120 177L108 164Z" fill={a}/><circle cx="120" cy="164" r="4" fill="#F7E8C7"/></g>;
+    case 'lab-coat': return <g><path d="M98 130L113 143L120 160L105 173L91 151Z" fill="#F5F0E7"/><path d="M142 130L127 143L120 160L135 173L149 151Z" fill="#E6E0D5"/><path d="M120 157V219" stroke="#F7F3EA" strokeWidth="3"/><path d="M91 179H108V198H91ZM132 179H149V198H132Z" fill="none" stroke="#F5F0E7" strokeWidth="2.5"/><path d="M139 180V190M143 180V190" stroke={a} strokeWidth="2.5"/></g>;
+    case 'hoodie': return <g><path d="M90 140Q120 115 150 140L145 165Q120 179 95 165Z" fill="#286D4C"/><path d="M110 143Q120 157 130 143" fill="none" stroke="#BFE1C1" strokeWidth="3"/><path d="M112 152L109 171M128 152L131 171" stroke="#F4D984" strokeWidth="2.2" strokeLinecap="round"/><path d="M101 187Q120 178 139 187L137 205Q120 211 103 205Z" fill="#237D55" stroke="#BFE1C1" strokeWidth="2"/></g>;
+    case 'knit-sweater': return <g><path d="M94 137Q120 151 146 137" fill="none" stroke="#F4D2AC" strokeWidth="5" strokeLinecap="round"/><path d="M89 177H151M91 184H149" stroke="#F4B27E" strokeWidth="2.3"/><path d="M108 157L120 168L132 157L120 146Z" fill="none" stroke={a} strokeWidth="3"/></g>;
+    case 'cardigan': return <g><path d="M94 132L108 143L120 156L132 143L146 132" fill="none" stroke="#F3D6A0" strokeWidth="5" strokeLinecap="round"/><path d="M120 154V219" stroke="#D8E8C6" strokeWidth="2.5"/><circle cx="120" cy="172" r="3" fill={a}/><circle cx="120" cy="190" r="3" fill={a}/></g>;
+    case 'formal-coat': return <g><path d="M96 130L112 143L120 160L103 174L91 151Z" fill="#EEE7DC"/><path d="M144 130L128 143L120 160L137 174L149 151Z" fill="#DAD0C3"/><path d="M120 154V217" stroke="#D8C9B8" strokeWidth="2.5"/><path d="M107 145L120 160L113 177L102 161ZM133 145L120 160L127 177L138 161Z" fill={a}/><circle cx="120" cy="188" r="3" fill="#EBCB70"/></g>;
+    case 'language-scarf': return <g><path d="M92 133Q120 148 148 133L143 151Q120 163 97 151Z" fill={a}/><path d="M132 148L147 153L142 183L129 171Z" fill={a}/><path d="M99 140Q120 151 141 140" fill="none" stroke="#FFE9C5" strokeWidth="2.2"/><path d="M135 159l7 3M133 167l7 3M132 175l7 3" stroke="#FFE9C5" strokeWidth="2"/></g>;
+    case 'embroidered-tunic': return <g><path d="M99 138Q120 151 141 138" fill="none" stroke={a} strokeWidth="4" strokeLinecap="round"/><path d="M92 183H148" stroke={a} strokeWidth="3" strokeDasharray="3 4"/><path d="M120 158L126 166L120 174L114 166Z" fill="none" stroke="#E9D7B9" strokeWidth="2.5"/></g>;
+    case 'blazer': return <g><path d="M96 130L111 143L120 158L107 172L92 149Z" fill="#E9E0D4"/><path d="M144 130L129 143L120 158L133 172L148 149Z" fill="#D7CBBE"/><path d="M120 156V217" stroke="#F2E9DA" strokeWidth="2.5"/><path d="M120 164L126 172L120 180L114 172Z" fill={a}/><circle cx="120" cy="194" r="3" fill="#E9C97D"/></g>;
+    case 'tech-hoodie': return <g><path d="M91 141Q120 112 149 141L143 164Q120 176 97 164Z" fill="#A87922"/><path d="M105 143Q120 159 135 143" fill="none" stroke="#F7DC95" strokeWidth="3.5"/><path d="M120 154V216" stroke="#F6E4B4" strokeWidth="2.5"/><rect x="130" y="178" width="17" height="14" rx="3" fill="none" stroke={a} strokeWidth="2.5"/></g>;
+  }
+}
+
 function Hand({ x, y, skin, gesture }: { x: number; y: number; skin: string; gesture: HandGesture }) {
   return <g transform={'translate(' + x + ' ' + y + ')'}>
     <ellipse cx="0" cy="0" rx="10.5" ry="11" fill={skin}/>
@@ -341,14 +498,19 @@ export function TeacherCharacter({
     <svg viewBox={portrait ? '40 12 160 160' : '0 0 240 270'} width={style.width} height={style.height}
       className={'shrink-0 ' + (portrait ? 'rounded-full overflow-hidden ' : 'overflow-visible ') + className}
       style={style} role="img" aria-label={teacher.name + ', personagem ilustrado do Pórtico'}
-      data-character-style="portico-friends-v8" data-character-pose={characterPose} data-character-body={look.body} data-character-lower={look.lower} data-character-face={look.face} data-character-hair={look.hairStyle} data-character-eyes={look.eyes} data-character-mouth={look.mouth} data-character-nose={look.nose} data-character-brows={look.brows} data-character-spacing={look.eyeSpacing} focusable="false">
+      data-character-style="portico-friends-v9" data-character-pose={characterPose} data-character-species={look.species} data-character-outfit={look.outfit} data-character-body={look.body} data-character-lower={look.lower} data-character-face={look.face} data-character-hair={look.hairStyle} data-character-eyes={look.eyes} data-character-mouth={look.mouth} data-character-nose={look.nose} data-character-brows={look.brows} data-character-spacing={look.eyeSpacing} focusable="false">
       {portrait && <circle cx="120" cy="98" r="90" fill={'rgb(var(--' + teacher.tone + '))'}/>}
       {!portrait && <rect x="83" y="260" width="74" height="6" rx="3" fill="#243840" opacity=".14"/>}
 
-      {/* Tronco: uma massa simples, com cintura definida sem contorno decorativo. */}
+      <CreatureBack look={look}/>
+      {/* Roupa com acabamento discreto, aplicado sobre a silhueta principal. */}
       <g transform={'translate(120 174) rotate(' + look.torsoTilt + ') scale(' + look.torsoScaleX + ' ' + look.torsoScaleY + ') translate(-120 -174)'}>
         <path d={BODY_PATH[look.body]} fill={look.top}/>
         <path d={LOWER_PATH[look.lower]} fill={look.bottom}/>
+        <OutfitDetails look={look}/>
+        {look.species === 'armadillo' && <g fill="none" stroke="#E2C39F" strokeWidth="3.2"><path d="M83 150Q120 132 157 150M79 165Q120 146 161 165M82 180Q120 164 158 180"/></g>}
+        {look.species === 'turtle' && <g fill="none" stroke="#E2C487" strokeWidth="2.8"><path d="M87 154Q120 169 153 154M91 178Q120 191 149 178M120 150V201"/></g>}
+        {look.species === 'parrot' && <path d="M92 160Q105 177 120 181Q135 177 148 160" fill="none" stroke="#F5D78A" strokeWidth="4" strokeLinecap="round"/>}
 
         {/* Braços grossos integrados ao corpo, mas com gestos próprios. */}
         <path d={a.left} fill="none" stroke={look.top} strokeWidth="19" strokeLinecap="round" strokeLinejoin="round"/>
@@ -357,17 +519,15 @@ export function TeacherCharacter({
         <Hand x={a.rh[0]} y={a.rh[1]} skin={look.skin} gesture={gesture}/>
       </g>
 
-      {/* Pernas curtas e calçados realmente separados, com espaço negativo visível. */}
+      {/* Pernas e pés adaptados à espécie. */}
       {!portrait && <g>
-        <path d="M104 222Q103 230 102 237" fill="none" stroke={look.bottom} strokeWidth="13" strokeLinecap="round"/>
-        <path d="M136 222Q137 230 138 237" fill="none" stroke={look.bottom} strokeWidth="13" strokeLinecap="round"/>
-        <rect x="86" y="245" width="31" height="12" rx="6" fill={look.shoe}/>
-        <rect x="123" y="245" width="31" height="12" rx="6" fill={look.shoe}/>
+        <path d="M104 222Q103 230 102 237" fill="none" stroke={look.species === 'human' ? look.bottom : look.skin} strokeWidth="13" strokeLinecap="round"/>
+        <path d="M136 222Q137 230 138 237" fill="none" stroke={look.species === 'human' ? look.bottom : look.skin} strokeWidth="13" strokeLinecap="round"/>
+        <AnimalFeet look={look}/>
       </g>}
       {/* A cabeça também varia em largura e altura; rosto e cabelo formam uma única unidade. */}
       <g transform={'translate(120 91) rotate(' + look.headTilt + ') scale(' + look.headScaleX + ' ' + look.headScaleY + ') translate(-120 -91)'}>
-        <Face look={look} pose={characterPose}/>
-        <Hair look={look}/>
+        <AnimalHead look={look} pose={characterPose}/>
 
         {/* Acessórios pequenos, mas desenhados na escala de cada rosto. */}
         {look.accessory === 'headset' && <g fill="none" stroke={look.accent} strokeWidth="7" strokeLinecap="round">

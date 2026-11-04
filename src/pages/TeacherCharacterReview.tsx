@@ -8,10 +8,10 @@ export function TeacherCharacterReviewPage() {
   return (
     <main className="mx-auto max-w-5xl space-y-5 px-4 py-6">
       <header className="space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V8</p>
+        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V9</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted">
-          Estudos de rosto, roupas inferiores, proporções e gestos-assinatura. A V8 diferencia melhor calças, saias, casacos e poses sem acrescentar detalhes excessivos. Esta galeria continua em revisão,
+          Um elenco misto de pessoas e criaturas ligadas ao universo do conhecimento. A V9 introduz espécies próprias, silhuetas animais, roupas com pequenos acabamentos e gestos de assinatura. Esta galeria continua em revisão,
           ainda não representa uma família aprovada.
         </p>
       </header>
@@ -47,7 +47,9 @@ export function TeacherCharacterReviewPage() {
           <li>Pés separados das pernas por espaço negativo, sem parecerem presos ao corpo.</li>
           <li>Rostos realmente diferentes: distância e inclinação dos olhos, sobrancelhas, nariz, bochechas e expressão.</li>
           <li>Uma silhueta inferior própria: calças retas, largas, joggers, saia, vestido, casaco ou shorts, sem repetir o mesmo triângulo.</li>
-          <li>Gestos-assinatura legíveis também no tamanho pequeno da tela de aula.</li>
+          <li>Espécies variadas: capivara, castor, axolote, gato, sapo, tatu, tartaruga, papagaio e camaleão.</li>
+          <li>Roupas com pequenos acabamentos funcionais: golas, costuras, bolsos, fechos, faixas e insígnias.</li>
+          <li>Os detalhes reforçam a personalidade sem competir com a silhueta.</li>
         </ul>
       </section>
     </main>

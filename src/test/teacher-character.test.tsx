@@ -28,7 +28,7 @@ describe('personagens-professores vetoriais', () => {
       expect(figure.getAttribute('viewBox')).toBe('0 0 240 270');
       expect(figure.querySelectorAll('path, rect, circle, ellipse').length).toBeGreaterThan(14);
       expect(figure.querySelectorAll('[stroke-width]').length).toBeLessThan(12);
-      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v8');
+      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v9');
     }
     const bodySilhouettes = figures.map((figure) => figure.getAttribute('data-character-body'));
     expect(new Set(bodySilhouettes).size).toBe(teachers.length);
@@ -50,6 +50,17 @@ describe('personagens-professores vetoriais', () => {
     expect(new Set(differentDrawings).size).toBe(teachers.length);
   });
 
+  it('mistura humanos e criaturas originais ligadas às disciplinas', () => {
+    const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={140}/>)}</div>);
+    const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
+    const species = figures.map((figure) => figure.getAttribute('data-character-species'));
+    const outfits = figures.map((figure) => figure.getAttribute('data-character-outfit'));
+    expect(species).toHaveLength(teachers.length);
+    expect(new Set(species).size).toBeGreaterThanOrEqual(9);
+    expect(species.filter(value => value !== 'human')).toHaveLength(9);
+    expect(new Set(outfits).size).toBe(teachers.length);
+  });
+
   it('mostra o professor em uma cena de explicação, com fala contextual e presença visual grande', () => {
     const { container, getByRole, getByText } = render(<TeacherScene teacher={teachers[0]} heading="Somar números inteiros" message="Vamos caminhar pela reta numérica juntos." size={180}/>);
     expect(getByRole('region', { name: /explicando: Somar números inteiros/i })).toBeInTheDocument();
@@ -60,7 +71,7 @@ describe('personagens-professores vetoriais', () => {
 
   it('usa a mesma linguagem vetorial nas versões de avatar e corpo inteiro', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} portrait size={48}/>)}</div>);
-    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v8"]')).toHaveLength(teachers.length);
+    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v9"]')).toHaveLength(teachers.length);
   });
 
   it('atribui um professor coerente às principais disciplinas', () => {
