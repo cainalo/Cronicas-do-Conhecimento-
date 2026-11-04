@@ -8,10 +8,10 @@ export function TeacherCharacterReviewPage() {
   return (
     <main className="mx-auto max-w-5xl space-y-5 px-4 py-6">
       <header className="space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V7</p>
+        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V8</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted">
-          Estudos de silhueta, rosto, olhos, sobrancelhas, nariz, cabelo, proporções, cintura e gestos-assinatura. Esta galeria é uma etapa de revisão,
+          Estudos de rosto, roupas inferiores, proporções e gestos-assinatura. A V8 diferencia melhor calças, saias, casacos e poses sem acrescentar detalhes excessivos. Esta galeria continua em revisão,
           ainda não representa uma família aprovada.
         </p>
       </header>
@@ -46,7 +46,8 @@ export function TeacherCharacterReviewPage() {
           <li>Olhos expressivos, poucos traços faciais e gestos legíveis em celular.</li>
           <li>Pés separados das pernas por espaço negativo, sem parecerem presos ao corpo.</li>
           <li>Rostos realmente diferentes: distância e inclinação dos olhos, sobrancelhas, nariz, bochechas e expressão.</li>
-          <li>Um gesto-assinatura próprio para cada professor, também usado nas aulas e não só nesta galeria.</li>
+          <li>Uma silhueta inferior própria: calças retas, largas, joggers, saia, vestido, casaco ou shorts, sem repetir o mesmo triângulo.</li>
+          <li>Gestos-assinatura legíveis também no tamanho pequeno da tela de aula.</li>
         </ul>
       </section>
     </main>

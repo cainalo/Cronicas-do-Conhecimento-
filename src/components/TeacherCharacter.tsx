@@ -111,19 +111,19 @@ const BODY_PATH: Record<BodyShape, string> = {
 
 /** Silhuetas da parte inferior: cada professor tem uma leitura de roupa própria. */
 const LOWER_PATH: Record<LowerShape, string> = {
-  'clara-skirt': 'M94 184Q120 197 146 184L174 229Q120 243 66 229Z',
-  'lia-slim': 'M98 184Q120 193 142 184L145 230Q120 235 95 230Z',
-  'davi-wide': 'M90 183Q120 197 150 183L163 231Q120 240 77 231Z',
-  'iara-cape': 'M92 180Q120 194 148 180L183 231Q120 247 57 231Z',
-  'nina-straight': 'M96 184Q120 193 144 184L151 230Q120 235 89 230Z',
-  'ravi-jogger': 'M91 183Q120 196 149 183L155 221L145 230L127 224L120 232L113 224L95 230L85 221Z',
-  'mateus-round': 'M89 183Q120 197 151 183Q166 206 156 231Q120 239 84 231Q74 206 89 183Z',
-  'marina-a-line': 'M94 184Q120 197 146 184L166 231Q120 244 74 231Z',
-  'beatriz-coat': 'M90 178Q120 188 150 178L160 230Q120 237 80 230Z',
-  'sofia-bell': 'M96 183Q120 198 144 183L177 230Q120 247 63 230Z',
-  'helena-wide': 'M86 183Q120 198 154 183L169 231Q120 240 71 231Z',
-  'augusto-shorts': 'M94 183Q120 195 146 183L152 216Q120 225 88 216Z',
-  'caio-tapered': 'M94 183Q120 194 146 183L150 230Q120 236 90 230Z',
+  'clara-skirt': 'M96 184Q120 194 144 184Q157 197 160 222Q120 235 80 222Q83 197 96 184Z',
+  'lia-slim': 'M99 184Q120 193 141 184L139 222Q134 230 124 227L120 205L116 227Q106 230 101 222Z',
+  'davi-wide': 'M88 184Q120 198 152 184L150 227Q138 231 124 227L120 207L116 227Q102 231 90 227Z',
+  'iara-cape': 'M91 180Q120 194 149 180L164 220L147 226L120 212L93 226L76 220Z',
+  'nina-straight': 'M100 184Q120 192 140 184L138 227L122 227L120 206L118 227L102 227Z',
+  'ravi-jogger': 'M92 183Q120 196 148 183L151 219Q143 228 126 225L120 217L114 225Q97 228 89 219Z',
+  'mateus-round': 'M90 183Q120 196 150 183Q162 193 159 216Q155 229 120 229Q85 229 81 216Q78 193 90 183Z',
+  'marina-a-line': 'M96 184Q120 195 144 184Q157 201 163 224Q120 235 77 224Q83 201 96 184Z',
+  'beatriz-coat': 'M94 178Q120 188 146 178L153 225Q139 230 125 222L120 209L115 222Q101 230 87 225Z',
+  'sofia-bell': 'M98 183Q120 194 142 183L144 208Q153 217 157 232Q140 237 126 228L120 209L114 228Q100 237 83 232Q87 217 96 208Z',
+  'helena-wide': 'M90 183Q120 197 150 183L156 226Q142 232 126 226L120 206L114 226Q98 232 84 226Z',
+  'augusto-shorts': 'M95 183Q120 194 145 183L148 215Q135 223 120 217Q105 223 92 215Z',
+  'caio-tapered': 'M98 183Q120 193 142 183L140 226Q131 231 124 225L120 209L116 225Q109 231 100 226Z',
 };
 
 function Hair({ look }: { look: Look }) {
@@ -321,18 +321,18 @@ export function TeacherCharacter({
   const arms: Record<TeacherPose, { left: string; right: string; lh: [number,number]; rh: [number,number]; hand: HandGesture }> = {
     presenting: { left:'M88 164Q72 176 62 194', right:'M152 162Q174 152 188 132', lh:[62,194], rh:[188,132], hand:'open' },
     greeting: { left:'M88 164Q75 180 80 197', right:'M152 160Q177 127 184 88', lh:[80,197], rh:[184,88], hand:'open' },
-    thinking: { left:'M88 164Q74 181 78 197', right:'M152 160Q168 145 157 127', lh:[78,197], rh:[157,127], hand:'closed' },
+    thinking: { left:'M88 164Q74 181 78 197', right:'M152 160Q166 150 154 152', lh:[78,197], rh:[154,152], hand:'closed' },
     celebrating: { left:'M88 158Q63 129 55 88', right:'M152 158Q177 128 185 88', lh:[55,88], rh:[185,88], hand:'open' },
     listening: { left:'M88 164Q103 184 114 181', right:'M152 164Q137 184 126 181', lh:[114,181], rh:[126,181], hand:'closed' },
-    'hands-on-hips': { left:'M88 164Q68 176 80 191', right:'M152 164Q172 176 160 191', lh:[80,191], rh:[160,191], hand:'closed' },
+    'hands-on-hips': { left:'M88 164Q69 176 90 190', right:'M152 164Q171 176 150 190', lh:[90,190], rh:[150,190], hand:'closed' },
     'arms-down': { left:'M88 164Q76 184 76 207', right:'M152 164Q164 184 164 207', lh:[76,207], rh:[164,207], hand:'closed' },
     shrug: { left:'M88 164Q68 145 58 150', right:'M152 164Q172 145 182 150', lh:[58,150], rh:[182,150], hand:'open' },
     'arms-crossed': { left:'M88 164Q104 179 132 190', right:'M152 164Q136 179 108 190', lh:[132,190], rh:[108,190], hand:'closed' },
-    'hand-on-chin': { left:'M88 164Q74 184 76 207', right:'M152 164Q168 151 151 143', lh:[76,207], rh:[151,143], hand:'closed' },
+    'hand-on-chin': { left:'M88 164Q74 184 76 207', right:'M152 164Q168 153 151 154', lh:[76,207], rh:[151,154], hand:'closed' },
     'hands-forward': { left:'M88 164Q101 183 111 180', right:'M152 164Q139 183 129 180', lh:[111,180], rh:[129,180], hand:'open' },
-    'one-hand-on-hip': { left:'M88 164Q66 178 80 191', right:'M152 164Q164 184 164 207', lh:[80,191], rh:[164,207], hand:'closed' },
+    'one-hand-on-hip': { left:'M88 164Q68 177 91 190', right:'M152 164Q164 184 164 207', lh:[91,190], rh:[164,207], hand:'closed' },
     pointing: { left:'M88 164Q76 184 76 207', right:'M152 160Q174 137 190 111', lh:[76,207], rh:[190,111], hand:'point' },
-    'one-hand-up': { left:'M88 164Q76 184 76 207', right:'M152 160Q178 127 184 88', lh:[76,207], rh:[184,88], hand:'open' },
+    'one-hand-up': { left:'M88 164Q76 184 76 207', right:'M152 160Q168 132 166 96', lh:[76,207], rh:[166,96], hand:'open' },
   };
   const a = arms[characterPose];
   const gesture = a.hand;
@@ -341,7 +341,7 @@ export function TeacherCharacter({
     <svg viewBox={portrait ? '40 12 160 160' : '0 0 240 270'} width={style.width} height={style.height}
       className={'shrink-0 ' + (portrait ? 'rounded-full overflow-hidden ' : 'overflow-visible ') + className}
       style={style} role="img" aria-label={teacher.name + ', personagem ilustrado do Pórtico'}
-      data-character-style="portico-friends-v7" data-character-body={look.body} data-character-lower={look.lower} data-character-face={look.face} data-character-hair={look.hairStyle} data-character-eyes={look.eyes} data-character-mouth={look.mouth} data-character-nose={look.nose} data-character-brows={look.brows} data-character-spacing={look.eyeSpacing} focusable="false">
+      data-character-style="portico-friends-v8" data-character-pose={characterPose} data-character-body={look.body} data-character-lower={look.lower} data-character-face={look.face} data-character-hair={look.hairStyle} data-character-eyes={look.eyes} data-character-mouth={look.mouth} data-character-nose={look.nose} data-character-brows={look.brows} data-character-spacing={look.eyeSpacing} focusable="false">
       {portrait && <circle cx="120" cy="98" r="90" fill={'rgb(var(--' + teacher.tone + '))'}/>}
       {!portrait && <rect x="83" y="260" width="74" height="6" rx="3" fill="#243840" opacity=".14"/>}
 
