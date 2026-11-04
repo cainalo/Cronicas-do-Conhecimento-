@@ -9,14 +9,14 @@ const VIEW_MODES: { value:ViewMode; label:string; description:string }[] = [
   { value:'portrait', label:'Rostos', description:'A expressão, o cabelo e a identidade em tamanho de avatar.' },
 ];
 
-/** V22: revisão exclusiva de arte estática. Poses e animações não entram nesta etapa. */
+/** V21: revisão exclusiva de arte estática. Poses e animações não entram nesta etapa. */
 export function TeacherCharacterReviewPage() {
   const [view, setView] = useState<ViewMode>('color');
   return (
     <main className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:space-y-8"
       data-character-review-mode={view} data-character-review-stage="static-only">
       <header className="max-w-3xl space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · V22</p>
+        <p className="kicker">LABORATÓRIO DE PERSONAGENS · V21</p>
         <h1 className="font-title text-3xl font-bold leading-tight sm:text-4xl">Treze professores. Treze pessoas.</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
           A nova direção troca os antigos professores-animais por um elenco inteiramente humano.

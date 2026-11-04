@@ -2,7 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { FictionalTeacher } from '@/content/teachers';
 
 /**
- * V22 — elenco humano do Pórtico.
+ * V21 — elenco humano do Pórtico.
  * Arte estática: silhueta, rosto, cabelo e roupa. Movimento e poses ficam para outra etapa.
  */
 export type TeacherPose =
@@ -353,7 +353,6 @@ function Eyes({ design }: { design:CharacterDesign }) {
       <path d={design.nose} fill="none" stroke="#8C5A4B" strokeWidth="1.45" strokeLinecap="round" opacity=".72"/>
       <g transform="translate(94 95) scale(.78 .78) translate(-94 -95)">
         <path d={design.mouth} fill="#7E3D38" stroke="none"/>
-        <path d="M88 95Q94 98 100 94" fill="none" stroke="#F4BFB2" strokeWidth="1.8" strokeLinecap="round"/>
       </g>
     </g>
   );
@@ -391,24 +390,9 @@ function HumanArt({ design }: { design:CharacterDesign }) {
       <g transform={'translate(90 74) scale(' + design.headScale[0] + ' ' + design.headScale[1] + ') translate(-90 -74)'}>
       <path d={design.face} fill={design.skin} stroke={INK} strokeWidth="1.55" strokeLinejoin="round"/>
       {design.freckles && <path d="M68 84l1 1M73 88l1 1M111 84l1 1M116 88l1 1" stroke={INK} strokeWidth="1.15" opacity=".48"/>}
-      <path d="M67 91Q72 94 78 91M107 91Q113 94 118 91" fill="none" stroke="#D56F72" strokeWidth="3" opacity=".22" strokeLinecap="round"/>
       <Eyes design={design}/>
-      <g className="p-character__garment-signature">
-        {design.artId === 'clara' && <path d="M68 120Q78 132 89 136M112 119Q105 131 94 136" fill="none" stroke="#F0B38B" strokeWidth="2" opacity=".8" strokeLinecap="round"/>}
-        {design.artId === 'lia' && <path d="M79 111L91 124L103 111M91 124L91 145" fill="none" stroke="#49643C" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'davi' && <path d="M72 115Q90 130 111 115M72 148Q94 156 117 148" fill="none" stroke="#A8C084" strokeWidth="2" opacity=".5" strokeLinecap="round"/>}
-        {design.artId === 'iara' && <path d="M70 116Q91 127 112 116" fill="none" stroke="#D8CDB6" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'nina' && <path d="M77 108L91 121L105 108" fill="none" stroke="#A493B8" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'ravi' && <path d="M76 112Q91 126 107 112M83 112L83 131M99 112L99 131" fill="none" stroke="#F1D28E" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'mateus' && <path d="M77 110L91 126L105 110M91 126L91 144" fill="none" stroke="#D8BCA7" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'marina' && <path d="M68 112L82 123L91 116L100 123L115 112" fill="none" stroke="#77717A" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'beatriz' && <path d="M74 111Q91 128 108 111" fill="none" stroke="#F0BFA9" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'sofia' && <path d="M71 117Q91 132 111 117" fill="none" stroke="#F1B3C2" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'helena' && <path d="M74 111L91 127L108 111M91 127L91 148" fill="none" stroke="#D5CDAA" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'augusto' && <path d="M76 111L91 127L106 111" fill="none" stroke="#A2B6A7" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'caio' && <path d="M76 111Q91 128 106 111M83 112L83 132M99 112L99 132" fill="none" stroke="#85B2BE" strokeWidth="2" strokeLinecap="round"/>}
-      </g>
-      {design.glasses && <Glasses/>}
+      {/* Roupa sem ornamentos decorativos: a cor e a silhueta fazem o trabalho. */}
+     {design.glasses && <Glasses/>}
       {design.earrings && <path d="M57 84Q52 91 59 96M124 83Q130 91 123 96" fill="none" stroke="#D9A33F" strokeWidth="2.2"/>}
       {design.beard && <path d={design.beard} fill={design.hair} stroke="none"/>}
       {design.mustache && <path d={design.mustache} fill={design.hair} stroke="none"/>}
@@ -437,7 +421,7 @@ export function TeacherCharacter({
       style={{ width, height } as CSSProperties}
       role="img"
       aria-label={teacher.name + ', professora ou professor humano do Pórtico'}
-      data-character-style="portico-friends-v22"
+      data-character-style="portico-friends-v21"
       data-character-species="human"
       data-character-body={design.bodyLabel}
       data-character-hair={design.hairLabel}
