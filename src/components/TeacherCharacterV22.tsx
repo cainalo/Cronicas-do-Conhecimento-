@@ -326,7 +326,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     lower:'M56 166C77 174 114 174 136 166C138 185 134 204 131 223L107 223L100 188L89 223L65 223C60 204 56 184 56 166Z',
     leftArm:'M67 116C55 126 54 142 57 158C59 170 68 173 75 163L82 140Z',
     rightArm:'M122 116C134 125 139 143 138 158C137 170 127 174 120 164L112 140Z',
-    eyes:[78,104,72], eyeSize:[6.3,8.9], eyeStyle:'round', pupilSize:2.6, nose:'M89 82Q93 86 97 82', brow:'M68 62Q78 56 87 61M97 61Q106 56 115 61',
+    eyes:[78,104,72], eyeSize:[6.4,8.9], eyeStyle:'round', pupilSize:2.6, nose:'M89 82Q93 86 97 82', brow:'M68 62Q78 56 87 61M97 61Q106 56 115 61',
     headScale:[1.20,1.12],
     bodyScale:[0.92,0.98],
     mouth:'M84 90Q94 100 106 89Q102 104 94 105Q87 103 84 90Z',
