@@ -508,13 +508,19 @@ export function TeacherCharacter({
   const characterPose = pose ?? TEACHER_SIGNATURE_POSES[teacher.id] ?? 'presenting';
   const characterMotion = teacher.id.replace('prof.', '');
   const style:CSSProperties = portrait ? { width:size, height:size } : { width:Math.round(size * .9), height:size };
+  // Quadrúpedes e o camaleão têm uma massa horizontal legítima. A escala uniforme
+  // aproxima seu peso visual do restante do elenco sem alongar patas ou alterar a anatomia.
+  const horizontalSpecies = !portrait && ['armadillo', 'turtle', 'chameleon'].includes(meta.species);
+  const frameTransform = horizontalSpecies
+    ? 'translate(0 -6) translate(120 180) scale(1.14) translate(-120 -180)'
+    : undefined;
   return (
     <svg
       viewBox={portrait ? '12 18 216 216' : '0 0 240 280'}
       width={style.width} height={style.height}
       className={'shrink-0 ' + (portrait ? 'rounded-full overflow-hidden ' : 'overflow-visible ') + className}
       style={style} role="img" aria-label={teacher.name + ', personagem original do Pórtico'}
-      data-character-style="portico-friends-v19"
+      data-character-style="portico-friends-v20"
       data-character-motion={characterMotion}
       data-character-species={meta.species} data-character-outfit={meta.outfit}
       data-character-body={meta.body} data-character-lower={meta.lower}
@@ -524,12 +530,15 @@ export function TeacherCharacter({
       data-character-brows={meta.brows} data-character-spacing={meta.spacing}
       data-character-anatomy={meta.species === 'human' ? 'human' : 'species-specific'}
       data-character-limbs={meta.limbs} data-character-pose={characterPose}
+      data-character-frame={horizontalSpecies ? 'horizontal-species' : 'standard'}
       focusable="false" preserveAspectRatio="xMidYMax meet"
     >
       {portrait && <circle cx="120" cy="120" r="106" fill={'rgb(var(--' + teacher.tone + '))'}/>}
-      {!portrait && <ellipse cx="120" cy="265" rx="78" ry="5" fill="#2D2926" opacity=".06" stroke="none"/>}
-      <g className={'p-character__art p-character__art--' + characterMotion}>
-        {CharacterArt({ id:teacher.id, pose:characterPose })}
+      <g transform={frameTransform}>
+        {!portrait && <ellipse cx="120" cy="265" rx="78" ry="5" fill="#2D2926" opacity=".06" stroke="none"/>}
+        <g className={'p-character__art p-character__art--' + characterMotion}>
+          {CharacterArt({ id:teacher.id, pose:characterPose })}
+        </g>
       </g>
     </svg>
   );
