@@ -30,7 +30,6 @@ const KIND: Record<FeedPost['kind'], string> = {
   exemplo: 'Exemplo resolvido',
   atividade: 'Confira',
   video: 'Videoaula',
-  narrada: 'Aula narrada',
   dica: 'Dica',
   resumo: 'Resumo',
 };
@@ -553,15 +552,6 @@ function PostBody({ p, prefs, setPrefs }: { p: FeedPost; prefs: FeedPrefs; setPr
       <div className="space-y-1.5">
         <VideoEmbed url={p.video.url} title={p.video.title} meta={[p.video.channel, p.video.objective].join(' · ')} />
         {p.video.status === 'a-conferir' && <p className="text-xs text-muted">A conferir: título como indexado; canal e duração ainda não confirmados.</p>}
-      </div>
-    );
-  if (p.kind === 'narrada' && p.narrated)
-    return (
-      <div>
-        <p className="text-sm">Uma voz explica o mesmo assunto enquanto a cena se monta na tela. Com legenda, transcrição e controles; não toca sozinha.</p>
-        <Link to={`/aula-narrada/${p.narrated.id}`} className="btn-primary mt-3 w-full">
-          Assistir à aula narrada <Icon name="avancar" size={18} />
-        </Link>
       </div>
     );
   if (p.kind === 'resumo' && p.summary)
