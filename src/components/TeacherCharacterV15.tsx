@@ -491,7 +491,7 @@ export function TeacherCharacter({
       width={style.width} height={style.height}
       className={'shrink-0 ' + (portrait ? 'rounded-full overflow-hidden ' : 'overflow-visible ') + className}
       style={style} role="img" aria-label={teacher.name + ', personagem original do Pórtico'}
-      data-character-style="portico-friends-v17"
+      data-character-style="portico-friends-v18"
       data-character-motion={characterMotion}
       data-character-species={meta.species} data-character-outfit={meta.outfit}
       data-character-body={meta.body} data-character-lower={meta.lower}
