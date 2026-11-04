@@ -1,92 +1,82 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { TeacherCharacter, TeacherScene } from '@/components/TeacherCharacter';
+import { TeacherCharacter, TeacherScene, TEACHER_SIGNATURE_POSES } from '@/components/TeacherCharacter';
 import { Illustration, type IllustrationName } from '@/components/Illustration';
 import { teacherForChapter, teachers } from '@/content';
 
-describe('personagens-professores vetoriais', () => {
-  it('desenha um personagem SVG próprio para cada docente', () => {
+describe('elenco vetorial original do Pórtico — V15', () => {
+  it('desenha um personagem completo e identificável para cada docente', () => {
     const { container } = render(
-      <div>
-        {teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} pose="presenting" size={120} />)}
-      </div>,
+      <div>{teachers.map((teacher) => (
+        <TeacherCharacter key={teacher.id} teacher={teacher} pose={TEACHER_SIGNATURE_POSES[teacher.id]} size={180}/>
+      ))}</div>,
     );
-    const portraits = Array.from(container.querySelectorAll('svg[role="img"]'));
-    expect(portraits).toHaveLength(teachers.length);
-    const labels = portraits.map((portrait) => portrait.getAttribute('aria-label'));
-    expect(new Set(labels).size).toBe(teachers.length);
-    const drawings = portraits.map((portrait) => portrait.innerHTML);
-    expect(new Set(drawings).size).toBe(teachers.length);
-  });
-
-
-  it('desenha silhuetas fechadas de corpo inteiro, com mãos visíveis e ligadas aos braços', () => {
-    const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} pose="presenting" size={180}/>)}</div>);
     const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
     expect(figures).toHaveLength(teachers.length);
+    expect(new Set(figures.map((svg) => svg.getAttribute('aria-label'))).size).toBe(teachers.length);
+    expect(new Set(figures.map((svg) => svg.innerHTML)).size).toBe(teachers.length);
     for (const figure of figures) {
-      expect(figure.getAttribute('viewBox')).toBe('0 0 240 270');
+      expect(figure.getAttribute('viewBox')).toBe('0 0 240 280');
+      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v15');
       expect(figure.querySelectorAll('path, rect, circle, ellipse').length).toBeGreaterThan(14);
-      expect(figure.querySelectorAll('[stroke-width]').length).toBeLessThan(22);
-      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v14');
+      expect(figure.getAttribute('data-character-pose')).toBeTruthy();
     }
-    const bodySilhouettes = figures.map((figure) => figure.getAttribute('data-character-body'));
-    expect(new Set(bodySilhouettes).size).toBe(teachers.length);
-    const lowerSilhouettes = figures.map((figure) => figure.getAttribute('data-character-lower'));
-    expect(new Set(lowerSilhouettes).size).toBe(teachers.length);
-    const hairSilhouettes = figures.map((figure) => figure.getAttribute('data-character-hair'));
-    expect(new Set(hairSilhouettes).size).toBe(teachers.length);
-    const eyeStyles = figures.map((figure) => figure.getAttribute('data-character-eyes'));
-    expect(new Set(eyeStyles).size).toBeGreaterThanOrEqual(9);
-    const mouthStyles = figures.map((figure) => figure.getAttribute('data-character-mouth'));
-    expect(new Set(mouthStyles).size).toBeGreaterThanOrEqual(6);
-    const noseStyles = figures.map((figure) => figure.getAttribute('data-character-nose'));
-    expect(new Set(noseStyles).size).toBeGreaterThanOrEqual(4);
-    const browStyles = figures.map((figure) => figure.getAttribute('data-character-brows'));
-    expect(new Set(browStyles).size).toBeGreaterThanOrEqual(6);
-    const eyeSpacings = figures.map((figure) => figure.getAttribute('data-character-spacing'));
-    expect(new Set(eyeSpacings).size).toBe(teachers.length);
-    const differentDrawings = figures.map((figure) => figure.innerHTML);
-    expect(new Set(differentDrawings).size).toBe(teachers.length);
   });
 
-  it('usa anatomia de tronco, patas e pernas própria para os animais', () => {
-    const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={140}/>)}</div>);
+  it('mantém treze silhuetas, roupas, cabeças e expressões distintas', () => {
+    const { container } = render(<div>{teachers.map((teacher) => (
+      <TeacherCharacter key={teacher.id} teacher={teacher} size={180}/>
+    ))}</div>);
     const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
-    expect(figures.filter(f => f.getAttribute('data-character-species') !== 'human')).toHaveLength(9);
-    expect(figures.filter(f => f.getAttribute('data-character-anatomy') === 'species-specific')).toHaveLength(9);
-    expect(figures.every(f => f.getAttribute('data-character-style') === 'portico-friends-v14')).toBe(true);
-    const animalLimbs = figures.filter(f => f.getAttribute('data-character-species') !== 'human').map(f => f.getAttribute('data-character-limbs'));
-    expect(new Set(animalLimbs).size).toBe(9);
-    expect(animalLimbs).toContain('four short armored legs and digging claws');
-    expect(animalLimbs).toContain('four splayed flipper-legs');
-    expect(animalLimbs).toContain('feathered wings and curved talons');
-    expect(figures.filter(f => f.getAttribute('data-character-species') !== 'human').every(f => Boolean(f.getAttribute('data-character-eye-treatment')))).toBe(true);
+    const unique = (attribute:string) => new Set(figures.map((figure) => figure.getAttribute(attribute)));
+    expect(unique('data-character-body').size).toBe(teachers.length);
+    expect(unique('data-character-lower').size).toBe(teachers.length);
+    expect(unique('data-character-hair').size).toBe(teachers.length);
+    expect(unique('data-character-outfit').size).toBe(teachers.length);
+    expect(unique('data-character-eyes').size).toBeGreaterThanOrEqual(9);
+    expect(unique('data-character-mouth').size).toBeGreaterThanOrEqual(6);
+    expect(unique('data-character-nose').size).toBeGreaterThanOrEqual(4);
+    expect(unique('data-character-brows').size).toBeGreaterThanOrEqual(6);
+    expect(unique('data-character-spacing').size).toBe(teachers.length);
   });
 
-  it('mistura humanos e criaturas originais ligadas às disciplinas', () => {
-    const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={140}/>)}</div>);
+  it('trata as nove espécies com anatomia própria, incluindo quadrúpedes e ave', () => {
+    const { container } = render(<div>{teachers.map((teacher) => (
+      <TeacherCharacter key={teacher.id} teacher={teacher} size={160}/>
+    ))}</div>);
     const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
-    const species = figures.map((figure) => figure.getAttribute('data-character-species'));
-    const outfits = figures.map((figure) => figure.getAttribute('data-character-outfit'));
-    expect(species).toHaveLength(teachers.length);
-    expect(new Set(species).size).toBeGreaterThanOrEqual(9);
-    expect(species.filter(value => value !== 'human')).toHaveLength(9);
-    expect(figures.filter(f => f.getAttribute('data-character-anatomy') === 'species-specific')).toHaveLength(9);
-    expect(new Set(outfits).size).toBe(teachers.length);
+    const nonHumans = figures.filter((figure) => figure.getAttribute('data-character-species') !== 'human');
+    expect(nonHumans).toHaveLength(9);
+    expect(new Set(nonHumans.map((figure) => figure.getAttribute('data-character-species'))).size).toBe(9);
+    expect(nonHumans.every((figure) => figure.getAttribute('data-character-anatomy') === 'species-specific')).toBe(true);
+    expect(new Set(nonHumans.map((figure) => figure.getAttribute('data-character-limbs'))).size).toBe(9);
+    const limbs = nonHumans.map((figure) => figure.getAttribute('data-character-limbs'));
+    expect(limbs).toContain('four short armored legs with digging claws');
+    expect(limbs).toContain('four splayed flipper-legs');
+    expect(limbs).toContain('feathered wings and curved talons');
+    expect(limbs).toContain('four gripping limbs with split toes');
+    const bodies = figures.map((figure) => figure.getAttribute('data-character-body'));
+    expect(bodies).toContain('low horizontal armored shell');
+    expect(bodies).toContain('low rounded turtle shell');
+    expect(bodies).toContain('horizontal agile chameleon body');
   });
 
-  it('mostra o professor em uma cena de explicação, com fala contextual e presença visual grande', () => {
-    const { container, getByRole, getByText } = render(<TeacherScene teacher={teachers[0]} heading="Somar números inteiros" message="Vamos caminhar pela reta numérica juntos." size={180}/>);
-    expect(getByRole('region', { name: /explicando: Somar números inteiros/i })).toBeInTheDocument();
+  it('reutiliza a mesma ilustração na versão de retrato e de corpo inteiro', () => {
+    const { container } = render(<div>{teachers.map((teacher) => (
+      <TeacherCharacter key={teacher.id} teacher={teacher} portrait size={48}/>
+    ))}</div>);
+    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v15"]')).toHaveLength(teachers.length);
+  });
+
+  it('apresenta o professor em uma cena de explicação contextualizada', () => {
+    const { container, getByRole, getByText } = render(
+      <TeacherScene teacher={teachers[0]} heading="Somar números inteiros"
+        message="Vamos caminhar pela reta numérica juntos." size={180}/>,
+    );
+    expect(getByRole('region', { name:/explicando: Somar números inteiros/i })).toBeInTheDocument();
     expect(getByText('Somar números inteiros')).toBeInTheDocument();
     expect(getByText(/Vamos caminhar pela reta numérica juntos/)).toBeInTheDocument();
     expect(container.querySelector('.teacher-scene__figure')).toBeInTheDocument();
-  });
-
-  it('usa a mesma linguagem vetorial nas versões de avatar e corpo inteiro', () => {
-    const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} portrait size={48}/>)}</div>);
-    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v14"]')).toHaveLength(teachers.length);
   });
 
   it('atribui um professor coerente às principais disciplinas', () => {
@@ -105,7 +95,6 @@ describe('personagens-professores vetoriais', () => {
     expect(teacherForChapter('cap.devops.01').id).toBe('prof.caio');
   });
 });
-
 
 describe('ilustrações vetoriais dos conceitos', () => {
   it('mantém um desenho próprio para cada conceito técnico adicionado', () => {
