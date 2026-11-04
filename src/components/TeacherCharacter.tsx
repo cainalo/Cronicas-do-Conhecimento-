@@ -112,7 +112,7 @@ function Face({ look, pose }: { look: Look; pose: TeacherPose }) {
 }
 
 function Hands({ x, y, skin, gesture }: { x: number; y: number; skin: string; gesture: 'open'|'closed' }) {
-  return <g transform={\`translate(\${x} \${y})\`}>
+  return <g transform={`translate(${x} ${y})`}>
     <circle r="9.5" fill={skin}/>
     {gesture === 'open' && <g fill={skin}>
       <rect x="-10" y="-15" width="5.5" height="13" rx="2.7"/>
@@ -145,10 +145,10 @@ export function TeacherCharacter({
   const gesture = a.open ? 'open' : 'closed';
   return (
     <svg viewBox={portrait ? '40 18 160 160' : '0 0 240 280'} width={style.width} height={style.height}
-      className={\`shrink-0 \${portrait ? 'rounded-full overflow-hidden' : 'overflow-visible'} \${className}\`}
-      style={style} role="img" aria-label={\`\${teacher.name}, personagem ilustrado do Pórtico\`}
+      className={`shrink-0 ${portrait ? 'rounded-full overflow-hidden' : 'overflow-visible'} ${className}`}
+      style={style} role="img" aria-label={`${teacher.name}, personagem ilustrado do Pórtico`}
       data-character-style="portico-friends-v3" focusable="false">
-      {portrait && <circle cx="120" cy="98" r="88" fill={\`rgb(var(--\${teacher.tone}))\`}/>}
+      {portrait && <circle cx="120" cy="98" r="88" fill={`rgb(var(--${teacher.tone}))`}/>}
 
       {!portrait && <ellipse cx="120" cy="266" rx="46" ry="5" fill="#1E3035" opacity=".12"/>}
 
@@ -196,7 +196,7 @@ export function TeacherScene({
   className?: string;
 }) {
   return (
-    <section className={\`teacher-scene \${className}\`} style={{ '--teacher-tone': \`rgb(var(--\${teacher.tone}))\` } as CSSProperties} aria-label={\`\${teacher.name} explicando: \${heading}\`}>
+    <section className={`teacher-scene ${className}`} style={{ '--teacher-tone': `rgb(var(--${teacher.tone}))` } as CSSProperties} aria-label={`${teacher.name} explicando: ${heading}`}>
       <div className="teacher-scene__portrait">
         <TeacherCharacter teacher={teacher} pose={pose} size={size} className="teacher-scene__figure"/>
         <span className="teacher-scene__name">{teacher.name}</span>
@@ -221,9 +221,9 @@ export function TeacherCue({
   className?: string;
 }) {
   return (
-    <div className={\`teacher-cue flex items-center gap-2.5 rounded-2xl border px-3 py-2 \${compact ? 'min-h-[4.5rem]' : 'min-h-[6rem]'} \${className}\`}
-      style={{ borderColor: \`rgb(var(--\${teacher.tone}) / .28)\`, backgroundColor: \`rgb(var(--\${teacher.tone}) / .07)\` }}
-      aria-label={\`Professor \${teacher.name}\`}>
+    <div className={`teacher-cue flex items-center gap-2.5 rounded-2xl border px-3 py-2 ${compact ? 'min-h-[4.5rem]' : 'min-h-[6rem]'} ${className}`}
+      style={{ borderColor: `rgb(var(--${teacher.tone}) / .28)`, backgroundColor: `rgb(var(--${teacher.tone}) / .07)` }}
+      aria-label={`Professor ${teacher.name}`}>
       <TeacherCharacter teacher={teacher} pose={pose} size={size} portrait/>
       <div className="min-w-0 flex-1">
         <p className="text-[.68rem] font-bold uppercase tracking-[.11em] text-muted">{teacher.name} · {teacher.expertiseLabel}</p>
