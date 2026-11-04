@@ -144,18 +144,15 @@ async function run() {
             await page.waitForTimeout(120);
             await page.screenshot({ path: `${SCREENSHOT_DIR}/390x844-personagens-silhueta.png`, fullPage: true, animations: 'disabled' });
 
-            await page.getByRole('button', { name: 'Retratos' }).click();
+            await page.getByRole('button', { name: 'Rostos' }).click();
             await page.waitForTimeout(120);
-            await page.screenshot({ path: `${SCREENSHOT_DIR}/390x844-personagens-retratos.png`, fullPage: true, animations: 'disabled' });
+            await page.screenshot({ path: `${SCREENSHOT_DIR}/390x844-personagens-rostos.png`, fullPage: true, animations: 'disabled' });
 
-            await page.getByRole('button', { name: 'Coloridos' }).click();
-            await page.getByRole('button', { name: 'Pensando' }).click();
+            await page.getByRole('button', { name: 'Cores' }).click();
             await page.waitForTimeout(120);
-            await page.screenshot({ path: `${SCREENSHOT_DIR}/390x844-personagens-pensando.png`, fullPage: true, animations: 'disabled' });
+            await page.screenshot({ path: `${SCREENSHOT_DIR}/390x844-personagens-humanos.png`, fullPage: true, animations: 'disabled' });
 
-            await page.getByRole('button', { name: 'Comemorando' }).click();
-            await page.waitForTimeout(120);
-            await page.screenshot({ path: `${SCREENSHOT_DIR}/390x844-personagens-comemorando.png`, fullPage: true, animations: 'disabled' });
+            await page.screenshot({ path: `${SCREENSHOT_DIR}/390x844-personagens-mascotes.png`, fullPage: true, animations: 'disabled' });
 
             // Captura adicional para comprovar o movimento real dos SVGs no Chromium.
             await go(shot.path);
