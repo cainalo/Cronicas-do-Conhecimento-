@@ -38,6 +38,7 @@ type CharacterDesign = {
   eyeStyle: 'round' | 'almond' | 'soft' | 'wide';
   pupilSize: number;
   headScale: [number, number];
+  bodyScale: [number, number];
   nose: string;
   brow: string;
   mouth: string;
@@ -70,6 +71,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     rightArm:'M120 119C132 123 139 142 141 159C142 169 136 176 128 171C121 166 124 149 114 142Z',
     eyes:[78,103,75], eyeSize:[5.8,8.2], eyeStyle:'round', pupilSize:2.7, nose:'M88 83Q92 87 96 83', brow:'M68 66Q77 60 85 65M96 64Q105 59 112 65',
     headScale:[1.04,1.02],
+    bodyScale:[1.06,1.03],
     mouth:'M82 91Q94 101 106 90Q102 105 92 105Q85 103 82 91Z',
     earrings:true, freckles:true, signature:'Curiosa e acolhedora',
     hairLabel:'Cabelo longo, ondulado e volumoso', outfitLabel:'Blusa terracota e calça ampla creme',
@@ -89,6 +91,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     rightArm:'M119 116C130 126 134 145 134 159C133 169 125 173 119 164L110 139Z',
     eyes:[80,103,72], eyeSize:[5.2,7.5], eyeStyle:'almond', pupilSize:2.25, nose:'M89 82Q92 86 95 83', brow:'M70 61Q78 57 86 61M98 60Q105 56 112 60',
     headScale:[0.94,1.08],
+    bodyScale:[0.92,1.09],
     mouth:'M85 88Q94 94 103 87Q100 98 93 98Q87 97 85 88Z',
     glasses:true, signature:'Metódica e investigativa',
     hairLabel:'Coque alto e franja lateral', outfitLabel:'Blusa verde-oliva e calça clara',
@@ -108,6 +111,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     rightArm:'M123 117C136 125 142 142 140 157C139 170 129 174 123 163L113 139Z',
     eyes:[79,103,72], eyeSize:[6.2,8.4], eyeStyle:'round', pupilSize:2.7, nose:'M88 83Q92 88 97 83', brow:'M67 61Q77 55 86 60M97 60Q107 54 115 60',
     headScale:[1.12,1.02],
+    bodyScale:[1.13,1],
     mouth:'M83 87Q94 98 107 87Q105 103 94 104Q86 101 83 87Z',
     beard:'M65 83C69 101 81 112 94 113C108 112 119 101 123 82C117 109 107 122 93 123C78 121 68 107 65 83Z',
     signature:'Conversador e visual',
@@ -128,6 +132,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     rightArm:'M119 117C132 127 135 143 137 158C138 169 128 175 121 164L113 142Z',
     eyes:[78,103,72], eyeSize:[5.4,8.8], eyeStyle:'almond', pupilSize:2.35, nose:'M88 84Q92 88 96 84', brow:'M68 65Q77 59 86 63M96 63Q105 59 113 64',
     headScale:[0.95,1.08],
+    bodyScale:[0.98,1.17],
     mouth:'M83 90Q93 96 104 89Q101 100 94 101Q86 100 83 90Z',
     earrings:true, signature:'Calma e criteriosa',
     hairLabel:'Cabelo longo, liso e lateral', outfitLabel:'Blusa creme e saia verde',
@@ -147,6 +152,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     rightArm:'M120 112C133 123 137 141 139 155C140 168 130 174 122 164L113 138Z',
     eyes:[79,103,72], eyeSize:[5.4,7.6], eyeStyle:'almond', pupilSize:2.5, nose:'M89 82Q92 86 95 82', brow:'M68 65Q78 58 87 64M97 63Q106 58 114 64',
     headScale:[0.97,0.95],
+    bodyScale:[0.94,0.97],
     mouth:'M84 88Q94 92 104 86Q102 98 94 99Q87 98 84 88Z',
     glasses:true, signature:'Investigativa e curiosa',
     hairLabel:'Bob curto com franja lateral', outfitLabel:'Blusa ameixa e calça escura',
@@ -166,6 +172,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     rightArm:'M123 116C135 124 142 142 140 158C139 170 128 174 121 163L113 139Z',
     eyes:[79,103,72], eyeSize:[6.2,8.5], eyeStyle:'wide', pupilSize:2.8, nose:'M88 84Q92 88 97 84', brow:'M68 61Q78 54 87 60M97 60Q107 54 116 60',
     headScale:[1.1,1.03],
+    bodyScale:[1.12,1],
     mouth:'M83 87Q94 98 107 87Q105 103 94 104Q86 101 83 87Z',
     signature:'Prático e colaborativo',
     hairLabel:'Cachos curtos e arredondados', outfitLabel:'Blusa mostarda e calça verde-escura',
@@ -185,6 +192,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     rightArm:'M122 116C133 124 138 143 137 158C136 170 126 174 119 164L112 140Z',
     eyes:[79,103,72], eyeSize:[5.6,7.6], eyeStyle:'soft', pupilSize:2.4, nose:'M89 82Q92 86 95 82', brow:'M68 62Q78 56 86 62M97 61Q106 56 114 62',
     headScale:[0.98,1.06],
+    bodyScale:[1.02,1.02],
     mouth:'M84 88Q94 95 104 87Q102 98 94 100Q87 98 84 88Z',
     glasses:true, beard:'M66 82C71 102 80 111 94 112C108 110 118 99 122 81C119 109 107 121 94 122C79 120 69 106 66 82Z',
     signature:'Preciso e paciente',
@@ -205,6 +213,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     rightArm:'M121 116C135 125 140 143 139 159C138 171 128 175 121 164L112 139Z',
     eyes:[79,103,72], eyeSize:[5.5,8.2], eyeStyle:'almond', pupilSize:2.35, nose:'M88 83Q92 87 96 83', brow:'M68 63Q77 57 86 62M97 62Q106 57 114 62',
     headScale:[1.08,1.04],
+    bodyScale:[1.04,1.1],
     mouth:'M83 89Q94 96 105 88Q102 100 94 101Q86 100 83 89Z',
     earrings:true, signature:'Organizada e estratégica',
     hairLabel:'Cabelo médio reto com pontas curvas', outfitLabel:'Casaco grafite e calça creme',
@@ -224,6 +233,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     rightArm:'M121 115C133 125 138 142 138 158C138 169 129 173 121 164L113 140Z',
     eyes:[79,103,72], eyeSize:[5.9,8], eyeStyle:'round', pupilSize:2.6, nose:'M88 83Q92 87 96 83', brow:'M68 63Q77 58 86 63M97 63Q106 58 114 63',
     headScale:[1.06,0.97],
+    bodyScale:[1.03,0.99],
     mouth:'M84 89Q94 98 104 88Q101 102 94 103Q87 102 84 89Z',
     glasses:true, signature:'Clara e criteriosa',
     hairLabel:'Cachos médios com faixa discreta', outfitLabel:'Blusa coral e calça clara',
@@ -243,6 +253,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     rightArm:'M121 118C134 127 139 143 138 159C137 171 127 174 120 164L112 140Z',
     eyes:[79,103,72], eyeSize:[6,8.9], eyeStyle:'wide', pupilSize:2.7, nose:'M88 84Q92 88 96 84', brow:'M67 63Q77 57 86 62M97 62Q107 57 115 62',
     headScale:[1.03,1.1],
+    bodyScale:[1.05,1.09],
     mouth:'M83 89Q94 100 106 88Q103 104 94 104Q86 102 83 89Z',
     earrings:true, signature:'Expressiva e acolhedora',
     hairLabel:'Cabelo longo e ondulado', outfitLabel:'Blusa rosa antigo e calça escura',
@@ -262,6 +273,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     rightArm:'M121 114C134 124 139 143 139 158C138 170 128 173 121 164L113 140Z',
     eyes:[80,103,72], eyeSize:[5.5,7.7], eyeStyle:'soft', pupilSize:2.3, nose:'M89 82Q92 86 95 82', brow:'M69 64Q78 58 87 63M98 63Q107 58 115 63',
     headScale:[0.98,1.08],
+    bodyScale:[1,1.11],
     mouth:'M84 89Q94 96 104 88Q101 99 94 100Q87 99 84 89Z',
     glasses:true, signature:'Expressiva e cuidadosa',
     hairLabel:'Coque grisalho com mechas suaves', outfitLabel:'Cardigã verde e saia escura',
@@ -281,6 +293,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     rightArm:'M122 116C134 125 139 143 138 158C137 170 127 174 120 164L112 140Z',
     eyes:[79,103,72], eyeSize:[5.7,7.4], eyeStyle:'soft', pupilSize:2.3, nose:'M89 82Q93 86 96 82', brow:'M68 62Q78 56 87 61M97 61Q106 56 115 61',
     headScale:[1.11,1.05],
+    bodyScale:[1.14,1.07],
     mouth:'M86 99Q94 103 103 99Q100 108 94 108Q88 107 86 99Z',
     mustache:'M80 94C84 88 90 89 94 93C98 89 104 88 108 94C105 100 100 100 94 97C89 101 84 100 80 94Z',
     signature:'Sereno e didático',
@@ -301,6 +314,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     rightArm:'M122 116C134 125 139 143 138 158C137 170 127 174 120 164L112 140Z',
     eyes:[79,103,72], eyeSize:[5.8,7.8], eyeStyle:'round', pupilSize:2.6, nose:'M89 82Q93 86 97 82', brow:'M68 62Q78 56 87 61M97 61Q106 56 115 61',
     headScale:[0.95,1.02],
+    bodyScale:[0.92,1.1],
     mouth:'M84 88Q94 97 105 87Q102 101 94 102Q87 100 84 88Z',
     signature:'Objetivo e experimental',
     hairLabel:'Corte curto com topete lateral', outfitLabel:'Moletom azul-petróleo e calça escura',
@@ -361,6 +375,7 @@ function HumanArt({ design }: { design:CharacterDesign }) {
       <g transform={'translate(90 74) scale(' + design.headScale[0] + ' ' + design.headScale[1] + ') translate(-90 -74)'}>
         <path d={design.hairBack} fill={design.hair} stroke={INK} strokeWidth="1.5" strokeLinejoin="round"/>
       </g>
+      <g transform={'translate(90 178) scale(' + design.bodyScale[0] + ' ' + design.bodyScale[1] + ') translate(-90 -178)'}>
       {/* Silhueta contínua: ombros, braços, tronco e pernas pertencem ao mesmo corpo. */}
       <path d={design.silhouette} fill={design.shirt} stroke={INK} strokeWidth="1.55" strokeLinejoin="round"/>
       <path d={design.lower} fill={design.bottomColor} stroke="none"/>
@@ -372,6 +387,7 @@ function HumanArt({ design }: { design:CharacterDesign }) {
       <path d="M60 217C68 218 80 218 90 215C94 218 94 225 88 227C79 230 66 229 60 226C57 223 57 219 60 217Z" fill={INK} stroke="none"/>
       <path d="M109 215C119 218 129 217 136 215C141 218 141 224 137 227C128 230 115 229 108 226C104 223 105 218 109 215Z" fill={INK} stroke="none"/>
       <path d="M74 171Q91 176 128 170" fill="none" stroke="#765A48" strokeWidth="1.3" opacity=".25" strokeLinecap="round"/>
+      </g>
       <g transform={'translate(90 74) scale(' + design.headScale[0] + ' ' + design.headScale[1] + ') translate(-90 -74)'}>
       <path d={design.face} fill={design.skin} stroke={INK} strokeWidth="1.55" strokeLinejoin="round"/>
       {design.freckles && <path d="M68 84l1 1M73 88l1 1M111 84l1 1M116 88l1 1" stroke={INK} strokeWidth="1.15" opacity=".48"/>}
@@ -432,6 +448,7 @@ export function TeacherCharacter({
       data-character-id={design.artId}
       data-character-silhouette="bespoke-connected-body"
       data-character-head-scale={design.headScale[0] + "x" + design.headScale[1]}
+      data-character-body-scale={design.bodyScale[0] + "x" + design.bodyScale[1]}
       data-character-eyes={design.eyeStyle}
       focusable="false"
       preserveAspectRatio="xMidYMax meet"
