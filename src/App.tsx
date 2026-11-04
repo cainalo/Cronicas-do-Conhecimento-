@@ -43,12 +43,14 @@ import { WorldPage } from '@/pages/World';
 import { ProgrammingLabPage } from '@/pages/ProgrammingLab';
 import { TerminalLabPage } from '@/pages/TerminalLab';
 import { CodeLabPage } from '@/pages/CodeLab';
+import { TeacherCharacterReviewPage } from '@/pages/TeacherCharacterReview';
 
 export function AppRoutes() {
   return (
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Dashboard />} />
+        <Route path="revisao-personagens" element={<TeacherCharacterReviewPage />} />
         <Route path="biblioteca" element={<LibraryPage />} />
         <Route path="estudos" element={<StudiesPage />} />
         <Route path="trilha" element={<TrailPage />} />
