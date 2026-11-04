@@ -120,6 +120,18 @@ async function run() {
         if (vp.width === 390 && cards === null) {
           for (const shot of REVIEW_SHOTS) {
             await go(shot.path);
+            // Na galeria de revisão, escondemos a navegação fixa inferior para que
+            // a captura fullPage não cubra personagens no meio da prancha.
+            if (shot.path === '/revisao-personagens') {
+              await page.evaluate(() => {
+                for (const el of document.querySelectorAll('body *')) {
+                  const cs = getComputedStyle(el);
+                  if (cs.position === 'fixed' && cs.bottom !== 'auto' && parseFloat(cs.bottom) >= 0) {
+                    (el as HTMLElement).style.display = 'none';
+                  }
+                }
+              });
+            }
             await page.screenshot({
               path: `${SCREENSHOT_DIR}/390x844-${shot.name}.png`,
               fullPage: true,
