@@ -390,7 +390,7 @@ function Eyes({ design }: { design:CharacterDesign }) {
   const iris=`M${px-p} ${py}C${px-p} ${py-p*1.4} ${px+p} ${py-p*1.4} ${px+p} ${py}C${px+p} ${py+p*1.5} ${px-p} ${py+p*1.5} ${px-p} ${py}Z`;
   const shiny=['round','wide','asymmetric'].includes(design.eyeStyle);
   const lid=design.eyeStyle==='half-lidded'||design.eyeStyle==='hooded'?`M${x-rx} ${y-1}Q${x} ${top+ry*.12} ${x+rx} ${y-1}L${x+rx*.8} ${y+ry*.12}Q${x} ${y+ry*.02} ${x-rx} ${y+ry*.12}Z`:null;
-  return <g><path d={d} fill={PAPER}/><path d={iris} fill={INK}/>{shiny&&<path d={`M${px-p*.25} ${py-p*.65}Q${px} ${py-p} ${px+p*.45} ${py-p*.55}Q${px} ${py-p*.3} ${px-p*.25} ${py-p*.65}Z`} fill={PAPER}/ >}{lid&&<path d={lid} fill={design.skin}/>}</g>;
+  return <g><path d={d} fill={PAPER}/><path d={iris} fill={INK}/>{shiny&&<path d={`M${px-p*.25} ${py-p*.65}Q${px} ${py-p} ${px+p*.45} ${py-p*.55}Q${px} ${py-p*.3} ${px-p*.25} ${py-p*.65}Z`} fill={PAPER}/>}{lid&&<path d={lid} fill={design.skin}/>}</g>;
  };
  return <g><path d={design.brow} fill={INK}/>{makeEye(left,-1)}{makeEye(right,1)}<path d={design.nose} fill="#8C5A4B"/><path d={design.mouth} fill="#693A36"/></g>;
 }
