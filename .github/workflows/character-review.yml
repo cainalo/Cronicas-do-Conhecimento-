@@ -20,7 +20,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: portico-character-review
+  group: portico-character-review-v21
   cancel-in-progress: true
 
 jobs:
