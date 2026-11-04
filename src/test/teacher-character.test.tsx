@@ -5,7 +5,7 @@ import { Illustration, type IllustrationName } from '@/components/Illustration';
 import { teacherForChapter, teachers } from '@/content';
 import { TeacherCharacterReviewPage } from '@/pages/TeacherCharacterReview';
 
-describe('elenco humano do Pórtico — V22.8.1', () => {
+describe('elenco humano do Pórtico — V22.8.2', () => {
   it('desenha treze professores humanos, cada um com arte vetorial própria', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={200}/>)}</div>);
     const figures = Array.from(container.querySelectorAll('svg[data-character-style="portico-friends-v22"]'));
@@ -59,6 +59,7 @@ describe('elenco humano do Pórtico — V22.8.1', () => {
     expect(figures).toHaveLength(13);
     expect(figures.every((svg) => svg.getAttribute('data-character-silhouette') === 'bespoke-connected-body')).toBe(true);
     expect(new Set(figures.map((svg) => svg.getAttribute('data-character-shape-archetype'))).size).toBe(13);
+    expect(figures.every((svg) => svg.getAttribute('data-character-hands') === 'custom-joined')).toBe(true);
     expect(new Set(figures.map((svg) => svg.getAttribute('data-character-id'))).size).toBe(13);
     expect(new Set(figures.map((svg) => svg.getAttribute('data-character-face-shape'))).size).toBe(13);
     expect(new Set(figures.map((svg) => svg.getAttribute('data-character-eyes'))).size).toBe(4);
