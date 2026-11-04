@@ -2,9 +2,19 @@
 
 > **Marca vigente (04/11/2026): Pórtico.** “Crônicas do Conhecimento” é nome histórico e não deve aparecer em novas telas, vídeos, narrações, capas ou materiais de divulgação. Preservar `appId` do Capacitor para não quebrar a compatibilidade das instalações Android existentes.
 
-**Última atualização:** 2026-10-29
-**Fase:** reformulação "Arquivo Real" (kit em `docs/kit/`, auditoria em `docs/AUDITORIA_REFORMULACAO.md`): fases 0 a 5 do kit feitas para o piloto; expansão pendente.
+**Última atualização:** 2026-11-04
+**Fase:** reorganização da trilha e revisão visual dos personagens. O registro operacional anterior continua abaixo como histórico. "Arquivo Real" (kit em `docs/kit/`, auditoria em `docs/AUDITORIA_REFORMULACAO.md`): fases 0 a 5 do kit feitas para o piloto; expansão pendente.
 
+## Revisão de trilha, videoaulas e personagens — 04/11/2026
+
+- **Marca nas capas:** `BookCover.tsx` usa agora o nome Pórtico; removida a inscrição antiga “Crônicas”.
+- **Sequência da trilha:** as etapas de narração foram removidas do percurso, do checkpoint e do feed. O formato de mídia passa a ser videoaula verificada. A ordem por trecho fica: Aprender (ou cada aula da série) → videoaulas vinculadas → posts editoriais do professor (quando existem) → Praticar → Caso prático → cartões do capítulo → Desafio.
+- **Compatibilidade:** links antigos `/aula-narrada/:id` redirecionam para `/trilha`; um progresso salvo em fase de mídia antiga é ajustado para a próxima fase disponível. Os conteúdos de narração ficam apenas no catálogo interno legado, fora da navegação principal.
+- **Vídeos próprios planejados:** `src/content/estudos/portico-videos.ts` registra “O computador por dentro — CPU, memória RAM e armazenamento” e “Programa e processo — qual é a diferença?”, ambos associados a `cap.infra.03/processos`. A lista `PUBLISHED_IDS` permanece vazia até upload real no bucket `portico-lesson-videos` do Supabase e conferência de reprodução; não publicar URLs que ainda não existem.
+- **Personagens:** `TeacherCharacter.tsx` passou a ser a origem vetorial única para personagens em corpo inteiro e retratos pequenos (`TeacherAvatar.tsx`). Os 13 professores mantêm cabelos, tons, roupas, acessórios e objetos distintos; a nova linguagem usa silhuetas compactas, olhos expressivos, formas arredondadas e mãos simplificadas. A composição `TeacherScene` foi alinhada a essa linguagem.
+- **Referência visual:** princípios do Duolingo consultados em artigos oficiais: arte vetorial legível em escala pequena, silhueta clara, poucos detalhes com boa função, expressividade, personalidade e exagero moderado. Não reutilizar personagens nem ativos proprietários do Duolingo.
+- **Validação:** commit `987ece9` passou em `npm test`, build web e Playwright E2E (viewports 360×640 e 390×844, tema padrão e cartões “vidro”). Foram geradas capturas em `portico-visual-review`: Trilha, Aprender — Processos, Aprender — O computador surgiu e Explorar. Inspeção visual detectou a inscrição de marca antiga na capa; corrigida neste commit.
+- **Pendente de publicação de mídia:** o MP4 local revisado da primeira videoaula existe no ambiente de trabalho, mas ainda não foi enviado ao bucket do Supabase; a segunda videoaula segue em produção. Sem armazenamento público, ambas continuam fora do currículo publicado.
 ## Pórtico — implementação de 29/10/2026
 - `/sala` foi transformada em feed social demonstrativo, com stories, filtros, criação local de texto/imagem, curtidas, comentários e perfil completo dos professores. Stories incluem referências externas e indicação musical; a música não é reproduzida pela plataforma.
 - A antiga experiência didática permanece em `/feed-aulas`; a rota dedicada permite preservar testes e utilidades curriculares.

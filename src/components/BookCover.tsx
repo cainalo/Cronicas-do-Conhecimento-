@@ -18,7 +18,7 @@ export function BookCover({ g, className = '' }: { g: Grimoire; className?: stri
       style={{ backgroundColor: `rgb(${tone})`, boxShadow: 'inset 6px 0 0 rgb(0 0 0 / .12)' }}
     >
       <span className="flex items-center justify-between text-[10px] tracking-wide opacity-80">
-        <span>Crônicas</span>
+        <span>Pórtico</span>
         <Icon name={g.sigil ?? 'livro'} size={16} />
       </span>
       <span>

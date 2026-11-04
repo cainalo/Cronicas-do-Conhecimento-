@@ -2,7 +2,8 @@
 
 ## Aprovadas pelo usuário
 | Data | Assunto | Decisão | Consequência |
-|---|---|---|---| 
+|---|---|---|---|
+| 2026-11-04 | Trilha, videoaulas e personagens | As videoaulas originais do Pórtico substituem as aulas narradas no percurso principal. Narrações antigas não devem gerar etapas. Os personagens devem compartilhar uma linguagem vetorial arredondada, expressiva e legível, inspirada em princípios de design educacional do Duolingo, sem copiar seus personagens ou ativos. | Trilha e feed deixam de inserir narrações; videoaulas só entram após upload e verificação. Avatares e personagens de aula passam a usar a mesma base vetorial. | 
 | 2026-11-04 | Nome e identidade de marca | **Pórtico** é o nome oficial da plataforma. “Crônicas do Conhecimento” passa a ser somente uma referência histórica; não deve aparecer em novos vídeos ou materiais. | README, marca vetorial e título web já usam Pórtico; alinhar também o nome exibido pelo app Android e toda nova mídia. |
 | 2026-10-17 | Backend | Criar projeto Supabase novo e separado (`cronicas-do-conhecimento`, sa-east-1, custo $0 informado na criação). | Não usar o projeto NutriConnect. |
 | 2026-10-17 | Edital | O usuário vai liberar `concursosfcc.com.br` e `portal.tce.go.gov.br` na rede do ambiente. | Próxima sessão deve ler o edital oficial e trocar `fonte-secundaria` por `oficial-verificado` onde conferido. |

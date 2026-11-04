@@ -24,7 +24,7 @@ export const learnKey = (chapterId: string, sectionId: string) => `aprender:${ch
 /** Chave de uma aula dentro da série de um trecho. */
 export const seriesKey = (chapterId: string, sectionId: string, lessonId: string) => `${learnKey(chapterId, sectionId)}#${lessonId}`;
 
-/** Materiais de estudo encaixados na trilha (aulas narradas, vídeos, posts dos professores, cartões). */
+/** Materiais de estudo encaixados na trilha (vídeos verificados, posts dos professores, cartões). */
 export interface TrailExtras {
   /** Videoaulas de um trecho; com `lessonId`, as que acompanham aquela aula; sem, as do trecho todo. */
   videosFor?: (chapterId: string, sectionId: string) => { id: string; title: string; lessonId?: string }[];
