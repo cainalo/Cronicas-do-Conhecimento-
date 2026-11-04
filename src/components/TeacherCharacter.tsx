@@ -304,7 +304,7 @@ function AnimalEyes({ y, spacing, rx = 11.5, ry = 15, look }: { y:number; spacin
 }
 
 function AnimalHead({ look, pose }: { look:Look; pose:TeacherPose }) {
-  const fur=look.hair, muzzle=look.skin;
+  const fur=CreaturePalette({look}), muzzle=look.skin;
   const mouth=pose==='celebrating'
     ? <ellipse cx="120" cy="122" rx="10" ry="12" fill="#593A36"/>
     : pose==='thinking'
