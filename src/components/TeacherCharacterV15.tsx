@@ -149,18 +149,25 @@ function Lia({ pose }: { pose:TeacherPose }) {
     <GestureArms pose={pose} sleeve="#087F7A" hand="#C78E6C"/>
     <path d="M83 87Q79 42 119 37Q165 36 164 91L150 111L91 109Z" fill="#231D20"/>
     <circle cx="120" cy="30" r="20" fill="#231D20"/>
-    <path d="M78 94Q74 50 120 47Q166 48 163 94Q159 147 120 151Q80 147 78 94Z" fill="#C98E6A"/>
+    <path d="M79 91Q78 52 112 47Q147 43 160 77Q167 108 149 137Q134 156 114 150Q86 144 79 117Q76 104 79 91Z" fill="#C98E6A"/>
     <path d="M78 84Q77 44 118 43Q153 42 164 75L157 88Q137 66 105 73Q91 77 78 91Z" fill="#231D20"/>
-    <Eye x={101} y={95} rx={10} ry={14} shape="almond" lidColor="#C98E6A" tilt={-4}/>
-    <Eye x={140} y={95} rx={10} ry={14} shape="almond" lidColor="#C98E6A" tilt={-4}/>
+    <Eye x={101} y={95} rx={9} ry={12} shape="almond" lidColor="#C98E6A" pupilScale={.88} tilt={-6}/>
+    <Eye x={140} y={95} rx={10} ry={12} shape="almond" lidColor="#C98E6A" pupilScale={.94} tilt={2}/>
     <path d="M88 80Q101 72 112 80M130 79Q142 71 153 79" fill="none" stroke="#231D20" strokeWidth="5" strokeLinecap="round"/>
     <path d="M115 115Q120 120 125 115" fill="none" stroke="#925E50" strokeWidth="3" strokeLinecap="round"/>
-    <path d="M105 128Q120 140 135 128" fill="none" stroke="#75433E" strokeWidth="4" strokeLinecap="round"/>
+    <path d="M104 128Q115 135 126 128Q135 123 140 126Q134 141 119 140Q108 138 104 128Z" fill="#75433E"/>
+    <path d="M111 134Q120 138 130 133" fill="none" stroke="#E8B5A0" strokeWidth="2" strokeLinecap="round"/>
     <path d="M155 90Q171 92 168 110" fill="none" stroke="#F1C54B" strokeWidth="5" strokeLinecap="round"/>
     <rect x="153" y="103" width="12" height="18" rx="5" fill="#F1C54B"/>
     <path d="M161 116Q169 121 161 130L149 133" fill="none" stroke="#F1C54B" strokeWidth="3" strokeLinecap="round"/>
     <circle cx="148" cy="133" r="3.2" fill="#F1C54B"/>
-    <g fill="#875C4D" opacity=".6"><circle cx="91" cy="121" r="1.6"/><circle cx="97" cy="124" r="1.4"/><circle cx="146" cy="122" r="1.5"/></g>
+    <g className="p-character__face-signature--lia" fill="#875C4D" opacity=".6">
+      <circle cx="91" cy="121" r="1.6"/><circle cx="97" cy="124" r="1.4"/><circle cx="146" cy="122" r="1.5"/>
+      <path d="M155 90Q171 92 168 110" fill="none" stroke="#F1C54B" strokeWidth="5" strokeLinecap="round"/>
+      <rect x="153" y="103" width="12" height="18" rx="5" fill="#F1C54B"/>
+      <path d="M161 116Q169 121 161 130L149 133" fill="none" stroke="#F1C54B" strokeWidth="3" strokeLinecap="round"/>
+      <circle cx="148" cy="133" r="3.2" fill="#F1C54B"/>
+    </g>
     <rect x="87" y="190" width="18" height="22" rx="3" fill="#204D5A"/>
     <path d="M92 196h8M92 202h8" stroke="#F1C54B" strokeWidth="2"/>
   </g>;
@@ -324,17 +331,25 @@ function Beatriz({ pose }: { pose:TeacherPose }) {
     <path d="M120 183L132 196L120 210L108 196Z" fill="#C68B43"/>
     <path d="M85 173L103 182L96 215L78 208ZM155 173L137 182L144 215L162 208Z" fill="#8D69AE"/>
     <GestureArms pose={pose} sleeve="#76539B" hand="#E8C0A3"/>
-    <path d="M76 83Q79 38 120 36Q161 37 164 83L158 127Q148 151 120 153Q92 151 82 127Z" fill="#E9C3A5"/>
+    <path d="M78 82Q81 42 119 39Q157 38 162 81L158 113Q155 141 132 151Q118 157 105 151Q82 139 79 112Z" fill="#E9C3A5"/>
     <path d="M77 92Q67 50 101 35Q128 22 151 39Q174 55 161 91L148 81L139 57Q116 71 98 62Q90 80 77 92Z" fill="#4A3028"/>
     <path d="M74 84L70 64L85 67M165 84L170 64L155 67" fill="#4A3028"/>
     <Eye x={101} y={97} rx={9} ry={12} iris="#3B3A44" shape="almond" lidColor="#E9C3A5" pupilScale={.9}/>
     <Eye x={140} y={97} rx={9} ry={12} iris="#3B3A44" shape="almond" lidColor="#E9C3A5" pupilScale={.9}/>
     <path d="M88 79L111 78M129 78L152 79" stroke="#4A3028" strokeWidth="4.5" strokeLinecap="round"/>
-    <rect x="86" y="89" width="29" height="23" rx="8" fill="none" stroke="#65506D" strokeWidth="2.5"/>
-    <rect x="126" y="89" width="29" height="23" rx="8" fill="none" stroke="#65506D" strokeWidth="2.5"/>
-    <path d="M115 99h11" stroke="#65506D" strokeWidth="2.5"/>
+    <g className="p-character__face-signature--beatriz" fill="none" stroke="#5B465F" strokeWidth="3.1">
+      <path d="M86 90L92 87H109L116 91V108L110 114H92L86 108Z"/>
+      <path d="M125 91L132 87H149L155 90V108L149 114H132L125 108Z"/>
+      <path d="M116 99Q120 96 125 99"/>
+      <path d="M83 102L78 104M158 101L163 103"/>
+      <circle cx="77" cy="117" r="3.2" fill="#C68B43" stroke="none"/>
+      <circle cx="163" cy="117" r="3.2" fill="#C68B43" stroke="none"/>
+      <path d="M77 120Q75 129 82 131Q89 129 86 121M154 121Q151 129 158 131Q165 128 162 120" stroke="#C68B43" strokeWidth="2.4"/>
+    </g>
     <path d="M116 116l4 4l4-4" fill="none" stroke="#B08069" strokeWidth="3" strokeLinecap="round"/>
-    <path d="M108 132Q120 128 132 132" fill="none" stroke="#87544E" strokeWidth="3.5" strokeLinecap="round"/>
+    <ellipse cx="93" cy="119" rx="7" ry="3.2" fill="#DE8F85" opacity=".23"/>
+    <ellipse cx="147" cy="119" rx="7" ry="3.2" fill="#DE8F85" opacity=".23"/>
+    <path d="M107 132Q120 135 133 132" fill="none" stroke="#87544E" strokeWidth="3.5" strokeLinecap="round"/>
     <circle cx="77" cy="117" r="3.2" fill="#C68B43"/>
     <circle cx="163" cy="117" r="3.2" fill="#C68B43"/>
     <path d="M146 190l15 15M94 190l-15 15" stroke="#F2D9C5" strokeWidth="2.5" strokeLinecap="round"/>
@@ -390,13 +405,17 @@ function Helena({ pose }: { pose:TeacherPose }) {
     </g>
     <g fill="#D6B15A"><circle cx="79" cy="170" r="4"/><circle cx="91" cy="162" r="3.2"/><circle cx="149" cy="165" r="3.2"/><circle cx="161" cy="171" r="4"/></g>
     <path d="M80 86Q80 41 120 41Q161 41 160 86Q159 136 120 148Q81 136 80 86Z" fill="#D6A17C"/>
-    <Eye x={100} y={92} rx={10} ry={14} iris="#382D2E" shape="round" pupilScale={1.06} tilt={-1}/>
-    <Eye x={140} y={92} rx={10} ry={14} iris="#382D2E" shape="round" pupilScale={1.06} tilt={1}/>
+    <Eye x={100} y={92} rx={11} ry={14} iris="#382D2E" shape="wide" pupilScale={1.08} tilt={-2}/>
+    <Eye x={140} y={92} rx={11} ry={14} iris="#382D2E" shape="wide" pupilScale={1.08} tilt={2}/>
     <path d="M87 76Q100 68 112 76M129 76Q141 68 153 76" fill="none" stroke="#211B22" strokeWidth="4" strokeLinecap="round"/>
     <path d="M117 111q3 6 7 0" fill="none" stroke="#996B58" strokeWidth="3" strokeLinecap="round"/>
-    <path d="M105 126Q120 143 135 126Q131 145 120 145Q109 145 105 126Z" fill="#6D3F43"/>
-    <path d="M110 130Q120 136 130 130" stroke="#FFF1DB" strokeWidth="2.5" fill="none"/>
-    <path d="M68 136Q55 169 69 191M171 136Q185 169 171 191" fill="none" stroke="#241F28" strokeWidth="8" strokeLinecap="round"/>
+    <path d="M103 125Q120 145 137 125Q134 150 120 151Q106 149 103 125Z" fill="#6D3F43"/>
+    <path d="M108 130Q120 138 132 130" stroke="#FFF1DB" strokeWidth="3" fill="none"/>
+    <g className="p-character__face-signature--helena">
+      <path d="M68 136Q55 169 69 191M171 136Q185 169 171 191" fill="none" stroke="#241F28" strokeWidth="8" strokeLinecap="round"/>
+      <g fill="#D6B15A"><circle cx="68" cy="193" r="4"/><circle cx="172" cy="193" r="4"/></g>
+      <path d="M68 179Q55 184 59 198Q66 204 72 196M171 179Q185 184 181 198Q174 204 168 196" fill="none" stroke="#D6B15A" strokeWidth="2.6" strokeLinecap="round"/>
+    </g>
   </g>;
 }
 
@@ -413,18 +432,22 @@ function Augusto({ pose }: { pose:TeacherPose }) {
     <rect x="139" y="186" width="31" height="34" rx="4" fill="#8D6245"/>
     <rect x="143" y="190" width="23" height="26" rx="2" fill="#F3E6CD"/>
     <path d="M148 196h14M148 202h14M148 208h9" stroke="#8D6245" strokeWidth="2"/>
-    <path d="M80 88Q78 36 120 34Q163 34 160 88Q157 139 120 149Q83 139 80 88Z" fill="#B77D5D"/>
+    <path d="M80 84Q79 37 120 35Q161 37 160 84Q161 119 144 139Q132 153 120 153Q108 153 96 139Q79 119 80 84Z" fill="#B77D5D"/>
     <path d="M77 81Q71 44 95 34Q107 15 123 26Q144 11 156 39Q171 49 163 85L151 70Q147 55 135 54Q120 67 103 55Q91 67 88 85Z" fill="#D2C8B7"/>
     <g fill="#D2C8B7" stroke={O} strokeWidth="2">
       <circle cx="86" cy="48" r="12"/><circle cx="105" cy="31" r="13"/><circle cx="126" cy="28" r="12"/><circle cx="147" cy="39" r="13"/><circle cx="157" cy="58" r="11"/>
     </g>
-    <path d="M88 78Q101 71 113 78M128 78Q140 71 152 78" fill="none" stroke="#8F6B59" strokeWidth="3.5" strokeLinecap="round"/>
+    <path d="M86 77Q100 67 114 77M127 77Q141 67 154 77" fill="none" stroke="#84796D" strokeWidth="4.4" strokeLinecap="round"/>
     <Eye x={101} y={95} rx={10} ry={13} iris="#3C3734" shape="sleepy" lidColor="#B77D5D" pupilScale={.86}/>
     <Eye x={140} y={95} rx={10} ry={13} iris="#3C3734" shape="sleepy" lidColor="#B77D5D" pupilScale={.86}/>
     <circle cx="101" cy="95" r="17" fill="none" stroke="#665B54" strokeWidth="2.5"/>
     <circle cx="140" cy="95" r="17" fill="none" stroke="#665B54" strokeWidth="2.5"/>
     <path d="M118 95h5" stroke="#665B54" strokeWidth="2.5"/>
-    <path d="M113 115l7 4l7-4" fill="none" stroke="#865D4E" strokeWidth="3" strokeLinecap="round"/>
+    <path d="M111 114Q120 120 129 114" fill="none" stroke="#865D4E" strokeWidth="3" strokeLinecap="round"/>
+    <g className="p-character__face-signature--augusto">
+      <path d="M107 121Q100 115 96 121Q102 130 117 126Q120 125 122 124Q124 125 127 126Q141 130 146 121Q142 115 133 121Q120 127 107 121Z" fill="#D2C8B7" stroke="#8F8173" strokeWidth="1.8" strokeLinejoin="round"/>
+      <path d="M89 117Q84 121 83 128M151 117Q156 121 157 128" fill="none" stroke="#875D50" strokeWidth="2" strokeLinecap="round" opacity=".65"/>
+    </g>
     <path d="M103 131Q120 141 137 131Q132 149 120 149Q108 149 103 131Z" fill="#6A4441"/>
     <path d="M110 132Q120 136 130 132" stroke="#F2E4D3" strokeWidth="2.5" fill="none"/>
     <path d="M111 121Q120 126 129 121" fill="none" stroke="#5B4036" strokeWidth="4" strokeLinecap="round"/>
@@ -491,7 +514,7 @@ export function TeacherCharacter({
       width={style.width} height={style.height}
       className={'shrink-0 ' + (portrait ? 'rounded-full overflow-hidden ' : 'overflow-visible ') + className}
       style={style} role="img" aria-label={teacher.name + ', personagem original do Pórtico'}
-      data-character-style="portico-friends-v18"
+      data-character-style="portico-friends-v19"
       data-character-motion={characterMotion}
       data-character-species={meta.species} data-character-outfit={meta.outfit}
       data-character-body={meta.body} data-character-lower={meta.lower}
