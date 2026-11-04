@@ -280,7 +280,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     leftArm:'M67 116C55 126 54 142 57 158C59 170 68 173 75 163L82 140Z',
     rightArm:'M122 116C134 125 139 143 138 158C137 170 127 174 120 164L112 140Z',
     eyes:[79,103,72], eyeSize:[5.7,7.4], eyeStyle:'soft', pupilSize:2.3, nose:'M89 82Q93 86 96 82', brow:'M68 62Q78 56 87 61M97 61Q106 56 115 61',
-    headScale:[1.1,1.03],
+    headScale:[1.11,1.05],
     mouth:'M86 99Q94 103 103 99Q100 108 94 108Q88 107 86 99Z',
     mustache:'M80 94C84 88 90 89 94 93C98 89 104 88 108 94C105 100 100 100 94 97C89 101 84 100 80 94Z',
     signature:'Sereno e didático',
