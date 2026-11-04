@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { FictionalTeacher } from '@/content/teachers';
 
-export type TeacherPose = 'greeting' | 'presenting' | 'thinking' | 'celebrating' | 'listening' | 'hands-on-hips' | 'arms-down' | 'shrug';
+export type TeacherPose = 'greeting' | 'presenting' | 'thinking' | 'celebrating' | 'listening' | 'hands-on-hips' | 'arms-down' | 'shrug' | 'arms-crossed' | 'hand-on-chin' | 'hands-forward' | 'one-hand-on-hip' | 'pointing' | 'one-hand-up';
 type HairStyle = 'afro' | 'bun' | 'short' | 'curls' | 'bob' | 'braid' | 'waves' | 'fade' | 'ponytail' | 'pixie' | 'locs' | 'sidepart' | 'spiky';
 type FaceShape = 'round' | 'wide' | 'long' | 'square' | 'pear' | 'oval';
 type BodyShape = 'pear' | 'tall' | 'broad' | 'cape' | 'box' | 'round' | 'wide' | 'dress' | 'longcoat' | 'flared' | 'compact' | 'tunic' | 'hood';
@@ -10,6 +10,10 @@ type Accessory = 'glasses' | 'round-glasses' | 'headset' | 'earrings' | 'headban
 type FacialHair = 'beard' | 'mustache';
 type EyeStyle = 'bright' | 'narrow' | 'soft' | 'round' | 'sleepy' | 'wide' | 'small' | 'focused' | 'surprised' | 'curious';
 type MouthStyle = 'big-grin' | 'gentle-smile' | 'neutral' | 'open' | 'smirk' | 'frown' | 'tight-smile';
+type NoseStyle = 'none' | 'dot' | 'button' | 'bridge' | 'broad';
+type BrowStyle = 'arched' | 'straight' | 'angled' | 'soft' | 'heavy' | 'sleepy' | 'raised';
+type CheekStyle = 'none' | 'freckles' | 'dimples' | 'flush' | 'spots';
+type HandGesture = 'open' | 'closed' | 'point';
 
 type Look = {
   skin: string;
@@ -24,6 +28,16 @@ type Look = {
   lower: LowerShape;
   eyes: EyeStyle;
   mouth: MouthStyle;
+  nose: NoseStyle;
+  brows: BrowStyle;
+  cheeks: CheekStyle;
+  eyeSpacing: number;
+  eyeOffsetY: number;
+  eyeTilt: number;
+  eyeAsymmetry: number;
+  pupilShift: number;
+  headTilt: number;
+  torsoTilt: number;
   headScaleX: number;
   headScaleY: number;
   torsoScaleX: number;
@@ -39,19 +53,35 @@ type Look = {
  * A linguagem é original e não reproduz personagens, desenhos ou ativos do Duolingo.
  */
 const LOOKS: Record<string, Look> = {
-  'prof.clara': { skin:'#E9B994', hair:'#34201C', top:'#F05A4F', bottom:'#304D76', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'ponytail', face:'wide', body:'pear', lower:'clara-skirt', eyes:'bright', mouth:'big-grin', headScaleX:1.08, headScaleY:1.02, torsoScaleX:1.05, torsoScaleY:1.00, accessory:'earrings' },
-  'prof.lia': { skin:'#C98E6A', hair:'#211B1B', top:'#009E9A', bottom:'#174C70', shoe:'#FFD13F', accent:'#FFD13F', hairStyle:'bun', face:'round', body:'tall', lower:'lia-slim', eyes:'focused', mouth:'neutral', headScaleX:0.95, headScaleY:1.05, torsoScaleX:0.86, torsoScaleY:1.12, accessory:'headset' },
-  'prof.davi': { skin:'#8D5A3F', hair:'#211B1B', top:'#3678D8', bottom:'#24445A', shoe:'#F4B52B', accent:'#F4B52B', hairStyle:'short', face:'square', body:'broad', lower:'davi-wide', eyes:'soft', mouth:'gentle-smile', headScaleX:1.00, headScaleY:1.08, torsoScaleX:1.18, torsoScaleY:0.98, facialHair:'mustache' },
-  'prof.iara': { skin:'#A86F4C', hair:'#2A1A12', top:'#8B5BC7', bottom:'#425C45', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'afro', face:'pear', body:'cape', lower:'iara-cape', eyes:'round', mouth:'open', headScaleX:1.16, headScaleY:1.02, torsoScaleX:1.20, torsoScaleY:1.00, accessory:'earrings' },
-  'prof.nina': { skin:'#E4B99B', hair:'#30364B', top:'#E9A62B', bottom:'#354C78', shoe:'#7A55B6', accent:'#7A55B6', hairStyle:'bob', face:'square', body:'box', lower:'nina-straight', eyes:'sleepy', mouth:'smirk', headScaleX:0.98, headScaleY:0.98, torsoScaleX:1.00, torsoScaleY:1.04, accessory:'round-glasses' },
-  'prof.ravi': { skin:'#A96F4F', hair:'#241B18', top:'#2E9A65', bottom:'#25475A', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'fade', face:'long', body:'round', lower:'ravi-jogger', eyes:'wide', mouth:'big-grin', headScaleX:0.92, headScaleY:1.12, torsoScaleX:1.06, torsoScaleY:1.08, facialHair:'beard' },
-  'prof.mateus': { skin:'#D4A17B', hair:'#513629', top:'#E17A36', bottom:'#43516A', shoe:'#F7C74B', accent:'#F7C74B', hairStyle:'sidepart', face:'round', body:'wide', lower:'mateus-round', eyes:'small', mouth:'tight-smile', headScaleX:0.96, headScaleY:0.92, torsoScaleX:1.22, torsoScaleY:0.92, accessory:'glasses' },
-  'prof.marina': { skin:'#B97855', hair:'#2C1D1B', top:'#339A75', bottom:'#344C45', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'braid', face:'oval', body:'dress', lower:'marina-a-line', eyes:'soft', mouth:'gentle-smile', headScaleX:0.92, headScaleY:1.10, torsoScaleX:0.90, torsoScaleY:1.14, accessory:'earrings' },
-  'prof.beatriz': { skin:'#E8C2A4', hair:'#493126', top:'#8658C2', bottom:'#45436A', shoe:'#F8C34B', accent:'#F8C34B', hairStyle:'pixie', face:'long', body:'longcoat', lower:'beatriz-coat', eyes:'narrow', mouth:'frown', headScaleX:0.88, headScaleY:1.14, torsoScaleX:0.86, torsoScaleY:1.16, accessory:'glasses' },
-  'prof.sofia': { skin:'#F0C6A5', hair:'#A64F2D', top:'#EE684F', bottom:'#315778', shoe:'#6FAE69', accent:'#6FAE69', hairStyle:'waves', face:'round', body:'flared', lower:'sofia-bell', eyes:'surprised', mouth:'open', headScaleX:1.03, headScaleY:0.96, torsoScaleX:1.10, torsoScaleY:1.00, accessory:'headband' },
-  'prof.helena': { skin:'#D5A17B', hair:'#211E28', top:'#318AA7', bottom:'#514765', shoe:'#F5C84A', accent:'#F5C84A', hairStyle:'locs', face:'wide', body:'tunic', lower:'helena-wide', eyes:'sleepy', mouth:'neutral', headScaleX:1.14, headScaleY:0.94, torsoScaleX:1.02, torsoScaleY:1.12 },
-  'prof.augusto': { skin:'#B77D5D', hair:'#D2C7B5', top:'#247D91', bottom:'#49434B', shoe:'#EFB64A', accent:'#EFB64A', hairStyle:'curls', face:'pear', body:'compact', lower:'augusto-shorts', eyes:'soft', mouth:'gentle-smile', headScaleX:0.92, headScaleY:0.94, torsoScaleX:0.96, torsoScaleY:0.90, accessory:'glasses' },
-  'prof.caio': { skin:'#D09A76', hair:'#27222B', top:'#D99A26', bottom:'#294E59', shoe:'#4B9E9C', accent:'#4B9E9C', hairStyle:'spiky', face:'square', body:'hood', lower:'caio-tapered', eyes:'curious', mouth:'smirk', headScaleX:1.02, headScaleY:1.00, torsoScaleX:1.00, torsoScaleY:0.98, accessory:'headset' },
+  'prof.clara': { skin:'#E9B994', hair:'#34201C', top:'#F05A4F', bottom:'#304D76', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'ponytail', face:'wide', body:'pear', lower:'clara-skirt', eyes:'bright', mouth:'big-grin', headScaleX:1.08, headScaleY:1.02, torsoScaleX:1.05, torsoScaleY:1.00, accessory:'earrings', nose:'button', brows:'arched', cheeks:'freckles', eyeSpacing:20, eyeOffsetY:-1, eyeTilt:-2, eyeAsymmetry:1.04, pupilShift:0, headTilt:-3, torsoTilt:2 },
+  'prof.lia': { skin:'#C98E6A', hair:'#211B1B', top:'#009E9A', bottom:'#174C70', shoe:'#FFD13F', accent:'#FFD13F', hairStyle:'bun', face:'round', body:'tall', lower:'lia-slim', eyes:'focused', mouth:'neutral', headScaleX:0.95, headScaleY:1.05, torsoScaleX:0.86, torsoScaleY:1.12, accessory:'headset', nose:'none', brows:'straight', cheeks:'none', eyeSpacing:18, eyeOffsetY:1, eyeTilt:0, eyeAsymmetry:0.94, pupilShift:1, headTilt:2, torsoTilt:-2 },
+  'prof.davi': { skin:'#8D5A3F', hair:'#211B1B', top:'#3678D8', bottom:'#24445A', shoe:'#F4B52B', accent:'#F4B52B', hairStyle:'short', face:'square', body:'broad', lower:'davi-wide', eyes:'soft', mouth:'gentle-smile', headScaleX:1.00, headScaleY:1.08, torsoScaleX:1.18, torsoScaleY:0.98, facialHair:'mustache', nose:'broad', brows:'heavy', cheeks:'none', eyeSpacing:22, eyeOffsetY:0, eyeTilt:1, eyeAsymmetry:1.02, pupilShift:-1, headTilt:-2, torsoTilt:-1 },
+  'prof.iara': { skin:'#A86F4C', hair:'#2A1A12', top:'#8B5BC7', bottom:'#425C45', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'afro', face:'pear', body:'cape', lower:'iara-cape', eyes:'round', mouth:'open', headScaleX:1.16, headScaleY:1.02, torsoScaleX:1.20, torsoScaleY:1.00, accessory:'earrings', nose:'button', brows:'raised', cheeks:'dimples', eyeSpacing:24, eyeOffsetY:-2, eyeTilt:-1, eyeAsymmetry:1.08, pupilShift:0, headTilt:1, torsoTilt:2 },
+  'prof.nina': { skin:'#E4B99B', hair:'#30364B', top:'#E9A62B', bottom:'#354C78', shoe:'#7A55B6', accent:'#7A55B6', hairStyle:'bob', face:'square', body:'box', lower:'nina-straight', eyes:'sleepy', mouth:'smirk', headScaleX:0.98, headScaleY:0.98, torsoScaleX:1.00, torsoScaleY:1.04, accessory:'round-glasses', nose:'dot', brows:'sleepy', cheeks:'none', eyeSpacing:17, eyeOffsetY:2, eyeTilt:0, eyeAsymmetry:0.92, pupilShift:2, headTilt:0, torsoTilt:2 },
+  'prof.ravi': { skin:'#A96F4F', hair:'#241B18', top:'#2E9A65', bottom:'#25475A', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'fade', face:'long', body:'round', lower:'ravi-jogger', eyes:'wide', mouth:'big-grin', headScaleX:0.92, headScaleY:1.12, torsoScaleX:1.06, torsoScaleY:1.08, facialHair:'beard', nose:'broad', brows:'angled', cheeks:'spots', eyeSpacing:25, eyeOffsetY:-1, eyeTilt:2, eyeAsymmetry:1.07, pupilShift:0, headTilt:4, torsoTilt:-1 },
+  'prof.mateus': { skin:'#D4A17B', hair:'#513629', top:'#E17A36', bottom:'#43516A', shoe:'#F7C74B', accent:'#F7C74B', hairStyle:'sidepart', face:'round', body:'wide', lower:'mateus-round', eyes:'small', mouth:'tight-smile', headScaleX:0.96, headScaleY:0.92, torsoScaleX:1.22, torsoScaleY:0.92, accessory:'glasses', nose:'button', brows:'soft', cheeks:'dimples', eyeSpacing:16, eyeOffsetY:1, eyeTilt:-1, eyeAsymmetry:0.96, pupilShift:-1, headTilt:-2, torsoTilt:2 },
+  'prof.marina': { skin:'#B97855', hair:'#2C1D1B', top:'#339A75', bottom:'#344C45', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'braid', face:'oval', body:'dress', lower:'marina-a-line', eyes:'soft', mouth:'gentle-smile', headScaleX:0.92, headScaleY:1.10, torsoScaleX:0.90, torsoScaleY:1.14, accessory:'earrings', nose:'dot', brows:'arched', cheeks:'freckles', eyeSpacing:21, eyeOffsetY:0, eyeTilt:-2, eyeAsymmetry:1.03, pupilShift:1, headTilt:-3, torsoTilt:-2 },
+  'prof.beatriz': { skin:'#E8C2A4', hair:'#493126', top:'#8658C2', bottom:'#45436A', shoe:'#F8C34B', accent:'#F8C34B', hairStyle:'pixie', face:'long', body:'longcoat', lower:'beatriz-coat', eyes:'narrow', mouth:'frown', headScaleX:0.88, headScaleY:1.14, torsoScaleX:0.86, torsoScaleY:1.16, accessory:'glasses', nose:'bridge', brows:'straight', cheeks:'none', eyeSpacing:19, eyeOffsetY:1, eyeTilt:1, eyeAsymmetry:0.91, pupilShift:-2, headTilt:-1, torsoTilt:0 },
+  'prof.sofia': { skin:'#F0C6A5', hair:'#A64F2D', top:'#EE684F', bottom:'#315778', shoe:'#6FAE69', accent:'#6FAE69', hairStyle:'waves', face:'round', body:'flared', lower:'sofia-bell', eyes:'surprised', mouth:'open', headScaleX:1.03, headScaleY:0.96, torsoScaleX:1.10, torsoScaleY:1.00, accessory:'headband', nose:'button', brows:'raised', cheeks:'flush', eyeSpacing:23, eyeOffsetY:-1, eyeTilt:-2, eyeAsymmetry:1.05, pupilShift:1, headTilt:3, torsoTilt:-3 },
+  'prof.helena': { skin:'#D5A17B', hair:'#211E28', top:'#318AA7', bottom:'#514765', shoe:'#F5C84A', accent:'#F5C84A', hairStyle:'locs', face:'wide', body:'tunic', lower:'helena-wide', eyes:'sleepy', mouth:'neutral', headScaleX:1.14, headScaleY:0.94, torsoScaleX:1.02, torsoScaleY:1.12, nose:'dot', brows:'sleepy', cheeks:'spots', eyeSpacing:26, eyeOffsetY:0, eyeTilt:0, eyeAsymmetry:0.97, pupilShift:-1, headTilt:-2, torsoTilt:1 },
+  'prof.augusto': { skin:'#B77D5D', hair:'#D2C7B5', top:'#247D91', bottom:'#49434B', shoe:'#EFB64A', accent:'#EFB64A', hairStyle:'curls', face:'pear', body:'compact', lower:'augusto-shorts', eyes:'soft', mouth:'gentle-smile', headScaleX:0.92, headScaleY:0.94, torsoScaleX:0.96, torsoScaleY:0.90, accessory:'glasses', nose:'broad', brows:'soft', cheeks:'none', eyeSpacing:27, eyeOffsetY:1, eyeTilt:1, eyeAsymmetry:1.06, pupilShift:0, headTilt:2, torsoTilt:-1 },
+  'prof.caio': { skin:'#D09A76', hair:'#27222B', top:'#D99A26', bottom:'#294E59', shoe:'#4B9E9C', accent:'#4B9E9C', hairStyle:'spiky', face:'square', body:'hood', lower:'caio-tapered', eyes:'curious', mouth:'smirk', headScaleX:1.02, headScaleY:1.00, torsoScaleX:1.00, torsoScaleY:0.98, accessory:'headset', nose:'none', brows:'angled', cheeks:'dimples', eyeSpacing:28, eyeOffsetY:0, eyeTilt:-1, eyeAsymmetry:0.93, pupilShift:2, headTilt:3, torsoTilt:2 },
+};
+
+export const TEACHER_SIGNATURE_POSES: Record<string, TeacherPose> = {
+  'prof.clara': 'presenting',
+  'prof.lia': 'hands-on-hips',
+  'prof.davi': 'arms-crossed',
+  'prof.iara': 'shrug',
+  'prof.nina': 'hand-on-chin',
+  'prof.ravi': 'celebrating',
+  'prof.mateus': 'arms-down',
+  'prof.marina': 'greeting',
+  'prof.beatriz': 'hands-forward',
+  'prof.sofia': 'one-hand-on-hip',
+  'prof.helena': 'listening',
+  'prof.augusto': 'pointing',
+  'prof.caio': 'one-hand-up',
 };
 
 const FACE_PATH: Record<FaceShape, string> = {
@@ -168,8 +198,12 @@ function Face({ look, pose }: { look: Look; pose: TeacherPose }) {
     curious: { rx:12, ry:18, pupil:5.3, gaze:4 },
   };
   const eye = eyeMetrics[look.eyes];
-  const eyeY = pose === 'thinking' ? 100 : 98;
-  const pupilY = pose === 'thinking' ? eyeY + 3 : eyeY;
+  const eyeY = 98 + look.eyeOffsetY + (pose === 'thinking' ? 2 : 0);
+  const leftX = 120 - look.eyeSpacing;
+  const rightX = 120 + look.eyeSpacing;
+  const pupilShift = eye.gaze + look.pupilShift;
+  const leftRy = eye.ry * look.eyeAsymmetry;
+  const rightRy = eye.ry * (2 - look.eyeAsymmetry);
   const mouthStyle: MouthStyle = pose === 'celebrating' ? 'open' : pose === 'thinking' ? 'neutral' : pose === 'listening' ? 'gentle-smile' : look.mouth;
   const mouths: Record<MouthStyle, ReactNode> = {
     'big-grin': <g><path d="M99 113Q120 150 141 113Q136 145 120 145Q104 145 99 113Z" fill="#633B3C"/><path d="M107 116Q120 121 133 116L130 126Q120 130 110 126Z" fill="#FFFFFF"/></g>,
@@ -180,47 +214,101 @@ function Face({ look, pose }: { look: Look; pose: TeacherPose }) {
     frown: <path d="M108 130Q120 117 132 130" fill="none" stroke="#633B3C" strokeWidth="4.5" strokeLinecap="round"/>,
     'tight-smile': <path d="M112 124Q120 130 128 124" fill="none" stroke="#633B3C" strokeWidth="4" strokeLinecap="round"/>,
   };
-  const brow = pose === 'thinking'
-    ? 'M92 76Q103 65 113 74 M127 74Q137 65 148 76'
-    : look.eyes === 'narrow' || look.eyes === 'focused'
-      ? 'M92 79L113 75 M127 75L148 79'
-      : look.eyes === 'sleepy'
-        ? 'M92 80Q103 76 113 81 M127 81Q137 76 148 80'
-        : 'M92 78Q103 69 113 77 M127 77Q137 69 148 78';
+  const browY = eyeY - eye.ry - 8;
+  const browPaths: Record<BrowStyle, [string,string]> = {
+    arched: [
+      'M' + (leftX - 11) + ' ' + (browY + 3) + ' Q' + leftX + ' ' + (browY - 8) + ' ' + (leftX + 11) + ' ' + (browY + 2),
+      'M' + (rightX - 11) + ' ' + (browY + 2) + ' Q' + rightX + ' ' + (browY - 8) + ' ' + (rightX + 11) + ' ' + (browY + 3),
+    ],
+    straight: [
+      'M' + (leftX - 10) + ' ' + (browY + 1) + ' L' + (leftX + 10) + ' ' + (browY + 1),
+      'M' + (rightX - 10) + ' ' + (browY + 1) + ' L' + (rightX + 10) + ' ' + (browY + 1),
+    ],
+    angled: [
+      'M' + (leftX - 10) + ' ' + (browY + 3) + ' L' + (leftX + 10) + ' ' + (browY - 3),
+      'M' + (rightX - 10) + ' ' + (browY - 3) + ' L' + (rightX + 10) + ' ' + (browY + 3),
+    ],
+    soft: [
+      'M' + (leftX - 10) + ' ' + (browY + 2) + ' Q' + leftX + ' ' + (browY - 3) + ' ' + (leftX + 10) + ' ' + (browY + 2),
+      'M' + (rightX - 10) + ' ' + (browY + 2) + ' Q' + rightX + ' ' + (browY - 3) + ' ' + (rightX + 10) + ' ' + (browY + 2),
+    ],
+    heavy: [
+      'M' + (leftX - 11) + ' ' + (browY + 3) + ' Q' + leftX + ' ' + (browY - 5) + ' ' + (leftX + 11) + ' ' + (browY + 2),
+      'M' + (rightX - 11) + ' ' + (browY + 2) + ' Q' + rightX + ' ' + (browY - 5) + ' ' + (rightX + 11) + ' ' + (browY + 3),
+    ],
+    sleepy: [
+      'M' + (leftX - 10) + ' ' + (browY + 4) + ' Q' + leftX + ' ' + (browY - 1) + ' ' + (leftX + 10) + ' ' + (browY + 4),
+      'M' + (rightX - 10) + ' ' + (browY + 4) + ' Q' + rightX + ' ' + (browY - 1) + ' ' + (rightX + 10) + ' ' + (browY + 4),
+    ],
+    raised: [
+      'M' + (leftX - 10) + ' ' + (browY + 1) + ' Q' + leftX + ' ' + (browY - 11) + ' ' + (leftX + 10) + ' ' + (browY + 1),
+      'M' + (rightX - 10) + ' ' + (browY + 1) + ' Q' + rightX + ' ' + (browY - 11) + ' ' + (rightX + 10) + ' ' + (browY + 1),
+    ],
+  };
+  const browWidth = look.brows === 'heavy' ? 7 : look.brows === 'soft' ? 4 : 5.5;
+  const noses: Record<NoseStyle, ReactNode> = {
+    none: null,
+    dot: <circle cx="120" cy={eyeY + 17} r="2.6" fill="#A86F58" opacity=".8"/>,
+    button: <ellipse cx="120" cy={eyeY + 17} rx="4.3" ry="3.2" fill="#B77960" opacity=".72"/>,
+    bridge: <path d={'M120 ' + (eyeY + 8) + ' Q115 ' + (eyeY + 20) + ' 120 ' + (eyeY + 21)} fill="none" stroke="#A86F58" strokeWidth="2.8" strokeLinecap="round"/>,
+    broad: <path d={'M114 ' + (eyeY + 18) + ' Q120 ' + (eyeY + 24) + ' 126 ' + (eyeY + 18)} fill="none" stroke="#A86F58" strokeWidth="3.5" strokeLinecap="round"/>,
+  };
+  const cheeks: Record<CheekStyle, ReactNode> = {
+    none: null,
+    freckles: <g fill="#9A5E49" opacity=".62"><circle cx="83" cy="115" r="1.8"/><circle cx="88" cy="119" r="1.5"/><circle cx="93" cy="115" r="1.4"/><circle cx="147" cy="115" r="1.4"/><circle cx="152" cy="119" r="1.5"/><circle cx="157" cy="115" r="1.8"/></g>,
+    dimples: <g fill="none" stroke="#995E4B" strokeWidth="2.1" strokeLinecap="round"><path d="M83 120q4 3 8 0M149 120q4 3 8 0"/></g>,
+    flush: <g fill="#F07878" opacity=".32"><ellipse cx="82" cy="115" rx="10" ry="6"/><ellipse cx="158" cy="115" rx="10" ry="6"/></g>,
+    spots: <g fill="#9A5E49" opacity=".45"><circle cx="86" cy="117" r="2.2"/><circle cx="154" cy="117" r="2.2"/></g>,
+  };
   return <g>
     <path d={FACE_PATH[look.face]} fill={look.skin}/>
-    <path d={brow} fill="none" stroke={look.hair} strokeWidth="5.5" strokeLinecap="round"/>
-    <ellipse cx={120 - 19 - (look.eyes === 'small' ? 1 : 0)} cy={eyeY} rx={eye.rx} ry={eye.ry} fill="#FFFFFF"/>
-    <ellipse cx={120 + 19 + (look.eyes === 'small' ? 1 : 0)} cy={eyeY} rx={eye.rx} ry={eye.ry} fill="#FFFFFF"/>
-    <ellipse cx={101 + eye.gaze} cy={pupilY} rx={eye.pupil} ry={Math.max(4.5, eye.pupil + 2.2)} fill="#27252B"/>
-    <ellipse cx={139 + eye.gaze} cy={pupilY} rx={eye.pupil} ry={Math.max(4.5, eye.pupil + 2.2)} fill="#27252B"/>
-    <circle cx={103 + eye.gaze} cy={pupilY - 3} r="2.1" fill="#FFFFFF"/>
-    <circle cx={141 + eye.gaze} cy={pupilY - 3} r="2.1" fill="#FFFFFF"/>
-    {eye.lid && <g fill={look.skin}><path d="M88 84Q101 73 114 84L114 91Q101 84 88 91Z"/><path d="M126 84Q139 73 152 84L152 91Q139 84 126 91Z"/></g>}
-    <ellipse cx="82" cy="115" rx="8" ry="4.5" fill="#F08078" opacity=".22"/>
-    <ellipse cx="158" cy="115" rx="8" ry="4.5" fill="#F08078" opacity=".22"/>
+    <path d={browPaths[look.brows][0]} fill="none" stroke={look.hair} strokeWidth={browWidth} strokeLinecap="round"/>
+    <path d={browPaths[look.brows][1]} fill="none" stroke={look.hair} strokeWidth={browWidth} strokeLinecap="round"/>
+    <g transform={'rotate(' + look.eyeTilt + ' ' + leftX + ' ' + eyeY + ')'}>
+      <ellipse cx={leftX} cy={eyeY} rx={eye.rx} ry={leftRy} fill="#FFFFFF"/>
+      <ellipse cx={leftX + pupilShift} cy={eyeY + (pose === 'thinking' ? 3 : 0)} rx={eye.pupil} ry={Math.max(4.5, eye.pupil + 2.2)} fill="#27252B"/>
+      <circle cx={leftX + pupilShift + 2} cy={eyeY - 3} r="2.1" fill="#FFFFFF"/>
+    </g>
+    <g transform={'rotate(' + (-look.eyeTilt) + ' ' + rightX + ' ' + eyeY + ')'}>
+      <ellipse cx={rightX} cy={eyeY} rx={eye.rx} ry={rightRy} fill="#FFFFFF"/>
+      <ellipse cx={rightX + pupilShift} cy={eyeY + (pose === 'thinking' ? 3 : 0)} rx={eye.pupil} ry={Math.max(4.5, eye.pupil + 2.2)} fill="#27252B"/>
+      <circle cx={rightX + pupilShift + 2} cy={eyeY - 3} r="2.1" fill="#FFFFFF"/>
+    </g>
+    {eye.lid && <g fill={look.skin}>
+      <path d={'M' + (leftX - eye.rx) + ' ' + (eyeY - 4) + ' Q' + leftX + ' ' + (eyeY - eye.ry - 5) + ' ' + (leftX + eye.rx) + ' ' + (eyeY - 4) + ' L' + (leftX + eye.rx) + ' ' + (eyeY + 2) + ' Q' + leftX + ' ' + (eyeY - 5) + ' ' + (leftX - eye.rx) + ' ' + (eyeY + 2) + 'Z'}/>
+      <path d={'M' + (rightX - eye.rx) + ' ' + (eyeY - 4) + ' Q' + rightX + ' ' + (eyeY - eye.ry - 5) + ' ' + (rightX + eye.rx) + ' ' + (eyeY - 4) + ' L' + (rightX + eye.rx) + ' ' + (eyeY + 2) + ' Q' + rightX + ' ' + (eyeY - 5) + ' ' + (rightX - eye.rx) + ' ' + (eyeY + 2) + 'Z'}/>
+    </g>}
+    {noses[look.nose]}
+    {cheeks[look.cheeks]}
     {look.facialHair === 'beard' && <path d="M81 111Q87 145 120 150Q153 145 159 111Q145 128 120 127Q95 128 81 111Z" fill={look.hair}/>}
     {look.facialHair === 'mustache' && <g fill={look.hair}><ellipse cx="110" cy="117" rx="10" ry="5.3"/><ellipse cx="130" cy="117" rx="10" ry="5.3"/></g>}
     {mouths[mouthStyle]}
     {look.accessory === 'glasses' && <g fill="none" stroke="#302D36" strokeWidth="3.8"><rect x="85" y="82" width="31" height="31" rx="10"/><rect x="124" y="82" width="31" height="31" rx="10"/><path d="M116 94h8"/></g>}
-    {look.accessory === 'round-glasses' && <g fill="none" stroke={look.accent} strokeWidth="4"><circle cx="101" cy="98" r="16"/><circle cx="139" cy="98" r="16"/><path d="M117 95h6"/></g>}
+    {look.accessory === 'round-glasses' && <g fill="none" stroke={look.accent} strokeWidth="4"><circle cx={leftX} cy={eyeY} r="16"/><circle cx={rightX} cy={eyeY} r="16"/><path d="M117 95h6"/></g>}
   </g>;
 }
 
-function Hand({ x, y, skin, open }: { x: number; y: number; skin: string; open: boolean }) {
+function Hand({ x, y, skin, gesture }: { x: number; y: number; skin: string; gesture: HandGesture }) {
   return <g transform={'translate(' + x + ' ' + y + ')'}>
     <ellipse cx="0" cy="0" rx="10.5" ry="11" fill={skin}/>
-    {open && <g fill={skin}>
+    {gesture === 'open' && <g fill={skin}>
       <rect x="-9" y="-16" width="5.5" height="13" rx="2.75"/>
       <rect x="-2.5" y="-19" width="5.5" height="16" rx="2.75"/>
       <rect x="4" y="-15" width="5.5" height="12" rx="2.75"/>
       <ellipse cx="-11" cy="-3" rx="4.5" ry="7" transform="rotate(-34 -11 -3)"/>
     </g>}
+    {gesture === 'point' && <g fill={skin}>
+      <rect x="-2.8" y="-24" width="5.6" height="23" rx="2.8"/>
+      <rect x="-9" y="-9" width="5.6" height="10" rx="2.8"/>
+      <rect x="-2.5" y="-7" width="5.6" height="8" rx="2.8"/>
+      <rect x="4" y="-8" width="5.6" height="9" rx="2.8"/>
+      <ellipse cx="-10" cy="-3" rx="4.5" ry="6.5" transform="rotate(-34 -10 -3)"/>
+    </g>}
   </g>;
 }
 
 export function TeacherCharacter({
-  teacher, pose = 'presenting', size = 160, className = '', portrait = false,
+  teacher, pose, size = 160, className = '', portrait = false,
 }: {
   teacher: FictionalTeacher;
   pose?: TeacherPose;
@@ -229,36 +317,43 @@ export function TeacherCharacter({
   portrait?: boolean;
 }) {
   const look = LOOKS[teacher.id] ?? LOOKS['prof.lia'];
-  const arms: Record<TeacherPose, { left: string; right: string; lh: [number,number]; rh: [number,number]; open: boolean }> = {
-    presenting: { left:'M88 164Q72 176 62 194', right:'M152 162Q174 152 188 132', lh:[62,194], rh:[188,132], open:true },
-    greeting: { left:'M88 164Q75 180 80 197', right:'M152 160Q177 127 184 88', lh:[80,197], rh:[184,88], open:true },
-    thinking: { left:'M88 164Q74 181 78 197', right:'M152 160Q168 145 157 127', lh:[78,197], rh:[157,127], open:false },
-    celebrating: { left:'M88 158Q63 129 55 88', right:'M152 158Q177 128 185 88', lh:[55,88], rh:[185,88], open:true },
-    listening: { left:'M88 164Q103 184 114 181', right:'M152 164Q137 184 126 181', lh:[114,181], rh:[126,181], open:false },
-    'hands-on-hips': { left:'M88 164Q68 176 80 191', right:'M152 164Q172 176 160 191', lh:[80,191], rh:[160,191], open:false },
-    'arms-down': { left:'M88 164Q76 184 76 207', right:'M152 164Q164 184 164 207', lh:[76,207], rh:[164,207], open:false },
-    shrug: { left:'M88 164Q68 145 58 150', right:'M152 164Q172 145 182 150', lh:[58,150], rh:[182,150], open:true },
+  const characterPose = pose ?? TEACHER_SIGNATURE_POSES[teacher.id] ?? 'presenting';
+  const arms: Record<TeacherPose, { left: string; right: string; lh: [number,number]; rh: [number,number]; hand: HandGesture }> = {
+    presenting: { left:'M88 164Q72 176 62 194', right:'M152 162Q174 152 188 132', lh:[62,194], rh:[188,132], hand:'open' },
+    greeting: { left:'M88 164Q75 180 80 197', right:'M152 160Q177 127 184 88', lh:[80,197], rh:[184,88], hand:'open' },
+    thinking: { left:'M88 164Q74 181 78 197', right:'M152 160Q168 145 157 127', lh:[78,197], rh:[157,127], hand:'closed' },
+    celebrating: { left:'M88 158Q63 129 55 88', right:'M152 158Q177 128 185 88', lh:[55,88], rh:[185,88], hand:'open' },
+    listening: { left:'M88 164Q103 184 114 181', right:'M152 164Q137 184 126 181', lh:[114,181], rh:[126,181], hand:'closed' },
+    'hands-on-hips': { left:'M88 164Q68 176 80 191', right:'M152 164Q172 176 160 191', lh:[80,191], rh:[160,191], hand:'closed' },
+    'arms-down': { left:'M88 164Q76 184 76 207', right:'M152 164Q164 184 164 207', lh:[76,207], rh:[164,207], hand:'closed' },
+    shrug: { left:'M88 164Q68 145 58 150', right:'M152 164Q172 145 182 150', lh:[58,150], rh:[182,150], hand:'open' },
+    'arms-crossed': { left:'M88 164Q104 179 132 190', right:'M152 164Q136 179 108 190', lh:[132,190], rh:[108,190], hand:'closed' },
+    'hand-on-chin': { left:'M88 164Q74 184 76 207', right:'M152 164Q168 151 151 143', lh:[76,207], rh:[151,143], hand:'closed' },
+    'hands-forward': { left:'M88 164Q101 183 111 180', right:'M152 164Q139 183 129 180', lh:[111,180], rh:[129,180], hand:'open' },
+    'one-hand-on-hip': { left:'M88 164Q66 178 80 191', right:'M152 164Q164 184 164 207', lh:[80,191], rh:[164,207], hand:'closed' },
+    pointing: { left:'M88 164Q76 184 76 207', right:'M152 160Q174 137 190 111', lh:[76,207], rh:[190,111], hand:'point' },
+    'one-hand-up': { left:'M88 164Q76 184 76 207', right:'M152 160Q178 127 184 88', lh:[76,207], rh:[184,88], hand:'open' },
   };
-  const a = arms[pose];
+  const a = arms[characterPose];
   const style: CSSProperties = portrait ? { width:size, height:size } : { width:Math.round(size * .92), height:size };
   return (
     <svg viewBox={portrait ? '40 12 160 160' : '0 0 240 270'} width={style.width} height={style.height}
       className={'shrink-0 ' + (portrait ? 'rounded-full overflow-hidden ' : 'overflow-visible ') + className}
       style={style} role="img" aria-label={teacher.name + ', personagem ilustrado do Pórtico'}
-      data-character-style="portico-friends-v6" data-character-body={look.body} data-character-lower={look.lower} data-character-face={look.face} data-character-hair={look.hairStyle} data-character-eyes={look.eyes} data-character-mouth={look.mouth} focusable="false">
+      data-character-style="portico-friends-v7" data-character-body={look.body} data-character-lower={look.lower} data-character-face={look.face} data-character-hair={look.hairStyle} data-character-eyes={look.eyes} data-character-mouth={look.mouth} data-character-nose={look.nose} data-character-brows={look.brows} data-character-spacing={look.eyeSpacing} focusable="false">
       {portrait && <circle cx="120" cy="98" r="90" fill={'rgb(var(--' + teacher.tone + '))'}/>}
       {!portrait && <rect x="83" y="260" width="74" height="6" rx="3" fill="#243840" opacity=".14"/>}
 
       {/* Tronco: uma massa simples, com cintura definida sem contorno decorativo. */}
-      <g transform={'translate(120 174) scale(' + look.torsoScaleX + ' ' + look.torsoScaleY + ') translate(-120 -174)'}>
+      <g transform={'translate(120 174) rotate(' + look.torsoTilt + ') scale(' + look.torsoScaleX + ' ' + look.torsoScaleY + ') translate(-120 -174)'}>
         <path d={BODY_PATH[look.body]} fill={look.top}/>
         <path d={LOWER_PATH[look.lower]} fill={look.bottom}/>
 
         {/* Braços grossos integrados ao corpo, mas com gestos próprios. */}
         <path d={a.left} fill="none" stroke={look.top} strokeWidth="19" strokeLinecap="round" strokeLinejoin="round"/>
         <path d={a.right} fill="none" stroke={look.top} strokeWidth="19" strokeLinecap="round" strokeLinejoin="round"/>
-        <Hand x={a.lh[0]} y={a.lh[1]} skin={look.skin} open={a.open}/>
-        <Hand x={a.rh[0]} y={a.rh[1]} skin={look.skin} open={a.open}/>
+        <Hand x={a.lh[0]} y={a.lh[1]} skin={look.skin} gesture={gesture}/>
+        <Hand x={a.rh[0]} y={a.rh[1]} skin={look.skin} gesture={gesture}/>
       </g>
 
       {/* Pernas curtas e calçados realmente separados, com espaço negativo visível. */}
@@ -269,8 +364,8 @@ export function TeacherCharacter({
         <rect x="123" y="245" width="31" height="12" rx="6" fill={look.shoe}/>
       </g>}
       {/* A cabeça também varia em largura e altura; rosto e cabelo formam uma única unidade. */}
-      <g transform={'translate(120 91) scale(' + look.headScaleX + ' ' + look.headScaleY + ') translate(-120 -91)'}>
-        <Face look={look} pose={pose}/>
+      <g transform={'translate(120 91) rotate(' + look.headTilt + ') scale(' + look.headScaleX + ' ' + look.headScaleY + ') translate(-120 -91)'}>
+        <Face look={look} pose={characterPose}/>
         <Hair look={look}/>
 
         {/* Acessórios pequenos, mas desenhados na escala de cada rosto. */}
@@ -286,7 +381,7 @@ export function TeacherCharacter({
 }
 
 export function TeacherScene({
-  teacher, pose = 'presenting', size = 174, eyebrow = 'AULA COM SEU PROFESSOR', heading, message, className = '',
+  teacher, pose, size = 174, eyebrow = 'AULA COM SEU PROFESSOR', heading, message, className = '',
 }: {
   teacher: FictionalTeacher;
   pose?: TeacherPose;
@@ -312,7 +407,7 @@ export function TeacherScene({
 }
 
 export function TeacherCue({
-  teacher, pose = 'presenting', size = 98, children, compact = false, className = '',
+  teacher, pose, size = 98, children, compact = false, className = '',
 }: {
   teacher: FictionalTeacher;
   pose?: TeacherPose;

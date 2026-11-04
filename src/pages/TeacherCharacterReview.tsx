@@ -1,31 +1,17 @@
-import { TeacherCharacter, type TeacherPose } from '@/components/TeacherCharacter';
+import { TeacherCharacter, TEACHER_SIGNATURE_POSES } from '@/components/TeacherCharacter';
 import { teachers } from '@/content';
 
-const REVIEW_POSES: Record<string, TeacherPose> = {
-  'prof.clara': 'presenting',
-  'prof.lia': 'hands-on-hips',
-  'prof.davi': 'listening',
-  'prof.iara': 'shrug',
-  'prof.nina': 'thinking',
-  'prof.ravi': 'celebrating',
-  'prof.mateus': 'arms-down',
-  'prof.marina': 'greeting',
-  'prof.beatriz': 'hands-on-hips',
-  'prof.sofia': 'celebrating',
-  'prof.helena': 'listening',
-  'prof.augusto': 'arms-down',
-  'prof.caio': 'greeting',
-};
+const REVIEW_POSES = TEACHER_SIGNATURE_POSES;
 
 /** Galeria temporária de revisão visual; acesso direto, fora da navegação principal. */
 export function TeacherCharacterReviewPage() {
   return (
     <main className="mx-auto max-w-5xl space-y-5 px-4 py-6">
       <header className="space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V6</p>
+        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V7</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted">
-          Estudos de silhueta, proporção da cabeça, olhos, boca, cintura, roupas e gestos próprios. Esta galeria é uma etapa de revisão,
+          Estudos de silhueta, rosto, olhos, sobrancelhas, nariz, cabelo, proporções, cintura e gestos-assinatura. Esta galeria é uma etapa de revisão,
           ainda não representa uma família aprovada.
         </p>
       </header>
@@ -59,7 +45,8 @@ export function TeacherCharacterReviewPage() {
           <li>Tronco, quadril e parte inferior da roupa formam silhuetas legíveis e diferentes.</li>
           <li>Olhos expressivos, poucos traços faciais e gestos legíveis em celular.</li>
           <li>Pés separados das pernas por espaço negativo, sem parecerem presos ao corpo.</li>
-          <li>Diferenças reais entre os professores: cabeça, cabelo, corpo, olhos, boca e gesto-assinatura.</li>
+          <li>Rostos realmente diferentes: distância e inclinação dos olhos, sobrancelhas, nariz, bochechas e expressão.</li>
+          <li>Um gesto-assinatura próprio para cada professor, também usado nas aulas e não só nesta galeria.</li>
         </ul>
       </section>
     </main>

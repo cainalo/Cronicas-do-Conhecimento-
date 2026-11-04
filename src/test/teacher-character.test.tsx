@@ -28,7 +28,7 @@ describe('personagens-professores vetoriais', () => {
       expect(figure.getAttribute('viewBox')).toBe('0 0 240 270');
       expect(figure.querySelectorAll('path, rect, circle, ellipse').length).toBeGreaterThan(14);
       expect(figure.querySelectorAll('[stroke-width]').length).toBeLessThan(12);
-      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v6');
+      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v7');
     }
     const bodySilhouettes = figures.map((figure) => figure.getAttribute('data-character-body'));
     expect(new Set(bodySilhouettes).size).toBe(teachers.length);
@@ -40,6 +40,12 @@ describe('personagens-professores vetoriais', () => {
     expect(new Set(eyeStyles).size).toBeGreaterThanOrEqual(9);
     const mouthStyles = figures.map((figure) => figure.getAttribute('data-character-mouth'));
     expect(new Set(mouthStyles).size).toBeGreaterThanOrEqual(6);
+    const noseStyles = figures.map((figure) => figure.getAttribute('data-character-nose'));
+    expect(new Set(noseStyles).size).toBeGreaterThanOrEqual(4);
+    const browStyles = figures.map((figure) => figure.getAttribute('data-character-brows'));
+    expect(new Set(browStyles).size).toBeGreaterThanOrEqual(6);
+    const eyeSpacings = figures.map((figure) => figure.getAttribute('data-character-spacing'));
+    expect(new Set(eyeSpacings).size).toBe(teachers.length);
     const differentDrawings = figures.map((figure) => figure.innerHTML);
     expect(new Set(differentDrawings).size).toBe(teachers.length);
   });
@@ -54,7 +60,7 @@ describe('personagens-professores vetoriais', () => {
 
   it('usa a mesma linguagem vetorial nas versões de avatar e corpo inteiro', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} portrait size={48}/>)}</div>);
-    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v6"]')).toHaveLength(teachers.length);
+    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v7"]')).toHaveLength(teachers.length);
   });
 
   it('atribui um professor coerente às principais disciplinas', () => {
