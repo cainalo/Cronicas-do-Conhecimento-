@@ -7,6 +7,7 @@ on:
       - 'src/components/TeacherCharacter.tsx'
       - 'src/pages/TeacherCharacterReview.tsx'
       - 'src/test/teacher-character.test.tsx'
+      - 'src/content/teachers.ts'
       - 'scripts/e2e-layout.mjs'
       - 'package.json'
       - 'package-lock.json'
