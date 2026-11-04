@@ -127,7 +127,7 @@ async function run() {
                 for (const el of document.querySelectorAll('body *')) {
                   const cs = getComputedStyle(el);
                   if (cs.position === 'fixed' && cs.bottom !== 'auto' && parseFloat(cs.bottom) >= 0) {
-                    (el as HTMLElement).style.display = 'none';
+                    el.style?.setProperty('display', 'none');
                   }
                 }
               });
