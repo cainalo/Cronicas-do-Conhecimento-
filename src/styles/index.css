@@ -1200,7 +1200,86 @@ main.safe-top-content { padding-top: calc(env(safe-area-inset-top, 0px) + 1.5rem
 .p-character__art--augusto { animation: portico-character-nod 6.5s ease-in-out infinite; }
 .p-character__art--caio { animation: portico-character-rock 4.6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) {
-  .p-character__art { animation: none !important; }
+  .p-character__art, .p-character__eye, .p-character__tail,
+  .p-character__gills, .p-character__wings, .p-character__eye-stalks { animation: none !important; }
+}
+
+/* Rosto vivo e partes anatômicas com movimento próprio. */
+@keyframes portico-character-blink {
+  0%, 6%, 100% { transform: scaleY(1); }
+  7.2% { transform: scaleY(.08); }
+  8.8% { transform: scaleY(1); }
+}
+@keyframes portico-character-tail {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(3.5deg); }
+}
+@keyframes portico-character-tail-flick {
+  0%, 100% { transform: rotate(0deg); }
+  38% { transform: rotate(-3deg); }
+  56% { transform: rotate(4deg); }
+}
+@keyframes portico-character-gill-breathe {
+  0%, 100% { transform: rotate(-.6deg) scale(1); }
+  50% { transform: rotate(.8deg) scale(1.012); }
+}
+@keyframes portico-character-wing-shift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.6px); }
+}
+@keyframes portico-character-stalk-scan {
+  0%, 100% { transform: rotate(-.7deg); }
+  50% { transform: rotate(.9deg); }
+}
+.p-character__eye {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: portico-character-blink 4.8s ease-in-out .25s infinite;
+}
+.p-character__tail {
+  transform-box: fill-box;
+  transform-origin: 80% 50%;
+}
+.p-character__art--davi .p-character__tail {
+  animation: portico-character-tail 4.8s ease-in-out .7s infinite;
+}
+.p-character__art--nina .p-character__tail {
+  animation: portico-character-tail-flick 3.8s ease-in-out .4s infinite;
+}
+.p-character__gills {
+  transform-box: fill-box;
+  transform-origin: 50% 92%;
+  animation: portico-character-gill-breathe 4.2s ease-in-out .3s infinite;
+}
+.p-character__wings {
+  transform-box: fill-box;
+  transform-origin: 50% 70%;
+  animation: portico-character-wing-shift 3.9s ease-in-out .5s infinite;
+}
+.p-character__eye-stalks {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: portico-character-stalk-scan 4.4s ease-in-out .2s infinite;
+}
+.p-character__art--clara .p-character__eye { animation-duration: 5.4s; animation-delay: .55s; }
+.p-character__art--lia .p-character__eye { animation-duration: 4.6s; animation-delay: .9s; }
+.p-character__art--davi .p-character__eye { animation-duration: 6.2s; animation-delay: .25s; }
+.p-character__art--iara .p-character__eye { animation-duration: 4.9s; animation-delay: .7s; }
+.p-character__art--nina .p-character__eye { animation-duration: 7s; animation-delay: 1.1s; }
+.p-character__art--ravi .p-character__eye { animation-duration: 4.3s; animation-delay: .2s; }
+.p-character__art--mateus .p-character__eye { animation-duration: 6.8s; animation-delay: 1.25s; }
+.p-character__art--marina .p-character__eye { animation-duration: 5.4s; animation-delay: .85s; }
+.p-character__art--beatriz .p-character__eye { animation-duration: 7.2s; animation-delay: 1.4s; }
+.p-character__art--sofia .p-character__eye { animation-duration: 5.1s; animation-delay: .35s; }
+.p-character__art--helena .p-character__eye { animation-duration: 5.8s; animation-delay: 1.05s; }
+.p-character__art--augusto .p-character__eye { animation-duration: 6.5s; animation-delay: 1.5s; }
+.p-character__art--caio .p-character__eye { animation-duration: 4.7s; animation-delay: .6s; }
+.p-character__art--caio .p-character__eye[data-eye-x="212"] { animation-delay: 2.15s; }
+@media (prefers-reduced-motion: reduce) {
+  .p-character__art, .p-character__eye, .p-character__tail,
+  .p-character__gills, .p-character__wings, .p-character__eye-stalks {
+    animation: none !important;
+  }
 }
 
 /* Personagens do Pórtico: uma linguagem vetorial compartilhada entre avatar, trilha e aula. */

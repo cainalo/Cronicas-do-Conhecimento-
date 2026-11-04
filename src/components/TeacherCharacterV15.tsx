@@ -58,15 +58,17 @@ function Eye({
   const upperLid = 'M' + (x - eyeRx) + ' ' + (y - eyeRy * .12)
     + ' Q' + x + ' ' + (y - eyeRy * .88) + ' ' + (x + eyeRx) + ' ' + (y - eyeRy * .12);
   return (
-    <g data-eye-shape={shape} transform={'rotate(' + tilt + ' ' + x + ' ' + y + ')'}>
-      {shape === 'almond'
-        ? <path data-eye-base="true" d={almond} fill={WHITE}/>
-        : <ellipse data-eye-base="true" cx={x} cy={y} rx={eyeRx} ry={eyeRy} fill={WHITE}/>}
-      <ellipse cx={x + dx} cy={y + 2} rx={pupilRx} ry={pupilRy} fill={iris}/>
-      <ellipse cx={x + dx + 1} cy={y + 2} rx={pupilRx * .52} ry={pupilRy * .72} fill="#17252C"/>
-      <circle cx={x + dx - pupilRx * .42} cy={y - pupilRy * .48} r={Math.max(1.8, eyeRx * .19)} fill={WHITE}/>
-      {shape === 'sleepy' && <path d={upperLid} fill="none" stroke={lidColor} strokeWidth={Math.max(3, eyeRy * .58)} strokeLinecap="round"/>}
-      {shape === 'slit' && <path d={upperLid} fill="none" stroke={lidColor} strokeWidth={Math.max(2, eyeRy * .18)} strokeLinecap="round" opacity=".8"/>}
+    <g className="p-character__eye" data-eye-shape={shape} data-eye-x={x}>
+      <g transform={'rotate(' + tilt + ' ' + x + ' ' + y + ')'}>
+        {shape === 'almond'
+          ? <path data-eye-base="true" d={almond} fill={WHITE}/>
+          : <ellipse data-eye-base="true" cx={x} cy={y} rx={eyeRx} ry={eyeRy} fill={WHITE}/>}
+        <ellipse cx={x + dx} cy={y + 2} rx={pupilRx} ry={pupilRy} fill={iris}/>
+        <ellipse cx={x + dx + 1} cy={y + 2} rx={pupilRx * .52} ry={pupilRy * .72} fill="#17252C"/>
+        <circle cx={x + dx - pupilRx * .42} cy={y - pupilRy * .48} r={Math.max(1.8, eyeRx * .19)} fill={WHITE}/>
+        {shape === 'sleepy' && <path d={upperLid} fill="none" stroke={lidColor} strokeWidth={Math.max(3, eyeRy * .58)} strokeLinecap="round"/>}
+        {shape === 'slit' && <path d={upperLid} fill="none" stroke={lidColor} strokeWidth={Math.max(2, eyeRy * .18)} strokeLinecap="round" opacity=".8"/>}
+      </g>
     </g>
   );
 }
@@ -156,6 +158,9 @@ function Lia({ pose }: { pose:TeacherPose }) {
     <path d="M105 128Q120 140 135 128" fill="none" stroke="#75433E" strokeWidth="4" strokeLinecap="round"/>
     <path d="M155 90Q171 92 168 110" fill="none" stroke="#F1C54B" strokeWidth="5" strokeLinecap="round"/>
     <rect x="153" y="103" width="12" height="18" rx="5" fill="#F1C54B"/>
+    <path d="M161 116Q169 121 161 130L149 133" fill="none" stroke="#F1C54B" strokeWidth="3" strokeLinecap="round"/>
+    <circle cx="148" cy="133" r="3.2" fill="#F1C54B"/>
+    <g fill="#875C4D" opacity=".6"><circle cx="91" cy="121" r="1.6"/><circle cx="97" cy="124" r="1.4"/><circle cx="146" cy="122" r="1.5"/></g>
     <rect x="87" y="190" width="18" height="22" rx="3" fill="#204D5A"/>
     <path d="M92 196h8M92 202h8" stroke="#F1C54B" strokeWidth="2"/>
   </g>;
@@ -163,8 +168,10 @@ function Lia({ pose }: { pose:TeacherPose }) {
 
 function Beaver({ pose }: { pose:TeacherPose }) {
   return <g>
-    <ellipse cx="50" cy="207" rx="24" ry="51" transform="rotate(20 50 207)" fill="#8F563B"/>
-    <path d="M37 177Q49 163 67 171L75 227Q59 244 42 231Z" fill="#B07B51"/>
+    <g className="p-character__tail">
+      <ellipse cx="50" cy="207" rx="24" ry="51" transform="rotate(20 50 207)" fill="#8F563B"/>
+      <path d="M37 177Q49 163 67 171L75 227Q59 244 42 231Z" fill="#B07B51"/>
+    </g>
     <path d="M89 167Q120 145 151 167L161 235Q120 250 79 235Z" fill="#3676C9"/>
     <path d="M94 174L120 194L146 174L150 225L120 237L90 225Z" fill="#22558F"/>
     <path d="M104 181L120 198L136 181" fill="none" stroke="#F4C653" strokeWidth="5" strokeLinecap="round"/>
@@ -199,8 +206,10 @@ function Axolotl({ pose }: { pose:TeacherPose }) {
     <ellipse cx="101" cy="255" rx="13" ry="7" fill="#D8788C"/><ellipse cx="139" cy="255" rx="13" ry="7" fill="#D8788C"/>
     {pose !== "shrug" && <path d="M92 188Q72 195 68 211M148 188Q168 195 172 211" fill="none" stroke="#E78FA1" strokeWidth="12" strokeLinecap="round"/>}
     <ellipse cx="120" cy="104" rx="52" ry="54" fill="#F5B4C1"/>
-    <path d="M76 87Q53 65 63 37Q83 44 92 69Q96 37 111 24Q123 44 119 68Q135 38 153 30Q160 55 140 83Z" fill="#E88198"/>
-    <path d="M164 87Q187 65 177 37Q157 44 148 69Q144 37 129 24Q117 44 121 68Q105 38 87 30Q80 55 100 83Z" fill="#E88198"/>
+    <g className="p-character__gills">
+      <path d="M76 87Q53 65 63 37Q83 44 92 69Q96 37 111 24Q123 44 119 68Q135 38 153 30Q160 55 140 83Z" fill="#E88198"/>
+      <path d="M164 87Q187 65 177 37Q157 44 148 69Q144 37 129 24Q117 44 121 68Q105 38 87 30Q80 55 100 83Z" fill="#E88198"/>
+    </g>
     <path d="M87 111Q120 127 153 111" fill="none" stroke="#E9A0AE" strokeWidth="6" strokeLinecap="round"/>
     <path d="M85 82Q98 72 111 82M129 82Q142 72 155 82" fill="none" stroke="#DE8FA0" strokeWidth="3.5" strokeLinecap="round"/>
     <Eye x={99} y={100} rx={13} ry={16} iris="#3F8191" shape="wide" pupilScale={.92} tilt={-2}/>
@@ -215,7 +224,7 @@ function Axolotl({ pose }: { pose:TeacherPose }) {
 
 function Cat({ pose }: { pose:TeacherPose }) {
   return <g>
-    <path d="M155 205Q197 211 186 241Q178 261 154 249Q142 242 158 230" fill="none" stroke="#25334B" strokeWidth="15" strokeLinecap="round"/>
+    <path className="p-character__tail" d="M155 205Q197 211 186 241Q178 261 154 249Q142 242 158 230" fill="none" stroke="#25334B" strokeWidth="15" strokeLinecap="round"/>
     <path d="M95 166Q120 148 145 166L152 234Q120 248 88 234Z" fill="#26334F"/>
     <path d="M100 177L120 193L140 177L144 229L120 238L96 229Z" fill="#E7A82C"/>
     <path d="M91 185L109 198L100 216L87 204ZM149 185L131 198L140 216L153 204Z" fill="#F4E9D4"/>
@@ -326,7 +335,9 @@ function Beatriz({ pose }: { pose:TeacherPose }) {
     <path d="M115 99h11" stroke="#65506D" strokeWidth="2.5"/>
     <path d="M116 116l4 4l4-4" fill="none" stroke="#B08069" strokeWidth="3" strokeLinecap="round"/>
     <path d="M108 132Q120 128 132 132" fill="none" stroke="#87544E" strokeWidth="3.5" strokeLinecap="round"/>
-    <path d="M146 190l15 18M94 190l-15 18" stroke="#F2D9C5" strokeWidth="2.5" strokeLinecap="round"/>
+    <circle cx="77" cy="117" r="3.2" fill="#C68B43"/>
+    <circle cx="163" cy="117" r="3.2" fill="#C68B43"/>
+    <path d="M146 190l15 15M94 190l-15 15" stroke="#F2D9C5" strokeWidth="2.5" strokeLinecap="round"/>
     <path d="M158 208l-7 13" stroke="#D8B85B" strokeWidth="4" strokeLinecap="round"/>
   </g>;
 }
@@ -337,8 +348,10 @@ function Parrot({ pose }: { pose:TeacherPose }) {
     <path d="M103 224L99 248M137 224L141 248" stroke="#8B5E37" strokeWidth="7" strokeLinecap="round"/>
     <path d="M99 247q-13 7 -18 1M100 248q0 11 7 12M141 248q13 7 18 1M140 248q0 11 -7 12" fill="none" stroke="#8B5E37" strokeWidth="4" strokeLinecap="round"/>
     <path d="M93 151Q120 131 147 151Q162 186 145 229Q120 246 95 229Q78 186 93 151Z" fill="#E65C47"/>
-    <path d="M92 178Q65 191 71 224Q88 217 105 192" fill="#2C9D7C"/>
-    <path d={pose === "one-hand-on-hip" ? "M148 178Q174 168 183 185Q187 201 165 209Q151 204 135 192Z" : "M148 178Q175 191 169 224Q152 217 135 192"} fill="#2C9D7C"/>
+    <g className="p-character__wings">
+      <path d="M92 178Q65 191 71 224Q88 217 105 192" fill="#2C9D7C"/>
+      <path d={pose === "one-hand-on-hip" ? "M148 178Q174 168 183 185Q187 201 165 209Q151 204 135 192Z" : "M148 178Q175 191 169 224Q152 217 135 192"} fill="#2C9D7C"/>
+    </g>
     <path d="M76 205L89 193L98 213M164 205L151 193L142 213" fill="none" stroke="#F3C64F" strokeWidth="5" strokeLinecap="round"/>
     <path d="M111 223L120 251L129 223" fill="#EFBF45"/>
     <path d="M105 160Q120 177 135 160L132 185Q120 194 108 185Z" fill="#2B9D7C"/>
@@ -369,6 +382,13 @@ function Helena({ pose }: { pose:TeacherPose }) {
     <GestureArms pose={pose} sleeve="#247F90" hand="#D29B79"/>
     <path d="M67 87Q63 39 119 31Q176 38 173 91L168 183Q164 197 150 190L151 92Q139 61 120 61Q96 61 88 93L90 190Q77 197 67 183Z" fill="#241F28"/>
     <path d="M73 80Q85 55 98 52M91 67Q101 50 109 48M148 50Q163 62 168 81" fill="none" stroke="#44313A" strokeWidth="7" strokeLinecap="round"/>
+    <g fill="none" stroke="#241F28" strokeWidth="6" strokeLinecap="round">
+      <path d="M76 75Q68 96 76 119Q71 143 79 169"/>
+      <path d="M88 63Q81 89 89 113Q83 139 91 161"/>
+      <path d="M151 61Q160 88 151 113Q157 139 149 164"/>
+      <path d="M164 77Q172 100 163 122Q170 146 161 170"/>
+    </g>
+    <g fill="#D6B15A"><circle cx="79" cy="170" r="4"/><circle cx="91" cy="162" r="3.2"/><circle cx="149" cy="165" r="3.2"/><circle cx="161" cy="171" r="4"/></g>
     <path d="M80 86Q80 41 120 41Q161 41 160 86Q159 136 120 148Q81 136 80 86Z" fill="#D6A17C"/>
     <Eye x={100} y={92} rx={10} ry={14} iris="#382D2E" shape="round" pupilScale={1.06} tilt={-1}/>
     <Eye x={140} y={92} rx={10} ry={14} iris="#382D2E" shape="round" pupilScale={1.06} tilt={1}/>
@@ -408,6 +428,8 @@ function Augusto({ pose }: { pose:TeacherPose }) {
     <path d="M103 131Q120 141 137 131Q132 149 120 149Q108 149 103 131Z" fill="#6A4441"/>
     <path d="M110 132Q120 136 130 132" stroke="#F2E4D3" strokeWidth="2.5" fill="none"/>
     <path d="M111 121Q120 126 129 121" fill="none" stroke="#5B4036" strokeWidth="4" strokeLinecap="round"/>
+    <path d="M89 117Q84 121 83 128M151 117Q156 121 157 128" fill="none" stroke="#875D50" strokeWidth="2" strokeLinecap="round" opacity=".65"/>
+    <path d="M102 146Q120 153 138 146" fill="none" stroke="#875D50" strokeWidth="2" strokeLinecap="round" opacity=".45"/>
   </g>;
 }
 
@@ -424,9 +446,11 @@ function Chameleon({ pose }: { pose:TeacherPose }) {
     <path d="M85 247l-11 7M91 248v9M99 246l7 8M139 247l-7 8M147 248v9M155 247l11 7" stroke="#D8E6A1" strokeWidth="3" strokeLinecap="round"/>
     <path d="M154 176Q177 145 198 151Q216 158 224 176L210 194Q188 200 165 190Z" fill="#84C65E"/>
     <path d="M184 167Q208 166 223 179" fill="none" stroke="#A7D978" strokeWidth="5" strokeLinecap="round"/>
-    <path d="M154 158Q160 124 158 105M194 152Q210 120 211 99" fill="none" stroke="#4C9855" strokeWidth="8" strokeLinecap="round"/>
-    <Eye x={158} y={93} rx={15} ry={17} iris="#365E50" shape="wide" pupilScale={.86} tilt={-4}/>
-    <Eye x={212} y={87} rx={14} ry={16} iris="#365E50" shape="wide" pupilScale={.86} tilt={4}/>
+    <g className="p-character__eye-stalks">
+      <path d="M154 158Q160 124 158 105M194 152Q210 120 211 99" fill="none" stroke="#4C9855" strokeWidth="8" strokeLinecap="round"/>
+      <Eye x={158} y={93} rx={15} ry={17} iris="#365E50" shape="wide" pupilScale={.86} tilt={-4}/>
+      <Eye x={212} y={87} rx={14} ry={16} iris="#365E50" shape="wide" pupilScale={.86} tilt={4}/>
+    </g>
     <path d="M202 193Q214 199 220 189" fill="none" stroke="#426B45" strokeWidth="3.5" strokeLinecap="round"/>
     <path d="M157 199Q172 210 187 199" fill="none" stroke="#B5E27B" strokeWidth="4" strokeLinecap="round"/>
     {pose === 'one-hand-up' || pose === 'greeting' ? <path d="M89 194Q66 181 63 161" fill="none" stroke="#6AAE55" strokeWidth="12" strokeLinecap="round"/> : null}

@@ -4,7 +4,7 @@ import { TeacherCharacter, TeacherScene, TEACHER_SIGNATURE_POSES } from '@/compo
 import { Illustration, type IllustrationName } from '@/components/Illustration';
 import { teacherForChapter, teachers } from '@/content';
 
-describe('elenco vetorial original do Pórtico — V17', () => {
+describe('elenco vetorial original do Pórtico — V18', () => {
   it('desenha um personagem completo e identificável para cada docente', () => {
     const { container } = render(
       <div>{teachers.map((teacher) => (
@@ -17,11 +17,12 @@ describe('elenco vetorial original do Pórtico — V17', () => {
     expect(new Set(figures.map((svg) => svg.innerHTML)).size).toBe(teachers.length);
     for (const figure of figures) {
       expect(figure.getAttribute('viewBox')).toBe('0 0 240 280');
-      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v17');
+      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v18');
       expect(figure.querySelectorAll('path, rect, circle, ellipse').length).toBeGreaterThan(14);
       expect(figure.getAttribute('data-character-pose')).toBeTruthy();
       expect(figure.getAttribute('data-character-motion')).toBeTruthy();
       expect(figure.querySelector('.p-character__art')?.getAttribute('class')).toContain('p-character__art--');
+      expect(figure.querySelectorAll('.p-character__eye').length).toBeGreaterThan(0);
     }
   });
 
@@ -33,6 +34,17 @@ describe('elenco vetorial original do Pórtico — V17', () => {
     const motionNames = figures.map((figure) => figure.getAttribute('data-character-motion'));
     expect(new Set(motionNames).size).toBe(teachers.length);
     expect(container.querySelectorAll('.p-character__art')).toHaveLength(teachers.length);
+  });
+
+  it('desenha piscadas e movimentos localizados nas espécies que os exigem', () => {
+    const { container } = render(<div>{teachers.map((teacher) => (
+      <TeacherCharacter key={teacher.id} teacher={teacher} size={180}/>
+    ))}</div>);
+    expect(container.querySelectorAll('.p-character__eye').length).toBeGreaterThanOrEqual(24);
+    expect(container.querySelector('.p-character__tail')).toBeInTheDocument();
+    expect(container.querySelector('.p-character__gills')).toBeInTheDocument();
+    expect(container.querySelector('.p-character__wings')).toBeInTheDocument();
+    expect(container.querySelector('.p-character__eye-stalks')).toBeInTheDocument();
   });
 
   it('mantém treze silhuetas, roupas, cabeças e expressões distintas', () => {
@@ -94,7 +106,7 @@ describe('elenco vetorial original do Pórtico — V17', () => {
     const { container } = render(<div>{teachers.map((teacher) => (
       <TeacherCharacter key={teacher.id} teacher={teacher} portrait size={48}/>
     ))}</div>);
-    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v17"]')).toHaveLength(teachers.length);
+    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v18"]')).toHaveLength(teachers.length);
   });
 
   it('apresenta o professor em uma cena de explicação contextualizada', () => {
