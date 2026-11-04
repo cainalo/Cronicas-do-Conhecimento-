@@ -28,7 +28,7 @@ describe('personagens-professores vetoriais', () => {
       expect(figure.getAttribute('viewBox')).toBe('0 0 240 270');
       expect(figure.querySelectorAll('path, rect, circle, ellipse').length).toBeGreaterThan(14);
       expect(figure.querySelectorAll('[stroke-width]').length).toBeLessThan(22);
-      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v10');
+      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v11');
     }
     const bodySilhouettes = figures.map((figure) => figure.getAttribute('data-character-body'));
     expect(new Set(bodySilhouettes).size).toBe(teachers.length);
@@ -54,7 +54,8 @@ describe('personagens-professores vetoriais', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={140}/>)}</div>);
     const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
     expect(figures.filter(f => f.getAttribute('data-character-species') !== 'human')).toHaveLength(9);
-    expect(figures.every(f => f.getAttribute('data-character-style') === 'portico-friends-v10')).toBe(true);
+    expect(figures.filter(f => f.getAttribute('data-character-anatomy') === 'species-specific')).toHaveLength(9);
+    expect(figures.every(f => f.getAttribute('data-character-style') === 'portico-friends-v11')).toBe(true);
   });
 
   it('mistura humanos e criaturas originais ligadas às disciplinas', () => {
@@ -65,6 +66,7 @@ describe('personagens-professores vetoriais', () => {
     expect(species).toHaveLength(teachers.length);
     expect(new Set(species).size).toBeGreaterThanOrEqual(9);
     expect(species.filter(value => value !== 'human')).toHaveLength(9);
+    expect(figures.filter(f => f.getAttribute('data-character-anatomy') === 'species-specific')).toHaveLength(9);
     expect(new Set(outfits).size).toBe(teachers.length);
   });
 
@@ -78,7 +80,7 @@ describe('personagens-professores vetoriais', () => {
 
   it('usa a mesma linguagem vetorial nas versões de avatar e corpo inteiro', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} portrait size={48}/>)}</div>);
-    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v10"]')).toHaveLength(teachers.length);
+    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v11"]')).toHaveLength(teachers.length);
   });
 
   it('atribui um professor coerente às principais disciplinas', () => {

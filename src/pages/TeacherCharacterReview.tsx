@@ -8,10 +8,10 @@ export function TeacherCharacterReviewPage() {
   return (
     <main className="mx-auto max-w-5xl space-y-5 px-4 py-6">
       <header className="space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V10</p>
+        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V11</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted">
-          Um elenco misto de pessoas e criaturas ligadas ao universo do conhecimento. A V10 trabalha troncos, mãos e pernas próprios para cada espécie, reduzindo a sensação de animais com corpo humano. A galeria continua em revisão,
+          Um elenco misto de pessoas e criaturas ligadas ao universo do conhecimento. Na V11, os animais deixam de usar calças, mangas e troncos humanos: corpo, patas, cores e acessórios passam a seguir a espécie. A galeria continua em revisão,
           ainda não representa uma família aprovada.
         </p>
       </header>
@@ -50,6 +50,8 @@ export function TeacherCharacterReviewPage() {
           <li>Espécies variadas: capivara, castor, axolote, gato, sapo, tatu, tartaruga, papagaio e camaleão.</li>
           <li>Roupas com pequenos acabamentos funcionais: golas, costuras, bolsos, fechos, faixas e insígnias.</li>
           <li>O corpo acompanha a espécie: volume do tronco, mãos/patas, pernas e pés deixam de repetir uma anatomia humana.</li>
+          <li>Animais usam acessórios e peças próprias, sem calças ou mangas humanas genéricas.</li>
+          <li>Cor da cabeça, tronco, patas e cauda pertence à mesma paleta de espécie.</li>
           <li>As roupas têm acabamentos integrados à forma corporal e não escondem a silhueta.</li>
         </ul>
       </section>

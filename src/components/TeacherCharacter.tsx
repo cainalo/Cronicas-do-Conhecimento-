@@ -57,19 +57,19 @@ type Look = {
  * A linguagem é original e não reproduz personagens, desenhos ou ativos do Duolingo.
  */
 const LOOKS: Record<string, Look> = {
-  'prof.clara': { species:'capybara', outfit:'scarf', skin:'#E9B994', hair:'#34201C', top:'#F05A4F', bottom:'#304D76', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'ponytail', face:'wide', body:'pear', lower:'clara-skirt', eyes:'bright', mouth:'big-grin', headScaleX:1.08, headScaleY:1.02, torsoScaleX:1.05, torsoScaleY:1.00, accessory:'earrings', nose:'button', brows:'arched', cheeks:'freckles', eyeSpacing:20, eyeOffsetY:-1, eyeTilt:-2, eyeAsymmetry:1.04, pupilShift:0, headTilt:-3, torsoTilt:2 },
+  'prof.clara': { species:'capybara', outfit:'scarf', skin:'#E9B994', hair:'#34201C', top:'#F05A4F', bottom:'#304D76', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'ponytail', face:'wide', body:'pear', lower:'clara-skirt', eyes:'bright', mouth:'big-grin', headScaleX:0.98, headScaleY:0.94, torsoScaleX:1.05, torsoScaleY:1.00, accessory:'earrings', nose:'button', brows:'arched', cheeks:'freckles', eyeSpacing:20, eyeOffsetY:-1, eyeTilt:-2, eyeAsymmetry:1.04, pupilShift:0, headTilt:-3, torsoTilt:2 },
   'prof.lia': { species:'human', outfit:'tech-jacket', skin:'#C98E6A', hair:'#211B1B', top:'#009E9A', bottom:'#174C70', shoe:'#FFD13F', accent:'#FFD13F', hairStyle:'bun', face:'round', body:'tall', lower:'lia-slim', eyes:'focused', mouth:'neutral', headScaleX:0.95, headScaleY:1.05, torsoScaleX:0.86, torsoScaleY:1.12, accessory:'headset', nose:'none', brows:'straight', cheeks:'none', eyeSpacing:18, eyeOffsetY:1, eyeTilt:0, eyeAsymmetry:0.94, pupilShift:1, headTilt:2, torsoTilt:-2 },
-  'prof.davi': { species:'beaver', outfit:'utility-vest', skin:'#8D5A3F', hair:'#211B1B', top:'#3678D8', bottom:'#24445A', shoe:'#F4B52B', accent:'#F4B52B', hairStyle:'short', face:'square', body:'broad', lower:'davi-wide', eyes:'soft', mouth:'gentle-smile', headScaleX:1.00, headScaleY:1.08, torsoScaleX:1.18, torsoScaleY:0.98, facialHair:'mustache', nose:'broad', brows:'heavy', cheeks:'none', eyeSpacing:22, eyeOffsetY:0, eyeTilt:1, eyeAsymmetry:1.02, pupilShift:-1, headTilt:-2, torsoTilt:-1 },
-  'prof.iara': { species:'axolotl', outfit:'field-cape', skin:'#A86F4C', hair:'#2A1A12', top:'#8B5BC7', bottom:'#425C45', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'afro', face:'pear', body:'cape', lower:'iara-cape', eyes:'round', mouth:'open', headScaleX:1.16, headScaleY:1.02, torsoScaleX:1.20, torsoScaleY:1.00, accessory:'earrings', nose:'button', brows:'raised', cheeks:'dimples', eyeSpacing:24, eyeOffsetY:-2, eyeTilt:-1, eyeAsymmetry:1.08, pupilShift:0, headTilt:1, torsoTilt:2 },
-  'prof.nina': { species:'cat', outfit:'lab-coat', skin:'#E4B99B', hair:'#30364B', top:'#E9A62B', bottom:'#354C78', shoe:'#7A55B6', accent:'#7A55B6', hairStyle:'bob', face:'square', body:'box', lower:'nina-straight', eyes:'sleepy', mouth:'smirk', headScaleX:0.98, headScaleY:0.98, torsoScaleX:1.00, torsoScaleY:1.04, accessory:'round-glasses', nose:'dot', brows:'sleepy', cheeks:'none', eyeSpacing:17, eyeOffsetY:2, eyeTilt:0, eyeAsymmetry:0.92, pupilShift:2, headTilt:0, torsoTilt:2 },
-  'prof.ravi': { species:'frog', outfit:'hoodie', skin:'#A96F4F', hair:'#241B18', top:'#2E9A65', bottom:'#25475A', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'fade', face:'long', body:'round', lower:'ravi-jogger', eyes:'wide', mouth:'big-grin', headScaleX:0.92, headScaleY:1.12, torsoScaleX:1.06, torsoScaleY:1.08, facialHair:'beard', nose:'broad', brows:'angled', cheeks:'spots', eyeSpacing:25, eyeOffsetY:-1, eyeTilt:2, eyeAsymmetry:1.07, pupilShift:0, headTilt:4, torsoTilt:-1 },
-  'prof.mateus': { species:'armadillo', outfit:'knit-sweater', skin:'#D4A17B', hair:'#513629', top:'#E17A36', bottom:'#43516A', shoe:'#F7C74B', accent:'#F7C74B', hairStyle:'sidepart', face:'round', body:'wide', lower:'mateus-round', eyes:'small', mouth:'tight-smile', headScaleX:0.96, headScaleY:0.92, torsoScaleX:1.22, torsoScaleY:0.92, accessory:'glasses', nose:'button', brows:'soft', cheeks:'dimples', eyeSpacing:16, eyeOffsetY:1, eyeTilt:-1, eyeAsymmetry:0.96, pupilShift:-1, headTilt:-2, torsoTilt:2 },
-  'prof.marina': { species:'turtle', outfit:'cardigan', skin:'#B97855', hair:'#2C1D1B', top:'#339A75', bottom:'#344C45', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'braid', face:'oval', body:'dress', lower:'marina-a-line', eyes:'soft', mouth:'gentle-smile', headScaleX:0.92, headScaleY:1.10, torsoScaleX:0.90, torsoScaleY:1.14, accessory:'earrings', nose:'dot', brows:'arched', cheeks:'freckles', eyeSpacing:21, eyeOffsetY:0, eyeTilt:-2, eyeAsymmetry:1.03, pupilShift:1, headTilt:-3, torsoTilt:-2 },
+  'prof.davi': { species:'beaver', outfit:'utility-vest', skin:'#8D5A3F', hair:'#211B1B', top:'#3678D8', bottom:'#24445A', shoe:'#F4B52B', accent:'#F4B52B', hairStyle:'short', face:'square', body:'broad', lower:'davi-wide', eyes:'soft', mouth:'gentle-smile', headScaleX:0.96, headScaleY:0.98, torsoScaleX:1.18, torsoScaleY:0.98, facialHair:'mustache', nose:'broad', brows:'heavy', cheeks:'none', eyeSpacing:22, eyeOffsetY:0, eyeTilt:1, eyeAsymmetry:1.02, pupilShift:-1, headTilt:-2, torsoTilt:-1 },
+  'prof.iara': { species:'axolotl', outfit:'field-cape', skin:'#A86F4C', hair:'#2A1A12', top:'#8B5BC7', bottom:'#425C45', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'afro', face:'pear', body:'cape', lower:'iara-cape', eyes:'round', mouth:'open', headScaleX:1.02, headScaleY:0.96, torsoScaleX:1.20, torsoScaleY:1.00, accessory:'earrings', nose:'button', brows:'raised', cheeks:'dimples', eyeSpacing:24, eyeOffsetY:-2, eyeTilt:-1, eyeAsymmetry:1.08, pupilShift:0, headTilt:1, torsoTilt:2 },
+  'prof.nina': { species:'cat', outfit:'lab-coat', skin:'#E4B99B', hair:'#30364B', top:'#E9A62B', bottom:'#354C78', shoe:'#7A55B6', accent:'#7A55B6', hairStyle:'bob', face:'square', body:'box', lower:'nina-straight', eyes:'sleepy', mouth:'smirk', headScaleX:0.98, headScaleY:0.95, torsoScaleX:1.00, torsoScaleY:1.04, accessory:'round-glasses', nose:'dot', brows:'sleepy', cheeks:'none', eyeSpacing:17, eyeOffsetY:2, eyeTilt:0, eyeAsymmetry:0.92, pupilShift:2, headTilt:0, torsoTilt:2 },
+  'prof.ravi': { species:'frog', outfit:'hoodie', skin:'#A96F4F', hair:'#241B18', top:'#2E9A65', bottom:'#25475A', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'fade', face:'long', body:'round', lower:'ravi-jogger', eyes:'wide', mouth:'big-grin', headScaleX:0.94, headScaleY:0.98, torsoScaleX:1.06, torsoScaleY:1.08, facialHair:'beard', nose:'broad', brows:'angled', cheeks:'spots', eyeSpacing:25, eyeOffsetY:-1, eyeTilt:2, eyeAsymmetry:1.07, pupilShift:0, headTilt:4, torsoTilt:-1 },
+  'prof.mateus': { species:'armadillo', outfit:'knit-sweater', skin:'#D4A17B', hair:'#513629', top:'#E17A36', bottom:'#43516A', shoe:'#F7C74B', accent:'#F7C74B', hairStyle:'sidepart', face:'round', body:'wide', lower:'mateus-round', eyes:'small', mouth:'tight-smile', headScaleX:0.94, headScaleY:0.92, torsoScaleX:1.22, torsoScaleY:0.92, accessory:'glasses', nose:'button', brows:'soft', cheeks:'dimples', eyeSpacing:16, eyeOffsetY:1, eyeTilt:-1, eyeAsymmetry:0.96, pupilShift:-1, headTilt:-2, torsoTilt:2 },
+  'prof.marina': { species:'turtle', outfit:'cardigan', skin:'#B97855', hair:'#2C1D1B', top:'#339A75', bottom:'#344C45', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'braid', face:'oval', body:'dress', lower:'marina-a-line', eyes:'soft', mouth:'gentle-smile', headScaleX:0.94, headScaleY:0.98, torsoScaleX:0.90, torsoScaleY:1.14, accessory:'earrings', nose:'dot', brows:'arched', cheeks:'freckles', eyeSpacing:21, eyeOffsetY:0, eyeTilt:-2, eyeAsymmetry:1.03, pupilShift:1, headTilt:-3, torsoTilt:-2 },
   'prof.beatriz': { species:'human', outfit:'formal-coat', skin:'#E8C2A4', hair:'#493126', top:'#8658C2', bottom:'#45436A', shoe:'#F8C34B', accent:'#F8C34B', hairStyle:'pixie', face:'long', body:'longcoat', lower:'beatriz-coat', eyes:'narrow', mouth:'frown', headScaleX:0.88, headScaleY:1.14, torsoScaleX:0.86, torsoScaleY:1.16, accessory:'glasses', nose:'bridge', brows:'straight', cheeks:'none', eyeSpacing:19, eyeOffsetY:1, eyeTilt:1, eyeAsymmetry:0.91, pupilShift:-2, headTilt:-1, torsoTilt:0 },
-  'prof.sofia': { species:'parrot', outfit:'language-scarf', skin:'#F0C6A5', hair:'#A64F2D', top:'#EE684F', bottom:'#315778', shoe:'#6FAE69', accent:'#6FAE69', hairStyle:'waves', face:'round', body:'flared', lower:'sofia-bell', eyes:'surprised', mouth:'open', headScaleX:1.03, headScaleY:0.96, torsoScaleX:1.10, torsoScaleY:1.00, accessory:'headband', nose:'button', brows:'raised', cheeks:'flush', eyeSpacing:23, eyeOffsetY:-1, eyeTilt:-2, eyeAsymmetry:1.05, pupilShift:1, headTilt:3, torsoTilt:-3 },
+  'prof.sofia': { species:'parrot', outfit:'language-scarf', skin:'#F0C6A5', hair:'#A64F2D', top:'#EE684F', bottom:'#315778', shoe:'#6FAE69', accent:'#6FAE69', hairStyle:'waves', face:'round', body:'flared', lower:'sofia-bell', eyes:'surprised', mouth:'open', headScaleX:0.98, headScaleY:0.94, torsoScaleX:1.10, torsoScaleY:1.00, accessory:'headband', nose:'button', brows:'raised', cheeks:'flush', eyeSpacing:23, eyeOffsetY:-1, eyeTilt:-2, eyeAsymmetry:1.05, pupilShift:1, headTilt:3, torsoTilt:-3 },
   'prof.helena': { species:'human', outfit:'embroidered-tunic', skin:'#D5A17B', hair:'#211E28', top:'#318AA7', bottom:'#514765', shoe:'#F5C84A', accent:'#F5C84A', hairStyle:'locs', face:'wide', body:'tunic', lower:'helena-wide', eyes:'sleepy', mouth:'neutral', headScaleX:1.14, headScaleY:0.94, torsoScaleX:1.02, torsoScaleY:1.12, nose:'dot', brows:'sleepy', cheeks:'spots', eyeSpacing:26, eyeOffsetY:0, eyeTilt:0, eyeAsymmetry:0.97, pupilShift:-1, headTilt:-2, torsoTilt:1 },
   'prof.augusto': { species:'human', outfit:'blazer', skin:'#B77D5D', hair:'#D2C7B5', top:'#247D91', bottom:'#49434B', shoe:'#EFB64A', accent:'#EFB64A', hairStyle:'curls', face:'pear', body:'compact', lower:'augusto-shorts', eyes:'soft', mouth:'gentle-smile', headScaleX:0.92, headScaleY:0.94, torsoScaleX:0.96, torsoScaleY:0.90, accessory:'glasses', nose:'broad', brows:'soft', cheeks:'none', eyeSpacing:27, eyeOffsetY:1, eyeTilt:1, eyeAsymmetry:1.06, pupilShift:0, headTilt:2, torsoTilt:-1 },
-  'prof.caio': { species:'chameleon', outfit:'tech-hoodie', skin:'#D09A76', hair:'#27222B', top:'#D99A26', bottom:'#294E59', shoe:'#4B9E9C', accent:'#4B9E9C', hairStyle:'spiky', face:'square', body:'hood', lower:'caio-tapered', eyes:'curious', mouth:'smirk', headScaleX:1.02, headScaleY:1.00, torsoScaleX:1.00, torsoScaleY:0.98, accessory:'headset', nose:'none', brows:'angled', cheeks:'dimples', eyeSpacing:28, eyeOffsetY:0, eyeTilt:-1, eyeAsymmetry:0.93, pupilShift:2, headTilt:3, torsoTilt:2 },
+  'prof.caio': { species:'chameleon', outfit:'tech-hoodie', skin:'#D09A76', hair:'#27222B', top:'#D99A26', bottom:'#294E59', shoe:'#4B9E9C', accent:'#4B9E9C', hairStyle:'spiky', face:'square', body:'hood', lower:'caio-tapered', eyes:'curious', mouth:'smirk', headScaleX:0.98, headScaleY:0.96, torsoScaleX:1.00, torsoScaleY:0.98, accessory:'headset', nose:'none', brows:'angled', cheeks:'dimples', eyeSpacing:28, eyeOffsetY:0, eyeTilt:-1, eyeAsymmetry:0.93, pupilShift:2, headTilt:3, torsoTilt:2 },
 };
 
 export const TEACHER_SIGNATURE_POSES: Record<string, TeacherPose> = {
@@ -428,6 +428,20 @@ function AnimalFeet({ look }: { look:Look }) {
 
 function OutfitDetails({ look }: { look:Look }) {
   const a=look.accent;
+  if (look.species !== 'human') {
+    const top=look.top, bottom=look.bottom;
+    switch(look.species) {
+      case 'capybara': return <g><path d="M91 146Q120 160 149 146L144 158Q120 171 96 158Z" fill={top}/><path d="M136 156L149 160L144 187L132 181Z" fill={a}/><path d="M101 151Q120 163 139 151" fill="none" stroke="#FFF0D1" strokeWidth="2.5"/><circle cx="120" cy="164" r="3.2" fill="#FFF0D1"/></g>;
+      case 'beaver': return <g><path d="M83 153Q120 169 157 153L153 190Q120 204 87 190Z" fill={top}/><path d="M91 169H108V185H91ZM132 169H149V185H132Z" fill="none" stroke={a} strokeWidth="3"/><path d="M120 163V194" stroke="#F4D58A" strokeWidth="2.5"/></g>;
+      case 'axolotl': return <g><path d="M88 146Q120 164 152 146L163 187Q120 205 77 187Z" fill={top}/><path d="M88 153Q120 171 152 153" fill="none" stroke={a} strokeWidth="5" strokeLinecap="round"/><path d="M120 169L131 180L120 191L109 180Z" fill={a}/><circle cx="120" cy="180" r="3" fill="#FFF0D1"/></g>;
+      case 'cat': return <g><path d="M96 143L111 154L120 167L129 154L144 143L151 193L137 199L120 181L103 199L89 193Z" fill={top}/><path d="M111 154L120 167L129 154" fill="none" stroke="#FFF0D1" strokeWidth="3"/><rect x="129" y="176" width="14" height="13" rx="3" fill="none" stroke={a} strokeWidth="2.5"/></g>;
+      case 'frog': return <g><path d="M87 151Q120 166 153 151L148 189Q120 203 92 189Z" fill={top}/><path d="M106 153Q120 166 134 153" fill="none" stroke={a} strokeWidth="4" strokeLinecap="round"/><path d="M109 178Q120 171 131 178L130 188H110Z" fill="none" stroke="#D6EDB6" strokeWidth="2.5"/></g>;
+      case 'armadillo': return <g><path d="M85 154Q120 166 155 154L150 190Q120 203 90 190Z" fill={top}/><path d="M91 165Q120 177 149 165M89 177Q120 190 151 177" fill="none" stroke={a} strokeWidth="3" strokeLinecap="round"/><path d="M132 168L151 177L143 193L126 183Z" fill={bottom}/></g>;
+      case 'turtle': return <g><path d="M94 144Q120 160 146 144L154 187Q120 203 86 187Z" fill={top}/><path d="M96 151Q120 166 144 151M92 166Q120 181 148 166" fill="none" stroke={a} strokeWidth="3"/><circle cx="120" cy="176" r="7" fill={bottom}/><path d="M116 176h8M120 172v8" stroke="#FFF0D1" strokeWidth="1.8"/></g>;
+      case 'parrot': return <g><path d="M97 143Q120 157 143 143L149 185Q120 204 91 185Z" fill={top}/><path d="M101 151Q120 164 139 151" fill="none" stroke={a} strokeWidth="5"/><path d="M120 160L128 171L120 182L112 171Z" fill={bottom}/></g>;
+      case 'chameleon': return <g><path d="M91 149Q120 162 149 149L153 188Q120 203 87 188Z" fill={top}/><path d="M98 157Q120 171 142 157" fill="none" stroke={a} strokeWidth="4"/><rect x="129" y="169" width="17" height="14" rx="3" fill="none" stroke={bottom} strokeWidth="3"/><circle cx="137.5" cy="176" r="2.2" fill="#FFF0D1"/></g>;
+    }
+  }
   switch(look.outfit) {
     case 'scarf': return <g><path d="M91 132Q120 145 149 132L140 149Q120 159 100 149Z" fill={a}/><path d="M132 145L145 151L139 179L126 169Z" fill={a}/><path d="M96 137Q120 148 144 137" fill="none" stroke="#FFF1C8" strokeWidth="2.6"/><circle cx="120" cy="163" r="3" fill="#FFF1C8"/></g>;
     case 'tech-jacket': return <g><path d="M96 133L112 145L120 159L128 145L144 133" fill="none" stroke="#C7F0E9" strokeWidth="5" strokeLinecap="round"/><path d="M120 149V218" stroke="#B8E2DC" strokeWidth="2.5"/><rect x="132" y="169" width="16" height="18" rx="3" fill="none" stroke={a} strokeWidth="2.5"/><circle cx="120" cy="176" r="2.3" fill={a}/><circle cx="120" cy="193" r="2.3" fill={a}/></g>;
@@ -465,14 +479,40 @@ function Hand({ x, y, skin, gesture }: { x: number; y: number; skin: string; ges
 }
 
 
+function CreaturePalette({ look }: { look:Look }) {
+  const colors: Record<Exclude<Species,'human'>,string> = {
+    capybara:'#A87552', beaver:'#89553B', axolotl:'#F2A5B4',
+    cat:look.hair, frog:'#68A85D', armadillo:'#A88C72',
+    turtle:'#719B62', parrot:'#E66D47', chameleon:'#80B85C',
+  };
+  return colors[look.species as Exclude<Species,'human'>] ?? look.skin;
+}
 function CharacterBody({ look }: { look:Look }) {
   if (look.species === 'human') return <path d={BODY_PATH[look.body]} fill={look.top}/>;
+  const fur=CreaturePalette({look});
   const shapes: Record<Exclude<Species,'human'>,string> = {
-    capybara: 'M81 145Q120 121 159 145Q176 164 166 211Q120 238 74 211Q64 164 81 145Z', beaver: 'M79 137Q120 119 161 137Q178 157 168 212Q120 235 72 212Q62 157 79 137Z', axolotl: 'M91 132Q120 118 149 132Q162 151 155 217Q120 239 85 217Q78 151 91 132Z',
-    cat: 'M95 130Q120 116 145 130Q160 149 152 218Q120 234 88 218Q80 149 95 130Z', frog: 'M86 140Q120 119 154 140Q174 164 159 213Q120 242 81 213Q66 164 86 140Z', armadillo: 'M93 136Q120 122 147 136Q157 157 151 211Q120 231 89 211Q83 157 93 136Z',
-    turtle: 'M91 136Q120 121 149 136Q160 154 153 209Q120 232 87 209Q80 154 91 136Z', parrot: 'M98 127Q120 111 142 127Q159 147 155 211Q120 237 85 211Q81 147 98 127Z', chameleon: 'M88 139Q120 121 152 139Q167 162 155 218Q120 237 85 218Q74 162 88 139Z',
+    capybara:'M78 151Q91 133 120 133Q149 133 162 151Q176 174 165 211Q148 230 120 231Q92 230 75 211Q64 174 78 151Z',
+    beaver:'M76 145Q91 126 120 126Q149 126 164 145Q178 169 165 211Q145 232 120 232Q95 232 75 211Q62 169 76 145Z',
+    axolotl:'M91 139Q105 128 120 128Q135 128 149 139Q160 160 153 211Q139 232 120 235Q101 232 87 211Q80 160 91 139Z',
+    cat:'M93 137Q120 122 147 137Q163 156 153 207Q143 226 120 229Q97 226 87 207Q77 156 93 137Z',
+    frog:'M78 151Q93 127 120 127Q147 127 162 151Q178 177 160 214Q144 235 120 235Q96 235 80 214Q62 177 78 151Z',
+    armadillo:'M78 147Q95 126 120 126Q145 126 162 147Q174 174 160 211Q142 230 120 230Q98 230 80 211Q66 174 78 147Z',
+    turtle:'M91 140Q104 126 120 126Q136 126 149 140Q161 163 153 210Q139 231 120 232Q101 231 87 210Q79 163 91 140Z',
+    parrot:'M97 133Q120 120 143 133Q160 152 153 207Q139 230 120 233Q101 230 87 207Q80 152 97 133Z',
+    chameleon:'M85 144Q101 127 120 127Q139 127 155 144Q170 167 157 210Q140 231 120 232Q100 231 83 210Q70 167 85 144Z',
   };
-  return <path d={shapes[look.species]} fill={look.top}/>;
+  return <g>
+    <path d={shapes[look.species]} fill={fur}/>
+    {look.species==='capybara' && <path d="M91 178Q120 194 149 178Q145 219 120 220Q95 219 91 178Z" fill="#D9B18D" opacity=".75"/>}
+    {look.species==='beaver' && <path d="M92 177Q120 192 148 177L145 214Q120 226 95 214Z" fill="#C58C62" opacity=".8"/>}
+    {look.species==='axolotl' && <path d="M101 174Q120 183 139 174L135 218Q120 228 105 218Z" fill="#F8D0D0" opacity=".72"/>}
+    {look.species==='cat' && <path d="M101 165Q120 176 139 165L136 211Q120 221 104 211Z" fill="#F0E1D4" opacity=".9"/>}
+    {look.species==='frog' && <ellipse cx="120" cy="187" rx="31" ry="30" fill="#B9D98A" opacity=".82"/>}
+    {look.species==='armadillo' && <g fill="none" stroke="#D7B99A" strokeWidth="3.5"><path d="M82 163Q120 145 158 163M78 179Q120 160 162 179M82 195Q120 178 158 195"/></g>}
+    {look.species==='turtle' && <path d="M92 169Q120 184 148 169L143 215Q120 226 97 215Z" fill="#A7C77C" opacity=".75"/>}
+    {look.species==='parrot' && <path d="M120 151Q138 177 120 211Q102 177 120 151Z" fill="#F5B83E"/>}
+    {look.species==='chameleon' && <g fill="none" stroke="#B4D77A" strokeWidth="4"><path d="M92 163Q120 178 148 163M94 180Q120 194 146 180"/></g>}
+  </g>;
 }
 
 function CharacterLegs({ look }: { look:Look }) {
@@ -480,17 +520,36 @@ function CharacterLegs({ look }: { look:Look }) {
     <path d="M104 222Q103 230 102 237" fill="none" stroke={look.bottom} strokeWidth="13" strokeLinecap="round"/>
     <path d="M136 222Q137 230 138 237" fill="none" stroke={look.bottom} strokeWidth="13" strokeLinecap="round"/>
   </g>;
-  const widths: Record<Exclude<Species,'human'>,number> = { capybara:15, beaver:15, axolotl:11, cat:11, frog:17, armadillo:14, turtle:16, parrot:8, chameleon:11 };
-  const w=widths[look.species];
-  return <g>
-    <path d="M104 218Q102 230 100 239" fill="none" stroke={look.skin} strokeWidth={w} strokeLinecap="round"/>
-    <path d="M136 218Q138 230 140 239" fill="none" stroke={look.skin} strokeWidth={w} strokeLinecap="round"/>
+  const fur=CreaturePalette({look});
+  const paths: Record<Exclude<Species,'human'>,[string,string]> = {
+    capybara:['M94 215Q91 228 92 239','M146 215Q149 228 148 239'], beaver:['M94 215Q91 228 91 239','M146 215Q149 228 149 239'],
+    axolotl:['M104 215Q101 229 100 240','M136 215Q139 229 140 240'], cat:['M101 211Q99 226 96 239','M139 211Q141 226 144 239'],
+    frog:['M91 211Q78 225 80 239','M149 211Q162 225 160 239'], armadillo:['M98 211Q96 227 96 240','M142 211Q144 227 144 240'],
+    turtle:['M100 211Q96 226 95 240','M140 211Q144 226 145 240'], parrot:['M108 211Q106 227 105 240','M132 211Q134 227 135 240'],
+    chameleon:['M99 211Q91 226 91 239','M141 211Q149 226 149 239'],
+  };
+  const width: Record<Exclude<Species,'human'>,number> = {capybara:13,beaver:14,axolotl:9,cat:10,frog:15,armadillo:13,turtle:13,parrot:7,chameleon:10};
+  return <g fill="none" stroke={fur} strokeWidth={width[look.species as Exclude<Species,'human'>]} strokeLinecap="round">
+    <path d={paths[look.species as Exclude<Species,'human'>][0]}/><path d={paths[look.species as Exclude<Species,'human'>][1]}/>
   </g>;
 }
 
+function CreatureArms({ look, left, right, leftHand, rightHand, gesture }: {
+  look:Look; left:string; right:string; leftHand:[number,number]; rightHand:[number,number]; gesture:HandGesture;
+}) {
+  const fur=CreaturePalette({look});
+  const widths:Record<Exclude<Species,'human'>,number>={capybara:14,beaver:16,axolotl:10,cat:11,frog:17,armadillo:15,turtle:15,parrot:13,chameleon:12};
+  return <g>
+    <path d={left} fill="none" stroke={fur} strokeWidth={widths[look.species as Exclude<Species,'human'>]} strokeLinecap="round" strokeLinejoin="round"/>
+    <path d={right} fill="none" stroke={fur} strokeWidth={widths[look.species as Exclude<Species,'human'>]} strokeLinecap="round" strokeLinejoin="round"/>
+    {look.species==='parrot' && <g fill="none" stroke="#F5B83E" strokeWidth="3" strokeLinecap="round"><path d={left}/><path d={right}/></g>}
+    <CharacterHand look={look} x={leftHand[0]} y={leftHand[1]} gesture={gesture}/>
+    <CharacterHand look={look} x={rightHand[0]} y={rightHand[1]} gesture={gesture}/>
+  </g>;
+}
 function CharacterHand({ look, x, y, gesture }: { look:Look; x:number; y:number; gesture:HandGesture }) {
   if (look.species === 'human') return <Hand x={x} y={y} skin={look.skin} gesture={gesture}/>;
-  const c=look.skin;
+  const c=CreaturePalette({look});
   return <g transform={'translate('+x+' '+y+')'}>
     {look.species === 'frog'
       ? <g fill={c}><ellipse cx="0" cy="0" rx="10" ry="9"/><path d="M-5 -3Q-13 -18 -18 -17Q-25 -11 -12 -2ZM0 -6Q-4 -26 2 -25Q10 -23 7 -4ZM5 -3Q15 -18 20 -13Q23 -4 10 1Z"/><circle cx="-18" cy="-17" r="4.5" fill="#B6DC72"/><circle cx="2" cy="-25" r="4.5" fill="#B6DC72"/><circle cx="20" cy="-13" r="4.5" fill="#B6DC72"/></g>
@@ -539,7 +598,7 @@ export function TeacherCharacter({
     <svg viewBox={portrait ? '40 12 160 160' : '0 0 240 270'} width={style.width} height={style.height}
       className={'shrink-0 ' + (portrait ? 'rounded-full overflow-hidden ' : 'overflow-visible ') + className}
       style={style} role="img" aria-label={teacher.name + ', personagem ilustrado do Pórtico'}
-      data-character-style="portico-friends-v10" data-character-body-species={look.species} data-character-pose={characterPose} data-character-species={look.species} data-character-outfit={look.outfit} data-character-body={look.body} data-character-lower={look.lower} data-character-face={look.face} data-character-hair={look.hairStyle} data-character-eyes={look.eyes} data-character-mouth={look.mouth} data-character-nose={look.nose} data-character-brows={look.brows} data-character-spacing={look.eyeSpacing} focusable="false">
+      data-character-style="portico-friends-v11" data-character-anatomy={look.species === 'human' ? 'human' : 'species-specific'} data-character-body-species={look.species} data-character-pose={characterPose} data-character-species={look.species} data-character-outfit={look.outfit} data-character-body={look.body} data-character-lower={look.lower} data-character-face={look.face} data-character-hair={look.hairStyle} data-character-eyes={look.eyes} data-character-mouth={look.mouth} data-character-nose={look.nose} data-character-brows={look.brows} data-character-spacing={look.eyeSpacing} focusable="false">
       {portrait && <circle cx="120" cy="98" r="90" fill={'rgb(var(--' + teacher.tone + '))'}/>}
       {!portrait && <rect x="83" y="260" width="74" height="6" rx="3" fill="#243840" opacity=".14"/>}
 
@@ -547,17 +606,19 @@ export function TeacherCharacter({
       {/* Roupa com acabamento discreto, aplicado sobre a silhueta principal. */}
       <g transform={'translate(120 174) rotate(' + look.torsoTilt + ') scale(' + look.torsoScaleX + ' ' + look.torsoScaleY + ') translate(-120 -174)'}>
         <CharacterBody look={look}/>
-        <path d={LOWER_PATH[look.lower]} fill={look.bottom}/>
+        {look.species === 'human' && <path d={LOWER_PATH[look.lower]} fill={look.bottom}/>} 
         <OutfitDetails look={look}/>
         {look.species === 'armadillo' && <g fill="none" stroke="#E2C39F" strokeWidth="3.2"><path d="M83 150Q120 132 157 150M79 165Q120 146 161 165M82 180Q120 164 158 180"/></g>}
         {look.species === 'turtle' && <g fill="none" stroke="#E2C487" strokeWidth="2.8"><path d="M87 154Q120 169 153 154M91 178Q120 191 149 178M120 150V201"/></g>}
         {look.species === 'parrot' && <path d="M92 160Q105 177 120 181Q135 177 148 160" fill="none" stroke="#F5D78A" strokeWidth="4" strokeLinecap="round"/>}
 
         {/* Braços grossos integrados ao corpo, mas com gestos próprios. */}
-        <path d={a.left} fill="none" stroke={look.top} strokeWidth="19" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d={a.right} fill="none" stroke={look.top} strokeWidth="19" strokeLinecap="round" strokeLinejoin="round"/>
-        <CharacterHand look={look} x={a.lh[0]} y={a.lh[1]} gesture={gesture}/>
-        <CharacterHand look={look} x={a.rh[0]} y={a.rh[1]} gesture={gesture}/>
+        {look.species === 'human' ? <g>
+          <path d={a.left} fill="none" stroke={look.top} strokeWidth="19" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d={a.right} fill="none" stroke={look.top} strokeWidth="19" strokeLinecap="round" strokeLinejoin="round"/>
+          <CharacterHand look={look} x={a.lh[0]} y={a.lh[1]} gesture={gesture}/>
+          <CharacterHand look={look} x={a.rh[0]} y={a.rh[1]} gesture={gesture}/>
+        </g> : <CreatureArms look={look} left={a.left} right={a.right} leftHand={a.lh} rightHand={a.rh} gesture={gesture}/>} 
       </g>
 
       {/* Pernas e pés adaptados à espécie. */}
