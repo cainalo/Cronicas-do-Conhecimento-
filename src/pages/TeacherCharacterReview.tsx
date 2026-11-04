@@ -8,10 +8,10 @@ export function TeacherCharacterReviewPage() {
   return (
     <main className="mx-auto max-w-5xl space-y-5 px-4 py-6">
       <header className="space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V9</p>
+        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V10</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted">
-          Um elenco misto de pessoas e criaturas ligadas ao universo do conhecimento. A V9 introduz espécies próprias, silhuetas animais, roupas com pequenos acabamentos e gestos de assinatura. Esta galeria continua em revisão,
+          Um elenco misto de pessoas e criaturas ligadas ao universo do conhecimento. A V10 trabalha troncos, mãos e pernas próprios para cada espécie, reduzindo a sensação de animais com corpo humano. A galeria continua em revisão,
           ainda não representa uma família aprovada.
         </p>
       </header>
@@ -49,7 +49,8 @@ export function TeacherCharacterReviewPage() {
           <li>Uma silhueta inferior própria: calças retas, largas, joggers, saia, vestido, casaco ou shorts, sem repetir o mesmo triângulo.</li>
           <li>Espécies variadas: capivara, castor, axolote, gato, sapo, tatu, tartaruga, papagaio e camaleão.</li>
           <li>Roupas com pequenos acabamentos funcionais: golas, costuras, bolsos, fechos, faixas e insígnias.</li>
-          <li>Os detalhes reforçam a personalidade sem competir com a silhueta.</li>
+          <li>O corpo acompanha a espécie: volume do tronco, mãos/patas, pernas e pés deixam de repetir uma anatomia humana.</li>
+          <li>As roupas têm acabamentos integrados à forma corporal e não escondem a silhueta.</li>
         </ul>
       </section>
     </main>

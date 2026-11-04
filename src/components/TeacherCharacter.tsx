@@ -464,6 +464,47 @@ function Hand({ x, y, skin, gesture }: { x: number; y: number; skin: string; ges
   </g>;
 }
 
+
+function CharacterBody({ look }: { look:Look }) {
+  if (look.species === 'human') return <CharacterBody look={look}/>;
+  const shapes: Record<Exclude<Species,'human'>,string> = {
+    capybara: 'M81 145Q120 121 159 145Q176 164 166 211Q120 238 74 211Q64 164 81 145Z', beaver: 'M79 137Q120 119 161 137Q178 157 168 212Q120 235 72 212Q62 157 79 137Z', axolotl: 'M91 132Q120 118 149 132Q162 151 155 217Q120 239 85 217Q78 151 91 132Z',
+    cat: 'M95 130Q120 116 145 130Q160 149 152 218Q120 234 88 218Q80 149 95 130Z', frog: 'M86 140Q120 119 154 140Q174 164 159 213Q120 242 81 213Q66 164 86 140Z', armadillo: 'M93 136Q120 122 147 136Q157 157 151 211Q120 231 89 211Q83 157 93 136Z',
+    turtle: 'M91 136Q120 121 149 136Q160 154 153 209Q120 232 87 209Q80 154 91 136Z', parrot: 'M98 127Q120 111 142 127Q159 147 155 211Q120 237 85 211Q81 147 98 127Z', chameleon: 'M88 139Q120 121 152 139Q167 162 155 218Q120 237 85 218Q74 162 88 139Z',
+  };
+  return <path d={shapes[look.species]} fill={look.top}/>;
+}
+
+function CharacterLegs({ look }: { look:Look }) {
+  if (look.species === 'human') return <g>
+    <path d="M104 222Q103 230 102 237" fill="none" stroke={look.bottom} strokeWidth="13" strokeLinecap="round"/>
+    <path d="M136 222Q137 230 138 237" fill="none" stroke={look.bottom} strokeWidth="13" strokeLinecap="round"/>
+  </g>;
+  const widths: Record<Exclude<Species,'human'>,number> = { capybara:15, beaver:15, axolotl:11, cat:11, frog:17, armadillo:14, turtle:16, parrot:8, chameleon:11 };
+  const w=widths[look.species];
+  return <g>
+    <path d="M104 218Q102 230 100 239" fill="none" stroke={look.skin} strokeWidth={w} strokeLinecap="round"/>
+    <path d="M136 218Q138 230 140 239" fill="none" stroke={look.skin} strokeWidth={w} strokeLinecap="round"/>
+  </g>;
+}
+
+function CharacterHand({ look, x, y, gesture }: { look:Look; x:number; y:number; gesture:HandGesture }) {
+  if (look.species === 'human') return <Hand x={x} y={y} skin={look.skin} gesture={gesture}/>;
+  const c=look.skin;
+  return <g transform={'translate('+x+' '+y+')'}>
+    {look.species === 'frog'
+      ? <g fill={c}><ellipse cx="0" cy="0" rx="10" ry="9"/><path d="M-5 -3Q-13 -18 -18 -17Q-25 -11 -12 -2ZM0 -6Q-4 -26 2 -25Q10 -23 7 -4ZM5 -3Q15 -18 20 -13Q23 -4 10 1Z"/><circle cx="-18" cy="-17" r="4.5" fill="#B6DC72"/><circle cx="2" cy="-25" r="4.5" fill="#B6DC72"/><circle cx="20" cy="-13" r="4.5" fill="#B6DC72"/></g>
+      : look.species === 'parrot'
+        ? <g fill="none" stroke="#51483D" strokeWidth="4.5" strokeLinecap="round"><ellipse cx="0" cy="0" rx="9" ry="8" fill="#51483D" stroke="none"/><path d="M-4 -3Q-11 -16 -8 -22M1 -4Q0 -19 6 -22M5 -2Q10 -14 16 -13"/></g>
+        : look.species === 'chameleon'
+          ? <g fill={c}><ellipse cx="0" cy="0" rx="10" ry="8"/><path d="M-6 -2Q-17 -14 -20 -8M-2 -5Q-8 -21 -1 -21M4 -3Q12 -16 18 -11" fill="none" stroke={c} strokeWidth="5" strokeLinecap="round"/><circle cx="-20" cy="-8" r="3.5"/><circle cx="-1" cy="-21" r="3.5"/><circle cx="18" cy="-11" r="3.5"/></g>
+          : look.species === 'cat'
+            ? <g fill={c}><ellipse cx="0" cy="0" rx="10.5" ry="9"/><circle cx="-7" cy="-8" r="4.7"/><circle cx="0" cy="-11" r="4.7"/><circle cx="7" cy="-8" r="4.7"/><path d="M-5 4l-2 3M2 4v4M8 4l2 3" stroke="#F3E1D3" strokeWidth="1.8" strokeLinecap="round"/></g>
+            : <g fill={c}><ellipse cx="0" cy="0" rx="10.5" ry="9"/><path d="M-7 -2Q-12 -12 -8 -16M0 -5Q-2 -18 2 -20M7 -2Q13 -12 9 -16" fill="none" stroke={c} strokeWidth="4.2" strokeLinecap="round"/><path d="M-7 7l-2 3M0 8v3M7 7l2 3" stroke="#F1DCC8" strokeWidth="1.5" strokeLinecap="round"/></g>}
+    {gesture === 'point' && <path d="M2 -7Q4 -22 9 -25" fill="none" stroke={c} strokeWidth="4.5" strokeLinecap="round"/>}
+  </g>;
+}
+
 export function TeacherCharacter({
   teacher, pose, size = 160, className = '', portrait = false,
 }: {
@@ -498,7 +539,7 @@ export function TeacherCharacter({
     <svg viewBox={portrait ? '40 12 160 160' : '0 0 240 270'} width={style.width} height={style.height}
       className={'shrink-0 ' + (portrait ? 'rounded-full overflow-hidden ' : 'overflow-visible ') + className}
       style={style} role="img" aria-label={teacher.name + ', personagem ilustrado do Pórtico'}
-      data-character-style="portico-friends-v9" data-character-pose={characterPose} data-character-species={look.species} data-character-outfit={look.outfit} data-character-body={look.body} data-character-lower={look.lower} data-character-face={look.face} data-character-hair={look.hairStyle} data-character-eyes={look.eyes} data-character-mouth={look.mouth} data-character-nose={look.nose} data-character-brows={look.brows} data-character-spacing={look.eyeSpacing} focusable="false">
+      data-character-style="portico-friends-v10" data-character-body-species={look.species} data-character-pose={characterPose} data-character-species={look.species} data-character-outfit={look.outfit} data-character-body={look.body} data-character-lower={look.lower} data-character-face={look.face} data-character-hair={look.hairStyle} data-character-eyes={look.eyes} data-character-mouth={look.mouth} data-character-nose={look.nose} data-character-brows={look.brows} data-character-spacing={look.eyeSpacing} focusable="false">
       {portrait && <circle cx="120" cy="98" r="90" fill={'rgb(var(--' + teacher.tone + '))'}/>}
       {!portrait && <rect x="83" y="260" width="74" height="6" rx="3" fill="#243840" opacity=".14"/>}
 
@@ -515,14 +556,13 @@ export function TeacherCharacter({
         {/* Braços grossos integrados ao corpo, mas com gestos próprios. */}
         <path d={a.left} fill="none" stroke={look.top} strokeWidth="19" strokeLinecap="round" strokeLinejoin="round"/>
         <path d={a.right} fill="none" stroke={look.top} strokeWidth="19" strokeLinecap="round" strokeLinejoin="round"/>
-        <Hand x={a.lh[0]} y={a.lh[1]} skin={look.skin} gesture={gesture}/>
-        <Hand x={a.rh[0]} y={a.rh[1]} skin={look.skin} gesture={gesture}/>
+        <CharacterHand look={look} x={a.lh[0]} y={a.lh[1]} gesture={gesture}/>
+        <CharacterHand look={look} x={a.rh[0]} y={a.rh[1]} gesture={gesture}/>
       </g>
 
       {/* Pernas e pés adaptados à espécie. */}
       {!portrait && <g>
-        <path d="M104 222Q103 230 102 237" fill="none" stroke={look.species === 'human' ? look.bottom : look.skin} strokeWidth="13" strokeLinecap="round"/>
-        <path d="M136 222Q137 230 138 237" fill="none" stroke={look.species === 'human' ? look.bottom : look.skin} strokeWidth="13" strokeLinecap="round"/>
+        <CharacterLegs look={look}/>
         <AnimalFeet look={look}/>
       </g>}
       {/* A cabeça também varia em largura e altura; rosto e cabelo formam uma única unidade. */}
