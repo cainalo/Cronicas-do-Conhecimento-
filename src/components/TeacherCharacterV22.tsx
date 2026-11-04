@@ -350,36 +350,43 @@ function Eyes({ design }: { design:CharacterDesign }) {
       : 'M' + (x-rx) + ' ' + y + ' C' + (x-rx) + ' ' + (top+2) + ' ' + (x-rx*.35) + ' ' + top + ' ' + x + ' ' + top + ' C' + (x+rx*.85) + ' ' + top + ' ' + (x+rx) + ' ' + (y-2) + ' ' + (x+rx) + ' ' + y + ' C' + (x+rx*.8) + ' ' + bottom + ' ' + (x-rx*.7) + ' ' + (bottom+1) + ' ' + (x-rx) + ' ' + y + 'Z';
     const irisX = x + (lean * .55);
     const pupil = design.pupilSize;
+    const iris = 'M' + (irisX-pupil) + ' ' + (y+1)
+      + ' C' + (irisX-pupil*1.2) + ' ' + (y-2) + ' ' + (irisX-pupil*.6) + ' ' + (y-4) + ' ' + irisX + ' ' + (y-4)
+      + ' C' + (irisX+pupil*1.2) + ' ' + (y-4) + ' ' + (irisX+pupil) + ' ' + (y-1) + ' ' + (irisX+pupil) + ' ' + (y+1)
+      + ' C' + (irisX+pupil) + ' ' + (y+4) + ' ' + (irisX-pupil) + ' ' + (y+4) + ' ' + (irisX-pupil) + ' ' + (y+1) + 'Z';
     return (
       <g>
         <path d={eyePath} fill={PAPER}/>
-        <path d={'M'+(irisX-pupil)+' '+(y+1)+' C'+(irisX-pupil*1.2)+' '+(y-2)+' '+(irisX-pupil*.6)+' '+(y-4)+' '+irisX+' '+(y-4)+' C'+(irisX+pupil*1.2)+' '+(y-4)+' '+(irisX+pupil)+' '+(y-1)+' '+(irisX+pupil)+' '+(y+1)+' C'+(irisX+pupil)+' '+(y+4)+' '+(irisX-pupil)+' '+(y+4)+' '+(irisX-pupil)+' '+(y+1)+'Z'} fill={INK}/>
-        <path d={'M'+(irisX-pupil*.38)+' '+(y-2)+' Q'+(irisX-pupil*.1)+' '+(y-3.3)+' '+(irisX+pupil*.2)+' '+(y-2)} fill="none" stroke={PAPER} strokeWidth="1.25" strokeLinecap="round"/>
-        {(wide || soft) && <path d={'M'+(x-rx*.8)+' '+(y-ry*.65)+' Q'+x+' '+(y-ry*1.15)+' '+(x+rx*.8)+' '+(y-ry*.65)} fill="none" stroke={INK} strokeWidth={soft?1.45:1.8} strokeLinecap="round" opacity=".7"/>}
+        <path d={iris} fill={INK}/>
+        <path d={'M' + (irisX-pupil*.38) + ' ' + (y-2) + ' Q' + (irisX-pupil*.1) + ' ' + (y-3.3) + ' ' + (irisX+pupil*.2) + ' ' + (y-2) + 'Z'} fill={PAPER}/>
+        {(wide || soft) && <path d={'M' + (x-rx*.8) + ' ' + (y-ry*.65) + ' Q' + x + ' ' + (y-ry*1.15) + ' ' + (x+rx*.8) + ' ' + (y-ry*.65) + 'Z'} fill={INK} opacity=".82"/>}
       </g>
     );
   };
   return (
     <g>
-      <path d={design.brow} fill="none" stroke={INK} strokeWidth="2.05" strokeLinecap="round"/>
+      <path d={design.brow} fill={INK}/>
       {makeEye(left, -0.3)}
       {makeEye(right, 0.3)}
-      <path d={design.nose} fill="none" stroke="#8C5A4B" strokeWidth="1.45" strokeLinecap="round" opacity=".72"/>
-      <g transform="translate(94 95) scale(.78 .78) translate(-94 -95)">
-        <path d={design.mouth} fill="#7E3D38" stroke="none"/>
-        <path d="M88 95Q94 98 100 94" fill="none" stroke="#F4BFB2" strokeWidth="1.8" strokeLinecap="round"/>
-      </g>
+      <path d={design.nose} fill="#8C5A4B"/>
+      <path d={design.mouth} fill="#693A36"/>
+      <path d="M89 98Q94 101 100 97Q98 103 94 103Q91 102 89 98Z" fill="#E89A98"/>
     </g>
   );
 }
 
 function Glasses() {
   return (
-    <g fill="none" stroke={INK} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M66 72C66 66 70 64 77 64C85 64 88 67 88 73C88 80 84 84 77 84C70 84 66 80 66 72Z"/>
-      <path d="M96 72C96 66 100 64 107 64C115 64 119 67 119 73C119 80 115 84 108 84C100 84 96 80 96 72Z"/>
-      <path d="M88 72Q92 69 96 72M65 70L60 69M119 70L123 68"/>
-    </g>
+    <path
+      d="M64 72C64 63 69 60 77 60C86 60 90 65 90 73C90 82 85 87 77 87C68 87 64 82 64 72Z
+         M69 72C69 66 72 65 77 65C82 65 85 68 85 73C85 79 82 82 77 82C72 82 69 79 69 72Z
+         M94 72C94 63 100 60 107 60C116 60 120 65 120 73C120 82 115 87 107 87C99 87 94 82 94 72Z
+         M99 72C99 66 102 65 107 65C112 65 115 68 115 73C115 79 112 82 107 82C102 82 99 79 99 72Z
+         M88 72Q92 69 96 72L96 75Q92 73 88 75Z
+         M64 68L59 67L59 70L65 72Z M119 68L124 67L123 70L119 72Z"
+      fill={INK}
+      fillRule="evenodd"
+    />
   );
 }
 
@@ -387,47 +394,25 @@ function HumanArt({ design }: { design:CharacterDesign }) {
   return (
     <g>
       <g transform={'translate(90 74) scale(' + design.headScale[0] + ' ' + design.headScale[1] + ') translate(-90 -74)'}>
-        <path d={design.hairBack} fill={design.hair} stroke={INK} strokeWidth="1.5" strokeLinejoin="round"/>
+        <path d={design.hairBack} fill={design.hair}/>
       </g>
       <g transform={'translate(90 178) scale(' + design.bodyScale[0] + ' ' + design.bodyScale[1] + ') translate(-90 -178)'}>
-      {/* Silhueta contínua: ombros, braços, tronco e pernas pertencem ao mesmo corpo. */}
-      <path d={design.silhouette} fill={design.shirt} stroke={INK} strokeWidth="1.55" strokeLinejoin="round"/>
-      <path d={design.lower} fill={design.bottomColor} stroke="none"/>
-      <path d={design.torso} fill={design.shirt} stroke="none"/>
-      <path d={design.leftArm} fill={design.shirt} stroke="none"/>
-      <path d={design.rightArm} fill={design.shirt} stroke="none"/>
-      <path d="M50 158C47 161 47 166 50 169C53 172 56 170 57 167Q59 172 62 169L60 160Q56 155 50 158Z" fill={design.skin} stroke="none"/>
-      <path d="M133 158C138 159 142 164 140 169C138 173 133 172 131 168Q128 172 126 168L128 160Q130 157 133 158Z" fill={design.skin} stroke="none"/>
-      <path d="M60 217C68 218 80 218 90 215C94 218 94 225 88 227C79 230 66 229 60 226C57 223 57 219 60 217Z" fill={INK} stroke="none"/>
-      <path d="M109 215C119 218 129 217 136 215C141 218 141 224 137 227C128 230 115 229 108 226C104 223 105 218 109 215Z" fill={INK} stroke="none"/>
-      <path d="M74 171Q91 176 128 170" fill="none" stroke="#765A48" strokeWidth="1.3" opacity=".25" strokeLinecap="round"/>
+        {/* Uma única massa vetorial forma ombros, braços, tronco e pernas. */}
+        <path d={design.silhouette} fill={design.shirt}/>
+        <path d={design.lower} fill={design.bottomColor}/>
+        <path d="M82 105Q91 112 101 105L102 122Q92 127 82 122Z" fill={design.skin}/>
+        <path d="M50 158C47 161 47 166 50 169C53 172 56 170 57 167Q59 172 62 169L60 160Q56 155 50 158Z" fill={design.skin}/>
+        <path d="M133 158C138 159 142 164 140 169C138 173 133 172 131 168Q128 172 126 168L128 160Q130 157 133 158Z" fill={design.skin}/>
+        <path d="M60 217C68 218 80 218 90 215C94 218 94 225 88 227C79 230 66 229 60 226C57 223 57 219 60 217Z" fill={INK}/>
+        <path d="M109 215C119 218 129 217 136 215C141 218 141 224 137 227C128 230 115 229 108 226C104 223 105 218 109 215Z" fill={INK}/>
       </g>
       <g transform={'translate(90 74) scale(' + design.headScale[0] + ' ' + design.headScale[1] + ') translate(-90 -74)'}>
-      <path d={design.face} fill={design.skin} stroke={INK} strokeWidth="1.55" strokeLinejoin="round"/>
-      {design.freckles && <path d="M68 84l1 1M73 88l1 1M111 84l1 1M116 88l1 1" stroke={INK} strokeWidth="1.15" opacity=".48"/>}
-      <path d="M67 91Q72 94 78 91M107 91Q113 94 118 91" fill="none" stroke="#D56F72" strokeWidth="3" opacity=".22" strokeLinecap="round"/>
-      <Eyes design={design}/>
-      <g className="p-character__garment-signature">
-        {design.artId === 'clara' && <path d="M68 120Q78 132 89 136M112 119Q105 131 94 136" fill="none" stroke="#F0B38B" strokeWidth="2" opacity=".8" strokeLinecap="round"/>}
-        {design.artId === 'lia' && <path d="M79 111L91 124L103 111M91 124L91 145" fill="none" stroke="#49643C" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'davi' && <path d="M72 115Q90 130 111 115M72 148Q94 156 117 148" fill="none" stroke="#A8C084" strokeWidth="2" opacity=".5" strokeLinecap="round"/>}
-        {design.artId === 'iara' && <path d="M70 116Q91 127 112 116" fill="none" stroke="#D8CDB6" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'nina' && <path d="M77 108L91 121L105 108" fill="none" stroke="#A493B8" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'ravi' && <path d="M76 112Q91 126 107 112M83 112L83 131M99 112L99 131" fill="none" stroke="#F1D28E" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'mateus' && <path d="M77 110L91 126L105 110M91 126L91 144" fill="none" stroke="#D8BCA7" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'marina' && <path d="M68 112L82 123L91 116L100 123L115 112" fill="none" stroke="#77717A" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'beatriz' && <path d="M74 111Q91 128 108 111" fill="none" stroke="#F0BFA9" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'sofia' && <path d="M71 117Q91 132 111 117" fill="none" stroke="#F1B3C2" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'helena' && <path d="M74 111L91 127L108 111M91 127L91 148" fill="none" stroke="#D5CDAA" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'augusto' && <path d="M76 111L91 127L106 111" fill="none" stroke="#A2B6A7" strokeWidth="2" strokeLinecap="round"/>}
-        {design.artId === 'caio' && <path d="M76 111Q91 128 106 111M83 112L83 132M99 112L99 132" fill="none" stroke="#85B2BE" strokeWidth="2" strokeLinecap="round"/>}
-      </g>
-      {design.glasses && <Glasses/>}
-      {design.earrings && <path d="M57 84Q52 91 59 96M124 83Q130 91 123 96" fill="none" stroke="#D9A33F" strokeWidth="2.2"/>}
-      {design.beard && <path d={design.beard} fill={design.hair} stroke="none"/>}
-      {design.mustache && <path d={design.mustache} fill={design.hair} stroke="none"/>}
-      <path d={design.hairFront} fill={design.hair} stroke={INK} strokeWidth="1.5" strokeLinejoin="round"/>
-      {design.hairStrands && <path d={design.hairStrands} fill="none" stroke="#E9C4A1" strokeWidth="2.3" opacity=".26" strokeLinecap="round"/>}
+        <path d={design.face} fill={design.skin}/>
+        <Eyes design={design}/>
+        {design.glasses && <Glasses/>}
+        {design.beard && <path d={design.beard} fill={design.hair}/>}
+        {design.mustache && <path d={design.mustache} fill={design.hair}/>}
+        <path d={design.hairFront} fill={design.hair}/>
       </g>
     </g>
   );
@@ -452,6 +437,8 @@ export function TeacherCharacter({
       role="img"
       aria-label={teacher.name + ', professora ou professor humano do Pórtico'}
       data-character-style="portico-friends-v22"
+      data-character-art-version="v22.7-flat-color"
+      data-character-outline="none"
       data-character-species="human"
       data-character-body={design.bodyLabel}
       data-character-hair={design.hairLabel}
@@ -470,7 +457,6 @@ export function TeacherCharacter({
       preserveAspectRatio="xMidYMax meet"
     >
       {portrait && <circle cx="90" cy="90" r="65" fill={tone}/>}
-      {!portrait && <ellipse cx="90" cy="230" rx="44" ry="4" fill={INK} opacity=".08" stroke="none"/>}
       <HumanArt design={design}/>
     </svg>
   );
@@ -488,45 +474,42 @@ export const companionMascots: Mascot[] = [
 function MascotArt({ id }: { id:string }) {
   switch(id) {
     case 'miau':
-      return <g stroke={INK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M46 113C29 121 24 147 40 154C51 160 60 148 56 137C51 126 41 128 40 137" fill="none" stroke="#E98B35" strokeWidth="9"/>
-        <path d="M50 125C47 104 54 82 76 75C95 65 120 79 126 101C133 122 120 146 94 151C68 152 53 141 50 125Z" fill="#E98B35"/>
-        <path d="M58 91L55 67Q71 70 78 85M106 83Q116 67 130 71L123 96" fill="#E98B35"/>
-        <path d="M65 104Q75 97 84 104M99 103Q108 96 117 103" fill="none" stroke={INK} strokeWidth="3"/>
-        <path d="M81 116Q88 123 95 116Q93 128 88 128Q83 127 81 116Z" fill={INK}/>
-        <path d="M72 133Q89 145 106 132" fill="none" stroke={INK} strokeWidth="2.5"/>
-        <path d="M65 150Q59 162 68 166L80 165L85 151M98 151L103 165L116 165Q122 159 114 149" fill="#E98B35"/>
-        <path d="M79 166L78 171M108 166L109 171" stroke={INK} strokeWidth="3"/>
+      return <g>
+        <path d="M54 137C39 146 32 158 39 166C48 176 65 165 63 153C61 145 53 143 49 150C48 155 53 158 57 155C63 148 56 139 54 137Z" fill="#D8782E"/>
+        <path d="M48 113C45 96 53 77 72 70L77 48Q80 43 87 54L94 66C112 62 130 73 137 92C146 116 133 143 108 151L105 177Q99 185 90 178L84 155C65 151 51 136 48 113Z" fill="#E98B35"/>
+        <path d="M67 119Q91 130 119 117L115 148Q91 159 69 143Z" fill="#F6D9B4"/>
+        <path d="M79 115Q85 122 91 115Q89 127 85 127Q80 126 79 115Z" fill={INK}/>
+        <path d="M82 133Q92 139 103 132Q99 145 92 145Q85 143 82 133Z" fill="#8C4540"/>
+        <path d="M52 148Q46 161 55 166L72 167L77 151M105 151L110 167L127 165Q134 159 126 146Z" fill="#E98B35"/>
+        <path d="M57 166Q65 173 77 169L79 178Q65 183 54 175Z M108 169Q118 174 129 167L131 175Q118 184 106 178Z" fill="#D8782E"/>
       </g>;
     case 'teco':
-      return <g stroke={INK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M45 141C39 105 48 70 88 62C127 56 143 91 134 133C129 160 111 174 89 174C65 174 49 160 45 141Z" fill="#986044"/>
-        <path d="M48 83L45 57Q64 62 74 76M111 74Q123 58 137 58L130 87" fill="#986044"/>
-        <path d="M58 109Q66 82 86 91Q91 108 77 121Q64 125 58 109ZM91 94Q113 80 125 106Q121 123 104 122Q91 115 91 94Z" fill="#F6E6CE"/>
-        <path d="M84 114L91 123L99 114L94 137L88 137Z" fill="#D99D36"/>
-        <path d="M70 148Q90 158 111 147" fill="none" stroke="#F6E6CE" strokeWidth="4"/>
-        <path d="M60 161L52 174M117 161L126 174" stroke="#D99D36" strokeWidth="5"/>
+      return <g>
+        <path d="M43 142C39 111 45 80 63 69L58 48Q65 46 78 63C88 59 101 60 110 64Q126 45 136 51L130 78C141 103 137 145 119 164C104 180 76 181 58 166C50 160 46 152 43 142Z" fill="#956044"/>
+        <path d="M55 131C53 106 63 83 89 82C114 81 129 102 124 132C120 154 106 165 90 165C72 164 59 151 55 131Z" fill="#F5E7D0"/>
+        <path d="M63 108C67 93 82 90 89 105C91 120 79 130 68 125C63 121 61 115 63 108Z M94 105C102 90 117 93 121 109C123 120 116 128 105 126C95 123 91 114 94 105Z" fill={PAPER}/>
+        <path d="M84 119Q90 126 97 119L93 137Q90 141 87 137Z" fill="#D99D36"/>
+        <path d="M65 160Q90 170 115 160L111 172Q89 181 68 171Z" fill="#956044"/>
       </g>;
     case 'bento':
-      return <g stroke={INK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M42 139C40 108 56 81 88 80C117 78 138 103 134 136C130 163 111 177 87 177C61 176 44 161 42 139Z" fill="#B86D43"/>
-        <path d="M51 103Q44 87 60 77Q73 78 76 91M105 89Q115 75 130 85Q138 98 124 107" fill="#B86D43"/>
-        <path d="M71 115Q80 107 88 116M99 116Q108 108 116 116" fill="none" stroke={INK} strokeWidth="3"/>
-        <path d="M79 131Q92 137 105 130" fill="none" stroke={INK} strokeWidth="2.5"/>
-        <path d="M86 133L85 145L92 149L99 144L98 132" fill="#F7E6CF"/>
-        <path d="M48 151Q36 158 32 169M127 151Q143 154 152 169" fill="none" stroke="#B86D43" strokeWidth="10"/>
-        <path d="M128 140C148 137 160 148 156 164C152 178 132 179 120 164" fill="#76503B"/>
-        <path d="M60 173L54 183M108 174L115 183" stroke={INK} strokeWidth="4"/>
+      return <g>
+        <path d="M44 137C23 141 17 158 25 170C35 183 57 177 67 162L76 154Z" fill="#76503B"/>
+        <path d="M44 136C41 107 57 82 84 77C114 70 138 96 137 129C136 157 114 177 86 177C60 176 46 160 44 136Z" fill="#B86D43"/>
+        <path d="M56 101Q47 83 62 76Q76 75 82 91M108 88Q119 71 134 83Q141 96 128 106Z" fill="#B86D43"/>
+        <path d="M76 140Q91 147 107 139Q102 154 91 154Q81 153 76 140Z" fill="#7B4434"/>
+        <path d="M85 142L85 155Q91 160 97 155L97 141Z" fill="#F8E8D4"/>
+        <path d="M126 133C149 130 164 144 158 162C153 178 132 181 117 165L113 151Z" fill="#76503B"/>
+        <path d="M57 164Q48 174 59 181L79 181L83 167M104 167L109 181L131 180Q140 172 130 161Z" fill="#B86D43"/>
       </g>;
     default:
-      return <g stroke={INK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M40 139C39 105 55 88 88 86C122 84 139 106 136 140C133 166 113 178 88 178C62 178 43 165 40 139Z" fill="#7FA64E"/>
-        <path d="M50 96Q46 75 65 75Q81 74 83 94M93 94Q97 72 115 75Q132 78 126 100" fill="#7FA64E"/>
-        <path d="M63 111C65 99 82 99 84 112C85 125 66 127 63 111ZM96 111C98 99 115 99 117 112C118 125 99 127 96 111Z" fill="#FFF3D8"/>
-        <path d="M70 111C70 104 80 104 80 112C80 118 70 118 70 111ZM104 111C104 104 113 104 113 112C113 118 104 118 104 111Z" fill={INK}/>
-        <path d="M79 137Q89 143 101 137" fill="none" stroke={INK} strokeWidth="2.7"/>
-        <path d="M54 153Q42 163 49 177M122 153Q136 164 128 177" fill="none" stroke="#7FA64E" strokeWidth="11"/>
-        <path d="M69 174Q66 184 78 185L87 180M104 174Q111 185 122 181" fill="none" stroke="#7FA64E" strokeWidth="8"/>
+      return <g>
+        <path d="M40 133C38 105 54 85 88 82C123 80 141 103 137 136C134 161 113 178 88 178C62 178 43 161 40 133Z" fill="#7FA64E"/>
+        <path d="M51 91C48 72 58 67 73 71Q85 74 85 91M94 91Q97 69 115 70Q133 72 126 97L117 104L59 103Z" fill="#7FA64E"/>
+        <path d="M61 112C63 98 82 97 86 112C88 125 68 129 62 118Z M96 112C99 98 117 99 119 113C120 126 101 129 96 118Z" fill={PAPER}/>
+        <path d="M68 111Q74 105 79 113Q79 120 72 120Q67 118 68 111Z M103 112Q109 105 114 113Q114 120 107 120Q102 118 103 112Z" fill={INK}/>
+        <path d="M78 141Q89 147 101 141Q98 153 89 153Q82 152 78 141Z" fill="#557C3D"/>
+        <path d="M49 150Q38 159 47 175Q55 183 67 176L76 160M126 150Q140 159 131 175Q124 183 111 176L101 160Z" fill="#7FA64E"/>
+        <path d="M63 174Q62 185 76 186L88 179M103 179Q115 187 128 181L121 172Z" fill="#7FA64E"/>
       </g>;
   }
 }
@@ -542,8 +525,8 @@ export function CompanionMascots({ compact = false }: { compact?:boolean }) {
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {companionMascots.map((mascot) => (
           <article key={mascot.id} className="flex flex-col items-center rounded-2xl border border-line/70 bg-surface px-3 py-3 text-center">
-            <svg viewBox="0 0 180 200" width={compact ? 112 : 144} height={compact ? 124 : 158} role="img" aria-label={mascot.name + ', ' + mascot.role} data-mascot-id={mascot.id}>
-              <ellipse cx="90" cy="181" rx="43" ry="4" fill={INK} opacity=".08"/>
+            <svg viewBox="0 0 180 200" width={compact ? 112 : 144} height={compact ? 124 : 158} role="img" aria-label={mascot.name + ', ' + mascot.role} data-mascot-id={mascot.id} data-character-outline="none" data-character-art-version="v22.7-flat-color">
+              
               <MascotArt id={mascot.id}/>
             </svg>
             <h3 className="text-sm font-extrabold">{mascot.name}</h3>

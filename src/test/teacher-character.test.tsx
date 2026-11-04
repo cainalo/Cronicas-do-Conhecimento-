@@ -5,7 +5,7 @@ import { Illustration, type IllustrationName } from '@/components/Illustration';
 import { teacherForChapter, teachers } from '@/content';
 import { TeacherCharacterReviewPage } from '@/pages/TeacherCharacterReview';
 
-describe('elenco humano do Pórtico — V22.1.1', () => {
+describe('elenco humano do Pórtico — V22.7', () => {
   it('desenha treze professores humanos, cada um com arte vetorial própria', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={200}/>)}</div>);
     const figures = Array.from(container.querySelectorAll('svg[data-character-style="portico-friends-v22"]'));
@@ -39,6 +39,19 @@ describe('elenco humano do Pórtico — V22.1.1', () => {
     expect(getByRole('region', { name:'Mascotes companheiros do Pórtico' })).toBeInTheDocument();
   });
 
+
+  it('mantém a arte de humanos e mascotes em cores chapadas, sem strokes ou contornos vetoriais', () => {
+    const { container } = render(
+      <div>
+        {teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={200}/>)}
+        <CompanionMascots/>
+      </div>
+    );
+    const svgs = Array.from(container.querySelectorAll('svg[data-character-art-version="v22.7-flat-color"]'));
+    expect(svgs).toHaveLength(17);
+    expect(svgs.every((svg) => svg.getAttribute('data-character-outline') === 'none')).toBe(true);
+    expect(svgs.every((svg) => svg.querySelectorAll('[stroke]').length === 0)).toBe(true);
+  });
 
   it('usa silhuetas corporais conectadas, não peças independentes montadas', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={200}/>)}</div>);

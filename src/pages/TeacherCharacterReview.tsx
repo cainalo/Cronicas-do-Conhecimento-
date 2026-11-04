@@ -5,7 +5,7 @@ import { teachers } from '@/content';
 type ViewMode = 'color' | 'silhouette' | 'portrait';
 const VIEW_MODES: { value:ViewMode; label:string; description:string }[] = [
   { value:'color', label:'Cores', description:'A leitura completa das roupas, cabelos e rostos.' },
-  { value:'silhouette', label:'Silhuetas', description:'A forma externa sem depender de cor ou acessórios.' },
+  { value:'silhouette', label:'Silhuetas', description:'A forma externa sem linhas de contorno ou detalhes decorativos.' },
   { value:'portrait', label:'Rostos', description:'A expressão, o cabelo e a identidade em tamanho de avatar.' },
 ];
 
@@ -16,8 +16,8 @@ export function TeacherCharacterReviewPage() {
     <main className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:space-y-8"
       data-character-review-mode={view} data-character-review-stage="static-only">
       <header className="max-w-3xl space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · V22</p>
-        <h1 className="font-title text-3xl font-bold leading-tight sm:text-4xl">Treze professores. Treze pessoas.</h1>
+        <p className="kicker">LABORATÓRIO DE PERSONAGENS · V22.7</p>
+        <h1 className="font-title text-3xl font-bold leading-tight sm:text-4xl">Treze professores. Uma família visual.</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
           A nova direção troca os antigos professores-animais por um elenco inteiramente humano.
           Cada identidade é construída com cabelo, rosto, proporções e roupa próprios, usando poucos detalhes
@@ -53,7 +53,7 @@ export function TeacherCharacterReviewPage() {
             <p className="text-xs font-extrabold uppercase tracking-[.14em] text-muted">Elenco principal</p>
             <h2 className="font-title text-xl font-bold">Professores humanos</h2>
           </div>
-          <span className="text-xs text-muted">13 personagens · 13 identidades</span>
+          <span className="text-xs text-muted">13 humanos · 4 mascotes</span>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
           {teachers.map((teacher) => {
@@ -90,7 +90,7 @@ export function TeacherCharacterReviewPage() {
           <p><strong className="text-ink">Identidade sem legenda.</strong> Cabelo, rosto e proporções distinguem cada pessoa mesmo quando a roupa fica escondida.</p>
           <p><strong className="text-ink">Formas orgânicas.</strong> O corpo não pode parecer um conjunto de círculos, retângulos ou triângulos encaixados.</p>
           <p><strong className="text-ink">Detalhe com propósito.</strong> Óculos, brincos ou objetos aparecem somente quando ajudam a contar algo sobre a pessoa.</p>
-          <p><strong className="text-ink">Simplicidade equilibrada.</strong> Poucas cores, contornos limpos e rosto expressivo sem excesso de textura.</p>
+          <p><strong className="text-ink">Simplicidade equilibrada.</strong> Cores chapadas, nenhuma linha de contorno e rosto expressivo sem textura.</p>
           <p><strong className="text-ink">Unidade do elenco.</strong> Os treze devem pertencer à mesma família visual, sem serem variações de um único molde.</p>
           <p><strong className="text-ink">Mascotes separados.</strong> Os animais acompanham o estudante, mas não ocupam o papel de educador.</p>
         </div>
