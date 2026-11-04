@@ -546,7 +546,7 @@ export function TeacherCharacter({
       <CreatureBack look={look}/>
       {/* Roupa com acabamento discreto, aplicado sobre a silhueta principal. */}
       <g transform={'translate(120 174) rotate(' + look.torsoTilt + ') scale(' + look.torsoScaleX + ' ' + look.torsoScaleY + ') translate(-120 -174)'}>
-        <path d={BODY_PATH[look.body]} fill={look.top}/>
+        <CharacterBody look={look}/>
         <path d={LOWER_PATH[look.lower]} fill={look.bottom}/>
         <OutfitDetails look={look}/>
         {look.species === 'armadillo' && <g fill="none" stroke="#E2C39F" strokeWidth="3.2"><path d="M83 150Q120 132 157 150M79 165Q120 146 161 165M82 180Q120 164 158 180"/></g>}
