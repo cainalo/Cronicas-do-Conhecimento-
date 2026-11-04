@@ -469,7 +469,6 @@ function OutfitDetails({ look }: { look:Look }) {
 }
 
 function OutfitFinish({ look }: { look:Look }) {
-  const light="#FFF0D1";
   const seam="#F3D9AE";
   switch(look.species) {
     case 'capybara': return <g fill="none" stroke="#FFF0D1" strokeWidth="2.2" strokeLinecap="round"><path d="M102 153l4 4M114 158l4 4M126 158l4 4"/><path d="M144 159l-2 6M140 168l-2 6" stroke="#E6B95A"/></g>;
@@ -601,52 +600,22 @@ function CreatureArms({ look, left, right, leftHand, rightHand, gesture }: {
     <path d="M68 148Q75 160 91 166M75 139Q82 151 96 157M172 148Q165 160 149 166M165 139Q158 151 144 157" fill="none" stroke="#F4C45B" strokeWidth="4" strokeLinecap="round"/>
     <path d="M67 158L59 169M77 166L72 180M86 169L83 183M173 158L181 169M163 166L168 180M154 169L157 183" stroke="#2F9B78" strokeWidth="4.5" strokeLinecap="round"/>
   </g>;
-  if (look.species === 'armadillo' || look.species === 'turtle') return null;
-  if (look.species === 'parrot') return <g>
-    <path d="M94 151Q70 137 59 119Q54 143 68 163Q79 177 96 173Q103 164 94 151Z" fill="#D95F43" stroke="#994333" strokeWidth="2"/>
-    <path d="M146 151Q170 137 181 119Q186 143 172 163Q161 177 144 173Q137 164 146 151Z" fill="#D95F43" stroke="#994333" strokeWidth="2"/>
-    <path d="M68 148Q75 160 91 166M75 139Q82 151 96 157M172 148Q165 160 149 166M165 139Q158 151 144 157" fill="none" stroke="#F4C45B" strokeWidth="4" strokeLinecap="round"/>
-    <path d="M67 158L59 169M77 166L72 180M86 169L83 183M173 158L181 169M163 166L168 180M154 169L157 183" stroke="#2F9B78" strokeWidth="4.5" strokeLinecap="round"/>
-  </g>;
+  const species=look.species as Exclude<Species,'human'|'armadillo'|'turtle'|'parrot'>;
   const fur=CreaturePalette({look});
-  const widths:Record<Exclude<Species,'human'>,number>={
-    capybara:16,beaver:18,axolotl:9,cat:11,frog:16,armadillo:18,turtle:21,parrot:19,chameleon:12,
+  const widths:Record<Exclude<Species,'human'|'armadillo'|'turtle'|'parrot'>,number>={
+    capybara:16,beaver:18,axolotl:9,cat:11,frog:16,chameleon:12,
   };
-  const width=widths[look.species as Exclude<Species,'human'>];
   return <g>
-    <path d={left} fill="none" stroke={fur} strokeWidth={width} strokeLinecap="round" strokeLinejoin="round"/>
-    <path d={right} fill="none" stroke={fur} strokeWidth={width} strokeLinecap="round" strokeLinejoin="round"/>
-
-    {look.species==='parrot' && <g>
-      <path d={left} fill="none" stroke="#F0B63D" strokeWidth="4.5" strokeLinecap="round" strokeDasharray="8 7"/>
-      <path d={right} fill="none" stroke="#F0B63D" strokeWidth="4.5" strokeLinecap="round" strokeDasharray="8 7"/>
-      <g transform={'translate('+leftHand[0]+' '+leftHand[1]+') rotate(28)'}>
-        <path d="M0 0Q-18 -12 -24 -31Q-7 -27 1 -13Q4 -35 17 -39Q20 -17 8 -4Q25 -19 31 -12Q22 4 0 0Z" fill="#2D9B79" stroke="#236D5D" strokeWidth="1.8"/>
-        <path d="M-17 -25L-3 -8M7 -29L6 -7M24 -12L8 -2" stroke="#F6D27A" strokeWidth="2" strokeLinecap="round"/>
-      </g>
-      <g transform={'translate('+rightHand[0]+' '+rightHand[1]+') rotate(-28) scale(-1 1)'}>
-        <path d="M0 0Q-18 -12 -24 -31Q-7 -27 1 -13Q4 -35 17 -39Q20 -17 8 -4Q25 -19 31 -12Q22 4 0 0Z" fill="#2D9B79" stroke="#236D5D" strokeWidth="1.8"/>
-        <path d="M-17 -25L-3 -8M7 -29L6 -7M24 -12L8 -2" stroke="#F6D27A" strokeWidth="2" strokeLinecap="round"/>
-      </g>
-    </g>}
-
-    {look.species==='armadillo' && <g fill="none" stroke="#D8B795" strokeWidth="3" strokeLinecap="round">
-      <path d={left} strokeDasharray="3 8" opacity=".95"/>
-      <path d={right} strokeDasharray="3 8" opacity=".95"/>
-    </g>}
+    <path d={left} fill="none" stroke={fur} strokeWidth={widths[species]} strokeLinecap="round" strokeLinejoin="round"/>
+    <path d={right} fill="none" stroke={fur} strokeWidth={widths[species]} strokeLinecap="round" strokeLinejoin="round"/>
     {look.species==='axolotl' && <g fill="none" stroke="#F6CFD0" strokeWidth="2.4" strokeLinecap="round">
       <path d={'M'+(leftHand[0]-5)+' '+(leftHand[1]-4)+'q-11 -13 -7 -22M'+(leftHand[0])+' '+(leftHand[1]-5)+'q-7 -15 1 -23M'+(leftHand[0]+4)+' '+(leftHand[1]-3)+'q-2 -12 8 -18'}/>
       <path d={'M'+(rightHand[0]-5)+' '+(rightHand[1]-4)+'q-11 -13 -7 -22M'+(rightHand[0])+' '+(rightHand[1]-5)+'q-7 -15 1 -23M'+(rightHand[0]+4)+' '+(rightHand[1]-3)+'q-2 -12 8 -18'}/>
-    </g>}
-
-    {look.species==='turtle' && <g fill="none" stroke="#B3D58B" strokeWidth="2.2" strokeLinecap="round">
-      <path d={'M'+(leftHand[0]-8)+' '+(leftHand[1]-2)+'q8 6 16 0M'+(rightHand[0]-8)+' '+(rightHand[1]-2)+'q8 6 16 0'}/>
     </g>}
     {look.species==='beaver' && <g fill="none" stroke="#D6A27E" strokeWidth="2" strokeLinecap="round">
       <path d={'M'+(leftHand[0]-5)+' '+(leftHand[1]+5)+'l-2 5M'+(leftHand[0])+' '+(leftHand[1]+6)+'v5M'+(leftHand[0]+5)+' '+(leftHand[1]+5)+'l2 5'}/>
       <path d={'M'+(rightHand[0]-5)+' '+(rightHand[1]+5)+'l-2 5M'+(rightHand[0])+' '+(rightHand[1]+6)+'v5M'+(rightHand[0]+5)+' '+(rightHand[1]+5)+'l2 5'}/>
     </g>}
-
     <CharacterHand look={look} x={leftHand[0]} y={leftHand[1]} gesture={gesture}/>
     <CharacterHand look={look} x={rightHand[0]} y={rightHand[1]} gesture={gesture}/>
   </g>;
