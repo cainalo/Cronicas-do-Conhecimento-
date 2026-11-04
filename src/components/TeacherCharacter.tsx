@@ -5,6 +5,7 @@ export type TeacherPose = 'greeting' | 'presenting' | 'thinking' | 'celebrating'
 type HairStyle = 'afro' | 'bun' | 'short' | 'curls' | 'bob' | 'braid' | 'waves' | 'fade' | 'ponytail' | 'pixie' | 'locs' | 'sidepart' | 'spiky';
 type FaceShape = 'round' | 'wide' | 'long' | 'square' | 'pear' | 'oval';
 type BodyShape = 'pear' | 'tall' | 'broad' | 'cape' | 'box' | 'round' | 'wide' | 'dress' | 'longcoat' | 'flared' | 'compact' | 'tunic' | 'hood';
+type LowerShape = 'clara-skirt' | 'lia-slim' | 'davi-wide' | 'iara-cape' | 'nina-straight' | 'ravi-jogger' | 'mateus-round' | 'marina-a-line' | 'beatriz-coat' | 'sofia-bell' | 'helena-wide' | 'augusto-shorts' | 'caio-tapered';
 type Accessory = 'glasses' | 'round-glasses' | 'headset' | 'earrings' | 'headband';
 type FacialHair = 'beard' | 'mustache';
 type EyeStyle = 'bright' | 'narrow' | 'soft' | 'round' | 'sleepy' | 'wide' | 'small' | 'focused' | 'surprised' | 'curious';
@@ -20,6 +21,7 @@ type Look = {
   hairStyle: HairStyle;
   face: FaceShape;
   body: BodyShape;
+  lower: LowerShape;
   eyes: EyeStyle;
   mouth: MouthStyle;
   headScaleX: number;
@@ -31,25 +33,25 @@ type Look = {
 };
 
 /**
- * Pórtico — família de personagens V4.
+ * Pórtico — família de personagens V6.
  * Princípios: silhueta memorável antes dos detalhes; corpo como massa gráfica;
- * cabeça e tronco integrados; olhos expressivos; braços simples; pés destacados.
+ * cabeça e tronco integrados; olhos expressivos; cintura e roupas com silhuetas próprias; braços simples; pés destacados.
  * A linguagem é original e não reproduz personagens, desenhos ou ativos do Duolingo.
  */
 const LOOKS: Record<string, Look> = {
-  'prof.clara': { skin:'#E9B994', hair:'#34201C', top:'#F05A4F', bottom:'#304D76', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'ponytail', face:'wide', body:'pear', eyes:'bright', mouth:'big-grin', headScaleX:1.08, headScaleY:1.02, torsoScaleX:1.05, torsoScaleY:1.00, accessory:'earrings' },
-  'prof.lia': { skin:'#C98E6A', hair:'#211B1B', top:'#009E9A', bottom:'#174C70', shoe:'#FFD13F', accent:'#FFD13F', hairStyle:'bun', face:'round', body:'tall', eyes:'focused', mouth:'neutral', headScaleX:0.95, headScaleY:1.05, torsoScaleX:0.86, torsoScaleY:1.12, accessory:'headset' },
-  'prof.davi': { skin:'#8D5A3F', hair:'#211B1B', top:'#3678D8', bottom:'#24445A', shoe:'#F4B52B', accent:'#F4B52B', hairStyle:'short', face:'square', body:'broad', eyes:'soft', mouth:'gentle-smile', headScaleX:1.00, headScaleY:1.08, torsoScaleX:1.18, torsoScaleY:0.98, facialHair:'mustache' },
-  'prof.iara': { skin:'#A86F4C', hair:'#2A1A12', top:'#8B5BC7', bottom:'#425C45', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'afro', face:'pear', body:'cape', eyes:'round', mouth:'open', headScaleX:1.16, headScaleY:1.02, torsoScaleX:1.20, torsoScaleY:1.00, accessory:'earrings' },
-  'prof.nina': { skin:'#E4B99B', hair:'#30364B', top:'#E9A62B', bottom:'#354C78', shoe:'#7A55B6', accent:'#7A55B6', hairStyle:'bob', face:'square', body:'box', eyes:'sleepy', mouth:'smirk', headScaleX:0.98, headScaleY:0.98, torsoScaleX:1.00, torsoScaleY:1.04, accessory:'round-glasses' },
-  'prof.ravi': { skin:'#A96F4F', hair:'#241B18', top:'#2E9A65', bottom:'#25475A', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'fade', face:'long', body:'round', eyes:'wide', mouth:'big-grin', headScaleX:0.92, headScaleY:1.12, torsoScaleX:1.06, torsoScaleY:1.08, facialHair:'beard' },
-  'prof.mateus': { skin:'#D4A17B', hair:'#513629', top:'#E17A36', bottom:'#43516A', shoe:'#F7C74B', accent:'#F7C74B', hairStyle:'sidepart', face:'round', body:'wide', eyes:'small', mouth:'tight-smile', headScaleX:0.96, headScaleY:0.92, torsoScaleX:1.22, torsoScaleY:0.92, accessory:'glasses' },
-  'prof.marina': { skin:'#B97855', hair:'#2C1D1B', top:'#339A75', bottom:'#344C45', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'braid', face:'oval', body:'dress', eyes:'soft', mouth:'gentle-smile', headScaleX:0.92, headScaleY:1.10, torsoScaleX:0.90, torsoScaleY:1.14, accessory:'earrings' },
-  'prof.beatriz': { skin:'#E8C2A4', hair:'#493126', top:'#8658C2', bottom:'#45436A', shoe:'#F8C34B', accent:'#F8C34B', hairStyle:'pixie', face:'long', body:'longcoat', eyes:'narrow', mouth:'frown', headScaleX:0.88, headScaleY:1.14, torsoScaleX:0.86, torsoScaleY:1.16, accessory:'glasses' },
-  'prof.sofia': { skin:'#F0C6A5', hair:'#A64F2D', top:'#EE684F', bottom:'#315778', shoe:'#6FAE69', accent:'#6FAE69', hairStyle:'waves', face:'round', body:'flared', eyes:'surprised', mouth:'open', headScaleX:1.03, headScaleY:0.96, torsoScaleX:1.10, torsoScaleY:1.00, accessory:'headband' },
-  'prof.helena': { skin:'#D5A17B', hair:'#211E28', top:'#318AA7', bottom:'#514765', shoe:'#F5C84A', accent:'#F5C84A', hairStyle:'locs', face:'wide', body:'tunic', eyes:'sleepy', mouth:'neutral', headScaleX:1.14, headScaleY:0.94, torsoScaleX:1.02, torsoScaleY:1.12 },
-  'prof.augusto': { skin:'#B77D5D', hair:'#D2C7B5', top:'#247D91', bottom:'#49434B', shoe:'#EFB64A', accent:'#EFB64A', hairStyle:'curls', face:'pear', body:'compact', eyes:'soft', mouth:'gentle-smile', headScaleX:0.92, headScaleY:0.94, torsoScaleX:0.96, torsoScaleY:0.90, accessory:'glasses' },
-  'prof.caio': { skin:'#D09A76', hair:'#27222B', top:'#D99A26', bottom:'#294E59', shoe:'#4B9E9C', accent:'#4B9E9C', hairStyle:'spiky', face:'square', body:'hood', eyes:'curious', mouth:'smirk', headScaleX:1.02, headScaleY:1.00, torsoScaleX:1.00, torsoScaleY:0.98, accessory:'headset' },
+  'prof.clara': { skin:'#E9B994', hair:'#34201C', top:'#F05A4F', bottom:'#304D76', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'ponytail', face:'wide', body:'pear', lower:'clara-skirt', eyes:'bright', mouth:'big-grin', headScaleX:1.08, headScaleY:1.02, torsoScaleX:1.05, torsoScaleY:1.00, accessory:'earrings' },
+  'prof.lia': { skin:'#C98E6A', hair:'#211B1B', top:'#009E9A', bottom:'#174C70', shoe:'#FFD13F', accent:'#FFD13F', hairStyle:'bun', face:'round', body:'tall', lower:'lia-slim', eyes:'focused', mouth:'neutral', headScaleX:0.95, headScaleY:1.05, torsoScaleX:0.86, torsoScaleY:1.12, accessory:'headset' },
+  'prof.davi': { skin:'#8D5A3F', hair:'#211B1B', top:'#3678D8', bottom:'#24445A', shoe:'#F4B52B', accent:'#F4B52B', hairStyle:'short', face:'square', body:'broad', lower:'davi-wide', eyes:'soft', mouth:'gentle-smile', headScaleX:1.00, headScaleY:1.08, torsoScaleX:1.18, torsoScaleY:0.98, facialHair:'mustache' },
+  'prof.iara': { skin:'#A86F4C', hair:'#2A1A12', top:'#8B5BC7', bottom:'#425C45', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'afro', face:'pear', body:'cape', lower:'iara-cape', eyes:'round', mouth:'open', headScaleX:1.16, headScaleY:1.02, torsoScaleX:1.20, torsoScaleY:1.00, accessory:'earrings' },
+  'prof.nina': { skin:'#E4B99B', hair:'#30364B', top:'#E9A62B', bottom:'#354C78', shoe:'#7A55B6', accent:'#7A55B6', hairStyle:'bob', face:'square', body:'box', lower:'nina-straight', eyes:'sleepy', mouth:'smirk', headScaleX:0.98, headScaleY:0.98, torsoScaleX:1.00, torsoScaleY:1.04, accessory:'round-glasses' },
+  'prof.ravi': { skin:'#A96F4F', hair:'#241B18', top:'#2E9A65', bottom:'#25475A', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'fade', face:'long', body:'round', lower:'ravi-jogger', eyes:'wide', mouth:'big-grin', headScaleX:0.92, headScaleY:1.12, torsoScaleX:1.06, torsoScaleY:1.08, facialHair:'beard' },
+  'prof.mateus': { skin:'#D4A17B', hair:'#513629', top:'#E17A36', bottom:'#43516A', shoe:'#F7C74B', accent:'#F7C74B', hairStyle:'sidepart', face:'round', body:'wide', lower:'mateus-round', eyes:'small', mouth:'tight-smile', headScaleX:0.96, headScaleY:0.92, torsoScaleX:1.22, torsoScaleY:0.92, accessory:'glasses' },
+  'prof.marina': { skin:'#B97855', hair:'#2C1D1B', top:'#339A75', bottom:'#344C45', shoe:'#F2C13A', accent:'#F2C13A', hairStyle:'braid', face:'oval', body:'dress', lower:'marina-a-line', eyes:'soft', mouth:'gentle-smile', headScaleX:0.92, headScaleY:1.10, torsoScaleX:0.90, torsoScaleY:1.14, accessory:'earrings' },
+  'prof.beatriz': { skin:'#E8C2A4', hair:'#493126', top:'#8658C2', bottom:'#45436A', shoe:'#F8C34B', accent:'#F8C34B', hairStyle:'pixie', face:'long', body:'longcoat', lower:'beatriz-coat', eyes:'narrow', mouth:'frown', headScaleX:0.88, headScaleY:1.14, torsoScaleX:0.86, torsoScaleY:1.16, accessory:'glasses' },
+  'prof.sofia': { skin:'#F0C6A5', hair:'#A64F2D', top:'#EE684F', bottom:'#315778', shoe:'#6FAE69', accent:'#6FAE69', hairStyle:'waves', face:'round', body:'flared', lower:'sofia-bell', eyes:'surprised', mouth:'open', headScaleX:1.03, headScaleY:0.96, torsoScaleX:1.10, torsoScaleY:1.00, accessory:'headband' },
+  'prof.helena': { skin:'#D5A17B', hair:'#211E28', top:'#318AA7', bottom:'#514765', shoe:'#F5C84A', accent:'#F5C84A', hairStyle:'locs', face:'wide', body:'tunic', lower:'helena-wide', eyes:'sleepy', mouth:'neutral', headScaleX:1.14, headScaleY:0.94, torsoScaleX:1.02, torsoScaleY:1.12 },
+  'prof.augusto': { skin:'#B77D5D', hair:'#D2C7B5', top:'#247D91', bottom:'#49434B', shoe:'#EFB64A', accent:'#EFB64A', hairStyle:'curls', face:'pear', body:'compact', lower:'augusto-shorts', eyes:'soft', mouth:'gentle-smile', headScaleX:0.92, headScaleY:0.94, torsoScaleX:0.96, torsoScaleY:0.90, accessory:'glasses' },
+  'prof.caio': { skin:'#D09A76', hair:'#27222B', top:'#D99A26', bottom:'#294E59', shoe:'#4B9E9C', accent:'#4B9E9C', hairStyle:'spiky', face:'square', body:'hood', lower:'caio-tapered', eyes:'curious', mouth:'smirk', headScaleX:1.02, headScaleY:1.00, torsoScaleX:1.00, torsoScaleY:0.98, accessory:'headset' },
 };
 
 const FACE_PATH: Record<FaceShape, string> = {
@@ -75,6 +77,23 @@ const BODY_PATH: Record<BodyShape, string> = {
   compact: 'M92 139Q120 124 148 139Q160 149 157 185L151 219Q120 228 89 219L83 185Q80 149 92 139Z',
   tunic: 'M92 128Q120 118 148 128Q160 138 158 172L153 225Q120 233 87 225L82 172Q80 138 92 128Z',
   hood: 'M88 129Q120 114 152 129Q165 141 161 180L156 222Q120 235 84 222L79 180Q75 141 88 129Z',
+};
+
+/** Silhuetas da parte inferior: cada professor tem uma leitura de roupa própria. */
+const LOWER_PATH: Record<LowerShape, string> = {
+  'clara-skirt': 'M94 184Q120 197 146 184L174 229Q120 243 66 229Z',
+  'lia-slim': 'M98 184Q120 193 142 184L145 230Q120 235 95 230Z',
+  'davi-wide': 'M90 183Q120 197 150 183L163 231Q120 240 77 231Z',
+  'iara-cape': 'M92 180Q120 194 148 180L183 231Q120 247 57 231Z',
+  'nina-straight': 'M96 184Q120 193 144 184L151 230Q120 235 89 230Z',
+  'ravi-jogger': 'M91 183Q120 196 149 183L155 221L145 230L127 224L120 232L113 224L95 230L85 221Z',
+  'mateus-round': 'M89 183Q120 197 151 183Q166 206 156 231Q120 239 84 231Q74 206 89 183Z',
+  'marina-a-line': 'M94 184Q120 197 146 184L166 231Q120 244 74 231Z',
+  'beatriz-coat': 'M90 178Q120 188 150 178L160 230Q120 237 80 230Z',
+  'sofia-bell': 'M96 183Q120 198 144 183L177 230Q120 247 63 230Z',
+  'helena-wide': 'M86 183Q120 198 154 183L169 231Q120 240 71 231Z',
+  'augusto-shorts': 'M94 183Q120 195 146 183L152 216Q120 225 88 216Z',
+  'caio-tapered': 'M94 183Q120 194 146 183L150 230Q120 236 90 230Z',
 };
 
 function Hair({ look }: { look: Look }) {
@@ -226,29 +245,29 @@ export function TeacherCharacter({
     <svg viewBox={portrait ? '40 12 160 160' : '0 0 240 270'} width={style.width} height={style.height}
       className={'shrink-0 ' + (portrait ? 'rounded-full overflow-hidden ' : 'overflow-visible ') + className}
       style={style} role="img" aria-label={teacher.name + ', personagem ilustrado do Pórtico'}
-      data-character-style="portico-friends-v5" data-character-body={look.body} data-character-face={look.face} data-character-hair={look.hairStyle} data-character-eyes={look.eyes} data-character-mouth={look.mouth} focusable="false">
+      data-character-style="portico-friends-v6" data-character-body={look.body} data-character-lower={look.lower} data-character-face={look.face} data-character-hair={look.hairStyle} data-character-eyes={look.eyes} data-character-mouth={look.mouth} focusable="false">
       {portrait && <circle cx="120" cy="98" r="90" fill={'rgb(var(--' + teacher.tone + '))'}/>}
-      {!portrait && <rect x="83" y="257" width="74" height="7" rx="3.5" fill="#243840" opacity=".16"/>}
+      {!portrait && <rect x="83" y="260" width="74" height="6" rx="3" fill="#243840" opacity=".14"/>}
 
-      {/* Duas pernas simples e curtas deixam o corpo dominar a silhueta. */}
-      {!portrait && <g>
-        <path d="M104 215Q103 231 102 246" fill="none" stroke={look.bottom} strokeWidth="13" strokeLinecap="round"/>
-        <path d="M136 215Q137 231 138 246" fill="none" stroke={look.bottom} strokeWidth="13" strokeLinecap="round"/>
-        <rect x="86" y="245" width="31" height="12" rx="6" fill={look.shoe}/>
-        <rect x="123" y="245" width="31" height="12" rx="6" fill={look.shoe}/>
-      </g>}
-
-      {/* A roupa é a própria forma do corpo: uma massa de cor, sem costuras ou contorno. */}
+      {/* Tronco: uma massa simples, com cintura definida sem contorno decorativo. */}
       <g transform={'translate(120 174) scale(' + look.torsoScaleX + ' ' + look.torsoScaleY + ') translate(-120 -174)'}>
         <path d={BODY_PATH[look.body]} fill={look.top}/>
+        <path d={LOWER_PATH[look.lower]} fill={look.bottom}/>
 
-        {/* Cada professor altera a largura e a altura do tronco e a atitude dos braços. */}
+        {/* Braços grossos integrados ao corpo, mas com gestos próprios. */}
         <path d={a.left} fill="none" stroke={look.top} strokeWidth="19" strokeLinecap="round" strokeLinejoin="round"/>
         <path d={a.right} fill="none" stroke={look.top} strokeWidth="19" strokeLinecap="round" strokeLinejoin="round"/>
         <Hand x={a.lh[0]} y={a.lh[1]} skin={look.skin} open={a.open}/>
         <Hand x={a.rh[0]} y={a.rh[1]} skin={look.skin} open={a.open}/>
       </g>
 
+      {/* Pernas curtas e calçados realmente separados, com espaço negativo visível. */}
+      {!portrait && <g>
+        <path d="M104 222Q103 230 102 237" fill="none" stroke={look.bottom} strokeWidth="13" strokeLinecap="round"/>
+        <path d="M136 222Q137 230 138 237" fill="none" stroke={look.bottom} strokeWidth="13" strokeLinecap="round"/>
+        <rect x="86" y="245" width="31" height="12" rx="6" fill={look.shoe}/>
+        <rect x="123" y="245" width="31" height="12" rx="6" fill={look.shoe}/>
+      </g>}
       {/* A cabeça também varia em largura e altura; rosto e cabelo formam uma única unidade. */}
       <g transform={'translate(120 91) scale(' + look.headScaleX + ' ' + look.headScaleY + ') translate(-120 -91)'}>
         <Face look={look} pose={pose}/>
