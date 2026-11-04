@@ -18,7 +18,7 @@ describe('elenco vetorial original do Pórtico — V20', () => {
     expect(new Set(figures.map((svg) => svg.innerHTML)).size).toBe(teachers.length);
     for (const figure of figures) {
       expect(figure.getAttribute('viewBox')).toBe('0 0 240 280');
-      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v20');
+      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v21');
       expect(figure.querySelectorAll('path, rect, circle, ellipse').length).toBeGreaterThan(14);
       expect(figure.getAttribute('data-character-pose')).toBeTruthy();
       expect(figure.getAttribute('data-character-motion')).toBeTruthy();
@@ -116,7 +116,7 @@ describe('elenco vetorial original do Pórtico — V20', () => {
     const { container } = render(<div>{teachers.map((teacher) => (
       <TeacherCharacter key={teacher.id} teacher={teacher} portrait size={48}/>
     ))}</div>);
-    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v20"]')).toHaveLength(teachers.length);
+    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v21"]')).toHaveLength(teachers.length);
   });
 
   it('apresenta o professor em uma cena de explicação contextualizada', () => {
@@ -144,12 +144,12 @@ describe('elenco vetorial original do Pórtico — V20', () => {
 
     fireEvent.click(getByRole('button', { name: 'Pensando' }));
     expect(main).toHaveAttribute('data-character-review-pose', 'thinking');
-    expect(Array.from(container.querySelectorAll('svg[data-character-style="portico-friends-v20"]'))
+    expect(Array.from(container.querySelectorAll('svg[data-character-style="portico-friends-v21"]'))
       .every((svg) => svg.getAttribute('data-character-pose') === 'thinking')).toBe(true);
 
     fireEvent.click(getByRole('button', { name: 'Retratos' }));
     expect(main).toHaveAttribute('data-character-review-mode', 'portrait');
-    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v20"]')).toHaveLength(teachers.length);
+    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v21"]')).toHaveLength(teachers.length);
 
     fireEvent.click(getByRole('button', { name: 'Comemorando' }));
     expect(main).toHaveAttribute('data-character-review-pose', 'celebrating');
@@ -162,6 +162,24 @@ describe('elenco vetorial original do Pórtico — V20', () => {
     const framed = Array.from(container.querySelectorAll('svg[data-character-frame="horizontal-species"]'));
     expect(framed.map((svg) => svg.getAttribute('data-character-species')).sort())
       .toEqual(['armadillo', 'chameleon', 'turtle']);
+  });
+
+
+  it('aplica um contorno externo compartilhado sem desenhar um aro em cada detalhe interno', () => {
+    const { container } = render(<div>{teachers.map((teacher) => (
+      <TeacherCharacter key={teacher.id} teacher={teacher} size={180}/>
+    ))}</div>);
+    const figures = Array.from(container.querySelectorAll('svg[data-character-outline="unified-contour"]'));
+    expect(figures).toHaveLength(teachers.length);
+    expect(figures.every((svg) => svg.querySelector('filter feMorphology[operator="dilate"]'))).toBe(true);
+  });
+
+  it('muda a direção do olhar ao pensar e fecha os olhos em arcos de alegria ao comemorar', () => {
+    const { container, getByRole } = render(<TeacherCharacterReviewPage />);
+    fireEvent.click(getByRole('button', { name: 'Pensando' }));
+    expect(container.querySelectorAll('[data-eye-expression="curious-gaze"]').length).toBeGreaterThanOrEqual(20);
+    fireEvent.click(getByRole('button', { name: 'Comemorando' }));
+    expect(container.querySelectorAll('[data-eye-expression="joyful-closed"]').length).toBeGreaterThanOrEqual(20);
   });
 
   it('atribui um professor coerente às principais disciplinas', () => {

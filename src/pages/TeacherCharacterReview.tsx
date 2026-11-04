@@ -34,11 +34,11 @@ export function TeacherCharacterReviewPage() {
       data-character-review-pose={poseMode}
     >
       <header className="max-w-3xl space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V20</p>
+        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V21</p>
         <h1 className="font-title text-3xl font-bold leading-tight sm:text-4xl">Uma comunidade. Treze personalidades.</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
           A meta desta rodada é fazer cada personagem funcionar antes dos detalhes: a silhueta precisa ser reconhecível,
-          o rosto deve transmitir intenção e o gesto precisa combinar com a personalidade. Compare o elenco inteiro
+          o rosto deve transmitir intenção e o gesto precisa combinar com a personalidade. O contorno externo e o olhar agora seguem regras compartilhadas. Compare o elenco inteiro
           nos mesmos enquadramentos e poses — sem aprovar um desenho apenas porque ele é diferente dos outros.
         </p>
       </header>
@@ -49,7 +49,7 @@ export function TeacherCharacterReviewPage() {
             <h2 className="text-sm font-extrabold">Como olhar para o elenco</h2>
             <p className="text-xs text-muted">Mude o enquadramento e compare os mesmos personagens.</p>
           </div>
-          <p className="text-xs font-semibold text-muted">13 personagens · 3 leituras · 4 poses</p>
+          <p className="text-xs font-semibold text-muted">13 personagens · 3 leituras · 4 poses · contorno comum</p>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="space-y-1.5">
