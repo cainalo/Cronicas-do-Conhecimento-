@@ -76,7 +76,7 @@ function GestureArms({ pose, sleeve, hand = '#D29A76' }: { pose:TeacherPose; sle
     presenting:{l:'M91 172Q69 171 62 151',r:'M149 171Q169 165 184 145',lh:[62,151],rh:[184,145]},
     greeting:{l:'M91 172Q73 190 75 208',r:'M149 170Q178 132 179 100',lh:[75,208],rh:[179,100]},
     thinking:{l:'M91 172Q72 190 75 208',r:'M149 170Q166 153 146 143',lh:[75,208],rh:[146,143]},
-    celebrating:{l:'M91 165Q65 137 58 99',r:'M149 165Q175 137 182 99',lh:[58,99],rh:[182,99]},
+    celebrating:{l:'M91 165Q60 125 43 81',r:'M149 165Q180 125 197 81',lh:[43,81],rh:[197,81]},
     listening:{l:'M91 174Q102 193 116 190',r:'M149 174Q138 193 124 190',lh:[116,190],rh:[124,190]},
     'hands-on-hips':{l:'M91 169Q70 185 91 199',r:'M149 169Q170 185 149 199',lh:[91,199],rh:[149,199]},
     'arms-down':{l:'M91 171Q72 193 76 216',r:'M149 171Q168 193 164 216',lh:[76,216],rh:[164,216]},
@@ -171,7 +171,7 @@ function Beaver({ pose }: { pose:TeacherPose }) {
     <path d="M90 197h19v17H90ZM131 197h19v17h-19Z" fill="#E9B44B"/>
     <path d="M99 241L95 253Q107 259 116 253L119 240M128 240L131 253Q142 259 152 253L147 241" fill="#805039"/>
     <ellipse cx="104" cy="255" rx="15" ry="7" fill="#65402F"/><ellipse cx="143" cy="255" rx="15" ry="7" fill="#65402F"/>
-    <GestureArms pose={pose} sleeve="#3676C9" hand="#95603F"/>
+    <GestureArms pose={pose} sleeve="#95603F" hand="#95603F"/>
     <ellipse cx="120" cy="101" rx="56" ry="56" fill="#966044"/>
     <circle cx="77" cy="64" r="13" fill="#865137"/><circle cx="163" cy="64" r="13" fill="#865137"/>
     <ellipse cx="120" cy="125" rx="39" ry="25" fill="#D5A276"/>
@@ -197,7 +197,7 @@ function Axolotl({ pose }: { pose:TeacherPose }) {
     <path d="M120 193L129 204L120 215L111 204Z" fill="#F6C950"/>
     <path d="M97 235Q88 246 93 255L111 255L115 238M125 238L129 255L147 255Q152 246 143 235" fill="#E48A9C"/>
     <ellipse cx="101" cy="255" rx="13" ry="7" fill="#D8788C"/><ellipse cx="139" cy="255" rx="13" ry="7" fill="#D8788C"/>
-    <path d="M92 188Q72 195 68 211M148 188Q168 195 172 211" fill="none" stroke="#E78FA1" strokeWidth="12" strokeLinecap="round"/>
+    {pose !== "shrug" && <path d="M92 188Q72 195 68 211M148 188Q168 195 172 211" fill="none" stroke="#E78FA1" strokeWidth="12" strokeLinecap="round"/>}
     <ellipse cx="120" cy="104" rx="52" ry="54" fill="#F5B4C1"/>
     <path d="M76 87Q53 65 63 37Q83 44 92 69Q96 37 111 24Q123 44 119 68Q135 38 153 30Q160 55 140 83Z" fill="#E88198"/>
     <path d="M164 87Q187 65 177 37Q157 44 148 69Q144 37 129 24Q117 44 121 68Q105 38 87 30Q80 55 100 83Z" fill="#E88198"/>
@@ -207,6 +207,8 @@ function Axolotl({ pose }: { pose:TeacherPose }) {
     <Eye x={141} y={100} rx={13} ry={16} iris="#3F8191" shape="wide" pupilScale={.92} tilt={2}/>
     <path d="M111 132Q120 139 129 132" fill="none" stroke="#9B5B70" strokeWidth="4" strokeLinecap="round"/>
     <path d="M91 143q5 3 10 0M139 143q5 3 10 0" fill="none" stroke="#E48A9C" strokeWidth="3" strokeLinecap="round"/>
+    {pose === "shrug" && <g fill="none" stroke="#E78FA1" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"><path d="M92 190Q75 174 57 158"/><path d="M148 190Q165 174 183 158"/></g>}
+    {pose === "shrug" && <g fill="#E78FA1"><path d="M51 153Q44 145 50 140Q55 136 60 143L65 154Q59 164 51 153Z"/><path d="M189 153Q196 145 190 140Q185 136 180 143L175 154Q181 164 189 153Z"/></g>}
     {pose === 'celebrating' && <path d="M60 132l-10 -12M180 132l10 -12" stroke="#F2A0AD" strokeWidth="4" strokeLinecap="round"/>}
   </g>;
 }
@@ -255,6 +257,8 @@ function Frog({ pose }: { pose:TeacherPose }) {
     <path d="M86 134Q120 153 154 134Q145 149 120 151Q95 149 86 134Z" fill="#F0A2A0"/>
     <circle cx="105" cy="111" r="3.5" fill="#4A8A53"/><circle cx="135" cy="111" r="3.5" fill="#4A8A53"/>
     <path d="M107 179l13 10l13-10" fill="none" stroke="#E2F0BD" strokeWidth="2.5"/>
+    {pose === "celebrating" && <g fill="none" stroke="#5B9F59" strokeWidth="15" strokeLinecap="round" strokeLinejoin="round"><path d="M92 170Q65 136 43 81"/><path d="M148 170Q175 136 197 81"/></g>}
+    {pose === "celebrating" && <g fill="#7CBA63"><path d="M36 82Q29 72 36 66Q43 61 49 69L55 80Q49 91 40 88Z"/><path d="M204 82Q211 72 204 66Q197 61 191 69L185 80Q191 91 200 88Z"/></g>}
   </g>;
 }
 
@@ -333,7 +337,8 @@ function Parrot({ pose }: { pose:TeacherPose }) {
     <path d="M103 224L99 248M137 224L141 248" stroke="#8B5E37" strokeWidth="7" strokeLinecap="round"/>
     <path d="M99 247q-13 7 -18 1M100 248q0 11 7 12M141 248q13 7 18 1M140 248q0 11 -7 12" fill="none" stroke="#8B5E37" strokeWidth="4" strokeLinecap="round"/>
     <path d="M93 151Q120 131 147 151Q162 186 145 229Q120 246 95 229Q78 186 93 151Z" fill="#E65C47"/>
-    <path d="M92 178Q65 191 71 224Q88 217 105 192M148 178Q175 191 169 224Q152 217 135 192" fill="#2C9D7C"/>
+    <path d="M92 178Q65 191 71 224Q88 217 105 192" fill="#2C9D7C"/>
+    <path d={pose === "one-hand-on-hip" ? "M148 178Q174 168 183 185Q187 201 165 209Q151 204 135 192Z" : "M148 178Q175 191 169 224Q152 217 135 192"} fill="#2C9D7C"/>
     <path d="M76 205L89 193L98 213M164 205L151 193L142 213" fill="none" stroke="#F3C64F" strokeWidth="5" strokeLinecap="round"/>
     <path d="M111 223L120 251L129 223" fill="#EFBF45"/>
     <path d="M105 160Q120 177 135 160L132 185Q120 194 108 185Z" fill="#2B9D7C"/>
@@ -454,6 +459,7 @@ export function TeacherCharacter({
 }) {
   const meta = META[teacher.id] ?? META['prof.lia'];
   const characterPose = pose ?? TEACHER_SIGNATURE_POSES[teacher.id] ?? 'presenting';
+  const characterMotion = teacher.id.replace('prof.', '');
   const style:CSSProperties = portrait ? { width:size, height:size } : { width:Math.round(size * .9), height:size };
   return (
     <svg
@@ -461,7 +467,8 @@ export function TeacherCharacter({
       width={style.width} height={style.height}
       className={'shrink-0 ' + (portrait ? 'rounded-full overflow-hidden ' : 'overflow-visible ') + className}
       style={style} role="img" aria-label={teacher.name + ', personagem original do Pórtico'}
-      data-character-style="portico-friends-v16"
+      data-character-style="portico-friends-v17"
+      data-character-motion={characterMotion}
       data-character-species={meta.species} data-character-outfit={meta.outfit}
       data-character-body={meta.body} data-character-lower={meta.lower}
       data-character-hair={meta.hair} data-character-eyes={meta.eyes} data-character-eye-shape={meta.eyeShape}
@@ -474,7 +481,9 @@ export function TeacherCharacter({
     >
       {portrait && <circle cx="120" cy="120" r="106" fill={'rgb(var(--' + teacher.tone + '))'}/>}
       {!portrait && <ellipse cx="120" cy="265" rx="78" ry="5" fill="#2D2926" opacity=".06" stroke="none"/>}
-      <g>{CharacterArt({ id:teacher.id, pose:characterPose })}</g>
+      <g className={'p-character__art p-character__art--' + characterMotion}>
+        {CharacterArt({ id:teacher.id, pose:characterPose })}
+      </g>
     </svg>
   );
 }

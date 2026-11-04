@@ -1146,6 +1146,63 @@ main.safe-top-content { padding-top: calc(env(safe-area-inset-top, 0px) + 1.5rem
 }
 
 
+/* Micro-movimentos próprios do elenco Pórtico.
+   São discretos para não competir com a leitura; cada personagem tem seu ritmo.
+   A preferência do sistema por movimento reduzido sempre prevalece. */
+@keyframes portico-character-bob {
+  0%, 100% { transform: translateY(0) rotate(-.2deg); }
+  50% { transform: translateY(-2px) rotate(.35deg); }
+}
+@keyframes portico-character-nod {
+  0%, 100% { transform: rotate(0deg); }
+  44% { transform: rotate(-.8deg); }
+  58% { transform: rotate(.45deg); }
+}
+@keyframes portico-character-sway {
+  0%, 100% { transform: rotate(-.75deg); }
+  50% { transform: rotate(.85deg); }
+}
+@keyframes portico-character-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translate(1px, -2.4px); }
+}
+@keyframes portico-character-hop {
+  0%, 78%, 100% { transform: translateY(0) rotate(0); }
+  84% { transform: translateY(-4px) rotate(-.8deg); }
+  90% { transform: translateY(0) rotate(.5deg); }
+}
+@keyframes portico-character-rock {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-.45deg); }
+  50% { transform: rotate(.35deg); }
+  75% { transform: rotate(-.15deg); }
+}
+@keyframes portico-character-flutter {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  30% { transform: translateY(-1.2px) rotate(-.8deg); }
+  64% { transform: translateY(.4px) rotate(.65deg); }
+}
+.p-character__art {
+  transform-box: fill-box;
+  transform-origin: 50% 82%;
+}
+.p-character__art--clara { animation: portico-character-bob 3.8s ease-in-out infinite; }
+.p-character__art--lia { animation: portico-character-nod 4.8s ease-in-out infinite; }
+.p-character__art--davi { animation: portico-character-sway 5.4s ease-in-out infinite; }
+.p-character__art--iara { animation: portico-character-float 4s ease-in-out infinite; }
+.p-character__art--nina { animation: portico-character-rock 5.7s ease-in-out infinite; }
+.p-character__art--ravi { animation: portico-character-hop 4.9s ease-in-out infinite; }
+.p-character__art--mateus { animation: portico-character-rock 6.2s ease-in-out infinite; }
+.p-character__art--marina { animation: portico-character-float 5.4s ease-in-out infinite; }
+.p-character__art--beatriz { animation: portico-character-nod 5.8s ease-in-out infinite; }
+.p-character__art--sofia { animation: portico-character-flutter 4.3s ease-in-out infinite; }
+.p-character__art--helena { animation: portico-character-sway 5.1s ease-in-out infinite; }
+.p-character__art--augusto { animation: portico-character-nod 6.5s ease-in-out infinite; }
+.p-character__art--caio { animation: portico-character-rock 4.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .p-character__art { animation: none !important; }
+}
+
 /* Personagens do Pórtico: uma linguagem vetorial compartilhada entre avatar, trilha e aula. */
 .teacher-scene {
   --teacher-bg: color-mix(in srgb, rgb(var(--surface)) 84%, var(--teacher-tone) 16%);

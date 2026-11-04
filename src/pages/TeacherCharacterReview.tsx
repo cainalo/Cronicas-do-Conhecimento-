@@ -6,11 +6,11 @@ export function TeacherCharacterReviewPage() {
   return (
     <main className="mx-auto max-w-6xl space-y-5 px-4 py-6 sm:space-y-7">
       <header className="max-w-3xl space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V16</p>
+        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V17</p>
         <h1 className="font-title text-3xl font-bold leading-tight sm:text-4xl">Uma comunidade. Treze personalidades.</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
           Cada professor tem uma silhueta, um rosto, uma maneira de se mover e um jeito próprio de ensinar.
-          O elenco usa uma linguagem vetorial compartilhada, mas não um molde corporal único.
+          O elenco usa uma linguagem vetorial compartilhada, mas não um molde corporal único. Cada personalidade também tem um gesto e um ritmo de repouso próprios.
         </p>
       </header>
 

@@ -139,6 +139,24 @@ async function run() {
             fullPage: true,
             animations: 'disabled',
           });
+          if (shot.name === 'personagens' && vp.width === 390 && cards === null) {
+            // Captura adicional para comprovar o movimento real dos SVGs no Chromium.
+            await go(shot.path);
+            await page.evaluate(() => {
+              for (const el of document.querySelectorAll('body *')) {
+                const cs = getComputedStyle(el);
+                if (cs.position === 'fixed' && cs.bottom !== 'auto' && parseFloat(cs.bottom) >= 0) {
+                  el.style?.setProperty('display', 'none');
+                }
+              }
+            });
+            await page.waitForTimeout(1100);
+            await page.screenshot({
+              path: `${SCREENSHOT_DIR}/390x844-personagens-motion.png`,
+              fullPage: true,
+              animations: 'allow',
+            });
+          }
         }
 
         // Cartão de certo ou errado.
