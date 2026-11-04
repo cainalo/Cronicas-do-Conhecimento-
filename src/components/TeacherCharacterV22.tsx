@@ -79,7 +79,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     mouth:'M80 89Q94 103 108 88Q105 107 94 108Q83 106 80 89Z',
     earrings:true, freckles:true, signature:'Curiosa e acolhedora',
     hairLabel:'Cabelo longo, ondulado e volumoso', outfitLabel:'Blusa terracota e calça ampla creme',
-    bodyLabel:'Pera suave, cintura leve e quadril amplo',
+    bodyLabel:'Pera suave, cintura leve e quadril amplo', toneLabel:'Quente e acessível',
   },
   'prof.lia': {
     artId:'lia',
@@ -101,7 +101,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     mouth:'M86 91Q94 96 102 90Q100 99 94 99Q88 98 86 91Z',
     glasses:true, signature:'Metódica e investigativa',
     hairLabel:'Coque alto e franja lateral', outfitLabel:'Blusa verde-oliva e calça clara',
-    bodyLabel:'Coluna estreita, braços próximos e pernas longas',
+    bodyLabel:'Coluna estreita, braços próximos e pernas longas', toneLabel:'Prática e concentrada',
   },
   'prof.davi': {
     artId:'davi',
@@ -124,7 +124,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     beard:'M65 83C69 101 81 112 94 113C108 112 119 101 123 82C117 109 107 122 93 123C78 121 68 107 65 83Z',
     signature:'Conversador e visual',
     hairLabel:'Cachos curtos e densos', outfitLabel:'Moletom verde e calça carvão',
-    bodyLabel:'Barril largo, ombros dominantes e braços robustos',
+    bodyLabel:'Barril largo, ombros dominantes e braços robustos', toneLabel:'Energético e próximo',
   },
   'prof.iara': {
     artId:'iara',
@@ -146,7 +146,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     mouth:'M85 94Q94 99 103 93Q100 100 94 101Q88 100 85 94Z',
     earrings:true, signature:'Calma e criteriosa',
     hairLabel:'Cabelo longo, liso e lateral', outfitLabel:'Blusa creme e saia verde',
-    bodyLabel:'Parte superior delicada com saia ampla em A',
+    bodyLabel:'Parte superior delicada com saia ampla em A', toneLabel:'Serena e observadora',
   },
   'prof.nina': {
     artId:'nina',
@@ -168,7 +168,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     mouth:'M86 91Q93 94 102 89Q99 98 94 98Q88 97 86 91Z',
     glasses:true, signature:'Investigativa e curiosa',
     hairLabel:'Bob curto com franja lateral', outfitLabel:'Blusa ameixa e calça escura',
-    bodyLabel:'Corpo compacto e arredondado, centro de massa baixo',
+    bodyLabel:'Corpo compacto e arredondado, centro de massa baixo', toneLabel:'Perspicaz e expressiva',
   },
   'prof.ravi': {
     artId:'ravi',
@@ -190,7 +190,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     mouth:'M79 88Q94 103 109 87Q106 109 94 110Q82 108 79 88Z',
     signature:'Prático e colaborativo',
     hairLabel:'Cachos curtos e arredondados', outfitLabel:'Blusa mostarda e calça verde-escura',
-    bodyLabel:'Ombros largos, cintura estreita e postura atlética',
+    bodyLabel:'Ombros largos, cintura estreita e postura atlética', toneLabel:'Otimista e enérgico',
   },
   'prof.mateus': {
     artId:'mateus',
@@ -213,7 +213,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     glasses:true, beard:'M66 82C71 102 80 111 94 112C108 110 118 99 122 81C119 109 107 121 94 122C79 120 69 106 66 82Z',
     signature:'Preciso e paciente',
     hairLabel:'Corte curto lateral e barba discreta', outfitLabel:'Suéter terracota e calça carvão',
-    bodyLabel:'Retângulo alto e estreito, pernas compridas',
+    bodyLabel:'Retângulo alto e estreito, pernas compridas', toneLabel:'Confiável e analítico',
   },
   'prof.marina': {
     artId:'marina',
@@ -235,7 +235,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     mouth:'M84 93Q94 99 105 92Q102 101 94 102Q87 101 84 93Z',
     earrings:true, signature:'Organizada e estratégica',
     hairLabel:'Cabelo médio reto com pontas curvas', outfitLabel:'Casaco grafite e calça creme',
-    bodyLabel:'Cintura marcada entre ombros e quadris arredondados',
+    bodyLabel:'Cintura marcada entre ombros e quadris arredondados', toneLabel:'Organizada e segura',
   },
   'prof.beatriz': {
     artId:'beatriz',
@@ -257,7 +257,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     mouth:'M81 90Q94 103 107 89Q104 106 94 107Q83 105 81 90Z',
     glasses:true, signature:'Clara e criteriosa',
     hairLabel:'Cachos médios com faixa discreta', outfitLabel:'Blusa coral e calça clara',
-    bodyLabel:'Pera arredondada, braços curtos e quadril generoso',
+    bodyLabel:'Pera arredondada, braços curtos e quadril generoso', toneLabel:'Direta e acessível',
   },
   'prof.sofia': {
     artId:'sofia',
@@ -279,7 +279,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     mouth:'M79 90Q94 104 109 89Q105 108 94 109Q82 107 79 90Z',
     earrings:true, signature:'Expressiva e acolhedora',
     hairLabel:'Cabelo longo e ondulado', outfitLabel:'Blusa rosa antigo e calça escura',
-    bodyLabel:'Coluna longa e fluida com linha inferior contínua',
+    bodyLabel:'Coluna longa e fluida com linha inferior contínua', toneLabel:'Expressiva e calorosa',
   },
   'prof.helena': {
     artId:'helena',
@@ -301,7 +301,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     mouth:'M86 94Q94 98 102 93Q99 100 94 100Q88 100 86 94Z',
     glasses:true, signature:'Expressiva e cuidadosa',
     hairLabel:'Coque grisalho com mechas suaves', outfitLabel:'Cardigã verde e saia escura',
-    bodyLabel:'Retângulo macio, mangas amplas e base compacta',
+    bodyLabel:'Retângulo macio, mangas amplas e base compacta', toneLabel:'Acolhedora e experiente',
   },
   'prof.augusto': {
     artId:'augusto',
@@ -324,7 +324,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     mustache:'M80 94C84 88 90 89 94 93C98 89 104 88 108 94C105 100 100 100 94 97C89 101 84 100 80 94Z',
     signature:'Sereno e didático',
     hairLabel:'Cabelo grisalho ondulado e bigode curto', outfitLabel:'Suéter verde-escuro e calça ocre',
-    bodyLabel:'Centro de massa arredondado, tronco cheio e pernas firmes',
+    bodyLabel:'Centro de massa arredondado, tronco cheio e pernas firmes', toneLabel:'Sereno e ponderado',
   },
   'prof.caio': {
     artId:'caio',
@@ -346,7 +346,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     mouth:'M84 90Q94 100 106 89Q102 104 94 105Q87 103 84 90Z',
     signature:'Objetivo e experimental',
     hairLabel:'Corte curto com topete lateral', outfitLabel:'Moletom azul-petróleo e calça escura',
-    bodyLabel:'Moletom amplo e arredondado com pernas afuniladas',
+    bodyLabel:'Moletom amplo e arredondado com pernas afuniladas', toneLabel:'Curioso e inventivo',
   },
 };
 

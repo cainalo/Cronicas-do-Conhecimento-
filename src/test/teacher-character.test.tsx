@@ -58,6 +58,7 @@ describe('elenco humano do Pórtico — V22.8', () => {
     const figures = Array.from(container.querySelectorAll('svg[data-character-style="portico-friends-v22"]'));
     expect(figures).toHaveLength(13);
     expect(figures.every((svg) => svg.getAttribute('data-character-silhouette') === 'bespoke-connected-body')).toBe(true);
+    expect(new Set(figures.map((svg) => svg.getAttribute('data-character-shape-archetype'))).size).toBe(13);
     expect(new Set(figures.map((svg) => svg.getAttribute('data-character-id'))).size).toBe(13);
     expect(new Set(figures.map((svg) => svg.getAttribute('data-character-face-shape'))).size).toBe(13);
     expect(new Set(figures.map((svg) => svg.getAttribute('data-character-eyes'))).size).toBe(4);
