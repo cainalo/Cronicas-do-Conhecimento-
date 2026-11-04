@@ -59,7 +59,7 @@ describe('elenco humano do Pórtico — V22', () => {
   it('varia as proporções do corpo entre os treze professores sem perder a unidade visual', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={200}/>)}</div>);
     const figures = Array.from(container.querySelectorAll('svg[data-character-style="portico-friends-v22"]'));
-    expect(new Set(figures.map((svg) => svg.getAttribute('data-character-body-scale')).size).toBe(13);
+    expect(new Set(figures.map((svg) => svg.getAttribute('data-character-body-scale'))).size).toBe(13);
   });
 
   it('mantém os retratos coerentes em avatar e corpo inteiro', () => {
