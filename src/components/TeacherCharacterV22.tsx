@@ -1,17 +1,4 @@
-
-    artId:'caio',
-    artId:'augusto',
-    artId:'helena',
-    artId:'sofia',
-    artId:'beatriz',
-    artId:'marina',
-    artId:'mateus',
-    artId:'ravi',
-    artId:'nina',
-    artId:'iara',
-    artId:'davi',
-    artId:'lia',
-    artId:'clara',import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { FictionalTeacher } from '@/content/teachers';
 
 /**
@@ -68,6 +55,7 @@ const INK = '#49352F';
 const PAPER = '#FFF8EA';
 const DESIGNS: Record<string, CharacterDesign> = {
   'prof.clara': {
+    artId:'clara',
     skin:'#D99568', hair:'#4B2C25',
     hairBack:'M46 88C35 62 44 31 69 22C91 11 122 21 134 47C142 65 139 91 128 112L138 166C124 174 111 164 109 150L66 160C53 146 54 120 46 88Z',
     hairFront:'M48 64C44 43 57 24 78 19C102 12 125 27 131 49C120 46 113 40 107 31C98 46 82 48 67 47C62 58 57 63 48 64Z M51 55C54 40 62 31 73 29C69 40 63 47 51 55Z',
@@ -85,6 +73,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     bodyLabel:'Silhueta leve, cabelo como forma principal', toneLabel:'Quente e acessível',
   },
   'prof.lia': {
+    artId:'lia',
     skin:'#B97554', hair:'#2C2325',
     hairBack:'M57 57C56 34 73 22 91 22C113 22 128 38 128 59L126 107L116 123L65 116Z',
     hairFront:'M57 59C57 38 70 24 92 23C111 22 127 36 128 54C113 49 105 39 101 34C93 47 78 55 57 59Z M62 53C69 43 77 37 86 34C81 44 74 51 62 53Z',
@@ -102,6 +91,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     bodyLabel:'Silhueta compacta com coque alto', toneLabel:'Prática e concentrada',
   },
   'prof.davi': {
+    artId:'davi',
     skin:'#8F533C', hair:'#241C1B',
     hairBack:'M52 63C49 42 62 22 84 20C106 15 128 32 130 55L126 105L57 108Z',
     hairFront:'M51 59C45 43 58 22 76 20C89 12 107 21 114 28C127 32 133 47 127 63C118 58 112 51 107 42C99 52 87 55 76 51C69 59 61 62 51 59Z',
@@ -120,6 +110,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     bodyLabel:'Ombros largos e cabelo crespo', toneLabel:'Energético e próximo',
   },
   'prof.iara': {
+    artId:'iara',
     skin:'#E4A27E', hair:'#342126',
     hairBack:'M42 82C39 48 58 22 91 20C122 20 139 47 135 79L131 161C121 176 108 167 111 146L64 157C52 145 53 111 42 82Z',
     hairFront:'M47 62C49 34 71 20 93 22C118 23 132 40 132 64C117 55 109 43 103 34C91 51 76 57 59 58L47 62Z',
@@ -137,6 +128,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     bodyLabel:'Silhueta alongada com cabelo longo', toneLabel:'Serena e observadora',
   },
   'prof.nina': {
+    artId:'nina',
     skin:'#E7B08A', hair:'#242024',
     hairBack:'M47 69C45 42 61 23 91 22C122 22 136 45 133 76L127 104C121 123 108 131 94 130C73 128 55 112 48 91Z',
     hairFront:'M47 69C46 42 64 23 91 22C119 21 135 43 133 70C118 68 108 59 101 49C88 62 70 69 47 69Z M48 71C57 68 64 60 69 51C72 68 67 79 59 85Z',
@@ -154,6 +146,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     bodyLabel:'Silhueta curta com corte arredondado', toneLabel:'Perspicaz e expressiva',
   },
   'prof.ravi': {
+    artId:'ravi',
     skin:'#A86443', hair:'#2A211F',
     hairBack:'M48 62C48 37 66 20 91 19C118 19 135 38 132 64L126 103L54 105Z',
     hairFront:'M47 57C44 37 61 19 81 18C102 12 125 27 132 46C135 58 127 66 119 65C111 55 109 44 104 39C96 50 85 54 76 49C68 57 58 61 47 57Z',
@@ -171,6 +164,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     bodyLabel:'Silhueta atlética e compacta', toneLabel:'Otimista e enérgico',
   },
   'prof.mateus': {
+    artId:'mateus',
     skin:'#D89B75', hair:'#583A2A',
     hairBack:'M51 58C51 34 70 20 94 21C117 22 131 39 129 62L125 100L57 103Z',
     hairFront:'M51 59C47 39 63 20 84 19C105 16 125 29 130 48C118 46 110 41 104 34C95 47 78 51 64 49C60 55 56 58 51 59Z',
@@ -189,6 +183,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     bodyLabel:'Silhueta reta com óculos', toneLabel:'Confiável e analítico',
   },
   'prof.marina': {
+    artId:'marina',
     skin:'#A96F53', hair:'#2E2525',
     hairBack:'M48 64C48 39 66 22 93 22C119 22 136 41 133 69L130 108C122 127 109 132 92 130C70 127 52 110 48 87Z',
     hairFront:'M48 65C44 42 62 22 88 21C114 20 133 36 134 60C123 58 114 52 107 43C94 55 72 59 48 65Z M49 63C54 76 55 91 49 99C43 87 43 75 49 63Z',
@@ -206,6 +201,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     bodyLabel:'Silhueta média e equilibrada', toneLabel:'Organizada e segura',
   },
   'prof.beatriz': {
+    artId:'beatriz',
     skin:'#C98764', hair:'#4B302A',
     hairBack:'M52 72C40 65 44 47 55 42C49 27 67 18 79 25C83 12 102 13 108 25C126 20 138 38 129 52C140 65 131 83 124 93L126 102L54 104Z',
     hairFront:'M49 60C43 47 53 34 63 33C62 20 78 17 87 26C99 16 115 26 113 38C128 39 134 52 126 64C113 59 105 52 101 43C89 53 74 57 62 52C58 57 53 60 49 60Z',
@@ -223,6 +219,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     bodyLabel:'Silhueta compacta com cachos marcantes', toneLabel:'Direta e acessível',
   },
   'prof.sofia': {
+    artId:'sofia',
     skin:'#E4A17B', hair:'#6B3424',
     hairBack:'M42 84C39 51 56 22 91 20C124 18 141 45 136 82L130 166C118 174 108 163 110 145L61 158C49 148 53 112 42 84Z',
     hairFront:'M45 62C43 36 63 19 91 20C116 20 137 38 136 66C123 62 113 52 107 40C98 54 76 58 60 57C55 61 50 63 45 62Z',
@@ -240,6 +237,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     bodyLabel:'Silhueta fluida com cabelo longo', toneLabel:'Expressiva e calorosa',
   },
   'prof.helena': {
+    artId:'helena',
     skin:'#E3B18D', hair:'#A69B8D',
     hairBack:'M55 59C56 37 72 23 92 24C113 23 128 39 128 60L124 103L60 103Z M73 32C70 19 78 9 91 8C104 8 111 20 105 30C97 38 80 39 73 32Z',
     hairFront:'M58 54C60 34 73 24 91 24C109 24 125 37 127 53C116 49 108 43 102 34C94 47 77 51 58 54Z',
@@ -257,6 +255,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     bodyLabel:'Silhueta média com coque alto', toneLabel:'Acolhedora e experiente',
   },
   'prof.augusto': {
+    artId:'augusto',
     skin:'#C58A69', hair:'#96928D',
     hairBack:'M50 57C51 34 68 21 93 21C118 22 132 40 130 62L125 100L55 103Z',
     hairFront:'M51 58C48 38 64 22 84 19C107 16 129 31 132 51C120 49 112 42 106 33C96 45 79 51 65 48C60 54 56 57 51 58Z',
@@ -275,6 +274,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     bodyLabel:'Silhueta madura de ombros retos', toneLabel:'Sereno e ponderado',
   },
   'prof.caio': {
+    artId:'caio',
     skin:'#D99A70', hair:'#3A2725',
     hairBack:'M51 59C50 36 67 20 93 20C118 21 132 39 130 62L125 100L56 103Z',
     hairFront:'M51 59C48 39 62 21 84 18C107 15 129 30 132 50C119 47 110 41 104 32C95 45 79 50 65 49C61 55 56 58 51 59Z',
