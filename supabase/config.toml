@@ -1,0 +1,3 @@
+# Configuração mínima para permitir o uso do Supabase CLI com as migrações versionadas do Pórtico.
+# Não contém credenciais. O projeto remoto é selecionado por "supabase link".
+project_id = "portico"
