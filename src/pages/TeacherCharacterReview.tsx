@@ -9,7 +9,7 @@ const VIEW_MODES: { value:ViewMode; label:string; description:string }[] = [
   { value:'portrait', label:'Rostos', description:'A expressão, o cabelo e a identidade em tamanho de avatar.' },
 ];
 
-/** V22: revisão exclusiva de arte estática. Poses e animações não entram nesta etapa. */
+/** V22.1: revisão de proporções e leitura em tela pequena. Poses e animações não entram nesta etapa. */
 export function TeacherCharacterReviewPage() {
   const [view, setView] = useState<ViewMode>('color');
   return (
@@ -55,18 +55,18 @@ export function TeacherCharacterReviewPage() {
           </div>
           <span className="text-xs text-muted">13 personagens · 13 identidades</span>
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
           {teachers.map((teacher) => {
             const portrait = view === 'portrait';
             const silhouette = view === 'silhouette';
             return (
               <article key={teacher.id} className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-line/70 bg-surface"
                 data-review-character={teacher.id}>
-                <div className={'flex w-full items-end justify-center overflow-hidden ' + (portrait ? 'h-36' : 'h-52')}
+                <div className={'flex w-full items-end justify-center overflow-hidden ' + (portrait ? 'h-52' : 'h-72')}
                   style={{ backgroundColor:'rgb(var(--' + teacher.tone + ') / .16)' }}>
                   <div data-review-art={view} className="flex h-full w-full items-end justify-center"
                     style={{ filter:silhouette ? 'brightness(0)' : undefined }}>
-                    <TeacherCharacter teacher={teacher} size={portrait ? 144 : 208} portrait={portrait} className="max-w-full"/>
+                    <TeacherCharacter teacher={teacher} size={portrait ? 176 : 288} portrait={portrait} className="max-w-full"/>
                   </div>
                 </div>
                 <div className="min-h-[5.5rem] px-3 py-3">
