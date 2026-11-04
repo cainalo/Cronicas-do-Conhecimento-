@@ -25,11 +25,15 @@ describe('personagens-professores vetoriais', () => {
     const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
     expect(figures).toHaveLength(teachers.length);
     for (const figure of figures) {
-      expect(figure.getAttribute('viewBox')).toBe('0 0 240 280');
+      expect(figure.getAttribute('viewBox')).toBe('0 0 240 270');
       expect(figure.querySelectorAll('path, rect, circle, ellipse').length).toBeGreaterThan(14);
       expect(figure.querySelectorAll('[stroke-width]').length).toBeLessThan(12);
-      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v3');
+      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v4');
     }
+    const bodySilhouettes = figures.map((figure) => figure.getAttribute('data-character-body'));
+    expect(new Set(bodySilhouettes).size).toBe(teachers.length);
+    const differentDrawings = figures.map((figure) => figure.innerHTML);
+    expect(new Set(differentDrawings).size).toBe(teachers.length);
   });
 
   it('mostra o professor em uma cena de explicação, com fala contextual e presença visual grande', () => {
@@ -42,7 +46,7 @@ describe('personagens-professores vetoriais', () => {
 
   it('usa a mesma linguagem vetorial nas versões de avatar e corpo inteiro', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} portrait size={48}/>)}</div>);
-    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v3"]')).toHaveLength(teachers.length);
+    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v4"]')).toHaveLength(teachers.length);
   });
 
   it('atribui um professor coerente às principais disciplinas', () => {
