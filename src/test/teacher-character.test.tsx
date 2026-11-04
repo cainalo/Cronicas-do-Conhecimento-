@@ -4,7 +4,7 @@ import { TeacherCharacter, TeacherScene, TEACHER_SIGNATURE_POSES } from '@/compo
 import { Illustration, type IllustrationName } from '@/components/Illustration';
 import { teacherForChapter, teachers } from '@/content';
 
-describe('elenco vetorial original do Pórtico — V15', () => {
+describe('elenco vetorial original do Pórtico — V16', () => {
   it('desenha um personagem completo e identificável para cada docente', () => {
     const { container } = render(
       <div>{teachers.map((teacher) => (
@@ -17,7 +17,7 @@ describe('elenco vetorial original do Pórtico — V15', () => {
     expect(new Set(figures.map((svg) => svg.innerHTML)).size).toBe(teachers.length);
     for (const figure of figures) {
       expect(figure.getAttribute('viewBox')).toBe('0 0 240 280');
-      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v15');
+      expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v16');
       expect(figure.querySelectorAll('path, rect, circle, ellipse').length).toBeGreaterThan(14);
       expect(figure.getAttribute('data-character-pose')).toBeTruthy();
     }
@@ -34,6 +34,7 @@ describe('elenco vetorial original do Pórtico — V15', () => {
     expect(unique('data-character-hair').size).toBe(teachers.length);
     expect(unique('data-character-outfit').size).toBe(teachers.length);
     expect(unique('data-character-eyes').size).toBeGreaterThanOrEqual(9);
+    expect(unique('data-character-eye-shape').size).toBeGreaterThanOrEqual(5);
     expect(unique('data-character-mouth').size).toBeGreaterThanOrEqual(6);
     expect(unique('data-character-nose').size).toBeGreaterThanOrEqual(4);
     expect(unique('data-character-brows').size).toBeGreaterThanOrEqual(6);
@@ -61,11 +62,27 @@ describe('elenco vetorial original do Pórtico — V15', () => {
     expect(bodies).toContain('horizontal agile chameleon body');
   });
 
+  it('aplica de fato os formatos de olhos ao SVG, sem contorno escuro repetido', () => {
+    const { container } = render(<div>{teachers.map((teacher) => (
+      <TeacherCharacter key={teacher.id} teacher={teacher} size={180}/>
+    ))}</div>);
+    const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
+    for (const figure of figures) {
+      const eyeBases = Array.from(figure.querySelectorAll('[data-eye-base="true"]'));
+      expect(eyeBases.length).toBeGreaterThan(0);
+      expect(eyeBases.every((eye) => !eye.hasAttribute('stroke'))).toBe(true);
+      expect(figure.querySelectorAll('[data-eye-shape]').length).toBeGreaterThan(0);
+      expect(figure.getAttribute('data-character-eye-shape')).toBeTruthy();
+    }
+    const mittenRenderers = container.querySelectorAll('[data-hand-style="soft-mitten"]');
+    expect(mittenRenderers.length).toBeGreaterThanOrEqual(7);
+  });
+
   it('reutiliza a mesma ilustração na versão de retrato e de corpo inteiro', () => {
     const { container } = render(<div>{teachers.map((teacher) => (
       <TeacherCharacter key={teacher.id} teacher={teacher} portrait size={48}/>
     ))}</div>);
-    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v15"]')).toHaveLength(teachers.length);
+    expect(container.querySelectorAll('svg[data-character-style="portico-friends-v16"]')).toHaveLength(teachers.length);
   });
 
   it('apresenta o professor em uma cena de explicação contextualizada', () => {

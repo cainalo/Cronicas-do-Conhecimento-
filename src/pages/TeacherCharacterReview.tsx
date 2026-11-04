@@ -6,7 +6,7 @@ export function TeacherCharacterReviewPage() {
   return (
     <main className="mx-auto max-w-6xl space-y-5 px-4 py-6 sm:space-y-7">
       <header className="max-w-3xl space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V15</p>
+        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V16</p>
         <h1 className="font-title text-3xl font-bold leading-tight sm:text-4xl">Uma comunidade. Treze personalidades.</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
           Cada professor tem uma silhueta, um rosto, uma maneira de se mover e um jeito próprio de ensinar.
@@ -44,10 +44,10 @@ export function TeacherCharacterReviewPage() {
       <section className="rounded-2xl border border-line bg-surface px-4 py-4 sm:px-5">
         <h2 className="font-title text-lg font-bold">A linguagem visual do elenco</h2>
         <div className="mt-3 grid gap-3 text-sm leading-relaxed text-muted sm:grid-cols-2">
-          <p><strong className="text-ink">Reconhecimento imediato.</strong> A silhueta e a expressão precisam funcionar antes dos pequenos detalhes.</p>
-          <p><strong className="text-ink">Personalidades visíveis.</strong> Olhar, postura e gesto devem comunicar curiosidade, calma, rigor ou entusiasmo.</p>
+          <p><strong className="text-ink">Leitura em um segundo.</strong> Silhueta, rosto e gesto precisam ser reconhecidos sem depender de acessórios pequenos.</p>
+          <p><strong className="text-ink">Rostos com intenção.</strong> Pálpebras, direção das pupilas e sobrancelhas mudam de personagem para personagem.</p>
           <p><strong className="text-ink">Espécies de verdade.</strong> Patas, asas, cascos, caudas e proporções pertencem à anatomia de cada personagem.</p>
-          <p><strong className="text-ink">Uma família original.</strong> Contorno, acabamento e proporções conversam entre si sem imitar mascotes existentes.</p>
+          <p><strong className="text-ink">Uma família original.</strong> Formas arredondadas, cor chapada e acabamento coerente unem o elenco sem copiar personagens existentes.</p>
         </div>
       </section>
     </main>

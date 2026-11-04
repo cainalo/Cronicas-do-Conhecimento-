@@ -116,28 +116,29 @@ async function run() {
           await checkFullScreenOverlays(page, `${tag} ${path}`);
         }
 
-        // Capturas de tela reais das páginas centrais para auditoria visual em celular.
-        if (vp.width === 390 && cards === null) {
-          for (const shot of REVIEW_SHOTS) {
-            await go(shot.path);
-            // Na galeria de revisão, escondemos a navegação fixa inferior para que
-            // a captura fullPage não cubra personagens no meio da prancha.
-            if (shot.path === '/revisao-personagens') {
-              await page.evaluate(() => {
-                for (const el of document.querySelectorAll('body *')) {
-                  const cs = getComputedStyle(el);
-                  if (cs.position === 'fixed' && cs.bottom !== 'auto' && parseFloat(cs.bottom) >= 0) {
-                    el.style?.setProperty('display', 'none');
-                  }
+        // Capturas de tela reais para inspeção visual, inclusive a prancha de personagens.
+        for (const shot of REVIEW_SHOTS) {
+          const shouldCapture = cards === null && (shot.name === 'personagens' || vp.width === 390);
+          const captureGlassCharacters = cards === 'vidro' && vp.width === 390 && shot.name === 'personagens';
+          if (!shouldCapture && !captureGlassCharacters) continue;
+          await go(shot.path);
+          // Na galeria de revisão, escondemos a navegação fixa inferior para que
+          // a captura fullPage não cubra personagens no meio da prancha.
+          if (shot.path === '/revisao-personagens') {
+            await page.evaluate(() => {
+              for (const el of document.querySelectorAll('body *')) {
+                const cs = getComputedStyle(el);
+                if (cs.position === 'fixed' && cs.bottom !== 'auto' && parseFloat(cs.bottom) >= 0) {
+                  el.style?.setProperty('display', 'none');
                 }
-              });
-            }
-            await page.screenshot({
-              path: `${SCREENSHOT_DIR}/390x844-${shot.name}.png`,
-              fullPage: true,
-              animations: 'disabled',
+              }
             });
           }
+          await page.screenshot({
+            path: `${SCREENSHOT_DIR}/${tag.replaceAll(' ', '-')}-${shot.name}.png`,
+            fullPage: true,
+            animations: 'disabled',
+          });
         }
 
         // Cartão de certo ou errado.
