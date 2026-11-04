@@ -31,7 +31,7 @@ export function TeacherCharacterReviewPage() {
       </header>
 
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4" aria-label="Galeria dos treze professores">
-        {teachers.map((teacher, index) => (
+        {teachers.map((teacher) => (
           <article
             key={teacher.id}
             className="flex min-w-0 flex-col items-center overflow-hidden rounded-2xl border border-line/70"
