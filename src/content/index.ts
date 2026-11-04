@@ -434,6 +434,7 @@ export const totalUnits = chapters.reduce((n, c) => n + c.sections.length, 0) + 
 
 // Página Estudos: materiais externos com fonte verificável e videoaulas conferidas.
 export { externalMaterials, curatedVideos } from './estudos/materiais';
+export { porticoVideoPlan, publishedPorticoVideos } from './estudos/portico-videos';
 export type { ExternalMaterial, CuratedVideo } from './estudos/materiais';
 
 // Reformulação (Fase 2): unidades em texto interativo, com mapa de conceitos. O texto continua nas
@@ -473,12 +474,14 @@ export const narratedLessons: NarratedLesson[] = [...handmadeNarrated, ...autoNa
 export const getNarrated = (id: string) => narratedLessons.find((n) => n.id === id);
 export const narratedFor = (lessonId: string) => narratedLessons.find((n) => n.lessonId === lessonId);
 
-// Feed didático (pacote v4, etapa 4): as aulas em texto, na ordem da trilha, viram posts.
+// Feed didático: as aulas em texto, na ordem da trilha, viram posts.
 import { postsOfLesson, type FeedPost } from '@/lib/feed';
 import type { TrailExtras } from '@/lib/pace';
 import { teacherPosts as _tips } from './teachers';
-import { curatedVideos as _videos } from './estudos/materiais';
+import { curatedVideos as _externalVideos } from './estudos/materiais';
+import { publishedPorticoVideos } from './estudos/portico-videos';
 import { feedImages } from './estudos/imagens';
+const _videos = [...publishedPorticoVideos, ..._externalVideos];
 /** Aulas do feed, na ordem da trilha (capítulos, trechos e aulas da série). */
 export const feedLessons: MicroLesson[] = journey.flatMap((c) => c.sections.flatMap((s) => microSeries(c.id, s.id)));
 const feedCache = new Map<string, FeedPost[]>();
@@ -491,8 +494,7 @@ export function feedPostsOf(lessonId: string): FeedPost[] {
     feedCache.set(
       lessonId,
       postsOfLesson(m, {
-        videos: _videos.filter((v) => v.lessonId === m.id),
-        narrated: narratedFor(m.id),
+        videos: _videos.filter((v) => v.lessonId === m.id && v.status === 'conferido'),
         // Dicas do trecho entram no fim da última aula dele (tudo o que citam já foi ensinado).
         tips: last ? _tips.filter((t) => t.chapterId === m.chapterId && t.sectionId === m.sectionId) : [],
         images: feedImages,
@@ -518,12 +520,12 @@ export function trailPlaceOf(lessonId: string): { to: string; label: string } | 
 
 /** Materiais encaixados na trilha, na ordem lógica de cada trecho (ver courseUnits). */
 export const trailExtras: TrailExtras = {
-  narratedFor: (lessonId) => narratedFor(lessonId),
   videosFor: (chapterId, sectionId) => {
     // Vídeo sem sectionId é material de apoio do capítulo inteiro: aparece uma vez,
     // no primeiro trecho, e não se replica em todas as seções do mesmo capítulo.
     const firstSectionId = chapterMap.get(chapterId)?.sections[0]?.id;
     return _videos.filter((v) =>
+      v.status === 'conferido' &&
       v.chapterId === chapterId &&
       (v.sectionId ? v.sectionId === sectionId : sectionId === firstSectionId),
     );

@@ -43,7 +43,6 @@ import { WorldPage } from '@/pages/World';
 import { ProgrammingLabPage } from '@/pages/ProgrammingLab';
 import { TerminalLabPage } from '@/pages/TerminalLab';
 import { CodeLabPage } from '@/pages/CodeLab';
-import { NarratedPage } from '@/pages/Narrated';
 
 export function AppRoutes() {
   return (
@@ -73,7 +72,7 @@ export function AppRoutes() {
         <Route path="laboratorio/:id" element={<TerminalLabPage />} />
         <Route path="laboratorio-codigo" element={<CodeLabPage />} />
         <Route path="laboratorio-programacao" element={<ProgrammingLabPage />} />
-        <Route path="aula-narrada/:id" element={<NarratedPage />} />
+        <Route path="aula-narrada/:id" element={<Navigate to="/trilha" replace />} />
         <Route path="pratica/:chapterId/:sectionId" element={<PracticePage />} />
         <Route path="licao/:id" element={<LessonPage />} />
         <Route path="revisao" element={<ReviewPage />} />
