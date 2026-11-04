@@ -10,7 +10,6 @@ type Look = {
   prop?: 'book' | 'tablet' | 'map' | 'shield' | 'chip' | 'folder' | 'terminal' | 'mug' | 'scroll' | 'speech';
 };
 
-/** Cada professor tem silhueta, cabelo, roupa, acessório e objeto próprios. */
 const LOOKS: Record<string, Look> = {
   'prof.clara': { skin:'#E9B994',hair:'#3B2418',shirt:'#FFF4E3',jacket:'#C8402A',pants:'#314B55',accent:'#D4A017',hairStyle:'long',accessory:'earrings',prop:'book' },
   'prof.lia': { skin:'#C98E6A',hair:'#1D1A17',shirt:'#F7EEDF',jacket:'#0F4C5C',pants:'#263D43',accent:'#D4A017',hairStyle:'bun',accessory:'headset',prop:'terminal' },
@@ -28,95 +27,123 @@ const LOOKS: Record<string, Look> = {
 };
 
 function Hair({ look }: { look: Look }) {
-  const common = { fill: look.hair };
+  const c = look.hair;
   switch (look.hairStyle) {
-    case 'long': return <path {...common} d="M58 75Q54 25 100 23Q145 25 142 78L136 139L126 132L123 75Q113 51 99 49Q78 51 72 77L70 137L59 141Z"/>;
-    case 'bun': return <><circle cx="100" cy="25" r="15" {...common}/><path {...common} d="M62 76Q58 39 100 38Q140 39 138 77L130 91Q120 56 100 55Q79 56 70 91Z"/></>;
-    case 'short': return <path {...common} d="M62 78Q60 33 101 33Q139 33 138 79Q123 57 100 56Q77 57 62 78Z"/>;
-    case 'curls': return <><path {...common} d="M53 92Q42 42 78 35Q86 17 107 27Q127 17 143 43Q160 57 145 92L137 125L126 84Q115 59 99 61Q78 59 68 88L63 126Z"/><g fill={look.hair}><circle cx="62" cy="55" r="12"/><circle cx="78" cy="36" r="12"/><circle cx="98" cy="30" r="13"/><circle cx="119" cy="35" r="12"/><circle cx="140" cy="56" r="12"/></g></>;
-    case 'bob': return <path {...common} d="M59 80Q56 32 101 30Q145 31 141 82L134 116L124 105L127 75Q117 57 100 56Q80 57 72 77L75 109L64 118Z"/>;
-    case 'braid': return <><path {...common} d="M59 78Q55 33 101 31Q143 33 140 80L132 117L122 106L127 75Q116 55 100 56Q78 56 71 79L68 117Z"/><path d="M136 81Q154 103 140 125Q151 140 137 153Q124 140 134 126Q119 104 136 81Z" fill={look.hair}/></>;
-    case 'waves': return <path {...common} d="M57 82Q52 28 101 26Q146 27 143 82Q139 97 129 90Q134 108 122 117L120 80Q113 54 99 53Q80 52 72 83Q76 102 65 116Q54 104 61 91Z"/>;
-    case 'fade': return <path {...common} d="M63 78Q61 37 100 35Q138 36 137 78L126 64Q114 53 100 54Q80 53 70 67Z"/>;
+    case 'long': return <g fill={c} stroke="#35231E" strokeWidth="2.5" strokeLinejoin="round"><path d="M61 79Q50 18 120 18Q190 18 179 81L172 158Q164 174 151 157L153 84Q144 47 120 45Q94 46 86 84L88 158Q75 174 66 157Z"/><path d="M91 39Q104 28 121 29" fill="none" stroke="#FFFFFF" strokeOpacity=".16" strokeWidth="5" strokeLinecap="round"/></g>;
+    case 'bun': return <g fill={c} stroke="#35231E" strokeWidth="2.5"><circle cx="120" cy="25" r="22"/><path d="M61 81Q58 34 120 31Q181 34 179 81L165 101Q151 61 120 60Q87 60 74 101Z"/></g>;
+    case 'short': return <path d="M61 83Q57 27 120 26Q183 27 179 83Q158 59 120 57Q83 58 61 83Z" fill={c} stroke="#35231E" strokeWidth="2.5" strokeLinejoin="round"/>;
+    case 'curls': return <g fill={c} stroke="#35231E" strokeWidth="2.2" strokeLinejoin="round"><path d="M59 95Q45 42 85 31Q97 10 120 23Q144 10 157 34Q195 46 181 96L166 145L157 86Q142 57 120 58Q92 57 81 87L74 146Z"/>{[[69,60,14],[88,34,15],[111,25,15],[135,28,15],[157,43,15],[174,65,14]].map(([x,y,r])=><circle key={x} cx={x} cy={y} r={r}/>)}</g>;
+    case 'bob': return <path d="M60 82Q57 25 120 25Q184 25 180 84L174 133Q164 150 150 132L153 83Q142 58 120 57Q94 58 85 83L88 132Q74 150 66 133Z" fill={c} stroke="#35231E" strokeWidth="2.5" strokeLinejoin="round"/>;
+    case 'braid': return <g fill={c} stroke="#35231E" strokeWidth="2.5" strokeLinejoin="round"><path d="M60 82Q57 26 120 25Q183 26 180 83L169 131L155 121L153 83Q142 56 120 57Q94 57 85 83L76 132L65 130Z"/><path d="M169 80Q193 102 178 126Q194 143 175 160Q155 146 169 126Q151 104 169 80Z"/><path d="M169 103l8 13-8 13-8-13" fill="none" stroke="#D9A66F" strokeWidth="3"/></g>;
+    case 'waves': return <path d="M59 86Q50 20 120 20Q189 21 181 86Q178 106 162 100Q169 121 153 141L151 84Q142 55 120 55Q91 55 84 88Q91 113 74 139Q56 120 66 102Z" fill={c} stroke="#35231E" strokeWidth="2.5" strokeLinejoin="round"/>;
+    case 'fade': return <path d="M62 82Q58 31 120 29Q181 30 178 81L163 70Q143 55 120 56Q90 56 75 72Z" fill={c} stroke="#35231E" strokeWidth="2.5" strokeLinejoin="round"/>;
   }
 }
 
 function Prop({ look }: { look: Look }) {
-  const c = look.accent;
+  const accent = look.accent;
   switch (look.prop) {
-    case 'book': return <g><path d="M126 113Q139 105 151 111V151Q138 146 126 154Z" fill="#FFF4E3" stroke={c} strokeWidth="3"/><path d="M139 113V149" stroke={c} strokeWidth="2"/><path d="M132 123h10M132 131h10" stroke="#0F4C5C" strokeWidth="2"/></g>;
-    case 'tablet': return <g><rect x="125" y="107" width="29" height="46" rx="5" fill="#243D49" stroke={c} strokeWidth="3"/><path d="M131 116h17v26h-17z" fill="#F7EEDF"/><path d="M135 122h9M135 129h9" stroke="#0F4C5C" strokeWidth="2"/></g>;
-    case 'map': return <g><path d="M125 113l11-5 12 5v39l-12-5-11 5z" fill="#F7EEDF" stroke={c} strokeWidth="3"/><path d="M136 108v39M125 127l11-5 12 5" fill="none" stroke="#0F4C5C" strokeWidth="2"/><path d="M128 134l6-7 6 3 5-8" fill="none" stroke={c} strokeWidth="2.5"/></g>;
-    case 'shield': return <path d="M139 106L155 112V128Q154 146 139 154Q124 146 123 128V112Z" fill={c} stroke="#F7EEDF" strokeWidth="2"/>;
-    case 'chip': return <g><rect x="126" y="112" width="29" height="29" rx="4" fill="#0F4C5C" stroke={c} strokeWidth="3"/><rect x="134" y="120" width="13" height="13" fill="#F7EEDF"/><path d="M131 106v6M140 106v6M149 106v6M131 141v6M140 141v6M149 141v6" stroke={c} strokeWidth="2"/></g>;
-    case 'folder': return <path d="M123 117H137L142 122H156V151H123Z" fill="#F0CE91" stroke={c} strokeWidth="3"/>;
-    case 'mug': return <g><rect x="127" y="119" width="25" height="27" rx="4" fill="#FFF4E3" stroke={c} strokeWidth="3"/><path d="M152 125h6Q165 137 152 140" fill="none" stroke={c} strokeWidth="3"/><path d="M135 114Q130 107 136 102M144 114Q139 107 145 102" fill="none" stroke="#C8402A" strokeWidth="2"/></g>;
-    case 'scroll': return <g><path d="M130 109H153V148Q142 156 130 148Z" fill="#FFF4E3" stroke={c} strokeWidth="3"/><path d="M135 120h13M135 128h13M135 136h10" stroke="#0F4C5C" strokeWidth="2"/></g>;
-    case 'speech': return <g><path d="M126 110H155V139H143L135 147V139H126Z" fill="#FFF4E3" stroke={c} strokeWidth="3"/><path d="M132 120h16M132 128h11" stroke="#0F4C5C" strokeWidth="2"/></g>;
-    case 'terminal': return <g><rect x="125" y="113" width="31" height="28" rx="4" fill="#102B32" stroke={c} strokeWidth="3"/><path d="M131 121l5 4-5 4M139 130h10" stroke="#F7EEDF" strokeWidth="2" fill="none"/></g>;
+    case 'book': return <g><path d="M151 159Q170 151 190 161V205Q169 197 151 207Z" fill="#FFF4E3" stroke="#46535A" strokeWidth="3"/><path d="M170 157V202" stroke={accent} strokeWidth="3"/><path d="M158 174h9M158 184h9M178 174h8M178 184h8" stroke="#31505B" strokeWidth="2.5" strokeLinecap="round"/></g>;
+    case 'tablet': return <g><rect x="151" y="153" width="39" height="54" rx="8" fill="#203840" stroke={accent} strokeWidth="3"/><rect x="157" y="160" width="27" height="38" rx="3" fill="#F7EEDF"/><path d="M163 169h15M163 178h15M163 187h10" stroke="#0F4C5C" strokeWidth="2.4"/></g>;
+    case 'map': return <g><path d="M151 159l13-6 14 6 13-6v48l-13 6-14-6-13 6Z" fill="#F7EEDF" stroke="#46535A" strokeWidth="3"/><path d="M164 153v48M178 159v48M157 185l7-8 8 3 9-11" fill="none" stroke={accent} strokeWidth="3" strokeLinecap="round"/></g>;
+    case 'shield': return <path d="M172 152L193 160V181Q191 199 172 208Q153 199 151 181V160Z" fill={accent} stroke="#46535A" strokeWidth="3"/>;
+    case 'chip': return <g><rect x="153" y="158" width="39" height="39" rx="7" fill="#0F4C5C" stroke={accent} strokeWidth="3"/><rect x="163" y="168" width="19" height="19" rx="3" fill="#F7EEDF"/><path d="M160 150v8M172 150v8M184 150v8M160 197v8M172 197v8M184 197v8" stroke={accent} strokeWidth="3"/></g>;
+    case 'folder': return <g><path d="M151 163h17l6 7h18v37h-40Z" fill="#E7BF79" stroke="#46535A" strokeWidth="3"/><path d="M158 181h24M158 190h18" stroke="#8A5B34" strokeWidth="2.5"/></g>;
+    case 'mug': return <g><rect x="155" y="167" width="34" height="34" rx="7" fill="#FFF4E3" stroke="#46535A" strokeWidth="3"/><path d="M189 175h7Q203 191 189 194" fill="none" stroke="#46535A" strokeWidth="4"/><path d="M164 160Q158 150 166 145M177 160Q171 150 179 145" fill="none" stroke="#C8402A" strokeWidth="2.7" strokeLinecap="round"/></g>;
+    case 'scroll': return <g><path d="M158 157h33v48q-16 12-33 0Z" fill="#FFF4E3" stroke="#46535A" strokeWidth="3"/><path d="M165 170h19M165 181h19M165 192h13" stroke="#31505B" strokeWidth="2.5" strokeLinecap="round"/></g>;
+    case 'speech': return <g><path d="M151 158h42v35h-17l-11 11v-11h-14Z" fill="#FFF4E3" stroke="#46535A" strokeWidth="3"/><path d="M160 170h24M160 180h17" stroke="#31505B" strokeWidth="2.5" strokeLinecap="round"/></g>;
+    case 'terminal': return <g><rect x="151" y="160" width="43" height="36" rx="7" fill="#102B32" stroke={accent} strokeWidth="3"/><path d="M160 171l8 6-8 6M174 183h12" stroke="#F7EEDF" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round"/></g>;
     default: return null;
   }
 }
 
 export function TeacherCharacter({
-  teacher, pose = 'presenting', size = 160, className = '',
+  teacher, pose = 'presenting', size = 160, className = '', portrait = false,
 }: {
   teacher: FictionalTeacher;
   pose?: TeacherPose;
   size?: number;
   className?: string;
+  portrait?: boolean;
 }) {
   const look = LOOKS[teacher.id] ?? LOOKS['prof.lia'];
-  const style: CSSProperties = { height: size, width: Math.round(size * .91) };
-  const arm = pose === 'celebrating'
-    ? { left: 'M73 111Q51 99 42 63L25 53Q15 91 57 137L77 143Z', right: 'M130 111Q153 98 163 63L180 53Q191 91 148 137L127 143Z', leftHand: 'M29 58Q18 59 16 47L9 32Q12 23 19 32L25 43Q24 27 31 27L37 48Q43 38 49 45L43 64Z', rightHand: 'M176 58Q187 59 189 47L196 32Q193 23 186 32L180 43Q181 27 174 27L168 48Q162 38 156 45L162 64Z' }
-    : pose === 'greeting'
-      ? { left: 'M73 111Q58 122 64 151L80 162L94 133Z', right: 'M130 108Q150 92 153 58L172 49L184 58Q181 105 149 133L131 127Z', leftHand: 'M66 151Q57 155 62 167L70 178Q79 181 83 170L78 156Z', rightHand: 'M172 55Q165 49 168 38L170 24Q175 16 180 25L179 36Q186 20 191 27L188 43Q196 32 201 40L194 57Q185 69 174 63Z' }
-      : pose === 'thinking'
-        ? { left: 'M73 111Q57 122 65 151L83 164L95 133Z', right: 'M130 109Q151 115 152 140L138 155Q122 143 119 126Z', leftHand: 'M66 153Q57 158 62 170L72 181Q81 181 84 170L78 156Z', rightHand: 'M139 153Q129 149 133 135L144 118Q152 112 157 121L153 137L164 128Q172 132 166 142L153 158Z' }
-        : pose === 'listening'
-          ? { left: 'M73 111Q57 130 65 158L82 173L94 143Z', right: 'M130 111Q149 130 141 158L124 173L112 143Z', leftHand: 'M67 162Q58 165 63 178L71 191Q80 193 84 182L79 169Z', rightHand: 'M139 162Q148 165 143 178L135 191Q126 193 122 182L127 169Z' }
-          : { left: 'M73 110Q52 103 37 81L20 88Q26 128 67 146L83 137Z', right: 'M130 110Q153 103 168 81L185 88Q179 128 138 146L122 137Z', leftHand: 'M24 92Q15 91 14 81L13 68Q17 60 23 68L28 79Q31 69 37 75L39 91Q36 101 25 99Z', rightHand: 'M181 92Q190 91 191 81L192 68Q188 60 182 68L177 79Q174 69 168 75L166 91Q169 101 180 99Z' };
+  const arms: Record<TeacherPose, { left: string; right: string; leftHand: [number,number]; rightHand: [number,number] }> = {
+    presenting: { left:'M81 166Q55 174 43 198', right:'M159 165Q184 166 198 145', leftHand:[42,199], rightHand:[200,143] },
+    greeting: { left:'M81 166Q59 177 58 205', right:'M158 162Q182 129 185 79', leftHand:[58,207], rightHand:[187,75] },
+    thinking: { left:'M81 166Q55 176 52 205', right:'M159 164Q175 142 164 119', leftHand:[52,207], rightHand:[163,116] },
+    celebrating: { left:'M82 164Q51 130 52 82', right:'M158 164Q190 127 189 81', leftHand:[51,78], rightHand:[190,77] },
+    listening: { left:'M82 165Q100 190 117 183', right:'M158 165Q140 190 123 183', leftHand:[117,184], rightHand:[123,184] },
+  };
+  const poseArms = arms[pose];
+  const mouth = pose === 'thinking' ? 'M106 109Q120 103 134 109' : pose === 'celebrating' ? 'M101 103Q120 131 139 103' : pose === 'listening' ? 'M108 107Q120 114 132 107' : 'M103 103Q120 123 137 103';
+  const brows = pose === 'thinking'
+    ? ['M91 69Q103 60 111 68','M129 68Q140 60 150 69']
+    : pose === 'celebrating'
+      ? ['M91 66Q102 56 112 66','M128 66Q139 56 149 66']
+      : ['M91 67Q102 62 111 67','M129 67Q139 62 149 67'];
+  const sizeStyle: CSSProperties = portrait ? { width:size, height:size } : { width:Math.round(size * .92), height:size };
+  const hand = (point: [number,number]) => `M${point[0]-10} ${point[1]}Q${point[0]-9} ${point[1]-15} ${point[0]+1} ${point[1]-13}Q${point[0]+15} ${point[1]-10} ${point[0]+11} ${point[1]+4}Q${point[0]} ${point[1]+15} ${point[0]-10} ${point[1]}Z`;
   return (
-    <svg viewBox="0 0 200 220" width={style.width} height={style.height} className={`shrink-0 overflow-visible ${className}`} role="img" aria-label={`${teacher.name}, personagem vetorial`} focusable="false">
-      {/* Silhueta principal contínua: pernas, sapatos, tronco e braços preenchidos. */}
-      <path d="M78 151Q103 161 129 151L126 190L117 202L107 190L101 202L91 190L79 200L74 190Z" fill={look.pants} stroke="#263D43" strokeWidth="2.5" strokeLinejoin="round"/>
-      <path d="M77 190Q88 187 99 193L99 207H65Q61 201 69 195Z" fill="#233840" stroke="#172D34" strokeWidth="2"/>
-      <path d="M108 193Q120 186 132 191L140 201Q143 208 135 208H106Z" fill="#233840" stroke="#172D34" strokeWidth="2"/>
-      <path d="M68 201h22M116 201h17" stroke="#F7EEDF" strokeWidth="2" strokeLinecap="round" opacity=".75"/>
-      <path d="M75 90Q103 77 131 90Q143 97 147 124L143 160Q104 172 61 160L59 125Q63 98 75 90Z" fill={look.jacket} stroke="#263D43" strokeWidth="2.8" strokeLinejoin="round"/>
-      <path d="M91 88L103 103L116 88L124 160H81Z" fill={look.shirt} stroke="#263D43" strokeWidth="1.8" strokeLinejoin="round"/>
-      <path d="M91 90L103 104L116 90" fill="none" stroke={look.accent} strokeWidth="3" strokeLinejoin="round"/>
-      <path d="M103 108v42" stroke={look.accent} strokeWidth="2" strokeDasharray="3 6"/>
-      <path d={arm.left} fill={look.jacket} stroke="#263D43" strokeWidth="2.6" strokeLinejoin="round"/>
-      <path d={arm.right} fill={look.jacket} stroke="#263D43" strokeWidth="2.6" strokeLinejoin="round"/>
-      <path d={arm.leftHand} fill={look.skin} stroke="#794B3A" strokeWidth="2" strokeLinejoin="round"/>
-      <path d={arm.rightHand} fill={look.skin} stroke="#794B3A" strokeWidth="2" strokeLinejoin="round"/>
-      <path d={pose === 'greeting' ? 'M176 43l-1-11M185 45l4-11M194 49l5-8' : pose === 'celebrating' ? 'M23 45l-5-10M184 45l5-10' : 'M22 81l-1-7M30 91l1-7M181 91l-1-7'} stroke="#794B3A" strokeWidth="1.7" strokeLinecap="round" fill="none"/>
-      <path d="M92 72H114V96Q103 105 92 96Z" fill={look.skin} stroke="#794B3A" strokeWidth="1.6"/>
-      <ellipse cx="103" cy="53" rx="31" ry="36" fill={look.skin} stroke="#794B3A" strokeWidth="2.3"/>
-      <ellipse cx="72" cy="67" rx="5" ry="8" fill={look.skin}/>
-      <ellipse cx="134" cy="67" rx="5" ry="8" fill={look.skin}/>
-      <Hair look={look}/>
-      <path d="M88 53q5-4 10 0M111 53q5-4 10 0" stroke={look.hair} strokeWidth="2.2" fill="none" strokeLinecap="round"/>
-      <ellipse cx="93" cy="61" rx="2.5" ry="3" fill="#241D1B"/><ellipse cx="114" cy="61" rx="2.5" ry="3" fill="#241D1B"/>
-      <path d={pose === 'thinking' ? 'M98 76q5-4 10 0' : 'M96 76q7 7 14 0'} stroke="#71422F" strokeWidth="2.2" fill="none" strokeLinecap="round"/>
-      {look.accessory === 'glasses' && <g stroke="#243940" strokeWidth="2.2" fill="none"><circle cx="92" cy="61" r="8"/><circle cx="115" cy="61" r="8"/><path d="M100 61h7"/></g>}
-      {look.accessory === 'round-glasses' && <g stroke={look.accent} strokeWidth="2.5" fill="none"><circle cx="92" cy="61" r="9"/><circle cx="115" cy="61" r="9"/><path d="M101 61h5"/></g>}
-      {look.accessory === 'headset' && <g stroke={look.accent} strokeWidth="4" fill="none"><path d="M70 59Q69 20 103 18Q138 20 136 59"/><path d="M69 55v18M136 55v18M136 72h-8"/></g>}
-      {look.accessory === 'headband' && <path d="M73 42Q103 21 133 42" fill="none" stroke={look.accent} strokeWidth="5" strokeLinecap="round"/>}
-      {look.accessory === 'earrings' && <g fill={look.accent}><circle cx="70" cy="69" r="3.2"/><circle cx="136" cy="69" r="3.2"/></g>}
-      {look.accessory === 'tie' && <path d="M103 104l-7 12 7 27 8-27Z" fill={look.accent}/>}
-      {look.accessory === 'beard' && <path d="M76 67Q77 101 103 104Q129 101 130 67Q119 89 103 86Q87 89 76 67Z" fill={look.hair} stroke="#794B3A" strokeWidth="1"/>}
+    <svg viewBox={portrait ? '40 0 160 160' : '0 0 240 260'} width={sizeStyle.width} height={sizeStyle.height}
+      className={`shrink-0 ${portrait ? 'rounded-full overflow-hidden' : 'overflow-visible'} ${className}`}
+      style={sizeStyle} role="img" aria-label={`${teacher.name}, personagem ilustrado do Pórtico`}
+      data-character-style="portico-rounded-v1" focusable="false">
+      {portrait && <circle cx="120" cy="78" r="82" fill={`rgb(var(--${teacher.tone}))`} />}
+      {!portrait && <ellipse cx="120" cy="251" rx="66" ry="6" fill="#1F3438" opacity=".13"/>}
+      {/* Pés destacados, pernas curtas e volume central compacto. */}
+      <path d="M91 203Q90 219 93 230L111 230L115 207Z" fill={look.pants} stroke="#35434A" strokeWidth="3" strokeLinejoin="round"/>
+      <path d="M126 207L131 230L150 230Q152 217 147 202Z" fill={look.pants} stroke="#35434A" strokeWidth="3" strokeLinejoin="round"/>
+      <path d="M82 228Q99 224 114 232Q119 239 113 246Q97 252 77 244Q72 237 82 228Z" fill="#263B40" stroke="#182B30" strokeWidth="3"/>
+      <path d="M128 232Q143 224 159 229Q168 237 159 245Q141 252 126 246Q120 239 128 232Z" fill="#263B40" stroke="#182B30" strokeWidth="3"/>
+      <path d="M92 237h10M139 237h10" stroke="#F2D9B2" strokeWidth="2.5" strokeLinecap="round" opacity=".8"/>
+      {/* Braços em fita grossa e mãos tipo luva: sem dedos finos desconectados do gesto. */}
+      <path d={poseArms.left} fill="none" stroke="#34464C" strokeWidth="31" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d={poseArms.right} fill="none" stroke="#34464C" strokeWidth="31" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d={poseArms.left} fill="none" stroke={look.jacket} strokeWidth="25" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d={poseArms.right} fill="none" stroke={look.jacket} strokeWidth="25" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M79 143Q120 126 161 143Q174 150 173 180L166 210Q120 225 73 210L67 180Q66 151 79 143Z" fill={look.jacket} stroke="#34464C" strokeWidth="3.5" strokeLinejoin="round"/>
+      <path d="M105 143L120 162L136 143L144 211H96Z" fill={look.shirt} stroke="#34464C" strokeWidth="2.5" strokeLinejoin="round"/>
+      <path d="M105 144L120 163L136 144" fill="none" stroke={look.accent} strokeWidth="4" strokeLinejoin="round"/>
+      <path d="M120 169v28" stroke={look.accent} strokeWidth="2.5" strokeDasharray="3 6" strokeLinecap="round"/>
+      <path d="M145 180Q157 174 166 182L166 199Q154 204 145 198Z" fill={look.jacket} stroke="#34464C" strokeWidth="2"/>
+      <path d="M151 186h8" stroke={look.accent} strokeWidth="2.5" strokeLinecap="round"/>
+      {pose === 'thinking' && <path d="M158 120Q170 111 175 122" stroke="#8A5C49" strokeWidth="2.5" fill="none" strokeLinecap="round"/>}
+      <path d={hand(poseArms.leftHand)} fill={look.skin} stroke="#8A5C49" strokeWidth="2.5"/>
+      <path d={hand(poseArms.rightHand)} fill={look.skin} stroke="#8A5C49" strokeWidth="2.5"/>
       {look.prop && <Prop look={look}/>}
-      <ellipse cx="103" cy="214" rx="43" ry="5" fill="#162E34" opacity=".12"/>
+      {/* Pescoço, orelhas e cabeça arredondada com bochechas. */}
+      <path d="M105 127Q120 143 135 127V151Q120 165 105 151Z" fill={look.skin} stroke="#8A5C49" strokeWidth="2.5"/>
+      <ellipse cx="61" cy="88" rx="11" ry="16" fill={look.skin} stroke="#8A5C49" strokeWidth="2.5"/>
+      <ellipse cx="179" cy="88" rx="11" ry="16" fill={look.skin} stroke="#8A5C49" strokeWidth="2.5"/>
+      <ellipse cx="120" cy="83" rx="62" ry="68" fill={look.skin} stroke="#684738" strokeWidth="3.5"/>
+      <ellipse cx="82" cy="105" rx="10" ry="5" fill="#D97873" opacity=".22"/>
+      <ellipse cx="158" cy="105" rx="10" ry="5" fill="#D97873" opacity=".22"/>
+      <Hair look={look}/>
+      {look.accessory === 'beard' && <path d="M71 104Q77 143 120 148Q163 143 169 104Q152 126 120 126Q89 126 71 104Z" fill={look.hair} stroke="#553B32" strokeWidth="2.5" strokeLinejoin="round"/>}
+      <path d={brows[0]} fill="none" stroke={look.hair} strokeWidth="5" strokeLinecap="round"/>
+      <path d={brows[1]} fill="none" stroke={look.hair} strokeWidth="5" strokeLinecap="round"/>
+      <ellipse cx="101" cy="86" rx="12" ry="15" fill="#FFFCF4" stroke="#60483D" strokeWidth="2"/>
+      <ellipse cx="139" cy="86" rx="12" ry="15" fill="#FFFCF4" stroke="#60483D" strokeWidth="2"/>
+      <ellipse cx={pose === 'greeting' ? 104 : 103} cy={pose === 'thinking' ? 88 : 89} rx="5.7" ry="7.3" fill="#302A29"/>
+      <ellipse cx="140" cy={pose === 'thinking' ? 85 : 89} rx="5.7" ry="7.3" fill="#302A29"/>
+      <circle cx="105" cy="84" r="2.2" fill="#fff"/>
+      <circle cx="142" cy="84" r="2.2" fill="#fff"/>
+      <path d="M118 91Q114 100 120 101" fill="none" stroke="#A26B59" strokeWidth="2" strokeLinecap="round"/>
+      <path d={mouth} fill={pose === 'celebrating' ? '#753D40' : 'none'} stroke="#743E3C" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M121 113l-1 4" stroke="#F3D5B4" strokeWidth="2" strokeLinecap="round" opacity=".7"/>
+      {look.accessory === 'glasses' && <g fill="none" stroke="#243B43" strokeWidth="3.2"><rect x="84" y="73" width="34" height="28" rx="10"/><rect x="122" y="73" width="34" height="28" rx="10"/><path d="M118 84h4"/></g>}
+      {look.accessory === 'round-glasses' && <g fill="none" stroke={look.accent} strokeWidth="3.5"><circle cx="101" cy="86" r="18"/><circle cx="139" cy="86" r="18"/><path d="M119 84h2"/></g>}
+      {look.accessory === 'earrings' && <g fill={look.accent} stroke="#6B4A27" strokeWidth="1.5"><circle cx="60" cy="106" r="4.5"/><circle cx="180" cy="106" r="4.5"/></g>}
+      {look.accessory === 'headband' && <path d="M62 62Q120 19 178 62" fill="none" stroke={look.accent} strokeWidth="7" strokeLinecap="round"/>}
+      {look.accessory === 'tie' && <path d="M120 164l-9 13 9 34 9-34Z" fill={look.accent}/>}
+      {look.accessory === 'headset' && <g fill="none" stroke={look.accent} strokeWidth="5" strokeLinecap="round"><path d="M65 74Q63 15 120 15Q178 15 175 74"/><rect x="58" y="68" width="12" height="28" rx="6" fill="#D4A017" stroke="#76501B" strokeWidth="2"/><rect x="170" y="68" width="12" height="28" rx="6" fill="#D4A017" stroke="#76501B" strokeWidth="2"/></g>}
+      {portrait && <path d="M76 142Q120 155 164 142" fill="none" stroke="#FFF4E3" strokeOpacity=".5" strokeWidth="4"/>}
     </svg>
   );
 }
 
-/** Cena didática: professor em destaque, enquadrado em uma bancada e falando diretamente com o aluno. */
 export function TeacherScene({
-  teacher, pose = 'presenting', size = 156, eyebrow = 'AULA COM SEU PROFESSOR', heading, message, className = '',
+  teacher, pose = 'presenting', size = 174, eyebrow = 'AULA COM SEU PROFESSOR', heading, message, className = '',
 }: {
   teacher: FictionalTeacher;
   pose?: TeacherPose;
@@ -129,7 +156,6 @@ export function TeacherScene({
   return (
     <section className={`teacher-scene ${className}`} style={{ '--teacher-tone': `rgb(var(--${teacher.tone}))` } as CSSProperties} aria-label={`${teacher.name} explicando: ${heading}`}>
       <div className="teacher-scene__portrait">
-        <span className="teacher-scene__spotlight" aria-hidden="true"/>
         <TeacherCharacter teacher={teacher} pose={pose} size={size} className="teacher-scene__figure"/>
         <span className="teacher-scene__name">{teacher.name}</span>
       </div>
@@ -143,7 +169,7 @@ export function TeacherScene({
 }
 
 export function TeacherCue({
-  teacher, pose = 'presenting', size = 112, children, compact = false, className = '',
+  teacher, pose = 'presenting', size = 98, children, compact = false, className = '',
 }: {
   teacher: FictionalTeacher;
   pose?: TeacherPose;
@@ -153,12 +179,10 @@ export function TeacherCue({
   className?: string;
 }) {
   return (
-    <div
-      className={`teacher-cue flex items-center gap-2.5 rounded-2xl border px-3 py-2 ${compact ? 'min-h-[4.5rem]' : 'min-h-[6rem]'} ${className}`}
+    <div className={`teacher-cue flex items-center gap-2.5 rounded-2xl border px-3 py-2 ${compact ? 'min-h-[4.5rem]' : 'min-h-[6rem]'} ${className}`}
       style={{ borderColor: `rgb(var(--${teacher.tone}) / .28)`, backgroundColor: `rgb(var(--${teacher.tone}) / .07)` }}
-      aria-label={`Professor ${teacher.name}`}
-    >
-      <TeacherCharacter teacher={teacher} pose={pose} size={size}/>
+      aria-label={`Professor ${teacher.name}`}>
+      <TeacherCharacter teacher={teacher} pose={pose} size={size} portrait/>
       <div className="min-w-0 flex-1">
         <p className="text-[.68rem] font-bold uppercase tracking-[.11em] text-muted">{teacher.name} · {teacher.expertiseLabel}</p>
         <div className="mt-1 text-sm leading-snug text-ink">{children}</div>

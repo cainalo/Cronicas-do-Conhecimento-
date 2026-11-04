@@ -25,9 +25,10 @@ describe('personagens-professores vetoriais', () => {
     const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
     expect(figures).toHaveLength(teachers.length);
     for (const figure of figures) {
-      expect(figure.getAttribute('viewBox')).toBe('0 0 200 220');
+      expect(figure.getAttribute('viewBox')).toBe('0 0 240 260');
       expect(figure.querySelectorAll('path[fill]').length).toBeGreaterThan(8);
       expect(figure.querySelectorAll('path[stroke]').length).toBeGreaterThan(5);
+      expect(figure.getAttribute('data-character-style')).toBe('portico-rounded-v1');
     }
   });
 
@@ -37,6 +38,11 @@ describe('personagens-professores vetoriais', () => {
     expect(getByText('Somar números inteiros')).toBeInTheDocument();
     expect(getByText(/Vamos caminhar pela reta numérica juntos/)).toBeInTheDocument();
     expect(container.querySelector('.teacher-scene__figure')).toBeInTheDocument();
+  });
+
+  it('usa a mesma linguagem vetorial nas versões de avatar e corpo inteiro', () => {
+    const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} portrait size={48}/>)}</div>);
+    expect(container.querySelectorAll('svg[data-character-style="portico-rounded-v1"]')).toHaveLength(teachers.length);
   });
 
   it('atribui um professor coerente às principais disciplinas', () => {
