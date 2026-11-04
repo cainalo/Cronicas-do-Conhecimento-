@@ -1,6 +1,7 @@
 import { getChapter } from '@/content';
 import { trailUnits } from '@/app/useCheckpoint';
 import { clearProgress, getLearningCheckpoint, saveProgress } from '@/lib/checkpoint';
+import { unitDone } from '@/lib/pace';
 import { emptyData } from '@/lib/model';
 import { markSectionRead } from '@/lib/study';
 import { mergeData } from '@/lib/merge';
@@ -32,8 +33,10 @@ describe('fonte única da trilha (checkpoint)', () => {
     expect(getLearningCheckpoint(d, units).to).toBe(units[H].to);
     d = clearProgress(d, units[H].key);
     const c = getLearningCheckpoint(d, units);
-    // A próxima é a atividade seguinte da trilha (a aula narrada ou outro material, quando houver).
-    expect(c.to).toBe(units[1].to);
+    // Depois de limpar o ponto mais recente, oferece a primeira unidade ainda pendente.
+    const nextPending = units.find((u) => !unitDone(d, u));
+    expect(nextPending).toBeDefined();
+    expect(c.to).toBe(nextPending!.to);
     expect(c.action).toBe('Continuar');
   });
   it('o ponto salvo sobrevive à fusão entre aparelhos (o mais recente vence)', () => {

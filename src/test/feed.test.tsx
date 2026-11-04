@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
-import { feedLessons, feedPostsOf, microLessons } from '@/content';
+import { feedLessons, feedPostsOf, microLessons, publishedPorticoVideos } from '@/content';
 import { emptyFeed, lessonAnswered, lessonUnlocked } from '@/lib/feed';
 import { loadData, saveData } from '@/lib/storage';
 import { emptyData } from '@/lib/model';
@@ -39,13 +39,16 @@ describe('feed didático: conteúdo', () => {
         expect(j, `${m.id}/${s.id}`).toBeGreaterThan(i);
       }
       expect(posts.at(-1)!.kind).toBe('resumo');
-      // Vídeo, aula narrada e dica só depois da última etapa.
+      // Vídeos publicados e dicas só depois da última etapa. Narrações antigas não são posts.
       const lastStep = Math.max(...posts.map((p, k) => (p.stepId ? k : -1)));
-      posts.forEach((p, k) => ['video', 'narrada', 'dica'].includes(p.kind) && expect(k).toBeGreaterThan(lastStep));
+      posts.forEach((p, k) => ['video', 'dica'].includes(p.kind) && expect(k).toBeGreaterThan(lastStep));
+      expect(posts.some((p) => (p.kind as string) === 'narrada')).toBe(false);
     }
-    // Variedade: há carrossel, exemplo, atividade, vídeo, aula narrada, dica e resumo no conjunto.
+    // Variedade: videoaula entra no feed somente depois de existir arquivo verificado e publicado.
     const kinds = new Set(feedLessons.flatMap((m) => feedPostsOf(m.id).map((p) => p.kind)));
-    for (const k of ['carrossel', 'exemplo', 'atividade', 'video', 'narrada', 'dica', 'resumo'] as const) expect(kinds.has(k), k).toBe(true);
+    for (const k of ['carrossel', 'exemplo', 'atividade', 'dica', 'resumo'] as const) expect(kinds.has(k), k).toBe(true);
+    expect(kinds.has('video')).toBe(publishedPorticoVideos.length > 0);
+    expect(kinds.has('narrada' as never)).toBe(false);
   });
 
   it('ordem guiada: só abre a aula quando as anteriores estão concluídas', () => {

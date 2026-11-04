@@ -30,7 +30,6 @@ describe('trilha com todos os materiais', () => {
         expect(matches, v.id).toHaveLength(0);
         continue;
       }
-      const matches = units.filter((u) => u.key === `video:${v.id}`);
       expect(matches, v.id).toHaveLength(1);
       const i = units.indexOf(matches[0]);
       expect(i, v.id).toBeGreaterThan(0);

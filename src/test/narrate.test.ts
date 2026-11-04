@@ -26,12 +26,11 @@ describe('aulas narradas geradas', () => {
       for (const b of scene.beats) for (const piece of b.say.split(/(?<=[.!?:])\s+/)) expect(source, n.id).toContain(piece.replace(/^Por exemplo:\s*/, ''));
     }
   });
-  it('cada uma entra na trilha logo depois da sua aula', () => {
+  it('nenhuma narração antiga gera etapa na nova trilha', () => {
     const units = trailUnits();
     for (const n of auto) {
-      const i = units.findIndex((u) => u.key === `narrada:${n.id}`);
-      expect(i, n.id).toBeGreaterThan(0);
-      expect(units[i - 1].key.endsWith(`#${n.lessonId}`) || units[i - 1].kind === 'aprender', n.id).toBe(true);
+      expect(units.some((u) => u.key === `narrada:${n.id}`), n.id).toBe(false);
+      expect(units.some((u) => u.to === `/aula-narrada/${n.id}`), n.id).toBe(false);
     }
   });
   it('plainSpeech tira a marcação de markdown', () => {
