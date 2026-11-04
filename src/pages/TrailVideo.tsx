@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { curatedVideos, trailPlaceOf } from '@/content';
+import { curatedVideos, publishedPorticoVideos, trailPlaceOf } from '@/content';
 import { VideoEmbed } from '@/components/VideoEmbed';
 import { Icon } from '@/components/Icon';
 import { PageHeader } from '@/components/Page';
@@ -37,7 +37,7 @@ function timestampUrl(url: string, time: string) {
 export function TrailVideoPage() {
   const { id = '' } = useParams();
   const checkpoint = useCheckpoint();
-  const video = curatedVideos.find((item) => item.id === id);
+  const video = [...publishedPorticoVideos, ...curatedVideos].find((item) => item.id === id);
   if (!video) return <section className="card space-y-3 p-5">
     <h1 className="text-xl">Videoaula não encontrada</h1>
     <p className="text-sm text-muted">O vídeo pode ter sido removido do catálogo.</p>

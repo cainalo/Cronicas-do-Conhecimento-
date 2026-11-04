@@ -6,13 +6,12 @@ import { Link } from 'react-router-dom';
 import { useStudy } from '@/app/StudyProvider';
 import { useCheckpoint } from '@/app/useCheckpoint';
 import { areaColor } from '@/app/areas';
-import { DEFAULT_CONTEST_ID, externalMaterials, flashcards, getContest, narratedLessons, questionsForContest } from '@/content';
+import { DEFAULT_CONTEST_ID, externalMaterials, flashcards, getContest, questionsForContest } from '@/content';
 import { reviewQueue } from '@/lib/study';
 import { dueCards, unlockedCardIds } from '@/lib/training';
 import { Icon } from '@/components/Icon';
 import { PageHeader, SectionTitle, Tile, TileGrid, useIsDark } from '@/components/Page';
 import { VideoLibrary } from '@/components/VideoLibrary';
-import { TrailPlace } from '@/components/TrailPlace';
 import { VideoEmbed, youTubeId } from '@/components/VideoEmbed';
 
 interface OwnVideo {
@@ -97,26 +96,6 @@ export function StudiesPage() {
           <Tile wide to="/escritorio" icon="mapa" color="rgb(var(--ember))" title="Escritório de TI 2D" text="Ande pelo mapa, converse com a equipe, investigue um chamado e use terminais no próprio ambiente." />
           <Tile to="/sala" icon="balao" color="rgb(var(--azure))" title="Sala dos Professores" text="Dicas, pegadinhas e mini-desafios." />
         </TileGrid>
-      </section>
-
-      <section aria-label="Aulas narradas">
-        <SectionTitle icon="play" color={color}>
-          Aulas narradas
-        </SectionTitle>
-        <ul className="ledger">
-          {narratedLessons.map((n) => (
-            <li key={n.id} className="px-4 py-3.5">
-              <Link to={`/aula-narrada/${n.id}`} className="flex items-center gap-3">
-                <span className="min-w-0 flex-1">
-                  <span className="block font-semibold">{n.title}</span>
-                  <span className="block text-sm text-muted">Voz explicando enquanto a cena se monta · {n.minutes} min · com legenda e transcrição</span>
-                </span>
-                <Icon name="avancar" size={18} className="shrink-0 text-muted" />
-              </Link>
-              <TrailPlace lessonId={n.lessonId} className="mt-1.5 max-w-full" />
-            </li>
-          ))}
-        </ul>
       </section>
 
       <section aria-label="Videoaulas">

@@ -22,7 +22,6 @@ const STATE_LABEL: Record<UnitState, string> = {
 
 const KIND_LABEL: Record<string, string> = {
   aprender: 'Aula',
-  narrada: 'Aula narrada',
   video: 'Videoaula',
   professores: 'Professores',
   praticar: 'Prática',
@@ -33,7 +32,6 @@ const KIND_LABEL: Record<string, string> = {
 
 const KIND_ICON: Record<string, IconName> = {
   aprender: 'grimorio',
-  narrada: 'play',
   video: 'play',
   professores: 'balao',
   praticar: 'chama',

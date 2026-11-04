@@ -7,8 +7,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { returnToPreviousPage } from '@/lib/navigation';
 import type { MicroLesson } from '@/content/types';
 import type { FeedPost } from '@/lib/feed';
-import { curatedVideos, feedPostsOf, getChapter, getQuestion, narratedFor, teacherForChapter } from '@/content';
-import { NarratedPlayer } from './Narrated';
+import { curatedVideos, publishedPorticoVideos, feedPostsOf, getChapter, getQuestion, teacherForChapter } from '@/content';
 import { VideoEmbed } from '@/components/VideoEmbed';
 import { useStudy } from '@/app/StudyProvider';
 import { useFx } from '@/app/fx';
@@ -43,7 +42,7 @@ type Phase =
   | { k: 'checar'; i: number }
   | { k: 'recuperar'; i: number }
   | { k: 'rechecar'; i: number }
-  /** Sequência única (25/10/2026): aula narrada e videoaula conferida, dentro da aula, antes da prática. */
+  /** Videoaula integrada ao percurso, depois das explicações e antes da prática. */
   | { k: 'midia' }
   | { k: 'praticar'; i: number }
   | { k: 'prova'; i: number }
@@ -82,11 +81,10 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
   const chapter = getChapter(lesson.chapterId)!;
   const section = chapter.sections.find((item) => item.id === lesson.sectionId);
   const teacher = teacherForChapter(lesson.chapterId);
-  const narrated = narratedFor(lesson.id);
-  // Só videoaulas conferidas entram na sequência; as "a conferir" ficam na biblioteca de vídeos.
-  const videos = curatedVideos.filter((v) => v.lessonId === lesson.id && v.status === 'conferido');
+  // Só arquivos publicados pelo Pórtico e vídeos externos conferidos entram na sequência principal.
+  const videos = [...publishedPorticoVideos, ...curatedVideos].filter((v) => v.lessonId === lesson.id && v.status === 'conferido');
   const relatedTips = useMemo(() => feedPostsOf(lesson.id).filter((post) => post.kind === 'dica'), [lesson.id]);
-  const hasMedia = !!narrated || videos.length > 0;
+  const hasMedia = videos.length > 0;
   const [showFullMaterial, setShowFullMaterial] = useState(false);
   const n = lesson.steps.length;
   // Em série, cada aula tem o seu ponto salvo; sozinha, usa a chave do trecho (como antes).
@@ -299,22 +297,13 @@ export function MicroLessonPage({ lesson, series }: { lesson: MicroLesson; serie
         </section>
       )}
 
-      {phase.k === 'midia' && narrated && (
-        <NarratedPlayer
-          l={narrated}
-          embedded
-          exitLabel="Ir para a prática"
-          onClose={() => set(lesson.consolidation.length ? { k: 'praticar', i: 0 } : lesson.exam.length ? { k: 'prova', i: 0 } : { k: 'sintese' })}
-        />
-      )}
-
-      {phase.k === 'midia' && !narrated && videos.length > 0 && (
-        <section className="flex min-h-0 flex-1 flex-col overflow-hidden" aria-label="Veja de outro jeito">
+      {phase.k === 'midia' && videos.length > 0 && (
+        <section className="flex min-h-0 flex-1 flex-col overflow-hidden" aria-label="Videoaula do Pórtico">
           <div className="mb-3 shrink-0">
             <p className="kicker">Antes de praticar</p>
-            <h1 className="mt-0.5 text-2xl leading-tight">Veja de outro jeito</h1>
-            <p className="mt-1 text-sm text-muted">Videoaulas complementares do assunto. A aula narrada fica disponível na trilha, em sua página própria.</p>
-            <TeacherScene teacher={teacher} pose="presenting" size={142} eyebrow="EXEMPLO EM CENA" heading="Veja o conceito em ação" message={`Observe esta demonstração comigo. Compare a explicação com o caso mostrado.`} />
+            <h1 className="mt-0.5 text-2xl leading-tight">Videoaula do Pórtico</h1>
+            <p className="mt-1 text-sm text-muted">Assista à demonstração do assunto. Depois, volte para aplicar o que aprendeu na prática.</p>
+            <TeacherScene teacher={teacher} pose="presenting" size={142} eyebrow="APRENDER EM CENA" heading="Observe o conceito em ação" message="Acompanhe a explicação visual e relacione cada etapa ao que você acabou de estudar." />
           </div>
           <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain">
             {videos.map((v) => <VideoEmbed key={v.id} url={v.url} title={v.title} meta={[v.channel, v.duration].filter(Boolean).join(' · ')} />)}

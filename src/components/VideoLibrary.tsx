@@ -2,7 +2,7 @@
 // (só carrega ao tocar, sem tocar sozinho) e ligação com a aula em texto do mesmo assunto. Vídeo não
 // conferido aparece com aviso e a origem; nada é apresentado como curado sem conferência.
 import { useMemo, useState } from 'react';
-import { curatedVideos, getChapter } from '@/content';
+import { curatedVideos, publishedPorticoVideos, getChapter } from '@/content';
 import { VideoEmbed } from '@/components/VideoEmbed';
 import { TrailPlace } from './TrailPlace';
 import { Icon } from '@/components/Icon';
@@ -10,11 +10,12 @@ import { Icon } from '@/components/Icon';
 export function VideoLibrary() {
   const [subject, setSubject] = useState<string>('todos');
   const [q, setQ] = useState('');
-  const subjects = useMemo(() => [...new Set(curatedVideos.map((v) => v.chapterId))].map((id) => ({ id, title: getChapter(id)?.title ?? id })), []);
-  const list = curatedVideos.filter(
+  const videos = useMemo(() => [...publishedPorticoVideos, ...curatedVideos], []);
+  const subjects = useMemo(() => [...new Set(videos.map((v) => v.chapterId))].map((id) => ({ id, title: getChapter(id)?.title ?? id })), [videos]);
+  const list = videos.filter(
     (v) => (subject === 'todos' || v.chapterId === subject) && (!q.trim() || `${v.title} ${v.objective}`.toLowerCase().includes(q.trim().toLowerCase())),
   );
-  if (!curatedVideos.length) return <p className="text-sm text-muted">Ainda não há videoaulas na biblioteca. Guarde abaixo as aulas que você já usa.</p>;
+  if (!videos.length) return <p className="text-sm text-muted">As videoaulas próprias do Pórtico estão sendo publicadas. Enquanto isso, a biblioteca reúne sugestões externas para consulta complementar.</p>;
   return (
     <div className="space-y-3" data-testid="videoteca">
       <div className="flex flex-wrap items-center gap-2">
