@@ -6,7 +6,7 @@ type ViewMode = 'color' | 'silhouette' | 'portrait';
 const VIEW_MODES: { value:ViewMode; label:string; description:string }[] = [
   { value:'color', label:'Cores', description:'A leitura completa das roupas, cabelos e rostos.' },
   { value:'silhouette', label:'Silhuetas', description:'A forma externa sem linhas de contorno ou detalhes decorativos.' },
-  { value:'portrait', label:'Rostos', description:'A expressão, o cabelo e a identidade em tamanho de avatar.' },
+  { value:'portrait', label:'Cabeças e rostos', description:'Formato de cabeça, cabelo e expressão em tamanho de avatar.' },
 ];
 
 /** V22.1: revisão de proporções e leitura em tela pequena. Poses e animações não entram nesta etapa. */
@@ -16,10 +16,10 @@ export function TeacherCharacterReviewPage() {
     <main className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:space-y-8"
       data-character-review-mode={view} data-character-review-stage="static-only">
       <header className="max-w-3xl space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · V22.8.2</p>
-        <h1 className="font-title text-3xl font-bold leading-tight sm:text-4xl">Treze professores. Uma família visual.</h1>
+        <p className="kicker">LABORATÓRIO DE PERSONAGENS · V22.9</p>
+        <h1 className="font-title text-3xl font-bold leading-tight sm:text-4xl">Treze professores. Treze rostos reconhecíveis.</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
-          A nova etapa deixa de tratar os professores como variações de um mesmo molde. Cada pessoa recebe uma arquitetura corporal própria — coluna, pera, barril, triângulo invertido, ampulheta, saia em A ou formas arredondadas — com transições limpas entre braços e mãos, roupa e pernas, com extremidades arredondadas. A prancha avalia somente silhueta, massa corporal e proporções estáticas; não inclui poses nem animações.
+          Esta prancha concentra-se nas cabeças: formato do rosto, linha do cabelo, penteado, olhos, sobrancelhas, nariz e boca. A ideia é reconhecer cada professor pela identidade facial, mantendo formas chapadas, expressivas e econômicas. Corpos, poses e animações não são alterados nesta etapa.
         </p>
       </header>
 
@@ -27,7 +27,7 @@ export function TeacherCharacterReviewPage() {
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-sm font-extrabold">Inspecionar os personagens</h2>
-            <p className="text-xs text-muted">A forma externa precisa identificar a pessoa mesmo sem rosto, cabelo ou roupa colorida; a roupa deve acompanhar essa forma sem vazamentos de cor e mãos devem encaixar no fim dos braços.</p>
+            <p className="text-xs text-muted">Cada rosto precisa ser reconhecível sem legenda, cor da roupa ou acessórios.</p>
           </div>
           <div className="flex flex-wrap gap-1.5" role="group" aria-label="Modo de visualização">
             {VIEW_MODES.map((mode) => (
@@ -86,10 +86,10 @@ export function TeacherCharacterReviewPage() {
         <h2 className="font-title text-lg font-bold">Critérios de aprovação visual</h2>
         <div className="mt-3 grid gap-3 text-sm leading-relaxed text-muted sm:grid-cols-2">
           <p><strong className="text-ink">Identidade pela forma.</strong> A silhueta corporal precisa ser reconhecível sem depender de cabelo, rosto ou legenda.</p>
-          <p><strong className="text-ink">Continuidade.</strong> Braços, mãos, calças, saias e pernas precisam formar um contorno contínuo, sem sobras de cor ou cortes retos acidentais.</p>
-          <p><strong className="text-ink">Detalhe com propósito.</strong> Óculos, brincos ou objetos aparecem somente quando ajudam a contar algo sobre a pessoa.</p>
-          <p><strong className="text-ink">Simplicidade equilibrada.</strong> Cores chapadas, nenhuma linha de contorno e rosto expressivo sem textura.</p>
-          <p><strong className="text-ink">Unidade sem repetição.</strong> Os treze compartilham a mesma linguagem de desenho, mas nenhum repete o contorno de outro.</p>
+          <p><strong className="text-ink">Personalidade facial.</strong> Olhos, sobrancelhas, nariz e boca não devem repetir a mesma fórmula.</p>
+          <p><strong className="text-ink">Cabelo como silhueta.</strong> O penteado deve mudar o contorno da cabeça e não apenas acrescentar volume genérico.</p>
+          <p><strong className="text-ink">Poucas formas, bem escolhidas.</strong> Cores chapadas, nenhuma linha de contorno e detalhes com função expressiva.</p>
+          <p><strong className="text-ink">Expressões distintas.</strong> Alguns são expansivos, outros reservados, curiosos, analíticos ou serenos.</p>
           <p><strong className="text-ink">Mascotes separados.</strong> Os animais acompanham o estudante, mas não ocupam o papel de educador.</p>
         </div>
       </section>
