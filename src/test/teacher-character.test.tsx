@@ -5,7 +5,7 @@ import { Illustration, type IllustrationName } from '@/components/Illustration';
 import { teacherForChapter, teachers } from '@/content';
 import { TeacherCharacterReviewPage } from '@/pages/TeacherCharacterReview';
 
-describe('elenco humano do Pórtico — V22.8', () => {
+describe('elenco humano do Pórtico — V22.8.1', () => {
   it('desenha treze professores humanos, cada um com arte vetorial própria', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={200}/>)}</div>);
     const figures = Array.from(container.querySelectorAll('svg[data-character-style="portico-friends-v22"]'));

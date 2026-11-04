@@ -16,10 +16,10 @@ export function TeacherCharacterReviewPage() {
     <main className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:space-y-8"
       data-character-review-mode={view} data-character-review-stage="static-only">
       <header className="max-w-3xl space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · V22.8</p>
+        <p className="kicker">LABORATÓRIO DE PERSONAGENS · V22.8.1</p>
         <h1 className="font-title text-3xl font-bold leading-tight sm:text-4xl">Treze professores. Uma família visual.</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
-          A nova etapa deixa de tratar os professores como variações de um mesmo molde. Cada pessoa recebe uma arquitetura corporal própria — coluna, pera, barril, triângulo invertido, ampulheta, saia em A ou formas arredondadas — antes dos detalhes. A prancha avalia somente silhueta, massa corporal e proporções estáticas; não inclui poses nem animações.
+          A nova etapa deixa de tratar os professores como variações de um mesmo molde. Cada pessoa recebe uma arquitetura corporal própria — coluna, pera, barril, triângulo invertido, ampulheta, saia em A ou formas arredondadas — com transições limpas entre roupa, pernas e base dos pés. A prancha avalia somente silhueta, massa corporal e proporções estáticas; não inclui poses nem animações.
         </p>
       </header>
 
@@ -27,7 +27,7 @@ export function TeacherCharacterReviewPage() {
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-sm font-extrabold">Inspecionar os personagens</h2>
-            <p className="text-xs text-muted">A forma externa precisa identificar a pessoa mesmo sem rosto, cabelo ou roupa colorida.</p>
+            <p className="text-xs text-muted">A forma externa precisa identificar a pessoa mesmo sem rosto, cabelo ou roupa colorida; a roupa deve acompanhar essa forma sem vazamentos de cor.</p>
           </div>
           <div className="flex flex-wrap gap-1.5" role="group" aria-label="Modo de visualização">
             {VIEW_MODES.map((mode) => (
@@ -86,7 +86,7 @@ export function TeacherCharacterReviewPage() {
         <h2 className="font-title text-lg font-bold">Critérios de aprovação visual</h2>
         <div className="mt-3 grid gap-3 text-sm leading-relaxed text-muted sm:grid-cols-2">
           <p><strong className="text-ink">Identidade pela forma.</strong> A silhueta corporal precisa ser reconhecível sem depender de cabelo, rosto ou legenda.</p>
-          <p><strong className="text-ink">Arquiteturas distintas.</strong> Cada corpo usa uma distribuição própria de largura, volume, cintura, quadril e comprimento.</p>
+          <p><strong className="text-ink">Continuidade.</strong> Calças, saias, pernas e pés precisam formar uma base contínua, sem sobras de cor ou cortes retos acidentais.</p>
           <p><strong className="text-ink">Detalhe com propósito.</strong> Óculos, brincos ou objetos aparecem somente quando ajudam a contar algo sobre a pessoa.</p>
           <p><strong className="text-ink">Simplicidade equilibrada.</strong> Cores chapadas, nenhuma linha de contorno e rosto expressivo sem textura.</p>
           <p><strong className="text-ink">Unidade sem repetição.</strong> Os treze compartilham a mesma linguagem de desenho, mas nenhum repete o contorno de outro.</p>
