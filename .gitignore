@@ -7,5 +7,9 @@ coverage
 android/app/build
 *.tsbuildinfo
 
+# Estado local do Supabase CLI (não versionar)
+supabase/.temp/
+supabase/.branches/
+
 # Capturas de tela de verificação (ficam no scratchpad, não no repositório)
 shots/
