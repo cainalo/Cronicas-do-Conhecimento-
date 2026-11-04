@@ -1,8 +1,7 @@
-// Trilha integrada (26/10/2026): aulas narradas, videoaulas, posts dos professores e cartões entram
-// na sequência, em ordem lógica, e contam como feitos ao abrir pela trilha (?u=chave).
+// Trilha integrada: videoaulas verificadas, posts dos professores e cartões entram na sequência lógica.
 import { describe, expect, it } from 'vitest';
 import { trailUnits } from '@/app/useCheckpoint';
-import { chapters, curatedVideos, flashcards, narratedLessons } from '@/content';
+import { chapters, curatedVideos, flashcards, porticoVideoPlan } from '@/content';
 import { emptyData } from '@/lib/model';
 import { logUnit, unitDone } from '@/lib/pace';
 
@@ -10,17 +9,27 @@ const units = trailUnits();
 const idx = (pred: (u: (typeof units)[number]) => boolean) => units.findIndex(pred);
 
 describe('trilha com todos os materiais', () => {
-  it('toda aula narrada aparece logo depois da sua aula em texto', () => {
-    for (const n of narratedLessons) {
-      const i = idx((u) => u.key === `narrada:${n.id}`);
-      expect(i, n.id).toBeGreaterThan(0);
-      expect(units[i - 1].kind, n.id).toBe('aprender');
-      expect(units[i].to).toContain(`/aula-narrada/${n.id}`);
+  it('aulas narradas antigas não criam mais etapas na trilha', () => {
+    expect(units.some((u) => u.key.startsWith('narrada:'))).toBe(false);
+    expect(units.some((u) => u.to.startsWith('/aula-narrada/'))).toBe(false);
+  });
+
+  it('o catálogo próprio aponta as novas videoaulas para a unidade didática correta', () => {
+    expect(porticoVideoPlan).toHaveLength(2);
+    for (const v of porticoVideoPlan) {
+      expect(v.chapterId).toBe('cap.infra.03');
+      expect(v.sectionId).toBe('processos');
+      expect(v.lessonId).toBe('micro.infra.processos');
     }
   });
 
-  it('toda videoaula curada aparece uma única vez, antes do Praticar do seu trecho', () => {
+  it('só videoaulas verificadas aparecem uma única vez, antes do Praticar do trecho', () => {
     for (const v of curatedVideos) {
+      const matches = units.filter((u) => u.key === `video:${v.id}`);
+      if (v.status !== 'conferido') {
+        expect(matches, v.id).toHaveLength(0);
+        continue;
+      }
       const matches = units.filter((u) => u.key === `video:${v.id}`);
       expect(matches, v.id).toHaveLength(1);
       const i = units.indexOf(matches[0]);
@@ -60,7 +69,7 @@ describe('trilha com todos os materiais', () => {
   });
 
   it('material aberto pela trilha conta como feito', () => {
-    const u = units.find((x) => x.kind === 'video')!;
+    const u = units.find((x) => x.kind === 'video') ?? units.find((x) => x.kind === 'professores')!;
     expect(unitDone(emptyData(), u)).toBeUndefined();
     expect(u.to).toContain(`u=${encodeURIComponent(u.key)}`);
     expect(unitDone(logUnit(emptyData(), u.key), u)).toBeTruthy();

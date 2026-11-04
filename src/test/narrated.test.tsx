@@ -1,6 +1,5 @@
-import { act, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter, useLocation } from 'react-router-dom';
 import { StudyProvider } from '@/app/StudyProvider';
 import { PrefsProvider } from '@/app/prefs';
 import { AppRoutes } from '@/App';
@@ -12,19 +11,23 @@ import { splitCaptionLines } from '@/pages/Narrated';
 vi.mock('@/lib/supabase', () => ({ supabase: null }));
 beforeEach(() => localStorage.clear());
 
-describe.each(narratedLessons.map((n) => [n.id, n] as const))('aula narrada %s', (_, l) => {
-  it('conteúdo válido e ligado a uma aula em texto existente', () => {
+function RouteProbe() {
+  const location = useLocation();
+  return <output data-testid="route-location">{location.pathname}</output>;
+}
+
+// O motor de narração fica preservado para compatibilidade com dados antigos,
+// mas não é mais um formato de aula oferecido no percurso atual do Pórtico.
+describe.each(narratedLessons.map((n) => [n.id, n] as const))('arquivo legado %s', (_, l) => {
+  it('conteúdo válido e ligado a uma microaula existente', () => {
     expect(validateNarrated(l)).toEqual([]);
     expect(microLessons.some((m) => m.id === l.lessonId && m.chapterId === l.chapterId && m.sectionId === l.sectionId)).toBe(true);
     expect(transcript(l).flatMap((t) => t.lines).length).toBe(l.scenes.reduce((n, s) => n + s.beats.length, 0));
   });
-  it('navegação: avança frase a frase, cena a cena, e termina', () => {
+  it('navegação interna percorre todas as falas sem perder a ordem', () => {
     let p: { scene: number; beat: number } | undefined = { scene: 0, beat: 0 };
     let n = 0;
-    while (p) {
-      n++;
-      p = nextBeat(l, p);
-    }
+    while (p) { n++; p = nextBeat(l, p); }
     expect(n).toBe(l.scenes.reduce((k, s) => k + s.beats.length, 0));
     expect(prevScene(l, { scene: 2, beat: 1 })).toEqual({ scene: 2, beat: 0 });
     expect(prevScene(l, { scene: 2, beat: 0 })).toEqual({ scene: 1, beat: 0 });
@@ -50,63 +53,35 @@ it('validador acusa revelação fora do alcance e número fora da reta', () => {
   expect(errs).toMatch(/9 fora da reta/);
 });
 
-it('página: começa parada; sem voz, avança pelas legendas; pula cena; transcrição; última cena', async () => {
-  vi.useFakeTimers({ shouldAdvanceTime: true });
-  const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
-  const l = narratedLessons.find((x) => x.id === 'narrada.mat.somar-inteiros')!;
+it('links antigos de aula narrada redirecionam para a trilha, sem abrir o player legado', () => {
+  const legacy = narratedLessons[0];
   render(
     <PrefsProvider>
       <StudyProvider>
-        <MemoryRouter initialEntries={[`/aula-narrada/${l.id}`]}>
+        <MemoryRouter initialEntries={[`/aula-narrada/${legacy.id}`]}>
           <AppRoutes />
+          <RouteProbe />
         </MemoryRouter>
       </StudyProvider>
     </PrefsProvider>,
   );
-  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Imagine que sua conta tem saldo zero/);
-  expect(screen.getByTestId('narrada-player')).toHaveClass('fixed', 'inset-0', 'h-[100dvh]', 'overflow-hidden');
-  expect(screen.getByTestId('narrada-elementos-visuais')).toBeInTheDocument();
-  expect(screen.getByText(/sem voz neste aparelho/)).toBeInTheDocument();
-  // Não toca sozinha.
-  await act(async () => void vi.advanceTimersByTime(20000));
-  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Imagine que sua conta tem saldo zero/);
-  await user.click(screen.getByTestId('narrada-tocar'));
-  const captionWords = screen.getByTestId('narrada-legenda-texto').querySelectorAll(':scope > span');
-  expect(captionWords.length).toBeGreaterThan(1);
-  expect(captionWords[0]).toHaveClass('text-[#ffd38a]');
-  await act(async () => void vi.advanceTimersByTime(8000));
-  expect(screen.getByTestId('narrada-legenda')).not.toHaveTextContent(l.scenes[0].beats[0].say);
-  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-0');
-  await user.click(screen.getByTestId('narrada-mostrar-controles'));
-  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-100');
-  // Um toque na área do vídeo também esconde os controles; um novo toque revela-os.
-  await user.click(screen.getByTestId('narrada-stage'));
-  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-0');
-  await user.click(screen.getByTestId('narrada-mostrar-controles'));
-  expect(screen.getByTestId('narrada-controles-flutuantes')).toHaveClass('opacity-100');
-  await user.click(screen.getByTestId('narrada-tocar')); // pausa
-  await user.click(screen.getByRole('button', { name: 'Ir para a cena 6: Subtrair é somar o oposto' }));
-  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/cinco menos oito/);
-  await user.click(screen.getByRole('button', { name: 'Transcrição' }));
-  expect(screen.getByRole('region', { name: 'Transcrição' })).toHaveTextContent(/subtrair um número equivale a somar o oposto/i);
-  // Avança até a última fala da última cena e confirma o estado real de conclusão.
-  const finalScene = l.scenes[l.scenes.length - 1];
-  await user.click(screen.getByRole('button', { name: `Ir para a cena ${l.scenes.length}: ${finalScene.heading}` }));
-  for (let i = 1; i < finalScene.beats.length; i++) {
-    await user.click(screen.getByRole('button', { name: 'Avançar uma fala' }));
-  }
-  await user.click(screen.getByTestId('narrada-tocar'));
-  await act(async () => void vi.advanceTimersByTime(20000));
-  expect(screen.getByTestId('narrada-tocar')).toHaveAttribute('aria-label', 'Assistir novamente');
-  vi.useRealTimers();
+  expect(screen.getByTestId('route-location')).toHaveTextContent('/trilha');
+  expect(screen.queryByTestId('narrada-player')).toBeNull();
 });
 
-it('sequência única: a aula narrada abre em tela cheia e segue para a prática', async () => {
-  const user = userEvent.setup();
+it('uma sessão antiga salva na etapa de narração continua na prática, sem voltar a abrir o player', () => {
   const key = 'aprender:cap.prim.01:computador#prim.computador.1';
   localStorage.setItem(
     'cronicas:v1:visitante',
-    JSON.stringify({ ...emptyData(), progress: { [key]: { step: { phase: { k: 'midia' }, first: {}, struggled: [] }, updatedAt: new Date().toISOString() } } }),
+    JSON.stringify({
+      ...emptyData(),
+      progress: {
+        [key]: {
+          step: { phase: { k: 'midia' }, first: {}, struggled: [] },
+          updatedAt: new Date().toISOString(),
+        },
+      },
+    }),
   );
   render(
     <PrefsProvider>
@@ -117,14 +92,6 @@ it('sequência única: a aula narrada abre em tela cheia e segue para a prática
       </StudyProvider>
     </PrefsProvider>,
   );
-  const player = screen.getByTestId('narrada-player');
-  expect(player).toHaveClass('fixed', 'inset-0', 'h-[100dvh]', 'overflow-hidden', 'w-full');
-  expect(player.style.width).toBe('100%');
-  expect(player.style.height).toBe('100dvh');
-  expect(screen.getByTestId('narrada-seek')).toBeInTheDocument();
-  expect(screen.getByTestId('narrada-legenda')).toHaveTextContent(/Pegue o celular que está na sua/);
-  expect(screen.queryByRole('link', { name: 'Conta e configurações' })).toBeNull();
-  await user.click(screen.getByTestId('narrada-sair'));
   expect(screen.queryByTestId('narrada-player')).toBeNull();
   expect(screen.getByRole('region', { name: 'Prática final' })).toBeInTheDocument();
 });
