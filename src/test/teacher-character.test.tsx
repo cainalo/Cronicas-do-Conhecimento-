@@ -50,8 +50,6 @@ describe('elenco humano do Pórtico — V22.1.1', () => {
     expect(new Set(figures.map((svg) => svg.getAttribute('data-character-eyes'))).size).toBe(4);
     expect(figures.every((svg) => Number((svg.getAttribute('data-character-head-scale') || '0').split('x')[0]) >= 1.14)).toBe(true);
     expect(new Set(figures.map((svg) => svg.getAttribute('data-character-eye-size'))).size).toBe(13);
-    expect(figures.every((svg) => Number((svg.getAttribute('data-character-head-scale') || '0').split('x')[0]) >= 1.14)).toBe(true);
-    expect(new Set(figures.map((svg) => svg.getAttribute('data-character-eye-size'))).size).toBe(13);
   });
 
   it('varia a proporção da cabeça e os traços faciais sem perder a família visual', () => {
