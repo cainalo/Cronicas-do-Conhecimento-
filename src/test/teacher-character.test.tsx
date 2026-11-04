@@ -32,6 +32,8 @@ describe('personagens-professores vetoriais', () => {
     }
     const bodySilhouettes = figures.map((figure) => figure.getAttribute('data-character-body'));
     expect(new Set(bodySilhouettes).size).toBe(teachers.length);
+    const hairSilhouettes = figures.map((figure) => figure.getAttribute('data-character-hair'));
+    expect(new Set(hairSilhouettes).size).toBe(teachers.length);
     const differentDrawings = figures.map((figure) => figure.innerHTML);
     expect(new Set(differentDrawings).size).toBe(teachers.length);
   });
