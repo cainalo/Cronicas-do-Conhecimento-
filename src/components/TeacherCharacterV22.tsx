@@ -23,6 +23,7 @@ type CharacterDesign = {
   hair: string;
   hairBack: string;
   hairFront: string;
+  hairStrands?: string;
   face: string;
   shirt: string;
   bottomColor: string;
@@ -51,6 +52,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     skin:'#D99568', hair:'#4B2C25',
     hairBack:'M46 88C35 62 44 31 69 22C91 11 122 21 134 47C142 65 139 91 128 112L138 166C124 174 111 164 109 150L66 160C53 146 54 120 46 88Z',
     hairFront:'M48 64C44 43 57 24 78 19C102 12 125 27 131 49C120 46 113 40 107 31C98 46 82 48 67 47C62 58 57 63 48 64Z M51 55C54 40 62 31 73 29C69 40 63 47 51 55Z',
+    hairStrands:'M56 55Q63 38 78 31M112 37Q126 50 126 68M58 102Q57 118 65 131',
     face:'M57 52C61 34 78 30 94 32C113 34 124 48 123 69C122 94 112 112 94 116C74 115 58 99 55 77C53 68 54 59 57 52Z',
     shirt:'#C45A36', bottomColor:'#EED5B3', torso:'M65 112C76 105 111 105 123 116C132 127 134 152 139 174C120 184 77 184 58 172C62 149 57 126 65 112Z',
     lower:'M60 168C81 176 119 176 139 168C142 185 137 204 132 223L108 223L100 187L91 223L66 223C61 204 56 185 60 168Z',
@@ -66,6 +68,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     skin:'#B97554', hair:'#2C2325',
     hairBack:'M57 57C56 34 73 22 91 22C113 22 128 38 128 59L126 107L116 123L65 116Z',
     hairFront:'M57 59C57 38 70 24 92 23C111 22 127 36 128 54C113 49 105 39 101 34C93 47 78 55 57 59Z M62 53C69 43 77 37 86 34C81 44 74 51 62 53Z',
+    hairStrands:'M62 49Q72 35 86 31M105 32Q119 42 123 57',
     face:'M62 51C67 35 79 31 94 32C110 33 121 45 121 63C121 86 110 106 93 109C75 107 61 90 60 69C60 62 60 56 62 51Z',
     shirt:'#6D854B', bottomColor:'#E9D7B8', torso:'M68 106C81 99 107 101 119 111C128 124 127 149 130 170C110 181 75 181 55 169C60 147 59 119 68 106Z',
     lower:'M59 166C78 173 111 173 132 165C136 183 132 202 130 223L104 223L99 187L88 223L63 223C60 202 56 182 59 166Z',
@@ -81,6 +84,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     skin:'#8F533C', hair:'#241C1B',
     hairBack:'M52 63C49 42 62 22 84 20C106 15 128 32 130 55L126 105L57 108Z',
     hairFront:'M51 59C45 43 58 22 76 20C89 12 107 21 114 28C127 32 133 47 127 63C118 58 112 51 107 42C99 52 87 55 76 51C69 59 61 62 51 59Z',
+    hairStrands:'M55 49Q62 34 75 29M92 25Q108 27 117 42',
     face:'M58 49C64 32 78 29 94 31C111 33 122 47 121 68C120 90 107 107 91 109C74 107 60 91 57 71C56 62 56 55 58 49Z',
     shirt:'#477A48', bottomColor:'#34343C', torso:'M62 108C77 101 110 103 125 115C131 129 133 153 137 171C118 182 72 181 52 169C57 147 54 122 62 108Z',
     lower:'M54 166C73 174 116 174 137 166C138 185 135 202 131 223L107 223L100 188L90 223L66 223C60 202 55 184 54 166Z',
@@ -97,9 +101,10 @@ const DESIGNS: Record<string, CharacterDesign> = {
     skin:'#E4A27E', hair:'#342126',
     hairBack:'M42 82C39 48 58 22 91 20C122 20 139 47 135 79L131 161C121 176 108 167 111 146L64 157C52 145 53 111 42 82Z',
     hairFront:'M47 62C49 34 71 20 93 22C118 23 132 40 132 64C117 55 109 43 103 34C91 51 76 57 59 58L47 62Z',
+    hairStrands:'M48 58Q57 39 72 32M105 31Q125 44 127 65M119 96Q127 111 122 128',
     face:'M57 48C64 32 79 29 94 31C112 34 122 49 120 71C118 94 107 111 91 114C73 111 58 94 56 72C55 63 55 54 57 48Z',
     shirt:'#F1E8D3', bottomColor:'#687747', torso:'M65 109C79 102 108 103 120 114C128 130 128 153 133 174C112 184 74 184 54 172C59 149 57 125 65 109Z',
-    lower:'M56 167C76 175 112 176 133 167C140 185 138 204 133 223L107 223L99 187L88 223L64 223C60 202 55 184 56 167Z',
+    lower:'M56 167C76 175 112 176 133 167C140 185 144 204 148 223L44 223C48 203 52 184 56 167Z',
     leftArm:'M66 118C56 128 55 146 59 160C62 170 71 171 76 162L82 140Z',
     rightArm:'M119 117C132 127 135 143 137 158C138 169 128 175 121 164L113 142Z',
     eyes:[78,103,72], brow:'M68 65Q77 59 86 63M96 63Q105 59 113 64',
@@ -112,6 +117,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     skin:'#E7B08A', hair:'#242024',
     hairBack:'M47 69C45 42 61 23 91 22C122 22 136 45 133 76L127 104C121 123 108 131 94 130C73 128 55 112 48 91Z',
     hairFront:'M47 69C46 42 64 23 91 22C119 21 135 43 133 70C118 68 108 59 101 49C88 62 70 69 47 69Z M48 71C57 68 64 60 69 51C72 68 67 79 59 85Z',
+    hairStrands:'M54 55Q66 36 82 31M102 31Q122 43 126 62',
     face:'M61 51C68 35 80 32 94 33C111 34 120 47 120 65C120 84 110 100 94 104C76 102 62 88 60 69C59 62 59 56 61 51Z',
     shirt:'#79609B', bottomColor:'#393541', torso:'M66 103C79 96 110 99 121 111C129 125 132 149 137 169C119 180 74 180 55 169C60 148 58 119 66 103Z',
     lower:'M57 166C76 174 114 174 136 166C137 184 135 204 132 223L108 223L100 188L89 223L65 223C60 203 56 183 57 166Z',
@@ -127,6 +133,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     skin:'#A86443', hair:'#2A211F',
     hairBack:'M48 62C48 37 66 20 91 19C118 19 135 38 132 64L126 103L54 105Z',
     hairFront:'M47 57C44 37 61 19 81 18C102 12 125 27 132 46C135 58 127 66 119 65C111 55 109 44 104 39C96 50 85 54 76 49C68 57 58 61 47 57Z',
+    hairStrands:'M52 49Q62 32 78 28M95 26Q115 29 125 48',
     face:'M58 48C63 32 79 29 94 31C111 33 122 47 121 69C119 92 107 108 91 111C74 108 59 92 57 70C56 61 56 53 58 48Z',
     shirt:'#D6A34E', bottomColor:'#344B3A', torso:'M63 108C77 100 109 102 123 114C132 128 132 151 138 172C116 184 73 182 52 169C58 148 55 124 63 108Z',
     lower:'M54 166C73 175 116 174 138 166C139 183 135 203 131 223L107 223L100 188L89 223L65 223C60 203 55 184 54 166Z',
@@ -142,6 +149,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     skin:'#D89B75', hair:'#583A2A',
     hairBack:'M51 58C51 34 70 20 94 21C117 22 131 39 129 62L125 100L57 103Z',
     hairFront:'M51 59C47 39 63 20 84 19C105 16 125 29 130 48C118 46 110 41 104 34C95 47 78 51 64 49C60 55 56 58 51 59Z',
+    hairStrands:'M56 49Q69 32 87 29M105 31Q119 40 124 55',
     face:'M60 48C66 33 80 30 95 32C111 33 121 47 120 67C119 88 108 105 93 109C76 106 62 91 59 71C58 61 58 54 60 48Z',
     shirt:'#985B45', bottomColor:'#38343C', torso:'M66 107C80 101 110 103 122 114C130 127 131 151 136 171C116 183 76 183 55 170C60 148 58 125 66 107Z',
     lower:'M56 166C77 174 114 174 136 166C138 185 134 204 131 223L107 223L100 188L89 223L65 223C60 204 56 184 56 166Z',
@@ -158,6 +166,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     skin:'#A96F53', hair:'#2E2525',
     hairBack:'M48 64C48 39 66 22 93 22C119 22 136 41 133 69L130 108C122 127 109 132 92 130C70 127 52 110 48 87Z',
     hairFront:'M48 65C44 42 62 22 88 21C114 20 133 36 134 60C123 58 114 52 107 43C94 55 72 59 48 65Z M49 63C54 76 55 91 49 99C43 87 43 75 49 63Z',
+    hairStrands:'M54 59Q64 39 80 32M108 34Q126 46 128 66',
     face:'M60 50C66 34 80 31 94 32C111 34 121 48 120 68C119 90 107 107 92 110C75 107 61 92 59 71C58 63 58 56 60 50Z',
     shirt:'#302E35', bottomColor:'#E9D9BE', torso:'M67 107C81 100 109 102 121 113C129 127 130 151 135 171C116 183 75 182 55 170C60 147 58 124 67 107Z',
     lower:'M57 166C77 174 112 174 134 166C140 185 138 203 133 223L108 223L100 188L88 223L64 223C60 203 56 185 57 166Z',
@@ -171,8 +180,9 @@ const DESIGNS: Record<string, CharacterDesign> = {
   },
   'prof.beatriz': {
     skin:'#C98764', hair:'#4B302A',
-    hairBack:'M50 58C48 35 65 21 91 21C116 21 131 37 130 61L126 102L54 104Z',
-    hairFront:'M50 60C45 39 61 20 85 18C108 17 128 33 131 53C120 51 112 43 105 34C97 46 81 51 66 49C61 55 56 59 50 60Z',
+    hairBack:'M52 72C40 65 44 47 55 42C49 27 67 18 79 25C83 12 102 13 108 25C126 20 138 38 129 52C140 65 131 83 124 93L126 102L54 104Z',
+    hairFront:'M49 60C43 47 53 34 63 33C62 20 78 17 87 26C99 16 115 26 113 38C128 39 134 52 126 64C113 59 105 52 101 43C89 53 74 57 62 52C58 57 53 60 49 60Z',
+    hairStrands:'M54 48Q63 31 80 28M101 29Q121 38 126 56',
     face:'M60 49C66 33 80 30 94 31C111 33 121 47 120 67C119 88 108 105 93 108C76 106 62 91 59 70C58 61 58 54 60 49Z',
     shirt:'#D65A36', bottomColor:'#EAD7BC', torso:'M66 107C80 101 109 103 121 114C129 127 132 151 136 171C116 182 76 183 55 170C60 148 58 124 66 107Z',
     lower:'M56 166C77 174 114 174 136 166C138 184 134 203 130 223L106 223L100 188L89 223L65 223C60 203 56 184 56 166Z',
@@ -188,6 +198,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     skin:'#E4A17B', hair:'#6B3424',
     hairBack:'M42 84C39 51 56 22 91 20C124 18 141 45 136 82L130 166C118 174 108 163 110 145L61 158C49 148 53 112 42 84Z',
     hairFront:'M45 62C43 36 63 19 91 20C116 20 137 38 136 66C123 62 113 52 107 40C98 54 76 58 60 57C55 61 50 63 45 62Z',
+    hairStrands:'M47 59Q58 35 78 29M109 31Q131 48 130 70M119 107Q128 123 123 140',
     face:'M57 49C64 32 79 29 94 31C112 33 122 48 121 71C119 94 107 111 91 114C73 111 58 94 56 71C55 62 55 54 57 49Z',
     shirt:'#CB557A', bottomColor:'#38343D', torso:'M65 110C78 102 110 103 121 115C129 129 130 151 135 172C116 184 75 184 54 171C59 149 57 124 65 110Z',
     lower:'M56 166C76 175 114 175 136 166C141 184 137 203 132 223L107 223L100 188L89 223L64 223C59 203 55 184 56 166Z',
@@ -201,11 +212,12 @@ const DESIGNS: Record<string, CharacterDesign> = {
   },
   'prof.helena': {
     skin:'#E3B18D', hair:'#A69B8D',
-    hairBack:'M55 59C56 37 72 23 92 24C113 23 128 39 128 60L124 103L60 103Z',
+    hairBack:'M55 59C56 37 72 23 92 24C113 23 128 39 128 60L124 103L60 103Z M73 32C70 19 78 9 91 8C104 8 111 20 105 30C97 38 80 39 73 32Z',
     hairFront:'M58 54C60 34 73 24 91 24C109 24 125 37 127 53C116 49 108 43 102 34C94 47 77 51 58 54Z',
+    hairStrands:'M62 47Q72 32 89 29M104 30Q121 42 123 57',
     face:'M62 51C68 36 80 32 94 33C110 34 119 47 119 66C119 86 108 103 93 106C77 104 63 89 61 69C60 62 60 56 62 51Z',
     shirt:'#778B50', bottomColor:'#3C3940', torso:'M67 105C81 99 109 101 121 112C128 126 130 149 135 171C116 182 76 182 56 169C60 147 59 123 67 105Z',
-    lower:'M57 166C78 174 112 174 134 166C140 185 137 203 132 223L107 223L100 188L89 223L65 223C60 202 56 185 57 166Z',
+    lower:'M57 166C78 174 112 174 134 166C141 185 144 204 147 223L45 223C49 204 53 185 57 166Z',
     leftArm:'M68 114C56 125 55 141 58 157C60 169 69 173 75 163L82 140Z',
     rightArm:'M121 114C134 124 139 143 139 158C138 170 128 173 121 164L113 140Z',
     eyes:[80,103,72], brow:'M69 64Q78 58 87 63M98 63Q107 58 115 63',
@@ -218,6 +230,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     skin:'#C58A69', hair:'#96928D',
     hairBack:'M50 57C51 34 68 21 93 21C118 22 132 40 130 62L125 100L55 103Z',
     hairFront:'M51 58C48 38 64 22 84 19C107 16 129 31 132 51C120 49 112 42 106 33C96 45 79 51 65 48C60 54 56 57 51 58Z',
+    hairStrands:'M55 49Q67 31 84 29M105 31Q123 42 124 57',
     face:'M60 49C66 33 80 30 95 32C111 33 121 47 120 67C119 88 108 105 93 108C76 106 62 91 59 70C58 62 58 54 60 49Z',
     shirt:'#344E42', bottomColor:'#B98958', torso:'M66 108C80 100 110 102 122 113C130 127 131 151 136 171C116 183 76 183 55 170C60 148 58 124 66 108Z',
     lower:'M56 166C77 174 114 174 136 166C138 185 134 204 131 223L107 223L100 188L89 223L65 223C60 204 56 184 56 166Z',
@@ -234,6 +247,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     skin:'#D99A70', hair:'#3A2725',
     hairBack:'M51 59C50 36 67 20 93 20C118 21 132 39 130 62L125 100L56 103Z',
     hairFront:'M51 59C48 39 62 21 84 18C107 15 129 30 132 50C119 47 110 41 104 32C95 45 79 50 65 49C61 55 56 58 51 59Z',
+    hairStrands:'M56 49Q68 32 86 28M105 29Q123 39 126 57',
     face:'M60 48C66 33 80 30 95 32C111 33 121 47 120 67C119 88 108 105 93 108C76 106 62 91 59 70C58 62 58 54 60 48Z',
     shirt:'#356D80', bottomColor:'#34343E', torso:'M66 108C80 100 110 102 122 113C130 127 131 151 136 171C116 183 76 183 55 170C60 148 58 124 66 108Z',
     lower:'M56 166C77 174 114 174 136 166C138 185 134 204 131 223L107 223L100 188L89 223L65 223C60 204 56 184 56 166Z',
@@ -251,20 +265,23 @@ function Eyes({ design }: { design:CharacterDesign }) {
   const [left, right, y] = design.eyes;
   return (
     <g>
-      <path d={design.brow} fill="none" stroke={INK} strokeWidth="2.6" strokeLinecap="round"/>
+      <path d={design.brow} fill="none" stroke={INK} strokeWidth="2.05" strokeLinecap="round"/>
       <path d={'M' + (left - 4) + ' ' + (y - 1) + ' C' + (left - 6) + ' ' + (y - 10) + ' ' + (left + 6) + ' ' + (y - 10) + ' ' + (left + 5) + ' ' + y + ' C' + (left + 4) + ' ' + (y + 7) + ' ' + (left - 4) + ' ' + (y + 7) + ' ' + (left - 4) + ' ' + (y - 1) + 'Z'} fill={PAPER}/>
       <path d={'M' + (right - 5) + ' ' + (y - 1) + ' C' + (right - 6) + ' ' + (y - 10) + ' ' + (right + 6) + ' ' + (y - 10) + ' ' + (right + 5) + ' ' + y + ' C' + (right + 4) + ' ' + (y + 7) + ' ' + (right - 4) + ' ' + (y + 7) + ' ' + (right - 5) + ' ' + (y - 1) + 'Z'} fill={PAPER}/>
       <path d={'M' + (left - 1) + ' ' + y + ' C' + (left - 1) + ' ' + (y - 5) + ' ' + (left + 3) + ' ' + (y - 5) + ' ' + (left + 3) + ' ' + y + ' C' + (left + 3) + ' ' + (y + 3) + ' ' + (left - 1) + ' ' + (y + 3) + ' ' + (left - 1) + ' ' + y + 'Z'} fill={INK}/>
       <path d={'M' + (right - 2) + ' ' + y + ' C' + (right - 2) + ' ' + (y - 5) + ' ' + (right + 2) + ' ' + (y - 5) + ' ' + (right + 2) + ' ' + y + ' C' + (right + 2) + ' ' + (y + 3) + ' ' + (right - 2) + ' ' + (y + 3) + ' ' + (right - 2) + ' ' + y + 'Z'} fill={INK}/>
       <path d="M92 84Q90 90 94 91" fill="none" stroke={INK} strokeWidth="1.8" strokeLinecap="round" opacity=".55"/>
-      <path d={design.mouth} fill={INK}/>
+      <g transform="translate(94 95) scale(.82 .82) translate(-94 -95)">
+        <path d={design.mouth} fill="#7E3D38" stroke="none"/>
+        <path d="M88 95Q94 98 100 94" fill="none" stroke="#F1B4A9" strokeWidth="1.8" strokeLinecap="round"/>
+      </g>
     </g>
   );
 }
 
 function Glasses() {
   return (
-    <g fill="none" stroke={INK} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+    <g fill="none" stroke={INK} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
       <path d="M66 72C66 66 70 64 77 64C85 64 88 67 88 73C88 80 84 84 77 84C70 84 66 80 66 72Z"/>
       <path d="M96 72C96 66 100 64 107 64C115 64 119 67 119 73C119 80 115 84 108 84C100 84 96 80 96 72Z"/>
       <path d="M88 72Q92 69 96 72M65 70L60 69M119 70L123 68"/>
@@ -274,25 +291,27 @@ function Glasses() {
 
 function HumanArt({ design }: { design:CharacterDesign }) {
   return (
-    <g stroke={INK} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+    <g stroke={INK} strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round">
       <path d={design.hairBack} fill={design.hair}/>
       <path d="M78 101Q91 111 104 101L106 119Q91 126 76 118Z" fill={design.skin}/>
       <path d={design.lower} fill={design.bottomColor}/>
       <path d={design.torso} fill={design.shirt}/>
       <path d={design.leftArm} fill={design.shirt}/>
       <path d={design.rightArm} fill={design.shirt}/>
-      <path d="M68 129Q62 142 66 154Q71 159 76 153L78 139Z" fill={design.skin}/>
-      <path d="M128 129Q135 141 131 154Q126 160 121 153L119 139Z" fill={design.skin}/>
-      <path d="M66 218Q78 221 91 217L91 226Q76 230 62 226Q59 222 66 218Z" fill={INK}/>
-      <path d="M108 217Q120 220 132 216L138 225Q123 230 107 226Q103 222 108 217Z" fill={INK}/>
+      <path d="M50 158C46 162 47 170 52 174C57 177 64 174 65 168L61 159Q56 156 50 158Z" fill={design.skin}/>
+      <path d="M133 158C139 160 143 166 140 172C137 177 130 177 126 171L128 161Q130 158 133 158Z" fill={design.skin}/>
+      <path d="M62 216C70 217 81 218 90 215C95 218 94 225 88 227C80 230 66 229 60 226C57 223 58 219 62 216Z" fill={INK}/>
+      <path d="M109 215C119 218 129 217 136 215C141 219 141 224 137 227C128 230 115 229 108 226C104 223 105 218 109 215Z" fill={INK}/>
       <path d="M70 171Q91 177 129 169" fill="none" stroke={INK} strokeWidth="1.5" opacity=".28"/>
       <path d={design.face} fill={design.skin}/>
-      {design.freckles && <path d="M68 84l1 1M73 88l1 1M111 84l1 1M116 88l1 1" stroke={INK} strokeWidth="1.3" opacity=".55"/>}
+      <path d="M67 91Q72 94 78 91M107 91Q113 94 118 91" fill="none" stroke="#D56F72" strokeWidth="3" opacity=".22" strokeLinecap="round"/>
+      {design.freckles && <path d="M68 84l1 1M73 88l1 1M111 84l1 1M116 88l1 1" stroke={INK} strokeWidth="1.15" opacity=".48"/>}
       <Eyes design={design}/>
       {design.glasses && <Glasses/>}
-      {design.earrings && <path d="M57 84Q52 91 59 96M124 83Q130 91 123 96" fill="none" stroke="#D9A33F" strokeWidth="3"/>}
+      {design.earrings && <path d="M57 84Q52 91 59 96M124 83Q130 91 123 96" fill="none" stroke="#D9A33F" strokeWidth="2.4"/>}
       {design.beard && <path d={design.beard} fill={design.hair} stroke="none"/>}
       <path d={design.hairFront} fill={design.hair}/>
+      {design.hairStrands && <path d={design.hairStrands} fill="none" stroke="#E9C4A1" strokeWidth="2.3" opacity=".22" strokeLinecap="round"/>}
     </g>
   );
 }
