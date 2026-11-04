@@ -26,8 +26,8 @@ describe('personagens-professores vetoriais', () => {
     expect(figures).toHaveLength(teachers.length);
     for (const figure of figures) {
       expect(figure.getAttribute('viewBox')).toBe('0 0 240 280');
-      expect(figure.querySelectorAll('path[fill]').length).toBeGreaterThan(8);
-      expect(figure.querySelectorAll('path[stroke]').length).toBeGreaterThan(5);
+      expect(figure.querySelectorAll('path, rect, circle, ellipse').length).toBeGreaterThan(14);
+      expect(figure.querySelectorAll('[stroke-width]').length).toBeLessThan(12);
       expect(figure.getAttribute('data-character-style')).toBe('portico-friends-v3');
     }
   });
