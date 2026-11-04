@@ -24,7 +24,6 @@ type CharacterDesign = {
   hair: string;
   hairBack: string;
   hairFront: string;
-  hairStrands?: string;
   face: string;
   silhouette: string;
   shirt: string;
@@ -397,7 +396,6 @@ function HumanArt({ design }: { design:CharacterDesign }) {
       {design.beard && <path d={design.beard} fill={design.hair} stroke="none"/>}
       {design.mustache && <path d={design.mustache} fill={design.hair} stroke="none"/>}
       <path d={design.hairFront} fill={design.hair} stroke={INK} strokeWidth="1.5" strokeLinejoin="round"/>
-      {design.hairStrands && <path d={design.hairStrands} fill="none" stroke="#E9C4A1" strokeWidth="2.3" opacity=".26" strokeLinecap="round"/>}
       </g>
     </g>
   );
