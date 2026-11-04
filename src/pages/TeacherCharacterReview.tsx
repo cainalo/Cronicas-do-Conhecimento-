@@ -8,10 +8,10 @@ export function TeacherCharacterReviewPage() {
   return (
     <main className="mx-auto max-w-5xl space-y-5 px-4 py-6">
       <header className="space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V12</p>
+        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V13</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted">
-          Um elenco misto de pessoas e criaturas ligadas ao universo do conhecimento. Na V12, cada espécie recebe extremidades próprias — patas, membranas, nadadeiras, asas ou dedos aderentes — e acabamentos específicos. A galeria continua em revisão,
+          Um elenco misto de pessoas e criaturas ligadas ao universo do conhecimento. Na V13, algumas espécies deixam a postura bípede: tatu e tartaruga usam quatro membros de apoio, enquanto o papagaio ganha asas e garras próprias. Os acabamentos das roupas também ficam mais definidos. A galeria continua em revisão,
           ainda não representa uma família aprovada.
         </p>
       </header>
@@ -50,7 +50,9 @@ export function TeacherCharacterReviewPage() {
           <li>Espécies variadas: capivara, castor, axolote, gato, sapo, tatu, tartaruga, papagaio e camaleão.</li>
           <li>Roupas com pequenos acabamentos funcionais: golas, costuras, bolsos, fechos, faixas e insígnias.</li>
           <li>As extremidades são legíveis como patas, membranas, nadadeiras, asas ou mãos aderentes — não mãos humanas recoloridas.</li>
-          <li>Os braços acompanham a anatomia e a personalidade da espécie, inclusive quando o personagem gesticula.</li>
+          <li>Nem toda criatura precisa ficar em pé: quadrúpedes, aves e animais de membros especializados têm postura própria.</li>
+          <li>Asas, cascos, garras e membros de apoio precisam formar uma silhueta coerente em tamanho pequeno.</li>
+          <li>Costuras, bolsos, bordados, fechos e insígnias devem enriquecer as roupas sem competir com a anatomia.</li>
           <li>Animais usam acessórios e peças próprias, sem calças ou mangas humanas genéricas.</li>
           <li>Cor da cabeça, tronco, patas e cauda pertence à mesma paleta de espécie.</li>
           <li>As roupas têm acabamentos integrados à forma corporal e não escondem a silhueta.</li>
