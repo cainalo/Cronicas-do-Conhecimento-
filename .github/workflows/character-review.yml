@@ -1,0 +1,54 @@
+name: Revisão visual dos personagens Pórtico
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/components/TeacherCharacter.tsx'
+      - 'src/pages/TeacherCharacterReview.tsx'
+      - 'src/test/teacher-character.test.tsx'
+      - 'scripts/e2e-layout.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/character-review.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portico-character-review
+  cancel-in-progress: true
+
+jobs:
+  visual-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Build web
+        run: npm run build
+      - name: Cache do Chromium
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+      - name: Instalar Chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install chromium
+      - name: Capturar e verificar telas reais no Chromium
+        run: npm run test:e2e
+      - name: Guardar capturas para revisão
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portico-character-visual-review
+          path: artifacts/visual-review/*.png
+          if-no-files-found: warn
+          retention-days: 7
