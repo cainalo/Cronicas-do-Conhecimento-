@@ -102,7 +102,7 @@ const DESIGNS: Record<string, CharacterDesign> = {
     leftArm:'M69 115C58 122 57 144 58 159C58 170 65 174 73 168L80 140Z',
     rightArm:'M119 116C130 126 134 145 134 159C133 169 125 173 119 164L110 139Z',
     eyes:[80,103,71], eyeSize:[5.5,7.3], eyeStyle:'narrow', pupilSize:2.1, nose:'M90 80C92 77 95 78 96 81L94 86L91 86L89 82Z', brow:'M71 59Q79 55 86 59L85 61Q77 60 71 59ZM99 59Q106 55 113 57L112 60Q105 59 99 59Z',
-    headScale:[1.01,1.12],
+    headScale:[0.98,1.12],
     bodyScale:[0.82,1.1],
     mouth:'M86 94C90 92 97 92 101 94C99 98 96 100 93 100C90 99 88 97 86 94Z',
     glasses:true, glassesStyle:'oval', signature:'Metódica e investigativa',
