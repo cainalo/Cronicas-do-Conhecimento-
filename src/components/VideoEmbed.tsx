@@ -5,13 +5,13 @@ import { Icon } from '@/components/Icon';
 export function youTubeId(url: string): string | undefined {
   try {
     const u = new URL(url.trim());
-    const host = u.hostname.replace(/^www\\.|^m\\./, '');
+    const host = u.hostname.replace(/^www\.|^m\./, '');
     let id: string | null | undefined;
     if (host === 'youtu.be') id = u.pathname.slice(1).split('/')[0];
     else if (host === 'youtube.com' || host === 'youtube-nocookie.com') {
-      id = u.searchParams.get('v') ?? u.pathname.match(/^\\/(?:embed|shorts|live)\\/([^/?#]+)/)?.[1];
+      id = u.searchParams.get('v') ?? u.pathname.match(/^\/(?:embed|shorts|live)\/([^/?#]+)/)?.[1];
     }
-    return id && /^[\\w-]{11}$/.test(id) ? id : undefined;
+    return id && /^[\w-]{11}$/.test(id) ? id : undefined;
   } catch {
     return undefined;
   }
