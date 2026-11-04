@@ -3,7 +3,7 @@ import type { FictionalTeacher } from '@/content/teachers';
 
 export type TeacherPose = 'greeting' | 'presenting' | 'thinking' | 'celebrating' | 'listening';
 type HairStyle = 'afro' | 'bun' | 'short' | 'curls' | 'bob' | 'braid' | 'waves' | 'fade' | 'ponytail' | 'pixie' | 'locs' | 'sidepart' | 'spiky';
-type FaceShape = 'round' | 'wide' | 'long' | 'square' | 'pear';
+type FaceShape = 'round' | 'wide' | 'long' | 'square' | 'pear' | 'oval';
 type BodyShape = 'pear' | 'tall' | 'broad' | 'cape' | 'box' | 'round' | 'wide' | 'dress' | 'longcoat' | 'flared' | 'compact' | 'tunic' | 'hood';
 type Accessory = 'glasses' | 'round-glasses' | 'headset' | 'earrings' | 'headband';
 type FacialHair = 'beard' | 'mustache';
@@ -29,7 +29,7 @@ type Look = {
  * A linguagem é original e não reproduz personagens, desenhos ou ativos do Duolingo.
  */
 const LOOKS: Record<string, Look> = {
-  'prof.clara': { skin:'#E9B994', hair:'#34201C', top:'#F05A4F', bottom:'#304D76', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'waves', face:'wide', body:'pear', accessory:'headband' },
+  'prof.clara': { skin:'#E9B994', hair:'#34201C', top:'#F05A4F', bottom:'#304D76', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'ponytail', face:'wide', body:'pear', accessory:'earrings' },
   'prof.lia': { skin:'#C98E6A', hair:'#211B1B', top:'#009E9A', bottom:'#174C70', shoe:'#FFD13F', accent:'#FFD13F', hairStyle:'bun', face:'round', body:'tall', accessory:'headset' },
   'prof.davi': { skin:'#8D5A3F', hair:'#211B1B', top:'#3678D8', bottom:'#24445A', shoe:'#F4B52B', accent:'#F4B52B', hairStyle:'short', face:'square', body:'broad', facialHair:'mustache' },
   'prof.iara': { skin:'#A86F4C', hair:'#2A1A12', top:'#8B5BC7', bottom:'#425C45', shoe:'#FFC83D', accent:'#FFC83D', hairStyle:'afro', face:'pear', body:'cape', accessory:'earrings' },
@@ -40,7 +40,7 @@ const LOOKS: Record<string, Look> = {
   'prof.beatriz': { skin:'#E8C2A4', hair:'#493126', top:'#8658C2', bottom:'#45436A', shoe:'#F8C34B', accent:'#F8C34B', hairStyle:'pixie', face:'long', body:'longcoat', accessory:'glasses' },
   'prof.sofia': { skin:'#F0C6A5', hair:'#A64F2D', top:'#EE684F', bottom:'#315778', shoe:'#6FAE69', accent:'#6FAE69', hairStyle:'waves', face:'round', body:'flared', accessory:'headband' },
   'prof.helena': { skin:'#D5A17B', hair:'#211E28', top:'#318AA7', bottom:'#514765', shoe:'#F5C84A', accent:'#F5C84A', hairStyle:'locs', face:'wide', body:'tunic' },
-  'prof.augusto': { skin:'#B77D5D', hair:'#D2C7B5', top:'#247D91', bottom:'#49434B', shoe:'#EFB64A', accent:'#EFB64A', hairStyle:'short', face:'pear', body:'compact', accessory:'glasses' },
+  'prof.augusto': { skin:'#B77D5D', hair:'#D2C7B5', top:'#247D91', bottom:'#49434B', shoe:'#EFB64A', accent:'#EFB64A', hairStyle:'curls', face:'pear', body:'compact', accessory:'glasses' },
   'prof.caio': { skin:'#D09A76', hair:'#27222B', top:'#D99A26', bottom:'#294E59', shoe:'#4B9E9C', accent:'#4B9E9C', hairStyle:'spiky', face:'square', body:'hood', accessory:'headset' },
 };
 
@@ -50,6 +50,7 @@ const FACE_PATH: Record<FaceShape, string> = {
   long: 'M82 49Q120 21 158 49Q169 64 162 119Q153 147 120 151Q87 147 78 119Q71 64 82 49Z',
   square: 'M76 54Q83 31 120 31Q157 31 164 54L163 115Q158 146 120 146Q82 146 77 115Z',
   pear: 'M78 52Q120 25 162 52Q170 67 163 112Q153 148 120 150Q87 148 77 112Q70 67 78 52Z',
+  oval: 'M80 47Q120 19 160 47Q169 64 162 119Q153 147 120 150Q87 147 78 119Q71 64 80 47Z',
 };
 
 const BODY_PATH: Record<BodyShape, string> = {
@@ -127,7 +128,6 @@ function Hair({ look }: { look: Look }) {
 }
 
 function Face({ look, pose }: { look: Look; pose: TeacherPose }) {
-  const closed = pose === 'thinking' || pose === 'listening';
   const pupilY = pose === 'thinking' ? 101 : 98;
   const eyeHeight = pose === 'celebrating' ? 15 : 18;
   const mouth = pose === 'thinking'
@@ -216,8 +216,8 @@ export function TeacherCharacter({
       <Hand x={a.rh[0]} y={a.rh[1]} skin={look.skin} open={a.open}/>
 
       {/* O rosto encosta no corpo; não há pescoço anatômico ou roupa em camadas. */}
-      <Hair look={look}/>
       <Face look={look} pose={pose}/>
+      <Hair look={look}/>
 
       {/* Poucos sinais de identidade, escolhidos para continuar legíveis em miniatura. */}
       {look.accessory === 'headset' && <g fill="none" stroke={look.accent} strokeWidth="7" strokeLinecap="round">
