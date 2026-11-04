@@ -194,7 +194,7 @@ export function TeacherCharacter({
     <svg viewBox={portrait ? '40 12 160 160' : '0 0 240 270'} width={style.width} height={style.height}
       className={'shrink-0 ' + (portrait ? 'rounded-full overflow-hidden ' : 'overflow-visible ') + className}
       style={style} role="img" aria-label={teacher.name + ', personagem ilustrado do Pórtico'}
-      data-character-style="portico-friends-v4" data-character-body={look.body} data-character-face={look.face} focusable="false">
+      data-character-style="portico-friends-v4" data-character-body={look.body} data-character-face={look.face} data-character-hair={look.hairStyle} focusable="false">
       {portrait && <circle cx="120" cy="98" r="90" fill={'rgb(var(--' + teacher.tone + '))'}/>}
       {!portrait && <rect x="83" y="257" width="74" height="7" rx="3.5" fill="#243840" opacity=".16"/>}
 
