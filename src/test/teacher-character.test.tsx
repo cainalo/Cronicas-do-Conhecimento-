@@ -39,6 +39,16 @@ describe('elenco humano do Pórtico — V22', () => {
     expect(getByRole('region', { name:'Mascotes companheiros do Pórtico' })).toBeInTheDocument();
   });
 
+
+  it('usa silhuetas corporais conectadas, não peças independentes montadas', () => {
+    const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={200}/>)}</div>);
+    const figures = Array.from(container.querySelectorAll('svg[data-character-style="portico-friends-v22"]'));
+    expect(figures).toHaveLength(13);
+    expect(figures.every((svg) => svg.getAttribute('data-character-silhouette') === 'bespoke-connected-body')).toBe(true);
+    expect(new Set(figures.map((svg) => svg.getAttribute('data-character-id'))).size).toBe(13);
+    expect(new Set(figures.map((svg) => svg.getAttribute('data-character-eyes'))).size).toBe(4);
+  });
+
   it('mantém os retratos coerentes em avatar e corpo inteiro', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} portrait size={64}/>)}</div>);
     expect(container.querySelectorAll('svg[data-character-style="portico-friends-v22"]')).toHaveLength(13);
