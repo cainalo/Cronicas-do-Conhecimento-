@@ -55,7 +55,7 @@ describe('personagens-professores vetoriais', () => {
     expect(figures.every(f => f.getAttribute('data-character-anatomy') === 'human')).toBe(true);
     expect(figures.every(f => f.getAttribute('data-character-style') === 'portico-humans-v16')).toBe(true);
     expect(new Set(figures.map(f => f.getAttribute('data-character-id'))).size).toBe(13);
-    expect(figures.every(f => !/capybara|beaver|axolotl|armadillo|turtle|parrot|chameleon|frog|cat/.test(f.outerHTML))).toBe(true);
+    expect(figures.every(f => !f.hasAttribute('data-character-species'))).toBe(true);
   });
 
   it('usa uma silhueta própria para cada pessoa do elenco', () => {
