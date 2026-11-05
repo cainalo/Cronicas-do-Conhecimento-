@@ -1,36 +1,37 @@
 import { TeacherCharacter, TEACHER_SIGNATURE_POSES } from '@/components/TeacherCharacter';
 import { teachers } from '@/content';
 
-const REVIEW_POSES = TEACHER_SIGNATURE_POSES;
-
-/** Galeria temporária de revisão visual; acesso direto, fora da navegação principal. */
+/** Prancha estática de revisão do elenco; acesso direto, fora da navegação principal. */
 export function TeacherCharacterReviewPage() {
   return (
-    <main className="mx-auto max-w-5xl space-y-5 px-4 py-6">
+    <main className="mx-auto max-w-6xl space-y-5 px-4 py-6">
       <header className="space-y-2">
-        <p className="kicker">LABORATÓRIO DE PERSONAGENS · DIREÇÃO V14</p>
+        <p className="kicker">PÓRTICO · ESTÚDIO DE PERSONAGENS · V15</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
-        <p className="max-w-2xl text-sm leading-relaxed text-muted">
-          Um elenco misto de pessoas e criaturas ligadas ao universo do conhecimento. Na V14, as espécies mantêm suas silhuetas próprias e recebem tratamentos faciais distintos: olhos, pálpebras, pupilas e sobrancelhas acompanham a personalidade de cada criatura. A galeria continua em revisão,
-          ainda não representa uma família aprovada.
+        <p className="max-w-3xl text-sm leading-relaxed text-muted">
+          Treze professores humanos, cada um com uma silhueta desenhada individualmente.
+          A família compartilha uma linguagem de ilustração vetorial simples, expressiva e
+          colorida; cabelos, proporções, roupas, rostos e posturas dão identidade própria
+          a cada pessoa. Esta prancha avalia o desenho estático, antes de qualquer animação.
         </p>
       </header>
 
-      <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4" aria-label="Galeria dos treze professores">
+      <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4" aria-label="Galeria dos treze professores humanos">
         {teachers.map((teacher) => (
           <article
             key={teacher.id}
+            data-teacher-id={teacher.id}
             className="flex min-w-0 flex-col items-center overflow-hidden rounded-2xl border border-line/70"
             style={{ backgroundColor: 'rgb(var(--' + teacher.tone + ') / .14)' }}
           >
-            <div className="flex h-48 w-full items-end justify-center overflow-hidden pt-3">
+            <div className="flex h-52 w-full items-end justify-center overflow-hidden pt-3">
               <TeacherCharacter
                 teacher={teacher}
-                pose={REVIEW_POSES[teacher.id] ?? 'presenting'}
-                size={178}
+                pose={TEACHER_SIGNATURE_POSES[teacher.id]}
+                size={188}
               />
             </div>
-            <div className="w-full bg-surface/85 px-2 py-2.5 text-center">
+            <div className="w-full bg-surface/90 px-2.5 py-3 text-center">
               <h2 className="text-sm font-extrabold leading-tight">{teacher.name}</h2>
               <p className="mt-1 line-clamp-2 text-[.68rem] leading-snug text-muted">{teacher.expertiseLabel}</p>
             </div>
@@ -39,24 +40,18 @@ export function TeacherCharacterReviewPage() {
       </section>
 
       <section className="rounded-2xl border border-line bg-surface p-4">
-        <h2 className="font-bold">Critérios desta rodada</h2>
+        <h2 className="font-bold">Critérios de avaliação desta etapa</h2>
         <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted">
-          <li>Uma silhueta própria e identificável antes de qualquer detalhe.</li>
-          <li>Tronco, quadril e parte inferior da roupa formam silhuetas legíveis e diferentes.</li>
-          <li>Olhos expressivos, poucos traços faciais e gestos legíveis em celular.</li>
-          <li>Pés separados das pernas por espaço negativo, sem parecerem presos ao corpo.</li>
-          <li>Rostos realmente diferentes: distância e inclinação dos olhos, sobrancelhas, nariz, bochechas e expressão.</li>
-          <li>Uma silhueta inferior própria: calças retas, largas, joggers, saia, vestido, casaco ou shorts, sem repetir o mesmo triângulo.</li>
-          <li>Espécies variadas: capivara, castor, axolote, gato, sapo, tatu, tartaruga, papagaio e camaleão.</li>
-          <li>Roupas com pequenos acabamentos funcionais: golas, costuras, bolsos, fechos, faixas e insígnias.</li>
-          <li>As extremidades são legíveis como patas, membranas, nadadeiras, asas ou mãos aderentes — não mãos humanas recoloridas.</li>
-          <li>Nem toda criatura precisa ficar em pé: quadrúpedes, aves e animais de membros especializados têm postura própria.</li>
-          <li>Olhos e pálpebras têm formas próprias para cada espécie, sem repetir a mesma fórmula de olhos ovais.</li>
-          <li>A direção do olhar e o contraste da pupila precisam apoiar a personalidade de cada professor.</li>
-          <li>Costuras, bolsos, bordados, fechos e insígnias devem enriquecer as roupas sem competir com a anatomia.</li>
-          <li>Animais usam acessórios e peças próprias, sem calças ou mangas humanas genéricas.</li>
-          <li>Cor da cabeça, tronco, patas e cauda pertence à mesma paleta de espécie.</li>
-          <li>As roupas têm acabamentos integrados à forma corporal e não escondem a silhueta.</li>
+          <li>Silhueta reconhecível mesmo sem rosto, acessórios ou detalhes internos.</li>
+          <li>Proporções e contorno corporal próprios; não parecer o mesmo boneco com roupa e cabelo trocados.</li>
+          <li>Diversidade humana real: tons de pele, idades aparentes, cabelos, biotipos e presença corporal.</li>
+          <li>Rosto simples e expressivo, com leitura clara em tamanho de avatar.</li>
+          <li>Roupa de poucas massas de cor; acessórios só quando ajudam a reconhecer a pessoa.</li>
+          <li>Paleta viva e coerente, contornos orgânicos e formas vetoriais limpas, sem acabamento de desenho improvisado.</li>
+          <li>Personalidade percebida pela pose, expressão e silhueta, não por texto ou excesso de objetos.</li>
+          <li>Todos os treze professores são humanos; não há animais, mascotes ou anatomias híbridas.</li>
+          <li>Referência de linguagem visual, não de personagens: não reproduzir Duo, o elenco nem ativos do Duolingo.</li>
+          <li>Esta fase aprova a identidade estática; animações, ciclos e gestos secundários ficam para uma etapa posterior.</li>
         </ul>
       </section>
     </main>
