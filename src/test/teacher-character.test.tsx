@@ -50,30 +50,23 @@ describe('personagens-professores vetoriais', () => {
     expect(new Set(differentDrawings).size).toBe(teachers.length);
   });
 
-  it('usa anatomia de tronco, patas e pernas própria para os animais', () => {
+  it('mantém todos os treze professores humanos e sem anatomia animal', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={140}/>)}</div>);
     const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
-    expect(figures.filter(f => f.getAttribute('data-character-species') !== 'human')).toHaveLength(9);
-    expect(figures.filter(f => f.getAttribute('data-character-anatomy') === 'species-specific')).toHaveLength(9);
-    expect(figures.every(f => f.getAttribute('data-character-style') === 'portico-friends-v14')).toBe(true);
-    const animalLimbs = figures.filter(f => f.getAttribute('data-character-species') !== 'human').map(f => f.getAttribute('data-character-limbs'));
-    expect(new Set(animalLimbs).size).toBe(9);
-    expect(animalLimbs).toContain('four short armored legs and digging claws');
-    expect(animalLimbs).toContain('four splayed flipper-legs');
-    expect(animalLimbs).toContain('feathered wings and curved talons');
-    expect(figures.filter(f => f.getAttribute('data-character-species') !== 'human').every(f => Boolean(f.getAttribute('data-character-eye-treatment')))).toBe(true);
+    expect(figures).toHaveLength(13);
+    expect(figures.every(f => f.getAttribute('data-character-anatomy') === 'human')).toBe(true);
+    expect(figures.every(f => f.getAttribute('data-character-style') === 'portico-humans-v15')).toBe(true);
+    expect(new Set(figures.map(f => f.getAttribute('data-character-id')).size).toBe(13);
+    expect(figures.every(f => !/capybara|beaver|axolotl|armadillo|turtle|parrot|chameleon|frog|cat/.test(f.outerHTML))).toBe(true);
   });
 
-  it('mistura humanos e criaturas originais ligadas às disciplinas', () => {
+  it('usa uma silhueta própria para cada pessoa do elenco', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={140}/>)}</div>);
     const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
-    const species = figures.map((figure) => figure.getAttribute('data-character-species'));
-    const outfits = figures.map((figure) => figure.getAttribute('data-character-outfit'));
-    expect(species).toHaveLength(teachers.length);
-    expect(new Set(species).size).toBeGreaterThanOrEqual(9);
-    expect(species.filter(value => value !== 'human')).toHaveLength(9);
-    expect(figures.filter(f => f.getAttribute('data-character-anatomy') === 'species-specific')).toHaveLength(9);
-    expect(new Set(outfits).size).toBe(teachers.length);
+    const silhouettes = figures.map(figure => figure.getAttribute('data-character-silhouette'));
+    expect(new Set(silhouettes).size).toBe(teachers.length);
+    const drawings = figures.map(figure => figure.innerHTML);
+    expect(new Set(drawings).size).toBe(teachers.length);
   });
 
   it('mostra o professor em uma cena de explicação, com fala contextual e presença visual grande', () => {
