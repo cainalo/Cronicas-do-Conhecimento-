@@ -27,7 +27,7 @@ describe('personagens-professores vetoriais', () => {
     for (const figure of figures) {
       expect(figure.getAttribute('viewBox')).toBe('0 0 240 270');
       expect(figure.querySelectorAll('path, rect, circle, ellipse').length).toBeGreaterThan(14);
-      expect(figure.getAttribute('data-character-style')).toBe('portico-humans-v15');
+      expect(figure.getAttribute('data-character-style')).toBe('portico-humans-v16');
       expect(figure.getAttribute('data-character-anatomy')).toBe('human');
     }
     const silhouettes = figures.map(figure => figure.getAttribute('data-character-silhouette'));
@@ -35,12 +35,25 @@ describe('personagens-professores vetoriais', () => {
     expect(new Set(figures.map(figure => figure.innerHTML)).size).toBe(teachers.length);
   });
 
+  it('mostra treze silhuetas pretas independentes, sem detalhes internos', () => {
+    const { container } = render(
+      <div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} silhouette size={128}/>)}</div>,
+    );
+    const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
+    expect(figures).toHaveLength(13);
+    expect(figures.every(f => f.getAttribute('data-character-mode') === 'silhouette')).toBe(true);
+    expect(figures.every(f => f.querySelectorAll('[data-silhouette-art]').length === 1)).toBe(true);
+    const drawings = figures.map(f => f.querySelector('[data-silhouette-art]')?.innerHTML);
+    expect(new Set(drawings).size).toBe(13);
+    expect(figures.every(f => Array.from(f.querySelectorAll('[data-silhouette-art] path')).every(p => p.getAttribute('fill') === '#1E2529'))).toBe(true);
+  });
+
   it('mantém todos os treze professores humanos e sem anatomia animal', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={140}/>)}</div>);
     const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
     expect(figures).toHaveLength(13);
     expect(figures.every(f => f.getAttribute('data-character-anatomy') === 'human')).toBe(true);
-    expect(figures.every(f => f.getAttribute('data-character-style') === 'portico-humans-v15')).toBe(true);
+    expect(figures.every(f => f.getAttribute('data-character-style') === 'portico-humans-v16')).toBe(true);
     expect(new Set(figures.map(f => f.getAttribute('data-character-id'))).size).toBe(13);
     expect(figures.every(f => !/capybara|beaver|axolotl|armadillo|turtle|parrot|chameleon|frog|cat/.test(f.outerHTML))).toBe(true);
   });
@@ -64,7 +77,7 @@ describe('personagens-professores vetoriais', () => {
 
   it('usa a mesma linguagem vetorial nas versões de avatar e corpo inteiro', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} portrait size={48}/>)}</div>);
-    expect(container.querySelectorAll('svg[data-character-style="portico-humans-v15"]')).toHaveLength(teachers.length);
+    expect(container.querySelectorAll('svg[data-character-style="portico-humans-v16"]')).toHaveLength(teachers.length);
   });
 
   it('atribui um professor coerente às principais disciplinas', () => {
