@@ -9,7 +9,7 @@ export function TeacherCharacterReviewPage() {
         <p className="kicker">PÓRTICO · ESTÚDIO DE PERSONAGENS · V18</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
         <p className="max-w-3xl text-sm leading-relaxed text-muted">
-          Nesta rodada, os treze rostos receberam desenhos individuais: formato dos olhos, sobrancelhas, boca e marcas pessoais. As geometrias corporais e as silhuetas aprovadas na V17 foram preservadas. O foco agora é reconhecer a personalidade em tamanho de avatar, sem depender do nome ou da disciplina.
+          Nesta rodada, os treze rostos receberam desenhos individuais: formato dos olhos, sobrancelhas, boca e marcas pessoais. As geometrias corporais e as silhuetas aprovadas na V18 foram preservadas. O foco agora é reconhecer a personalidade em tamanho de avatar, sem depender do nome ou da disciplina.
         </p>
       </header>
 
@@ -25,6 +25,19 @@ export function TeacherCharacterReviewPage() {
                 <TeacherCharacter teacher={teacher} silhouette size={128}/>
               </div>
               <h3 className="mt-1.5 text-center text-xs font-bold leading-tight">{teacher.name.replace(/^(Professora|Professor) /, '')}</h3>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-3" aria-label="Prancha de rostos e expressões">
+        <div><p className="kicker">TESTE 02 · ROSTOS EM TAMANHO DE AVATAR</p><h2 className="text-xl font-bold">Treze expressões, treze personalidades</h2><p className="text-xs text-muted">Compare sobrancelhas, olhos, boca e marcas pessoais sem depender das roupas.</p></div>
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-7">
+          {teachers.map((teacher) => (
+            <article key={teacher.id} data-face-id={teacher.id} className="flex min-w-0 flex-col items-center rounded-xl border border-line/70 bg-surface p-2 text-center">
+              <TeacherCharacter teacher={teacher} portrait size={104}/>
+              <h3 className="mt-1 text-xs font-bold leading-tight">{teacher.name.replace(/^(Professora|Professor) /, '')}</h3>
+              <p className="mt-1 text-[.65rem] leading-snug text-muted">{TEACHER_FACE_EXPRESSIONS[teacher.id]}</p>
             </article>
           ))}
         </div>
