@@ -2,7 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { FictionalTeacher } from '@/content/teachers';
 
 /**
- * Direção de arte Pórtico V17 — personagens humanos originais.
+ * Direção de arte Pórtico V18 — personagens humanos originais.
  *
  * A silhueta é desenhada para cada docente, não montada por combinação de
  * partes padronizadas. A família compartilha apenas a linguagem visual:
@@ -17,7 +17,7 @@ export type TeacherPose =
 
 
 /**
- * V17 — contornos e massas corporais refinados por docente.
+ * V18 — rostos e expressões individualizados sobre as silhuetas já aprovadas.
  * A forma-base é compartilhada entre a prancha monocromática e a versão colorida.
  * Esta prancha é o teste de verdade: se a pessoa não se distingue em preto,
  * a silhueta ainda não está resolvida.
@@ -175,96 +175,170 @@ function SilhouetteArt({ id, monochrome = false }: { id: string; monochrome?: bo
   </g>;
 }
 
-const V17_DETAIL_IDS = new Set([
-  'prof.clara', 'prof.davi', 'prof.iara', 'prof.ravi',
-  'prof.mateus', 'prof.sofia', 'prof.helena', 'prof.augusto',
-]);
+export const TEACHER_FACE_EXPRESSIONS: Record<string, string> = {
+  'prof.clara': 'alegre e acolhedora',
+  'prof.lia': 'atenta e concentrada',
+  'prof.davi': 'confiante e caloroso',
+  'prof.iara': 'serena e observadora',
+  'prof.nina': 'curiosa e questionadora',
+  'prof.ravi': 'entusiasmado e colaborativo',
+  'prof.mateus': 'gentil e paciente',
+  'prof.marina': 'tranquila e estratégica',
+  'prof.beatriz': 'firme e criteriosa',
+  'prof.sofia': 'espontânea e animada',
+  'prof.helena': 'expressiva e segura',
+  'prof.augusto': 'sereno e experiente',
+  'prof.caio': 'curioso e levemente cético',
+};
 
-/** Detalhes de rosto e vestuário; a anatomia vem integralmente de SILHOUETTES. */
-function CharacterDetailsV17({ id }: { id: string }) {
+/** Expressões faciais e marcas pessoais desenhadas por pessoa, não por molde. */
+function CharacterDetailsV18({ id }: { id: string }) {
   switch (id) {
-    case 'prof.clara': return <g data-character-details="v17-clara">
-      <path d="M106 84Q112 80 118 84M133 84Q140 80 146 84" fill="none" stroke="#452B29" strokeWidth="3.2" strokeLinecap="round"/>
-      <ellipse cx="112" cy="92" rx="3.5" ry="5.1" fill="#342320"/><ellipse cx="140" cy="92" rx="3.5" ry="5.1" fill="#342320"/>
-      <circle cx="113" cy="90" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="90" r="1.3" fill="#FFF5E9"/>
+    case 'prof.clara': return <g data-character-details="v18-prof.clara">
+      <path d="M104 83Q111 76 119 83M132 83Q140 76 148 83" fill="none" stroke="#452B29" strokeWidth="3.2" strokeLinecap="round"/>
+      <ellipse cx="112" cy="93" rx="4.2" ry="5.7" fill="#342320"/><ellipse cx="140" cy="93" rx="4.2" ry="5.7" fill="#342320"/>
+      <circle cx="113.5" cy="91" r="1.5" fill="#FFF5E9"/><circle cx="141.5" cy="91" r="1.5" fill="#FFF5E9"/>
       <path d="M121 98L118 105L123 106" fill="none" stroke="#8E503F" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M112 111Q126 123 141 109" fill="none" stroke="#713E39" strokeWidth="3.4" strokeLinecap="round"/>
-      <path d="M100 144L120 162L140 144" fill="none" stroke="#FFD17D" strokeWidth="4.5" strokeLinecap="round"/>
-      <path d="M120 163V185" stroke="#B64B3D" strokeWidth="2.5" strokeLinecap="round"/>
-      <circle cx="120" cy="174" r="3" fill="#F6D58E"/>
-      <path d="M85 208Q120 221 155 208" fill="none" stroke="#F6CF81" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M108 110Q125 128 144 108Q139 132 123 132Q111 129 108 110Z" fill="#713E39"/>
+      <path d="M114 114Q127 121 139 112" fill="none" stroke="#FFF4E8" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M100 103Q94 106 96 111M151 103Q157 106 155 111" fill="none" stroke="#B97050" strokeWidth="2.5" strokeLinecap="round"/>
+      <path d="M100 145L120 162L140 145" fill="none" stroke="#FFD17D" strokeWidth="4" strokeLinecap="round"/>
+      <path d="M120 164V185" stroke="#B64B3D" strokeWidth="2.5" strokeLinecap="round"/><circle cx="120" cy="174" r="3" fill="#F6D58E"/>
     </g>;
-    case 'prof.davi': return <g data-character-details="v17-davi">
-      <path d="M103 86Q111 81 119 86M132 86Q141 81 149 86" fill="none" stroke="#2D201C" strokeWidth="4.5" strokeLinecap="round"/>
-      <ellipse cx="112" cy="95" rx="4" ry="5" fill="#201C1B"/><ellipse cx="140" cy="95" rx="4" ry="5" fill="#201C1B"/>
+    case 'prof.lia': return <g data-character-details="v18-prof.lia">
+      <path d="M103 83L118 82M132 82L147 84" fill="none" stroke="#392820" strokeWidth="3.4" strokeLinecap="round"/>
+      <path d="M105 92Q111 87 117 92M134 92Q140 87 146 92" fill="none" stroke="#211F22" strokeWidth="2.3" strokeLinecap="round"/>
+      <ellipse cx="111" cy="94" rx="3" ry="4.6" fill="#211F22"/><ellipse cx="140" cy="94" rx="3" ry="4.6" fill="#211F22"/>
+      <path d="M121 99L119 105L123 106" fill="none" stroke="#57342E" strokeWidth="1.8" strokeLinecap="round"/>
+      <path d="M112 113Q121 116 131 112" fill="none" stroke="#57342E" strokeWidth="2.7" strokeLinecap="round"/>
+      <path d="M102 96L97 99M148 97L153 100" stroke="#8C543E" strokeWidth="1.8" strokeLinecap="round"/>
+      <path d="M104 145L120 160L136 145" fill="none" stroke="#D5E6DF" strokeWidth="4"/>
+      <path d="M120 160V211" stroke="#1B6666" strokeWidth="2.5"/>
+      <rect x="132" y="174" width="13" height="17" rx="2.5" fill="#F0BC51"/>
+    </g>;
+    case 'prof.davi': return <g data-character-details="v18-prof.davi">
+      <path d="M101 86Q110 79 120 86M131 86Q141 79 151 86" fill="none" stroke="#2D201C" strokeWidth="4.8" strokeLinecap="round"/>
+      <ellipse cx="112" cy="95" rx="4.2" ry="5" fill="#201C1B"/><ellipse cx="140" cy="95" rx="4.2" ry="5" fill="#201C1B"/>
       <circle cx="113" cy="93" r="1.4" fill="#FFF5E9"/><circle cx="141" cy="93" r="1.4" fill="#FFF5E9"/>
-      <path d="M120 98L117 107L123 108" fill="none" stroke="#4B3027" strokeWidth="2.4" strokeLinecap="round"/>
-      <path d="M107 114Q120 119 133 114" fill="none" stroke="#3E2924" strokeWidth="3.2" strokeLinecap="round"/>
+      <path d="M121 99L118 106L124 107" fill="none" stroke="#4B3027" strokeWidth="2.4" strokeLinecap="round"/>
+      <path d="M94 103Q97 124 120 130Q144 124 147 103L143 119Q135 135 120 136Q105 135 98 119Z" fill="#4A2D23"/>
+      <path d="M104 113Q120 121 137 113" fill="none" stroke="#D7A17E" strokeWidth="2.3" strokeLinecap="round"/>
       <path d="M88 151Q120 166 152 151" fill="none" stroke="#79A9D0" strokeWidth="4" strokeLinecap="round"/>
-      <path d="M120 158L120 214" stroke="#244B69" strokeWidth="3"/>
+      <path d="M120 158V214" stroke="#244B69" strokeWidth="3"/>
       <path d="M101 181L112 189M139 181L128 189" stroke="#E5D8C6" strokeWidth="3" strokeLinecap="round"/>
     </g>;
-    case 'prof.iara': return <g data-character-details="v17-iara">
-      <path d="M104 84Q111 79 118 84M132 84Q139 79 146 84" fill="none" stroke="#563B34" strokeWidth="3.1" strokeLinecap="round"/>
-      <ellipse cx="111" cy="92" rx="3.8" ry="5.2" fill="#32231F"/><ellipse cx="140" cy="92" rx="3.8" ry="5.2" fill="#32231F"/>
-      <circle cx="112" cy="90" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="90" r="1.3" fill="#FFF5E9"/>
-      <path d="M121 99L118 106L123 107" fill="none" stroke="#81513F" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M109 112Q122 123 136 111" fill="none" stroke="#6F4038" strokeWidth="3.2" strokeLinecap="round"/>
+    case 'prof.iara': return <g data-character-details="v18-prof.iara">
+      <path d="M103 84Q111 78 119 83M132 83Q140 78 148 84" fill="none" stroke="#563B34" strokeWidth="2.8" strokeLinecap="round"/>
+      <path d="M104 92Q112 86 119 92Q112 99 104 92ZM132 92Q140 86 147 92Q140 99 132 92Z" fill="#32231F"/>
+      <circle cx="112" cy="92" r="2.5" fill="#FFF5E9"/><circle cx="140" cy="92" r="2.5" fill="#FFF5E9"/>
+      <path d="M121 99L118 106L123 107" fill="none" stroke="#81513F" strokeWidth="1.8" strokeLinecap="round"/>
+      <path d="M111 113Q122 120 135 112" fill="none" stroke="#6F4038" strokeWidth="2.8" strokeLinecap="round"/>
       <path d="M91 144L120 162L148 144" fill="none" stroke="#D6B1E9" strokeWidth="4" strokeLinecap="round"/>
-      <path d="M120 161L120 220" stroke="#543B79" strokeWidth="2.5" strokeDasharray="4 6"/>
-      <circle cx="120" cy="181" r="4" fill="#E8BC6A"/><circle cx="77" cy="151" r="4" fill="#E8BC6A"/>
+      <path d="M120 161V220" stroke="#543B79" strokeWidth="2.5" strokeDasharray="4 6"/><circle cx="120" cy="181" r="4" fill="#E8BC6A"/>
     </g>;
-    case 'prof.ravi': return <g data-character-details="v17-ravi">
-      <path d="M105 83Q112 79 118 84M132 84Q139 78 146 83" fill="none" stroke="#392924" strokeWidth="3.2" strokeLinecap="round"/>
+    case 'prof.nina': return <g data-character-details="v18-prof.nina">
+      <path d="M103 82Q109 77 117 81M133 81Q141 76 148 81" fill="none" stroke="#31324A" strokeWidth="3.2" strokeLinecap="round"/>
+      <ellipse cx="111" cy="92" rx="3.7" ry="4.8" fill="#28263A"/><ellipse cx="140" cy="92" rx="3.7" ry="4.8" fill="#28263A"/>
+      <circle cx="112" cy="90.5" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="90.5" r="1.3" fill="#FFF5E9"/>
+      <circle cx="111" cy="92" r="13.5" fill="none" stroke="#31324A" strokeWidth="3"/>
+      <circle cx="140" cy="92" r="13.5" fill="none" stroke="#31324A" strokeWidth="3"/>
+      <path d="M124 91Q126 88 127 91M153 90L158 88" fill="none" stroke="#31324A" strokeWidth="2.6" strokeLinecap="round"/>
+      <path d="M121 100L119 106L123 107" fill="none" stroke="#B88972" strokeWidth="1.8" strokeLinecap="round"/>
+      <path d="M114 114Q120 109 127 114" fill="none" stroke="#8A5D55" strokeWidth="2.8" strokeLinecap="round"/>
+      <path d="M99 146L120 162L141 146" fill="none" stroke="#D9CFB9" strokeWidth="4"/>
+      <path d="M120 161V210" stroke="#C9A44C" strokeWidth="2.4"/><circle cx="120" cy="179" r="3.3" fill="#D9A94C"/>
+    </g>;
+    case 'prof.ravi': return <g data-character-details="v18-prof.ravi">
+      <path d="M104 83Q111 78 119 83M132 83Q140 77 147 82" fill="none" stroke="#392924" strokeWidth="3.5" strokeLinecap="round"/>
       <ellipse cx="112" cy="91" rx="3.7" ry="5.2" fill="#251F1C"/><ellipse cx="140" cy="91" rx="3.7" ry="5.2" fill="#251F1C"/>
       <circle cx="113" cy="89" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="89" r="1.3" fill="#FFF5E9"/>
       <path d="M121 98L119 104L124 105" fill="none" stroke="#815344" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M110 110Q124 122 139 108" fill="none" stroke="#694239" strokeWidth="3.3" strokeLinecap="round"/>
+      <path d="M101 106Q120 132 143 106Q138 137 121 137Q105 134 101 106Z" fill="#29231F"/>
+      <path d="M109 113Q124 127 139 112" fill="none" stroke="#D6A27F" strokeWidth="2.6" strokeLinecap="round"/>
+      <path d="M107 114Q120 120 134 114" fill="none" stroke="#FFF0E5" strokeWidth="2.4" strokeLinecap="round"/>
       <path d="M97 145L120 160L143 145" fill="none" stroke="#BCE0B8" strokeWidth="4" strokeLinecap="round"/>
-      <path d="M120 160L120 194" stroke="#1F6E4A" strokeWidth="2.5"/>
+      <path d="M120 160V194" stroke="#1F6E4A" strokeWidth="2.5"/>
       <path d="M91 210L103 215M149 210L137 215" stroke="#BCE0B8" strokeWidth="3" strokeLinecap="round"/>
     </g>;
-    case 'prof.mateus': return <g data-character-details="v17-mateus">
-      <path d="M103 84Q110 80 117 84M133 84Q140 80 147 84" fill="none" stroke="#513A2F" strokeWidth="3.2" strokeLinecap="round"/>
-      <ellipse cx="111" cy="93" rx="3.7" ry="5" fill="#2A2421"/><ellipse cx="140" cy="93" rx="3.7" ry="5" fill="#2A2421"/>
+    case 'prof.mateus': return <g data-character-details="v18-prof.mateus">
+      <path d="M103 84Q110 80 118 84M133 84Q140 80 147 84" fill="none" stroke="#513A2F" strokeWidth="3" strokeLinecap="round"/>
+      <ellipse cx="111" cy="93" rx="3.5" ry="4.7" fill="#2A2421"/><ellipse cx="140" cy="93" rx="3.5" ry="4.7" fill="#2A2421"/>
       <circle cx="112" cy="91" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="91" r="1.3" fill="#FFF5E9"/>
+      <rect x="98" y="84" width="24" height="19" rx="6" fill="none" stroke="#6A5144" strokeWidth="2.1"/>
+      <rect x="129" y="84" width="24" height="19" rx="6" fill="none" stroke="#6A5144" strokeWidth="2.1"/>
+      <path d="M122 91Q125 88 128 91" fill="none" stroke="#6A5144" strokeWidth="2"/>
       <path d="M121 100L118 106L123 107" fill="none" stroke="#A77A5C" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M109 113Q121 121 135 112" fill="none" stroke="#75473A" strokeWidth="3.2" strokeLinecap="round"/>
+      <path d="M109 114Q121 122 135 113" fill="none" stroke="#75473A" strokeWidth="3" strokeLinecap="round"/>
       <path d="M95 146Q120 161 145 146" fill="none" stroke="#F1C38B" strokeWidth="4" strokeLinecap="round"/>
-      <path d="M120 160L120 206" stroke="#A84F2A" strokeWidth="2.5"/><circle cx="120" cy="183" r="4" fill="#F5D179"/>
-      <path d="M87 194Q120 208 153 194" fill="none" stroke="#EBA26F" strokeWidth="2.5" strokeLinecap="round"/>
+      <path d="M120 160V206" stroke="#A84F2A" strokeWidth="2.5"/><circle cx="120" cy="183" r="4" fill="#F5D179"/>
     </g>;
-    case 'prof.sofia': return <g data-character-details="v17-sofia">
-      <path d="M103 83Q111 78 118 83M132 83Q140 78 147 83" fill="none" stroke="#714339" strokeWidth="3.2" strokeLinecap="round"/>
-      <ellipse cx="111" cy="92" rx="3.8" ry="5.3" fill="#32231F"/><ellipse cx="140" cy="92" rx="3.8" ry="5.3" fill="#32231F"/>
-      <circle cx="112" cy="90" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="90" r="1.3" fill="#FFF5E9"/>
-      <circle cx="98" cy="106" r="2" fill="#C98270"/><circle cx="104" cy="109" r="1.8" fill="#C98270"/>
-      <path d="M106 109Q121 126 139 108Q133 129 120 128Q110 125 106 109Z" fill="#713D39"/>
-      <path d="M113 113Q124 119 134 111" fill="none" stroke="#FFF5E8" strokeWidth="2.8" strokeLinecap="round"/>
+    case 'prof.marina': return <g data-character-details="v18-prof.marina">
+      <path d="M104 84Q112 77 119 83M132 83Q140 77 147 84" fill="none" stroke="#4A2D29" strokeWidth="2.8" strokeLinecap="round"/>
+      <path d="M104 92Q112 86 119 92M132 92Q140 86 147 92" fill="none" stroke="#211C1C" strokeWidth="2.5" strokeLinecap="round"/>
+      <ellipse cx="112" cy="93" rx="3.3" ry="4.5" fill="#211C1C"/><ellipse cx="140" cy="93" rx="3.3" ry="4.5" fill="#211C1C"/>
+      <path d="M121 100L119 106L123 106" fill="none" stroke="#7F4D3D" strokeWidth="1.8" strokeLinecap="round"/>
+      <path d="M111 113Q122 121 134 112" fill="none" stroke="#6E4038" strokeWidth="2.8" strokeLinecap="round"/>
+      <circle cx="79" cy="119" r="4" fill="#E7BE6C"/><circle cx="160" cy="119" r="4" fill="#E7BE6C"/>
+      <path d="M98 145L120 161L142 145" fill="none" stroke="#C3E2CB" strokeWidth="4" strokeLinecap="round"/>
+      <path d="M120 160V221" stroke="#1A6D5D" strokeWidth="2.5"/><circle cx="120" cy="175" r="3" fill="#EEC66F"/>
+    </g>;
+    case 'prof.beatriz': return <g data-character-details="v18-prof.beatriz">
+      <path d="M103 82L119 86M132 86L148 82" fill="none" stroke="#4B3029" strokeWidth="3.6" strokeLinecap="round"/>
+      <path d="M104 93Q112 88 119 93M132 93Q140 88 147 93" fill="none" stroke="#302320" strokeWidth="2.4" strokeLinecap="round"/>
+      <ellipse cx="112" cy="94" rx="3.2" ry="4.2" fill="#302320"/><ellipse cx="140" cy="94" rx="3.2" ry="4.2" fill="#302320"/>
+      <path d="M121 100L118 106L123 106" fill="none" stroke="#8D5148" strokeWidth="1.8" strokeLinecap="round"/>
+      <path d="M111 113Q121 116 132 112" fill="none" stroke="#7D4741" strokeWidth="2.5" strokeLinecap="round"/>
+      <path d="M91 145L120 160L149 145" fill="none" stroke="#F0E6D8" strokeWidth="4"/>
+      <path d="M105 140L120 159L135 140" fill="none" stroke="#D5B47D" strokeWidth="3"/>
+      <rect x="137" y="179" width="12" height="19" rx="2" fill="#D9A94C"/>
+    </g>;
+    case 'prof.sofia': return <g data-character-details="v18-prof.sofia">
+      <path d="M103 82Q111 76 119 82M132 82Q140 76 148 82" fill="none" stroke="#714339" strokeWidth="3.2" strokeLinecap="round"/>
+      <ellipse cx="111" cy="91" rx="4.2" ry="5.5" fill="#32231F"/><ellipse cx="140" cy="91" rx="4.2" ry="5.5" fill="#32231F"/>
+      <circle cx="112" cy="89" r="1.5" fill="#FFF5E9"/><circle cx="141" cy="89" r="1.5" fill="#FFF5E9"/>
+      <circle cx="97" cy="105" r="2" fill="#C98270"/><circle cx="104" cy="109" r="2" fill="#C98270"/>
+      <circle cx="145" cy="105" r="2" fill="#C98270"/><circle cx="151" cy="108" r="1.7" fill="#C98270"/>
+      <path d="M106 108Q121 128 140 108Q134 133 120 132Q109 129 106 108Z" fill="#713D39"/>
+      <path d="M113 113Q124 121 135 112" fill="none" stroke="#FFF5E8" strokeWidth="3" strokeLinecap="round"/>
       <path d="M97 145Q120 162 143 145" fill="none" stroke="#F0C46E" strokeWidth="5" strokeLinecap="round"/>
-      <path d="M120 160L120 193" stroke="#B64E42" strokeWidth="2.5"/><circle cx="120" cy="181" r="3.2" fill="#F6D78B"/>
+      <path d="M120 160V193" stroke="#B64E42" strokeWidth="2.5"/><circle cx="120" cy="181" r="3.2" fill="#F6D78B"/>
     </g>;
-    case 'prof.helena': return <g data-character-details="v17-helena">
-      <path d="M104 83Q111 79 118 83M132 83Q140 79 147 83" fill="none" stroke="#3A2927" strokeWidth="3.2" strokeLinecap="round"/>
-      <ellipse cx="111" cy="92" rx="3.8" ry="5.2" fill="#261D1C"/><ellipse cx="140" cy="92" rx="3.8" ry="5.2" fill="#261D1C"/>
-      <circle cx="112" cy="90" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="90" r="1.3" fill="#FFF5E9"/>
-      <path d="M120 99L117 106L123 107" fill="none" stroke="#70483B" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M108 111Q121 122 136 110" fill="none" stroke="#633E37" strokeWidth="3.2" strokeLinecap="round"/>
+    case 'prof.helena': return <g data-character-details="v18-prof.helena">
+      <path d="M102 83Q111 75 120 82M131 82Q140 75 150 83" fill="none" stroke="#3A2927" strokeWidth="3.6" strokeLinecap="round"/>
+      <path d="M103 92Q112 84 120 92Q112 100 103 92ZM131 92Q140 84 149 92Q140 100 131 92Z" fill="#261D1C"/>
+      <circle cx="112" cy="92" r="2.7" fill="#FFF5E9"/><circle cx="140" cy="92" r="2.7" fill="#FFF5E9"/>
+      <path d="M121 99L117 106L123 107" fill="none" stroke="#70483B" strokeWidth="1.9" strokeLinecap="round"/>
+      <path d="M106 110Q121 128 138 109Q133 134 120 134Q108 131 106 110Z" fill="#633E37"/>
+      <path d="M112 115Q123 124 135 113" fill="none" stroke="#F6E9D9" strokeWidth="3" strokeLinecap="round"/>
       <path d="M94 147L120 164L146 147" fill="none" stroke="#D1AA68" strokeWidth="4" strokeLinecap="round"/>
-      <path d="M120 164L120 220" stroke="#1D6975" strokeWidth="3"/>
-      <circle cx="120" cy="180" r="3.5" fill="#E5BD6B"/><circle cx="120" cy="197" r="3.5" fill="#E5BD6B"/><circle cx="78" cy="124" r="4" fill="#E5BD6B"/>
+      <path d="M120 164V220" stroke="#1D6975" strokeWidth="3"/><circle cx="120" cy="180" r="3.5" fill="#E5BD6B"/>
     </g>;
-    case 'prof.augusto': return <g data-character-details="v17-augusto">
-      <path d="M105 82Q112 78 118 82M131 82Q138 78 144 82" fill="none" stroke="#51423A" strokeWidth="3" strokeLinecap="round"/>
-      <ellipse cx="111" cy="90" rx="3.6" ry="5" fill="#2A2421"/><ellipse cx="138" cy="90" rx="3.6" ry="5" fill="#2A2421"/>
-      <circle cx="112" cy="88" r="1.2" fill="#FFF5E9"/><circle cx="139" cy="88" r="1.2" fill="#FFF5E9"/>
-      <path d="M120 97L118 103L122 104" fill="none" stroke="#97664F" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M106 109Q120 116 134 109" fill="none" stroke="#5A3933" strokeWidth="3" strokeLinecap="round"/>
+    case 'prof.augusto': return <g data-character-details="v18-prof.augusto">
+      <path d="M104 82Q112 77 119 82M131 82Q138 77 145 82" fill="none" stroke="#B9ADA2" strokeWidth="3.2" strokeLinecap="round"/>
+      <path d="M105 92Q112 87 119 92M132 92Q139 87 145 92" fill="none" stroke="#2A2421" strokeWidth="2.4" strokeLinecap="round"/>
+      <ellipse cx="112" cy="93" rx="3.3" ry="4.5" fill="#2A2421"/><ellipse cx="138" cy="93" rx="3.3" ry="4.5" fill="#2A2421"/>
+      <path d="M121 99L118 105L122 106" fill="none" stroke="#97664F" strokeWidth="1.8" strokeLinecap="round"/>
+      <path d="M108 108Q120 114 133 108Q130 117 120 117Q111 116 108 108Z" fill="#C9BEB1"/>
+      <path d="M111 120Q120 124 130 120" fill="none" stroke="#5A3933" strokeWidth="2.4" strokeLinecap="round"/>
       <path d="M96 145L120 161L144 145" fill="none" stroke="#D4C4AA" strokeWidth="4" strokeLinecap="round"/>
-      <path d="M119 161L120 211" stroke="#1F687B" strokeWidth="2.5"/><path d="M106 171L120 179L134 171" fill="none" stroke="#E5B95E" strokeWidth="3"/>
+      <path d="M119 161V211" stroke="#1F687B" strokeWidth="2.5"/><path d="M106 171L120 179L134 171" fill="none" stroke="#E5B95E" strokeWidth="3"/>
+    </g>;
+    case 'prof.caio': return <g data-character-details="v18-prof.caio">
+      <path d="M103 82Q110 76 118 82M133 84Q141 81 148 86" fill="none" stroke="#392924" strokeWidth="3.2" strokeLinecap="round"/>
+      <ellipse cx="111" cy="92" rx="3.8" ry="5.1" fill="#251F1C"/><ellipse cx="140" cy="93" rx="3.8" ry="5" fill="#251F1C"/>
+      <circle cx="112" cy="90" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="91" r="1.3" fill="#FFF5E9"/>
+      <path d="M121 99L119 105L124 106" fill="none" stroke="#693D36" strokeWidth="1.9" strokeLinecap="round"/>
+      <path d="M113 111Q121 119 137 108" fill="none" stroke="#693D36" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M95 146Q120 162 145 146" fill="none" stroke="#F3DEAC" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M111 154L109 180M130 154L132 180" stroke="#F3DEAC" strokeWidth="3" strokeLinecap="round"/>
+      <rect x="135" y="177" width="16" height="14" rx="3" fill="none" stroke="#4E9E9C" strokeWidth="3"/>
     </g>;
     default: return null;
   }
+}
+
+function CharacterArt({ id }: { id: string }) {
+  return <CharacterDetailsV18 id={id}/>;
 }
 
 export const TEACHER_SIGNATURE_POSES: Record<string, TeacherPose> = {
@@ -689,13 +763,15 @@ export function TeacherCharacter({
       style={style}
       role="img"
       aria-label={teacher.name + ', professor humano ilustrado do Pórtico'}
-      data-character-style="portico-humans-v17"
+      data-character-style="portico-humans-v18"
       data-character-anatomy="human"
       data-character-id={teacher.id}
       data-character-silhouette={teacher.id}
       data-character-pose={characterPose}
       data-character-mode={silhouette ? 'silhouette' : 'color'}
-      data-character-renderer={V17_DETAIL_IDS.has(teacher.id) ? 'silhouette-v17' : 'legacy-v16'}
+      data-character-renderer="silhouette-v18"
+      data-character-face-design={teacher.id}
+      data-character-expression={TEACHER_FACE_EXPRESSIONS[teacher.id] ?? 'expressão neutra'}
       focusable="false"
     >
       {portrait && <circle cx="120" cy="98" r="90" fill={'rgb(var(--' + teacher.tone + '))'}/>}
