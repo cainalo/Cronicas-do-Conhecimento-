@@ -357,26 +357,6 @@ export const TEACHER_SIGNATURE_POSES: Record<string, TeacherPose> = {
   'prof.caio': 'one-hand-up',
 };
 
-function CharacterArt({ id }: { id: string }) {
-  if (V17_DETAIL_IDS.has(id)) return <CharacterDetailsV17 id={id}/>;
-  switch (id) {
-    case 'prof.clara': return <Clara/>;
-    case 'prof.lia': return <Lia/>;
-    case 'prof.davi': return <Davi/>;
-    case 'prof.iara': return <Iara/>;
-    case 'prof.nina': return <Nina/>;
-    case 'prof.ravi': return <Ravi/>;
-    case 'prof.mateus': return <Mateus/>;
-    case 'prof.marina': return <Marina/>;
-    case 'prof.beatriz': return <Beatriz/>;
-    case 'prof.sofia': return <Sofia/>;
-    case 'prof.helena': return <Helena/>;
-    case 'prof.augusto': return <Augusto/>;
-    case 'prof.caio': return <Caio/>;
-    default: return <Lia/>;
-  }
-}
-
 export function TeacherCharacter({
   teacher, pose, size = 160, className = '', portrait = false, silhouette = false,
 }: {
