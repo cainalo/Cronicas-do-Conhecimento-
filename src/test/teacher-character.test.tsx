@@ -57,7 +57,7 @@ describe('personagens-professores vetoriais', () => {
     const mono = render(<div>{teachers.map(teacher => <TeacherCharacter key={teacher.id} teacher={teacher} silhouette/>)}</div>);
     const colorFigures = Array.from(color.container.querySelectorAll('svg[data-character-id]'));
     const monoFigures = Array.from(mono.container.querySelectorAll('svg[data-character-id]'));
-    const geometry = (figure: SVGElement) => Array.from(
+    const geometry = (figure: Element) => Array.from(
       figure.querySelectorAll('[data-silhouette-art] path'),
     ).map(path => path.getAttribute('d')).join('|');
 
@@ -69,7 +69,7 @@ describe('personagens-professores vetoriais', () => {
       expect(figure.getAttribute('data-character-renderer')).toBe('silhouette-v17');
       expect(figure.querySelector('[data-character-details]')).toBeInTheDocument();
       expect(silhouette).toBeDefined();
-      expect(geometry(figure)).toBe(geometry(silhouette as SVGElement));
+      expect(geometry(figure)).toBe(geometry(silhouette as Element));
     }
     expect(new Set(revisedColor.map(geometry)).size).toBe(8);
   });
