@@ -87,6 +87,19 @@ describe('personagens-professores vetoriais', () => {
     expect(figures.every(figure => figure.querySelectorAll('[data-character-details] path, [data-character-details] ellipse, [data-character-details] circle, [data-character-details] rect').length >= 5)).toBe(true);
   });
 
+  it('atribui treze rostos e expressões individuais aos professores', () => {
+    const { container } = render(
+      <div>{teachers.map(teacher => <TeacherCharacter key={teacher.id} teacher={teacher} size={160}/>)}</div>,
+    );
+    const figures = Array.from(container.querySelectorAll('svg[data-character-id]'));
+    expect(figures).toHaveLength(13);
+    expect(figures.every(figure => figure.getAttribute('data-character-renderer') === 'silhouette-v18')).toBe(true);
+    expect(figures.every(figure => figure.querySelector('[data-character-details^="v18-"]'))).toBe(true);
+    expect(new Set(figures.map(figure => figure.getAttribute('data-character-face-design'))).size).toBe(13);
+    expect(new Set(figures.map(figure => figure.getAttribute('data-character-expression'))).size).toBe(13);
+    expect(figures.every(figure => figure.querySelectorAll('[data-character-details] path, [data-character-details] ellipse, [data-character-details] circle, [data-character-details] rect').length >= 5)).toBe(true);
+  });
+
   it('mantém todos os treze professores humanos e sem anatomia animal', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={140}/>)}</div>);
     const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
