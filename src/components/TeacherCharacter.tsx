@@ -2,7 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { FictionalTeacher } from '@/content/teachers';
 
 /**
- * Direção de arte Pórtico V15 — personagens humanos originais.
+ * Direção de arte Pórtico V17 — personagens humanos originais.
  *
  * A silhueta é desenhada para cada docente, não montada por combinação de
  * partes padronizadas. A família compartilha apenas a linguagem visual:
@@ -17,25 +17,25 @@ export type TeacherPose =
 
 
 /**
- * V16 — contornos específicos por docente.
- * As peças são independentes para preservar vazios entre braços, tronco e pernas.
+ * V17 — contornos e massas corporais refinados por docente.
+ * A forma-base é compartilhada entre a prancha monocromática e a versão colorida.
  * Esta prancha é o teste de verdade: se a pessoa não se distingue em preto,
  * a silhueta ainda não está resolvida.
  */
 type SilhouetteParts = {
-  skin: string; hairColor: string; topColor: string; bottomColor: string; shoeColor: string;
-  head: string; hair: string; neck: string; body: string; arms: string[]; lower: string; shoes: string;
+  skin: string; hairColor: string; topColor: string; bottomColor: string; shoeColor: string; propColor?: string;
+  head: string; hair: string; neck: string; body: string; arms: string[]; lower: string; shoes: string; props?: string[];
 };
 const SILHOUETTES: Record<string, SilhouetteParts> = {
   'prof.clara': {
-    skin:'#B97050', hairColor:'#38251F', topColor:'#EE684F', bottomColor:'#E6A34A', shoeColor:'#F3D6B6',
-    head:'M91 58C91 39 104 30 121 30C141 30 154 44 154 65L151 105C146 126 134 135 119 134C103 132 91 118 88 99Z',
-    hair:'M84 83C68 68 74 46 91 43C88 26 107 19 119 30C130 16 149 24 151 41C170 42 175 61 161 76L153 91L146 68C130 78 111 73 98 65L91 92Z',
-    neck:'M105 122Q120 135 136 122L143 151Q120 163 97 151Z',
-    body:'M85 141C95 132 105 137 120 151C135 137 146 132 157 141L174 181C160 196 143 201 120 201C97 201 79 196 65 181Z',
-    arms:['M88 145C73 137 65 124 56 110C50 101 40 108 44 119C50 139 61 157 76 170L93 166Z','M152 145C167 137 176 124 185 110C191 101 201 108 197 119C191 139 180 157 165 170L147 166Z'],
-    lower:'M91 188Q120 204 149 188L166 234Q120 251 74 234Z M101 231L98 255Q107 262 116 257L120 237 M129 237L135 257Q145 262 153 255L140 231',
-    shoes:'M98 253Q108 249 119 255L118 264Q104 269 91 262ZM136 255Q148 249 157 254Q165 259 158 264Q145 269 133 263Z',
+    skin:'#B97050', hairColor:'#38251F', topColor:'#EE684F', bottomColor:'#D99A42', shoeColor:'#31576A',
+    head:'M94 59Q99 36 121 35Q145 35 151 59L148 101Q142 122 121 124Q99 122 93 101Z',
+    hair:'M91 82Q74 76 75 57Q70 40 90 31Q89 14 109 22Q121 9 135 22Q154 14 162 33Q179 40 168 62Q171 79 153 88L147 65Q130 77 109 68Q97 67 91 82Z M77 47Q65 35 77 24Q91 16 99 29L97 47Z M155 40Q167 26 178 37Q187 50 172 61Z',
+    neck:'M106 119L136 119L143 145L120 157L97 145Z',
+    body:'M82 141Q96 130 108 139L120 152L132 139Q145 130 159 141L164 177Q148 190 140 193L152 216Q120 232 88 216L100 193Q92 190 76 177Z',
+    arms:['M86 146Q75 145 68 157L53 178Q50 187 61 191L72 182L91 164Z','M154 145Q168 145 174 157L168 171L151 181L145 171L157 160Z'],
+    lower:'M91 188Q120 202 149 188L170 250Q120 260 70 250Z M101 243L99 260Q108 265 117 260L120 245 M129 245L135 260Q144 265 153 260L139 243',
+    shoes:'M96 255Q108 251 119 257L118 265Q105 270 91 264ZM136 257Q148 251 158 256L162 264Q147 270 133 265Z',
   },
   'prof.lia': {
     skin:'#8C543E', hairColor:'#3D2922', topColor:'#087F7C', bottomColor:'#253A48', shoeColor:'#F0B95C',
@@ -49,23 +49,23 @@ const SILHOUETTES: Record<string, SilhouetteParts> = {
   },
   'prof.davi': {
     skin:'#663F30', hairColor:'#4A2D23', topColor:'#3673B1', bottomColor:'#244B69', shoeColor:'#E9D4B3',
-    head:'M83 62Q89 39 119 38Q151 37 158 64L154 106Q145 131 119 132Q92 129 84 105Z',
-    hair:'M75 76Q63 52 80 37Q87 20 105 28Q116 13 134 27Q153 21 163 43Q177 53 164 79L153 89L150 67Q119 77 91 66L86 91Z',
-    neck:'M99 123Q120 135 141 123L151 150L120 165L89 150Z',
-    body:'M57 143Q81 124 105 137L120 161L135 137Q159 124 183 143L205 204Q164 229 120 226Q76 229 35 204Z',
-    arms:['M60 150Q39 157 31 177Q24 192 42 199Q68 204 93 185L109 168L94 153Z','M180 150Q201 157 209 177Q216 192 198 199Q172 204 147 185L131 168L146 153Z'],
-    lower:'M76 207Q120 225 164 207L169 247Q150 259 125 253L120 228L115 253Q90 259 71 247Z',
-    shoes:'M75 246Q95 244 115 252L115 266Q91 272 71 262ZM128 252Q148 244 168 247L174 262Q153 272 129 266Z',
+    head:'M82 61Q88 36 120 35Q153 35 160 62L155 105Q146 130 120 132Q92 130 84 105Z',
+    hair:'M79 69Q69 45 87 31Q102 19 119 25Q138 16 154 32Q172 43 164 70L153 79Q137 66 120 68Q98 65 86 82Z',
+    neck:'M99 121L141 121L151 151L120 166L89 151Z',
+    body:'M54 143Q74 124 102 132L120 154L138 132Q166 124 186 143L202 207Q163 230 120 230Q77 230 38 207Z',
+    arms:['M58 150Q40 155 31 176L29 195Q32 208 47 205L68 190L82 164Z','M182 150Q200 155 209 176L211 195Q208 208 193 205L172 190L158 164Z'],
+    lower:'M74 210Q120 229 166 210L164 250Q145 259 126 255L120 228L114 255Q95 259 76 250Z',
+    shoes:'M76 248Q96 244 115 253L115 265Q94 271 72 263ZM128 253Q147 244 167 248L174 263Q152 271 129 265Z',
   },
   'prof.iara': {
     skin:'#A7684B', hairColor:'#38241F', topColor:'#7650A2', bottomColor:'#315C56', shoeColor:'#E0AD62',
-    head:'M99 53Q108 36 122 37Q144 38 150 57L146 101Q140 120 121 122Q102 120 96 101Z',
-    hair:'M94 70Q86 45 107 29Q126 14 146 31Q161 43 155 74L150 97L141 68Q119 59 100 80Z M92 62Q78 75 83 112L87 156Q91 166 99 155L102 83Z M151 61Q166 73 162 113L158 156Q154 166 146 155L143 83Z',
-    neck:'M105 117Q120 128 136 117L144 146L120 158L96 146Z',
-    body:'M82 140Q101 125 120 139Q139 125 158 140L181 194Q152 216 120 216Q88 216 59 194Z',
-    arms:['M83 146Q68 158 55 182L45 198Q49 210 62 202L99 171Z','M157 146Q172 158 185 182L195 198Q191 210 178 202L141 171Z'],
-    lower:'M88 199Q120 216 152 199L164 244Q146 254 126 247L120 223L114 247Q94 254 76 244Z',
-    shoes:'M78 244Q96 240 114 249L114 263Q95 270 76 260ZM127 249Q145 240 163 244L166 260Q147 270 127 263Z',
+    head:'M97 57Q104 37 122 37Q144 38 150 58L147 100Q140 121 121 123Q101 121 95 100Z',
+    hair:'M94 70Q85 45 105 28Q123 15 144 31Q159 43 154 70L145 86Q132 65 114 68Q101 68 94 82Z M91 66Q79 81 83 109L87 140Q91 149 99 141L101 84Z M88 132Q78 142 80 157L70 178Q67 187 76 190Q85 189 87 179L101 151L104 132Z',
+    neck:'M105 118L137 118L144 145L120 157L96 145Z',
+    body:'M87 141Q102 130 111 139L120 153L131 139Q144 130 158 141L167 203Q150 224 120 228Q90 224 73 203Z',
+    arms:['M88 146Q74 140 68 125L62 107Q59 96 50 100Q42 105 48 119L58 150L81 168Z','M155 146Q169 157 166 178L159 193Q151 197 145 188L146 164Z'],
+    lower:'M91 211Q120 227 149 211L158 251Q120 259 82 251Z M106 246L104 261Q113 266 119 261L120 249 M130 249L136 261Q145 266 153 261L137 246',
+    shoes:'M99 257Q110 253 120 259L119 266Q106 270 94 265ZM133 259Q145 253 155 257L160 265Q147 270 132 266Z',
   },
   'prof.nina': {
     skin:'#F0C7A9', hairColor:'#31324A', topColor:'#F4EDE2', bottomColor:'#3B415B', shoeColor:'#E9C66D',
@@ -79,23 +79,23 @@ const SILHOUETTES: Record<string, SilhouetteParts> = {
   },
   'prof.ravi': {
     skin:'#B87956', hairColor:'#29231F', topColor:'#2D8C5D', bottomColor:'#273E4A', shoeColor:'#E6B84E',
-    head:'M96 55Q104 38 121 38Q144 37 151 57L148 101Q140 121 120 124Q100 121 94 101Z',
-    hair:'M88 69Q79 45 98 30Q109 19 123 24Q139 19 153 36Q165 51 155 72L148 80Q136 60 120 64Q102 61 92 80Z',
-    neck:'M106 119L137 119L143 145L120 157L97 145Z',
-    body:'M66 143Q90 124 108 138L120 159L132 138Q150 124 174 143L184 204Q120 229 56 204Z',
-    arms:['M69 150Q49 156 42 177Q39 193 58 198L91 188L110 167L95 151Z','M171 150Q191 156 198 177Q201 193 182 198L149 188L130 167L145 151Z'],
-    lower:'M83 207Q120 226 157 207L159 246L140 254L120 225L100 254L81 246Z',
-    shoes:'M82 246Q99 243 116 252L117 265Q97 271 78 261ZM124 252Q141 243 158 246L164 261Q145 271 125 265Z',
+    head:'M98 57Q105 38 122 38Q143 38 150 58L147 99Q140 120 121 122Q102 120 96 99Z',
+    hair:'M91 69Q80 49 96 33Q108 22 121 27Q136 20 150 34Q162 48 153 69L145 78Q132 64 120 66Q104 64 95 81Z',
+    neck:'M107 117L136 117L143 142L120 154L97 142Z',
+    body:'M80 141Q97 129 109 138L120 151L131 138Q145 129 160 141L170 201Q120 222 70 201Z',
+    arms:['M84 146Q71 141 66 126L61 109Q57 98 49 103Q42 108 48 121L59 151L78 168Z','M156 145Q170 145 178 159L185 177Q188 188 177 193L163 181L146 162Z'],
+    lower:'M91 202Q120 216 149 202L153 248Q137 256 125 251L120 224L113 251Q99 256 84 248Z',
+    shoes:'M87 245Q102 241 116 250L117 264Q99 269 82 260ZM125 250Q140 241 155 245L161 260Q145 269 126 264Z',
   },
   'prof.mateus': {
     skin:'#E5B993', hairColor:'#513A2F', topColor:'#D66C37', bottomColor:'#364F5E', shoeColor:'#E9C36B',
-    head:'M91 57Q99 36 121 36Q145 36 152 58L149 102Q141 125 120 127Q99 125 92 102Z',
-    hair:'M84 70Q77 44 98 27Q118 12 141 29Q162 39 163 68L153 82Q141 65 123 66Q100 63 91 84Z',
-    neck:'M106 121L136 121L142 143L120 154L98 143Z',
-    body:'M79 144Q95 130 120 136Q145 130 161 144Q183 169 180 204Q175 226 120 231Q65 226 60 204Q57 169 79 144Z',
-    arms:['M79 151Q64 164 66 184L80 200Q93 200 98 186L100 163Z','M161 151Q176 164 174 184L160 200Q147 200 142 186L140 163Z'],
-    lower:'M88 211Q120 227 152 211L146 246L129 248L120 229L111 248L94 246Z',
-    shoes:'M93 245Q108 242 120 250L120 262Q106 268 90 260ZM130 250Q142 242 157 245L161 260Q145 268 131 262Z',
+    head:'M91 56Q98 32 121 32Q147 32 154 58L151 102Q143 127 121 129Q98 127 91 102Z',
+    hair:'M84 69Q77 45 97 28Q112 17 128 23Q148 22 159 43Q166 59 156 76L148 84Q139 65 121 66Q101 63 91 83Z',
+    neck:'M106 122L137 122L143 145L120 157L97 145Z',
+    body:'M78 143Q94 129 120 136Q146 129 162 143Q188 168 185 203Q183 230 120 237Q57 230 55 203Q52 168 78 143Z',
+    arms:['M80 151Q67 159 68 178L83 194Q96 194 103 183L111 169L99 153Z','M160 151Q173 159 172 178L157 194Q144 194 137 183L129 169L141 153Z'],
+    lower:'M79 216Q120 236 161 216L153 251Q137 257 126 251L120 230L114 251Q103 257 87 251Z',
+    shoes:'M88 248Q103 244 118 253L118 265Q101 270 84 263ZM126 253Q141 244 156 248L161 263Q144 270 127 265Z',
   },
   'prof.marina': {
     skin:'#995E46', hairColor:'#241F25', topColor:'#24866D', bottomColor:'#33485A', shoeColor:'#E7BE6C',
@@ -119,33 +119,34 @@ const SILHOUETTES: Record<string, SilhouetteParts> = {
   },
   'prof.sofia': {
     skin:'#F0C8A9', hairColor:'#A54F38', topColor:'#E86D57', bottomColor:'#315574', shoeColor:'#EAC46B',
-    head:'M95 55Q102 36 121 36Q144 36 151 58L148 101Q140 122 120 124Q99 121 92 101Z',
-    hair:'M87 76Q67 51 84 29Q98 10 124 18Q150 12 166 36Q184 59 163 91L157 125Q151 140 140 126L149 78Q132 59 119 65Q101 62 91 88L100 128Q88 140 80 125L78 91Z',
-    neck:'M104 121L139 121L145 144L120 156L96 144Z',
-    body:'M87 143Q103 130 120 142Q137 130 154 143L174 205Q120 228 66 205Z',
-    arms:['M86 148Q67 135 52 119Q42 109 38 119Q35 131 54 151L83 176Z','M154 148Q173 135 188 119Q198 109 202 119Q205 131 186 151L157 176Z'],
-    lower:'M83 199Q120 216 157 199L160 247L139 252L120 224L101 252L80 247Z',
-    shoes:'M81 246Q99 242 116 251L116 264Q97 270 77 261ZM125 251Q142 242 159 246L164 261Q145 270 126 264Z',
+    head:'M95 56Q103 36 122 36Q145 37 151 59L147 100Q140 121 120 123Q99 121 93 100Z',
+    hair:'M91 76Q72 58 76 34Q81 11 111 16Q135 5 157 25Q179 47 165 78L158 118Q155 143 144 153L137 119L145 77Q132 61 118 66Q101 63 92 86L99 120L93 153Q80 144 79 119L74 83Q63 65 72 44Q76 69 91 76Z',
+    neck:'M104 119L138 119L145 145L120 157L96 145Z',
+    body:'M85 141Q101 128 110 139L120 152L132 139Q145 128 160 141L168 198Q120 217 72 198Z',
+    arms:['M88 146Q74 135 64 117L49 98Q43 89 35 96Q29 103 38 115L62 148L78 164Z','M156 146Q170 135 180 117L195 98Q201 89 209 96Q215 103 206 115L182 148L166 164Z'],
+    lower:'M89 197Q120 212 151 197L148 250Q135 257 126 251L120 224L114 251Q103 257 91 250Z',
+    shoes:'M91 247Q105 243 118 252L118 264Q104 269 88 261ZM125 252Q139 243 153 247L158 261Q143 269 126 264Z',
   },
   'prof.helena': {
     skin:'#8F5945', hairColor:'#211F27', topColor:'#267F91', bottomColor:'#50415D', shoeColor:'#E6B85D',
-    head:'M94 53Q102 36 121 36Q145 36 152 56L148 101Q141 123 120 125Q99 122 92 101Z',
-    hair:'M83 71Q68 44 91 23Q112 7 135 22Q164 19 169 50Q178 76 161 94L158 131Q151 143 143 130L148 74Q128 66 115 68Q96 69 89 93L99 131Q92 143 84 130L78 96Z M81 57Q68 75 75 112L83 151Q91 159 95 146L88 84Z M158 58Q173 75 166 112L158 151Q150 159 146 146L153 84Z',
-    neck:'M104 120L139 120L145 146L120 157L96 146Z',
-    body:'M80 143Q101 127 120 141Q139 127 160 143L180 220Q120 241 60 220Z',
-    arms:['M82 151Q65 164 68 190L88 207Q101 202 98 184L94 161Z','M158 151Q175 164 172 190L152 207Q139 202 142 184L146 161Z'],
-    lower:'M70 213Q120 232 170 213L164 249L140 254L120 229L100 254L76 249Z',
-    shoes:'M77 247Q98 243 117 252L117 266Q95 271 72 262ZM127 252Q146 243 166 247L170 262Q148 271 127 266Z',
+    head:'M95 54Q103 34 122 34Q145 35 152 58L149 101Q141 123 120 125Q98 123 92 101Z',
+    hair:'M91 70Q75 48 88 28Q103 10 127 17Q153 9 168 31Q182 52 166 78L160 104L151 89Q145 75 137 73L143 132Q139 145 130 135L128 82L119 78L116 143Q111 154 102 143L104 80Q94 80 89 97L88 135Q81 145 74 134L76 96Q66 75 75 54Z',
+    neck:'M104 120L139 120L145 146L120 158L96 146Z',
+    body:'M78 143Q99 127 111 140L120 155L132 140Q149 127 163 143L178 216Q120 239 62 216Z',
+    arms:['M82 150Q67 160 66 181L80 198Q93 200 99 187L103 164Z','M158 150Q173 160 174 181L160 198Q147 200 141 187L137 164Z'],
+    lower:'M72 211Q120 234 168 211L163 250Q144 258 127 252L120 228L113 252Q96 258 77 250Z',
+    shoes:'M78 247Q98 243 117 252L117 266Q95 271 73 262ZM127 252Q146 243 165 247L170 262Q148 271 127 266Z',
   },
   'prof.augusto': {
-    skin:'#B97E5C', hairColor:'#C9BEB1', topColor:'#247D91', bottomColor:'#42424E', shoeColor:'#E5B95E',
-    head:'M95 57Q102 38 121 38Q143 38 151 59L147 101Q140 121 120 123Q100 120 93 100Z',
-    hair:'M83 69Q74 45 93 29Q108 14 124 24Q140 13 156 31Q171 47 160 73L151 80Q137 61 120 64Q101 61 89 83Z',
-    neck:'M106 119L137 119L143 143L120 155L97 143Z',
-    body:'M79 144Q97 130 110 139L120 156L132 139Q146 130 163 144L177 207Q120 227 63 207Z',
-    arms:['M82 153Q68 165 73 186L92 198Q104 192 98 177L92 159Z','M158 153Q172 165 167 186L148 198Q136 192 142 177L148 159Z'],
-    lower:'M82 202Q120 218 158 202L156 240L135 246L120 221L105 246L84 240Z',
-    shoes:'M86 239Q103 236 119 245L119 260Q102 267 83 258ZM131 245Q147 236 164 239L167 258Q148 267 131 260Z',
+    skin:'#B97E5C', hairColor:'#C9BEB1', topColor:'#247D91', bottomColor:'#42424E', shoeColor:'#E5B95E', propColor:'#785A43',
+    head:'M97 59Q103 38 121 38Q141 38 147 60L145 98Q140 119 121 122Q101 119 96 98Z',
+    hair:'M94 67Q85 43 103 29Q116 19 128 27Q143 22 153 39L149 58Q136 48 121 52Q105 51 96 75Z M97 97Q101 111 120 113Q139 111 145 96L144 121Q139 139 120 143Q101 139 96 121Z M106 107Q120 116 136 107L132 114Q120 120 109 114Z',
+    neck:'M108 119L133 119L139 141L120 153L101 141Z',
+    body:'M88 143Q103 131 113 139L120 151L128 139Q142 131 154 143L164 199Q145 216 120 218Q95 216 76 199Z',
+    arms:['M91 150Q77 158 76 177L87 192Q98 194 104 181L108 162Z','M151 150Q164 158 165 177L155 189L141 186L138 169Z'],
+    lower:'M91 202Q120 216 149 202L148 246Q134 252 125 247L120 226L115 247Q105 252 92 246Z',
+    shoes:'M92 244Q106 241 119 249L119 262Q105 267 89 260ZM125 249Q138 241 151 244L155 260Q140 267 126 262Z',
+    props:['M51 177Q42 172 39 179Q44 187 50 188L47 259Q50 267 56 261L59 190Q66 185 61 179Q57 175 51 177Z'],
   },
   'prof.caio': {
     skin:'#AE7252', hairColor:'#28232A', topColor:'#D49A26', bottomColor:'#294B59', shoeColor:'#4E9E9C',
@@ -164,6 +165,7 @@ function SilhouetteArt({ id, monochrome = false }: { id: string; monochrome?: bo
   const c = monochrome ? '#1E2529' : null;
   return <g data-silhouette-art={id} aria-hidden="true">
     <path d={p.lower} fill={c ?? p.bottomColor}/>
+    {p.props?.map((d, i) => <path key={'prop-' + i} d={d} fill={c ?? p.propColor ?? p.topColor}/>)}
     <path d={p.body} fill={c ?? p.topColor}/>
     {p.arms.map((d, i) => <path key={i} d={d} fill={c ?? p.topColor}/>)}
     <path d={p.neck} fill={c ?? p.skin}/>
@@ -171,6 +173,98 @@ function SilhouetteArt({ id, monochrome = false }: { id: string; monochrome?: bo
     <path d={p.hair} fill={c ?? p.hairColor}/>
     <path d={p.shoes} fill={c ?? p.shoeColor}/>
   </g>;
+}
+
+const V17_DETAIL_IDS = new Set([
+  'prof.clara', 'prof.davi', 'prof.iara', 'prof.ravi',
+  'prof.mateus', 'prof.sofia', 'prof.helena', 'prof.augusto',
+]);
+
+/** Detalhes de rosto e vestuário; a anatomia vem integralmente de SILHOUETTES. */
+function CharacterDetailsV17({ id }: { id: string }) {
+  switch (id) {
+    case 'prof.clara': return <g data-character-details="v17-clara">
+      <path d="M106 84Q112 80 118 84M133 84Q140 80 146 84" fill="none" stroke="#452B29" strokeWidth="3.2" strokeLinecap="round"/>
+      <ellipse cx="112" cy="92" rx="3.5" ry="5.1" fill="#342320"/><ellipse cx="140" cy="92" rx="3.5" ry="5.1" fill="#342320"/>
+      <circle cx="113" cy="90" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="90" r="1.3" fill="#FFF5E9"/>
+      <path d="M121 98L118 105L123 106" fill="none" stroke="#8E503F" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M112 111Q126 123 141 109" fill="none" stroke="#713E39" strokeWidth="3.4" strokeLinecap="round"/>
+      <path d="M100 144L120 162L140 144" fill="none" stroke="#FFD17D" strokeWidth="4.5" strokeLinecap="round"/>
+      <path d="M120 163V185" stroke="#B64B3D" strokeWidth="2.5" strokeLinecap="round"/>
+      <circle cx="120" cy="174" r="3" fill="#F6D58E"/>
+      <path d="M85 208Q120 221 155 208" fill="none" stroke="#F6CF81" strokeWidth="3" strokeLinecap="round"/>
+    </g>;
+    case 'prof.davi': return <g data-character-details="v17-davi">
+      <path d="M103 86Q111 81 119 86M132 86Q141 81 149 86" fill="none" stroke="#2D201C" strokeWidth="4.5" strokeLinecap="round"/>
+      <ellipse cx="112" cy="95" rx="4" ry="5" fill="#201C1B"/><ellipse cx="140" cy="95" rx="4" ry="5" fill="#201C1B"/>
+      <circle cx="113" cy="93" r="1.4" fill="#FFF5E9"/><circle cx="141" cy="93" r="1.4" fill="#FFF5E9"/>
+      <path d="M120 98L117 107L123 108" fill="none" stroke="#4B3027" strokeWidth="2.4" strokeLinecap="round"/>
+      <path d="M107 114Q120 119 133 114" fill="none" stroke="#3E2924" strokeWidth="3.2" strokeLinecap="round"/>
+      <path d="M88 151Q120 166 152 151" fill="none" stroke="#79A9D0" strokeWidth="4" strokeLinecap="round"/>
+      <path d="M120 158L120 214" stroke="#244B69" strokeWidth="3"/>
+      <path d="M101 181L112 189M139 181L128 189" stroke="#E5D8C6" strokeWidth="3" strokeLinecap="round"/>
+    </g>;
+    case 'prof.iara': return <g data-character-details="v17-iara">
+      <path d="M104 84Q111 79 118 84M132 84Q139 79 146 84" fill="none" stroke="#563B34" strokeWidth="3.1" strokeLinecap="round"/>
+      <ellipse cx="111" cy="92" rx="3.8" ry="5.2" fill="#32231F"/><ellipse cx="140" cy="92" rx="3.8" ry="5.2" fill="#32231F"/>
+      <circle cx="112" cy="90" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="90" r="1.3" fill="#FFF5E9"/>
+      <path d="M121 99L118 106L123 107" fill="none" stroke="#81513F" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M109 112Q122 123 136 111" fill="none" stroke="#6F4038" strokeWidth="3.2" strokeLinecap="round"/>
+      <path d="M91 144L120 162L148 144" fill="none" stroke="#D6B1E9" strokeWidth="4" strokeLinecap="round"/>
+      <path d="M120 161L120 220" stroke="#543B79" strokeWidth="2.5" strokeDasharray="4 6"/>
+      <circle cx="120" cy="181" r="4" fill="#E8BC6A"/><circle cx="77" cy="151" r="4" fill="#E8BC6A"/>
+    </g>;
+    case 'prof.ravi': return <g data-character-details="v17-ravi">
+      <path d="M105 83Q112 79 118 84M132 84Q139 78 146 83" fill="none" stroke="#392924" strokeWidth="3.2" strokeLinecap="round"/>
+      <ellipse cx="112" cy="91" rx="3.7" ry="5.2" fill="#251F1C"/><ellipse cx="140" cy="91" rx="3.7" ry="5.2" fill="#251F1C"/>
+      <circle cx="113" cy="89" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="89" r="1.3" fill="#FFF5E9"/>
+      <path d="M121 98L119 104L124 105" fill="none" stroke="#815344" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M110 110Q124 122 139 108" fill="none" stroke="#694239" strokeWidth="3.3" strokeLinecap="round"/>
+      <path d="M97 145L120 160L143 145" fill="none" stroke="#BCE0B8" strokeWidth="4" strokeLinecap="round"/>
+      <path d="M120 160L120 194" stroke="#1F6E4A" strokeWidth="2.5"/>
+      <path d="M91 210L103 215M149 210L137 215" stroke="#BCE0B8" strokeWidth="3" strokeLinecap="round"/>
+    </g>;
+    case 'prof.mateus': return <g data-character-details="v17-mateus">
+      <path d="M103 84Q110 80 117 84M133 84Q140 80 147 84" fill="none" stroke="#513A2F" strokeWidth="3.2" strokeLinecap="round"/>
+      <ellipse cx="111" cy="93" rx="3.7" ry="5" fill="#2A2421"/><ellipse cx="140" cy="93" rx="3.7" ry="5" fill="#2A2421"/>
+      <circle cx="112" cy="91" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="91" r="1.3" fill="#FFF5E9"/>
+      <path d="M121 100L118 106L123 107" fill="none" stroke="#A77A5C" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M109 113Q121 121 135 112" fill="none" stroke="#75473A" strokeWidth="3.2" strokeLinecap="round"/>
+      <path d="M95 146Q120 161 145 146" fill="none" stroke="#F1C38B" strokeWidth="4" strokeLinecap="round"/>
+      <path d="M120 160L120 206" stroke="#A84F2A" strokeWidth="2.5"/><circle cx="120" cy="183" r="4" fill="#F5D179"/>
+      <path d="M87 194Q120 208 153 194" fill="none" stroke="#EBA26F" strokeWidth="2.5" strokeLinecap="round"/>
+    </g>;
+    case 'prof.sofia': return <g data-character-details="v17-sofia">
+      <path d="M103 83Q111 78 118 83M132 83Q140 78 147 83" fill="none" stroke="#714339" strokeWidth="3.2" strokeLinecap="round"/>
+      <ellipse cx="111" cy="92" rx="3.8" ry="5.3" fill="#32231F"/><ellipse cx="140" cy="92" rx="3.8" ry="5.3" fill="#32231F"/>
+      <circle cx="112" cy="90" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="90" r="1.3" fill="#FFF5E9"/>
+      <circle cx="98" cy="106" r="2" fill="#C98270"/><circle cx="104" cy="109" r="1.8" fill="#C98270"/>
+      <path d="M106 109Q121 126 139 108Q133 129 120 128Q110 125 106 109Z" fill="#713D39"/>
+      <path d="M113 113Q124 119 134 111" fill="none" stroke="#FFF5E8" strokeWidth="2.8" strokeLinecap="round"/>
+      <path d="M97 145Q120 162 143 145" fill="none" stroke="#F0C46E" strokeWidth="5" strokeLinecap="round"/>
+      <path d="M120 160L120 193" stroke="#B64E42" strokeWidth="2.5"/><circle cx="120" cy="181" r="3.2" fill="#F6D78B"/>
+    </g>;
+    case 'prof.helena': return <g data-character-details="v17-helena">
+      <path d="M104 83Q111 79 118 83M132 83Q140 79 147 83" fill="none" stroke="#3A2927" strokeWidth="3.2" strokeLinecap="round"/>
+      <ellipse cx="111" cy="92" rx="3.8" ry="5.2" fill="#261D1C"/><ellipse cx="140" cy="92" rx="3.8" ry="5.2" fill="#261D1C"/>
+      <circle cx="112" cy="90" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="90" r="1.3" fill="#FFF5E9"/>
+      <path d="M120 99L117 106L123 107" fill="none" stroke="#70483B" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M108 111Q121 122 136 110" fill="none" stroke="#633E37" strokeWidth="3.2" strokeLinecap="round"/>
+      <path d="M94 147L120 164L146 147" fill="none" stroke="#D1AA68" strokeWidth="4" strokeLinecap="round"/>
+      <path d="M120 164L120 220" stroke="#1D6975" strokeWidth="3"/>
+      <circle cx="120" cy="180" r="3.5" fill="#E5BD6B"/><circle cx="120" cy="197" r="3.5" fill="#E5BD6B"/><circle cx="78" cy="124" r="4" fill="#E5BD6B"/>
+    </g>;
+    case 'prof.augusto': return <g data-character-details="v17-augusto">
+      <path d="M105 82Q112 78 118 82M131 82Q138 78 144 82" fill="none" stroke="#51423A" strokeWidth="3" strokeLinecap="round"/>
+      <ellipse cx="111" cy="90" rx="3.6" ry="5" fill="#2A2421"/><ellipse cx="138" cy="90" rx="3.6" ry="5" fill="#2A2421"/>
+      <circle cx="112" cy="88" r="1.2" fill="#FFF5E9"/><circle cx="139" cy="88" r="1.2" fill="#FFF5E9"/>
+      <path d="M120 97L118 103L122 104" fill="none" stroke="#97664F" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M106 109Q120 116 134 109" fill="none" stroke="#5A3933" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M96 145L120 161L144 145" fill="none" stroke="#D4C4AA" strokeWidth="4" strokeLinecap="round"/>
+      <path d="M119 161L120 211" stroke="#1F687B" strokeWidth="2.5"/><path d="M106 171L120 179L134 171" fill="none" stroke="#E5B95E" strokeWidth="3"/>
+    </g>;
+    default: return null;
+  }
 }
 
 export const TEACHER_SIGNATURE_POSES: Record<string, TeacherPose> = {
@@ -552,6 +646,7 @@ function Caio() {
 }
 
 function CharacterArt({ id }: { id: string }) {
+  if (V17_DETAIL_IDS.has(id)) return <CharacterDetailsV17 id={id}/>;
   switch (id) {
     case 'prof.clara': return <Clara/>;
     case 'prof.lia': return <Lia/>;
@@ -594,12 +689,13 @@ export function TeacherCharacter({
       style={style}
       role="img"
       aria-label={teacher.name + ', professor humano ilustrado do Pórtico'}
-      data-character-style="portico-humans-v16"
+      data-character-style="portico-humans-v17"
       data-character-anatomy="human"
       data-character-id={teacher.id}
       data-character-silhouette={teacher.id}
       data-character-pose={characterPose}
       data-character-mode={silhouette ? 'silhouette' : 'color'}
+      data-character-renderer={V17_DETAIL_IDS.has(teacher.id) ? 'silhouette-v17' : 'legacy-v16'}
       focusable="false"
     >
       {portrait && <circle cx="120" cy="98" r="90" fill={'rgb(var(--' + teacher.tone + '))'}/>}
