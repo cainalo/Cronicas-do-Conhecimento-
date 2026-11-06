@@ -56,6 +56,8 @@ function armsFor(pose:TeacherPose):Arms {
  switch(pose){
   case 'hands-on-hips': case 'one-hand-on-hip':
    return {left:'M82 143 C70 148 68 164 75 176 L94 190 Q103 197 109 189 Q114 181 103 175 L91 159Z',right:'M158 143 C170 148 172 164 165 176 L146 190 Q137 197 131 189 Q126 181 137 175 L149 159Z',lh:'M96 181 Q105 178 111 185 Q115 193 107 198 Q98 201 94 192Z',rh:'M144 181 Q135 178 129 185 Q125 193 133 198 Q142 201 146 192Z'};
+  case 'presenting':
+   return {...base,right:'M158 143 C170 146 178 150 187 156 L201 161 Q208 166 202 174 Q198 179 189 173 L174 168 L154 163Z',rh:'M200 160 Q210 158 212 166 Q212 175 203 176 L196 170Z'};
   case 'one-hand-up': case 'greeting': case 'pointing':
    return {...base,right:'M158 143 C169 136 170 121 173 104 L177 85 Q180 75 189 80 Q197 84 192 95 L184 125 Q179 151 166 166Z',rh:'M177 86 Q176 75 184 72 Q193 72 194 81 L192 90 Q184 95 177 86Z'};
   case 'hand-on-chin': case 'thinking':
@@ -73,18 +75,25 @@ function armsFor(pose:TeacherPose):Arms {
 }
 function torso(p:Profile){
  const s=p.shoulder,w=p.waist,h=p.hem;
- return 'M '+(120-s)+' 143 C '+(120-s+9)+' 131 100 130 120 143 C 140 130 '+(120+s-9)+' 131 '+(120+s)+' 143 L '+(120+w)+' 204 Q 120 '+(218+Math.max(0,h-43)*.12)+' '+(120-h)+' 211 Q 120 220 '+(120-w)+' 204 Z';
+ return 'M '+(120-s)+' 143 C '+(120-s+9)+' 131 100 130 120 143 C 140 130 '+(120+s-9)+' 131 '+(120+s)+' 143 L '+(120+h)+' 208 Q 120 224 '+(120-h)+' 208 Z';
 }
 function lower(p:Profile){
- if(p.lower==='skirt') return 'M '+(120-p.hem)+' 204 Q 120 222 '+(120+p.hem)+' 204 L '+(120+p.hem+12)+' 251 Q 120 265 '+(120-p.hem-12)+' 251 Z';
+ if(p.lower==='skirt') return 'M '+(120-p.hem)+' 204 Q 120 221 '+(120+p.hem)+' 204 L '+(120+p.hem+8)+' 246 Q 120 256 '+(120-p.hem-8)+' 246 Z';
  const l=p.leg;
  return 'M '+(120-p.hem)+' 205 Q 120 222 '+(120+p.hem)+' 205 L '+(120+l+8)+' 251 Q '+(120+l+5)+' 258 '+(120+l-3)+' 254 L 124 220 L 116 220 L '+(120-l+3)+' 254 Q '+(120-l-5)+' 258 '+(120-l-8)+' 251 Z';
 }
-function shoes(p:Profile){
- const d=p.leg+(p.lower==='skirt'?8:1);
+function calves(){
  return [
-  'M '+(120-d-5)+' 248 Q '+(120-d+5)+' 243 117 250 Q 119 254 118 262 Q '+(120-d-15)+' 270 '+(120-d-28)+' 262 Q '+(120-d-28)+' 255 '+(120-d-5)+' 248 Z',
-  'M '+(120+d+5)+' 248 Q '+(120+d-5)+' 243 123 250 Q 121 254 122 262 Q '+(120+d+15)+' 270 '+(120+d+28)+' 262 Q '+(120+d+28)+' 255 '+(120+d+5)+' 248 Z'
+  'M106 239 Q111 237 118 241 L117 260 Q112 265 104 260Z',
+  'M122 241 Q129 237 134 239 L136 260 Q128 265 123 260Z'
+ ];
+}
+function shoes(p:Profile){
+ const d=Math.round(p.leg*.52);
+ const left=120-d-6, right=120+d+6;
+ return [
+  'M '+(left-14)+' 252 Q '+(left-8)+' 243 '+(left+2)+' 247 Q '+(left+14)+' 250 '+(left+15)+' 259 Q '+(left+11)+' 267 '+(left-13)+' 263 Q '+(left-17)+' 259 '+(left-14)+' 252 Z',
+  'M '+(right+14)+' 252 Q '+(right+8)+' 243 '+(right-2)+' 247 Q '+(right-14)+' 250 '+(right-15)+' 259 Q '+(right-11)+' 267 '+(right+13)+' 263 Q '+(right+17)+' 259 '+(right+14)+' 252 Z'
  ];
 }
 function head(p:Profile){
@@ -96,6 +105,7 @@ function SilhouetteArt({id,monochrome=false,pose='arms-down'}:{id:string;monochr
  const f=(c:string)=>monochrome?'#1E2529':c, seam=monochrome?'#1E2529':'none';
  return <g data-silhouette-art={id} aria-hidden="true" stroke={seam} strokeWidth={monochrome?1.8:0} strokeLinejoin="round" strokeLinecap="round">
   <path d={hair.back} fill={f(p.hair)}/>
+  {p.lower==='skirt'&&calves().map((d,i)=><path key={'calf-'+i} d={d} fill={f(p.skin)}/>)}
   <path d={lower(p)} fill={f(p.bottom)}/>
   <path d={a.left} fill={f(p.top)}/><path d={a.right} fill={f(p.top)}/>
   <path d="M105 111 Q120 117 135 111 L140 151 Q120 164 100 151Z" fill={f(p.skin)}/>
@@ -138,8 +148,6 @@ function CharacterDetails({id}:{id:string}){
    ? <><path d="M104 91 Q112 84 119 91 Q112 99 104 91Z M132 91 Q140 84 147 91 Q140 99 132 91Z" fill="#2A211F"/><circle cx="112" cy="91" r="2" fill="#FFF5E9"/><circle cx="140" cy="91" r="2" fill="#FFF5E9"/></>
    : <><ellipse cx="112" cy="92" rx={f.eye==='wide'?4:3.1} ry={f.eye==='wide'?5.1:4.1} fill="#28211F"/><ellipse cx="140" cy="92" rx={f.eye==='wide'?4:3.1} ry={f.eye==='wide'?5.1:4.1} fill="#28211F"/><circle cx="113" cy="90" r="1.3" fill="#FFF5E9"/><circle cx="141" cy="90" r="1.3" fill="#FFF5E9"/></>}
   <path d="M121 98 L118 104 Q120 107 124 105" fill="none" stroke="#81513F" strokeWidth="1.8" strokeLinecap="round"/>
-  <path d={f.mouth} fill={open?'#713E39':'none'} stroke="#713E39" strokeWidth="2.7" strokeLinecap="round" strokeLinejoin="round"/>
-  {open&&<path d="M112 114 Q122 123 134 113" fill="none" stroke="#FFF4E8" strokeWidth="2.4" strokeLinecap="round"/>}
   {p.glasses==='round'&&<><circle cx="112" cy="92" r="13.5" fill="none" stroke={p.hair} strokeWidth="2.8"/><circle cx="140" cy="92" r="13.5" fill="none" stroke={p.hair} strokeWidth="2.8"/><path d="M125 91 Q126 88 127 91" fill="none" stroke={p.hair} strokeWidth="2.5"/></>}
   {p.glasses==='square'&&<><rect x="98" y="82" width="26" height="20" rx="5" fill="none" stroke="#6A5144" strokeWidth="2.2"/><rect x="129" y="82" width="26" height="20" rx="5" fill="none" stroke="#6A5144" strokeWidth="2.2"/><path d="M124 91 L129 91" stroke="#6A5144" strokeWidth="2.2"/></>}
   {p.freckles&&<g fill="#C98270"><circle cx="97" cy="104" r="1.9"/><circle cx="103" cy="108" r="1.8"/><circle cx="145" cy="104" r="1.9"/><circle cx="151" cy="108" r="1.8"/></g>}
@@ -148,6 +156,8 @@ function CharacterDetails({id}:{id:string}){
   {p.beard==='moustache'&&<path d="M108 108 Q115 103 120 109 Q125 103 133 108 Q129 117 120 114 Q111 117 108 108Z" fill={p.hair}/>}
   {p.earrings&&<g fill={p.accent}><circle cx="91" cy="111" r="3.2"/><circle cx="151" cy="111" r="3.2"/></g>}
   {p.beard==='moustache'&&<path d="M111 121 Q120 125 130 121" fill="none" stroke="#5A3933" strokeWidth="2.1" strokeLinecap="round"/>}
+  <path d={f.mouth} fill={open?'#713E39':'none'} stroke="#713E39" strokeWidth="2.7" strokeLinecap="round" strokeLinejoin="round"/>
+  {open&&<path d="M112 114 Q122 123 134 113" fill="none" stroke="#FFF4E8" strokeWidth="2.4" strokeLinecap="round"/>}
   <path d="M98 145 Q120 158 142 145" fill="none" stroke={p.accent} strokeWidth="3.4" strokeLinecap="round"/>
   <path d="M120 159 V194" fill="none" stroke={p.top} strokeWidth="2.4" strokeLinecap="round"/>
   <circle cx="120" cy="178" r="3" fill={p.accent}/>
