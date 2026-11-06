@@ -27,7 +27,7 @@ describe('personagens-professores vetoriais', () => {
     for (const figure of figures) {
       expect(figure.getAttribute('viewBox')).toBe('0 0 240 270');
       expect(figure.querySelectorAll('path, rect, circle, ellipse').length).toBeGreaterThan(14);
-      expect(figure.getAttribute('data-character-style')).toBe('portico-humans-v16');
+      expect(figure.getAttribute('data-character-style')).toBe('portico-humans-v17');
       expect(figure.getAttribute('data-character-anatomy')).toBe('human');
     }
     const silhouettes = figures.map(figure => figure.getAttribute('data-character-silhouette'));
@@ -48,12 +48,38 @@ describe('personagens-professores vetoriais', () => {
     expect(figures.every(f => Array.from(f.querySelectorAll('[data-silhouette-art] path')).every(p => p.getAttribute('fill') === '#1E2529'))).toBe(true);
   });
 
+  it('usa a mesma geometria na silhueta e na versão colorida dos oito docentes revisados', () => {
+    const revisedIds = new Set([
+      'prof.clara', 'prof.davi', 'prof.iara', 'prof.ravi',
+      'prof.mateus', 'prof.sofia', 'prof.helena', 'prof.augusto',
+    ]);
+    const color = render(<div>{teachers.map(teacher => <TeacherCharacter key={teacher.id} teacher={teacher}/>)}</div>);
+    const mono = render(<div>{teachers.map(teacher => <TeacherCharacter key={teacher.id} teacher={teacher} silhouette/>)}</div>);
+    const colorFigures = Array.from(color.container.querySelectorAll('svg[data-character-id]'));
+    const monoFigures = Array.from(mono.container.querySelectorAll('svg[data-character-id]'));
+    const geometry = (figure: SVGElement) => Array.from(
+      figure.querySelectorAll('[data-silhouette-art] path'),
+    ).map(path => path.getAttribute('d')).join('|');
+
+    const revisedColor = colorFigures.filter(figure => revisedIds.has(figure.getAttribute('data-character-id') ?? ''));
+    expect(revisedColor).toHaveLength(8);
+    for (const figure of revisedColor) {
+      const id = figure.getAttribute('data-character-id');
+      const silhouette = monoFigures.find(item => item.getAttribute('data-character-id') === id);
+      expect(figure.getAttribute('data-character-renderer')).toBe('silhouette-v17');
+      expect(figure.querySelector('[data-character-details]')).toBeInTheDocument();
+      expect(silhouette).toBeDefined();
+      expect(geometry(figure)).toBe(geometry(silhouette as SVGElement));
+    }
+    expect(new Set(revisedColor.map(geometry)).size).toBe(8);
+  });
+
   it('mantém todos os treze professores humanos e sem anatomia animal', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} size={140}/>)}</div>);
     const figures = Array.from(container.querySelectorAll('svg[role="img"]'));
     expect(figures).toHaveLength(13);
     expect(figures.every(f => f.getAttribute('data-character-anatomy') === 'human')).toBe(true);
-    expect(figures.every(f => f.getAttribute('data-character-style') === 'portico-humans-v16')).toBe(true);
+    expect(figures.every(f => f.getAttribute('data-character-style') === 'portico-humans-v17')).toBe(true);
     expect(new Set(figures.map(f => f.getAttribute('data-character-id'))).size).toBe(13);
     expect(figures.every(f => !f.hasAttribute('data-character-species'))).toBe(true);
   });
@@ -77,7 +103,7 @@ describe('personagens-professores vetoriais', () => {
 
   it('usa a mesma linguagem vetorial nas versões de avatar e corpo inteiro', () => {
     const { container } = render(<div>{teachers.map((teacher) => <TeacherCharacter key={teacher.id} teacher={teacher} portrait size={48}/>)}</div>);
-    expect(container.querySelectorAll('svg[data-character-style="portico-humans-v16"]')).toHaveLength(teachers.length);
+    expect(container.querySelectorAll('svg[data-character-style="portico-humans-v17"]')).toHaveLength(teachers.length);
   });
 
   it('atribui um professor coerente às principais disciplinas', () => {
