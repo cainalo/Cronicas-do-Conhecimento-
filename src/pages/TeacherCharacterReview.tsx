@@ -4,14 +4,12 @@ import { teachers } from '@/content';
 /** Prancha de auditoria de silhuetas e personagens completos. */
 export function TeacherCharacterReviewPage() {
   return (
-    <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
+    <main className="mx-auto max-w-6xl space-y-6 px-4 py-6" data-review-version="v17">
       <header className="space-y-2">
-        <p className="kicker">PÓRTICO · ESTÚDIO DE PERSONAGENS · V16</p>
+        <p className="kicker">PÓRTICO · ESTÚDIO DE PERSONAGENS · V17</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
         <p className="max-w-3xl text-sm leading-relaxed text-muted">
-          Nesta rodada, a leitura da pessoa vem antes do rosto e da roupa. Cada professor
-          recebeu contornos próprios de cabeça, cabelo, tronco, braços e pernas. A primeira
-          prancha elimina cores e detalhes para testar se as treze pessoas continuam distintas.
+          Nesta rodada, oito professores receberam uma revisão de biotipo, gesto e cabelo para separar quatro duplas que ainda se aproximavam. Na versão colorida, a anatomia usa exatamente os mesmos caminhos vetoriais da prancha preta; o rosto e as marcas de roupa entram apenas como detalhes.
         </p>
       </header>
 
@@ -32,8 +30,18 @@ export function TeacherCharacterReviewPage() {
         </div>
       </section>
 
+      <section className="space-y-3" aria-label="Contrastes definidos na V17">
+        <div><p className="kicker">TESTE 01B · IDENTIDADE DE CADA DUPLA</p><h2 className="text-xl font-bold">Quatro contrastes de personalidade</h2></div>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          <article className="rounded-xl border border-line/70 bg-surface p-3"><h3 className="font-bold">Clara × Sofia</h3><p className="mt-1 text-sm text-muted">Clara: gesto assimétrico e postura de orientação. Sofia: braços erguidos em V, cabelo longo em movimento e corpo mais leve.</p></article>
+          <article className="rounded-xl border border-line/70 bg-surface p-3"><h3 className="font-bold">Davi × Ravi</h3><p className="mt-1 text-sm text-muted">Davi: tórax muito largo, braços pesados e base firme. Ravi: cintura estreita, pernas mais longas e gesto atlético.</p></article>
+          <article className="rounded-xl border border-line/70 bg-surface p-3"><h3 className="font-bold">Iara × Helena</h3><p className="mt-1 text-sm text-muted">Iara: trança lateral única e veste assimétrica mais estreita. Helena: locs espessos em vários comprimentos e túnica de maior volume.</p></article>
+          <article className="rounded-xl border border-line/70 bg-surface p-3"><h3 className="font-bold">Mateus × Augusto</h3><p className="mt-1 text-sm text-muted">Mateus: abdômen arredondado, cabelo cheio e postura compacta. Augusto: ombros caídos, barba grisalha e bengala.</p></article>
+        </div>
+      </section>
+
       <section className="space-y-3" aria-label="Personagens completos em cores">
-        <div><p className="kicker">TESTE 02 · DESENHO COMPLETO</p><h2 className="text-xl font-bold">Os mesmos professores em cores</h2><p className="text-xs text-muted">Compare cada pessoa com a silhueta correspondente acima.</p></div>
+        <div><p className="kicker">TESTE 02 · DESENHO COMPLETO</p><h2 className="text-xl font-bold">Os mesmos professores em cores</h2><p className="text-xs text-muted">Nas oito revisadas, a cor é aplicada sobre a mesma anatomia vetorial usada na prancha preta.</p></div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {teachers.map((teacher) => (
             <article key={teacher.id} data-teacher-id={teacher.id} className="flex min-w-0 flex-col items-center overflow-hidden rounded-2xl border border-line/70" style={{ backgroundColor: 'rgb(var(--' + teacher.tone + ') / .14)' }}>
