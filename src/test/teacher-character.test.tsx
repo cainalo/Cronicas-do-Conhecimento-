@@ -48,11 +48,7 @@ describe('personagens-professores vetoriais', () => {
     expect(figures.every(f => Array.from(f.querySelectorAll('[data-silhouette-art] path')).every(p => p.getAttribute('fill') === '#1E2529'))).toBe(true);
   });
 
-  it('usa a mesma geometria na silhueta e na versão colorida dos oito docentes revisados', () => {
-    const revisedIds = new Set([
-      'prof.clara', 'prof.davi', 'prof.iara', 'prof.ravi',
-      'prof.mateus', 'prof.sofia', 'prof.helena', 'prof.augusto',
-    ]);
+  it('usa a mesma geometria na silhueta e na versão colorida de todo o elenco', () => {
     const color = render(<div>{teachers.map(teacher => <TeacherCharacter key={teacher.id} teacher={teacher}/>)}</div>);
     const mono = render(<div>{teachers.map(teacher => <TeacherCharacter key={teacher.id} teacher={teacher} silhouette/>)}</div>);
     const colorFigures = Array.from(color.container.querySelectorAll('svg[data-character-id]'));
@@ -61,9 +57,8 @@ describe('personagens-professores vetoriais', () => {
       figure.querySelectorAll('[data-silhouette-art] path'),
     ).map(path => path.getAttribute('d')).join('|');
 
-    const revisedColor = colorFigures.filter(figure => revisedIds.has(figure.getAttribute('data-character-id') ?? ''));
-    expect(revisedColor).toHaveLength(8);
-    for (const figure of revisedColor) {
+    expect(colorFigures).toHaveLength(13);
+    for (const figure of colorFigures) {
       const id = figure.getAttribute('data-character-id');
       const silhouette = monoFigures.find(item => item.getAttribute('data-character-id') === id);
       expect(figure.getAttribute('data-character-renderer')).toBe('silhouette-v18');
@@ -71,7 +66,7 @@ describe('personagens-professores vetoriais', () => {
       expect(silhouette).toBeDefined();
       expect(geometry(figure)).toBe(geometry(silhouette as Element));
     }
-    expect(new Set(revisedColor.map(geometry)).size).toBe(8);
+    expect(new Set(colorFigures.map(geometry)).size).toBe(13);
   });
 
   it('atribui treze rostos e expressões individuais aos professores', () => {
