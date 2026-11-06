@@ -1,15 +1,15 @@
-import { TeacherCharacter, TEACHER_SIGNATURE_POSES } from '@/components/TeacherCharacter';
+import { TeacherCharacter, TEACHER_FACE_EXPRESSIONS, TEACHER_SIGNATURE_POSES } from '@/components/TeacherCharacter';
 import { teachers } from '@/content';
 
 /** Prancha de auditoria de silhuetas e personagens completos. */
 export function TeacherCharacterReviewPage() {
   return (
-    <main className="mx-auto max-w-6xl space-y-6 px-4 py-6" data-review-version="v17">
+    <main className="mx-auto max-w-6xl space-y-6 px-4 py-6" data-review-version="v18">
       <header className="space-y-2">
-        <p className="kicker">PÓRTICO · ESTÚDIO DE PERSONAGENS · V17</p>
+        <p className="kicker">PÓRTICO · ESTÚDIO DE PERSONAGENS · V18</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
         <p className="max-w-3xl text-sm leading-relaxed text-muted">
-          Nesta rodada, oito professores receberam uma revisão de biotipo, gesto e cabelo para separar quatro duplas que ainda se aproximavam. Na versão colorida, a anatomia usa exatamente os mesmos caminhos vetoriais da prancha preta; o rosto e as marcas de roupa entram apenas como detalhes.
+          Nesta rodada, os treze rostos receberam desenhos individuais: formato dos olhos, sobrancelhas, boca e marcas pessoais. As geometrias corporais e as silhuetas aprovadas na V17 foram preservadas. O foco agora é reconhecer a personalidade em tamanho de avatar, sem depender do nome ou da disciplina.
         </p>
       </header>
 
@@ -30,7 +30,20 @@ export function TeacherCharacterReviewPage() {
         </div>
       </section>
 
-      <section className="space-y-3" aria-label="Contrastes definidos na V17">
+      <section className="space-y-3" aria-label="Prancha de rostos e expressões">
+        <div><p className="kicker">TESTE 02 · ROSTOS EM TAMANHO DE AVATAR</p><h2 className="text-xl font-bold">Treze expressões, treze personalidades</h2><p className="text-xs text-muted">Compare sobrancelhas, olhos, boca e marcas pessoais sem depender das roupas.</p></div>
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-7">
+          {teachers.map((teacher) => (
+            <article key={teacher.id} data-face-id={teacher.id} className="flex min-w-0 flex-col items-center rounded-xl border border-line/70 bg-surface p-2 text-center">
+              <TeacherCharacter teacher={teacher} portrait size={104}/>
+              <h3 className="mt-1 text-xs font-bold leading-tight">{teacher.name.replace(/^(Professora|Professor) /, '')}</h3>
+              <p className="mt-1 text-[.65rem] leading-snug text-muted">{TEACHER_FACE_EXPRESSIONS[teacher.id]}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-3" aria-label="Contrastes definidos na V18">
         <div><p className="kicker">TESTE 01B · IDENTIDADE DE CADA DUPLA</p><h2 className="text-xl font-bold">Quatro contrastes de personalidade</h2></div>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           <article className="rounded-xl border border-line/70 bg-surface p-3"><h3 className="font-bold">Clara × Sofia</h3><p className="mt-1 text-sm text-muted">Clara: gesto assimétrico e postura de orientação. Sofia: braços erguidos em V, cabelo longo em movimento e corpo mais leve.</p></article>
