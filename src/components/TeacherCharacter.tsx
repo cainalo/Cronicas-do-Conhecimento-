@@ -128,13 +128,15 @@ function head(p:Profile){
  return 'M '+(120-w)+' 75 C '+(120-w+1)+' '+(63-h*.35)+' 101 '+(82-h)+' 120 '+(82-h)+' C 139 '+(82-h)+' '+(120+w-1)+' '+(63-h*.35)+' '+(120+w)+' 75 L '+(120+w-2)+' 103 C '+(120+w-5)+' 119 130 '+(82+h)+' 120 '+(82+h)+' C 110 '+(82+h)+' '+(120-w+5)+' 119 '+(120-w+2)+' 103 Z';
 }
 function SilhouetteArt({id,monochrome=false,pose='arms-down'}:{id:string;monochrome?:boolean;pose?:TeacherPose}){
- const p=P[id]??P['prof.lia'], hair=H[p.hairstyle]??H.lia, a=armsFor(pose), sole=shoes(p);\n const armLeftX=120-p.shoulder*.86,armRightX=240-armLeftX;
+ const p=P[id]??P['prof.lia'], hair=H[p.hairstyle]??H.lia, a=armsFor(pose), sole=shoes(p);
+ const armLeftX=120-p.shoulder*.86,armRightX=240-armLeftX;
  const f=(c:string)=>monochrome?'#1E2529':c, seam=monochrome?'#1E2529':'none';
  return <g data-silhouette-art={id} aria-hidden="true" stroke={seam} strokeWidth={monochrome?1.8:0} strokeLinejoin="round" strokeLinecap="round">
   <path d={hair.back} fill={f(p.hair)}/>
   {p.lower==='skirt'&&calves(p).map((d,i)=><path key={'calf-'+i} d={d} fill={f(p.skin)}/>) }
   <path data-connected-lower-body="true" d={lower(p)} fill={f(p.bottom)}/>
-  <g data-arm="left" transform={`translate(${armLeftX-82} 0)`}><path d={a.left} fill={f(p.top)}/><path d={a.lh} fill={f(p.skin)}/></g>\n  <g data-arm="right" transform={`translate(${armRightX-158} 0)`}><path d={a.right} fill={f(p.top)}/><path d={a.rh} fill={f(p.skin)}/></g>
+  <g data-arm="left" transform={`translate(${armLeftX-82} 0)`}><path d={a.left} fill={f(p.top)}/><path d={a.lh} fill={f(p.skin)}/></g>
+  <g data-arm="right" transform={`translate(${armRightX-158} 0)`}><path d={a.right} fill={f(p.top)}/><path d={a.rh} fill={f(p.skin)}/></g>
   <path data-neck="true" d="M110 111 Q120 117 130 111 L130 145 Q127 157 120 159 Q113 157 110 145Z" fill={f(p.skin)}/>
   <path data-connected-body="true" d={torso(p)} fill={f(p.top)}/>
   <path d={head(p)} fill={f(p.skin)}/>
