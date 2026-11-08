@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { FictionalTeacher } from '@/content/teachers';
 
-/** Pórtico V19: anatomia orgânica, volumes sobrepostos e silhuetas contínuas. */
+/** Pórtico V20: anatomia conectada, cintura definida e membros alinhados. */
 export type TeacherPose =
   | 'greeting' | 'presenting' | 'thinking' | 'celebrating' | 'listening'
   | 'hands-on-hips' | 'arms-down' | 'shrug' | 'arms-crossed'
@@ -73,27 +73,46 @@ function armsFor(pose:TeacherPose):Arms {
   default:return {...base,cross:pose==='arms-crossed'?'M78 166 Q91 155 106 169 Q120 182 137 169 Q151 157 163 167 L157 184 Q139 199 120 190 Q101 201 83 184Z':undefined};
  }
 }
+function legSpread(p:Profile){
+ return Math.max(11,Math.min(15,Math.round(p.leg*.5)));
+}
 function torso(p:Profile){
  const s=p.shoulder,w=p.waist,h=p.hem;
- return 'M '+(120-s)+' 143 C '+(120-s+9)+' 131 100 130 120 143 C 140 130 '+(120+s-9)+' 131 '+(120+s)+' 143 L '+(120+h)+' 208 Q 120 224 '+(120-h)+' 208 Z';
+ return `M ${120-s} 143
+ C ${120-s+9} 134 106 132 120 143
+ C 134 132 ${120+s-9} 134 ${120+s} 143
+ C ${120+s-1} 155 ${120+w+7} 172 ${120+w} 188
+ Q ${120+w} 198 ${120+h} 207
+ Q 120 224 ${120-h} 207
+ Q ${120-w} 198 ${120-w} 188
+ C ${120-w-7} 172 ${120-s+1} 155 ${120-s} 143 Z`;
 }
 function lower(p:Profile){
- if(p.lower==='skirt') return 'M '+(120-p.hem)+' 204 Q 120 221 '+(120+p.hem)+' 204 L '+(120+p.hem+8)+' 246 Q 120 256 '+(120-p.hem-8)+' 246 Z';
- const l=p.leg;
- return 'M '+(120-p.hem)+' 205 Q 120 222 '+(120+p.hem)+' 205 L '+(120+l+8)+' 251 Q '+(120+l+5)+' 258 '+(120+l-3)+' 254 L 124 220 L 116 220 L '+(120-l+3)+' 254 Q '+(120-l-5)+' 258 '+(120-l-8)+' 251 Z';
+ if(p.lower==='skirt') return `M ${120-p.hem} 205 Q 120 216 ${120+p.hem} 205 L ${120+p.hem+7} 224 Q 120 233 ${120-p.hem-7} 224 Z`;
+ const spread=legSpread(p),left=120-spread,right=120+spread;
+ return `M ${120-p.hem} 205
+ C ${120-p.hem+10} 214 ${left-10} 222 ${left-9} 232
+ L ${left-10} 251 Q ${left-11} 259 ${left} 260
+ Q ${left+11} 259 ${left+10} 251
+ L ${left+7} 232 Q 120 240 ${right-7} 232
+ L ${right-10} 251 Q ${right-11} 259 ${right} 260
+ Q ${right+11} 259 ${right+10} 251
+ L ${right+9} 232
+ C ${right+10} 222 ${120+p.hem-10} 214 ${120+p.hem} 205
+ Q 120 220 ${120-p.hem} 205 Z`;
 }
-function calves(){
+function calves(p:Profile){
+ const spread=legSpread(p),left=120-spread,right=120+spread;
  return [
-  'M106 239 Q111 237 118 241 L117 260 Q112 265 104 260Z',
-  'M122 241 Q129 237 134 239 L136 260 Q128 265 123 260Z'
+  `M ${left-6} 219 Q ${left} 216 ${left+6} 219 L ${left+6} 252 Q ${left+5} 259 ${left} 259 Q ${left-7} 259 ${left-7} 252 Z`,
+  `M ${right-6} 219 Q ${right} 216 ${right+6} 219 L ${right+7} 252 Q ${right+7} 259 ${right} 259 Q ${right-6} 259 ${right-6} 252 Z`
  ];
 }
 function shoes(p:Profile){
- const d=Math.round(p.leg*.52);
- const left=120-d-6, right=120+d+6;
+ const spread=legSpread(p),left=120-spread,right=120+spread;
  return [
-  'M '+(left-14)+' 252 Q '+(left-8)+' 243 '+(left+2)+' 247 Q '+(left+14)+' 250 '+(left+15)+' 259 Q '+(left+11)+' 267 '+(left-13)+' 263 Q '+(left-17)+' 259 '+(left-14)+' 252 Z',
-  'M '+(right+14)+' 252 Q '+(right+8)+' 243 '+(right-2)+' 247 Q '+(right-14)+' 250 '+(right-15)+' 259 Q '+(right-11)+' 267 '+(right+13)+' 263 Q '+(right+17)+' 259 '+(right+14)+' 252 Z'
+  `M ${left-11} 253 Q ${left-9} 246 ${left-2} 247 Q ${left+5} 248 ${left+10} 252 Q ${left+14} 256 ${left+10} 262 Q ${left+6} 267 ${left-6} 265 Q ${left-14} 262 ${left-11} 253 Z`,
+  `M ${right+11} 253 Q ${right+9} 246 ${right+2} 247 Q ${right-5} 248 ${right-10} 252 Q ${right-14} 256 ${right-10} 262 Q ${right-6} 267 ${right+6} 265 Q ${right+14} 262 ${right+11} 253 Z`
  ];
 }
 function head(p:Profile){
@@ -105,11 +124,11 @@ function SilhouetteArt({id,monochrome=false,pose='arms-down'}:{id:string;monochr
  const f=(c:string)=>monochrome?'#1E2529':c, seam=monochrome?'#1E2529':'none';
  return <g data-silhouette-art={id} aria-hidden="true" stroke={seam} strokeWidth={monochrome?1.8:0} strokeLinejoin="round" strokeLinecap="round">
   <path d={hair.back} fill={f(p.hair)}/>
-  {p.lower==='skirt'&&calves().map((d,i)=><path key={'calf-'+i} d={d} fill={f(p.skin)}/>)}
+  {p.lower==='skirt'&&calves(p).map((d,i)=><path key={'calf-'+i} d={d} fill={f(p.skin)}/>) }
   <path d={lower(p)} fill={f(p.bottom)}/>
   <path d={a.left} fill={f(p.top)}/><path d={a.right} fill={f(p.top)}/>
   <path d="M105 111 Q120 117 135 111 L140 151 Q120 164 100 151Z" fill={f(p.skin)}/>
-  <path d={torso(p)} fill={f(p.top)}/>
+  <path data-connected-body="true" d={torso(p)} fill={f(p.top)}/>
   <path d={head(p)} fill={f(p.skin)}/>
   <path d={hair.front} fill={f(p.hair)}/>
   <path d={a.lh} fill={f(p.skin)}/><path d={a.rh} fill={f(p.skin)}/>
@@ -125,24 +144,24 @@ export const TEACHER_FACE_EXPRESSIONS:Record<string,string>={
  'prof.sofia':'espontânea e animada','prof.helena':'expressiva e segura','prof.augusto':'sereno e experiente','prof.caio':'curioso e levemente cético'
 };
 const FACE:Record<string,{brow:string;mouth:string;eye?:'wide'|'narrow'|'almond'}>={
- 'prof.clara':{brow:'M104 80 Q111 75 118 81 M132 81 Q140 75 148 80',mouth:'M108 108 Q120 128 135 108 Q132 132 120 132 Q111 129 108 108Z',eye:'wide'},
- 'prof.lia':{brow:'M103 82 L118 81 M132 81 L147 83',mouth:'M111 114 Q120 117 130 113',eye:'narrow'},
- 'prof.davi':{brow:'M100 84 Q110 77 120 84 M132 84 Q142 77 152 84',mouth:'M108 111 Q120 121 134 111',eye:'wide'},
- 'prof.iara':{brow:'M103 82 Q111 77 119 82 M132 82 Q140 77 148 82',mouth:'M110 114 Q121 122 134 113',eye:'almond'},
- 'prof.nina':{brow:'M102 78 Q110 72 118 78 M132 78 Q141 72 149 78',mouth:'M108 108 Q120 126 135 108 Q132 132 120 132 Q111 129 108 108Z',eye:'wide'},
- 'prof.ravi':{brow:'M103 81 Q111 75 119 81 M132 81 Q140 75 148 81',mouth:'M106 107 Q121 132 140 107 Q135 137 121 137 Q109 133 106 107Z',eye:'wide'},
- 'prof.mateus':{brow:'M103 82 Q110 77 118 82 M133 82 Q140 77 147 82',mouth:'M109 114 Q121 123 135 113',eye:'wide'},
- 'prof.marina':{brow:'M104 82 Q112 76 119 82 M132 82 Q140 76 147 82',mouth:'M111 114 Q122 121 134 113',eye:'narrow'},
- 'prof.beatriz':{brow:'M102 80 L119 83 M132 83 L149 80',mouth:'M111 114 Q121 117 132 113',eye:'narrow'},
- 'prof.sofia':{brow:'M103 80 Q111 74 119 80 M132 80 Q140 74 148 80',mouth:'M106 107 Q121 132 140 107 Q135 137 121 137 Q109 133 106 107Z',eye:'wide'},
- 'prof.helena':{brow:'M101 81 Q111 73 120 81 M131 81 Q141 73 150 81',mouth:'M107 107 Q121 134 140 107 Q135 138 120 138 Q109 133 107 107Z',eye:'almond'},
- 'prof.augusto':{brow:'M104 82 Q112 77 119 82 M131 82 Q139 77 146 82',mouth:'M111 119 Q120 123 130 119',eye:'narrow'},
- 'prof.caio':{brow:'M102 79 L118 83 M133 84 Q141 80 149 86',mouth:'M113 114 Q122 119 137 108',eye:'wide'}
+ 'prof.clara':{brow:'M104 80 Q111 75 118 81 M132 81 Q140 75 148 80',mouth:'M111 111 Q121 123 134 111 Q131 123 121 123 Q114 121 111 111Z',eye:'wide'},
+ 'prof.lia':{brow:'M103 82 L118 81 M132 81 L147 83',mouth:'M112 117 Q121 120 131 116',eye:'narrow'},
+ 'prof.davi':{brow:'M100 84 Q110 77 120 84 M132 84 Q142 77 152 84',mouth:'M110 115 Q121 122 133 115',eye:'wide'},
+ 'prof.iara':{brow:'M103 82 Q111 77 119 82 M132 82 Q140 77 148 82',mouth:'M111 116 Q121 122 132 116',eye:'almond'},
+ 'prof.nina':{brow:'M102 78 Q110 72 118 78 M132 78 Q141 72 149 78',mouth:'M111 111 Q121 123 134 111 Q131 123 121 123 Q114 121 111 111Z',eye:'wide'},
+ 'prof.ravi':{brow:'M103 81 Q111 75 119 81 M132 81 Q140 75 148 81',mouth:'M109 110 Q121 124 136 110 Q132 124 121 124 Q112 122 109 110Z',eye:'wide'},
+ 'prof.mateus':{brow:'M103 82 Q110 77 118 82 M133 82 Q140 77 147 82',mouth:'M110 116 Q122 123 134 116',eye:'wide'},
+ 'prof.marina':{brow:'M104 82 Q112 76 119 82 M132 82 Q140 76 147 82',mouth:'M112 116 Q122 122 132 116',eye:'narrow'},
+ 'prof.beatriz':{brow:'M102 80 L119 83 M132 83 L149 80',mouth:'M112 117 Q121 120 132 117',eye:'narrow'},
+ 'prof.sofia':{brow:'M103 80 Q111 74 119 80 M132 80 Q140 74 148 80',mouth:'M109 110 Q121 124 136 110 Q132 124 121 124 Q112 122 109 110Z',eye:'wide'},
+ 'prof.helena':{brow:'M101 81 Q111 73 120 81 M131 81 Q141 73 150 81',mouth:'M109 109 Q121 124 137 109 Q133 124 120 124 Q112 122 109 109Z',eye:'almond'},
+ 'prof.augusto':{brow:'M104 82 Q112 77 119 82 M131 82 Q139 77 146 82',mouth:'M112 119 Q121 122 131 119',eye:'narrow'},
+ 'prof.caio':{brow:'M102 79 L118 83 M133 84 Q141 80 149 86',mouth:'M113 116 Q122 120 136 113',eye:'wide'}
 };
 function CharacterDetails({id}:{id:string}){
  const p=P[id]??P['prof.lia'],f=FACE[id]??FACE['prof.lia'];
  const open=f.mouth.includes('Z');
- return <g data-character-details={'v19-'+id}>
+ return <g data-character-details={'v20-'+id}>
   <path d={f.brow} fill="none" stroke={p.hair} strokeWidth="3.1" strokeLinecap="round"/>
   {f.eye==='almond'
    ? <><path d="M104 91 Q112 84 119 91 Q112 99 104 91Z M132 91 Q140 84 147 91 Q140 99 132 91Z" fill="#2A211F"/><circle cx="112" cy="91" r="2" fill="#FFF5E9"/><circle cx="140" cy="91" r="2" fill="#FFF5E9"/></>
@@ -178,9 +197,9 @@ export function TeacherCharacter({teacher,pose,size=160,className='',portrait=fa
  return <svg viewBox={portrait?'35 10 170 170':'0 0 240 270'} width={style.width} height={style.height}
   className={'shrink-0 '+(portrait?'rounded-full overflow-hidden ':'overflow-visible ')+className} style={style}
   role="img" aria-label={teacher.name+', professor humano ilustrado do Pórtico'}
-  data-character-style="portico-humans-v19" data-character-anatomy="human" data-character-id={teacher.id}
+  data-character-style="portico-humans-v20" data-character-anatomy="human" data-character-id={teacher.id}
   data-character-silhouette={teacher.id} data-character-pose={characterPose}
-  data-character-mode={silhouette?'silhouette':'color'} data-character-renderer="organic-v19"
+  data-character-mode={silhouette?'silhouette':'color'} data-character-renderer="organic-v20"
   data-character-face-design={teacher.id} data-character-expression={TEACHER_FACE_EXPRESSIONS[teacher.id]??'expressão neutra'} focusable="false">
   {portrait&&<circle cx="120" cy="98" r="90" fill={'rgb(var(--'+teacher.tone+'))'}/>}
   {!portrait&&!silhouette&&<ellipse cx="120" cy="263" rx="37" ry="4" fill="#263B45" opacity=".12"/>}
