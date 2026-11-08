@@ -4,12 +4,12 @@ import { teachers } from '@/content';
 /** Prancha de auditoria de silhuetas e personagens completos. */
 export function TeacherCharacterReviewPage() {
   return (
-    <main className="mx-auto max-w-6xl space-y-6 px-4 py-6" data-review-version="v20">
+    <main className="mx-auto max-w-6xl space-y-6 px-4 py-6" data-review-version="v21">
       <header className="space-y-2">
-        <p className="kicker">PÓRTICO · ESTÚDIO DE PERSONAGENS · V20</p>
+        <p className="kicker">PÓRTICO · ESTÚDIO DE PERSONAGENS · V21</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
         <p className="max-w-3xl text-sm leading-relaxed text-muted">
-          Nesta rodada, ajustamos a anatomia para que ombros, braços e tronco tenham junções suaves; a cintura e o quadril agora moldam o corpo, e pernas e sapatos seguem o mesmo eixo. Também corrigimos o comprimento das pernas sob as saias e aproximamos as expressões do contorno real do rosto. As poses continuam estáticas e devem manter a mesma sensação de unidade.
+          Nesta rodada, os braços passam a acompanhar a largura real dos ombros de cada professor. O pescoço foi estreitado e ligado ao decote, o tronco ganhou uma linha superior mais natural e a parte inferior recebeu pernas mais longas, com sapatos menos arredondados. A avaliação continua concentrada em silhueta e continuidade anatômica.
         </p>
       </header>
 
@@ -54,7 +54,7 @@ export function TeacherCharacterReviewPage() {
       </section>
 
       <section className="space-y-3" aria-label="Personagens completos em cores">
-        <div><p className="kicker">TESTE 03 · FIGURA INTEGRADA</p><h2 className="text-xl font-bold">Os mesmos professores em cores</h2><p className="text-xs text-muted">Nas treze figuras, a versão colorida reutiliza os mesmos caminhos da silhueta preta. As transições entre cabeça, pescoço, roupa, braços, cintura, pernas e sapatos devem parecer naturais, sem frestas nem peças deslocadas.</p></div>
+        <div><p className="kicker">TESTE 03 · FIGURA INTEGRADA</p><h2 className="text-xl font-bold">Os mesmos professores em cores</h2><p className="text-xs text-muted">Nas treze figuras, a versão colorida reutiliza os mesmos caminhos da silhueta preta. A figura deve parecer uma única pessoa: braços ligados aos ombros, pescoço saindo da cabeça e entrando no tronco, roupa acompanhando a cintura e pernas suficientemente longas.</p></div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {teachers.map((teacher) => (
             <article key={teacher.id} data-teacher-id={teacher.id} className="flex min-w-0 flex-col items-center overflow-hidden rounded-2xl border border-line/70" style={{ backgroundColor: 'rgb(var(--' + teacher.tone + ') / .14)' }}>
@@ -71,7 +71,7 @@ export function TeacherCharacterReviewPage() {
           <li>Cada silhueta precisa ter um contorno dominante diferente, legível sem cor ou rosto.</li>
           <li>Variar de forma intencional: alto/baixo, largo/estreito, redondo/angular, compacto/alongado.</li>
           <li>Não repetir a mesma cabeça, ombro, cintura e comprimento de pernas em todo o elenco.</li>
-          <li>Os braços precisam nascer visualmente dos ombros; a roupa deve formar um tronco com cintura e quadril, sem cortes artificiais.</li>
+          <li>Os braços precisam nascer do ponto correto dos ombros, acompanhando ombros largos ou estreitos; não podem parecer colados no meio do peito.</li>
           <li>As pernas devem sair de baixo da roupa e terminar em sapatos alinhados aos tornozelos, sem lacunas.</li>
           <li>Olhos, nariz e boca precisam permanecer dentro do contorno da cabeça.</li>
           <li>Manter coerência entre a prancha preta e o desenho colorido do mesmo professor.</li>
