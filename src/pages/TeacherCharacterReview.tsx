@@ -4,12 +4,12 @@ import { teachers } from '@/content';
 /** Prancha de auditoria de silhuetas e personagens completos. */
 export function TeacherCharacterReviewPage() {
   return (
-    <main className="mx-auto max-w-6xl space-y-6 px-4 py-6" data-review-version="v25">
+    <main className="mx-auto max-w-6xl space-y-6 px-4 py-6" data-review-version="v26">
       <header className="space-y-2">
-        <p className="kicker">PÓRTICO · ESTÚDIO DE PERSONAGENS · V25</p>
+        <p className="kicker">PÓRTICO · ESTÚDIO DE PERSONAGENS · V26</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
         <p className="max-w-3xl text-sm leading-relaxed text-muted">
-          Nesta rodada, o foco é o acabamento dos membros: mãos com dedos sugeridos pelo contorno, punhos que entram nas mangas sem parecer peças soltas e calçados com direção, calcanhar e sola mais definidos. Rostos, cabelos e tipos corporais permanecem como estavam para que a comparação isole a mudança.
+          Nesta rodada, as mãos foram reconstruídas com palmas e dedos mais legíveis, os braços foram afinados na transição dos ombros e punhos, e os calçados ganharam uma sola separada. A prancha monocromática verifica se essas formas continuam legíveis sem depender da cor.
         </p>
       </header>
 
@@ -74,7 +74,8 @@ export function TeacherCharacterReviewPage() {
           <li>As proporções devem continuar legíveis em tamanho pequeno e em silhueta monocromática.</li>
           <li>As pernas devem sair de baixo da roupa e terminar em sapatos alinhados aos tornozelos, sem lacunas.</li>
           <li>As mãos devem sugerir palma, polegar e dedos pela silhueta, sem parecer círculos ou luvas sem forma.</li>
-          <li>Os punhos devem entrar naturalmente nas mangas, e os sapatos devem ter leitura de calçado, não de cápsulas ovais.</li>
+          <li>Os punhos devem entrar naturalmente nas mangas, sem lacunas nem volumes que pareçam peças encaixadas.</li>
+          <li>Os sapatos devem ter bico, calcanhar e sola perceptíveis, mesmo em escala reduzida.</li>
           <li>Olhos, nariz e boca precisam permanecer dentro do contorno da cabeça.</li>
           <li>Manter coerência entre a prancha preta e o desenho colorido do mesmo professor.</li>
           <li>Expressões faciais diferentes, legíveis em tamanho de avatar e coerentes com cada personalidade.</li>
