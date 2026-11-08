@@ -7,27 +7,28 @@ export type TeacherPose =
   | 'hands-on-hips' | 'arms-down' | 'shrug' | 'arms-crossed'
   | 'hand-on-chin' | 'hands-forward' | 'one-hand-on-hip' | 'pointing' | 'one-hand-up';
 
+type BodyShape = 'balanced'|'slender'|'broad'|'pear'|'rounded'|'straight'|'athletic';
 type Profile = {
   skin:string; hair:string; top:string; bottom:string; shoes:string; accent:string;
   shoulder:number; waist:number; hem:number; leg:number; headW:number; headH:number;
-  hairstyle:string; lower?:'pants'|'skirt'; glasses?:'round'|'square';
+  hairstyle:string; bodyShape?:BodyShape; lower?:'pants'|'skirt'; glasses?:'round'|'square';
   beard?:'full'|'short'|'moustache'; freckles?:boolean; earrings?:boolean;
   eye?:'wide'|'narrow'|'almond'; mouth?:'smile'|'open'|'soft'|'firm'|'crooked';
 };
 const P:Record<string,Profile> = {
- 'prof.clara':{skin:'#B97050',hair:'#38251F',top:'#E96B51',bottom:'#D89A42',shoes:'#31576A',accent:'#FFD17D',shoulder:42,waist:31,hem:43,leg:25,headW:27,headH:43,hairstyle:'clara',mouth:'open'},
- 'prof.lia':{skin:'#8C543E',hair:'#3D2922',top:'#087F7C',bottom:'#253A48',shoes:'#E8B85C',accent:'#D5E6DF',shoulder:35,waist:27,hem:34,leg:21,headW:25,headH:42,hairstyle:'lia',mouth:'firm',eye:'narrow'},
- 'prof.davi':{skin:'#663F30',hair:'#4A2D23',top:'#3673B1',bottom:'#244B69',shoes:'#E9D4B3',accent:'#79A9D0',shoulder:58,waist:39,hem:51,leg:30,headW:31,headH:45,hairstyle:'davi',beard:'full',mouth:'soft'},
- 'prof.iara':{skin:'#A7684B',hair:'#38241F',top:'#7650A2',bottom:'#315C56',shoes:'#E0AD62',accent:'#D6B1E9',shoulder:41,waist:30,hem:44,leg:24,headW:27,headH:43,hairstyle:'iara',lower:'skirt',earrings:true,eye:'almond',mouth:'soft'},
- 'prof.nina':{skin:'#F0C7A9',hair:'#31324A',top:'#F4EDE2',bottom:'#3B415B',shoes:'#E9C66D',accent:'#8890B6',shoulder:43,waist:34,hem:46,leg:25,headW:27,headH:42,hairstyle:'nina',glasses:'round',eye:'wide',mouth:'open'},
- 'prof.ravi':{skin:'#B87956',hair:'#29231F',top:'#2D8C5D',bottom:'#273E4A',shoes:'#E6B84E',accent:'#BCE0B8',shoulder:46,waist:30,hem:40,leg:27,headW:26,headH:42,hairstyle:'ravi',beard:'short',mouth:'open'},
- 'prof.mateus':{skin:'#E5B993',hair:'#513A2F',top:'#D66C37',bottom:'#364F5E',shoes:'#E9C36B',accent:'#F1C38B',shoulder:39,waist:35,hem:48,leg:23,headW:29,headH:45,hairstyle:'mateus',glasses:'square',mouth:'soft'},
- 'prof.marina':{skin:'#995E46',hair:'#241F25',top:'#24866D',bottom:'#33485A',shoes:'#E7BE6C',accent:'#C3E2CB',shoulder:47,waist:31,hem:53,leg:23,headW:28,headH:43,hairstyle:'marina',lower:'skirt',earrings:true,mouth:'soft'},
- 'prof.beatriz':{skin:'#C58D6B',hair:'#4B3029',top:'#76509B',bottom:'#34394E',shoes:'#E8C16A',accent:'#F0E6D8',shoulder:42,waist:29,hem:40,leg:24,headW:25,headH:45,hairstyle:'beatriz',eye:'narrow',mouth:'firm'},
- 'prof.sofia':{skin:'#F0C8A9',hair:'#A54F38',top:'#E86D57',bottom:'#315574',shoes:'#EAC46B',accent:'#F0C46E',shoulder:44,waist:30,hem:42,leg:24,headW:27,headH:43,hairstyle:'sofia',freckles:true,mouth:'open'},
- 'prof.helena':{skin:'#8F5945',hair:'#211F27',top:'#267F91',bottom:'#50415D',shoes:'#E6B85D',accent:'#D1AA68',shoulder:49,waist:36,hem:55,leg:25,headW:28,headH:44,hairstyle:'helena',lower:'skirt',earrings:true,eye:'almond',mouth:'open'},
- 'prof.augusto':{skin:'#B97E5C',hair:'#C9BEB1',top:'#247D91',bottom:'#42424E',shoes:'#E5B95E',accent:'#D4C4AA',shoulder:43,waist:34,hem:45,leg:24,headW:26,headH:42,hairstyle:'augusto',beard:'moustache',mouth:'soft'},
- 'prof.caio':{skin:'#AE7252',hair:'#28232A',top:'#D49A26',bottom:'#294B59',shoes:'#4E9E9C',accent:'#F3DEAC',shoulder:38,waist:29,hem:39,leg:23,headW:27,headH:43,hairstyle:'caio',eye:'wide',mouth:'crooked'},
+ 'prof.clara':{skin:'#B97050',hair:'#38251F',top:'#E96B51',bottom:'#D89A42',shoes:'#31576A',accent:'#FFD17D',shoulder:42,waist:31,hem:43,leg:25,headW:27,headH:43,hairstyle:'clara',bodyShape:'balanced',mouth:'open'},
+ 'prof.lia':{skin:'#8C543E',hair:'#3D2922',top:'#087F7C',bottom:'#253A48',shoes:'#E8B85C',accent:'#D5E6DF',shoulder:35,waist:27,hem:34,leg:21,headW:25,headH:42,hairstyle:'lia',bodyShape:'slender',mouth:'firm',eye:'narrow'},
+ 'prof.davi':{skin:'#663F30',hair:'#4A2D23',top:'#3673B1',bottom:'#244B69',shoes:'#E9D4B3',accent:'#79A9D0',shoulder:58,waist:39,hem:51,leg:30,headW:31,headH:45,hairstyle:'davi',bodyShape:'broad',beard:'full',mouth:'soft'},
+ 'prof.iara':{skin:'#A7684B',hair:'#38241F',top:'#7650A2',bottom:'#315C56',shoes:'#E0AD62',accent:'#D6B1E9',shoulder:41,waist:30,hem:44,leg:24,headW:27,headH:43,hairstyle:'iara',bodyShape:'pear',lower:'skirt',earrings:true,eye:'almond',mouth:'soft'},
+ 'prof.nina':{skin:'#F0C7A9',hair:'#31324A',top:'#F4EDE2',bottom:'#3B415B',shoes:'#E9C66D',accent:'#8890B6',shoulder:43,waist:34,hem:46,leg:25,headW:27,headH:42,hairstyle:'nina',bodyShape:'rounded',glasses:'round',eye:'wide',mouth:'open'},
+ 'prof.ravi':{skin:'#B87956',hair:'#29231F',top:'#2D8C5D',bottom:'#273E4A',shoes:'#E6B84E',accent:'#BCE0B8',shoulder:46,waist:30,hem:40,leg:27,headW:26,headH:42,hairstyle:'ravi',bodyShape:'athletic',beard:'short',mouth:'open'},
+ 'prof.mateus':{skin:'#E5B993',hair:'#513A2F',top:'#D66C37',bottom:'#364F5E',shoes:'#E9C36B',accent:'#F1C38B',shoulder:39,waist:35,hem:48,leg:23,headW:29,headH:45,hairstyle:'mateus',bodyShape:'straight',glasses:'square',mouth:'soft'},
+ 'prof.marina':{skin:'#995E46',hair:'#241F25',top:'#24866D',bottom:'#33485A',shoes:'#E7BE6C',accent:'#C3E2CB',shoulder:47,waist:31,hem:53,leg:23,headW:28,headH:43,hairstyle:'marina',bodyShape:'pear',lower:'skirt',earrings:true,mouth:'soft'},
+ 'prof.beatriz':{skin:'#C58D6B',hair:'#4B3029',top:'#76509B',bottom:'#34394E',shoes:'#E8C16A',accent:'#F0E6D8',shoulder:42,waist:29,hem:40,leg:24,headW:25,headH:45,hairstyle:'beatriz',bodyShape:'slender',eye:'narrow',mouth:'firm'},
+ 'prof.sofia':{skin:'#F0C8A9',hair:'#A54F38',top:'#E86D57',bottom:'#315574',shoes:'#EAC46B',accent:'#F0C46E',shoulder:44,waist:30,hem:42,leg:24,headW:27,headH:43,hairstyle:'sofia',bodyShape:'athletic',freckles:true,mouth:'open'},
+ 'prof.helena':{skin:'#8F5945',hair:'#211F27',top:'#267F91',bottom:'#50415D',shoes:'#E6B85D',accent:'#D1AA68',shoulder:49,waist:36,hem:55,leg:25,headW:28,headH:44,hairstyle:'helena',bodyShape:'pear',lower:'skirt',earrings:true,eye:'almond',mouth:'open'},
+ 'prof.augusto':{skin:'#B97E5C',hair:'#C9BEB1',top:'#247D91',bottom:'#42424E',shoes:'#E5B95E',accent:'#D4C4AA',shoulder:43,waist:34,hem:45,leg:24,headW:26,headH:42,hairstyle:'augusto',bodyShape:'broad',beard:'moustache',mouth:'soft'},
+ 'prof.caio':{skin:'#AE7252',hair:'#28232A',top:'#D49A26',bottom:'#294B59',shoes:'#4E9E9C',accent:'#F3DEAC',shoulder:38,waist:29,hem:39,leg:23,headW:27,headH:43,hairstyle:'caio',bodyShape:'slender',eye:'wide',mouth:'crooked'},
 };
 
 const H:Record<string,{back:string;front:string}> = {
@@ -76,8 +77,21 @@ function armsFor(pose:TeacherPose):Arms {
 function legSpread(p:Profile){
  return Math.max(16,Math.min(21,Math.round(p.leg*.68)));
 }
+function bodyDimensions(p:Profile){
+ const shape=p.bodyShape??'balanced';
+ let shoulder=p.shoulder,waist=p.waist,hip=p.hem;
+ switch(shape){
+  case 'slender': shoulder-=2; waist-=4; hip-=3; break;
+  case 'broad': shoulder+=5; waist+=2; hip+=5; break;
+  case 'pear': shoulder-=2; waist-=3; hip+=8; break;
+  case 'rounded': shoulder+=1; waist+=6; hip+=6; break;
+  case 'straight': shoulder-=2; waist+=1; hip+=2; break;
+  case 'athletic': shoulder+=5; waist-=4; hip+=1; break;
+ }
+ return {shoulder,waist,hip,shape};
+}
 function torso(p:Profile){
- const s=p.shoulder,w=p.waist,h=Math.min(p.hem,p.waist+6);
+ const {shoulder:s,waist:w,hip:h}=bodyDimensions(p);
  const left=120-s,right=120+s;
  return `M ${left} 145
  C ${left+4} 137 ${left+13} 134 108 142
@@ -93,7 +107,7 @@ function torso(p:Profile){
  C ${left+4} 160 ${left+1} 153 ${left} 145 Z`;
 }
 function lower(p:Profile){
- const h=Math.min(p.hem,p.waist+6);
+ const {hip:h}=bodyDimensions(p);
  if(p.lower==='skirt') return `M ${120-h} 190
  C ${120-h+10} 197 ${120+h-10} 197 ${120+h} 190
  L ${120+h+9} 217 Q 120 229 ${120-h-9} 217 Z`;
@@ -136,7 +150,7 @@ function SilhouetteArt({id,monochrome=false,pose='arms-down'}:{id:string;monochr
  const armLeftX=Math.round(120-p.shoulder*.86),armRightX=240-armLeftX;
  const f=(c:string)=>monochrome?'#1E2529':c, seam=monochrome?'#1E2529':'none';
  return <g data-silhouette-art={id} aria-hidden="true" stroke={seam} strokeWidth={monochrome?1.8:0} strokeLinejoin="round" strokeLinecap="round">
-  <g data-head-group="v23" transform="translate(120 90) scale(.92 .90) translate(-120 -90)">
+  <g data-head-group="v24" transform="translate(120 90) scale(.92 .90) translate(-120 -90)">
    <path d={hair.back} fill={f(p.hair)}/>
    <path d={head(p)} fill={f(p.skin)}/>
    <path d={hair.front} fill={f(p.hair)}/>
@@ -176,7 +190,7 @@ const FACE:Record<string,{brow:string;mouth:string;eye?:'wide'|'narrow'|'almond'
 function CharacterDetails({id}:{id:string}){
  const p=P[id]??P['prof.lia'],f=FACE[id]??FACE['prof.lia'];
  const open=f.mouth.includes('Z');
- return <g data-character-details={'v23-'+id}>
+ return <g data-character-details={'v24-'+id}>
   <path d={f.brow} fill="none" stroke={p.hair} strokeWidth="3.1" strokeLinecap="round"/>
   {f.eye==='almond'
    ? <><path d="M104 91 Q112 84 119 91 Q112 99 104 91Z M132 91 Q140 84 147 91 Q140 99 132 91Z" fill="#2A211F"/><circle cx="112" cy="91" r="2" fill="#FFF5E9"/><circle cx="140" cy="91" r="2" fill="#FFF5E9"/></>
@@ -212,9 +226,9 @@ export function TeacherCharacter({teacher,pose,size=160,className='',portrait=fa
  return <svg viewBox={portrait?'35 10 170 170':'0 0 240 270'} width={style.width} height={style.height}
   className={'shrink-0 '+(portrait?'rounded-full overflow-hidden ':'overflow-visible ')+className} style={style}
   role="img" aria-label={teacher.name+', professor humano ilustrado do Pórtico'}
-  data-character-style="portico-humans-v23" data-character-anatomy="human" data-character-id={teacher.id}
-  data-character-silhouette={teacher.id} data-character-pose={characterPose}
-  data-character-mode={silhouette?'silhouette':'color'} data-character-renderer="organic-v23"
+  data-character-style="portico-humans-v24" data-character-anatomy="human" data-character-id={teacher.id}
+  data-character-silhouette={teacher.id} data-character-body-shape={P[teacher.id]?.bodyShape??"balanced"} data-character-pose={characterPose}
+  data-character-mode={silhouette?'silhouette':'color'} data-character-renderer="organic-v24"
   data-character-face-design={teacher.id} data-character-expression={TEACHER_FACE_EXPRESSIONS[teacher.id]??'expressão neutra'} focusable="false">
   {portrait&&<circle cx="120" cy="98" r="90" fill={'rgb(var(--'+teacher.tone+'))'}/>}
   {!portrait&&!silhouette&&<ellipse cx="120" cy="263" rx="37" ry="4" fill="#263B45" opacity=".12"/>}
