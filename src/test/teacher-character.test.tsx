@@ -157,10 +157,10 @@ describe('personagens-professores vetoriais', () => {
       expect(torso?.getAttribute('d')).toBeTruthy();
       expect(lower?.getAttribute('d')).toBeTruthy();
       expect(footwear).toHaveLength(2);
-      expect(figure.querySelectorAll('[data-shoe-sole="v27"]')).toHaveLength(2);
+      expect(figure.querySelectorAll('[data-shoe-sole="v26"]')).toHaveLength(2);
       for (const shoe of Array.from(footwear)) {
         const path = shoe.getAttribute('d') ?? '';
-        expect(shoe.getAttribute('data-shoe-shape')).toBe('v27');
+        expect(shoe.getAttribute('data-shoe-shape')).toBe('v26');
         expect(path.length).toBeGreaterThan(125);
         expect(path).toContain('C');
         expect(path).toContain('Q');
