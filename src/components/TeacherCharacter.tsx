@@ -125,14 +125,14 @@ function SilhouetteArt({id,monochrome=false,pose='arms-down'}:{id:string;monochr
  return <g data-silhouette-art={id} aria-hidden="true" stroke={seam} strokeWidth={monochrome?1.8:0} strokeLinejoin="round" strokeLinecap="round">
   <path d={hair.back} fill={f(p.hair)}/>
   {p.lower==='skirt'&&calves(p).map((d,i)=><path key={'calf-'+i} d={d} fill={f(p.skin)}/>) }
-  <path d={lower(p)} fill={f(p.bottom)}/>
+  <path data-connected-lower-body="true" d={lower(p)} fill={f(p.bottom)}/>
   <path d={a.left} fill={f(p.top)}/><path d={a.right} fill={f(p.top)}/>
   <path d="M105 111 Q120 117 135 111 L140 151 Q120 164 100 151Z" fill={f(p.skin)}/>
   <path data-connected-body="true" d={torso(p)} fill={f(p.top)}/>
   <path d={head(p)} fill={f(p.skin)}/>
   <path d={hair.front} fill={f(p.hair)}/>
   <path d={a.lh} fill={f(p.skin)}/><path d={a.rh} fill={f(p.skin)}/>
-  {sole.map((d,i)=><path key={i} d={d} fill={f(p.shoes)}/>)}
+  {sole.map((d,i)=><path key={i} data-footwear='true' d={d} fill={f(p.shoes)}/>)}
   {a.cross&&<path d={a.cross} fill={f(p.top)}/>}
  </g>;
 }
