@@ -170,8 +170,8 @@ function calves(p:Profile){
 function shoes(p:Profile){
  const spread=legSpread(p),left=120-spread,right=120+spread;
  return [
-  \`M \${left-5} 249 C \${left-1} 248 \${left+4} 250 \${left+7} 254 L \${left+12} 258 Q \${left+15} 261 \${left+12} 265 Q \${left+10} 267 \${left+5} 266 L \${left-9} 265 Q \${left-15} 264 \${left-15} 260 Q \${left-14} 256 \${left-10} 253 Q \${left-8} 250 \${left-5} 249 Z\`,
-  \`M \${right+5} 249 C \${right+1} 248 \${right-4} 250 \${right-7} 254 L \${right-12} 258 Q \${right-15} 261 \${right-12} 265 Q \${right-10} 267 \${right-5} 266 L \${right+9} 265 Q \${right+15} 264 \${right+15} 260 Q \${right+14} 256 \${right+10} 253 Q \${right+8} 250 \${right+5} 249 Z\`
+  `M ${left-5} 249 C ${left-1} 248 ${left+4} 250 ${left+7} 254 L ${left+12} 258 Q ${left+15} 261 ${left+12} 265 Q ${left+10} 267 ${left+5} 266 L ${left-9} 265 Q ${left-15} 264 ${left-15} 260 Q ${left-14} 256 ${left-10} 253 Q ${left-8} 250 ${left-5} 249 Z`,
+  `M ${right+5} 249 C ${right+1} 248 ${right-4} 250 ${right-7} 254 L ${right-12} 258 Q ${right-15} 261 ${right-12} 265 Q ${right-10} 267 ${right-5} 266 L ${right+9} 265 Q ${right+15} 264 ${right+15} 260 Q ${right+14} 256 ${right+10} 253 Q ${right+8} 250 ${right+5} 249 Z`
  ];
 }
 function head(p:Profile){
