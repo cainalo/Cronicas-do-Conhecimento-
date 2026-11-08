@@ -4,12 +4,12 @@ import { teachers } from '@/content';
 /** Prancha de auditoria de silhuetas e personagens completos. */
 export function TeacherCharacterReviewPage() {
   return (
-    <main className="mx-auto max-w-6xl space-y-6 px-4 py-6" data-review-version="v21">
+    <main className="mx-auto max-w-6xl space-y-6 px-4 py-6" data-review-version="v22">
       <header className="space-y-2">
-        <p className="kicker">PÓRTICO · ESTÚDIO DE PERSONAGENS · V21</p>
+        <p className="kicker">PÓRTICO · ESTÚDIO DE PERSONAGENS · V22</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
         <p className="max-w-3xl text-sm leading-relaxed text-muted">
-          Nesta rodada, os braços passam a acompanhar a largura real dos ombros de cada professor. O pescoço foi estreitado e ligado ao decote, o tronco ganhou uma linha superior mais natural e a parte inferior recebeu pernas mais longas, com sapatos menos arredondados. A avaliação continua concentrada em silhueta e continuidade anatômica.
+          Nesta rodada, a proporção cabeça-corpo foi reduzida e a parte inferior ganhou mais altura. O tronco termina antes, as pernas ficam mais separadas e os calçados acompanham a posição dos tornozelos. As mãos também deixam de ser círculos quase perfeitos e passam a ter contorno de palma e polegar. A meta é uma figura adulta, equilibrada e contínua.
         </p>
       </header>
 
@@ -54,7 +54,7 @@ export function TeacherCharacterReviewPage() {
       </section>
 
       <section className="space-y-3" aria-label="Personagens completos em cores">
-        <div><p className="kicker">TESTE 03 · FIGURA INTEGRADA</p><h2 className="text-xl font-bold">Os mesmos professores em cores</h2><p className="text-xs text-muted">Nas treze figuras, a versão colorida reutiliza os mesmos caminhos da silhueta preta. A figura deve parecer uma única pessoa: braços ligados aos ombros, pescoço saindo da cabeça e entrando no tronco, roupa acompanhando a cintura e pernas suficientemente longas.</p></div>
+        <div><p className="kicker">TESTE 03 · FIGURA INTEGRADA</p><h2 className="text-xl font-bold">Os mesmos professores em cores</h2><p className="text-xs text-muted">Nas treze figuras, a versão colorida reutiliza os mesmos caminhos da silhueta preta. A figura deve parecer uma pessoa adulta, sem efeito de cabeça excessivamente grande, tronco em forma de sino, pernas curtas ou mãos que pareçam bolinhas soltas.</p></div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {teachers.map((teacher) => (
             <article key={teacher.id} data-teacher-id={teacher.id} className="flex min-w-0 flex-col items-center overflow-hidden rounded-2xl border border-line/70" style={{ backgroundColor: 'rgb(var(--' + teacher.tone + ') / .14)' }}>
