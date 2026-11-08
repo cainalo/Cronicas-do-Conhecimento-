@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { FictionalTeacher } from '@/content/teachers';
 
-/** Pórtico V26: anatomia das mãos, união dos punhos e estrutura dos calçados. */
+/** Pórtico V27: gestos de mão diferenciados e linha de ombros mais natural. */
 export type TeacherPose =
   | 'greeting' | 'presenting' | 'thinking' | 'celebrating' | 'listening'
   | 'hands-on-hips' | 'arms-down' | 'shrug' | 'arms-crossed'
@@ -67,10 +67,20 @@ function armsFor(pose:TeacherPose):Arms {
     right:'M158 143 C169 147 178 151 187 156 L201 161 Q207 164 203 171 L198 176 Q194 179 189 174 L175 168 L154 163Z',
     rh:'M198 160 C201 158 204 158 207 160 L218 162 Q222 163 221 166 Q220 169 216 168 L208 166 L220 170 Q224 172 222 175 Q220 178 216 176 L207 172 L216 179 Q219 182 216 185 Q213 187 210 184 L201 176 C196 172 194 168 196 164Z'
    };
-  case 'one-hand-up': case 'greeting': case 'pointing':
+  case 'one-hand-up':
    return {...base,
     right:'M158 143 C168 137 171 122 174 105 L178 86 Q181 77 188 80 Q195 83 192 93 L184 125 Q179 151 166 165Z',
     rh:'M181 95 C176 94 173 90 174 86 L176 82 L173 72 Q172 68 176 67 Q179 66 181 70 L184 79 L183 66 Q183 61 187 61 Q191 61 191 66 L192 79 L195 69 Q197 65 201 67 Q204 69 201 73 L197 86 L200 79 Q202 76 205 78 Q208 80 205 84 L198 96 C194 101 187 101 183 98Z'
+   };
+  case 'greeting':
+   return {...base,
+    right:'M158 143 C168 137 171 122 174 105 L178 86 Q181 77 188 80 Q195 83 192 93 L184 125 Q179 151 166 165Z',
+    rh:'M181 95 C176 94 173 90 174 86 L176 82 L173 74 Q171 69 175 67 Q179 65 181 70 L184 78 L184 66 Q184 61 188 61 Q192 61 192 66 L192 77 L196 67 Q198 63 202 66 Q205 68 202 73 L198 82 L203 76 Q206 73 209 76 Q212 79 208 83 L199 95 C195 100 187 101 183 98Z'
+   };
+  case 'pointing':
+   return {...base,
+    right:'M158 143 C168 137 171 122 174 105 L178 86 Q181 77 188 80 Q195 83 192 93 L184 125 Q179 151 166 165Z',
+    rh:'M181 95 C177 94 174 90 175 86 L179 80 L181 70 Q181 66 185 64 L194 54 Q197 51 200 54 Q202 57 199 60 L192 69 L198 70 Q203 71 203 75 L200 87 Q197 96 189 99 L183 98Z'
    };
   case 'hand-on-chin': case 'thinking':
    return {...base,
@@ -127,10 +137,10 @@ function torso(p:Profile){
  const {shoulder:s,waist:w,hip:h}=bodyDimensions(p);
  const left=120-s,right=120+s;
  return `M ${left} 145
- C ${left+4} 137 ${left+13} 134 108 142
- Q 113 149 120 150
- Q 127 149 132 142
- C ${right-13} 134 ${right-4} 137 ${right} 145
+ C ${left+3} 139 ${left+13} 138 108 142
+ Q 113 145 120 146
+ Q 127 145 132 142
+ C ${right-13} 138 ${right-3} 139 ${right} 145
  C ${right-1} 153 ${right-4} 160 ${right-7} 168
  C ${120+w+3} 176 ${120+w+1} 183 ${120+w+4} 190
  Q ${120+w+5} 197 ${120+h} 202
@@ -191,15 +201,15 @@ function SilhouetteArt({id,monochrome=false,pose='arms-down'}:{id:string;monochr
  const armLeftX=Math.round(120-shoulderWidth*.86),armRightX=240-armLeftX;
  const f=(c:string)=>monochrome?'#1E2529':c, seam=monochrome?'#1E2529':'none';
  return <g data-silhouette-art={id} aria-hidden="true" stroke={seam} strokeWidth={monochrome?1.8:0} strokeLinejoin="round" strokeLinecap="round">
-  <g data-head-group="v26" transform="translate(120 90) scale(.92 .90) translate(-120 -90)">
+  <g data-head-group="v27" transform="translate(120 90) scale(.92 .90) translate(-120 -90)">
    <path d={hair.back} fill={f(p.hair)}/>
    <path d={head(p)} fill={f(p.skin)}/>
    <path d={hair.front} fill={f(p.hair)}/>
   </g>
   {p.lower==='skirt'&&calves(p).map((d,i)=><path key={'calf-'+i} d={d} fill={f(p.skin)}/>)}
   <path data-connected-lower-body="true" d={lower(p)} fill={f(p.bottom)}/>
-  <g data-arm="left" data-wrist-join="v26" transform={`translate(${armLeftX-82} 0)`}><path d={a.left} fill={f(p.top)}/><path data-hand="left" data-hand-anatomy="v26" d={a.lh} fill={f(p.skin)}/></g>
-  <g data-arm="right" data-wrist-join="v26" transform={`translate(${armRightX-158} 0)`}><path d={a.right} fill={f(p.top)}/><path data-hand="right" data-hand-anatomy="v26" d={a.rh} fill={f(p.skin)}/></g>
+  <g data-arm="left" data-wrist-join="v26" transform={`translate(${armLeftX-82} 0)`}><path d={a.left} fill={f(p.top)}/><path data-hand="left" data-hand-anatomy="v27" d={a.lh} fill={f(p.skin)}/></g>
+  <g data-arm="right" data-wrist-join="v26" transform={`translate(${armRightX-158} 0)`}><path d={a.right} fill={f(p.top)}/><path data-hand="right" data-hand-anatomy="v27" d={a.rh} fill={f(p.skin)}/></g>
   <path data-neck="true" d="M110 111 Q120 117 130 111 L130 141 Q127 153 120 155 Q113 153 110 141Z" fill={f(p.skin)}/>
   <path data-connected-body="true" d={torso(p)} fill={f(p.top)}/>
   {sole.map((d,i)=><path key={i} data-footwear="true" data-shoe-shape="v26" d={d} fill={f(p.shoes)}/>)}
@@ -232,7 +242,7 @@ const FACE:Record<string,{brow:string;mouth:string;eye?:'wide'|'narrow'|'almond'
 function CharacterDetails({id}:{id:string}){
  const p=P[id]??P['prof.lia'],f=FACE[id]??FACE['prof.lia'];
  const open=f.mouth.includes('Z');
- return <g data-character-details={'v26-'+id}>
+ return <g data-character-details={'v27-'+id}>
   <path d={f.brow} fill="none" stroke={p.hair} strokeWidth="3.1" strokeLinecap="round"/>
   {f.eye==='almond'
    ? <><path d="M104 91 Q112 84 119 91 Q112 99 104 91Z M132 91 Q140 84 147 91 Q140 99 132 91Z" fill="#2A211F"/><circle cx="112" cy="91" r="2" fill="#FFF5E9"/><circle cx="140" cy="91" r="2" fill="#FFF5E9"/></>
@@ -268,9 +278,9 @@ export function TeacherCharacter({teacher,pose,size=160,className='',portrait=fa
  return <svg viewBox={portrait?'35 10 170 170':'0 0 240 270'} width={style.width} height={style.height}
   className={'shrink-0 '+(portrait?'rounded-full overflow-hidden ':'overflow-visible ')+className} style={style}
   role="img" aria-label={teacher.name+', professor humano ilustrado do Pórtico'}
-  data-character-style="portico-humans-v26" data-character-anatomy="human" data-character-id={teacher.id}
+  data-character-style="portico-humans-v27" data-character-anatomy="human" data-character-id={teacher.id}
   data-character-silhouette={teacher.id} data-character-body-shape={P[teacher.id]?.bodyShape??"balanced"} data-character-pose={characterPose}
-  data-character-mode={silhouette?'silhouette':'color'} data-character-renderer="organic-v26"
+  data-character-mode={silhouette?'silhouette':'color'} data-character-renderer="organic-v27"
   data-character-face-design={teacher.id} data-character-expression={TEACHER_FACE_EXPRESSIONS[teacher.id]??'expressão neutra'} focusable="false">
   {portrait&&<circle cx="120" cy="98" r="90" fill={'rgb(var(--'+teacher.tone+'))'}/>}
   {!portrait&&!silhouette&&<ellipse cx="120" cy="263" rx="37" ry="4" fill="#263B45" opacity=".12"/>}
