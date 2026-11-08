@@ -4,12 +4,12 @@ import { teachers } from '@/content';
 /** Prancha de auditoria de silhuetas e personagens completos. */
 export function TeacherCharacterReviewPage() {
   return (
-    <main className="mx-auto max-w-6xl space-y-6 px-4 py-6" data-review-version="v26">
+    <main className="mx-auto max-w-6xl space-y-6 px-4 py-6" data-review-version="v27">
       <header className="space-y-2">
-        <p className="kicker">PÓRTICO · ESTÚDIO DE PERSONAGENS · V26</p>
+        <p className="kicker">PÓRTICO · ESTÚDIO DE PERSONAGENS · V27</p>
         <h1 className="text-3xl font-bold">Os professores do Pórtico</h1>
         <p className="max-w-3xl text-sm leading-relaxed text-muted">
-          Nesta rodada, as mãos foram reconstruídas com palmas e dedos mais legíveis, os braços foram afinados na transição dos ombros e punhos, e os calçados ganharam uma sola separada. A prancha monocromática verifica se essas formas continuam legíveis sem depender da cor.
+          Nesta rodada, os gestos de mão deixam de compartilhar a mesma forma: cumprimento, mão elevada e apontar passam a ter silhuetas próprias. Também suavizei a linha dos ombros e refinei o contorno das mãos neutras. O restante do desenho foi preservado para tornar a comparação objetiva.
         </p>
       </header>
 
@@ -75,6 +75,8 @@ export function TeacherCharacterReviewPage() {
           <li>As pernas devem sair de baixo da roupa e terminar em sapatos alinhados aos tornozelos, sem lacunas.</li>
           <li>As mãos devem sugerir palma, polegar e dedos pela silhueta, sem parecer círculos ou luvas sem forma.</li>
           <li>Os punhos devem entrar naturalmente nas mangas, sem lacunas nem volumes que pareçam peças encaixadas.</li>
+          <li>Gestos diferentes precisam apresentar contornos diferentes e continuar reconhecíveis em tamanho pequeno.</li>
+          <li>A linha dos ombros deve ser contínua e natural, sem volumes inflados ou pontas artificiais.</li>
           <li>Os sapatos devem ter bico, calcanhar e sola perceptíveis, mesmo em escala reduzida.</li>
           <li>Olhos, nariz e boca precisam permanecer dentro do contorno da cabeça.</li>
           <li>Manter coerência entre a prancha preta e o desenho colorido do mesmo professor.</li>
