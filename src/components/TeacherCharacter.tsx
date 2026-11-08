@@ -199,7 +199,7 @@ function SilhouetteArt({id,monochrome=false,pose='arms-down'}:{id:string;monochr
   {p.lower==='skirt'&&calves(p).map((d,i)=><path key={'calf-'+i} d={d} fill={f(p.skin)}/>)}
   <path data-connected-lower-body="true" d={lower(p)} fill={f(p.bottom)}/>
   <g data-arm="left" data-wrist-join="v26" transform={`translate(${armLeftX-82} 0)`}><path d={a.left} fill={f(p.top)}/><path data-hand="left" data-hand-anatomy="v26" d={a.lh} fill={f(p.skin)}/></g>
-  <g data-arm="right" data-wrist-join="v26" transform={`translate(${armRightX-158} 0)`}><path d={a.right} fill={f(p.top)}/><path data-hand="right" data-hand-anatomy="v25" d={a.rh} fill={f(p.skin)}/></g>
+  <g data-arm="right" data-wrist-join="v26" transform={`translate(${armRightX-158} 0)`}><path d={a.right} fill={f(p.top)}/><path data-hand="right" data-hand-anatomy="v26" d={a.rh} fill={f(p.skin)}/></g>
   <path data-neck="true" d="M110 111 Q120 117 130 111 L130 141 Q127 153 120 155 Q113 153 110 141Z" fill={f(p.skin)}/>
   <path data-connected-body="true" d={torso(p)} fill={f(p.top)}/>
   {sole.map((d,i)=><path key={i} data-footwear="true" data-shoe-shape="v26" d={d} fill={f(p.shoes)}/>)}
