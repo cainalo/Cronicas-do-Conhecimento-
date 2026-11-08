@@ -50,8 +50,8 @@ const H:Record<string,{back:string;front:string}> = {
 type Arms={left:string;right:string;lh:string;rh:string;cross?:string};
 const LDOWN='M84 144 C76 149 72 163 69 178 L64 198 Q63 205 69 208 Q75 210 78 202 L88 172 Q92 161 101 157Z';
 const RDOWN='M156 144 C164 149 168 163 171 178 L176 198 Q177 205 171 208 Q165 210 162 202 L152 172 Q148 161 139 157Z';
-const HL='M61 198 C57 197 54 199 53 203 L51 208 C50 211 52 214 55 214 L58 213 L58 219 C58 223 61 225 64 222 L67 218 L68 223 C69 226 72 226 74 223 Q76 220 73 216 L71 210 Q77 207 74 203 L70 199 Q67 195 63 197Z';
-const HR='M179 198 C183 197 186 199 187 203 L189 208 C190 211 188 214 185 214 L182 213 L182 219 C182 223 179 225 176 222 L173 218 L172 223 C171 226 168 226 166 223 Q164 220 167 216 L169 210 Q163 207 166 203 L170 199 Q173 195 177 197Z';
+const HL='M61 198 C57 198 54 201 53 205 L51 211 Q50 214 54 216 L57 214 L56 220 Q56 224 60 224 Q63 224 63 220 L64 226 Q65 230 69 228 Q72 227 71 223 L70 215 L73 218 Q76 220 78 217 Q80 214 77 211 L72 203 Q69 197 64 197Z';
+const HR='M179 198 C183 198 186 201 187 205 L189 211 Q190 214 186 216 L183 214 L184 220 Q184 224 180 224 Q177 224 177 220 L176 226 Q175 230 171 228 Q168 227 169 223 L170 215 L167 218 Q164 220 162 217 Q160 214 163 211 L168 203 Q171 197 176 197Z';
 function armsFor(pose:TeacherPose):Arms {
  const base={left:LDOWN,right:RDOWN,lh:HL,rh:HR};
  switch(pose){
@@ -208,8 +208,8 @@ function SilhouetteArt({id,monochrome=false,pose='arms-down'}:{id:string;monochr
   </g>
   {p.lower==='skirt'&&calves(p).map((d,i)=><path key={'calf-'+i} d={d} fill={f(p.skin)}/>)}
   <path data-connected-lower-body="true" d={lower(p)} fill={f(p.bottom)}/>
-  <g data-arm="left" data-wrist-join="v26" transform={`translate(${armLeftX-82} 0)`}><path d={a.left} fill={f(p.top)}/><path data-hand="left" data-hand-anatomy="v27" d={a.lh} fill={f(p.skin)}/></g>
-  <g data-arm="right" data-wrist-join="v26" transform={`translate(${armRightX-158} 0)`}><path d={a.right} fill={f(p.top)}/><path data-hand="right" data-hand-anatomy="v27" d={a.rh} fill={f(p.skin)}/></g>
+  <g data-arm="left" data-wrist-join="v27" transform={`translate(${armLeftX-82} 0)`}><path d={a.left} fill={f(p.top)}/><path data-hand="left" data-hand-anatomy="v27" d={a.lh} fill={f(p.skin)}/></g>
+  <g data-arm="right" data-wrist-join="v27" transform={`translate(${armRightX-158} 0)`}><path d={a.right} fill={f(p.top)}/><path data-hand="right" data-hand-anatomy="v27" d={a.rh} fill={f(p.skin)}/></g>
   <path data-neck="true" d="M110 111 Q120 117 130 111 L130 141 Q127 153 120 155 Q113 153 110 141Z" fill={f(p.skin)}/>
   <path data-connected-body="true" d={torso(p)} fill={f(p.top)}/>
   {sole.map((d,i)=><path key={i} data-footwear="true" data-shoe-shape="v26" d={d} fill={f(p.shoes)}/>)}
