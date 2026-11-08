@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { FictionalTeacher } from '@/content/teachers';
 
-/** Pórtico V20: anatomia conectada, cintura definida e membros alinhados. */
+/** Pórtico V21: junções de ombros, pescoço e pernas mais naturais. */
 export type TeacherPose =
   | 'greeting' | 'presenting' | 'thinking' | 'celebrating' | 'listening'
   | 'hands-on-hips' | 'arms-down' | 'shrug' | 'arms-crossed'
@@ -77,42 +77,50 @@ function legSpread(p:Profile){
  return Math.max(11,Math.min(15,Math.round(p.leg*.5)));
 }
 function torso(p:Profile){
- const s=p.shoulder,w=p.waist,h=p.hem;
- return `M ${120-s} 143
- C ${120-s+9} 134 106 132 120 143
- C 134 132 ${120+s-9} 134 ${120+s} 143
- C ${120+s-1} 155 ${120+w+7} 172 ${120+w} 188
- Q ${120+w} 198 ${120+h} 207
- Q 120 224 ${120-h} 207
- Q ${120-w} 198 ${120-w} 188
- C ${120-w-7} 172 ${120-s+1} 155 ${120-s} 143 Z`;
+ const s=p.shoulder,w=p.waist,h=Math.min(p.hem,p.waist+9);
+ const left=120-s,right=120+s;
+ return `M ${left} 145
+ C ${left+7} 135 ${left+15} 132 108 140
+ Q 120 157 132 140
+ C ${right-15} 132 ${right-7} 135 ${right} 145
+ C ${right-2} 158 ${120+w+7} 174 ${120+w} 187
+ Q ${120+w+1} 198 ${120+h} 210
+ Q 120 222 ${120-h} 210
+ Q ${120-w-1} 198 ${120-w} 187
+ C ${120-w-7} 174 ${left+2} 158 ${left} 145 Z`;
 }
 function lower(p:Profile){
- if(p.lower==='skirt') return `M ${120-p.hem} 205 Q 120 216 ${120+p.hem} 205 L ${120+p.hem+7} 224 Q 120 233 ${120-p.hem-7} 224 Z`;
+ const h=Math.min(p.hem,p.waist+9);
+ if(p.lower==='skirt') return `M ${120-h} 198
+ C ${120-h+12} 206 ${120+h-12} 206 ${120+h} 198
+ L ${120+h+7} 227 Q 120 239 ${120-h-7} 227 Z`;
  const spread=legSpread(p),left=120-spread,right=120+spread;
- return `M ${120-p.hem} 205
- C ${120-p.hem+10} 214 ${left-10} 222 ${left-9} 232
- L ${left-10} 251 Q ${left-11} 259 ${left} 260
- Q ${left+11} 259 ${left+10} 251
- L ${left+7} 232 Q 120 240 ${right-7} 232
- L ${right-10} 251 Q ${right-11} 259 ${right} 260
- Q ${right+11} 259 ${right+10} 251
- L ${right+9} 232
- C ${right+10} 222 ${120+p.hem-10} 214 ${120+p.hem} 205
- Q 120 220 ${120-p.hem} 205 Z`;
+ return `M ${120-h} 198
+ C ${120-h+12} 206 ${left-13} 208 ${left-12} 223
+ L ${left-14} 250
+ Q ${left-14} 260 ${left-3} 260
+ Q ${left+8} 260 ${left+8} 250
+ L ${left+7} 228
+ Q 120 236 ${right-7} 228
+ L ${right-8} 250
+ Q ${right-8} 260 ${right+3} 260
+ Q ${right+14} 260 ${right+14} 250
+ L ${right+12} 223
+ C ${right+13} 208 ${120+h-12} 206 ${120+h} 198
+ Q 120 211 ${120-h} 198 Z`;
 }
 function calves(p:Profile){
  const spread=legSpread(p),left=120-spread,right=120+spread;
  return [
-  `M ${left-6} 219 Q ${left} 216 ${left+6} 219 L ${left+6} 252 Q ${left+5} 259 ${left} 259 Q ${left-7} 259 ${left-7} 252 Z`,
-  `M ${right-6} 219 Q ${right} 216 ${right+6} 219 L ${right+7} 252 Q ${right+7} 259 ${right} 259 Q ${right-6} 259 ${right-6} 252 Z`
+  `M ${left-6} 218 Q ${left} 215 ${left+6} 218 L ${left+7} 255 Q ${left+6} 261 ${left} 261 Q ${left-7} 261 ${left-7} 255 Z`,
+  `M ${right-6} 218 Q ${right} 215 ${right+6} 218 L ${right+7} 255 Q ${right+7} 261 ${right} 261 Q ${right-6} 261 ${right-6} 255 Z`
  ];
 }
 function shoes(p:Profile){
  const spread=legSpread(p),left=120-spread,right=120+spread;
  return [
-  `M ${left-11} 253 Q ${left-9} 246 ${left-2} 247 Q ${left+5} 248 ${left+10} 252 Q ${left+14} 256 ${left+10} 262 Q ${left+6} 267 ${left-6} 265 Q ${left-14} 262 ${left-11} 253 Z`,
-  `M ${right+11} 253 Q ${right+9} 246 ${right+2} 247 Q ${right-5} 248 ${right-10} 252 Q ${right-14} 256 ${right-10} 262 Q ${right-6} 267 ${right+6} 265 Q ${right+14} 262 ${right+11} 253 Z`
+  `M ${left-17} 253 Q ${left-14} 246 ${left-4} 247 Q ${left+8} 248 ${left+15} 253 Q ${left+19} 257 ${left+14} 263 Q ${left+7} 268 ${left-8} 265 Q ${left-18} 262 ${left-17} 253 Z`,
+  `M ${right+17} 253 Q ${right+14} 246 ${right+4} 247 Q ${right-8} 248 ${right-15} 253 Q ${right-19} 257 ${right-14} 263 Q ${right-7} 268 ${right+8} 265 Q ${right+18} 262 ${right+17} 253 Z`
  ];
 }
 function head(p:Profile){
@@ -120,18 +128,18 @@ function head(p:Profile){
  return 'M '+(120-w)+' 75 C '+(120-w+1)+' '+(63-h*.35)+' 101 '+(82-h)+' 120 '+(82-h)+' C 139 '+(82-h)+' '+(120+w-1)+' '+(63-h*.35)+' '+(120+w)+' 75 L '+(120+w-2)+' 103 C '+(120+w-5)+' 119 130 '+(82+h)+' 120 '+(82+h)+' C 110 '+(82+h)+' '+(120-w+5)+' 119 '+(120-w+2)+' 103 Z';
 }
 function SilhouetteArt({id,monochrome=false,pose='arms-down'}:{id:string;monochrome?:boolean;pose?:TeacherPose}){
- const p=P[id]??P['prof.lia'], hair=H[p.hairstyle]??H.lia, a=armsFor(pose), sole=shoes(p);
+ const p=P[id]??P['prof.lia'], hair=H[p.hairstyle]??H.lia, a=armsFor(pose), sole=shoes(p);\n const armLeftX=120-p.shoulder*.86,armRightX=240-armLeftX;
  const f=(c:string)=>monochrome?'#1E2529':c, seam=monochrome?'#1E2529':'none';
  return <g data-silhouette-art={id} aria-hidden="true" stroke={seam} strokeWidth={monochrome?1.8:0} strokeLinejoin="round" strokeLinecap="round">
   <path d={hair.back} fill={f(p.hair)}/>
   {p.lower==='skirt'&&calves(p).map((d,i)=><path key={'calf-'+i} d={d} fill={f(p.skin)}/>) }
   <path data-connected-lower-body="true" d={lower(p)} fill={f(p.bottom)}/>
-  <path d={a.left} fill={f(p.top)}/><path d={a.right} fill={f(p.top)}/>
-  <path d="M105 111 Q120 117 135 111 L140 151 Q120 164 100 151Z" fill={f(p.skin)}/>
+  <g data-arm="left" transform={`translate(${armLeftX-82} 0)`}><path d={a.left} fill={f(p.top)}/><path d={a.lh} fill={f(p.skin)}/></g>\n  <g data-arm="right" transform={`translate(${armRightX-158} 0)`}><path d={a.right} fill={f(p.top)}/><path d={a.rh} fill={f(p.skin)}/></g>
+  <path data-neck="true" d="M110 111 Q120 117 130 111 L130 145 Q127 157 120 159 Q113 157 110 145Z" fill={f(p.skin)}/>
   <path data-connected-body="true" d={torso(p)} fill={f(p.top)}/>
   <path d={head(p)} fill={f(p.skin)}/>
   <path d={hair.front} fill={f(p.hair)}/>
-  <path d={a.lh} fill={f(p.skin)}/><path d={a.rh} fill={f(p.skin)}/>
+
   {sole.map((d,i)=><path key={i} data-footwear='true' d={d} fill={f(p.shoes)}/>)}
   {a.cross&&<path d={a.cross} fill={f(p.top)}/>}
  </g>;
@@ -161,7 +169,7 @@ const FACE:Record<string,{brow:string;mouth:string;eye?:'wide'|'narrow'|'almond'
 function CharacterDetails({id}:{id:string}){
  const p=P[id]??P['prof.lia'],f=FACE[id]??FACE['prof.lia'];
  const open=f.mouth.includes('Z');
- return <g data-character-details={'v20-'+id}>
+ return <g data-character-details={'v21-'+id}>
   <path d={f.brow} fill="none" stroke={p.hair} strokeWidth="3.1" strokeLinecap="round"/>
   {f.eye==='almond'
    ? <><path d="M104 91 Q112 84 119 91 Q112 99 104 91Z M132 91 Q140 84 147 91 Q140 99 132 91Z" fill="#2A211F"/><circle cx="112" cy="91" r="2" fill="#FFF5E9"/><circle cx="140" cy="91" r="2" fill="#FFF5E9"/></>
@@ -177,7 +185,7 @@ function CharacterDetails({id}:{id:string}){
   {p.beard==='moustache'&&<path d="M111 121 Q120 125 130 121" fill="none" stroke="#5A3933" strokeWidth="2.1" strokeLinecap="round"/>}
   <path d={f.mouth} fill={open?'#713E39':'none'} stroke="#713E39" strokeWidth="2.7" strokeLinecap="round" strokeLinejoin="round"/>
   {open&&<path d="M112 114 Q122 123 134 113" fill="none" stroke="#FFF4E8" strokeWidth="2.4" strokeLinecap="round"/>}
-  <path d="M98 145 Q120 158 142 145" fill="none" stroke={p.accent} strokeWidth="3.4" strokeLinecap="round"/>
+  <path d="M108 150 Q120 158 132 150" fill="none" stroke={p.accent} strokeWidth="3.4" strokeLinecap="round"/>
   <path d="M120 159 V194" fill="none" stroke={p.top} strokeWidth="2.4" strokeLinecap="round"/>
   <circle cx="120" cy="178" r="3" fill={p.accent}/>
  </g>;
@@ -197,9 +205,9 @@ export function TeacherCharacter({teacher,pose,size=160,className='',portrait=fa
  return <svg viewBox={portrait?'35 10 170 170':'0 0 240 270'} width={style.width} height={style.height}
   className={'shrink-0 '+(portrait?'rounded-full overflow-hidden ':'overflow-visible ')+className} style={style}
   role="img" aria-label={teacher.name+', professor humano ilustrado do Pórtico'}
-  data-character-style="portico-humans-v20" data-character-anatomy="human" data-character-id={teacher.id}
+  data-character-style="portico-humans-v21" data-character-anatomy="human" data-character-id={teacher.id}
   data-character-silhouette={teacher.id} data-character-pose={characterPose}
-  data-character-mode={silhouette?'silhouette':'color'} data-character-renderer="organic-v20"
+  data-character-mode={silhouette?'silhouette':'color'} data-character-renderer="organic-v21"
   data-character-face-design={teacher.id} data-character-expression={TEACHER_FACE_EXPRESSIONS[teacher.id]??'expressão neutra'} focusable="false">
   {portrait&&<circle cx="120" cy="98" r="90" fill={'rgb(var(--'+teacher.tone+'))'}/>}
   {!portrait&&!silhouette&&<ellipse cx="120" cy="263" rx="37" ry="4" fill="#263B45" opacity=".12"/>}
