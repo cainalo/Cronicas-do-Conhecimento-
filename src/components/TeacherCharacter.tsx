@@ -129,7 +129,7 @@ function head(p:Profile){
 }
 function SilhouetteArt({id,monochrome=false,pose='arms-down'}:{id:string;monochrome?:boolean;pose?:TeacherPose}){
  const p=P[id]??P['prof.lia'], hair=H[p.hairstyle]??H.lia, a=armsFor(pose), sole=shoes(p);
- const armLeftX=120-p.shoulder*.86,armRightX=240-armLeftX;
+ const armLeftX=Math.round(120-p.shoulder*.86),armRightX=240-armLeftX;
  const f=(c:string)=>monochrome?'#1E2529':c, seam=monochrome?'#1E2529':'none';
  return <g data-silhouette-art={id} aria-hidden="true" stroke={seam} strokeWidth={monochrome?1.8:0} strokeLinejoin="round" strokeLinecap="round">
   <path d={hair.back} fill={f(p.hair)}/>
